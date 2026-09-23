@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>PULSE · Energy & Sparkling</title>
-  <meta name="description" content="PULSE makes Arctic Rush zero-sugar energy and sparkling water with real fruit in Citrus, Mango, Berry and Watermelon." />
+  <meta name="description" content="PULSE makes zero-sugar energy in five flavors and sparkling water with real fruit in Citrus, Mango, Berry and Watermelon." />
   <meta name="theme-color" content="#050b16" />
   <meta property="og:title" content="PULSE · Energy & Sparkling" />
   <meta property="og:description" content="Cold energy. Sharp focus. Feel the beat." />
@@ -30,16 +30,22 @@
     <nav aria-label="Main">
       <a href="#energy">Energy</a>
       <a href="#sparkling">Sparkling</a>
-      <a href="#lineup">Lineup</a>
+      <a href="#shop">Shop</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <a class="btn btn-small" href="#notify">Get notified</a>
+    <div class="nav-actions">
+      <a class="btn btn-small btn-ghost nav-shop" href="#shop">Shop</a>
+      <button class="cart-btn" type="button" data-open-cart aria-label="Open cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z" /><path d="M9 7a3 3 0 0 1 6 0" /></svg>
+        <span class="badge" data-cart-count hidden>0</span>
+      </button>
+    </div>
   </header>
 
   <nav class="progress" aria-label="Sections">
     <a href="#top"><span>Intro</span></a>
-    <a href="#energy"><span>Arctic Rush</span></a>
-    <a href="#zero"><span>Zero sugar</span></a>
+    <a href="#energy"><span>Energy</span></a>
+    <a href="#inside"><span>What's inside</span></a>
     <a href="#sparkling"><span>Sparkling</span></a>
     <a href="#citrus"><span>Citrus</span></a>
     <a href="#mango"><span>Mango</span></a>
@@ -67,42 +73,41 @@
       <p class="scroll-hint front" aria-hidden="true"><span></span>Scroll</p>
     </section>
 
-    <!-- 1 · Arctic Rush -->
-    <section id="energy" class="chapter solo text-left" data-stage="1" aria-labelledby="energy-title">
+    <!-- 1 · Energy flavors -->
+    <section id="energy" class="chapter solo text-left energy" data-stage="1" aria-labelledby="energy-title">
       <div class="copy front">
-        <p class="eyebrow reveal">01 — Ice / Extreme</p>
-        <h2 id="energy-title" class="display reveal">Arctic<br />Rush</h2>
-        <p class="kicker reveal">Cold energy. Sharp focus.</p>
-        <p class="lede reveal">An ice-cold charge built to keep you moving. Zero sugar, full energy, and a crisp, clean finish that hits like a blast of arctic air.</p>
+        <p class="eyebrow reveal"><span data-e="index">Energy · 1 of 5</span> — <span data-e="tag">Ice / Extreme</span></p>
+        <div class="flavor-tabs reveal" aria-label="Choose an energy flavor"></div>
+        <h2 id="energy-title" class="display energy-name reveal" data-e="name" aria-live="polite">Arctic Rush</h2>
+        <p class="kicker reveal" data-e="notes">Icy blue raspberry</p>
+        <p class="lede reveal" data-e="desc">An ice-cold charge built to keep you moving.</p>
         <dl class="stats reveal">
+          <div><dt>Caffeine</dt><dd>160<small>mg</small></dd></div>
           <div><dt>Sugar</dt><dd>0<small>g</small></dd></div>
-          <div><dt>Can</dt><dd>500<small>mL</small></dd></div>
-          <div><dt>Built for</dt><dd>3<small>wins</small></dd></div>
+          <div><dt>Energy</dt><dd>10<small>kcal</small></dd></div>
         </dl>
+        <div class="buy reveal" data-buy="energy"></div>
+        <div class="step-row reveal">
+          <button class="step" type="button" data-energy-step="-1" aria-label="Previous flavor">←</button>
+          <button class="step" type="button" data-energy-step="1" aria-label="Next flavor">→</button>
+          <a class="step-link" href="#inside">Ingredients &amp; nutrition ↓</a>
+        </div>
       </div>
-      <img class="fallback-shot" src="assets/arctic-rush.jpg" alt="" width="418" height="535" loading="lazy" />
     </section>
 
-    <!-- 2 · Zero sugar -->
-    <section id="zero" class="chapter solo text-right" data-stage="2" aria-labelledby="zero-title">
+    <!-- 2 · What's inside -->
+    <section id="inside" class="chapter solo text-right inside" data-stage="2" aria-labelledby="inside-title">
       <p class="giant giant-outline behind" aria-hidden="true">ZERO<br />SUGAR</p>
       <div class="copy front">
-        <p class="eyebrow reveal">What's inside the rush</p>
-        <h2 id="zero-title" class="display display-md reveal">Three wins.<br />Zero sugar.</h2>
-        <ul class="benefits">
-          <li class="reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z" /></svg>
-            <div><h3>Energy</h3><p>A clean lift for training, study sessions and long nights.</p></div>
-          </li>
-          <li class="reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7C8 7.6 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6.4-6-11.3z" /></svg>
-            <div><h3>Hydration</h3><p>Ice-cold and refreshing, so you stay sharp instead of sluggish.</p></div>
-          </li>
-          <li class="reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="1" /></svg>
-            <div><h3>Focus</h3><p>Lock in on what matters and get it done.</p></div>
-          </li>
+        <p class="eyebrow reveal" data-e="inside">What's inside Arctic Rush</p>
+        <h2 id="inside-title" class="display display-md reveal">Three wins.<br />Zero sugar.</h2>
+        <ul class="wins reveal">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z" /></svg><span><b>Energy</b> 160 mg caffeine</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7C8 7.6 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6.4-6-11.3z" /></svg><span><b>Hydration</b> 3 electrolytes</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /></svg><span><b>Focus</b> L-theanine + B vitamins</span></li>
         </ul>
+        <div class="facts-card reveal" data-facts="energy"></div>
+        <p class="fine reveal">High caffeine content. Not recommended for children, pregnant or breastfeeding women, or anyone sensitive to caffeine. Max 2 cans a day.</p>
       </div>
     </section>
 
@@ -131,7 +136,12 @@
         <h2 id="citrus-title" class="display reveal">Citrus</h2>
         <p class="kicker reveal">Zesty &amp; bright</p>
         <p class="lede reveal">Sun-ripe citrus with a bright, sparkling snap. It wakes up your taste buds without any added sugar.</p>
-        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li><li>330 mL</li></ul>
+        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li></ul>
+        <div class="buy reveal" data-buy="citrus"></div>
+        <details class="facts reveal">
+          <summary>Ingredients &amp; nutrition</summary>
+          <div data-facts="citrus"></div>
+        </details>
       </div>
     </section>
 
@@ -142,7 +152,12 @@
         <h2 id="mango-title" class="display reveal">Mango</h2>
         <p class="kicker reveal">Tropical &amp; smooth</p>
         <p class="lede reveal">Juicy, golden mango, smooth from first sip to last. Like a beach day in a can.</p>
-        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li><li>330 mL</li></ul>
+        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li></ul>
+        <div class="buy reveal" data-buy="mango"></div>
+        <details class="facts reveal">
+          <summary>Ingredients &amp; nutrition</summary>
+          <div data-facts="mango"></div>
+        </details>
       </div>
     </section>
 
@@ -153,7 +168,12 @@
         <h2 id="berry-title" class="display reveal">Berry</h2>
         <p class="kicker reveal">Juicy &amp; fresh</p>
         <p class="lede reveal">Strawberry-forward and bursting with berry, with a fizz that keeps it light.</p>
-        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li><li>330 mL</li></ul>
+        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li></ul>
+        <div class="buy reveal" data-buy="berry"></div>
+        <details class="facts reveal">
+          <summary>Ingredients &amp; nutrition</summary>
+          <div data-facts="berry"></div>
+        </details>
       </div>
     </section>
 
@@ -164,28 +184,51 @@
         <h2 id="watermelon-title" class="display reveal">Water&shy;melon</h2>
         <p class="kicker reveal">Crisp &amp; cool</p>
         <p class="lede reveal">Pure summer: crisp, cool watermelon with fine bubbles. Best straight from the cooler.</p>
-        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li><li>330 mL</li></ul>
+        <ul class="tags reveal"><li>No added sugar</li><li>Natural flavors</li><li>Caffeine free</li></ul>
+        <div class="buy reveal" data-buy="watermelon"></div>
+        <details class="facts reveal">
+          <summary>Ingredients &amp; nutrition</summary>
+          <div data-facts="watermelon"></div>
+        </details>
       </div>
     </section>
 
     <!-- 8 · Lineup -->
     <section id="lineup" class="chapter lineup" data-stage="8" aria-labelledby="lineup-title">
       <div class="lineup-head front">
-        <p class="eyebrow reveal">The lineup</p>
+        <p class="eyebrow reveal">The lineup · 9 flavors</p>
         <h2 id="lineup-title" class="display display-md reveal">Pick your pulse</h2>
       </div>
-      <div class="lineup-spacer" aria-hidden="true"></div>
-      <ul class="cards front">
-        <li class="reveal" style="--c:#f5b400"><a href="#citrus"><span class="dot"></span><b>Citrus</b><small>Sparkling · 330 mL</small></a></li>
-        <li class="reveal" style="--c:#ff8a1f"><a href="#mango"><span class="dot"></span><b>Mango</b><small>Sparkling · 330 mL</small></a></li>
-        <li class="reveal" style="--c:#2b93f0"><a href="#energy"><span class="dot"></span><b>Arctic Rush</b><small>Energy · 500 mL</small></a></li>
-        <li class="reveal" style="--c:#e0409a"><a href="#berry"><span class="dot"></span><b>Berry</b><small>Sparkling · 330 mL</small></a></li>
-        <li class="reveal" style="--c:#3fae4b"><a href="#watermelon"><span class="dot"></span><b>Watermelon</b><small>Sparkling · 330 mL</small></a></li>
-      </ul>
+      <div class="lineup-rows" aria-hidden="true">
+        <span class="row-tag front">Energy · 500 mL</span>
+        <span class="row-tag front">Sparkling · 330 mL</span>
+      </div>
+      <div class="cta-row lineup-cta front reveal">
+        <a class="btn" href="#shop">Shop all flavors</a>
+      </div>
+    </section>
+
+    <!-- 9 · Shop -->
+    <section id="shop" class="chapter shop" data-stage="9" aria-labelledby="shop-title">
+      <div class="shop-inner front">
+        <div class="shop-head">
+          <div>
+            <p class="eyebrow reveal">Shop</p>
+            <h2 id="shop-title" class="display display-md reveal">Stock the fridge</h2>
+            <p class="lede reveal">Mix and match any flavor. Bigger packs save more, and shipping is free on orders over $40.</p>
+          </div>
+          <div class="shop-filter reveal" role="group" aria-label="Filter products">
+            <button type="button" data-filter="all" aria-pressed="true">All 9</button>
+            <button type="button" data-filter="energy" aria-pressed="false">Energy</button>
+            <button type="button" data-filter="sparkling" aria-pressed="false">Sparkling</button>
+          </div>
+        </div>
+        <div id="shop-grid" class="shop-groups"></div>
+      </div>
     </section>
 
     <!-- 9 · Campaign -->
-    <section id="campaign" class="chapter campaign" data-stage="9" aria-labelledby="campaign-title">
+    <section id="campaign" class="chapter campaign" aria-labelledby="campaign-title">
       <div class="copy copy-center front">
         <p class="eyebrow reveal">Campaign</p>
         <h2 id="campaign-title" class="display display-md reveal">Two moods. One pulse.</h2>
@@ -208,7 +251,7 @@
         <h2 id="faq-title" class="display display-md reveal">Questions</h2>
         <details class="reveal">
           <summary>What's the difference between PULSE Energy and PULSE Sparkling?</summary>
-          <p>PULSE Energy (Arctic Rush) is a zero-sugar energy drink in a 500 mL can, built for energy, hydration and focus. PULSE Sparkling is sparkling water with real fruit in 330 mL cans, caffeine free with no added sugar.</p>
+          <p>PULSE Energy comes in five zero-sugar flavors in 500 mL cans, built for energy, hydration and focus. PULSE Sparkling is sparkling water with real fruit in 330 mL cans, caffeine free with no added sugar.</p>
         </details>
         <details class="reveal">
           <summary>Does PULSE Sparkling contain caffeine?</summary>
@@ -216,11 +259,19 @@
         </details>
         <details class="reveal">
           <summary>Is there sugar in PULSE?</summary>
-          <p>Arctic Rush has zero sugar. The sparkling range has no added sugar and uses natural flavors.</p>
+          <p>Every PULSE Energy flavor has zero sugar. PULSE Sparkling has no added sugar; the 2 to 3 g per can comes naturally from the real fruit juice.</p>
+        </details>
+        <details class="reveal">
+          <summary>How much caffeine is in PULSE Energy?</summary>
+          <p>Every PULSE Energy flavor has 160 mg of caffeine per 500 mL can, about the same as one and a half cups of coffee. We recommend no more than 2 cans a day. It isn't suitable for children, pregnant or breastfeeding women, or anyone sensitive to caffeine.</p>
+        </details>
+        <details class="reveal">
+          <summary>How much does PULSE cost?</summary>
+          <p>PULSE Energy is $2.99 a can, $10.99 for a 4-pack or $29.99 for a 12-pack. PULSE Sparkling is $1.79 a can, $9.49 for a 6-pack or $17.99 for a 12-pack. Shipping is free on orders over $40.</p>
         </details>
         <details class="reveal">
           <summary>Where can I buy PULSE?</summary>
-          <p>We're launching soon. Drop your email below and you'll be the first to know where to find us.</p>
+          <p>Online orders open at launch. You can build your cart now, and drop your email below to be first in line when checkout goes live.</p>
         </details>
       </div>
     </section>
@@ -241,6 +292,23 @@
       </div>
     </section>
   </main>
+
+  <dialog id="cart" class="cart" aria-labelledby="cart-title">
+    <div class="cart-panel">
+      <header class="cart-head">
+        <h2 id="cart-title">Your cart</h2>
+        <button id="cart-close" class="icon-btn" type="button" aria-label="Close cart">✕</button>
+      </header>
+      <ul id="cart-lines" class="cart-lines"></ul>
+      <div class="cart-foot">
+        <p class="ship"><span id="ship-msg"></span><span id="ship-bar" class="ship-bar" aria-hidden="true"></span></p>
+        <p class="subtotal"><span>Subtotal</span><b id="cart-subtotal">$0.00</b></p>
+        <button id="checkout" class="btn" type="button">Checkout</button>
+        <p id="checkout-msg" class="fine" role="status"></p>
+      </div>
+    </div>
+  </dialog>
+  <p id="toast" class="toast" role="status" aria-live="polite"></p>
 
   <footer class="footer">
     <a class="logo" href="#top" aria-label="Back to top">
