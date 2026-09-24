@@ -378,6 +378,121 @@
     },
     "main": {
       "heading": "Opening soon"
+    },
+    "product_patches": {
+      "gallery_badge": "40 per pack",
+      "sticky_label": "Add to cart",
+      "eyebrow": {
+        "text": "Hydrocolloid star patches"
+      },
+      "rating": {
+        "fallback_text": "40 patches per pack · 7 colours"
+      },
+      "text": {
+        "text_html": "<p>Ultra-thin star patches that cover a spot, absorb fluid and keep your fingers off it. Wear them overnight or out and about.</p>"
+      },
+      "benefits": {
+        "lines": "Covers the spot and protects it\nAbsorbs fluid while you wear it\nStops you from touching or picking\nUltra-thin and comfortable"
+      },
+      "buy": {
+        "button_label": "Add to cart"
+      },
+      "trust": {
+        "item_1": "Tracked shipping",
+        "item_2": "40 per pack",
+        "item_3": "Secure checkout"
+      },
+      "tab_desc": {
+        "heading": "Description"
+      },
+      "tab_use": {
+        "heading": "How to use",
+        "content_html": "<p>Clean and dry your skin. Press a star gently onto the spot. Peel it off after 6 to 8 hours, or when it turns white. Use a new patch each time. Don't use on broken or irritated skin.</p>"
+      },
+      "tab_ship": {
+        "heading": "Shipping & returns",
+        "content_html": "<p>Orders are processed in 1 to 3 business days and ship with tracking. Unopened packs can be returned within 30 days.</p>"
+      }
+    },
+    "p_strip": {
+      "s1": {
+        "text": "7 colours"
+      },
+      "s2": {
+        "text": "Hydrocolloid"
+      },
+      "s3": {
+        "text": "Ultra-thin"
+      },
+      "s4": {
+        "text": "Wear day or night"
+      },
+      "s5": {
+        "text": "40 patches per pack"
+      }
+    },
+    "p_benefits": {
+      "eyebrow": "Why stars",
+      "heading": "Small patch, big help",
+      "c1": {
+        "heading": "Covers & protects",
+        "text": "The patch covers the spot and keeps dirt and makeup off it."
+      },
+      "c2": {
+        "heading": "Absorbs fluid",
+        "text": "Hydrocolloid soaks up fluid while you wear it. The patch turns white when it's full."
+      },
+      "c3": {
+        "heading": "Hands off",
+        "text": "A star on the spot makes it easy to stop touching or picking it."
+      }
+    },
+    "p_how": {
+      "eyebrow": "How to use",
+      "heading": "Three steps",
+      "h1": {
+        "heading": "Clean & dry",
+        "text": "Wash your face and pat the skin dry so the patch sticks well."
+      },
+      "h2": {
+        "heading": "Stick a star",
+        "text": "Peel off a star and press it gently onto the spot."
+      },
+      "h3": {
+        "heading": "Peel off",
+        "text": "Remove after 6 to 8 hours, or when it turns white."
+      }
+    },
+    "p_faq": {
+      "eyebrow": "FAQ",
+      "heading": "Questions, answered",
+      "text_html": "<p>Still wondering? Email us and a real person will reply within 24 hours.</p>",
+      "f1": {
+        "question": "How many patches are in a pack?",
+        "answer_html": "<p>40 star patches in the colour you choose.</p>"
+      },
+      "f2": {
+        "question": "How long do I leave a patch on?",
+        "answer_html": "<p>6 to 8 hours, or overnight. Replace it when it turns white. Use each patch once.</p>"
+      },
+      "f3": {
+        "question": "Can I wear them during the day?",
+        "answer_html": "<p>Yes. They're thin and stay put, and the colours make them look fun. Pick Clear if you'd rather they didn't show.</p>"
+      },
+      "f4": {
+        "question": "Are they OK for sensitive skin?",
+        "answer_html": "<p>They're made for all skin types. Don't use them on broken or irritated skin, and stop if you notice any redness.</p>"
+      },
+      "f5": {
+        "question": "How long does shipping take?",
+        "answer_html": "<p>Orders are processed within 1 to 3 business days. You'll get a tracking link by email as soon as your order ships.</p>"
+      }
+    },
+    "patches_promo": {
+      "eyebrow": "Also in the shop",
+      "heading": "Star pimple patches",
+      "text_html": "<p>40 ultra-thin hydrocolloid stars that cover a spot and keep your fingers off it. 7 colours to choose from.</p>",
+      "button_label": "Shop patches"
     }
   }
 }

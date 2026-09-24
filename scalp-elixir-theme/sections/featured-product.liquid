@@ -1,0 +1,44 @@
+{%- liquid
+  assign sk = 'content.' | append: section.id | append: '.'
+  assign p = section.settings.product
+-%}
+{%- if p != blank -%}
+  <section class="featured-product section-pad-md">
+    <div class="page-width">
+      <div class="featured-product__card">
+        <a class="featured-product__media" href="{{ p.url }}">
+          {%- if p.featured_media -%}
+            {{ p.featured_media | image_url: width: 900 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 40vw, 90vw', widths: '400, 600, 900', alt: p.title }}
+          {%- else -%}
+            {% render 'bottle-art', label: p.title %}
+          {%- endif -%}
+        </a>
+        <div class="featured-product__content">
+          {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{% render 'tr', value: section.settings.eyebrow, scope: sk, field: 'eyebrow' %}</p>{%- endif -%}
+          <h2 class="h2">{% render 'tr', value: section.settings.heading, scope: sk, field: 'heading' %}</h2>
+          {%- if section.settings.text != blank -%}<div class="rte lead">{% render 'tr', value: section.settings.text, scope: sk, field: 'text_html' %}</div>{%- endif -%}
+          {%- assign from_price = p.price_min | money -%}
+          <p class="featured-product__price">
+            {%- if p.price_varies -%}{{ 'products.from_price' | t: price: from_price }}{%- else -%}{{ from_price }}{%- endif -%}
+          </p>
+          <a class="btn btn--dark" href="{{ p.url }}">{% render 'tr', value: section.settings.button_label, scope: sk, field: 'button_label' %} {% render 'icon', name: 'arrow' %}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Featured product",
+  "class": "section-featured-product",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "eyebrow", "label": "Small heading", "default": "Also in the shop" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured product" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" }
+  ],
+  "presets": [ { "name": "Featured product" } ]
+}
+{% endschema %}

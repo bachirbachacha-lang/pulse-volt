@@ -1,0 +1,316 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Hydrocolloid star patches"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "fallback_text": "40 patches per pack · 7 colours"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Ultra-thin star patches that cover a spot, absorb fluid and keep your fingers off it. Wear them overnight or out and about.</p>"
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "lines": "Covers the spot and protects it\nAbsorbs fluid while you wear it\nStops you from touching or picking\nUltra-thin and comfortable"
+          }
+        },
+        "buy": {
+          "type": "buy",
+          "settings": {
+            "offer_cards": false,
+            "offers_heading": "",
+            "badge_1": "",
+            "sub_1": "",
+            "badge_2": "",
+            "sub_2": "",
+            "badge_3": "",
+            "sub_3": "",
+            "show_quantity": true,
+            "button_label": "Add to cart",
+            "show_dynamic_checkout": true
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "icon_1": "truck",
+            "item_1": "Tracked shipping",
+            "icon_2": "heart",
+            "item_2": "40 per pack",
+            "icon_3": "lock",
+            "item_3": "Secure checkout"
+          }
+        },
+        "tab_desc": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Description",
+            "icon": "sparkle",
+            "use_description": true,
+            "content": "",
+            "open": false
+          }
+        },
+        "tab_use": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "How to use",
+            "icon": "clock",
+            "use_description": false,
+            "content": "<p>Clean and dry your skin. Press a star gently onto the spot. Peel it off after 6 to 8 hours, or when it turns white. Use a new patch each time. Don't use on broken or irritated skin.</p>",
+            "open": false
+          }
+        },
+        "tab_ship": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping & returns",
+            "icon": "truck",
+            "use_description": false,
+            "content": "<p>Orders are processed in 1 to 3 business days and ship with tracking. Unopened packs can be returned within 30 days.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "rating",
+        "price",
+        "text",
+        "benefits",
+        "buy",
+        "trust",
+        "tab_desc",
+        "tab_use",
+        "tab_ship"
+      ],
+      "settings": {
+        "gallery_badge": "40 per pack",
+        "sticky_bar": true,
+        "sticky_label": "Add to cart",
+        "padding": "md"
+      }
+    },
+    "p_strip": {
+      "type": "icon-bar",
+      "blocks": {
+        "s1": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkle",
+            "text": "7 colours"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "icon": "drop",
+            "text": "Hydrocolloid"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "text": "Ultra-thin"
+          }
+        },
+        "s4": {
+          "type": "item",
+          "settings": {
+            "icon": "sun",
+            "text": "Wear day or night"
+          }
+        },
+        "s5": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "text": "40 patches per pack"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "settings": {
+        "scroll": true,
+        "style": "deep"
+      }
+    },
+    "p_benefits": {
+      "type": "feature-grid",
+      "blocks": {
+        "c1": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "label": "",
+            "heading": "Covers & protects",
+            "text": "The patch covers the spot and keeps dirt and makeup off it."
+          }
+        },
+        "c2": {
+          "type": "card",
+          "settings": {
+            "icon": "drop",
+            "label": "",
+            "heading": "Absorbs fluid",
+            "text": "Hydrocolloid soaks up fluid while you wear it. The patch turns white when it's full."
+          }
+        },
+        "c3": {
+          "type": "card",
+          "settings": {
+            "icon": "heart",
+            "label": "",
+            "heading": "Hands off",
+            "text": "A star on the spot makes it easy to stop touching or picking it."
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "eyebrow": "Why stars",
+        "heading": "Small patch, big help",
+        "text": "",
+        "columns": "3",
+        "card_style": "benefit",
+        "style": "light",
+        "anchor": "patch-benefits"
+      }
+    },
+    "p_how": {
+      "type": "steps",
+      "blocks": {
+        "h1": {
+          "type": "step",
+          "settings": {
+            "label": "",
+            "heading": "Clean & dry",
+            "text": "Wash your face and pat the skin dry so the patch sticks well."
+          }
+        },
+        "h2": {
+          "type": "step",
+          "settings": {
+            "label": "",
+            "heading": "Stick a star",
+            "text": "Peel off a star and press it gently onto the spot."
+          }
+        },
+        "h3": {
+          "type": "step",
+          "settings": {
+            "label": "",
+            "heading": "Peel off",
+            "text": "Remove after 6 to 8 hours, or when it turns white."
+          }
+        }
+      },
+      "block_order": [
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "settings": {
+        "eyebrow": "How to use",
+        "heading": "Three steps",
+        "layout": "cards",
+        "style": "light",
+        "footnote": "",
+        "anchor": "patch-how-to-use"
+      }
+    },
+    "p_faq": {
+      "type": "faq",
+      "blocks": {
+        "f1": {
+          "type": "question",
+          "settings": {
+            "question": "How many patches are in a pack?",
+            "answer": "<p>40 star patches in the colour you choose.</p>"
+          }
+        },
+        "f2": {
+          "type": "question",
+          "settings": {
+            "question": "How long do I leave a patch on?",
+            "answer": "<p>6 to 8 hours, or overnight. Replace it when it turns white. Use each patch once.</p>"
+          }
+        },
+        "f3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I wear them during the day?",
+            "answer": "<p>Yes. They're thin and stay put, and the colours make them look fun. Pick Clear if you'd rather they didn't show.</p>"
+          }
+        },
+        "f4": {
+          "type": "question",
+          "settings": {
+            "question": "Are they OK for sensitive skin?",
+            "answer": "<p>They're made for all skin types. Don't use them on broken or irritated skin, and stop if you notice any redness.</p>"
+          }
+        },
+        "f5": {
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Orders are processed within 1 to 3 business days. You'll get a tracking link by email as soon as your order ships.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4",
+        "f5"
+      ],
+      "settings": {
+        "eyebrow": "FAQ",
+        "heading": "Questions, answered",
+        "text": "<p>Still wondering? Email us and a real person will reply within 24 hours.</p>",
+        "anchor": "faq"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "p_strip",
+    "p_benefits",
+    "p_how",
+    "p_faq"
+  ]
+}

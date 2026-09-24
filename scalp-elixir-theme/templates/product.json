@@ -518,7 +518,8 @@
         "text": "<p>Use it every day for a month. If you're not happy, email us and we'll refund you. Even if the bottle is empty.</p>",
         "button_label": "Start your routine",
         "link": "",
-        "show_price": true
+        "show_price": true,
+        "product": "scalp-elixir"
       }
     }
   },

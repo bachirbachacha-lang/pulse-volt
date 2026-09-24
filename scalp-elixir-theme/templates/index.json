@@ -82,7 +82,8 @@
         "gallery_badge": "Pure plant oils",
         "sticky_bar": true,
         "sticky_label": "Add to cart",
-        "padding": "md"
+        "padding": "md",
+        "product": "scalp-elixir"
       }
     },
     "strip": {
@@ -533,7 +534,18 @@
         "text": "<p>Use it every day for a month. If you're not happy, email us and we'll refund you. Even if the bottle is empty.</p>",
         "button_label": "Start your routine",
         "link": "",
-        "show_price": true
+        "show_price": true,
+        "product": "scalp-elixir"
+      }
+    },
+    "patches_promo": {
+      "type": "featured-product",
+      "settings": {
+        "product": "star-pimple-patches",
+        "eyebrow": "Also in the shop",
+        "heading": "Star pimple patches",
+        "text": "<p>40 ultra-thin hydrocolloid stars that cover a spot and keep your fingers off it. 7 colours to choose from.</p>",
+        "button_label": "Shop patches"
       }
     }
   },
@@ -547,6 +559,7 @@
     "timeline",
     "compare",
     "reviews",
+    "patches_promo",
     "faq",
     "cta"
   ]

@@ -10,6 +10,9 @@
   assign current_variant = p.selected_or_first_available_variant
   assign form_id = 'ProductForm-' | append: section.id
   assign sk = 'content.product.'
+  if template.suffix != blank
+    assign sk = 'content.product_' | append: template.suffix | append: '.'
+  endif
   assign single_option = false
   if p.has_only_default_variant == false and p.options.size == 1
     assign single_option = true
