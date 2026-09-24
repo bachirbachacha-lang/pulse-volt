@@ -2,8 +2,8 @@
   Drawn dropper bottle, shown wherever a product photo hasn't been added yet.
   Usage: {% render 'bottle-art', label: shop.name %}
 {%- endcomment -%}
-{%- assign bottle_label = label | default: shop.name -%}
-<svg class="bottle-art" viewBox="0 0 400 480" role="img" aria-label="{{ bottle_label | escape }} bottle">
+{%- assign bottle_label = label | default: collections.all.products.first.title | default: shop.name -%}
+<svg class="bottle-art" viewBox="0 0 400 480" direction="ltr" role="img" aria-label="{{ bottle_label | escape }} bottle">
   <defs>
     <linearGradient id="ba-glass" x1="0" x2="1">
       <stop offset="0" stop-color="#6b3f1d"/>

@@ -1,0 +1,22 @@
+{%- comment -%}
+  The theme editor text is written in English. In English it's printed as is;
+  in any other language (like Arabic) the matching translation from
+  locales/<language>.json is printed instead, falling back to the editor text.
+
+  Usage: {% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}
+  - value: the text set in the theme editor (used as is in English)
+  - scope + field: the translation key, e.g. 'content.faq.q1.' + 'question'
+    Rich text keys must end in _html so their HTML isn't escaped.
+{%- endcomment -%}
+{%- liquid
+  assign out = value
+  assign language = request.locale.iso_code | slice: 0, 2
+  if language != 'en' and scope != blank
+    assign key = scope | append: field
+    assign translated = key | t
+    unless translated contains 'translation missing'
+      assign out = translated
+    endunless
+  endif
+  echo out
+-%}

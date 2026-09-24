@@ -6,11 +6,12 @@
     {%- else -%}
       {% render 'bottle-art', label: card.title %}
     {%- endif -%}
-    {%- if card.compare_at_price > card.price -%}<span class="product-card__badge">Sale</span>{%- endif -%}
+    {%- if card.compare_at_price > card.price -%}<span class="product-card__badge">{{ 'products.sale' | t }}</span>{%- endif -%}
   </div>
   <p class="product-card__title">{{ card.title }}</p>
   <p class="product-card__price">
-    {%- if card.price_varies -%}From {% endif -%}{{ card.price | money }}
+    {%- assign card_price = card.price | money -%}
+    {%- if card.price_varies -%}{{ 'products.from_price' | t: price: card_price }}{%- else -%}{{ card_price }}{%- endif -%}
     {%- if card.compare_at_price > card.price -%} <s>{{ card.compare_at_price | money }}</s>{%- endif -%}
   </p>
 </a>

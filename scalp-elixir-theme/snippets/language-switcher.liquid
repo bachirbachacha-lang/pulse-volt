@@ -1,0 +1,18 @@
+{%- comment -%}
+  Button that switches the store language (for example English ⇄ العربية).
+  Shows once a second language is published in Settings > Languages.
+  Usage: {% render 'language-switcher', id: 'Header' %}
+{%- endcomment -%}
+{%- if localization.available_languages.size > 1 -%}
+  {%- assign form_id = 'LanguageForm' | append: id -%}
+  {%- form 'localization', id: form_id, class: 'lang-switch' -%}
+    {%- for language in localization.available_languages -%}
+      {%- unless language.iso_code == localization.language.iso_code -%}
+        <button type="submit" name="language_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}" aria-label="{{ 'general.language.switch_to' | t: language: language.endonym_name }}">
+          {% render 'icon', name: 'globe' %}
+          <span>{{ language.endonym_name }}</span>
+        </button>
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endform -%}
+{%- endif -%}

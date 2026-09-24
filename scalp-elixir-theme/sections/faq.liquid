@@ -1,15 +1,17 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 <section class="faq section-pad-md" id="{{ section.settings.anchor | default: 'faq' }}">
   <div class="page-width faq__grid">
     <header class="section-head section-head--left">
-      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-      {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
-      {%- if section.settings.text != blank -%}<div class="rte">{{ section.settings.text }}</div>{%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{% render 'tr', value: section.settings.eyebrow, scope: sk, field: 'eyebrow' %}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2">{% render 'tr', value: section.settings.heading, scope: sk, field: 'heading' %}</h2>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="rte">{% render 'tr', value: section.settings.text, scope: sk, field: 'text_html' %}</div>{%- endif -%}
     </header>
     <div class="faq__list">
       {%- for block in section.blocks -%}
+        {%- assign bk = sk | append: block.id | append: '.' -%}
         <details class="accordion" {{ block.shopify_attributes }}>
-          <summary><span>{{ block.settings.question }}</span>{% render 'icon', name: 'plus' %}</summary>
-          <div class="accordion__body rte">{{ block.settings.answer }}</div>
+          <summary><span>{% render 'tr', value: block.settings.question, scope: bk, field: 'question' %}</span>{% render 'icon', name: 'plus' %}</summary>
+          <div class="accordion__body rte">{% render 'tr', value: block.settings.answer, scope: bk, field: 'answer_html' %}</div>
         </details>
       {%- endfor -%}
     </div>
@@ -23,7 +25,10 @@
       "@type": "FAQPage",
       "mainEntity": [
         {%- for block in section.blocks -%}
-          { "@type": "Question", "name": {{ block.settings.question | json }}, "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | json }} } }{% unless forloop.last %},{% endunless %}
+          {%- assign bk = sk | append: block.id | append: '.' -%}
+          {%- capture q -%}{% render 'tr', value: block.settings.question, scope: bk, field: 'question' %}{%- endcapture -%}
+          {%- capture a -%}{% render 'tr', value: block.settings.answer, scope: bk, field: 'answer_html' %}{%- endcapture -%}
+          { "@type": "Question", "name": {{ q | json }}, "acceptedAnswer": { "@type": "Answer", "text": {{ a | strip_html | json }} } }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ]
     }

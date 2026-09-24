@@ -1,11 +1,11 @@
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" data-header>
   <div class="page-width site-header__inner">
     <details class="menu-drawer" data-menu-drawer>
-      <summary class="icon-btn menu-drawer__toggle" aria-label="Menu">
+      <summary class="icon-btn menu-drawer__toggle" aria-label="{{ 'general.menu' | t }}">
         {% render 'icon', name: 'menu' %}
       </summary>
       <div class="menu-drawer__panel">
-        <nav aria-label="Mobile">
+        <nav aria-label="{{ 'general.menu' | t }}">
           <ul>
             {%- for link in section.settings.menu.links -%}
               <li><a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
@@ -13,8 +13,9 @@
           </ul>
         </nav>
         {%- if shop.customer_accounts_enabled -%}
-          <a class="menu-drawer__account" href="{{ routes.account_url }}">{% render 'icon', name: 'user' %} Account</a>
+          <a class="menu-drawer__account" href="{{ routes.account_url }}">{% render 'icon', name: 'user' %} {{ 'general.account' | t }}</a>
         {%- endif -%}
+        <div class="menu-drawer__lang">{% render 'language-switcher', id: 'Menu' %}</div>
       </div>
     </details>
 
@@ -23,11 +24,13 @@
         {%- assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio -%}
         {{ section.settings.logo | image_url: width: 600 | image_tag: width: section.settings.logo_width, height: logo_height, alt: shop.name, loading: 'eager' }}
       {%- else -%}
-        <span class="site-logo__text">{{ section.settings.logo_text | default: shop.name }}</span>
+        {%- assign sk = 'content.' | append: section.id | append: '.' -%}
+        {%- capture logo_text -%}{% render 'tr', value: section.settings.logo_text, scope: sk, field: 'logo_text' %}{%- endcapture -%}
+        <span class="site-logo__text">{{ logo_text | default: shop.name }}</span>
       {%- endif -%}
     </a>
 
-    <nav class="site-nav" aria-label="Main">
+    <nav class="site-nav" aria-label="{{ 'general.menu' | t }}">
       <ul>
         {%- for link in section.settings.menu.links -%}
           <li><a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
@@ -36,10 +39,11 @@
     </nav>
 
     <div class="site-header__actions">
+      {% render 'language-switcher', id: 'Header' %}
       {%- if shop.customer_accounts_enabled -%}
-        <a class="icon-btn hide-mobile" href="{{ routes.account_url }}" aria-label="Account">{% render 'icon', name: 'user' %}</a>
+        <a class="icon-btn hide-mobile" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">{% render 'icon', name: 'user' %}</a>
       {%- endif -%}
-      <a class="icon-btn cart-toggle" href="{{ routes.cart_url }}" aria-label="Cart" data-cart-open>
+      <a class="icon-btn cart-toggle" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}" data-cart-open>
         {% render 'icon', name: 'bag' %}
         <span class="cart-count" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
       </a>

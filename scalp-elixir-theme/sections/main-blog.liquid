@@ -13,7 +13,7 @@
           </a>
         {%- endfor -%}
       </div>
-      {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>{%- endif -%}
+      {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="{{ 'general.pagination' | t }}">{{ paginate | default_pagination }}</nav>{%- endif -%}
     {%- endpaginate -%}
   </div>
 </section>

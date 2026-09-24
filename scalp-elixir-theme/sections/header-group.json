@@ -5,11 +5,11 @@
     "announcement": {
       "type": "announcement-bar",
       "blocks": {
-        "msg-1": { "type": "message", "settings": { "text": "Free shipping on orders over 150 SAR", "link": "" } },
-        "msg-2": { "type": "message", "settings": { "text": "30-day money-back guarantee, even on an empty bottle", "link": "" } },
-        "msg-3": { "type": "message", "settings": { "text": "Save more when you bundle 2 or 3 bottles", "link": "" } }
+        "msg_1": { "type": "message", "settings": { "text": "Free shipping on orders over 150 SAR", "link": "" } },
+        "msg_2": { "type": "message", "settings": { "text": "30-day money-back guarantee, even on an empty bottle", "link": "" } },
+        "msg_3": { "type": "message", "settings": { "text": "Save more when you bundle 2 or 3 bottles", "link": "" } }
       },
-      "block_order": ["msg-1", "msg-2", "msg-3"],
+      "block_order": ["msg_1", "msg_2", "msg_3"],
       "settings": { "background": "#1D4A45", "text_color": "#F7F4EE" }
     },
     "header": {

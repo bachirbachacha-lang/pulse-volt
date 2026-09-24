@@ -5,9 +5,9 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "menu-1": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } }
+        "menu_1": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } }
       },
-      "block_order": ["menu-1"],
+      "block_order": ["menu_1"],
       "settings": {
         "show_newsletter": true,
         "newsletter_heading": "Join the Scalp Club",

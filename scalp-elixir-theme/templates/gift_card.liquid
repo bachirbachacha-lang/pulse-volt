@@ -1,10 +1,17 @@
 {% layout none %}
+{%- liquid
+  assign rtl_languages = 'ar,he,fa,ur'
+  assign text_dir = 'ltr'
+  if rtl_languages contains request.locale.iso_code
+    assign text_dir = 'rtl'
+  endif
+-%}
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}" dir="{{ text_dir }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Your {{ gift_card.initial_value | money }} gift card for {{ shop.name }}</title>
+    <title>{{ shop.name }}</title>
     {% render 'css-variables' %}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
     {{ content_for_header }}
@@ -13,12 +20,13 @@
     <main class="page-section section-pad-lg">
       <div class="page-width page-width--narrow empty-state">
         <p class="site-logo__text">{{ shop.name }}</p>
-        <h1 class="h2">Your gift card: {{ gift_card.balance | money }}</h1>
-        {%- if gift_card.expired or gift_card.enabled == false -%}<p>This gift card is no longer active.</p>{%- endif -%}
+        {%- assign balance = gift_card.balance | money -%}
+        <h1 class="h2">{{ 'gift_card.balance' | t: balance: balance }}</h1>
+        {%- if gift_card.expired or gift_card.enabled == false -%}<p>{{ 'gift_card.inactive' | t }}</p>{%- endif -%}
         <p class="gift-code">{{ gift_card.code | format_code }}</p>
         {%- if gift_card.qr_identifier -%}<div class="gift-qr" data-qr="{{ gift_card.qr_identifier }}"></div>{%- endif -%}
-        <a class="btn btn--accent" href="{{ shop.url }}">Start shopping</a>
-        {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}">Add to Apple Wallet</a></p>{%- endif -%}
+        <a class="btn btn--accent" href="{{ shop.url }}">{{ 'gift_card.shop' | t }}</a>
+        {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}">{{ 'gift_card.wallet' | t }}</a></p>{%- endif -%}
       </div>
     </main>
   </body>

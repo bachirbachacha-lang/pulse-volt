@@ -1,6 +1,6 @@
 # Scalp Elixir: Shopify theme
 
-A single-product Shopify theme (Online Store 2.0) for the Scalp Elixir hair & scalp serum. The home page is the sales page: product and bundle picker at the top, then benefits, ingredients, how to use, a 90-day timeline, a comparison table, FAQ and a money-back guarantee banner.
+A bilingual (English and Arabic) single-product Shopify theme (Online Store 2.0) for the Scalp Elixir hair & scalp serum. The home page is the sales page: product and bundle picker at the top, then benefits, ingredients, how to use, a 90-day timeline, a comparison table, FAQ and a money-back guarantee banner.
 
 Everything is editable in **Online Store → Themes → Customize**. No apps needed.
 
@@ -34,9 +34,51 @@ The home page automatically shows your first product. To choose a specific one: 
 
 Products with other kinds of options (like Size and Scent) fall back to normal dropdowns automatically.
 
+## Arabic and English
+
+The theme ships with every text on the site in both English and Arabic. Arabic pages read right to left and use Arabic fonts (Noto Naskh Arabic for headings, IBM Plex Sans Arabic for text). A language button (🌐 العربية / English) appears in the header, the mobile menu and the footer.
+
+### Turn it on (2 minutes)
+
+1. Shopify admin → **Settings → Languages → Add language → Arabic**.
+2. Click **Publish** next to Arabic.
+
+The language button appears as soon as Arabic is published. Shopify's checkout and order emails switch to Arabic automatically.
+
+### Translate your product, menu and policies
+
+The theme's own text is already translated. Things you type in Shopify admin (the product, the menu, your policies) need their Arabic version added once. Install the free **Translate & Adapt** app (by Shopify), open it, pick Arabic, and paste:
+
+**Product**
+
+- Title: `سكالب إليكسير – سيروم الشعر وفروة الرأس`
+- Option name `Bundle`: `الباقة`
+- Option values: `1 Bottle` → `عبوة واحدة`, `2 Bottles` → `عبوتان`, `3 Bottles` → `3 عبوات`
+- Description:
+
+  ```html
+  <p>سكالب إليكسير سيروم نباتي خفيف يُدلَّك على فروة الرأس في ثوانٍ. يغذّي الجذور، ويهدّئ الجفاف والقشرة، ويساعد على تقليل التقصّف ليبدو شعرك أكثف وأكثر امتلاءً.</p>
+  <ul><li>يغذّي فروة الرأس الجافة والمتهيّجة والمتقشّرة</li><li>يساعد على تقليل التقصّف لشعر يبدو أكثف</li><li>لا يترك ملمسًا دهنيًا ويُغسل بسهولة</li><li>مناسب لجميع أنواع الشعر، بما فيها المصبوغ</li></ul>
+  <p><strong>طريقة الاستخدام:</strong> ضع 3 إلى 5 قطرات مباشرة على فروة الرأس مرة يوميًا، ودلّكها لمدة دقيقة إلى دقيقتين. لا حاجة للشطف. اختبر المنتج على جزء صغير من البشرة قبل أول استخدام بـ 24 ساعة.</p>
+  <p>منتج تجميلي. تختلف النتائج من شخص لآخر.</p>
+  ```
+
+**Menu links:** Shop → `تسوّق`, How it works → `طريقة الاستخدام`, Ingredients → `المكوّنات`, FAQ → `الأسئلة الشائعة`, Contact → `تواصل معنا`
+
+### Changing text later
+
+- **English:** Online Store → Themes → **Customize**, as usual.
+- **Arabic:** Online Store → Themes → **⋯ → Edit default theme content** → pick **Arabic** at the top, then search for the text you want to change. Everything on the home page is under **Content**.
+
+So if you change a sentence in English, also update it in Arabic there.
+
+### What's it called in Arabic?
+
+The brand is written **سكالب إليكسير** (the English name, spelled in Arabic letters, the way most brands do it in Saudi Arabia). It shows as the logo text on Arabic pages. To use a different Arabic name, change `logo_text` under Content → header in Edit default theme content.
+
 ## Things to change before you launch
 
-These are placeholders. Please check each one so everything on the site is true for your product:
+These are placeholders. Please check each one so everything on the site is true for your product. Each one exists in English and Arabic, so change both (see *Changing text later* above):
 
 - **Ingredients section:** the four cards (Rosemary, Ginger root, Biotin, Castor oil) are common ingredients in this type of serum. Replace them with what's actually on your bottle's label, and paste the full ingredient list into the "Ingredients" tab on the product page.
 - **"Vegan", "Cruelty free", "Sulfate & paraben free":** keep these only if your supplier confirms them.
@@ -69,6 +111,8 @@ The header uses the **main-menu** menu and the footer uses the **footer** menu (
 | `sections/*.liquid` | Every other section (all reusable from the editor) |
 | `snippets/cart-drawer.liquid` + `assets/theme.js` | Slide-out cart with free shipping progress bar |
 | `assets/theme.css` | All styling. Colors come from **Theme settings → Colors** |
+| `locales/en.default.json`, `locales/ar.json` | All English and Arabic text |
+| `snippets/language-switcher.liquid` | The English / العربية button |
 
 Also included: working cart page, collection, search, blog, customer accounts, password page and gift card templates, plus product and FAQ structured data for Google.
 
@@ -78,4 +122,4 @@ The zip is built from this folder:
 cd scalp-elixir-theme && zip -r ../scalp-elixir-theme.zip . -x README.md
 ```
 
-Fonts: Fraunces and Inter (SIL Open Font License), self-hosted in `assets/`.
+Fonts: Fraunces, Inter, Noto Naskh Arabic and IBM Plex Sans Arabic (all SIL Open Font License), self-hosted in `assets/`.

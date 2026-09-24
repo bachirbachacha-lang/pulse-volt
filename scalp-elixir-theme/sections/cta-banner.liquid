@@ -1,3 +1,4 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 {%- liquid
   assign p = section.settings.product
   if p == blank
@@ -9,13 +10,14 @@
     <div class="cta-banner__card">
       <div class="cta-banner__content">
         <span class="cta-banner__seal">{% render 'icon', name: 'shield' %}</span>
-        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-        <h2 class="h2">{{ section.settings.heading }}</h2>
-        {%- if section.settings.text != blank -%}<div class="rte lead">{{ section.settings.text }}</div>{%- endif -%}
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{% render 'tr', value: section.settings.eyebrow, scope: sk, field: 'eyebrow' %}</p>{%- endif -%}
+        <h2 class="h2">{% render 'tr', value: section.settings.heading, scope: sk, field: 'heading' %}</h2>
+        {%- if section.settings.text != blank -%}<div class="rte lead">{% render 'tr', value: section.settings.text, scope: sk, field: 'text_html' %}</div>{%- endif -%}
         <div class="cta-banner__actions">
-          <a class="btn btn--accent btn--lg" href="{{ section.settings.link | default: '#shop' }}">{{ section.settings.button_label }} {% render 'icon', name: 'arrow' %}</a>
+          <a class="btn btn--accent btn--lg" href="{{ section.settings.link | default: '#shop' }}">{% render 'tr', value: section.settings.button_label, scope: sk, field: 'button_label' %} {% render 'icon', name: 'arrow' %}</a>
           {%- if p != blank and section.settings.show_price -%}
-            <span class="cta-banner__price">From {{ p.price_min | money }}</span>
+            {%- assign from_price = p.price_min | money -%}
+            <span class="cta-banner__price">{{ 'products.from_price' | t: price: from_price }}</span>
           {%- endif -%}
         </div>
       </div>
@@ -25,7 +27,7 @@
         {%- elsif p.featured_media -%}
           {{ p.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 40vw, 90vw', widths: '400, 700, 1000', alt: p.title }}
         {%- else -%}
-          {% render 'bottle-art', label: shop.name %}
+          {% render 'bottle-art' %}
         {%- endif -%}
       </div>
     </div>

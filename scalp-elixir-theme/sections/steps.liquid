@@ -1,24 +1,27 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 {%- comment -%} Numbered steps: used for "How to use" and "What to expect". {%- endcomment -%}
 <section class="steps section-pad-md{% if section.settings.style == 'deep' %} is-deep{% endif %}{% if section.settings.layout == 'timeline' %} is-timeline{% endif %}" id="{{ section.settings.anchor | default: section.id }}">
   <div class="page-width">
     <header class="section-head">
-      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-      {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{% render 'tr', value: section.settings.eyebrow, scope: sk, field: 'eyebrow' %}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2">{% render 'tr', value: section.settings.heading, scope: sk, field: 'heading' %}</h2>{%- endif -%}
     </header>
     <ol class="steps__list">
       {%- for block in section.blocks -%}
+        {%- assign bk = sk | append: block.id | append: '.' -%}
+        {%- capture step_label -%}{% render 'tr', value: block.settings.label, scope: bk, field: 'label' %}{%- endcapture -%}
         <li class="step" {{ block.shopify_attributes }}>
           {%- if block.settings.image != blank -%}
             <div class="step__img">{{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 30vw, 90vw', widths: '350, 500, 700' }}</div>
           {%- endif -%}
-          <span class="step__num">{{ block.settings.label | default: forloop.index }}</span>
-          <h3 class="h4">{{ block.settings.heading }}</h3>
-          <p>{{ block.settings.text }}</p>
+          <span class="step__num">{{ step_label | default: forloop.index }}</span>
+          <h3 class="h4">{% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}</h3>
+          <p>{% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}</p>
         </li>
       {%- endfor -%}
     </ol>
     {%- if section.settings.footnote != blank -%}
-      <p class="footnote">{{ section.settings.footnote }}</p>
+      <p class="footnote">{% render 'tr', value: section.settings.footnote, scope: sk, field: 'footnote' %}</p>
     {%- endif -%}
   </div>
 </section>

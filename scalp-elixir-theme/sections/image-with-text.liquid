@@ -1,32 +1,34 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 <section class="iwt section-pad-md{% if section.settings.style == 'deep' %} is-deep{% endif %}" id="{{ section.settings.anchor | default: section.id }}">
   <div class="page-width iwt__grid{% if section.settings.image_right %} is-reversed{% endif %}">
     <div class="iwt__media">
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 1400 | image_tag: sizes: '(min-width: 990px) 50vw, 100vw', widths: '500, 800, 1100, 1400', loading: 'lazy', class: 'cover' }}
       {%- else -%}
-        <div class="art-panel">{% render 'bottle-art', label: shop.name %}</div>
+        <div class="art-panel">{% render 'bottle-art' %}</div>
       {%- endif -%}
     </div>
     <div class="iwt__content">
       {%- for block in section.blocks -%}
+        {%- assign bk = sk | append: block.id | append: '.' -%}
         {%- case block.type -%}
           {%- when 'eyebrow' -%}
-            <p class="eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+            <p class="eyebrow" {{ block.shopify_attributes }}>{% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}</p>
           {%- when 'heading' -%}
-            <h2 class="h2" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+            <h2 class="h2" {{ block.shopify_attributes }}>{% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}</h2>
           {%- when 'text' -%}
-            <div class="rte lead" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            <div class="rte lead" {{ block.shopify_attributes }}>{% render 'tr', value: block.settings.text, scope: bk, field: 'text_html' %}</div>
           {%- when 'point' -%}
             <div class="point" {{ block.shopify_attributes }}>
               <span class="point__icon">{% render 'icon', name: block.settings.icon %}</span>
               <div>
-                <h3 class="h5">{{ block.settings.heading }}</h3>
-                <p>{{ block.settings.text }}</p>
+                <h3 class="h5">{% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}</h3>
+                <p>{% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}</p>
               </div>
             </div>
           {%- when 'button' -%}
             {%- if block.settings.label != blank -%}
-              <a class="btn {% if section.settings.style == 'deep' %}btn--accent{% else %}btn--dark{% endif %}" href="{{ block.settings.link | default: '#shop' }}" {{ block.shopify_attributes }}>{{ block.settings.label }} {% render 'icon', name: 'arrow' %}</a>
+              <a class="btn {% if section.settings.style == 'deep' %}btn--accent{% else %}btn--dark{% endif %}" href="{{ block.settings.link | default: '#shop' }}" {{ block.shopify_attributes }}>{% render 'tr', value: block.settings.label, scope: bk, field: 'label' %} {% render 'icon', name: 'arrow' %}</a>
             {%- endif -%}
         {%- endcase -%}
       {%- endfor -%}

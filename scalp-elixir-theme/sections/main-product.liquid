@@ -9,6 +9,7 @@
   endif
   assign current_variant = p.selected_or_first_available_variant
   assign form_id = 'ProductForm-' | append: section.id
+  assign sk = 'content.product.'
   assign single_option = false
   if p.has_only_default_variant == false and p.options.size == 1
     assign single_option = true
@@ -39,7 +40,7 @@
           </figure>
         {%- endif -%}
         {%- if section.settings.gallery_badge != blank -%}
-          <span class="gallery-badge">{% render 'icon', name: 'sparkle' %}{{ section.settings.gallery_badge }}</span>
+          <span class="gallery-badge">{% render 'icon', name: 'sparkle' %}{% render 'tr', value: section.settings.gallery_badge, scope: sk, field: 'gallery_badge' %}</span>
         {%- endif -%}
       </div>
       {%- if p.media.size > 1 -%}
@@ -56,14 +57,14 @@
     {%- comment -%} Buy box {%- endcomment -%}
     <div class="buybox" data-buybox>
       {%- if p == blank -%}
-        <p class="eyebrow">Hair &amp; scalp serum</p>
-        <h1 class="buybox__title">Add your product</h1>
-        <p>Import your product in Shopify admin, then pick it for this section in the theme editor.</p>
+        <h1 class="buybox__title">{{ 'products.no_product_title' | t }}</h1>
+        <p>{{ 'products.no_product_text' | t }}</p>
       {%- else -%}
         {%- for block in section.blocks -%}
+          {%- assign bk = sk | append: block.id | append: '.' -%}
           {%- case block.type -%}
             {%- when 'eyebrow' -%}
-              <p class="eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+              <p class="eyebrow" {{ block.shopify_attributes }}>{% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}</p>
 
             {%- when 'title' -%}
               {%- if template.name == 'product' -%}
@@ -78,10 +79,10 @@
               {%- if rating != blank -%}
                 <a class="rating" href="#reviews" {{ block.shopify_attributes }}>
                   {% render 'stars', rating: rating.rating %}
-                  <span>{{ rating.rating | round: 1 }} ({{ rating_count }} reviews)</span>
+                  <span>{{ 'products.rating_count' | t: rating: rating.rating, total: rating_count }}</span>
                 </a>
               {%- elsif block.settings.fallback_text != blank -%}
-                <p class="rating rating--text" {{ block.shopify_attributes }}>{% render 'icon', name: 'sparkle' %}<span>{{ block.settings.fallback_text }}</span></p>
+                <p class="rating rating--text" {{ block.shopify_attributes }}>{% render 'icon', name: 'sparkle' %}<span>{% render 'tr', value: block.settings.fallback_text, scope: bk, field: 'fallback_text' %}</span></p>
               {%- endif -%}
 
             {%- when 'price' -%}
@@ -90,11 +91,12 @@
               </div>
 
             {%- when 'text' -%}
-              <div class="buybox__text rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              <div class="buybox__text rte" {{ block.shopify_attributes }}>{% render 'tr', value: block.settings.text, scope: bk, field: 'text_html' %}</div>
 
             {%- when 'benefits' -%}
               <ul class="checklist" {{ block.shopify_attributes }}>
-                {%- assign lines = block.settings.lines | newline_to_br | split: '<br />' -%}
+                {%- capture benefit_lines -%}{% render 'tr', value: block.settings.lines, scope: bk, field: 'lines' %}{%- endcapture -%}
+                {%- assign lines = benefit_lines | newline_to_br | split: '<br />' -%}
                 {%- for line in lines -%}
                   {%- assign clean = line | strip -%}
                   {%- if clean != blank -%}
@@ -111,26 +113,27 @@
                   {%- unless p.has_only_default_variant -%}
                     {%- if single_option and block.settings.offer_cards -%}
                       <fieldset class="offers">
-                        <legend class="offers__legend">{{ block.settings.offers_heading | default: p.options.first }}</legend>
+                        {%- capture offers_heading -%}{% render 'tr', value: block.settings.offers_heading, scope: bk, field: 'offers_heading' %}{%- endcapture -%}
+                        <legend class="offers__legend">{{ offers_heading | default: p.options.first }}</legend>
                         {%- for variant in p.variants -%}
                           {%- liquid
                             assign badge = ''
-                            if forloop.index == 1
-                              assign badge = block.settings.badge_1
-                            elsif forloop.index == 2
-                              assign badge = block.settings.badge_2
-                            elsif forloop.index == 3
-                              assign badge = block.settings.badge_3
-                            endif
                             assign sub = ''
                             if forloop.index == 1
+                              assign badge = block.settings.badge_1
                               assign sub = block.settings.sub_1
                             elsif forloop.index == 2
+                              assign badge = block.settings.badge_2
                               assign sub = block.settings.sub_2
                             elsif forloop.index == 3
+                              assign badge = block.settings.badge_3
                               assign sub = block.settings.sub_3
                             endif
+                            assign badge_field = 'badge_' | append: forloop.index
+                            assign sub_field = 'sub_' | append: forloop.index
                           -%}
+                          {%- capture badge -%}{% render 'tr', value: badge, scope: bk, field: badge_field %}{%- endcapture -%}
+                          {%- capture sub -%}{% render 'tr', value: sub, scope: bk, field: sub_field %}{%- endcapture -%}
                           <label class="offer{% if badge != blank %} has-badge{% endif %}{% unless variant.available %} is-soldout{% endunless %}">
                             <input type="radio" name="offer-{{ section.id }}" value="{{ variant.id }}"
                               {% if variant.id == current_variant.id %}checked{% endif %}
@@ -140,14 +143,14 @@
                             <span class="offer__radio" aria-hidden="true"></span>
                             <span class="offer__main">
                               <span class="offer__title">
-                                {{- variant.title -}}
+                                <bdi>{{- variant.title -}}</bdi>
                                 {%- if variant.compare_at_price > variant.price -%}
                                   {%- assign save = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price | floor -%}
-                                  <span class="offer__save">Save {{ save }}%</span>
+                                  <span class="offer__save">{{ 'products.save_percent' | t: percent: save }}</span>
                                 {%- endif -%}
                               </span>
                               {%- if sub != blank -%}<span class="offer__sub">{{ sub }}</span>{%- endif -%}
-                              {%- unless variant.available -%}<span class="offer__sub">Sold out</span>{%- endunless -%}
+                              {%- unless variant.available -%}<span class="offer__sub">{{ 'products.sold_out' | t }}</span>{%- endunless -%}
                             </span>
                             <span class="offer__price">
                               <strong>{{ variant.price | money }}</strong>
@@ -177,18 +180,18 @@
 
                   {%- if block.settings.show_quantity -%}
                     <div class="qty-row">
-                      <span class="qty-row__label">Quantity</span>
+                      <span class="qty-row__label">{{ 'cart.quantity' | t }}</span>
                       <div class="qty" data-qty>
-                        <button type="button" data-qty-minus aria-label="Decrease quantity">{% render 'icon', name: 'minus' %}</button>
-                        <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Quantity">
-                        <button type="button" data-qty-plus aria-label="Increase quantity">{% render 'icon', name: 'plus' %}</button>
+                        <button type="button" data-qty-minus aria-label="{{ 'cart.decrease' | t }}">{% render 'icon', name: 'minus' %}</button>
+                        <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="{{ 'cart.quantity' | t }}">
+                        <button type="button" data-qty-plus aria-label="{{ 'cart.increase' | t }}">{% render 'icon', name: 'plus' %}</button>
                       </div>
                     </div>
                   {%- endif -%}
 
                   <button type="submit" name="add" class="btn btn--accent btn--full btn--lg" data-add-button {% unless current_variant.available %}disabled{% endunless %}>
                     <span data-add-label>
-                      {%- if current_variant.available -%}{{ block.settings.button_label }}{%- else -%}Sold out{%- endif -%}
+                      {%- if current_variant.available -%}{% render 'tr', value: block.settings.button_label, scope: bk, field: 'button_label' %}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
                     </span>
                     <span class="btn__spinner" aria-hidden="true"></span>
                   </button>
@@ -201,9 +204,9 @@
 
             {%- when 'trust' -%}
               <ul class="trust-row" {{ block.shopify_attributes }}>
-                {%- if block.settings.item_1 != blank -%}<li>{% render 'icon', name: block.settings.icon_1 %}<span>{{ block.settings.item_1 }}</span></li>{%- endif -%}
-                {%- if block.settings.item_2 != blank -%}<li>{% render 'icon', name: block.settings.icon_2 %}<span>{{ block.settings.item_2 }}</span></li>{%- endif -%}
-                {%- if block.settings.item_3 != blank -%}<li>{% render 'icon', name: block.settings.icon_3 %}<span>{{ block.settings.item_3 }}</span></li>{%- endif -%}
+                {%- if block.settings.item_1 != blank -%}<li>{% render 'icon', name: block.settings.icon_1 %}<span>{% render 'tr', value: block.settings.item_1, scope: bk, field: 'item_1' %}</span></li>{%- endif -%}
+                {%- if block.settings.item_2 != blank -%}<li>{% render 'icon', name: block.settings.icon_2 %}<span>{% render 'tr', value: block.settings.item_2, scope: bk, field: 'item_2' %}</span></li>{%- endif -%}
+                {%- if block.settings.item_3 != blank -%}<li>{% render 'icon', name: block.settings.icon_3 %}<span>{% render 'tr', value: block.settings.item_3, scope: bk, field: 'item_3' %}</span></li>{%- endif -%}
               </ul>
 
             {%- when 'payment_icons' -%}
@@ -219,14 +222,14 @@
               <details class="accordion" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
                 <summary>
                   {% render 'icon', name: block.settings.icon %}
-                  <span>{{ block.settings.heading }}</span>
+                  <span>{% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}</span>
                   {% render 'icon', name: 'plus' %}
                 </summary>
                 <div class="accordion__body rte">
                   {%- if block.settings.use_description -%}
                     {{ p.description }}
                   {%- else -%}
-                    {{ block.settings.content }}
+                    {% render 'tr', value: block.settings.content, scope: bk, field: 'content_html' %}
                     {%- if block.settings.page != blank -%}{{ block.settings.page.content }}{%- endif -%}
                   {%- endif -%}
                 </div>
@@ -268,7 +271,7 @@
             <p class="sticky-atc__price" data-sticky-price>{{ current_variant.price | money }}</p>
           </div>
         </div>
-        <button type="button" class="btn btn--accent" data-sticky-add>{{ section.settings.sticky_label }}</button>
+        <button type="button" class="btn btn--accent" data-sticky-add>{% render 'tr', value: section.settings.sticky_label, scope: sk, field: 'sticky_label' %}</button>
       </div>
     </div>
   {%- endif -%}

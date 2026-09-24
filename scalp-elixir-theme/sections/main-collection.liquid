@@ -9,11 +9,11 @@
         {%- for card in collection.products -%}
           {% render 'product-card', card: card %}
         {%- else -%}
-          <p>No products yet.</p>
+          <p>{{ 'collections.empty' | t }}</p>
         {%- endfor -%}
       </div>
       {%- if paginate.pages > 1 -%}
-        <nav class="pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>
+        <nav class="pagination" aria-label="{{ 'general.pagination' | t }}">{{ paginate | default_pagination }}</nav>
       {%- endif -%}
     {%- endpaginate -%}
   </div>

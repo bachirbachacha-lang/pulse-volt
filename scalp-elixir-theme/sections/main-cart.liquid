@@ -1,6 +1,6 @@
 <section class="page-section section-pad-md">
   <div class="page-width page-width--narrow">
-    <h1 class="h2">Your cart</h1>
+    <h1 class="h2">{{ 'cart.title' | t }}</h1>
     {%- if cart.item_count > 0 -%}
       <form action="{{ routes.cart_url }}" method="post" class="cart-page" id="CartPage">
         <ul class="cart-lines">
@@ -16,10 +16,10 @@
                   <p class="cart-line__discount">{{ discount.discount_application.title }} (-{{ discount.amount | money }})</p>
                 {%- endfor -%}
                 <div class="qty qty--sm">
-                  <label class="visually-hidden" for="Qty-{{ item.key }}">Quantity</label>
+                  <label class="visually-hidden" for="Qty-{{ item.key }}">{{ 'cart.quantity' | t }}</label>
                   <input id="Qty-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric">
                 </div>
-                <a class="cart-line__remove" href="{{ item.url_to_remove }}">Remove</a>
+                <a class="cart-line__remove" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
               </div>
               <div class="cart-line__price">
                 {%- if item.original_line_price > item.final_line_price -%}<s>{{ item.original_line_price | money }}</s>{%- endif -%}
@@ -31,17 +31,17 @@
 
         <div class="cart-summary">
           {%- if section.settings.show_note -%}
-            <label for="CartNote">Order note</label>
+            <label for="CartNote">{{ 'cart.note' | t }}</label>
             <textarea id="CartNote" name="note" rows="2">{{ cart.note }}</textarea>
           {%- endif -%}
           {%- for discount in cart.cart_level_discount_applications -%}
             <p class="cart-summary__row"><span>{{ discount.title }}</span><span>-{{ discount.total_allocated_amount | money }}</span></p>
           {%- endfor -%}
-          <p class="cart-summary__row cart-summary__total"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></p>
-          <p class="cart-drawer__tax">Taxes and shipping calculated at checkout.</p>
+          <p class="cart-summary__row cart-summary__total"><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money }}</strong></p>
+          <p class="cart-drawer__tax">{{ 'cart.taxes' | t }}</p>
           <div class="cart-summary__actions">
-            <button type="submit" name="update" class="btn btn--ghost">Update cart</button>
-            <button type="submit" name="checkout" class="btn btn--accent btn--lg">{% render 'icon', name: 'lock' %} Checkout</button>
+            <button type="submit" name="update" class="btn btn--ghost">{{ 'cart.update' | t }}</button>
+            <button type="submit" name="checkout" class="btn btn--accent btn--lg">{% render 'icon', name: 'lock' %} {{ 'cart.checkout' | t }}</button>
           </div>
           {%- if additional_checkout_buttons -%}
             <div class="additional-checkout">{{ content_for_additional_checkout_buttons }}</div>
@@ -50,8 +50,8 @@
       </form>
     {%- else -%}
       <div class="empty-state">
-        <p>Your cart is empty.</p>
-        <a class="btn btn--dark" href="{{ routes.root_url }}#shop">Shop now</a>
+        <p>{{ 'cart.empty' | t }}</p>
+        <a class="btn btn--dark" href="{{ routes.root_url }}#shop">{{ 'cart.shop_now' | t }}</a>
       </div>
     {%- endif -%}
   </div>

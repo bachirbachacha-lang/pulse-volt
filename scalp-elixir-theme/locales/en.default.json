@@ -1,10 +1,388 @@
 {
   "general": {
     "skip": "Skip to content",
-    "cart": "Cart"
+    "menu": "Menu",
+    "account": "Account",
+    "cart": "Cart",
+    "pagination": "Pagination",
+    "not_found": "This page doesn't exist",
+    "back_home": "Back to home",
+    "language": {
+      "switch_to": "Switch to {{ language }}"
+    }
   },
   "products": {
     "add_to_cart": "Add to cart",
-    "sold_out": "Sold out"
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "save_percent": "Save {{ percent }}%",
+    "add_error": "Could not add to cart. Please try again.",
+    "rating_count": "{{ rating }} ({{ total }} reviews)",
+    "from_price": "From {{ price }}",
+    "sale": "Sale",
+    "no_product_title": "Add your product",
+    "no_product_text": "Add your product in Shopify admin, then pick it for this section in the theme editor."
+  },
+  "cart": {
+    "title": "Your cart",
+    "close": "Close cart",
+    "subtotal": "Subtotal",
+    "taxes": "Taxes and shipping calculated at checkout.",
+    "checkout": "Checkout",
+    "empty": "Your cart is empty.",
+    "shop_now": "Shop now",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "note": "Order note",
+    "update": "Update cart",
+    "shipping_away_html": "You're <strong>{{ amount }}</strong> away from free shipping",
+    "shipping_unlocked_html": "<strong>You unlocked free shipping</strong>"
+  },
+  "newsletter": {
+    "success": "Thanks, you're on the list.",
+    "email": "Email",
+    "placeholder": "Your email",
+    "subscribe": "Subscribe"
+  },
+  "comparison": {
+    "feature": "Feature",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "reviews": {
+    "verified": "Verified buyer",
+    "stars": "{{ rating }} out of 5 stars"
+  },
+  "collections": {
+    "empty": "No products yet.",
+    "title": "Collections"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search products",
+    "submit": "Search",
+    "results": "{{ total }} results for “{{ terms }}”"
+  },
+  "password": {
+    "success": "Thanks, we'll email you when we open.",
+    "notify": "Notify me",
+    "enter": "Enter store password",
+    "password": "Password",
+    "submit": "Enter"
+  },
+  "gift_card": {
+    "balance": "Your gift card: {{ balance }}",
+    "inactive": "This gift card is no longer active.",
+    "shop": "Start shopping",
+    "wallet": "Add to Apple Wallet"
+  },
+  "accounts": {
+    "login": "Log in",
+    "email": "Email",
+    "password": "Password",
+    "forgot": "Forgot your password?",
+    "create_link": "Create an account",
+    "reset_title": "Reset your password",
+    "reset_sent": "We've sent you an email with a link to reset your password.",
+    "send_reset": "Send reset link",
+    "create": "Create account",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "title": "Your account",
+    "logout": "Log out",
+    "orders": "Order history",
+    "no_orders": "You haven't placed any orders yet.",
+    "default_address": "Default address",
+    "manage_addresses": "Manage addresses ({{ total }})",
+    "back": "← Back to account",
+    "order": "Order {{ name }}",
+    "shipping_address": "Shipping address",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "track": "Track",
+    "addresses": "Addresses",
+    "default": "Default",
+    "delete": "Delete",
+    "add_new": "Add a new address",
+    "address1": "Address",
+    "address2": "Apartment, suite, etc.",
+    "city": "City",
+    "country": "Country",
+    "province": "Province / State",
+    "zip": "Postal code",
+    "phone": "Phone",
+    "set_default": "Set as default address",
+    "add": "Add address",
+    "activate_title": "Activate your account",
+    "confirm_password": "Confirm password",
+    "activate": "Activate account",
+    "new_password": "New password",
+    "reset": "Reset password"
+  },
+  "content": {
+    "product": {
+      "gallery_badge": "Vegan · Cruelty free",
+      "sticky_label": "Add to cart",
+      "eyebrow": {
+        "text": "Botanical hair & scalp serum"
+      },
+      "rating": {
+        "fallback_text": "New formula · Made for daily use"
+      },
+      "text": {
+        "text_html": "<p>A lightweight, fast-absorbing serum that massages into the scalp in seconds. It nourishes the roots, calms dryness and flakes, and helps reduce breakage so hair looks <strong>thicker and fuller</strong>.</p>"
+      },
+      "benefits": {
+        "lines": "Nourishes dry, itchy, flaky scalps\nHelps reduce breakage for fuller-looking hair\nNon-greasy, washes out easily\nFor every hair type, including color-treated"
+      },
+      "buy": {
+        "offers_heading": "Choose your routine",
+        "sub_1": "Try it out · 1 month",
+        "badge_2": "Most popular",
+        "sub_2": "2-month routine",
+        "badge_3": "Best value",
+        "sub_3": "3-month routine for the best results",
+        "button_label": "Add to cart"
+      },
+      "trust": {
+        "item_1": "Tracked shipping",
+        "item_2": "30-day guarantee",
+        "item_3": "Secure checkout"
+      },
+      "tab_desc": {
+        "heading": "Description"
+      },
+      "tab_use": {
+        "heading": "How to use",
+        "content_html": "<p>Apply 3 to 5 drops directly to the scalp once a day. Massage for 1 to 2 minutes. No need to rinse. Patch test 24 hours before first use.</p>"
+      },
+      "tab_ingr": {
+        "heading": "Ingredients",
+        "content_html": "<p>Replace this with the full ingredient list (INCI) from your product label.</p>"
+      },
+      "tab_ship": {
+        "heading": "Shipping & returns",
+        "content_html": "<p>Orders are processed in 1 to 3 business days and ship with tracking. Covered by our 30-day money-back guarantee.</p>"
+      }
+    },
+    "announcement": {
+      "msg_1": {
+        "text": "Free shipping on orders over 150 SAR"
+      },
+      "msg_2": {
+        "text": "30-day money-back guarantee, even on an empty bottle"
+      },
+      "msg_3": {
+        "text": "Save more when you bundle 2 or 3 bottles"
+      }
+    },
+    "header": {
+      "logo_text": "Scalp Elixir"
+    },
+    "strip": {
+      "i1": {
+        "text": "Vegan formula"
+      },
+      "i2": {
+        "text": "Lightweight, non-greasy"
+      },
+      "i3": {
+        "text": "Sulfate & paraben free"
+      },
+      "i4": {
+        "text": "Cruelty free"
+      },
+      "i5": {
+        "text": "30-day money-back guarantee"
+      }
+    },
+    "problem": {
+      "e": {
+        "text": "Why your hair feels thin"
+      },
+      "h": {
+        "heading": "Great hair starts at the scalp, not the ends"
+      },
+      "t": {
+        "text_html": "<p>Stress, heat styling, tight hairstyles and harsh shampoos leave the scalp dry and irritated. Hair that grows from a stressed scalp is more likely to break, so it never looks as full as it could.</p>"
+      },
+      "p1": {
+        "heading": "Feeds the roots",
+        "text": "Plant oils and extracts go straight where hair grows, not just on the lengths."
+      },
+      "p2": {
+        "heading": "Less breakage",
+        "text": "Stronger, better-conditioned strands mean less hair in your brush."
+      },
+      "b": {
+        "label": "Start your routine"
+      }
+    },
+    "benefits": {
+      "eyebrow": "Benefits",
+      "heading": "What it does for your hair",
+      "b1": {
+        "heading": "Fuller-looking hair",
+        "text": "Helps reduce breakage so your hair keeps its length and looks thicker over time."
+      },
+      "b2": {
+        "heading": "Calm, balanced scalp",
+        "text": "Soothes dryness, itch and flakes with a gentle, plant-based formula."
+      },
+      "b3": {
+        "heading": "Zero grease",
+        "text": "Absorbs in seconds. Use it on dry hair and style as usual."
+      },
+      "b4": {
+        "heading": "For every hair type",
+        "text": "Straight, wavy, curly, coily, color-treated. Women and men."
+      }
+    },
+    "ingredients": {
+      "eyebrow": "What's inside",
+      "heading": "Clean botanicals, nothing you don't need",
+      "text_html": "<p>No sulfates, parabens, silicones or mineral oil.</p>",
+      "g1": {
+        "label": "Rosmarinus officinalis",
+        "heading": "Rosemary",
+        "text": "A classic hair-care botanical that helps refresh and invigorate the scalp."
+      },
+      "g2": {
+        "label": "Zingiber officinale",
+        "heading": "Ginger root",
+        "text": "Gives a gentle, warming tingle that makes the daily scalp massage feel good."
+      },
+      "g3": {
+        "label": "Vitamin B7",
+        "heading": "Biotin",
+        "text": "A well-known hair-care vitamin that helps condition and strengthen strands."
+      },
+      "g4": {
+        "label": "Ricinus communis",
+        "heading": "Castor oil",
+        "text": "A rich plant oil that seals in moisture and helps reduce breakage."
+      }
+    },
+    "how": {
+      "eyebrow": "How to use",
+      "heading": "Two minutes a day",
+      "s1": {
+        "heading": "Apply",
+        "text": "Part your hair and apply 3 to 5 drops directly to the scalp, focusing on thinner areas."
+      },
+      "s2": {
+        "heading": "Massage",
+        "text": "Massage with your fingertips for 1 to 2 minutes to spread the serum and wake up the scalp."
+      },
+      "s3": {
+        "heading": "Repeat daily",
+        "text": "No need to rinse. Use once a day, morning or night, and keep going. Consistency is everything."
+      }
+    },
+    "timeline": {
+      "eyebrow": "What to expect",
+      "heading": "Your first 90 days",
+      "footnote": "Hair grows in cycles, so give it at least 8 to 12 weeks of daily use. Individual results vary.",
+      "t1": {
+        "label": "Week 1–2",
+        "heading": "Scalp feels better",
+        "text": "Less dryness and itch. Your scalp feels clean, calm and refreshed."
+      },
+      "t2": {
+        "label": "Week 4–6",
+        "heading": "Stronger strands",
+        "text": "Hair feels softer and more conditioned, with less breakage when you brush."
+      },
+      "t3": {
+        "label": "Week 8–12",
+        "heading": "Fuller-looking hair",
+        "text": "With daily use, hair looks thicker and healthier from root to tip."
+      }
+    },
+    "compare": {
+      "eyebrow": "The difference",
+      "heading": "Not another greasy hair oil",
+      "us_label": "Scalp Elixir",
+      "them_label": "Typical hair oils",
+      "r1": {
+        "feature": "Targets the scalp, where hair grows"
+      },
+      "r2": {
+        "feature": "Lightweight, non-greasy finish"
+      },
+      "r3": {
+        "feature": "Precision dropper, no mess"
+      },
+      "r4": {
+        "feature": "Free from sulfates, parabens & silicones"
+      },
+      "r5": {
+        "feature": "Vegan and cruelty free"
+      },
+      "r6": {
+        "feature": "30-day money-back guarantee"
+      }
+    },
+    "reviews": {
+      "eyebrow": "Reviews",
+      "heading": "What customers are saying"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "heading": "Questions, answered",
+      "text_html": "<p>Still wondering? Email us and a real person will reply within 24 hours.</p>",
+      "q1": {
+        "question": "How long until I see results?",
+        "answer_html": "<p>Most people notice a calmer, more comfortable scalp within the first two weeks. Hair grows slowly and in cycles, so give it 8 to 12 weeks of daily use to judge the look of your hair. Individual results vary.</p>"
+      },
+      "q2": {
+        "question": "Will it make my hair greasy?",
+        "answer_html": "<p>No. The formula is lightweight and absorbs in a minute or two. You only need a few drops, applied to the scalp, not the lengths.</p>"
+      },
+      "q3": {
+        "question": "Can I use it on color-treated or curly hair?",
+        "answer_html": "<p>Yes. It works on all hair types and textures, including color-treated, relaxed and natural hair.</p>"
+      },
+      "q4": {
+        "question": "How long does one bottle last?",
+        "answer_html": "<p>Used once a day, one bottle lasts about a month. That's why most customers pick the 2 or 3 bottle routine.</p>"
+      },
+      "q5": {
+        "question": "Is it safe for sensitive skin?",
+        "answer_html": "<p>It's made for daily use, but everyone's skin is different. Do a patch test behind your ear 24 hours before first use. Stop using it if irritation occurs. If you're pregnant, breastfeeding or under medical care, check with your doctor first.</p>"
+      },
+      "q6": {
+        "question": "How long does shipping take?",
+        "answer_html": "<p>Orders are processed within 1 to 3 business days. You'll get a tracking link by email as soon as your order ships.</p>"
+      },
+      "q7": {
+        "question": "What if it doesn't work for me?",
+        "answer_html": "<p>You're covered by our 30-day money-back guarantee. Email us within 30 days of delivery and we'll refund you, even if the bottle is empty.</p>"
+      }
+    },
+    "cta": {
+      "eyebrow": "Risk-free",
+      "heading": "Love your hair in 30 days or your money back",
+      "text_html": "<p>Use it every day for a month. If you're not happy, email us and we'll refund you. Even if the bottle is empty.</p>",
+      "button_label": "Start your routine"
+    },
+    "footer": {
+      "newsletter_heading": "Join the Scalp Club",
+      "newsletter_text": "Hair care tips, early access and subscriber-only offers. No spam.",
+      "brand_text_html": "<p>Botanical hair and scalp care, made simple.</p>",
+      "disclaimer": "Cosmetic product. Individual results vary.",
+      "menu_1": {
+        "heading": "Help"
+      }
+    },
+    "settings": {
+      "cart_note": "Secure checkout. 30-day money-back guarantee."
+    },
+    "main": {
+      "heading": "Opening soon"
+    }
   }
 }

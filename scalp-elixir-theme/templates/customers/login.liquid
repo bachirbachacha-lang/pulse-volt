@@ -1,27 +1,27 @@
 <section class="page-section section-pad-md">
   <div class="page-width page-width--narrow account-form">
-    <h1 class="h2">Log in</h1>
+    <h1 class="h2">{{ 'accounts.login' | t }}</h1>
     {%- form 'customer_login' -%}
       {{ form.errors | default_errors }}
-      <label for="LoginEmail">Email</label>
+      <label for="LoginEmail">{{ 'accounts.email' | t }}</label>
       <input id="LoginEmail" type="email" name="customer[email]" autocomplete="email" required>
       {%- if form.password_needed -%}
-        <label for="LoginPassword">Password</label>
+        <label for="LoginPassword">{{ 'accounts.password' | t }}</label>
         <input id="LoginPassword" type="password" name="customer[password]" autocomplete="current-password">
-        <a href="#recover" class="account-form__link">Forgot your password?</a>
+        <a href="#recover" class="account-form__link">{{ 'accounts.forgot' | t }}</a>
       {%- endif -%}
-      <button class="btn btn--dark btn--full" type="submit">Log in</button>
+      <button class="btn btn--dark btn--full" type="submit">{{ 'accounts.login' | t }}</button>
     {%- endform -%}
-    <p class="account-form__alt"><a href="{{ routes.account_register_url }}">Create an account</a></p>
+    <p class="account-form__alt"><a href="{{ routes.account_register_url }}">{{ 'accounts.create_link' | t }}</a></p>
 
     <div id="recover" class="account-form__recover">
-      <h2 class="h4">Reset your password</h2>
+      <h2 class="h4">{{ 'accounts.reset_title' | t }}</h2>
       {%- form 'recover_customer_password' -%}
-        {%- if form.posted_successfully? -%}<p role="status">We've sent you an email with a link to reset your password.</p>{%- endif -%}
+        {%- if form.posted_successfully? -%}<p role="status">{{ 'accounts.reset_sent' | t }}</p>{%- endif -%}
         {{ form.errors | default_errors }}
-        <label for="RecoverEmail">Email</label>
+        <label for="RecoverEmail">{{ 'accounts.email' | t }}</label>
         <input id="RecoverEmail" type="email" name="email" autocomplete="email" required>
-        <button class="btn btn--ghost" type="submit">Send reset link</button>
+        <button class="btn btn--ghost" type="submit">{{ 'accounts.send_reset' | t }}</button>
       {%- endform -%}
     </div>
   </div>

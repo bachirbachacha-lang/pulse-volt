@@ -6,8 +6,8 @@
   <div class="cart-drawer__overlay" data-cart-close></div>
   <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" tabindex="-1">
     <header class="cart-drawer__head">
-      <h2 id="CartDrawerTitle" class="h4">Your cart</h2>
-      <button type="button" class="icon-btn" data-cart-close aria-label="Close cart">{% render 'icon', name: 'close' %}</button>
+      <h2 id="CartDrawerTitle" class="h4">{{ 'cart.title' | t }}</h2>
+      <button type="button" class="icon-btn" data-cart-close aria-label="{{ 'cart.close' | t }}">{% render 'icon', name: 'close' %}</button>
     </header>
 
     {%- if settings.free_shipping_threshold > 0 -%}
@@ -21,16 +21,16 @@
 
     <footer class="cart-drawer__foot" data-cart-foot>
       <div class="cart-drawer__total">
-        <span>Subtotal</span>
+        <span>{{ 'cart.subtotal' | t }}</span>
         <strong data-cart-subtotal>{{ cart.total_price | money }}</strong>
       </div>
-      <p class="cart-drawer__tax">Taxes and shipping calculated at checkout.</p>
+      <p class="cart-drawer__tax">{{ 'cart.taxes' | t }}</p>
       <form action="{{ routes.cart_url }}" method="post">
         <button type="submit" name="checkout" class="btn btn--accent btn--full btn--lg">
-          {% render 'icon', name: 'lock' %} Checkout
+          {% render 'icon', name: 'lock' %} {{ 'cart.checkout' | t }}
         </button>
       </form>
-      {%- if settings.cart_note != blank -%}<p class="cart-drawer__note">{{ settings.cart_note }}</p>{%- endif -%}
+      {%- if settings.cart_note != blank -%}<p class="cart-drawer__note">{% render 'tr', value: settings.cart_note, scope: 'content.settings.', field: 'cart_note' %}</p>{%- endif -%}
     </footer>
   </aside>
 </div>

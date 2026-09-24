@@ -1,19 +1,20 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 <footer class="site-footer">
   <div class="page-width">
     {%- if section.settings.show_newsletter -%}
       <div class="newsletter">
         <div>
-          <h2 class="h3">{{ section.settings.newsletter_heading }}</h2>
-          <p>{{ section.settings.newsletter_text }}</p>
+          <h2 class="h3">{% render 'tr', value: section.settings.newsletter_heading, scope: sk, field: 'newsletter_heading' %}</h2>
+          <p>{% render 'tr', value: section.settings.newsletter_text, scope: sk, field: 'newsletter_text' %}</p>
         </div>
         {%- form 'customer', id: 'FooterNewsletter', class: 'newsletter__form' -%}
           <input type="hidden" name="contact[tags]" value="newsletter">
           {%- if form.posted_successfully? -%}
-            <p class="newsletter__ok" role="status">{% render 'icon', name: 'check' %} Thanks, you're on the list.</p>
+            <p class="newsletter__ok" role="status">{% render 'icon', name: 'check' %} {{ 'newsletter.success' | t }}</p>
           {%- else -%}
-            <label class="visually-hidden" for="FooterEmail">Email</label>
-            <input id="FooterEmail" type="email" name="contact[email]" placeholder="Your email" autocomplete="email" required>
-            <button class="btn btn--accent" type="submit">Subscribe</button>
+            <label class="visually-hidden" for="FooterEmail">{{ 'newsletter.email' | t }}</label>
+            <input id="FooterEmail" type="email" name="contact[email]" placeholder="{{ 'newsletter.placeholder' | t }}" autocomplete="email" required>
+            <button class="btn btn--accent" type="submit">{{ 'newsletter.subscribe' | t }}</button>
             {%- if form.errors -%}<p class="form-error" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
           {%- endif -%}
         {%- endform -%}
@@ -23,7 +24,7 @@
     <div class="site-footer__grid">
       <div class="site-footer__brand">
         <p class="site-logo__text">{{ section.settings.brand_name | default: shop.name }}</p>
-        {%- if section.settings.brand_text != blank -%}<div class="rte">{{ section.settings.brand_text }}</div>{%- endif -%}
+        {%- if section.settings.brand_text != blank -%}<div class="rte">{% render 'tr', value: section.settings.brand_text, scope: sk, field: 'brand_text_html' %}</div>{%- endif -%}
         <ul class="socials">
           {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
           {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
@@ -33,8 +34,10 @@
         </ul>
       </div>
       {%- for block in section.blocks -%}
-        <nav class="site-footer__col" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}>
-          <h2 class="h6">{{ block.settings.heading }}</h2>
+        {%- assign bk = sk | append: block.id | append: '.' -%}
+        {%- capture col_heading -%}{% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}{%- endcapture -%}
+        <nav class="site-footer__col" aria-label="{{ col_heading | escape }}" {{ block.shopify_attributes }}>
+          <h2 class="h6">{{ col_heading }}</h2>
           <ul>
             {%- for link in block.settings.menu.links -%}
               <li><a href="{{ link.url }}">{{ link.title }}</a></li>
@@ -45,7 +48,8 @@
     </div>
 
     <div class="site-footer__bottom">
-      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.disclaimer }}</p>
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {% render 'tr', value: section.settings.disclaimer, scope: sk, field: 'disclaimer' %}</p>
+      {% render 'language-switcher', id: 'Footer' %}
       {%- if shop.enabled_payment_types.size > 0 -%}
         <ul class="payment-icons">
           {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}

@@ -1,15 +1,15 @@
 <section class="page-section section-pad-md">
   <div class="page-width">
-    <h1 class="h2">Search</h1>
+    <h1 class="h2">{{ 'search.title' | t }}</h1>
     <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
-      <label class="visually-hidden" for="SearchInput">Search</label>
-      <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products">
+      <label class="visually-hidden" for="SearchInput">{{ 'search.title' | t }}</label>
+      <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}">
       <input type="hidden" name="type" value="product">
-      <button class="btn btn--dark" type="submit">{% render 'icon', name: 'search' %} Search</button>
+      <button class="btn btn--dark" type="submit">{% render 'icon', name: 'search' %} {{ 'search.submit' | t }}</button>
     </form>
     {%- if search.performed -%}
       {%- paginate search.results by 12 -%}
-        <p class="search-count">{{ search.results_count }} results for "{{ search.terms | escape }}"</p>
+        <p class="search-count">{{ 'search.results' | t: total: search.results_count, terms: search.terms }}</p>
         <div class="product-list">
           {%- for item in search.results -%}
             {%- if item.object_type == 'product' -%}
@@ -19,7 +19,7 @@
             {%- endif -%}
           {%- endfor -%}
         </div>
-        {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="Pagination">{{ paginate | default_pagination }}</nav>{%- endif -%}
+        {%- if paginate.pages > 1 -%}<nav class="pagination" aria-label="{{ 'general.pagination' | t }}">{{ paginate | default_pagination }}</nav>{%- endif -%}
       {%- endpaginate -%}
     {%- endif -%}
   </div>

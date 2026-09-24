@@ -1,5 +1,12 @@
+{%- liquid
+  assign rtl_languages = 'ar,he,fa,ur'
+  assign text_dir = 'ltr'
+  if rtl_languages contains request.locale.iso_code
+    assign text_dir = 'rtl'
+  endif
+-%}
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}" dir="{{ text_dir }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,6 +39,21 @@
       window.theme = {
         moneyFormat: {{ shop.money_format | json }},
         freeShippingThreshold: {{ settings.free_shipping_threshold | times: 100 | json }},
+        strings: {
+          addToCart: {{ 'products.add_to_cart' | t | json }},
+          soldOut: {{ 'products.sold_out' | t | json }},
+          unavailable: {{ 'products.unavailable' | t | json }},
+          save: {{ 'products.save_percent' | t: percent: '[percent]' | json }},
+          addError: {{ 'products.add_error' | t | json }},
+          shippingAway: {{ 'cart.shipping_away_html' | t: amount: '[amount]' | json }},
+          shippingUnlocked: {{ 'cart.shipping_unlocked_html' | t | json }},
+          empty: {{ 'cart.empty' | t | json }},
+          shopNow: {{ 'cart.shop_now' | t | json }},
+          remove: {{ 'cart.remove' | t | json }},
+          quantity: {{ 'cart.quantity' | t | json }},
+          decrease: {{ 'cart.decrease' | t | json }},
+          increase: {{ 'cart.increase' | t | json }}
+        },
         routes: {
           cart: {{ routes.cart_url | json }},
           cartAdd: {{ routes.cart_add_url | json }},
@@ -46,7 +68,7 @@
   </head>
 
   <body class="template-{{ template.name }}">
-    <a class="skip-link" href="#MainContent">Skip to content</a>
+    <a class="skip-link" href="#MainContent">{{ 'general.skip' | t }}</a>
 
     {% sections 'header-group' %}
 

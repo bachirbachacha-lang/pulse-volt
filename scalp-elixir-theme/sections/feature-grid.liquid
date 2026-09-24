@@ -1,13 +1,15 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 {%- comment -%} Grid of cards: used for benefits and ingredients. {%- endcomment -%}
 <section class="feature-grid section-pad-md{% if section.settings.style == 'deep' %} is-deep{% endif %}" id="{{ section.settings.anchor | default: section.id }}">
   <div class="page-width">
     <header class="section-head">
-      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-      {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
-      {%- if section.settings.text != blank -%}<div class="rte lead">{{ section.settings.text }}</div>{%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{% render 'tr', value: section.settings.eyebrow, scope: sk, field: 'eyebrow' %}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2">{% render 'tr', value: section.settings.heading, scope: sk, field: 'heading' %}</h2>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="rte lead">{% render 'tr', value: section.settings.text, scope: sk, field: 'text_html' %}</div>{%- endif -%}
     </header>
     <div class="feature-grid__list cols-{{ section.settings.columns }}{% if section.settings.card_style == 'ingredient' %} is-ingredients{% endif %}">
       {%- for block in section.blocks -%}
+        {%- assign bk = sk | append: block.id | append: '.' -%}
         <article class="feature-card" {{ block.shopify_attributes }}>
           {%- if block.settings.image != blank -%}
             <div class="feature-card__img">
@@ -16,9 +18,9 @@
           {%- else -%}
             <span class="feature-card__icon">{% render 'icon', name: block.settings.icon %}</span>
           {%- endif -%}
-          {%- if block.settings.label != blank -%}<p class="feature-card__label">{{ block.settings.label }}</p>{%- endif -%}
-          <h3 class="h4">{{ block.settings.heading }}</h3>
-          <p>{{ block.settings.text }}</p>
+          {%- if block.settings.label != blank -%}<p class="feature-card__label">{% render 'tr', value: block.settings.label, scope: bk, field: 'label' %}</p>{%- endif -%}
+          <h3 class="h4">{% render 'tr', value: block.settings.heading, scope: bk, field: 'heading' %}</h3>
+          <p>{% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}</p>
         </article>
       {%- endfor -%}
     </div>

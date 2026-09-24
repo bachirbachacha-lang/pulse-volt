@@ -2,6 +2,13 @@
 (() => {
   const theme = window.theme || {};
   const $ = (sel, root = document) => root.querySelector(sel);
+  const t = Object.assign({
+    addToCart: 'Add to cart', soldOut: 'Sold out', unavailable: 'Unavailable', save: 'Save [percent]%',
+    addError: 'Could not add to cart. Please try again.',
+    shippingAway: "You're <strong>[amount]</strong> away from free shipping", shippingUnlocked: '<strong>You unlocked free shipping</strong>',
+    empty: 'Your cart is empty.', shopNow: 'Shop now', remove: 'Remove', quantity: 'Quantity',
+    decrease: 'Decrease quantity', increase: 'Increase quantity'
+  }, theme.strings || {});
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   /* ---------- Money ---------- */
@@ -68,12 +75,12 @@
       const pct = Math.min(100, (cart.total_price / threshold) * 100);
       $('[data-ship-fill]', bar).style.width = pct + '%';
       $('[data-ship-text]', bar).innerHTML = remaining > 0
-        ? `You're <strong>${formatMoney(remaining)}</strong> away from free shipping`
-        : '<strong>You unlocked free shipping</strong>';
+        ? t.shippingAway.replace('[amount]', escapeHtml(formatMoney(remaining)))
+        : t.shippingUnlocked;
     }
 
     if (cart.item_count === 0) {
-      body.innerHTML = `<div class="cart-empty"><p>Your cart is empty.</p><a class="btn btn--dark" href="${theme.routes.root}#shop" data-cart-close>Shop now</a></div>`;
+      body.innerHTML = `<div class="cart-empty"><p>${escapeHtml(t.empty)}</p><a class="btn btn--dark" href="${theme.routes.root}#shop" data-cart-close>${escapeHtml(t.shopNow)}</a></div>`;
       return;
     }
 
@@ -89,15 +96,15 @@
             <a class="drawer-item__title" href="${item.url}">${escapeHtml(item.product_title)}</a>
             ${variant}
             <div class="qty qty--drawer">
-              <button type="button" data-line-change="${line}" data-qty="${item.quantity - 1}" aria-label="Decrease quantity"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
-              <input type="number" value="${item.quantity}" min="0" data-line-input="${line}" aria-label="Quantity" inputmode="numeric">
-              <button type="button" data-line-change="${line}" data-qty="${item.quantity + 1}" aria-label="Increase quantity"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              <button type="button" data-line-change="${line}" data-qty="${item.quantity - 1}" aria-label="${escapeHtml(t.decrease)}"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+              <input type="number" value="${item.quantity}" min="0" data-line-input="${line}" aria-label="${escapeHtml(t.quantity)}" inputmode="numeric">
+              <button type="button" data-line-change="${line}" data-qty="${item.quantity + 1}" aria-label="${escapeHtml(t.increase)}"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
             </div>
           </div>
           <div class="drawer-item__price">
             <strong>${formatMoney(item.final_line_price)}</strong>
             ${was}
-            <button type="button" class="drawer-item__remove" data-line-change="${line}" data-qty="0">Remove</button>
+            <button type="button" class="drawer-item__remove" data-line-change="${line}" data-qty="0">${escapeHtml(t.remove)}</button>
           </div>
         </div>`;
     }).join('');
@@ -171,7 +178,7 @@
     const idInput = $('[data-variant-input]', section);
     const addBtn = $('[data-add-button]', section);
     const addLabel = addBtn ? $('[data-add-label]', addBtn) : null;
-    const defaultLabel = addLabel ? addLabel.textContent.trim() : 'Add to cart';
+    const defaultLabel = addLabel ? addLabel.textContent.trim() : t.addToCart;
     const errorEl = $('[data-form-error]', section);
     const slides = $$('.product-gallery__slide', section);
     const thumbs = $$('[data-thumb]', section);
@@ -189,12 +196,12 @@
     function updateVariant(variant) {
       if (!variant) {
         if (addBtn) addBtn.disabled = true;
-        if (addLabel) addLabel.textContent = 'Unavailable';
+        if (addLabel) addLabel.textContent = t.unavailable;
         return;
       }
       idInput.value = variant.id;
       if (addBtn) addBtn.disabled = !variant.available;
-      if (addLabel) addLabel.textContent = variant.available ? defaultLabel : 'Sold out';
+      if (addLabel) addLabel.textContent = variant.available ? defaultLabel : t.soldOut;
 
       const now = $('[data-price-now]', section);
       const was = $('[data-price-was]', section);
@@ -204,7 +211,7 @@
       if (was) { was.hidden = !onSale; was.textContent = onSale ? formatMoney(variant.compare_at_price) : ''; }
       if (badge) {
         badge.hidden = !onSale;
-        if (onSale) badge.textContent = `Save ${Math.floor(((variant.compare_at_price - variant.price) * 100) / variant.compare_at_price)}%`;
+        if (onSale) badge.textContent = t.save.replace('[percent]', Math.floor(((variant.compare_at_price - variant.price) * 100) / variant.compare_at_price));
       }
       const sticky = $('[data-sticky-price]', section);
       if (sticky) sticky.textContent = formatMoney(variant.price);
@@ -256,7 +263,7 @@
           });
           const result = await res.json();
           if (!res.ok) {
-            errorEl.textContent = result.description || result.message || 'Could not add to cart. Please try again.';
+            errorEl.textContent = result.description || result.message || t.addError;
             errorEl.hidden = false;
             return;
           }

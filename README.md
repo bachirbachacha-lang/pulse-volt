@@ -39,4 +39,4 @@ Respects `prefers-reduced-motion`, and falls back to the campaign photos when We
 
 ## Scalp Elixir Shopify theme
 
-`scalp-elixir-theme/` is a separate, uploadable Shopify theme for the Scalp Elixir hair serum. Upload `scalp-elixir-theme.zip` in Shopify admin. Setup steps are in [`scalp-elixir-theme/README.md`](scalp-elixir-theme/README.md).
+`scalp-elixir-theme/` is a separate, uploadable Shopify theme (English + Arabic) for the Scalp Elixir hair serum. Upload `scalp-elixir-theme.zip` in Shopify admin. Setup steps are in [`scalp-elixir-theme/README.md`](scalp-elixir-theme/README.md).

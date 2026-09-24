@@ -1,9 +1,11 @@
+{%- assign sk = 'content.' | append: section.id | append: '.' -%}
 <section class="icon-bar{% if section.settings.style == 'deep' %} is-deep{% endif %}">
   <div class="icon-bar__track{% if section.settings.scroll %} is-scrolling{% endif %}">
     {%- for i in (1..2) -%}
       <ul class="icon-bar__list"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
         {%- for block in section.blocks -%}
-          <li {% if forloop.parentloop.index == 1 %}{{ block.shopify_attributes }}{% endif %}>{% render 'icon', name: block.settings.icon %}<span>{{ block.settings.text }}</span></li>
+          {%- assign bk = sk | append: block.id | append: '.' -%}
+          <li {% if forloop.parentloop.index == 1 %}{{ block.shopify_attributes }}{% endif %}>{% render 'icon', name: block.settings.icon %}<span>{% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}</span></li>
         {%- endfor -%}
       </ul>
       {%- unless section.settings.scroll -%}{%- break -%}{%- endunless -%}

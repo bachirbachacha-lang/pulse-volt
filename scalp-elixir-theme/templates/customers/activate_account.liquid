@@ -1,13 +1,13 @@
 <section class="page-section section-pad-md">
   <div class="page-width page-width--narrow account-form">
-    <h1 class="h2">Activate your account</h1>
+    <h1 class="h2">{{ 'accounts.activate_title' | t }}</h1>
     {%- form 'activate_customer_password' -%}
       {{ form.errors | default_errors }}
-      <label for="ActPassword">Password</label>
+      <label for="ActPassword">{{ 'accounts.password' | t }}</label>
       <input id="ActPassword" type="password" name="customer[password]" autocomplete="new-password" required>
-      <label for="ActConfirm">Confirm password</label>
+      <label for="ActConfirm">{{ 'accounts.confirm_password' | t }}</label>
       <input id="ActConfirm" type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
-      <button class="btn btn--dark btn--full" type="submit">Activate account</button>
+      <button class="btn btn--dark btn--full" type="submit">{{ 'accounts.activate' | t }}</button>
     {%- endform -%}
   </div>
 </section>

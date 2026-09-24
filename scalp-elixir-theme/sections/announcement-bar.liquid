@@ -4,7 +4,8 @@
       {%- for block in section.blocks -%}
         <p class="announcement__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
           {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
-          {{ block.settings.text }}
+          {%- assign bk = 'content.' | append: section.id | append: '.' | append: block.id | append: '.' -%}
+          {% render 'tr', value: block.settings.text, scope: bk, field: 'text' %}
           {%- if block.settings.link != blank -%}</a>{%- endif -%}
         </p>
       {%- endfor -%}
