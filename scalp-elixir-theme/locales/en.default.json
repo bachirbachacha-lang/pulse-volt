@@ -124,25 +124,25 @@
   },
   "content": {
     "product": {
-      "gallery_badge": "Vegan · Cruelty free",
+      "gallery_badge": "Pure plant oils",
       "sticky_label": "Add to cart",
       "eyebrow": {
-        "text": "Botanical hair & scalp serum"
+        "text": "Rosemary hair & scalp oil"
       },
       "rating": {
-        "fallback_text": "New formula · Made for daily use"
+        "fallback_text": "Natural & fresh · 50 mL"
       },
       "text": {
-        "text_html": "<p>A lightweight, fast-absorbing serum that massages into the scalp in seconds. It nourishes the roots, calms dryness and flakes, and helps reduce breakage so hair looks <strong>thicker and fuller</strong>.</p>"
+        "text_html": "<p>Rosemary infused in natural coconut and olive oil. Massage a few drops into your scalp each day to nourish the roots, calm dryness and flakes, and help reduce breakage so hair looks <strong>thicker and fuller</strong>.</p>"
       },
       "benefits": {
-        "lines": "Nourishes dry, itchy, flaky scalps\nHelps reduce breakage for fuller-looking hair\nNon-greasy, washes out easily\nFor every hair type, including color-treated"
+        "lines": "Nourishes dry, itchy, flaky scalps\nHelps reduce breakage for fuller-looking hair\nFresh rosemary scent that keeps hair smelling clean\nFor every hair type, including color-treated"
       },
       "buy": {
         "offers_heading": "Choose your routine",
-        "sub_1": "Try it out · 1 month",
+        "sub_1": "Try it out",
         "badge_2": "Most popular",
-        "sub_2": "2-month routine",
+        "sub_2": "Most customers pick this",
         "badge_3": "Best value",
         "sub_3": "3-month routine for the best results",
         "button_label": "Add to cart"
@@ -157,11 +157,11 @@
       },
       "tab_use": {
         "heading": "How to use",
-        "content_html": "<p>Apply 3 to 5 drops directly to the scalp once a day. Massage for 1 to 2 minutes. No need to rinse. Patch test 24 hours before first use.</p>"
+        "content_html": "<p>Put a few drops on your fingertips and massage about 3 drops into each area of your scalp: front, back, left, right and crown. Rub any oil left on your hands through the lengths. Use once a day. Do a patch test 24 hours before first use.</p>"
       },
       "tab_ingr": {
         "heading": "Ingredients",
-        "content_html": "<p>Replace this with the full ingredient list (INCI) from your product label.</p>"
+        "content_html": "<p>Rosemary infused in coconut oil and olive oil. 50 mL / 1.69 fl oz. See the bottle label for the full ingredient list.</p>"
       },
       "tab_ship": {
         "heading": "Shipping & returns",
@@ -184,16 +184,16 @@
     },
     "strip": {
       "i1": {
-        "text": "Vegan formula"
+        "text": "Pure plant oils"
       },
       "i2": {
-        "text": "Lightweight, non-greasy"
+        "text": "Fresh rosemary scent"
       },
       "i3": {
-        "text": "Sulfate & paraben free"
+        "text": "No hormones, no drugs"
       },
       "i4": {
-        "text": "Cruelty free"
+        "text": "50 mL dropper bottle"
       },
       "i5": {
         "text": "30-day money-back guarantee"
@@ -211,7 +211,7 @@
       },
       "p1": {
         "heading": "Feeds the roots",
-        "text": "Plant oils and extracts go straight where hair grows, not just on the lengths."
+        "text": "Rosemary-infused plant oils go straight where hair grows, not just on the lengths."
       },
       "p2": {
         "heading": "Less breakage",
@@ -233,8 +233,8 @@
         "text": "Soothes dryness, itch and flakes with a gentle, plant-based formula."
       },
       "b3": {
-        "heading": "Zero grease",
-        "text": "Absorbs in seconds. Use it on dry hair and style as usual."
+        "heading": "Fresh rosemary scent",
+        "text": "A clean, herbal scent that keeps your hair and scalp smelling fresh."
       },
       "b4": {
         "heading": "For every hair type",
@@ -243,27 +243,22 @@
     },
     "ingredients": {
       "eyebrow": "What's inside",
-      "heading": "Clean botanicals, nothing you don't need",
-      "text_html": "<p>No sulfates, parabens, silicones or mineral oil.</p>",
+      "heading": "Three plant oils, nothing you don't need",
+      "text_html": "<p>Rosemary is soaked in natural coconut and olive oil to draw out its goodness. No hormones, no drugs.</p>",
       "g1": {
         "label": "Rosmarinus officinalis",
         "heading": "Rosemary",
-        "text": "A classic hair-care botanical that helps refresh and invigorate the scalp."
+        "text": "A classic hair-care botanical that refreshes the scalp and gives the oil its clean, herbal scent."
       },
       "g2": {
-        "label": "Zingiber officinale",
-        "heading": "Ginger root",
-        "text": "Gives a gentle, warming tingle that makes the daily scalp massage feel good."
+        "label": "Cocos nucifera",
+        "heading": "Coconut oil",
+        "text": "A nourishing plant oil that conditions strands and helps reduce breakage."
       },
       "g3": {
-        "label": "Vitamin B7",
-        "heading": "Biotin",
-        "text": "A well-known hair-care vitamin that helps condition and strengthen strands."
-      },
-      "g4": {
-        "label": "Ricinus communis",
-        "heading": "Castor oil",
-        "text": "A rich plant oil that seals in moisture and helps reduce breakage."
+        "label": "Olea europaea",
+        "heading": "Olive oil",
+        "text": "A rich, gentle oil that softens hair and helps keep the scalp from drying out."
       }
     },
     "how": {
@@ -271,15 +266,15 @@
       "heading": "Two minutes a day",
       "s1": {
         "heading": "Apply",
-        "text": "Part your hair and apply 3 to 5 drops directly to the scalp, focusing on thinner areas."
+        "text": "Put a few drops on your fingertips. Split your scalp into 5 areas: front, back, left, right and crown."
       },
       "s2": {
         "heading": "Massage",
-        "text": "Massage with your fingertips for 1 to 2 minutes to spread the serum and wake up the scalp."
+        "text": "Massage about 3 drops into each area with your fingertips, using a gentle combing and pressing motion."
       },
       "s3": {
         "heading": "Repeat daily",
-        "text": "No need to rinse. Use once a day, morning or night, and keep going. Consistency is everything."
+        "text": "Rub any oil left on your hands through the lengths. Use once a day and keep going. Consistency is everything."
       }
     },
     "timeline": {
@@ -304,23 +299,23 @@
     },
     "compare": {
       "eyebrow": "The difference",
-      "heading": "Not another greasy hair oil",
+      "heading": "Made for the scalp, not just the ends",
       "us_label": "Scalp Elixir",
-      "them_label": "Typical hair oils",
+      "them_label": "Regular hair oils",
       "r1": {
         "feature": "Targets the scalp, where hair grows"
       },
       "r2": {
-        "feature": "Lightweight, non-greasy finish"
+        "feature": "Rosemary infused in coconut & olive oil"
       },
       "r3": {
         "feature": "Precision dropper, no mess"
       },
       "r4": {
-        "feature": "Free from sulfates, parabens & silicones"
+        "feature": "Pure plant oils, no hormones or drugs"
       },
       "r5": {
-        "feature": "Vegan and cruelty free"
+        "feature": "Fresh rosemary scent"
       },
       "r6": {
         "feature": "30-day money-back guarantee"
@@ -339,8 +334,8 @@
         "answer_html": "<p>Most people notice a calmer, more comfortable scalp within the first two weeks. Hair grows slowly and in cycles, so give it 8 to 12 weeks of daily use to judge the look of your hair. Individual results vary.</p>"
       },
       "q2": {
-        "question": "Will it make my hair greasy?",
-        "answer_html": "<p>No. The formula is lightweight and absorbs in a minute or two. You only need a few drops, applied to the scalp, not the lengths.</p>"
+        "question": "Will it make my hair oily?",
+        "answer_html": "<p>Use a few drops on the scalp only, not the lengths. If your hair gets oily easily, apply it in the evening and wash your hair the next morning.</p>"
       },
       "q3": {
         "question": "Can I use it on color-treated or curly hair?",
@@ -348,7 +343,7 @@
       },
       "q4": {
         "question": "How long does one bottle last?",
-        "answer_html": "<p>Used once a day, one bottle lasts about a month. That's why most customers pick the 2 or 3 bottle routine.</p>"
+        "answer_html": "<p>Each bottle holds 50 mL. With daily use it lasts about 1 to 2 months, depending on how much you use. That's why most customers pick the 2 or 3 bottle routine.</p>"
       },
       "q5": {
         "question": "Is it safe for sensitive skin?",

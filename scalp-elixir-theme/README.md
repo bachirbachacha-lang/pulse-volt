@@ -80,8 +80,7 @@ The brand is written **سكالب إليكسير** (the English name, spelled in
 
 These are placeholders. Please check each one so everything on the site is true for your product. Each one exists in English and Arabic, so change both (see *Changing text later* above):
 
-- **Ingredients section:** the four cards (Rosemary, Ginger root, Biotin, Castor oil) are common ingredients in this type of serum. Replace them with what's actually on your bottle's label, and paste the full ingredient list into the "Ingredients" tab on the product page.
-- **"Vegan", "Cruelty free", "Sulfate & paraben free":** keep these only if your supplier confirms them.
+- **Ingredients:** the site lists rosemary, coconut oil and olive oil, taken from the supplier's photos (PURC Rosemary Hair Growth Essential Oil, 50 mL). Check the label on the bottle you receive and paste the full ingredient list into the "Ingredients" tab.
 - **Guarantee:** the site promises a 30-day money-back guarantee. Make sure your refund policy (**Settings → Policies**) says the same, or change the text.
 - **Free shipping:** the announcement bar and cart progress bar say free shipping over 150 SAR. Set the amount in **Customize → Theme settings → Cart**, and create the matching rate in **Settings → Shipping and delivery**.
 - **Shipping times** in the FAQ: set them to what your supplier actually delivers.
