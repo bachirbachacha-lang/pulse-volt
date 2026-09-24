@@ -22,9 +22,11 @@ In **Products → Add product**:
 
   | Variant   | Price   | Compare-at |
   |-----------|---------|------------|
-  | 1 Bottle  | 119 SAR | (empty)    |
-  | 2 Bottles | 199 SAR | 238 SAR    |
-  | 3 Bottles | 259 SAR | 357 SAR    |
+  | 1 Bottle  | 99 SAR  | (empty)    |
+  | 2 Bottles | 179 SAR | 198 SAR    |
+  | 3 Bottles | 239 SAR | 297 SAR    |
+
+  Shortcut: import `scalp-elixir-product.csv` (in the repo root) under **Products → Import** and this product is created for you with these prices. Then just add the photos.
 
 - **Description:** it shows in the "Description" tab on the product page.
 
