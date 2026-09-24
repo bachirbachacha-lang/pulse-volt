@@ -1,0 +1,68 @@
+{%- comment -%}
+  Customer reviews. Only real reviews belong here: the section stays hidden
+  on the live store until you add at least one review block.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  <section class="testimonials section-pad-md" id="reviews">
+    <div class="page-width">
+      <header class="section-head">
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
+      </header>
+      <div class="testimonials__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            <div class="review-app">{% render block %}</div>
+            {%- continue -%}
+          {%- endif -%}
+          <figure class="review" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <div class="review__img">{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 30vw, 85vw', widths: '300, 450, 600' }}</div>
+            {%- endif -%}
+            {% render 'stars', rating: block.settings.rating %}
+            {%- if block.settings.title != blank -%}<p class="review__title">{{ block.settings.title }}</p>{%- endif -%}
+            <blockquote>{{ block.settings.quote }}</blockquote>
+            <figcaption>
+              <strong>{{ block.settings.author }}</strong>
+              {%- if block.settings.verified -%}<span class="review__verified">{% render 'icon', name: 'check' %}Verified buyer</span>{%- endif -%}
+            </figcaption>
+          </figure>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <section class="section-pad-sm">
+    <div class="page-width editor-hint">
+      <strong>Customer reviews</strong>
+      <p>Add a Review block for each real customer review. This section is hidden on your store until you add one. Or install a reviews app like Judge.me and add its block here instead.</p>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "class": "section-testimonials",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small heading", "default": "Reviews" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What customers are saying" }
+  ],
+  "blocks": [
+    {
+      "type": "review", "name": "Review",
+      "settings": [
+        { "type": "paragraph", "content": "Only add reviews from real customers. Made-up reviews break Shopify's rules and consumer protection law in most countries." },
+        { "type": "image_picker", "id": "image", "label": "Customer photo" },
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "quote", "label": "Review" },
+        { "type": "text", "id": "author", "label": "Customer name" },
+        { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true }
+      ]
+    },
+    { "type": "@app" }
+  ],
+  "presets": [ { "name": "Customer reviews" } ]
+}
+{% endschema %}

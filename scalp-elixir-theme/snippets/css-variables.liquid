@@ -1,0 +1,33 @@
+{% style %}
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('{{ 'fraunces-latin.woff2' | asset_url }}') format('woff2');
+    font-weight: 400 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('{{ 'inter-latin.woff2' | asset_url }}') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  :root {
+    --c-bg: {{ settings.color_background }};
+    --c-surface: {{ settings.color_surface }};
+    --c-text: {{ settings.color_text }};
+    --c-muted: {{ settings.color_text | color_mix: settings.color_background, 62 }};
+    --c-line: {{ settings.color_text | color_mix: settings.color_background, 14 }};
+    --c-deep: {{ settings.color_deep }};
+    --c-on-deep: {{ settings.color_on_deep }};
+    --c-accent: {{ settings.color_accent }};
+    --c-on-accent: {{ settings.color_on_accent }};
+    --c-sale: {{ settings.color_sale }};
+    --radius: {{ settings.radius }}px;
+    --radius-btn: {{ settings.button_radius }}px;
+    --font-heading: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --page-width: {{ settings.page_width }}px;
+  }
+{% endstyle %}

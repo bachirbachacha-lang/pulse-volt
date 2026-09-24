@@ -1,0 +1,34 @@
+<section class="icon-bar{% if section.settings.style == 'deep' %} is-deep{% endif %}">
+  <div class="icon-bar__track{% if section.settings.scroll %} is-scrolling{% endif %}">
+    {%- for i in (1..2) -%}
+      <ul class="icon-bar__list"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+        {%- for block in section.blocks -%}
+          <li {% if forloop.parentloop.index == 1 %}{{ block.shopify_attributes }}{% endif %}>{% render 'icon', name: block.settings.icon %}<span>{{ block.settings.text }}</span></li>
+        {%- endfor -%}
+      </ul>
+      {%- unless section.settings.scroll -%}{%- break -%}{%- endunless -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Icon strip",
+  "class": "section-icon-bar",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "checkbox", "id": "scroll", "label": "Scroll continuously", "default": true },
+    { "type": "select", "id": "style", "label": "Style", "options": [ { "value": "light", "label": "Light" }, { "value": "deep", "label": "Deep brand color" } ], "default": "deep" }
+  ],
+  "blocks": [
+    {
+      "type": "item", "name": "Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [ { "value": "leaf", "label": "Leaf" }, { "value": "drop", "label": "Drop" }, { "value": "shield", "label": "Shield" }, { "value": "truck", "label": "Truck" }, { "value": "sparkle", "label": "Sparkle" }, { "value": "heart", "label": "Heart" }, { "value": "flask", "label": "Flask" }, { "value": "sun", "label": "Sun" }, { "value": "refresh", "label": "Return" } ], "default": "leaf" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Vegan formula" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Icon strip", "blocks": [ { "type": "item" }, { "type": "item" }, { "type": "item" } ] } ]
+}
+{% endschema %}

@@ -1,0 +1,81 @@
+<footer class="site-footer">
+  <div class="page-width">
+    {%- if section.settings.show_newsletter -%}
+      <div class="newsletter">
+        <div>
+          <h2 class="h3">{{ section.settings.newsletter_heading }}</h2>
+          <p>{{ section.settings.newsletter_text }}</p>
+        </div>
+        {%- form 'customer', id: 'FooterNewsletter', class: 'newsletter__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="newsletter__ok" role="status">{% render 'icon', name: 'check' %} Thanks, you're on the list.</p>
+          {%- else -%}
+            <label class="visually-hidden" for="FooterEmail">Email</label>
+            <input id="FooterEmail" type="email" name="contact[email]" placeholder="Your email" autocomplete="email" required>
+            <button class="btn btn--accent" type="submit">Subscribe</button>
+            {%- if form.errors -%}<p class="form-error" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <p class="site-logo__text">{{ section.settings.brand_name | default: shop.name }}</p>
+        {%- if section.settings.brand_text != blank -%}<div class="rte">{{ section.settings.brand_text }}</div>{%- endif -%}
+        <ul class="socials">
+          {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
+          {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
+          {%- if settings.social_facebook != blank -%}<li><a href="{{ settings.social_facebook }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+          {%- if settings.social_youtube != blank -%}<li><a href="{{ settings.social_youtube }}" target="_blank" rel="noopener">YouTube</a></li>{%- endif -%}
+          {%- if settings.social_pinterest != blank -%}<li><a href="{{ settings.social_pinterest }}" target="_blank" rel="noopener">Pinterest</a></li>{%- endif -%}
+        </ul>
+      </div>
+      {%- for block in section.blocks -%}
+        <nav class="site-footer__col" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}>
+          <h2 class="h6">{{ block.settings.heading }}</h2>
+          <ul>
+            {%- for link in block.settings.menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endfor -%}
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.disclaimer }}</p>
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="payment-icons">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show email signup", "info": "Signups go to Customers in Shopify admin.", "default": true },
+    { "type": "text", "id": "newsletter_heading", "label": "Signup heading", "default": "Join the Scalp Club" },
+    { "type": "text", "id": "newsletter_text", "label": "Signup text", "default": "Hair care tips, early access and subscriber-only offers. No spam." },
+    { "type": "text", "id": "brand_name", "label": "Brand name" },
+    { "type": "richtext", "id": "brand_text", "label": "Brand text", "default": "<p>Botanical hair and scalp care, made simple.</p>" },
+    { "type": "text", "id": "disclaimer", "label": "Small print", "default": "Cosmetic product. Individual results vary." }
+  ],
+  "blocks": [
+    {
+      "type": "menu", "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Help" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    }
+  ]
+}
+{% endschema %}

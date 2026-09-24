@@ -1,0 +1,158 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Scalp Elixir",
+    "theme_version": "1.0.0",
+    "theme_author": "Scalp Elixir",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Page background",
+        "default": "#F7F4EE"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Card background",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#14201F"
+      },
+      {
+        "type": "color",
+        "id": "color_deep",
+        "label": "Deep brand color",
+        "info": "Used for dark sections and the footer.",
+        "default": "#1D4A45"
+      },
+      {
+        "type": "color",
+        "id": "color_on_deep",
+        "label": "Text on deep brand color",
+        "default": "#F7F4EE"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent (buttons)",
+        "default": "#2FCB47"
+      },
+      {
+        "type": "color",
+        "id": "color_on_accent",
+        "label": "Text on accent",
+        "default": "#0C1A12"
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Savings badges",
+        "default": "#1D4A45"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page width",
+        "min": 1000,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "default": 1240
+      },
+      {
+        "type": "range",
+        "id": "radius",
+        "label": "Card corner radius",
+        "min": 0,
+        "max": 32,
+        "step": 2,
+        "unit": "px",
+        "default": 18
+      },
+      {
+        "type": "range",
+        "id": "button_radius",
+        "label": "Button corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "default": 40
+      }
+    ]
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 x 32px .png recommended."
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "In your store currency. Shows a progress bar in the cart. Set to 0 to hide it. Remember to create the matching free shipping rate in Settings > Shipping.",
+        "default": 150
+      },
+      {
+        "type": "text",
+        "id": "cart_note",
+        "label": "Message under checkout button",
+        "default": "Secure checkout. 30-day money-back guarantee."
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
+      }
+    ]
+  }
+]

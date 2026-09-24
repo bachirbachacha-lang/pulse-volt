@@ -1,0 +1,21 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-1": { "type": "menu", "settings": { "heading": "Help", "menu": "footer" } }
+      },
+      "block_order": ["menu-1"],
+      "settings": {
+        "show_newsletter": true,
+        "newsletter_heading": "Join the Scalp Club",
+        "newsletter_text": "Hair care tips, early access and subscriber-only offers. No spam.",
+        "brand_text": "<p>Botanical hair and scalp care, made simple.</p>",
+        "disclaimer": "Cosmetic product. Individual results vary."
+      }
+    }
+  },
+  "order": ["footer"]
+}

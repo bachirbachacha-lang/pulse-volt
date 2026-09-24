@@ -1,0 +1,36 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="announcement" style="--ann-bg: {{ section.settings.background }}; --ann-fg: {{ section.settings.text_color }};" data-announcement>
+    <div class="announcement__track">
+      {%- for block in section.blocks -%}
+        <p class="announcement__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+          {{ block.settings.text }}
+          {%- if block.settings.link != blank -%}</a>{%- endif -%}
+        </p>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "section-announcement",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "color", "id": "background", "label": "Background", "default": "#1D4A45" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#F7F4EE" }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free shipping on orders over 150 SAR" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Announcement bar", "blocks": [{ "type": "message" }] }]
+}
+{% endschema %}

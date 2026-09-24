@@ -1,0 +1,20 @@
+<section class="page-section section-pad-md">
+  <div class="page-width page-width--narrow">
+    <p><a href="{{ routes.account_url }}">&larr; Back to account</a></p>
+    <h1 class="h2">Order {{ order.name }}</h1>
+    <p>Placed {{ order.created_at | date: '%B %d, %Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
+    <ul class="order-list">
+      {%- for line_item in order.line_items -%}
+        <li>{{ line_item.title }} × {{ line_item.quantity }} · {{ line_item.final_line_price | money }}
+          {%- if line_item.fulfillment -%} · <a href="{{ line_item.fulfillment.tracking_url }}">Track</a>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    <p>Subtotal: {{ order.line_items_subtotal_price | money }}</p>
+    {%- for shipping_method in order.shipping_methods -%}<p>Shipping ({{ shipping_method.title }}): {{ shipping_method.price | money }}</p>{%- endfor -%}
+    <p>Tax: {{ order.tax_price | money }}</p>
+    <p><strong>Total: {{ order.total_price | money_with_currency }}</strong></p>
+    <h2 class="h4">Shipping address</h2>
+    {{ order.shipping_address | format_address }}
+  </div>
+</section>

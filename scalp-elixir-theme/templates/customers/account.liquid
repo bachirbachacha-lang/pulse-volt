@@ -1,0 +1,22 @@
+<section class="page-section section-pad-md">
+  <div class="page-width page-width--narrow">
+    <h1 class="h2">Your account</h1>
+    <p><a href="{{ routes.account_logout_url }}">Log out</a></p>
+    <h2 class="h4">Order history</h2>
+    {%- paginate customer.orders by 20 -%}
+      {%- if customer.orders.size > 0 -%}
+        <ul class="order-list">
+          {%- for order in customer.orders -%}
+            <li><a href="{{ order.customer_url }}">{{ order.name }}</a> · {{ order.created_at | date: '%b %d, %Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }} · {{ order.total_price | money }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <p>You haven't placed any orders yet.</p>
+      {%- endif -%}
+      {%- if paginate.pages > 1 -%}{{ paginate | default_pagination }}{%- endif -%}
+    {%- endpaginate -%}
+    <h2 class="h4">Default address</h2>
+    {{ customer.default_address | format_address }}
+    <p><a href="{{ routes.account_addresses_url }}">Manage addresses ({{ customer.addresses_count }})</a></p>
+  </div>
+</section>

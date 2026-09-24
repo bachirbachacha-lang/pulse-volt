@@ -1,0 +1,51 @@
+{%- comment -%} Numbered steps: used for "How to use" and "What to expect". {%- endcomment -%}
+<section class="steps section-pad-md{% if section.settings.style == 'deep' %} is-deep{% endif %}{% if section.settings.layout == 'timeline' %} is-timeline{% endif %}" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="page-width">
+    <header class="section-head">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
+    </header>
+    <ol class="steps__list">
+      {%- for block in section.blocks -%}
+        <li class="step" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="step__img">{{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 30vw, 90vw', widths: '350, 500, 700' }}</div>
+          {%- endif -%}
+          <span class="step__num">{{ block.settings.label | default: forloop.index }}</span>
+          <h3 class="h4">{{ block.settings.heading }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+    {%- if section.settings.footnote != blank -%}
+      <p class="footnote">{{ section.settings.footnote }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Steps",
+  "class": "section-steps",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small heading", "default": "How to use" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Three steps, once a day" },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [ { "value": "cards", "label": "Cards" }, { "value": "timeline", "label": "Timeline" } ], "default": "cards" },
+    { "type": "select", "id": "style", "label": "Background", "options": [ { "value": "light", "label": "Light" }, { "value": "deep", "label": "Deep brand color" } ], "default": "light" },
+    { "type": "text", "id": "footnote", "label": "Footnote" },
+    { "type": "text", "id": "anchor", "label": "Anchor ID" }
+  ],
+  "blocks": [
+    {
+      "type": "step", "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "label", "label": "Label", "info": "Leave empty to show the step number." },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Step" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Describe this step." }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Steps", "blocks": [ { "type": "step" }, { "type": "step" }, { "type": "step" } ] } ]
+}
+{% endschema %}

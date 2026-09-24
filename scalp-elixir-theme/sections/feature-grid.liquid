@@ -1,0 +1,55 @@
+{%- comment -%} Grid of cards: used for benefits and ingredients. {%- endcomment -%}
+<section class="feature-grid section-pad-md{% if section.settings.style == 'deep' %} is-deep{% endif %}" id="{{ section.settings.anchor | default: section.id }}">
+  <div class="page-width">
+    <header class="section-head">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="h2">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="rte lead">{{ section.settings.text }}</div>{%- endif -%}
+    </header>
+    <div class="feature-grid__list cols-{{ section.settings.columns }}{% if section.settings.card_style == 'ingredient' %} is-ingredients{% endif %}">
+      {%- for block in section.blocks -%}
+        <article class="feature-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <div class="feature-card__img">
+              {{ block.settings.image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', widths: '300, 500, 700' }}
+            </div>
+          {%- else -%}
+            <span class="feature-card__icon">{% render 'icon', name: block.settings.icon %}</span>
+          {%- endif -%}
+          {%- if block.settings.label != blank -%}<p class="feature-card__label">{{ block.settings.label }}</p>{%- endif -%}
+          <h3 class="h4">{{ block.settings.heading }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Feature grid",
+  "class": "section-feature-grid",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small heading", "default": "Benefits" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What it does for your hair" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "select", "id": "columns", "label": "Columns on desktop", "options": [ { "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ], "default": "4" },
+    { "type": "select", "id": "card_style", "label": "Card style", "options": [ { "value": "benefit", "label": "Benefit" }, { "value": "ingredient", "label": "Ingredient" } ], "default": "benefit" },
+    { "type": "select", "id": "style", "label": "Background", "options": [ { "value": "light", "label": "Light" }, { "value": "deep", "label": "Deep brand color" } ], "default": "light" },
+    { "type": "text", "id": "anchor", "label": "Anchor ID", "info": "Link to this section with #your-id." }
+  ],
+  "blocks": [
+    {
+      "type": "card", "name": "Card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Optional. Replaces the icon." },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [ { "value": "leaf", "label": "Leaf" }, { "value": "drop", "label": "Drop" }, { "value": "shield", "label": "Shield" }, { "value": "sparkle", "label": "Sparkle" }, { "value": "heart", "label": "Heart" }, { "value": "flask", "label": "Flask" }, { "value": "sun", "label": "Sun" }, { "value": "comb", "label": "Comb" }, { "value": "clock", "label": "Clock" } ], "default": "leaf" },
+        { "type": "text", "id": "label", "label": "Label", "info": "Small tag above the heading, like a botanical name." },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Benefit" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Explain the benefit in one or two sentences." }
+      ]
+    }
+  ],
+  "presets": [ { "name": "Feature grid", "blocks": [ { "type": "card" }, { "type": "card" }, { "type": "card" }, { "type": "card" } ] } ]
+}
+{% endschema %}

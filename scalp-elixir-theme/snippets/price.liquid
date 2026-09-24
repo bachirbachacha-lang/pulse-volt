@@ -1,0 +1,14 @@
+{%- comment -%}
+  Usage: {% render 'price', variant: variant %}
+{%- endcomment -%}
+<div class="price{% if variant.compare_at_price > variant.price %} price--sale{% endif %}" data-price>
+  <span class="price__now" data-price-now>{{ variant.price | money }}</span>
+  {%- if variant.compare_at_price > variant.price -%}
+    {%- assign save_pct = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price | floor -%}
+    <s class="price__was" data-price-was>{{ variant.compare_at_price | money }}</s>
+    <span class="price__badge" data-price-badge>Save {{ save_pct }}%</span>
+  {%- else -%}
+    <s class="price__was" data-price-was hidden></s>
+    <span class="price__badge" data-price-badge hidden></span>
+  {%- endif -%}
+</div>

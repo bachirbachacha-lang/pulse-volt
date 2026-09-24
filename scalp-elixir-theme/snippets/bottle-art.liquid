@@ -1,0 +1,38 @@
+{%- comment -%}
+  Drawn dropper bottle, shown wherever a product photo hasn't been added yet.
+  Usage: {% render 'bottle-art', label: shop.name %}
+{%- endcomment -%}
+{%- assign bottle_label = label | default: shop.name -%}
+<svg class="bottle-art" viewBox="0 0 400 480" role="img" aria-label="{{ bottle_label | escape }} bottle">
+  <defs>
+    <linearGradient id="ba-glass" x1="0" x2="1">
+      <stop offset="0" stop-color="#6b3f1d"/>
+      <stop offset=".45" stop-color="#b8743a"/>
+      <stop offset=".62" stop-color="#d59a5c"/>
+      <stop offset="1" stop-color="#5a3317"/>
+    </linearGradient>
+    <linearGradient id="ba-cap" x1="0" x2="1">
+      <stop offset="0" stop-color="#0f2724"/>
+      <stop offset=".5" stop-color="#2a5a54"/>
+      <stop offset="1" stop-color="#0f2724"/>
+    </linearGradient>
+    <radialGradient id="ba-glow" cx=".5" cy=".55" r=".5">
+      <stop offset="0" stop-color="#2fcb47" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#2fcb47" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="200" cy="270" rx="190" ry="200" fill="url(#ba-glow)"/>
+  <ellipse cx="200" cy="452" rx="92" ry="12" fill="#14201f" opacity=".14"/>
+  <path d="M182 34c0-12 36-12 36 0v40h-36z" fill="#1d1d1b"/>
+  <rect x="156" y="70" width="88" height="70" rx="10" fill="url(#ba-cap)"/>
+  <rect x="164" y="80" width="6" height="50" rx="3" fill="#fff" opacity=".18"/>
+  <path d="M170 140h60v22c34 8 58 30 58 64v196c0 17-14 30-30 30H142c-16 0-30-13-30-30V226c0-34 24-56 58-64z" fill="url(#ba-glass)"/>
+  <path d="M132 232c0-22 10-40 30-50" stroke="#fff" stroke-opacity=".35" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <rect x="128" y="250" width="144" height="150" rx="8" fill="#f7f4ee"/>
+  <rect x="128" y="250" width="144" height="10" fill="#1d4a45"/>
+  <text x="200" y="300" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="24" fill="#14201f">{{ bottle_label | escape | truncate: 18, '' }}</text>
+  <line x1="168" y1="316" x2="232" y2="316" stroke="#2fcb47" stroke-width="2"/>
+  <text x="200" y="340" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" letter-spacing="2.4" fill="#1d4a45">HAIR &amp; SCALP</text>
+  <text x="200" y="356" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" letter-spacing="2.4" fill="#1d4a45">SERUM</text>
+  <text x="200" y="386" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="9" fill="#14201f" opacity=".6">30 mL / 1 fl oz</text>
+</svg>

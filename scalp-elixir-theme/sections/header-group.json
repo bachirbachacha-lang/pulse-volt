@@ -1,0 +1,21 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "msg-1": { "type": "message", "settings": { "text": "Free shipping on orders over 150 SAR", "link": "" } },
+        "msg-2": { "type": "message", "settings": { "text": "30-day money-back guarantee, even on an empty bottle", "link": "" } },
+        "msg-3": { "type": "message", "settings": { "text": "Save more when you bundle 2 or 3 bottles", "link": "" } }
+      },
+      "block_order": ["msg-1", "msg-2", "msg-3"],
+      "settings": { "background": "#1D4A45", "text_color": "#F7F4EE" }
+    },
+    "header": {
+      "type": "header",
+      "settings": { "logo_text": "Scalp Elixir", "menu": "main-menu", "sticky": true, "logo_width": 140 }
+    }
+  },
+  "order": ["announcement", "header"]
+}

@@ -1,0 +1,8 @@
+{%- comment -%}
+  Usage: {% render 'stars', rating: 4.6 %}
+{%- endcomment -%}
+{%- assign pct = rating | times: 20 | at_most: 100 -%}
+<span class="stars" style="--fill: {{ pct }}%" role="img" aria-label="{{ rating | round: 1 }} out of 5 stars">
+  <span class="stars__base">★★★★★</span>
+  <span class="stars__fill" aria-hidden="true">★★★★★</span>
+</span>

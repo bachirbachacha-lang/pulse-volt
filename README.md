@@ -34,3 +34,9 @@ Add an energy flavor by adding it to `ENERGY` in `products.js` and giving it a d
 The email form isn't connected to anything yet either. Hook it up to Mailchimp, ConvertKit, Formspree or similar before launch.
 
 Respects `prefers-reduced-motion`, and falls back to the campaign photos when WebGL isn't available.
+
+---
+
+## Scalp Elixir Shopify theme
+
+`scalp-elixir-theme/` is a separate, uploadable Shopify theme for the Scalp Elixir hair serum. Upload `scalp-elixir-theme.zip` in Shopify admin. Setup steps are in [`scalp-elixir-theme/README.md`](scalp-elixir-theme/README.md).

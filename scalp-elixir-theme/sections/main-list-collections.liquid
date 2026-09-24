@@ -1,0 +1,23 @@
+<section class="page-section section-pad-md">
+  <div class="page-width">
+    <h1 class="h2">Collections</h1>
+    <div class="product-list">
+      {%- for c in collections -%}
+        <a class="product-card" href="{{ c.url }}">
+          <div class="product-card__img">
+            {%- if c.featured_image -%}
+              {{ c.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: c.title }}
+            {%- else -%}
+              {% render 'bottle-art', label: c.title %}
+            {%- endif -%}
+          </div>
+          <p class="product-card__title">{{ c.title }}</p>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collections list", "settings": [] }
+{% endschema %}

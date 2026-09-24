@@ -1,0 +1,51 @@
+{%- liquid
+  assign p = section.settings.product
+  if p == blank
+    assign p = collections.all.products.first
+  endif
+-%}
+<section class="cta-banner section-pad-md">
+  <div class="page-width">
+    <div class="cta-banner__card">
+      <div class="cta-banner__content">
+        <span class="cta-banner__seal">{% render 'icon', name: 'shield' %}</span>
+        {%- if section.settings.eyebrow != blank -%}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="h2">{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}<div class="rte lead">{{ section.settings.text }}</div>{%- endif -%}
+        <div class="cta-banner__actions">
+          <a class="btn btn--accent btn--lg" href="{{ section.settings.link | default: '#shop' }}">{{ section.settings.button_label }} {% render 'icon', name: 'arrow' %}</a>
+          {%- if p != blank and section.settings.show_price -%}
+            <span class="cta-banner__price">From {{ p.price_min | money }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="cta-banner__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 40vw, 90vw', widths: '400, 700, 1000' }}
+        {%- elsif p.featured_media -%}
+          {{ p.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 40vw, 90vw', widths: '400, 700, 1000', alt: p.title }}
+        {%- else -%}
+          {% render 'bottle-art', label: shop.name %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Guarantee banner",
+  "class": "section-cta",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small heading", "default": "Risk-free" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Love it in 30 days or your money back" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Use the whole bottle. If you're not happy, email us for a full refund.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Start your routine" },
+    { "type": "url", "id": "link", "label": "Button link", "info": "Leave empty to scroll to the product on the home page." },
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "checkbox", "id": "show_price", "label": "Show starting price", "default": true },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the product photo." }
+  ],
+  "presets": [ { "name": "Guarantee banner" } ]
+}
+{% endschema %}

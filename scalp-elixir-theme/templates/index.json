@@ -1,0 +1,157 @@
+{
+  "sections": {
+    "hero": {
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": { "text": "Botanical hair & scalp serum" } },
+        "title": { "type": "title", "settings": {} },
+        "rating": { "type": "rating", "settings": { "fallback_text": "New formula · Made for daily use" } },
+        "price": { "type": "price", "settings": {} },
+        "text": { "type": "text", "settings": { "text": "<p>A lightweight, fast-absorbing serum that massages into the scalp in seconds. It nourishes the roots, calms dryness and flakes, and helps reduce breakage so hair looks <strong>thicker and fuller</strong>.</p>" } },
+        "benefits": { "type": "benefits", "settings": { "lines": "Nourishes dry, itchy, flaky scalps\nHelps reduce breakage for fuller-looking hair\nNon-greasy, washes out easily\nFor every hair type, including color-treated" } },
+        "buy": {
+          "type": "buy",
+          "settings": {
+            "offer_cards": true,
+            "offers_heading": "Choose your routine",
+            "badge_1": "",
+            "sub_1": "Try it out · 1 month",
+            "badge_2": "Most popular",
+            "sub_2": "2-month routine",
+            "badge_3": "Best value",
+            "sub_3": "3-month routine for the best results",
+            "show_quantity": false,
+            "button_label": "Add to cart",
+            "show_dynamic_checkout": true
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "icon_1": "truck", "item_1": "Tracked shipping",
+            "icon_2": "shield", "item_2": "30-day guarantee",
+            "icon_3": "lock", "item_3": "Secure checkout"
+          }
+        },
+        "payment": { "type": "payment_icons", "settings": {} }
+      },
+      "block_order": ["eyebrow", "title", "rating", "price", "text", "benefits", "buy", "trust", "payment"],
+      "settings": {
+        "gallery_badge": "Vegan · Cruelty free",
+        "sticky_bar": true,
+        "sticky_label": "Add to cart",
+        "padding": "md"
+      }
+    },
+    "strip": {
+      "type": "icon-bar",
+      "blocks": {
+        "i1": { "type": "item", "settings": { "icon": "leaf", "text": "Vegan formula" } },
+        "i2": { "type": "item", "settings": { "icon": "drop", "text": "Lightweight, non-greasy" } },
+        "i3": { "type": "item", "settings": { "icon": "flask", "text": "Sulfate & paraben free" } },
+        "i4": { "type": "item", "settings": { "icon": "heart", "text": "Cruelty free" } },
+        "i5": { "type": "item", "settings": { "icon": "shield", "text": "30-day money-back guarantee" } }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5"],
+      "settings": { "scroll": true, "style": "deep" }
+    },
+    "problem": {
+      "type": "image-with-text",
+      "blocks": {
+        "e": { "type": "eyebrow", "settings": { "text": "Why your hair feels thin" } },
+        "h": { "type": "heading", "settings": { "heading": "Great hair starts at the scalp, not the ends" } },
+        "t": { "type": "text", "settings": { "text": "<p>Stress, heat styling, tight hairstyles and harsh shampoos leave the scalp dry and irritated. Hair that grows from a stressed scalp is more likely to break, so it never looks as full as it could.</p>" } },
+        "p1": { "type": "point", "settings": { "icon": "drop", "heading": "Feeds the roots", "text": "Plant oils and extracts go straight where hair grows, not just on the lengths." } },
+        "p2": { "type": "point", "settings": { "icon": "comb", "heading": "Less breakage", "text": "Stronger, better-conditioned strands mean less hair in your brush." } },
+        "b": { "type": "button", "settings": { "label": "Start your routine", "link": "" } }
+      },
+      "block_order": ["e", "h", "t", "p1", "p2", "b"],
+      "settings": { "image_right": false, "style": "light", "anchor": "why" }
+    },
+    "benefits": {
+      "type": "feature-grid",
+      "blocks": {
+        "b1": { "type": "card", "settings": { "icon": "sparkle", "label": "", "heading": "Fuller-looking hair", "text": "Helps reduce breakage so your hair keeps its length and looks thicker over time." } },
+        "b2": { "type": "card", "settings": { "icon": "leaf", "label": "", "heading": "Calm, balanced scalp", "text": "Soothes dryness, itch and flakes with a gentle, plant-based formula." } },
+        "b3": { "type": "card", "settings": { "icon": "drop", "label": "", "heading": "Zero grease", "text": "Absorbs in seconds. Use it on dry hair and style as usual." } },
+        "b4": { "type": "card", "settings": { "icon": "heart", "label": "", "heading": "For every hair type", "text": "Straight, wavy, curly, coily, color-treated. Women and men." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"],
+      "settings": { "eyebrow": "Benefits", "heading": "What it does for your hair", "text": "", "columns": "4", "card_style": "benefit", "style": "light", "anchor": "benefits" }
+    },
+    "ingredients": {
+      "type": "feature-grid",
+      "blocks": {
+        "g1": { "type": "card", "settings": { "icon": "leaf", "label": "Rosmarinus officinalis", "heading": "Rosemary", "text": "A classic hair-care botanical that helps refresh and invigorate the scalp." } },
+        "g2": { "type": "card", "settings": { "icon": "sun", "label": "Zingiber officinale", "heading": "Ginger root", "text": "Gives a gentle, warming tingle that makes the daily scalp massage feel good." } },
+        "g3": { "type": "card", "settings": { "icon": "flask", "label": "Vitamin B7", "heading": "Biotin", "text": "A well-known hair-care vitamin that helps condition and strengthen strands." } },
+        "g4": { "type": "card", "settings": { "icon": "drop", "label": "Ricinus communis", "heading": "Castor oil", "text": "A rich plant oil that seals in moisture and helps reduce breakage." } }
+      },
+      "block_order": ["g1", "g2", "g3", "g4"],
+      "settings": { "eyebrow": "What's inside", "heading": "Clean botanicals, nothing you don't need", "text": "<p>No sulfates, parabens, silicones or mineral oil.</p>", "columns": "4", "card_style": "ingredient", "style": "deep", "anchor": "ingredients" }
+    },
+    "how": {
+      "type": "steps",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "label": "", "heading": "Apply", "text": "Part your hair and apply 3 to 5 drops directly to the scalp, focusing on thinner areas." } },
+        "s2": { "type": "step", "settings": { "label": "", "heading": "Massage", "text": "Massage with your fingertips for 1 to 2 minutes to spread the serum and wake up the scalp." } },
+        "s3": { "type": "step", "settings": { "label": "", "heading": "Repeat daily", "text": "No need to rinse. Use once a day, morning or night, and keep going. Consistency is everything." } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": { "eyebrow": "How to use", "heading": "Two minutes a day", "layout": "cards", "style": "light", "footnote": "", "anchor": "how-to-use" }
+    },
+    "timeline": {
+      "type": "steps",
+      "blocks": {
+        "t1": { "type": "step", "settings": { "label": "Week 1–2", "heading": "Scalp feels better", "text": "Less dryness and itch. Your scalp feels clean, calm and refreshed." } },
+        "t2": { "type": "step", "settings": { "label": "Week 4–6", "heading": "Stronger strands", "text": "Hair feels softer and more conditioned, with less breakage when you brush." } },
+        "t3": { "type": "step", "settings": { "label": "Week 8–12", "heading": "Fuller-looking hair", "text": "With daily use, hair looks thicker and healthier from root to tip." } }
+      },
+      "block_order": ["t1", "t2", "t3"],
+      "settings": { "eyebrow": "What to expect", "heading": "Your first 90 days", "layout": "timeline", "style": "light", "footnote": "Hair grows in cycles, so give it at least 8 to 12 weeks of daily use. Individual results vary.", "anchor": "results" }
+    },
+    "compare": {
+      "type": "comparison",
+      "blocks": {
+        "r1": { "type": "row", "settings": { "feature": "Targets the scalp, where hair grows", "us": true, "them": false } },
+        "r2": { "type": "row", "settings": { "feature": "Lightweight, non-greasy finish", "us": true, "them": false } },
+        "r3": { "type": "row", "settings": { "feature": "Precision dropper, no mess", "us": true, "them": false } },
+        "r4": { "type": "row", "settings": { "feature": "Free from sulfates, parabens & silicones", "us": true, "them": false } },
+        "r5": { "type": "row", "settings": { "feature": "Vegan and cruelty free", "us": true, "them": false } },
+        "r6": { "type": "row", "settings": { "feature": "30-day money-back guarantee", "us": true, "them": false } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4", "r5", "r6"],
+      "settings": { "eyebrow": "The difference", "heading": "Not another greasy hair oil", "us_label": "Scalp Elixir", "them_label": "Typical hair oils", "anchor": "compare" }
+    },
+    "reviews": {
+      "type": "testimonials",
+      "settings": { "eyebrow": "Reviews", "heading": "What customers are saying" }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "question", "settings": { "question": "How long until I see results?", "answer": "<p>Most people notice a calmer, more comfortable scalp within the first two weeks. Hair grows slowly and in cycles, so give it 8 to 12 weeks of daily use to judge the look of your hair. Individual results vary.</p>" } },
+        "q2": { "type": "question", "settings": { "question": "Will it make my hair greasy?", "answer": "<p>No. The formula is lightweight and absorbs in a minute or two. You only need a few drops, applied to the scalp, not the lengths.</p>" } },
+        "q3": { "type": "question", "settings": { "question": "Can I use it on color-treated or curly hair?", "answer": "<p>Yes. It works on all hair types and textures, including color-treated, relaxed and natural hair.</p>" } },
+        "q4": { "type": "question", "settings": { "question": "How long does one bottle last?", "answer": "<p>Used once a day, one bottle lasts about a month. That's why most customers pick the 2 or 3 bottle routine.</p>" } },
+        "q5": { "type": "question", "settings": { "question": "Is it safe for sensitive skin?", "answer": "<p>It's made for daily use, but everyone's skin is different. Do a patch test behind your ear 24 hours before first use. Stop using it if irritation occurs. If you're pregnant, breastfeeding or under medical care, check with your doctor first.</p>" } },
+        "q6": { "type": "question", "settings": { "question": "How long does shipping take?", "answer": "<p>Orders are processed within 1 to 3 business days. You'll get a tracking link by email as soon as your order ships.</p>" } },
+        "q7": { "type": "question", "settings": { "question": "What if it doesn't work for me?", "answer": "<p>You're covered by our 30-day money-back guarantee. Email us within 30 days of delivery and we'll refund you, even if the bottle is empty.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6", "q7"],
+      "settings": { "eyebrow": "FAQ", "heading": "Questions, answered", "text": "<p>Still wondering? Email us and a real person will reply within 24 hours.</p>", "anchor": "faq" }
+    },
+    "cta": {
+      "type": "cta-banner",
+      "settings": {
+        "eyebrow": "Risk-free",
+        "heading": "Love your hair in 30 days or your money back",
+        "text": "<p>Use it every day for a month. If you're not happy, email us and we'll refund you. Even if the bottle is empty.</p>",
+        "button_label": "Start your routine",
+        "link": "",
+        "show_price": true
+      }
+    }
+  },
+  "order": ["hero", "strip", "problem", "benefits", "ingredients", "how", "timeline", "compare", "reviews", "faq", "cta"]
+}
