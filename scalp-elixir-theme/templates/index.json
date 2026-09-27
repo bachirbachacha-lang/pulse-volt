@@ -547,6 +547,16 @@
         "text": "<p>40 ultra-thin hydrocolloid stars that cover a spot and keep your fingers off it. 7 colours to choose from.</p>",
         "button_label": "Shop patches"
       }
+    },
+    "massager_promo": {
+      "type": "featured-product",
+      "settings": {
+        "product": "scalp-massager",
+        "eyebrow": "Pairs with Scalp Elixir",
+        "heading": "Scalp massage brush",
+        "text": "<p>A soft-bristled brush that fits in your palm. Massage your oil in, or use it with shampoo in the shower. 4 colours.</p>",
+        "button_label": "Shop the brush"
+      }
     }
   },
   "order": [
@@ -559,6 +569,7 @@
     "timeline",
     "compare",
     "reviews",
+    "massager_promo",
     "patches_promo",
     "faq",
     "cta"

@@ -1,0 +1,272 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Scalp massage brush"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "fallback_text": "Soft bristles · 4 colours"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>A soft-bristled brush that fits in your palm. Use it to massage Scalp Elixir into your scalp, or to work shampoo through your roots in the shower.</p>"
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "lines": "Soft, flexible bristles\nSpreads scalp oil evenly\nLifts shampoo and buildup in the shower\nWorks on wet or dry hair"
+          }
+        },
+        "buy": {
+          "type": "buy",
+          "settings": {
+            "offer_cards": false,
+            "offers_heading": "",
+            "badge_1": "",
+            "sub_1": "",
+            "badge_2": "",
+            "sub_2": "",
+            "badge_3": "",
+            "sub_3": "",
+            "show_quantity": true,
+            "button_label": "Add to cart",
+            "show_dynamic_checkout": true
+          }
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {
+            "icon_1": "truck",
+            "item_1": "Tracked shipping",
+            "icon_2": "heart",
+            "item_2": "Pairs with Scalp Elixir",
+            "icon_3": "lock",
+            "item_3": "Secure checkout"
+          }
+        },
+        "tab_desc": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Description",
+            "icon": "sparkle",
+            "use_description": true,
+            "content": "",
+            "open": false
+          }
+        },
+        "tab_use": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "How to use",
+            "icon": "clock",
+            "use_description": false,
+            "content": "<p>With oil: put 3 to 5 drops of Scalp Elixir on your scalp, then move the brush in small circles for 1 to 2 minutes. In the shower: work in your shampoo with gentle circles, then rinse. Press lightly. Rinse the brush after use and let it air dry.</p>",
+            "open": false
+          }
+        },
+        "tab_ship": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping & returns",
+            "icon": "truck",
+            "use_description": false,
+            "content": "<p>Orders are processed in 1 to 3 business days and ship with tracking. Delivery usually takes 7 to 14 business days in Saudi Arabia and the Gulf, and 10 to 20 business days to other countries. Unused brushes can be returned within 30 days.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "rating",
+        "price",
+        "text",
+        "benefits",
+        "buy",
+        "trust",
+        "tab_desc",
+        "tab_use",
+        "tab_ship"
+      ],
+      "settings": {
+        "gallery_badge": "Soft bristles",
+        "sticky_bar": true,
+        "sticky_label": "Add to cart",
+        "padding": "md"
+      }
+    },
+    "m_strip": {
+      "type": "icon-bar",
+      "blocks": {
+        "s1": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "text": "Soft bristles"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "icon": "drop",
+            "text": "Wet or dry"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "text": "Pairs with Scalp Elixir"
+          }
+        },
+        "s4": {
+          "type": "item",
+          "settings": {
+            "icon": "sparkle",
+            "text": "Easy to clean"
+          }
+        },
+        "s5": {
+          "type": "item",
+          "settings": {
+            "icon": "sun",
+            "text": "4 colours"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "settings": {
+        "scroll": true,
+        "style": "deep"
+      }
+    },
+    "m_how": {
+      "type": "steps",
+      "blocks": {
+        "h1": {
+          "type": "step",
+          "settings": {
+            "label": "",
+            "heading": "Apply",
+            "text": "Put 3 to 5 drops of Scalp Elixir on your scalp, or lather your shampoo."
+          }
+        },
+        "h2": {
+          "type": "step",
+          "settings": {
+            "label": "",
+            "heading": "Massage",
+            "text": "Move the brush in small, gentle circles for 1 to 2 minutes."
+          }
+        },
+        "h3": {
+          "type": "step",
+          "settings": {
+            "label": "",
+            "heading": "Rinse & dry",
+            "text": "Rinse the brush with water and let it air dry."
+          }
+        }
+      },
+      "block_order": [
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "settings": {
+        "eyebrow": "How to use",
+        "heading": "Three steps",
+        "layout": "cards",
+        "style": "light",
+        "footnote": "",
+        "anchor": "brush-how-to-use"
+      }
+    },
+    "m_pair": {
+      "type": "featured-product",
+      "settings": {
+        "product": "scalp-elixir",
+        "eyebrow": "Better together",
+        "heading": "Pair it with Scalp Elixir",
+        "text": "<p>Rosemary scalp oil in natural coconut and olive oil. A few drops a day, massaged in with the brush.</p>",
+        "button_label": "Shop Scalp Elixir"
+      }
+    },
+    "m_faq": {
+      "type": "faq",
+      "blocks": {
+        "f1": {
+          "type": "question",
+          "settings": {
+            "question": "Is it gentle on the scalp?",
+            "answer": "<p>Yes. The bristles are soft and flexible. Press lightly and let the brush do the work.</p>"
+          }
+        },
+        "f2": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use it in the shower?",
+            "answer": "<p>Yes. It works on wet or dry hair, with shampoo in the shower or with Scalp Elixir on a dry scalp.</p>"
+          }
+        },
+        "f3": {
+          "type": "question",
+          "settings": {
+            "question": "How do I clean it?",
+            "answer": "<p>Rinse it under warm water after each use and let it air dry.</p>"
+          }
+        },
+        "f4": {
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Orders are processed within 1 to 3 business days. Delivery usually takes 7 to 14 business days in Saudi Arabia and the Gulf, and 10 to 20 business days to other countries. You'll get a tracking link by email as soon as your order ships.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ],
+      "settings": {
+        "eyebrow": "FAQ",
+        "heading": "Questions, answered",
+        "text": "<p>Still wondering? Email us and a real person will reply within 24 hours.</p>",
+        "anchor": "faq"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "m_strip",
+    "m_how",
+    "m_pair",
+    "m_faq"
+  ]
+}
