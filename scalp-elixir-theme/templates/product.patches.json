@@ -88,7 +88,7 @@
             "heading": "Shipping & returns",
             "icon": "truck",
             "use_description": false,
-            "content": "<p>Orders are processed in 1 to 3 business days and ship with tracking. Unopened packs can be returned within 30 days.</p>",
+            "content": "<p>Orders are processed in 1 to 3 business days and ship with tracking. Delivery usually takes 7 to 14 business days in Saudi Arabia and the Gulf, and 10 to 20 business days to other countries. Unopened packs can be returned within 30 days.</p>",
             "open": false
           }
         }
@@ -287,7 +287,7 @@
           "type": "question",
           "settings": {
             "question": "How long does shipping take?",
-            "answer": "<p>Orders are processed within 1 to 3 business days. You'll get a tracking link by email as soon as your order ships.</p>"
+            "answer": "<p>Orders are processed within 1 to 3 business days. Delivery usually takes 7 to 14 business days in Saudi Arabia and the Gulf, and 10 to 20 business days to other countries. You'll get a tracking link by email as soon as your order ships.</p>"
           }
         }
       },
