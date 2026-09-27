@@ -521,10 +521,21 @@
         "show_price": true,
         "product": "scalp-elixir"
       }
+    },
+    "massager_pair": {
+      "type": "featured-product",
+      "settings": {
+        "product": "scalp-massager",
+        "eyebrow": "Complete your routine",
+        "heading": "Add the scalp massage brush",
+        "text": "<p>Soft bristles that spread the oil evenly and make your daily massage easier. 39 SAR, in 4 colours.</p>",
+        "button_label": "See the brush"
+      }
     }
   },
   "order": [
     "main",
+    "massager_pair",
     "strip",
     "benefits",
     "ingredients",
