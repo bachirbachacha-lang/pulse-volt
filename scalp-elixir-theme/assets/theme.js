@@ -202,6 +202,8 @@
       idInput.value = variant.id;
       if (addBtn) addBtn.disabled = !variant.available;
       if (addLabel) addLabel.textContent = variant.available ? defaultLabel : t.soldOut;
+      const addPrice = addBtn ? $('[data-add-price]', addBtn) : null;
+      if (addPrice) { addPrice.hidden = !variant.available; addPrice.textContent = formatMoney(variant.price); }
 
       const now = $('[data-price-now]', section);
       const was = $('[data-price-was]', section);

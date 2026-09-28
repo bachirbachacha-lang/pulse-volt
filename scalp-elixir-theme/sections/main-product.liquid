@@ -196,6 +196,7 @@
                     <span data-add-label>
                       {%- if current_variant.available -%}{% render 'tr', value: block.settings.button_label, scope: bk, field: 'button_label' %}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
                     </span>
+                    <span class="btn__price" data-add-price {% unless current_variant.available %}hidden{% endunless %}>{{ current_variant.price | money }}</span>
                     <span class="btn__spinner" aria-hidden="true"></span>
                   </button>
                   {%- if block.settings.show_dynamic_checkout -%}

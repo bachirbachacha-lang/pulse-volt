@@ -141,10 +141,10 @@
       "buy": {
         "offers_heading": "Choose your routine",
         "sub_1": "Try it out",
-        "badge_2": "Most popular",
-        "sub_2": "Most customers pick this",
-        "badge_3": "Best value",
-        "sub_3": "3-month routine for the best results",
+        "badge_2": "Great value",
+        "sub_2": "2-month routine",
+        "badge_3": "Best value + gift",
+        "sub_3": "Includes a FREE scalp massage brush",
         "button_label": "Add to cart"
       },
       "trust": {
@@ -343,7 +343,7 @@
       },
       "q4": {
         "question": "How long does one bottle last?",
-        "answer_html": "<p>Each bottle holds 50 mL. With daily use it lasts about 1 to 2 months, depending on how much you use. That's why most customers pick the 2 or 3 bottle routine.</p>"
+        "answer_html": "<p>Each bottle holds 50 mL. With daily use it lasts about 1 to 2 months, depending on how much you use. That's why the 2 and 3 bottle routines are the better deal.</p>"
       },
       "q5": {
         "question": "Is it safe for sensitive skin?",

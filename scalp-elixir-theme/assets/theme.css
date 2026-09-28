@@ -83,6 +83,8 @@ p { margin: 0 0 1em; }
 .btn--ghost { background: transparent; border-color: var(--c-line); }
 .btn--full { width: 100%; }
 .btn--lg { min-height: 58px; font-size: 1.06rem; }
+.btn__price { font-variant-numeric: tabular-nums; }
+.btn__price::before { content: "·"; margin-inline: .5em; opacity: .6; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn__spinner { display: none; width: 18px; height: 18px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
 .btn.is-loading [data-add-label] { opacity: 0; }
