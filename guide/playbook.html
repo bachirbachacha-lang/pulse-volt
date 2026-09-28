@@ -1,0 +1,281 @@
+<title>Scalp Elixir Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F4F1E9; --surface:#FFFFFF; --ink:#14201F; --muted:#56635F; --line:#DCD5C4;
+  --deep:#1D4A45; --on-deep:#F4F1E9; --leaf:#2A9D4A; --leaf-soft:#E3F1E4;
+  --warn:#9A5B12; --warn-soft:#F7ECDB; --bad:#A33A2C; --bad-soft:#F6E2DE;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1A18; --surface:#162522; --ink:#E9EFEC; --muted:#9DB0AA; --line:#2A3D39;
+    --deep:#1F5A53; --on-deep:#EEF4F1; --leaf:#57D276; --leaf-soft:#173726;
+    --warn:#E3A857; --warn-soft:#33260F; --bad:#EF8A7C; --bad-soft:#3A1D19;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1A18; --surface:#162522; --ink:#E9EFEC; --muted:#9DB0AA; --line:#2A3D39;
+  --deep:#1F5A53; --on-deep:#EEF4F1; --leaf:#57D276; --leaf-soft:#173726;
+  --warn:#E3A857; --warn-soft:#33260F; --bad:#EF8A7C; --bad-soft:#3A1D19;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(2rem,6vw,2.8rem)}
+h2{font-size:1.6rem}
+h3{font-size:1.1rem;font-family:"IBM Plex Sans",system-ui,sans-serif}
+p{margin:0}
+.ar{font-family:"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif}
+header.top{background:var(--deep);color:var(--on-deep);margin-inline:-16px;padding:40px 16px 32px}
+header.top .wrap{display:grid;gap:12px}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;opacity:.8}
+header.top p{max-width:60ch;opacity:.92}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
+nav.toc .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+nav.toc a{flex:none;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem;font-weight:500;background:var(--surface)}
+nav.toc a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--leaf);outline-offset:2px}
+section{padding-block:40px 8px;display:grid;gap:18px;scroll-margin-top:64px}
+.lead{color:var(--muted);max-width:62ch}
+ul.points{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+ul.points li{display:grid;grid-template-columns:22px 1fr;gap:10px;max-width:65ch}
+ul.points li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--leaf);margin-top:.6em;justify-self:center}
+ul.points b{font-weight:600}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:8px;align-content:start}
+.box.good{border-color:transparent;background:var(--leaf-soft)}
+.box.bad{border-color:transparent;background:var(--bad-soft)}
+.box.warn{border-color:transparent;background:var(--warn-soft)}
+.box h3{display:flex;align-items:center;gap:8px}
+.tag{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.formula{font-family:Fraunces,Georgia,serif;font-size:1.25rem;background:var(--surface);border-left:4px solid var(--leaf);padding:14px 18px;border-radius:0 12px 12px 0}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;background:var(--surface);border-radius:12px;overflow:hidden}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:16px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.fields label{display:grid;gap:6px;font-size:.85rem;color:var(--muted);font-weight:500}
+.fields input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;font-variant-numeric:tabular-nums}
+.result{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{border-radius:12px;padding:14px;background:var(--bg);display:grid;gap:2px}
+.stat .v{font-family:Fraunces,Georgia,serif;font-size:1.6rem;font-variant-numeric:tabular-nums}
+.stat .k{font-size:.8rem;color:var(--muted)}
+.verdict{border-radius:12px;padding:12px 14px;font-weight:500}
+.verdict.ok{background:var(--leaf-soft)} .verdict.no{background:var(--bad-soft)}
+.bar{display:flex;height:34px;border-radius:10px;overflow:hidden;font-size:.8rem;font-weight:600}
+.bar span{display:flex;align-items:center;justify-content:center;color:var(--on-deep);white-space:nowrap;padding-inline:4px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:6px;vertical-align:middle}
+ol.plan{list-style:none;padding:0;margin:0;display:grid;gap:10px;counter-reset:s}
+ol.plan li{counter-increment:s;display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+ol.plan li::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--deep);color:var(--on-deep);display:grid;place-items:center;font-weight:600;font-size:.9rem}
+ol.plan label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+ol.plan input{margin-top:.35em;accent-color:var(--leaf);width:18px;height:18px;flex:none}
+ol.plan li.done{opacity:.6} ol.plan li.done span{text-decoration:line-through}
+.note{font-size:.85rem;color:var(--muted)}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Scalp Elixir · your business notebook</div>
+    <h1>The Scalp Elixir Playbook</h1>
+    <p>AI, money, business, ads and investing. Everything we've talked about, in one place. Come back to it whenever you feel lost.</p>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <div class="wrap">
+    <a href="#ai">AI</a><a href="#money">Money</a><a href="#calc">Profit check</a><a href="#business">Business</a><a href="#ads">Ads</a><a href="#investing">Investing</a><a href="#mindset">Mindset</a><a href="#plan">Your plan</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="ai">
+  <div class="eyebrow tag">1 · AI</div>
+  <h2>AI is your worker, not your boss</h2>
+  <p class="lead">AI builds, writes and designs fast. You still decide, take action, and put your name behind it.</p>
+  <div class="split">
+    <div class="box good"><h3>What AI does well</h3><p>Websites, ad videos, captions, Arabic and English copy, translations, product research, customer replies, working out profit.</p></div>
+    <div class="box bad"><h3>What AI can't do for you</h3><p>Post on your accounts, pay for ads, sign contracts, verify with Nafath, or be the face of the brand.</p></div>
+  </div>
+  <ul class="points">
+    <li><span><b>Clear input, better output.</b> Screenshots and exact details (price, colour, country) get you the right answer on the first try.</span></li>
+    <li><span><b>Never fake results.</b> No AI "before and after" hair, no fake reviews, no fake follower counts. Platforms ban it, and customers stop trusting you.</span></li>
+    <li><span><b>Check what matters.</b> Prices, delivery times and health claims should always be true. AI can make mistakes too.</span></li>
+  </ul>
+</section>
+
+<section id="money">
+  <div class="eyebrow tag">2 · Money</div>
+  <h2>Know your numbers</h2>
+  <p class="formula">Profit = Sale price − (product + shipping + fees + ads)</p>
+  <ul class="points">
+    <li><span><b>Revenue isn't profit.</b> "10,000 SAR in sales" can still be a loss after ads.</span></li>
+    <li><span><b>Start small, test, then grow</b> only what works.</span></li>
+    <li><span><b>Reinvest early profits</b> into ads and better products before spending on yourself.</span></li>
+    <li><span><b>Keep business money separate</b> from personal money. One account for the store.</span></li>
+    <li><span><b>Nobody gets rich in a week.</b> Most "7,000 sales in a week" videos sell courses.</span></li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>Scalp Elixir order</th><th class="num">Customer pays</th><th class="num">Product</th><th class="num">Fees ~5%</th><th class="num">Left before ads</th></tr></thead>
+    <tbody>
+      <tr><td>1 bottle</td><td class="num">169 SAR</td><td class="num">71</td><td class="num">8</td><td class="num"><b>~90</b></td></tr>
+      <tr><td>2 bottles</td><td class="num">299 SAR</td><td class="num">142</td><td class="num">15</td><td class="num"><b>~142</b></td></tr>
+      <tr><td>3 bottles</td><td class="num">399 SAR</td><td class="num">213</td><td class="num">20</td><td class="num"><b>~166</b></td></tr>
+      <tr><td>1 bottle + brush</td><td class="num">208 SAR</td><td class="num">84</td><td class="num">10</td><td class="num"><b>~114</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Fees = Tap (about 2–3%) + Shopify (2% with a third-party payment provider). The monthly Shopify plan comes on top.</p>
+</section>
+
+<section id="calc">
+  <div class="eyebrow tag">3 · Profit check</div>
+  <h2>Is my ad making money?</h2>
+  <p class="lead">After a few days of ads, fill in your real numbers. The ad cost per sale must stay below what's left before ads.</p>
+  <div class="calc">
+    <div class="fields">
+      <label for="price">Average order (SAR)<input id="price" type="number" inputmode="decimal" value="169"></label>
+      <label for="cost">Product cost (SAR)<input id="cost" type="number" inputmode="decimal" value="71"></label>
+      <label for="spend">Ad spend so far (SAR)<input id="spend" type="number" inputmode="decimal" value="200"></label>
+      <label for="orders">Orders from ads<input id="orders" type="number" inputmode="numeric" value="3"></label>
+    </div>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <div class="legend"><span><i style="background:#7A8C87"></i>Product</span><span><i style="background:#B07A2A"></i>Fees</span><span><i style="background:#A33A2C"></i>Ads</span><span><i style="background:#2A9D4A"></i>Profit</span></div>
+    <div class="result">
+      <div class="stat"><span class="v" id="cps">–</span><span class="k">Ad cost per sale</span></div>
+      <div class="stat"><span class="v" id="pps">–</span><span class="k">Profit per sale</span></div>
+      <div class="stat"><span class="v" id="tot">–</span><span class="k">Total profit</span></div>
+    </div>
+    <div class="verdict" id="verdict" role="status"></div>
+  </div>
+  <p class="note">Example numbers are filled in. Replace them with your own.</p>
+</section>
+
+<section id="business">
+  <div class="eyebrow tag">4 · Business</div>
+  <h2>What makes people buy and come back</h2>
+  <ul class="points">
+    <li><span><b>People buy results and feelings.</b> A calm scalp and fuller-looking hair, not "50 mL of oil".</span></li>
+    <li><span><b>Trust sells.</b> A clean site, honest delivery times (7–14 business days), real reviews, fast replies, easy refunds.</span></li>
+    <li><span><b>Upsells and bundles</b> raise every order. That's why the brush sits on the oil page and 2–3 bottle deals exist.</span></li>
+    <li><span><b>Focus.</b> One hero product done well beats ten random ones. Add products that fit the same customer.</span></li>
+    <li><span><b>Do it properly.</b> A licence, honest claims (never "cures hair loss"), and SFDA registration once you keep stock in Saudi Arabia.</span></li>
+    <li><span><b>Automate later.</b> At 5–10 orders, set up DSers so AliExpress orders and tracking happen in one click.</span></li>
+  </ul>
+</section>
+
+<section id="ads">
+  <div class="eyebrow tag">5 · Ads</div>
+  <h2>Free posts build you. Paid ads feed you.</h2>
+  <div class="split">
+    <div class="box"><span class="tag">Free, every day</span><h3>Spotlight, TikTok, Reels</h3><p>1 video a day, 8–11pm Saudi time, trending sound, 3–4 hashtags. Switch between products freely.</p></div>
+    <div class="box"><span class="tag">Paid, after payments work</span><h3>Snapchat first</h3><p>50 SAR a day, 2–3 videos in one ad, the oil only, 3–4 days in a row before judging. Then TikTok.</p></div>
+  </div>
+  <ul class="points">
+    <li><span><b>The first 2 seconds decide everything.</b> Open with the hook, not the logo.</span></li>
+    <li><span><b>Real beats perfect.</b> Your hands, your bathroom, the real bottle.</span></li>
+    <li><span><b>Test, keep, kill, scale.</b> Keep the video that sells, stop the rest, raise budget slowly on the winner.</span></li>
+    <li><span><b>Don't switch products daily</b> in paid ads. Each switch restarts the learning.</span></li>
+    <li><span><b>Spy for free:</b> facebook.com/ads/library and TikTok Creative Center → Top Ads. Long-running ads are the profitable ones.</span></li>
+    <li><span><b>Never buy followers.</b> Fake followers kill your reach. Use the in-app "Promote" button instead.</span></li>
+  </ul>
+</section>
+
+<section id="investing">
+  <div class="eyebrow tag">6 · Investing</div>
+  <h2>If you make 100,000 SAR a year</h2>
+  <p class="lead">Can you make more? Yes. A store that makes 100,000 SAR in a year can grow past that with more winning ads and products. But investing comes after the business is safe, in this order:</p>
+  <ol class="plan" id="order">
+    <li><span><b>Keep the business running.</b> Enough cash for ads, stock and refunds for the next 2–3 months.</span></li>
+    <li><span><b>Emergency savings.</b> 3–6 months of your personal costs, kept in cash.</span></li>
+    <li><span><b>Reinvest in the store.</b> Early on, the business usually earns more on each riyal than any stock does.</span></li>
+    <li><span><b>Then invest 10–20% of profit</b> (for example 10,000–20,000 SAR) for the long term.</span></li>
+  </ol>
+  <div class="split">
+    <div class="box good"><span class="tag">Most of the investing money</span><h3>Diversified, long-term funds</h3><p>Low-cost funds that hold many companies, bought monthly and held for years. Sharia-compliant funds are widely available in Saudi Arabia.</p></div>
+    <div class="box warn"><span class="tag">Only a small slice</span><h3>Crypto</h3><p>Very volatile. At most about 5% of what you invest, and only money you can afford to lose completely.</p></div>
+    <div class="box bad"><span class="tag">Avoid</span><h3>Traps</h3><p>Day trading, borrowed money (leverage), "signals" groups, and anyone promising guaranteed returns.</p></div>
+  </div>
+  <ul class="points">
+    <li><span><b>Age:</b> investment accounts in Saudi Arabia usually need you to be 18+. Until then, your dad would hold it for you.</span></li>
+    <li><span><b>Zakat:</b> savings you hold for a full year are subject to zakat (2.5%). Saudi Arabia has no personal income tax.</span></li>
+    <li><span><b>Ask a professional</b> (a licensed advisor or your bank) before investing large amounts. This page is general guidance, not financial advice.</span></li>
+  </ul>
+</section>
+
+<section id="mindset">
+  <div class="eyebrow tag">7 · Mindset</div>
+  <h2>Stay hungry, not cocky</h2>
+  <ul class="points">
+    <li><span><b>Most people quit after 5 videos.</b> Post 30 days in a row and you're already ahead.</span></li>
+    <li><span><b>Failures are data.</b> A bad ad tells you what not to do next.</span></li>
+    <li><span><b>Don't compare</b> yourself to screenshots on TikTok.</span></li>
+    <li><span><b>Protect your money and time</b> from get-rich-quick courses and apps.</span></li>
+    <li><span><b>Rest when you're tired.</b> Everything saves. The store will still be there tomorrow.</span></li>
+  </ul>
+</section>
+
+<section id="plan">
+  <div class="eyebrow tag">8 · Your plan</div>
+  <h2>Tick these off as you go</h2>
+  <ol class="plan" id="checklist">
+    <li><label><input type="checkbox" id="c1"><span>Finish Tap Payments and the licence with Dad</span></label></li>
+    <li><label><input type="checkbox" id="c2"><span>PayPal: set it up with Dad, or deactivate it</span></label></li>
+    <li><label><input type="checkbox" id="c3"><span>Bottle arrives: photo of the label and ingredients to Claude</span></label></li>
+    <li><label><input type="checkbox" id="c4"><span>Film real videos (hands, dropper, massage) and send them for editing</span></label></li>
+    <li><label><input type="checkbox" id="c5"><span>Post 1 video a day on Snapchat, TikTok and Instagram</span></label></li>
+    <li><label><input type="checkbox" id="c6"><span>Put the store link in every bio once payments work</span></label></li>
+    <li><label><input type="checkbox" id="c7"><span>First Snapchat ad: 50 SAR a day for 3–4 days, oil only</span></label></li>
+    <li><label><input type="checkbox" id="c8"><span>Send the results to Claude: keep, stop or change</span></label></li>
+    <li><label><input type="checkbox" id="c9"><span>At 5–10 orders: set up DSers</span></label></li>
+  </ol>
+  <p class="note">Your ticks are saved in this browser only.</p>
+</section>
+
+<footer>Made for the Scalp Elixir store · Prices in SAR · General guidance, not legal or financial advice.</footer>
+</main>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const fmt=n=>(Math.round(n)).toLocaleString('en-US');
+  function calc(){
+    const price=+$('price').value||0, cost=+$('cost').value||0, spend=+$('spend').value||0, orders=+$('orders').value||0;
+    const fees=price*0.05, left=price-cost-fees;
+    const cps=orders>0?spend/orders:spend;
+    const pps=left-cps, tot=orders*left-spend;
+    $('cps').textContent=orders>0?fmt(cps)+' SAR':'no sales yet';
+    $('pps').textContent=orders>0?fmt(pps)+' SAR':'–';
+    $('tot').textContent=fmt(tot)+' SAR';
+    const v=$('verdict');
+    if(orders===0){v.className='verdict no';v.textContent='No sales yet. Give a new ad 3–4 days, then try a different video if it still has none.';}
+    else if(pps>0){v.className='verdict ok';v.textContent='Profitable: each sale costs '+fmt(cps)+' SAR in ads, below the '+fmt(left)+' SAR you keep. Keep it running and raise the budget slowly.';}
+    else{v.className='verdict no';v.textContent='Losing money: each sale costs '+fmt(cps)+' SAR in ads, more than the '+fmt(left)+' SAR you keep. Stop this video or try a new hook.';}
+    const parts=[['Product',cost,'#7A8C87'],['Fees',fees,'#B07A2A'],['Ads',orders>0?Math.min(cps,price):0,'#A33A2C']];
+    const used=parts.reduce((a,p)=>a+p[1],0); parts.push(['Profit',Math.max(price-used,0),'#2A9D4A']);
+    const bar=$('bar'); bar.innerHTML='';
+    const total=Math.max(price,used)||1;
+    parts.forEach(([k,val,c])=>{ if(val<=0) return; const s=document.createElement('span'); s.style.flex=String(val/total); s.style.background=c; s.textContent=val/total>0.12?fmt(val):''; s.title=k+': '+fmt(val)+' SAR'; bar.appendChild(s); });
+  }
+  ['price','cost','spend','orders'].forEach(id=>$(id).addEventListener('input',calc));
+  calc();
+  const KEY='se-playbook-checks';
+  let saved={}; try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  document.querySelectorAll('#checklist input').forEach(cb=>{
+    const li=cb.closest('li');
+    if(saved[cb.id]){cb.checked=true;li.classList.add('done');}
+    cb.addEventListener('change',()=>{ li.classList.toggle('done',cb.checked); saved[cb.id]=cb.checked; try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){} });
+  });
+})();
+</script>
