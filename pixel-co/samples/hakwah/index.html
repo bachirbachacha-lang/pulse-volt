@@ -65,6 +65,21 @@ html[lang=en] h2{font-family:var(--en-display);font-weight:600;font-size:56px}
 .visit .cta{justify-content:flex-start;margin-top:4px}
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
 .gallery div{aspect-ratio:1;border-radius:18px;background:#EADBCB;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;text-align:center;padding:8px}
+.about{display:grid;gap:26px}
+.about p.lead{font-size:21px;line-height:1.75;margin:0;max-width:40ch;color:var(--brown-2)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.facts div{background:#fff8f1;border:1px solid var(--sand);border-radius:20px;padding:16px 8px;text-align:center;min-width:0}
+.facts svg{width:34px;height:34px;stroke:var(--rose);display:block;margin:0 auto 10px}
+.facts b{display:block;font-weight:500;font-size:15px;line-height:1.35;color:var(--brown)}
+.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:26px}
+.gal figure{margin:0;border-radius:22px;aspect-ratio:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.gal figure.tall{grid-row:span 2;aspect-ratio:auto}
+.gal figure.wide{grid-column:1/-1;aspect-ratio:auto;height:180px}
+.gal figure svg{width:44%;max-width:120px;stroke:currentColor;opacity:.85}
+.gal figcaption{position:absolute;inset-inline:0;bottom:0;padding:12px 14px;font-size:15px;background:linear-gradient(transparent,rgba(42,26,17,.55));color:var(--cream)}
+.g1{background:var(--brown);color:var(--sand)}.g2{background:var(--rose);color:var(--cream)}.g3{background:var(--sand);color:var(--brown)}.g4{background:#5B3A28;color:var(--sand)}.g5{background:#D9BFA8;color:var(--brown)}.g6{background:var(--brown-2);color:var(--sand)}
+.galnote{font-size:15px;color:var(--muted);margin-top:14px}
+@media (min-width:700px){.gal{grid-template-columns:repeat(3,1fr)}}
 footer{background:var(--ink);color:var(--sand);text-align:center;padding:44px 20px calc(44px + env(safe-area-inset-bottom,0px));font-size:17px}
 footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
 .float{position:fixed;inset-inline-end:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:16px 24px;font-size:18px;font-weight:500;display:flex;gap:8px;align-items:center;box-shadow:0 10px 26px rgba(0,0,0,.2)}
@@ -78,7 +93,9 @@ footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
 <header class="top">
   <a class="logo" href="#top">حكوة</a>
   <nav>
+    <a href="#about" data-ar="حكايتنا" data-en="Story">حكايتنا</a>
     <a href="#menu" data-ar="المنيو" data-en="Menu">المنيو</a>
+    <a href="#gallery" data-ar="الصور" data-en="Gallery">الصور</a>
     <a href="#visit" data-ar="زورونا" data-en="Visit">زورونا</a>
   </nav>
   <button class="lang" id="lang" type="button">English</button>
@@ -101,6 +118,19 @@ footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
   </svg>
 </div>
 <div class="sadu" aria-hidden="true"></div>
+<section id="about">
+  <div class="about">
+    <div><p class="eyebrow">Our story</p><h2 data-ar="حكايتنا" data-en="Our story">حكايتنا</h2></div>
+    <p class="lead" data-ar="في قلب حي الصحافة، حكوة مكان للقهوة المختصة والمخبوزات الطازجة، بهوية مستوحاة من السدو والتراث السعودي. نؤمن إن لكل فنجان حكوة، وحكايتك تبدأ من أول رشفة." data-en="In the heart of Al Sahafa, Hakwah is a home for specialty coffee and fresh bakes, with a look inspired by Sadu weaving and Saudi heritage. We believe every cup has a story, and yours starts with the first sip.">في قلب حي الصحافة، حكوة مكان للقهوة المختصة والمخبوزات الطازجة، بهوية مستوحاة من السدو والتراث السعودي. نؤمن إن لكل فنجان حكوة، وحكايتك تبدأ من أول رشفة.</p>
+    <div class="facts">
+      <div><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M9 3c-1 1.5 1 2 0 3.5M13 3c-1 1.5 1 2 0 3.5"/><path d="M4 9h13v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/></svg><b data-ar="قهوة مختصة" data-en="Specialty coffee">قهوة مختصة</b></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M4 12c0-3.5 3.6-6 8-6s8 2.5 8 6v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 10l1 3M13 9.5l1 3.5M17 10.5l.6 2"/></svg><b data-ar="مخبوزات طازجة" data-en="Fresh bakery">مخبوزات طازجة</b></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19v-5l2-2 2 1 2-4 2 3 2-4 2 4h3l2-3 1 1-2 4v5M7 19v-4M15 19v-4"/></svg><b data-ar="جلسة الجمل" data-en="Camel seating">جلسة الجمل</b></div>
+    </div>
+  </div>
+</section>
+<div class="sadu" aria-hidden="true"></div>
+
 
 <section id="menu">
   <p class="eyebrow">Menu</p>
@@ -119,6 +149,21 @@ footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
 </section>
 <div class="sadu" aria-hidden="true"></div>
 
+<section id="gallery">
+  <p class="eyebrow">Gallery</p>
+  <h2 data-ar="لحظات من حكوة" data-en="Moments at Hakwah">لحظات من حكوة</h2>
+  <div class="gal">
+    <figure class="g1 tall"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12M4 21h16M9 21v-7h6v7"/></svg><figcaption data-ar="واجهة المقهى" data-en="The café">واجهة المقهى</figcaption></figure>
+    <figure class="g2"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M9 3c-1 1.5 1 2 0 3.5M13 3c-1 1.5 1 2 0 3.5"/><path d="M4 9h13v4a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/></svg><figcaption data-ar="قهوتنا" data-en="Our coffee">قهوتنا</figcaption></figure>
+    <figure class="g3"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19v-5l2-2 2 1 2-4 2 3 2-4 2 4h3l2-3 1 1-2 4v5M7 19v-4M15 19v-4"/></svg><figcaption data-ar="جلسة الجمل" data-en="Camel seating">جلسة الجمل</figcaption></figure>
+    <figure class="g4"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M4 12c0-3.5 3.6-6 8-6s8 2.5 8 6v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 10l1 3M13 9.5l1 3.5M17 10.5l.6 2"/></svg><figcaption data-ar="المخبوزات" data-en="Bakery">المخبوزات</figcaption></figure>
+    <figure class="g5"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5h12l-4 6h-4z"/><path d="M12 11v2"/><path d="M7 15h10v3a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/></svg><figcaption data-ar="القهوة المقطرة" data-en="Pour over">القهوة المقطرة</figcaption></figure>
+    <figure class="g6 wide"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><figcaption data-ar="تصويركم" data-en="Your photos">تصويركم</figcaption></figure>
+  </div>
+  <p class="galnote" data-ar="هنا تنحط صور حكوة الحقيقية من الانستقرام." data-en="Hakwah's real photos from Instagram go here.">هنا تنحط صور حكوة الحقيقية من الانستقرام.</p>
+</section>
+<div class="sadu" aria-hidden="true"></div>
+
 <section id="visit">
   <div class="visit">
     <div><p class="eyebrow">Visit</p><h2 data-ar="زورونا" data-en="Come say hi">زورونا</h2></div>
@@ -130,11 +175,6 @@ footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
       <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Hakwah+Specialty+Coffee+Al+Sahafa+Riyadh" target="_blank" rel="noopener" data-ar="افتح في الخرائط" data-en="Open in Maps">افتح في الخرائط</a>
       <a class="btn line" href="https://instagram.com/hakwah_cafe" target="_blank" rel="noopener">Instagram</a>
     </div>
-  </div>
-  <div class="gallery" aria-label="Photo spots">
-    <div data-ar="صورة المقهى" data-en="Café photo">صورة المقهى</div>
-    <div data-ar="جلسة الجمل 🐪" data-en="Camel seating 🐪">جلسة الجمل 🐪</div>
-    <div data-ar="المخبوزات" data-en="Bakery">المخبوزات</div>
   </div>
 </section>
 
