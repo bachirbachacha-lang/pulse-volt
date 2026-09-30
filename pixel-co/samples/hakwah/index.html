@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حكوة | Hakwah Specialty Coffee</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cormorant+Garamond:wght@500;600&family=Readex+Pro:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: one column for phones; hero, menu, visit card, footer. Sadu weave borders frame each section like the café's own posts. */
+:root{
+  --brown:#3A2317; --brown-2:#4E3122; --cream:#F5EADF; --sand:#E8D6C3; --rose:#B98470; --ink:#2A1A11; --muted:#7A6152;
+  --ar-display:'Aref Ruqaa','Amiri',serif;
+  --en-display:'Cormorant Garamond',Georgia,serif;
+  --body:'Readex Pro','IBM Plex Sans Arabic',Tahoma,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+.sample{background:var(--ink);color:var(--sand);font-size:12px;text-align:center;padding:7px 16px;letter-spacing:.02em}
+/* Sadu weave band */
+.sadu{height:22px;background:
+  linear-gradient(45deg,transparent 35%,var(--rose) 35% 45%,transparent 45% 55%,var(--rose) 55% 65%,transparent 65%) 0 0/22px 22px,
+  linear-gradient(-45deg,transparent 35%,var(--brown-2) 35% 45%,transparent 45% 55%,var(--brown-2) 55% 65%,transparent 65%) 0 0/22px 22px,
+  var(--sand)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(245,234,223,.94);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--sand)}
+.logo{font-family:var(--ar-display);font-size:30px;line-height:1;color:var(--brown);text-decoration:none}
+nav{display:flex;gap:18px;font-size:14px}
+nav a{text-decoration:none;color:var(--muted)}
+.lang{border:1px solid var(--brown);background:transparent;color:var(--brown);border-radius:999px;padding:6px 14px;font:500 13px var(--body);cursor:pointer}
+.hero{background:var(--brown);color:var(--cream);text-align:center;padding:56px 20px 64px;position:relative;overflow:hidden}
+.hero .mark{font-family:var(--ar-display);font-size:clamp(96px,26vw,170px);line-height:1;margin:0}
+.hero .en{font-family:var(--en-display);letter-spacing:.42em;font-size:clamp(20px,5vw,30px);margin:10px 0 0;padding-inline-start:.42em}
+.hero .en small{display:block;font-size:.55em;letter-spacing:.8em;margin-top:6px;opacity:.8}
+.hero .tag{font-size:20px;margin:30px auto 0;max-width:30ch;color:var(--sand)}
+.hero .meta{font-size:14px;color:var(--rose);margin-top:10px;letter-spacing:.04em}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:500;font-size:16px;padding:14px 24px;border-radius:999px;background:var(--cream);color:var(--brown)}
+.btn.line{background:transparent;color:var(--cream);border:1px solid rgba(245,234,223,.5)}
+.cup{width:120px;margin:34px auto 0;opacity:.9}
+section{padding:56px 20px;max-width:760px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin:0 0 6px}
+h2{font-family:var(--ar-display);font-size:44px;line-height:1.15;margin:0;color:var(--brown)}
+html[lang=en] h2{font-family:var(--en-display);font-weight:600;font-size:44px}
+.tabs{display:flex;gap:8px;margin:26px 0 8px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--sand);background:#fff8f1;color:var(--muted);border-radius:999px;padding:8px 16px;font:500 14px var(--body);cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--brown);border-color:var(--brown);color:var(--cream)}
+.menu{list-style:none;padding:0;margin:0}
+.menu li{display:flex;align-items:baseline;gap:12px;padding:15px 0;border-bottom:1px dashed #d9c3ae}
+.menu .name{font-weight:500}
+.menu .sub{display:block;font-size:13px;color:var(--muted);font-weight:300}
+.menu .dots{flex:1;border-bottom:1px dotted #cbb39c;transform:translateY(-4px);min-width:16px}
+.menu .price{font-variant-numeric:tabular-nums;font-weight:600;color:var(--brown);white-space:nowrap}
+.note{margin-top:18px;background:#EFE3D5;border-radius:14px;padding:12px 16px;font-size:14px;color:var(--brown-2)}
+.soon{padding:26px 0;color:var(--muted);font-size:15px}
+.visit{background:var(--brown);color:var(--cream);border-radius:28px;padding:34px 26px;display:grid;gap:22px}
+.visit h2{color:var(--cream)}
+.rows{display:grid;gap:14px}
+.row{display:flex;gap:14px;align-items:flex-start}
+.row svg{flex:none;width:22px;height:22px;margin-top:3px;stroke:var(--rose)}
+.row b{display:block;font-weight:500}
+.row span{color:var(--sand);font-size:15px}
+.visit .cta{justify-content:flex-start;margin-top:4px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.gallery div{aspect-ratio:1;border-radius:18px;background:#EADBCB;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:8px}
+footer{background:var(--ink);color:var(--sand);text-align:center;padding:32px 20px calc(32px + env(safe-area-inset-bottom,0px));font-size:14px}
+footer .logo{color:var(--cream);font-size:40px;display:block;margin-bottom:8px}
+.float{position:fixed;inset-inline-end:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:13px 18px;font-weight:500;display:flex;gap:8px;align-items:center;box-shadow:0 10px 26px rgba(0,0,0,.2)}
+@media (max-width:560px){nav{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="sample" data-ar="تصميم تجريبي من Pixel &amp; Co. — ليس الموقع الرسمي لحكوة" data-en="Sample design by Pixel &amp; Co. — not Hakwah's official website">تصميم تجريبي من Pixel &amp; Co. — ليس الموقع الرسمي لحكوة</div>
+
+<header class="top">
+  <a class="logo" href="#top">حكوة</a>
+  <nav>
+    <a href="#menu" data-ar="المنيو" data-en="Menu">المنيو</a>
+    <a href="#visit" data-ar="زورونا" data-en="Visit">زورونا</a>
+  </nav>
+  <button class="lang" id="lang" type="button">English</button>
+</header>
+
+<div class="hero" id="top">
+  <p class="mark">حكوة</p>
+  <p class="en">HAKWAH<small>COFFEE</small></p>
+  <p class="tag" data-ar="لكل فنجان حكوة" data-en="Every cup has a story">لكل فنجان حكوة</p>
+  <p class="meta" data-ar="قهوة مختصة · مخبوزات · حي الصحافة، الرياض" data-en="Specialty coffee · Bakery · Al Sahafa, Riyadh">قهوة مختصة · مخبوزات · حي الصحافة، الرياض</p>
+  <div class="cta">
+    <a class="btn" href="#menu" data-ar="شوف المنيو" data-en="See the menu">شوف المنيو</a>
+    <a class="btn line" href="#visit" data-ar="موقعنا" data-en="Find us">موقعنا</a>
+  </div>
+  <svg class="cup" viewBox="0 0 120 110" fill="none" stroke="#E8D6C3" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+    <path d="M44 14c-6 8 6 12 0 20M60 8c-6 9 6 13 0 22M76 14c-6 8 6 12 0 20"/>
+    <path d="M22 44h72v18a34 34 0 0 1-34 34h-4a34 34 0 0 1-34-34z"/>
+    <path d="M94 50h6a12 12 0 0 1 0 24h-8"/>
+    <path d="M12 104h96"/>
+  </svg>
+</div>
+<div class="sadu" aria-hidden="true"></div>
+
+<section id="menu">
+  <p class="eyebrow">Menu</p>
+  <h2 data-ar="المنيو" data-en="Our menu">المنيو</h2>
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" aria-selected="true" data-tab="coffee" data-ar="القهوة" data-en="Coffee">القهوة</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="drinks" data-ar="المشروبات" data-en="Beverages">المشروبات</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="bakery" data-ar="المخبوزات" data-en="Bakery">المخبوزات</button>
+  </div>
+  <div data-panel="coffee">
+    <ul class="menu" id="coffee"></ul>
+    <p class="note" data-ar="🌱 متوفرة بالحليب النباتي +٤ ريال" data-en="🌱 Available with plant milk +4 SR">🌱 متوفرة بالحليب النباتي +٤ ريال</p>
+  </div>
+  <div data-panel="drinks" hidden><p class="soon" data-ar="تنضاف المشروبات من منيو حكوة الكامل." data-en="Beverages are added from Hakwah's full menu.">تنضاف المشروبات من منيو حكوة الكامل.</p></div>
+  <div data-panel="bakery" hidden><p class="soon" data-ar="تنضاف المخبوزات مع صورها من منيو حكوة الكامل." data-en="Bakery items and photos are added from Hakwah's full menu.">تنضاف المخبوزات مع صورها من منيو حكوة الكامل.</p></div>
+</section>
+<div class="sadu" aria-hidden="true"></div>
+
+<section id="visit">
+  <div class="visit">
+    <div><p class="eyebrow">Visit</p><h2 data-ar="زورونا" data-en="Come say hi">زورونا</h2></div>
+    <div class="rows">
+      <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><div><b data-ar="حي الصحافة" data-en="Al Sahafa District">حي الصحافة</b><span data-ar="الرياض" data-en="Riyadh">الرياض</span></div></div>
+      <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M5 17h11l3-5h-4l-2-4H8"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><div><b data-ar="التوصيل" data-en="Delivery">التوصيل</b><span data-ar="اطلب من تطبيقات التوصيل أو واتساب" data-en="Order through delivery apps or WhatsApp">اطلب من تطبيقات التوصيل أو واتساب</span></div></div>
+    </div>
+    <div class="cta">
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Hakwah+Specialty+Coffee+Al+Sahafa+Riyadh" target="_blank" rel="noopener" data-ar="افتح في الخرائط" data-en="Open in Maps">افتح في الخرائط</a>
+      <a class="btn line" href="https://instagram.com/hakwah_cafe" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="gallery" aria-label="Photo spots">
+    <div data-ar="صورة المقهى" data-en="Café photo">صورة المقهى</div>
+    <div data-ar="جلسة الجمل 🐪" data-en="Camel seating 🐪">جلسة الجمل 🐪</div>
+    <div data-ar="المخبوزات" data-en="Bakery">المخبوزات</div>
+  </div>
+</section>
+
+<footer>
+  <span class="logo">حكوة</span>
+  <div data-ar="قهوة مختصة · حي الصحافة، الرياض" data-en="Specialty coffee · Al Sahafa, Riyadh">قهوة مختصة · حي الصحافة، الرياض</div>
+  <div style="margin-top:14px;opacity:.6;font-size:12px">Sample design by Pixel &amp; Co.</div>
+</footer>
+
+<a class="float" href="#visit" data-ar="اطلب واتساب" data-en="Order on WhatsApp">اطلب واتساب</a>
+
+<script>
+const COFFEE = [
+  ['قهوة اليوم', 'Coffee of the day', 'حار / بارد', 'Hot / Cold', '9'],
+  ['مقطر إثيوبي', 'Drip Ethiopian', 'حار / بارد', 'Hot / Cold', '17 / 16'],
+  ['مقطر بنما', 'Drip Panama', 'حار / بارد', 'Hot / Cold', '18 / 17'],
+  ['اسبريسو', 'Espresso', '', '', '11'],
+  ['ايروكانو', 'Aerocano', '', '', '21'],
+  ['فلات وايت', 'Flat White', '', '', '16'],
+  ['كابتشينو', 'Cappuccino', '', '', '17'],
+  ['موكاتشينو', 'Mochachino', 'حار / بارد', 'Hot / Cold', '20 / 19'],
+  ['كورتادو', 'Cortado', '', '', '13'],
+  ['لاتيه', 'Latte', 'حار / بارد', 'Hot / Cold', '17'],
+  ['سبانش لاتيه', 'Spanish Latte', 'حار / بارد', 'Hot / Cold', '18'],
+  ['أمريكانو', 'Americano', 'حار / بارد', 'Hot / Cold', '12 / 13'],
+];
+let lang = 'ar';
+function render() {
+  document.getElementById('coffee').innerHTML = COFFEE.map(([ar, en, sar, sen, p]) => {
+    const n = lang === 'ar' ? ar : en, s = lang === 'ar' ? sar : sen;
+    return `<li><span class="name">${n}${s ? `<span class="sub">${s}</span>` : ''}</span><span class="dots"></span><span class="price">${p} ${lang === 'ar' ? 'ر.س' : 'SR'}</span></li>`;
+  }).join('');
+  document.querySelectorAll('[data-ar]').forEach(el => { el.textContent = el.dataset[lang]; });
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('lang').textContent = lang === 'ar' ? 'English' : 'العربية';
+}
+document.getElementById('lang').addEventListener('click', () => { lang = lang === 'ar' ? 'en' : 'ar'; render(); });
+document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-tab]').forEach(x => x.setAttribute('aria-selected', x === b));
+  document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== b.dataset.tab; });
+}));
+render();
+</script>
+</body>
+</html>
