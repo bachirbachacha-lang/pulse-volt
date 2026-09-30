@@ -29,7 +29,14 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .logo{font-family:var(--ar-display);font-size:38px;line-height:1;color:var(--brown);text-decoration:none}
 nav{display:flex;gap:22px;font-size:17px}
 nav a{text-decoration:none;color:var(--muted)}
-.lang{border:1px solid var(--brown);background:transparent;color:var(--brown);border-radius:999px;padding:8px 18px;font:500 15px var(--body);cursor:pointer}
+.switch{display:inline-flex;align-items:center;gap:4px;background:#EADBCB;border-radius:999px;padding:4px}
+.switch svg{width:20px;height:20px;stroke:var(--brown);margin-inline:8px 2px}
+.switch button{border:0;background:transparent;color:var(--brown);border-radius:999px;padding:8px 16px;font:500 16px var(--body);cursor:pointer;min-width:56px}
+.switch button[aria-pressed=true]{background:var(--brown);color:var(--cream)}
+footer .switch{background:rgba(245,234,223,.12);margin-top:22px}
+footer .switch svg{stroke:var(--sand)}
+footer .switch button{color:var(--sand)}
+footer .switch button[aria-pressed=true]{background:var(--cream);color:var(--brown)}
 .hero{background:var(--brown);color:var(--cream);text-align:center;padding:72px 20px 80px;position:relative;overflow:hidden}
 .hero .mark{font-family:var(--ar-display);font-size:clamp(120px,34vw,220px);line-height:1;margin:0}
 .hero .en{font-family:var(--en-display);letter-spacing:.42em;font-size:clamp(24px,6.4vw,38px);margin:14px 0 0;padding-inline-start:.42em}
@@ -98,7 +105,7 @@ footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
     <a href="#gallery" data-ar="الصور" data-en="Gallery">الصور</a>
     <a href="#visit" data-ar="زورونا" data-en="Visit">زورونا</a>
   </nav>
-  <button class="lang" id="lang" type="button">English</button>
+  <div class="switch" role="group" aria-label="Language / اللغة"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><button type="button" data-lang="ar" aria-pressed="true">عربي</button><button type="button" data-lang="en" aria-pressed="false">English</button></div>
 </header>
 
 <div class="hero" id="top">
@@ -181,6 +188,7 @@ footer .logo{color:var(--cream);font-size:56px;display:block;margin-bottom:8px}
 <footer>
   <span class="logo">حكوة</span>
   <div data-ar="قهوة مختصة · حي الصحافة، الرياض" data-en="Specialty coffee · Al Sahafa, Riyadh">قهوة مختصة · حي الصحافة، الرياض</div>
+  <div class="switch" role="group" aria-label="Language / اللغة"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><button type="button" data-lang="ar" aria-pressed="true">عربي</button><button type="button" data-lang="en" aria-pressed="false">English</button></div>
   <div style="margin-top:14px;opacity:.6;font-size:12px">Sample design by Pixel &amp; Co.</div>
 </footer>
 
@@ -210,9 +218,14 @@ function render() {
   document.querySelectorAll('[data-ar]').forEach(el => { el.textContent = el.dataset[lang]; });
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  document.getElementById('lang').textContent = lang === 'ar' ? 'English' : 'العربية';
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
 }
-document.getElementById('lang').addEventListener('click', () => { lang = lang === 'ar' ? 'en' : 'ar'; render(); });
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => {
+  lang = b.dataset.lang;
+  try { localStorage.setItem('hakwah-lang', lang); } catch (e) {}
+  render();
+}));
+try { const saved = localStorage.getItem('hakwah-lang'); if (saved === 'en' || saved === 'ar') lang = saved; } catch (e) {}
 document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => {
   document.querySelectorAll('[data-tab]').forEach(x => x.setAttribute('aria-selected', x === b));
   document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== b.dataset.tab; });
