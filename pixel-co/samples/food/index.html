@@ -4,167 +4,295 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TAMRA Lab | Date Snacks</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cormorant+Garamond:wght@500;600&family=Readex+Pro:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Readex+Pro:wght@300;400;500;600&display=swap">
 <style>
-/* Layout: dark hero with floating products, product grid, gift box band, order footer. Sample brand by Pixel & Co. */
+/* Layout: dark hero with a jar that turns on scroll, filterable products with a working cart, build-your-box, reviews, order steps. Sample brand by Pixel & Co. */
 :root{
-  --night:#1B0F0A; --date:#4A2414; --caramel:#D98A3A; --honey:#F2C46D; --pist:#8DB255; --cream:#FBF3E6; --muted:#B79A84;
+  --night:#170C08; --night2:#22120B; --date:#4A2414; --caramel:#D98A3A; --honey:#F2C46D; --pist:#9CC15E; --cream:#FBF3E6; --muted:#BCA08A; --line:rgba(242,196,109,.14);
   --ar:'Aref Ruqaa',serif; --serif:'Cormorant Garamond',Georgia,serif; --body:'Readex Pro',Tahoma,sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
-.marquee,.hero{max-width:100vw}
 body{margin:0;background:var(--night);color:var(--cream);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
 a{color:inherit}
+button{font-family:var(--body)}
 :focus-visible{outline:3px solid var(--honey);outline-offset:3px}
 .sample{background:var(--honey);color:var(--night);text-align:center;font-size:13px;font-weight:500;padding:7px 16px}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:rgba(27,15,10,.82);backdrop-filter:blur(10px)}
-.logo{font-family:var(--serif);font-weight:600;font-size:28px;letter-spacing:.18em;text-decoration:none}
-.logo b{color:var(--caramel);font-weight:600}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 20px;background:rgba(23,12,8,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.logo{font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:.2em;text-decoration:none;white-space:nowrap}
+.logo b{color:var(--caramel)}
+.hright{display:flex;align-items:center;gap:8px}
 .switch{display:flex;background:rgba(251,243,230,.08);border-radius:999px;padding:4px}
-.switch button{border:0;background:transparent;color:var(--cream);font:500 14px var(--body);padding:7px 14px;border-radius:999px;cursor:pointer}
+.switch button{border:0;background:transparent;color:var(--cream);font-size:13px;font-weight:500;padding:7px 12px;border-radius:999px;cursor:pointer}
 .switch button[aria-pressed=true]{background:var(--cream);color:var(--night)}
-.cart{border:0;background:var(--caramel);color:var(--night);font:600 14px var(--body);border-radius:999px;padding:9px 16px;cursor:pointer}
-.hero{position:relative;min-height:640px;padding:56px 20px 40px;text-align:center;overflow:hidden;background:radial-gradient(70% 55% at 50% 60%,#6b3519 0%,#2b150c 55%,var(--night) 100%)}
-.hero .eyebrow{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--honey)}
-.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(46px,11vw,104px);line-height:.98;margin:14px 0 0;letter-spacing:-.01em}
-.hero h1 em{font-style:italic;color:var(--caramel)}
-.hero .ar-big{font-family:var(--ar);font-size:clamp(34px,8vw,64px);color:var(--honey);margin-top:6px}
-.hero p{max-width:30ch;margin:16px auto 0;color:var(--muted);font-size:18px}
-.stage{position:relative;height:300px;margin-top:20px}
-.float{position:absolute;left:50%;top:50%;animation:bob 5s ease-in-out infinite}
-@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -16px}}
-.jar{width:150px;height:190px;margin:-95px 0 0 -75px;border-radius:28px 28px 34px 34px;background:linear-gradient(105deg,#2a130a,#6a3418 45%,#3a1b0d);box-shadow:inset 0 0 0 3px rgba(242,196,109,.25),0 40px 60px -20px rgba(0,0,0,.7)}
-.jar:before{content:"";position:absolute;left:12px;right:12px;top:-26px;height:34px;border-radius:12px;background:linear-gradient(90deg,#b56d26,#f2c46d,#b56d26)}
-.jar .lbl{position:absolute;left:14px;right:14px;top:58px;bottom:40px;border-radius:14px;background:var(--cream);color:var(--date);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.jar .lbl b{font-family:var(--serif);font-size:24px;letter-spacing:.14em}
-.jar .lbl span{font-size:11px;letter-spacing:.2em;color:var(--caramel)}
-.date{width:46px;height:68px;border-radius:50%;background:radial-gradient(40% 30% at 35% 30%,#a8582a,#5a240d 60%,#3a1607);box-shadow:0 14px 20px rgba(0,0,0,.5)}
-.date.p{background:radial-gradient(40% 30% at 35% 30%,#a8582a,#5a240d 60%,#3a1607)}
-.date.p:after{content:"";position:absolute;left:12px;right:12px;top:8px;height:20px;border-radius:50%;background:radial-gradient(#b9d77a,#6f9a3a)}
-.d1{margin:-150px 0 0 -210px;rotate:-28deg;animation-delay:-1s}.d2{margin:-30px 0 0 140px;rotate:24deg;animation-delay:-2.5s}.d3{margin:70px 0 0 -170px;rotate:12deg;animation-delay:-3.5s}.d4{margin:-150px 0 0 130px;rotate:-12deg;animation-delay:-.5s}
-.sprinkle{position:absolute;width:8px;height:8px;border-radius:2px;background:var(--pist);opacity:.8;animation:spin 9s linear infinite}
-@keyframes spin{to{rotate:360deg}}
-.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:10px}
-.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:15px 26px;font:600 16px var(--body);text-decoration:none;border:0;cursor:pointer}
+.cartbtn{position:relative;border:0;background:var(--caramel);color:var(--night);border-radius:999px;width:44px;height:44px;cursor:pointer;display:grid;place-items:center}
+.cartbtn svg{width:22px;height:22px}
+.badge{position:absolute;top:-4px;inset-inline-end:-4px;min-width:20px;height:20px;border-radius:999px;background:var(--cream);color:var(--night);font-size:12px;font-weight:600;display:grid;place-items:center;padding:0 5px;transition:transform .3s}
+.badge.pop{transform:scale(1.35)}
+.hero{position:relative;padding:54px 20px 30px;overflow:hidden;background:radial-gradient(60% 50% at 50% 62%,#7a3c1b 0%,#2d160c 55%,var(--night) 100%)}
+.hero-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:20px}
+.eyebrow{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--honey)}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(48px,8vw,104px);line-height:.95;margin:14px 0 0;letter-spacing:-.01em}
+.hero h1 em{color:var(--caramel)}
+.ar-big{font-family:var(--ar);font-size:clamp(36px,5vw,58px);color:var(--honey);margin-top:8px}
+.lead{max-width:34ch;color:var(--muted);font-size:18px;margin:14px 0 0}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:15px 26px;font-weight:600;font-size:16px;text-decoration:none;border:0;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
 .btn.main{background:var(--caramel);color:var(--night)}
-.btn.ghost{background:transparent;color:var(--cream);border:1px solid rgba(251,243,230,.35)}
+.btn.ghost{background:transparent;color:var(--cream);border:1px solid rgba(251,243,230,.3)}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;color:var(--muted);font-size:14px}
+.trust span:before{content:"✦ ";color:var(--pist)}
+.stage{position:relative;height:440px}
+.glow{position:absolute;left:50%;top:55%;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%;background:radial-gradient(closest-side,rgba(242,196,109,.35),transparent);filter:blur(10px)}
+.jar{position:absolute;left:50%;top:50%;width:190px;height:240px;margin:-110px 0 0 -95px;border-radius:34px 34px 44px 44px;background:linear-gradient(100deg,#1f0e06 0%,#5e2c13 30%,#8a4520 48%,#4a2212 70%,#1f0e06 100%);box-shadow:inset 0 0 0 3px rgba(242,196,109,.22),0 50px 70px -25px rgba(0,0,0,.8);will-change:transform}
+.jar:before{content:"";position:absolute;left:14px;right:14px;top:-32px;height:42px;border-radius:14px;background:repeating-linear-gradient(90deg,#a8601f 0 6px,#e9b860 6px 12px);box-shadow:0 6px 0 #7a4314}
+.jar:after{content:"";position:absolute;left:22px;top:20px;width:16px;bottom:30px;border-radius:999px;background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,0))}
+.jar .lbl{position:absolute;left:18px;right:18px;top:70px;bottom:52px;border-radius:16px;background:var(--cream);color:var(--date);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.jar .lbl b{font-family:var(--serif);font-size:30px;letter-spacing:.16em;line-height:1}
+.jar .lbl i{font-style:normal;font-size:10px;letter-spacing:.24em;color:var(--caramel)}
+.jar .lbl small{font-family:var(--ar);font-size:18px;color:var(--date)}
+.fl{position:absolute;will-change:transform}
+.crumb{position:absolute;width:9px;height:9px;border-radius:3px;background:var(--pist);animation:spin 8s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+@keyframes rise{from{opacity:0;translate:0 30px}to{opacity:1;translate:0 0}}
+.rise{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
 .marquee{overflow:hidden;background:var(--caramel);color:var(--night);font-family:var(--serif);font-weight:600;font-size:22px;white-space:nowrap;padding:12px 0}
-.marquee div{display:inline-block;animation:slide 22s linear infinite}
+.marquee div{display:inline-block;animation:slide 26s linear infinite}
 @keyframes slide{to{transform:translateX(-50%)}}
-section{padding:72px 20px;max-width:1100px;margin:0 auto}
+section{padding:76px 20px;max-width:1100px;margin:0 auto}
 .k{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--honey);margin:0}
-h2{font-family:var(--serif);font-weight:600;font-size:clamp(38px,7vw,60px);line-height:1.02;margin:10px 0 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:34px}
-.card{background:linear-gradient(180deg,#2c170d,#21110a);border:1px solid rgba(242,196,109,.12);border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:12px;transition:transform .25s}
-.card:hover{transform:translateY(-6px)}
-.pic{height:170px;border-radius:18px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.pic .date{position:relative;margin:0 -6px}
-.tag{position:absolute;top:12px;inset-inline-start:12px;background:var(--pist);color:var(--night);font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px}
-.card h3{margin:0;font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.1}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(40px,6vw,62px);line-height:1;margin:10px 0 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.chips button{border:1px solid var(--line);background:transparent;color:var(--cream);border-radius:999px;padding:9px 16px;font-size:14px;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--cream);color:var(--night);border-color:var(--cream)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-top:26px}
+.card{background:linear-gradient(180deg,#2c170d,var(--night2));border:1px solid var(--line);border-radius:28px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-6px);box-shadow:0 30px 50px -25px rgba(0,0,0,.8)}
+.pic{height:190px;border-radius:20px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pic svg{height:80%;width:auto;filter:drop-shadow(0 18px 18px rgba(0,0,0,.45));transition:transform .5s}
+.card:hover .pic svg{transform:scale(1.06) rotate(-3deg)}
+.tag{position:absolute;top:12px;inset-inline-start:12px;background:var(--cream);color:var(--night);font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px}
+.card h3{margin:4px 0 0;font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.05}
 .card p{margin:0;color:var(--muted);font-size:15px}
-.row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
-.price{font-weight:600;font-size:20px;font-variant-numeric:tabular-nums}
-.add{border:0;background:var(--cream);color:var(--night);font:600 14px var(--body);border-radius:999px;padding:10px 16px;cursor:pointer}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px}
+.price{font-weight:600;font-size:21px;font-variant-numeric:tabular-nums}
+.add{border:0;background:var(--cream);color:var(--night);font-weight:600;font-size:14px;border-radius:999px;padding:11px 18px;cursor:pointer}
 .add.done{background:var(--pist)}
-.gift{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;background:linear-gradient(120deg,#5a2a12,#2b150c);border-radius:32px;padding:40px}
-.box{height:240px;border-radius:24px;background:linear-gradient(135deg,var(--cream),#efdcc0);position:relative;box-shadow:0 30px 50px -20px rgba(0,0,0,.6)}
-.box:before,.box:after{content:"";position:absolute;background:var(--caramel)}
-.box:before{left:0;right:0;top:46%;height:22px}.box:after{top:0;bottom:0;left:46%;width:22px}
-.box .bow{position:absolute;left:50%;top:46%;width:70px;height:40px;margin:-28px 0 0 -24px;border-radius:50%;border:10px solid var(--honey);z-index:2}
-.gift ul{list-style:none;padding:0;margin:18px 0 24px;display:grid;gap:8px;color:var(--muted)}
-.gift li:before{content:"✦ ";color:var(--honey)}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:linear-gradient(120deg,#5a2a12,#2b150c);border:1px solid var(--line);border-radius:34px;padding:38px}
+.tray{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;background:var(--cream);border-radius:24px;padding:18px;box-shadow:0 30px 50px -20px rgba(0,0,0,.6)}
+.slot{aspect-ratio:1;border-radius:16px;background:#efdcc0;display:grid;place-items:center}
+.slot svg{width:70%;animation:pop .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{scale:.3;opacity:0}}
+.flavors{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.flavors button{border:1px solid var(--line);background:rgba(0,0,0,.2);color:var(--cream);border-radius:999px;padding:10px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.flavors i{width:14px;height:14px;border-radius:50%}
+.bnote{color:var(--muted);font-size:15px;margin:14px 0 0}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.rev{background:var(--night2);border:1px solid var(--line);border-radius:24px;padding:22px}
+.rev .st{color:var(--honey);letter-spacing:.15em}
+.rev p{margin:10px 0 14px}
+.rev b{font-weight:500;color:var(--muted);font-size:14px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
 .steps div{border-top:2px solid var(--caramel);padding-top:14px}
-.steps b{font-family:var(--serif);font-size:26px;display:block}
+.steps b{font-family:var(--serif);font-size:28px;display:block}
 .steps span{color:var(--muted);font-size:15px}
-footer{text-align:center;padding:50px 20px calc(50px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(242,196,109,.12);color:var(--muted);font-size:14px}
+footer{text-align:center;padding:50px 20px calc(60px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 footer .logo{display:block;margin-bottom:8px;color:var(--cream)}
-.wa{position:fixed;inset-inline-end:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:600;box-shadow:0 10px 26px rgba(0,0,0,.35)}
-[dir=rtl] body,[dir=rtl] .card h3,[dir=rtl] h2,[dir=rtl] .hero h1{font-family:var(--body)}
-[dir=rtl] .hero h1{font-size:clamp(40px,10vw,84px);line-height:1.15}
-@media (max-width:500px){header{padding:12px 14px;gap:8px}.logo{font-size:19px;letter-spacing:.1em}.switch button{padding:6px 10px;font-size:13px}.cart{padding:8px 12px}}
-@media (max-width:760px){.gift{grid-template-columns:1fr;padding:26px}.steps{grid-template-columns:1fr}.hero{min-height:600px}}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(400px,100%);background:var(--night2);z-index:31;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));border-inline-start:1px solid var(--line)}
+[dir=rtl] .drawer{transform:translateX(-105%)}
+.open .scrim{opacity:1;pointer-events:auto}.open .drawer{transform:none}
+.dhead{display:flex;justify-content:space-between;align-items:center}
+.dhead h3{margin:0;font-family:var(--serif);font-size:32px}
+.x{border:0;background:rgba(251,243,230,.1);color:var(--cream);width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer}
+.items{flex:1;overflow:auto;margin:16px 0;display:flex;flex-direction:column;gap:12px}
+.it{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.2);border-radius:16px;padding:10px}
+.it .th{width:54px;height:54px;border-radius:12px;display:grid;place-items:center;flex:none}
+.it .th svg{width:70%}
+.it .nm{flex:1;min-width:0;font-size:15px}
+.it .nm small{display:block;color:var(--muted)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--cream);cursor:pointer}
+.empty{color:var(--muted);text-align:center;margin-top:40px}
+.total{display:flex;justify-content:space-between;font-size:18px;font-weight:600;border-top:1px solid var(--line);padding-top:14px;margin-bottom:12px}
+.wa{display:flex;justify-content:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:15px;font-weight:600}
+.dnote{text-align:center;color:var(--muted);font-size:12px;margin-top:8px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));translate:-50% 20px;background:var(--cream);color:var(--night);font-weight:600;font-size:14px;border-radius:999px;padding:12px 20px;opacity:0;transition:opacity .25s,translate .25s;z-index:40;pointer-events:none}
+.toast.show{opacity:1;translate:-50% 0}
+[dir=rtl] .hero h1,[dir=rtl] h2,[dir=rtl] .card h3,[dir=rtl] .dhead h3{font-family:var(--body);line-height:1.2}
+[dir=rtl] .hero h1{font-size:clamp(40px,7vw,84px)}
+@media (max-width:820px){
+  .hero-in{grid-template-columns:1fr;text-align:center}
+  .lead{margin-inline:auto}.cta,.trust{justify-content:center}
+  .stage{height:360px}
+  .builder{grid-template-columns:1fr;padding:24px}
+  .reviews,.steps{grid-template-columns:1fr}
+}
+@media (max-width:500px){header{padding:12px 14px}.logo{font-size:19px;letter-spacing:.12em}.switch button{padding:6px 10px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="sample" data-i="sample">Sample design by Pixel &amp; Co. · Example brand</div>
+<div class="sample" data-i="sample"></div>
 <header>
   <a class="logo" href="#top">TAMRA<b>·</b>LAB</a>
-  <div class="switch" role="group" aria-label="Language"><button type="button" data-lang="ar" aria-pressed="false">عربي</button><button type="button" data-lang="en" aria-pressed="true">EN</button></div>
-  <button class="cart" type="button" id="cart">🛒 <span id="count">0</span></button>
-</header>
-
-<div class="hero" id="top">
-  <div class="eyebrow" data-i="eyebrow">Saudi dates · Reimagined</div>
-  <h1 data-i="h1">Dates, but <em>make it</em> dessert.</h1>
-  <div class="ar-big">تمر بطعم جديد</div>
-  <p data-i="lead">Stuffed dates, date spreads and snack bites made with Saudi Sukkari dates.</p>
-  <div class="stage" aria-hidden="true">
-    <div class="float jar"><div class="lbl"><b>TAMRA</b><span>DATE SPREAD</span></div></div>
-    <div class="float date p d1"></div><div class="float date d2"></div><div class="float date p d3"></div><div class="float date d4"></div>
-    <i class="sprinkle" style="left:12%;top:20%"></i><i class="sprinkle" style="left:84%;top:30%;animation-delay:-3s"></i><i class="sprinkle" style="left:22%;top:78%;animation-delay:-5s"></i><i class="sprinkle" style="left:76%;top:82%;animation-delay:-1s"></i>
+  <div class="hright">
+    <div class="switch" role="group" aria-label="Language"><button type="button" data-lang="ar" aria-pressed="false">عربي</button><button type="button" data-lang="en" aria-pressed="true">EN</button></div>
+    <button class="cartbtn" type="button" id="openCart" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span class="badge" id="badge">0</span></button>
   </div>
-  <div class="cta"><a class="btn main" href="#shop" data-i="shop">Shop now</a><a class="btn ghost" href="#gift" data-i="giftbtn">Gift boxes</a></div>
-</div>
-<div class="marquee" aria-hidden="true"><div>✦ Sukkari dates ✦ Pistachio ✦ Dark cacao ✦ Tahini ✦ No added sugar ✦ Made in Riyadh ✦ Sukkari dates ✦ Pistachio ✦ Dark cacao ✦ Tahini ✦ No added sugar ✦ Made in Riyadh&nbsp;</div></div>
-
-<section id="shop">
-  <p class="k" data-i="k1">Our products</p>
-  <h2 data-i="h2a">Pick your favorite.</h2>
-  <div class="grid" id="grid"></div>
-</section>
-
-<section id="gift">
-  <div class="gift">
-    <div class="box"><div class="bow"></div></div>
+</header>
+<div class="hero" id="top">
+  <div class="hero-in">
     <div>
-      <p class="k" data-i="k2">Gift box</p>
-      <h2 data-i="h2b">The perfect gift for any visit.</h2>
-      <ul><li data-i="g1">12 stuffed dates, 3 flavors</li><li data-i="g2">Date spread jar + cacao bites</li><li data-i="g3">Handwritten card with your message</li></ul>
-      <button class="btn main add" type="button" data-id="gift" data-i="giftadd">Add gift box · 149 SAR</button>
+      <div class="eyebrow rise" data-i="eyebrow"></div>
+      <h1 class="rise" style="animation-delay:.08s" data-i="h1"></h1>
+      <div class="ar-big rise" style="animation-delay:.16s">تمر بطعم جديد</div>
+      <p class="lead rise" style="animation-delay:.24s" data-i="lead"></p>
+      <div class="cta rise" style="animation-delay:.32s"><a class="btn main" href="#shop" data-i="shop"></a><a class="btn ghost" href="#box" data-i="boxbtn"></a></div>
+      <div class="trust rise" style="animation-delay:.4s"><span data-i="t1"></span><span data-i="t2"></span><span data-i="t3"></span></div>
+    </div>
+    <div class="stage" id="stage" aria-hidden="true">
+      <div class="glow"></div>
+      <div class="jar" id="jar"><div class="lbl"><b>TAMRA</b><i>DATE SPREAD</i><small>دبس التمر</small></div></div>
     </div>
   </div>
+</div>
+<div class="marquee" aria-hidden="true"><div id="mq"></div></div>
+<section id="shop">
+  <p class="k" data-i="k1"></p>
+  <h2 data-i="h2a"></h2>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
 </section>
-
-<section>
-  <p class="k" data-i="k3">How to order</p>
-  <h2 data-i="h2c">Fresh to your door.</h2>
-  <div class="steps">
-    <div><b>01</b><span data-i="s1">Pick your products and add them to the cart.</span></div>
-    <div><b>02</b><span data-i="s2">Pay with Mada, Apple Pay or cash on delivery.</span></div>
-    <div><b>03</b><span data-i="s3">Delivered in Riyadh within 24 hours.</span></div>
+<section id="box">
+  <div class="builder">
+    <div>
+      <p class="k" data-i="k2"></p>
+      <h2 data-i="h2b"></h2>
+      <p class="bnote" data-i="bnote"></p>
+      <div class="flavors" id="flavors"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn main" type="button" id="addBox"></button><button class="btn ghost" type="button" id="clearBox" data-i="clear"></button></div>
+    </div>
+    <div class="tray" id="tray"></div>
   </div>
 </section>
-
-<footer><span class="logo">TAMRA·LAB</span><span data-i="foot">Example brand made by Pixel &amp; Co. to show what your food website could look like.</span></footer>
-<a class="wa" href="#shop" data-i="wa">Order on WhatsApp</a>
-
+<section>
+  <p class="k" data-i="k3"></p>
+  <h2 data-i="h2c"></h2>
+  <div class="reviews">
+    <div class="rev"><div class="st">★★★★★</div><p data-i="r1"></p><b data-i="r1n"></b></div>
+    <div class="rev"><div class="st">★★★★★</div><p data-i="r2"></p><b data-i="r2n"></b></div>
+    <div class="rev"><div class="st">★★★★★</div><p data-i="r3"></p><b data-i="r3n"></b></div>
+  </div>
+</section>
+<section>
+  <p class="k" data-i="k4"></p>
+  <h2 data-i="h2d"></h2>
+  <div class="steps">
+    <div><b>01</b><span data-i="s1"></span></div>
+    <div><b>02</b><span data-i="s2"></span></div>
+    <div><b>03</b><span data-i="s3"></span></div>
+  </div>
+</section>
+<footer><span class="logo">TAMRA·LAB</span><span data-i="foot"></span></footer>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" aria-label="Cart">
+  <div class="dhead"><h3 data-i="cart"></h3><button class="x" type="button" id="closeCart" aria-label="Close">×</button></div>
+  <div class="items" id="items"></div>
+  <div class="total"><span data-i="total"></span><span id="sum">0</span></div>
+  <a class="wa" href="#top" id="checkout" data-i="checkout"></a>
+  <div class="dnote" data-i="dnote"></div>
+</aside>
+<div class="toast" id="toast"></div>
 <script>
 const T={
- en:{sample:'Sample design by Pixel & Co. · Example brand',eyebrow:'Saudi dates · Reimagined',h1:'Dates, but <em>make it</em> dessert.',lead:'Stuffed dates, date spreads and snack bites made with Saudi Sukkari dates.',shop:'Shop now',giftbtn:'Gift boxes',k1:'Our products',h2a:'Pick your favorite.',k2:'Gift box',h2b:'The perfect gift for any visit.',g1:'12 stuffed dates, 3 flavors',g2:'Date spread jar + cacao bites',g3:'Handwritten card with your message',giftadd:'Add gift box · 149 SAR',k3:'How to order',h2c:'Fresh to your door.',s1:'Pick your products and add them to the cart.',s2:'Pay with Mada, Apple Pay or cash on delivery.',s3:'Delivered in Riyadh within 24 hours.',foot:'Example brand made by Pixel & Co. to show what your food website could look like.',wa:'Order on WhatsApp',add:'Add',added:'Added ✓',sar:'SAR'},
- ar:{sample:'تصميم تجريبي من Pixel & Co. · علامة تجارية مثال',eyebrow:'تمر سعودي · بطريقة جديدة',h1:'تمر… <em>بس حلى</em>',lead:'تمر محشي، دبس تمر للدهن، وسناكات صحية من تمر السكري السعودي.',shop:'تسوق الآن',giftbtn:'بوكسات الهدايا',k1:'منتجاتنا',h2a:'اختر المفضل لك',k2:'بوكس هدية',h2b:'أحلى هدية لأي زيارة',g1:'١٢ تمرة محشية، ٣ نكهات',g2:'علبة دبس تمر + بايتس الكاكاو',g3:'كرت مكتوب بخط اليد برسالتك',giftadd:'أضف بوكس الهدية · ١٤٩ ر.س',k3:'طريقة الطلب',h2c:'طازج لين باب بيتك',s1:'اختر منتجاتك وأضفها للسلة',s2:'ادفع بمدى، أبل باي، أو عند الاستلام',s3:'التوصيل داخل الرياض خلال ٢٤ ساعة',foot:'علامة مثال صممتها Pixel & Co. عشان تشوف كيف ممكن يكون موقع منتجك',wa:'اطلب واتساب',add:'أضف',added:'تمت ✓',sar:'ر.س'}
+ en:{sample:'Sample design by Pixel & Co. · Example brand, not a real shop',eyebrow:'Saudi Sukkari dates · Reimagined',h1:'Dates, but <em>make it</em> dessert.',lead:'Stuffed dates, date spreads and snack bites made fresh in Riyadh. No added sugar.',shop:'Shop now',boxbtn:'Build a box',t1:'No added sugar',t2:'Fresh every morning',t3:'24h delivery in Riyadh',
+  k1:'Our products',h2a:'Pick your favorite.',all:'All',stuffed:'Stuffed',bites:'Bites',spreads:'Spreads',
+  k2:'Build your box',h2b:'Make it yours.',bnote:'Pick 9 dates in any flavor. Perfect for guests, gifts and Eid.',clear:'Clear',
+  k3:'Reviews',h2c:'People keep coming back.',r1:'"The pistachio ones disappeared in five minutes. Ordering the big box next time."',r1n:'Example review',r2:'"Finally a healthy snack my kids actually ask for."',r2n:'Example review',r3:'"Brought the gift box to a family visit. Everyone asked where it was from."',r3n:'Example review',
+  k4:'How to order',h2d:'Fresh to your door.',s1:'Pick your products or build your own box.',s2:'Pay with Mada, Apple Pay or cash on delivery.',s3:'Delivered in Riyadh within 24 hours.',
+  foot:'Example brand made by Pixel & Co. to show what your food website could look like.',cart:'Your cart',total:'Total',checkout:'Order on WhatsApp',dnote:'Your order is sent as a WhatsApp message',empty:'Your cart is empty.',added:'Added to cart',add:'Add',done:'Added ✓',sar:'SAR',box:'Custom box (9)',
+  mq:'✦ Sukkari dates ✦ Pistachio ✦ Dark cacao ✦ Tahini ✦ No added sugar ✦ Made in Riyadh ',left:n=>`Pick ${n} more`,addbox:'Add box · 99 SAR',fl:{pist:'Pistachio',cacao:'Cacao',tahini:'Tahini',orange:'Orange'}},
+ ar:{sample:'تصميم تجريبي من Pixel & Co. · علامة مثال وليست متجر حقيقي',eyebrow:'تمر سكري سعودي · بطريقة جديدة',h1:'تمر… <em>بس حلى</em>',lead:'تمر محشي، دبس تمر، وسناكات صحية تنصنع طازجة في الرياض. بدون سكر مضاف.',shop:'تسوق الآن',boxbtn:'صمم بوكسك',t1:'بدون سكر مضاف',t2:'طازج كل صباح',t3:'توصيل خلال ٢٤ ساعة',
+  k1:'منتجاتنا',h2a:'اختر المفضل لك',all:'الكل',stuffed:'محشي',bites:'بايتس',spreads:'دبس',
+  k2:'صمم بوكسك',h2b:'خله على ذوقك',bnote:'اختر ٩ تمرات بأي نكهة. مثالي للضيوف والهدايا والعيد.',clear:'مسح',
+  k3:'آراء العملاء',h2c:'الكل يرجع لنا',r1:'"تمر الفستق خلص في خمس دقايق. المرة الجاية بطلب البوكس الكبير."',r1n:'تقييم مثال',r2:'"أخيراً سناك صحي عيالي يطلبونه بنفسهم."',r2n:'تقييم مثال',r3:'"أخذت بوكس الهدية لزيارة عائلية والكل سألني من وين."',r3n:'تقييم مثال',
+  k4:'طريقة الطلب',h2d:'طازج لين باب بيتك',s1:'اختر منتجاتك أو صمم بوكسك.',s2:'ادفع بمدى، أبل باي، أو عند الاستلام.',s3:'التوصيل داخل الرياض خلال ٢٤ ساعة.',
+  foot:'علامة مثال صممتها Pixel & Co. عشان تشوف كيف ممكن يكون موقع منتجك.',cart:'سلتك',total:'المجموع',checkout:'اطلب عبر واتساب',dnote:'طلبك يوصلنا كرسالة واتساب',empty:'السلة فاضية.',added:'انضاف للسلة',add:'أضف',done:'تمت ✓',sar:'ر.س',box:'بوكس مخصص (٩)',
+  mq:'✦ تمر سكري ✦ فستق ✦ كاكاو داكن ✦ طحينة ✦ بدون سكر مضاف ✦ صنع في الرياض ',left:n=>`باقي ${n}`,addbox:'أضف البوكس · ٩٩ ر.س',fl:{pist:'فستق',cacao:'كاكاو',tahini:'طحينة',orange:'برتقال'}}
 };
+const FL={pist:['#c9e38a','#6f9a3a'],cacao:['#8a5a3c','#3a1d10'],tahini:['#f3e2c0','#c9a874'],orange:['#ffc27a','#e07a1f']};
+let uid=0;
+function dateSVG(fill){
+  const id='d'+(uid++),f=fill?FL[fill]:null;
+  return `<svg viewBox="0 0 120 120"><defs><radialGradient id="g${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#b8622c"/><stop offset=".55" stop-color="#5c250d"/><stop offset="1" stop-color="#2e1006"/></radialGradient>${f?`<linearGradient id="f${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f[0]}"/><stop offset="1" stop-color="${f[1]}"/></linearGradient>`:''}</defs><ellipse cx="60" cy="62" rx="32" ry="48" fill="url(#g${id})"/>${f?`<ellipse cx="60" cy="48" rx="16" ry="30" fill="url(#f${id})"/><ellipse cx="55" cy="38" rx="5" ry="9" fill="#fff" opacity=".35"/>`:`<ellipse cx="48" cy="40" rx="7" ry="16" fill="#fff" opacity=".18"/>`}</svg>`;
+}
+function pairSVG(fill){const a=dateSVG(fill),b=dateSVG(fill);return `<svg viewBox="0 0 200 120"><g transform="rotate(-14 55 60)">${a.replace('<svg viewBox="0 0 120 120">','<svg x="0" y="0" width="110" height="120" viewBox="0 0 120 120">')}</g><g transform="rotate(12 140 60)">${b.replace('<svg viewBox="0 0 120 120">','<svg x="85" y="0" width="110" height="120" viewBox="0 0 120 120">')}</g></svg>`}
+function bitesSVG(){return `<svg viewBox="0 0 160 120">${[[45,70,'c'],[80,56,'p'],[115,72,'c']].map(([x,y,c],i)=>`<circle cx="${x}" cy="${y}" r="28" fill="${c==='p'?'#7a9a3e':'#3a1d10'}"/><circle cx="${x-8}" cy="${y-10}" r="8" fill="#fff" opacity=".15"/>${[...Array(7)].map((_,k)=>`<rect x="${x-15+((k*13+i*7)%28)}" y="${y-14+((k*17+i*5)%26)}" width="4" height="4" rx="1" fill="${c==='p'?'#d9ef9c':'#d98a3a'}"/>`).join('')}`).join('')}</svg>`}
+function jarSVG(){return `<svg viewBox="0 0 120 140"><rect x="30" y="16" width="60" height="20" rx="6" fill="#d9a04a"/><rect x="22" y="34" width="76" height="94" rx="20" fill="#5e2c13"/><rect x="32" y="62" width="56" height="42" rx="8" fill="#fbf3e6"/><text x="60" y="88" text-anchor="middle" font-family="Georgia" font-size="13" fill="#4a2414" letter-spacing="2">TAMRA</text><rect x="30" y="42" width="8" height="72" rx="4" fill="#fff" opacity=".15"/></svg>`}
 const P=[
- {id:'pist',en:['Pistachio Stuffed Dates','Sukkari dates filled with roasted pistachio cream.'],ar:['تمر محشي فستق','تمر سكري محشي بكريمة الفستق المحمص.'],price:59,tag:'Best seller',tagAr:'الأكثر مبيعاً',bg:'linear-gradient(135deg,#3d5a22,#8db255)',dates:['p','p','p']},
- {id:'cacao',en:['Date & Cacao Bites','Bite-size energy balls with dark cacao and almonds.'],ar:['بايتس تمر وكاكاو','كرات طاقة صغيرة بالكاكاو الداكن واللوز.'],price:39,tag:'New',tagAr:'جديد',bg:'linear-gradient(135deg,#2a130a,#6a3418)',dates:['','','']},
- {id:'spread',en:['Date Spread','Smooth date spread with a touch of tahini. 350 g.'],ar:['دبس تمر للدهن','دبس تمر ناعم مع لمسة طحينة. ٣٥٠ جم.'],price:45,tag:'',tagAr:'',bg:'linear-gradient(135deg,#b56d26,#f2c46d)',dates:['']},
- {id:'mix',en:['Tasting Box','9 stuffed dates: pistachio, tahini and orange.'],ar:['بوكس التذوق','٩ تمرات محشية: فستق، طحينة، وبرتقال.'],price:89,tag:'Gift idea',tagAr:'فكرة هدية',bg:'linear-gradient(135deg,#5a2a12,#d98a3a)',dates:['p','','p','']}
+ {id:'pist',cat:'stuffed',en:['Pistachio Stuffed Dates','Sukkari dates filled with roasted pistachio cream. Box of 12.'],ar:['تمر محشي فستق','تمر سكري محشي بكريمة الفستق المحمص. ١٢ حبة.'],price:59,tag:['Best seller','الأكثر مبيعاً'],bg:'linear-gradient(135deg,#3d5a22,#9cc15e)',art:()=>pairSVG('pist'),th:'pist'},
+ {id:'tahini',cat:'stuffed',en:['Tahini & Sesame Dates','Creamy tahini center, rolled in toasted sesame. Box of 12.'],ar:['تمر بالطحينة والسمسم','قلب طحينة كريمي مع سمسم محمص. ١٢ حبة.'],price:55,tag:['New','جديد'],bg:'linear-gradient(135deg,#8a6a3a,#e8cf9c)',art:()=>pairSVG('tahini'),th:'tahini'},
+ {id:'bites',cat:'bites',en:['Date & Cacao Bites','Energy bites with dark cacao, almonds and pistachio dust.'],ar:['بايتس تمر وكاكاو','كرات طاقة بالكاكاو الداكن واللوز والفستق.'],price:39,tag:['',''],bg:'linear-gradient(135deg,#2a130a,#7a3c1b)',art:bitesSVG,th:'cacao'},
+ {id:'spread',cat:'spreads',en:['Date Spread','Smooth Sukkari date spread with a touch of tahini. 350 g.'],ar:['دبس تمر للدهن','دبس سكري ناعم مع لمسة طحينة. ٣٥٠ جم.'],price:45,tag:['',''],bg:'linear-gradient(135deg,#b56d26,#f2c46d)',art:jarSVG,th:null},
+ {id:'orange',cat:'stuffed',en:['Orange Blossom Dates','Candied orange with a hint of orange blossom. Box of 12.'],ar:['تمر برتقال وزهر','برتقال مسكر مع لمسة ماء الزهر. ١٢ حبة.'],price:55,tag:['Limited','كمية محدودة'],bg:'linear-gradient(135deg,#c2621a,#ffc27a)',art:()=>pairSVG('orange'),th:'orange'}
 ];
-let lang='en',count=0;
+let lang='en',filter='all',cart={},box=[];
+const $=s=>document.querySelector(s);
+const fmt=n=>lang==='ar'?n.toLocaleString('ar-EG'):n;
+const prod=id=>P.find(p=>p.id===id);
+const nameOf=id=>id==='box'?T[lang].box:prod(id)[lang][0];
+const priceOf=id=>id==='box'?99:prod(id).price;
 function render(){
   const t=T[lang];
-  document.querySelectorAll('[data-i]').forEach(el=>{el.innerHTML=t[el.dataset.i]});
-  document.getElementById('grid').innerHTML=P.map(p=>{const [n,d]=p[lang];const tg=lang==='en'?p.tag:p.tagAr;return `<article class="card"><div class="pic" style="background:${p.bg}">${tg?`<span class="tag">${tg}</span>`:''}${p.dates.map(c=>`<i class="date ${c}"></i>`).join('')}</div><h3>${n}</h3><p>${d}</p><div class="row"><span class="price">${p.price} ${t.sar}</span><button class="add" type="button" data-id="${p.id}">${t.add}</button></div></article>`}).join('');
+  document.querySelectorAll('[data-i]').forEach(el=>{const v=t[el.dataset.i];if(typeof v==='string')el.innerHTML=v});
+  $('#mq').textContent=t.mq.repeat(4);
+  $('#chips').innerHTML=['all','stuffed','bites','spreads'].map(c=>`<button type="button" data-f="${c}" aria-pressed="${c===filter}">${t[c]}</button>`).join('');
+  $('#grid').innerHTML=P.filter(p=>filter==='all'||p.cat===filter).map(p=>{const [n,d]=p[lang];const tg=p.tag[lang==='en'?0:1];const inC=cart[p.id];return `<article class="card"><div class="pic" style="background:${p.bg}">${tg?`<span class="tag">${tg}</span>`:''}${p.art()}</div><h3>${n}</h3><p>${d}</p><div class="row"><span class="price">${fmt(p.price)} ${t.sar}</span><button class="add ${inC?'done':''}" type="button" data-add="${p.id}">${inC?t.done:t.add}</button></div></article>`}).join('');
+  $('#flavors').innerHTML=Object.keys(FL).map(k=>`<button type="button" data-fl="${k}"><i style="background:${FL[k][0]}"></i>${t.fl[k]}</button>`).join('');
+  renderBox();renderCart();
   document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
   document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang));
 }
+function renderBox(){
+  $('#tray').innerHTML=[...Array(9)].map((_,i)=>`<div class="slot">${box[i]?dateSVG(box[i]):''}</div>`).join('');
+  const b=$('#addBox'),t=T[lang];b.textContent=box.length<9?t.left(fmt(9-box.length)):t.addbox;b.style.opacity=box.length<9?.6:1;
+}
+function renderCart(){
+  const t=T[lang],ids=Object.keys(cart),n=ids.reduce((a,k)=>a+cart[k],0);
+  $('#badge').textContent=fmt(n);
+  $('#items').innerHTML=ids.length?ids.map(id=>`<div class="it"><div class="th" style="background:${id==='box'?'#efdcc0':prod(id).bg}">${id==='box'?dateSVG('pist'):dateSVG(prod(id).th)}</div><div class="nm">${nameOf(id)}<small>${fmt(priceOf(id))} ${t.sar}</small></div><div class="qty"><button type="button" data-q="${id}" data-d="-1" aria-label="Less">−</button><span>${fmt(cart[id])}</span><button type="button" data-q="${id}" data-d="1" aria-label="More">+</button></div></div>`).join(''):`<p class="empty">${t.empty}</p>`;
+  $('#sum').textContent=`${fmt(ids.reduce((a,k)=>a+cart[k]*priceOf(k),0))} ${t.sar}`;
+}
+function add(id){cart[id]=(cart[id]||0)+1;render();const b=$('#badge');b.classList.add('pop');setTimeout(()=>b.classList.remove('pop'),300);toast(T[lang].added)}
+let tt;function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),1600)}
 document.addEventListener('click',e=>{
-  const l=e.target.closest('[data-lang]');if(l){lang=l.dataset.lang;render();return}
-  const a=e.target.closest('.add');if(a){count++;document.getElementById('count').textContent=count;if(!a.classList.contains('main')){a.textContent=T[lang].added;a.classList.add('done')}}
+  const g=k=>e.target.closest(k);let el;
+  if(el=g('[data-lang]')){lang=el.dataset.lang;render()}
+  else if(el=g('[data-f]')){filter=el.dataset.f;render()}
+  else if(el=g('[data-add]')){add(el.dataset.add)}
+  else if(el=g('[data-fl]')){if(box.length<9){box.push(el.dataset.fl);renderBox()}}
+  else if(g('#clearBox')){box=[];renderBox()}
+  else if(g('#addBox')){if(box.length===9){box=[];add('box')}}
+  else if(el=g('[data-q]')){const id=el.dataset.q;cart[id]+= +el.dataset.d;if(cart[id]<=0)delete cart[id];render()}
+  else if(g('#openCart')){document.body.classList.add('open')}
+  else if(g('#closeCart')||g('#scrim')){document.body.classList.remove('open')}
+  else if(g('#checkout')){e.preventDefault();toast(lang==='en'?'On the real site this opens WhatsApp with the order':'في الموقع الحقيقي يفتح واتساب بالطلب')}
 });
+const stage=$('#stage');
+[[-150,-140,'pist',-24],[120,-120,null,18],[-170,90,'cacao',14],[140,70,'pist',-14],[-40,150,'tahini',8],[70,-190,'orange',30]].forEach(([x,y,f,r],i)=>{const d=document.createElement('div');d.className='fl';d.style.cssText=`left:calc(50% + ${x}px - 32px);top:calc(50% + ${y}px - 32px);width:64px;height:64px;rotate:${r}deg`;d.innerHTML=dateSVG(f);d.dataset.k=(i%3+1)*.5;stage.appendChild(d)});
+[[12,18],[86,26],[20,80],[80,84],[50,8]].forEach(([l,t],i)=>{const c=document.createElement('i');c.className='crumb';c.style.cssText=`left:${l}%;top:${t}%;animation-delay:-${i*1.7}s`;stage.appendChild(c)});
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const fls=[...stage.querySelectorAll('.fl')];
+function tick(now){
+  const y=scrollY,s=Math.min(y/500,1),tm=now/1000;
+  $('#jar').style.transform=reduce?'':`rotate(${-8+s*16}deg) translateY(${Math.sin(tm*1.2)*8-s*30}px)`;
+  fls.forEach((d,i)=>{d.style.transform=reduce?'':`translate(${Math.sin(tm*.8+i)*6}px,${Math.cos(tm+i)*10-y*.15*d.dataset.k}px)`});
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
 render();
 </script>
 </body>
