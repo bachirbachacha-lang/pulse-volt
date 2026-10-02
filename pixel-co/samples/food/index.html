@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TAMRA Lab | Date Snacks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cormorant+Garamond:wght@500;600&family=Readex+Pro:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: dark hero with floating products, product grid, gift box band, order footer. Sample brand by Pixel & Co. */
+:root{
+  --night:#1B0F0A; --date:#4A2414; --caramel:#D98A3A; --honey:#F2C46D; --pist:#8DB255; --cream:#FBF3E6; --muted:#B79A84;
+  --ar:'Aref Ruqaa',serif; --serif:'Cormorant Garamond',Georgia,serif; --body:'Readex Pro',Tahoma,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+.marquee,.hero{max-width:100vw}
+body{margin:0;background:var(--night);color:var(--cream);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--honey);outline-offset:3px}
+.sample{background:var(--honey);color:var(--night);text-align:center;font-size:13px;font-weight:500;padding:7px 16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:rgba(27,15,10,.82);backdrop-filter:blur(10px)}
+.logo{font-family:var(--serif);font-weight:600;font-size:28px;letter-spacing:.18em;text-decoration:none}
+.logo b{color:var(--caramel);font-weight:600}
+.switch{display:flex;background:rgba(251,243,230,.08);border-radius:999px;padding:4px}
+.switch button{border:0;background:transparent;color:var(--cream);font:500 14px var(--body);padding:7px 14px;border-radius:999px;cursor:pointer}
+.switch button[aria-pressed=true]{background:var(--cream);color:var(--night)}
+.cart{border:0;background:var(--caramel);color:var(--night);font:600 14px var(--body);border-radius:999px;padding:9px 16px;cursor:pointer}
+.hero{position:relative;min-height:640px;padding:56px 20px 40px;text-align:center;overflow:hidden;background:radial-gradient(70% 55% at 50% 60%,#6b3519 0%,#2b150c 55%,var(--night) 100%)}
+.hero .eyebrow{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--honey)}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(46px,11vw,104px);line-height:.98;margin:14px 0 0;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:var(--caramel)}
+.hero .ar-big{font-family:var(--ar);font-size:clamp(34px,8vw,64px);color:var(--honey);margin-top:6px}
+.hero p{max-width:30ch;margin:16px auto 0;color:var(--muted);font-size:18px}
+.stage{position:relative;height:300px;margin-top:20px}
+.float{position:absolute;left:50%;top:50%;animation:bob 5s ease-in-out infinite}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -16px}}
+.jar{width:150px;height:190px;margin:-95px 0 0 -75px;border-radius:28px 28px 34px 34px;background:linear-gradient(105deg,#2a130a,#6a3418 45%,#3a1b0d);box-shadow:inset 0 0 0 3px rgba(242,196,109,.25),0 40px 60px -20px rgba(0,0,0,.7)}
+.jar:before{content:"";position:absolute;left:12px;right:12px;top:-26px;height:34px;border-radius:12px;background:linear-gradient(90deg,#b56d26,#f2c46d,#b56d26)}
+.jar .lbl{position:absolute;left:14px;right:14px;top:58px;bottom:40px;border-radius:14px;background:var(--cream);color:var(--date);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.jar .lbl b{font-family:var(--serif);font-size:24px;letter-spacing:.14em}
+.jar .lbl span{font-size:11px;letter-spacing:.2em;color:var(--caramel)}
+.date{width:46px;height:68px;border-radius:50%;background:radial-gradient(40% 30% at 35% 30%,#a8582a,#5a240d 60%,#3a1607);box-shadow:0 14px 20px rgba(0,0,0,.5)}
+.date.p{background:radial-gradient(40% 30% at 35% 30%,#a8582a,#5a240d 60%,#3a1607)}
+.date.p:after{content:"";position:absolute;left:12px;right:12px;top:8px;height:20px;border-radius:50%;background:radial-gradient(#b9d77a,#6f9a3a)}
+.d1{margin:-150px 0 0 -210px;rotate:-28deg;animation-delay:-1s}.d2{margin:-30px 0 0 140px;rotate:24deg;animation-delay:-2.5s}.d3{margin:70px 0 0 -170px;rotate:12deg;animation-delay:-3.5s}.d4{margin:-150px 0 0 130px;rotate:-12deg;animation-delay:-.5s}
+.sprinkle{position:absolute;width:8px;height:8px;border-radius:2px;background:var(--pist);opacity:.8;animation:spin 9s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:15px 26px;font:600 16px var(--body);text-decoration:none;border:0;cursor:pointer}
+.btn.main{background:var(--caramel);color:var(--night)}
+.btn.ghost{background:transparent;color:var(--cream);border:1px solid rgba(251,243,230,.35)}
+.marquee{overflow:hidden;background:var(--caramel);color:var(--night);font-family:var(--serif);font-weight:600;font-size:22px;white-space:nowrap;padding:12px 0}
+.marquee div{display:inline-block;animation:slide 22s linear infinite}
+@keyframes slide{to{transform:translateX(-50%)}}
+section{padding:72px 20px;max-width:1100px;margin:0 auto}
+.k{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--honey);margin:0}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(38px,7vw,60px);line-height:1.02;margin:10px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:34px}
+.card{background:linear-gradient(180deg,#2c170d,#21110a);border:1px solid rgba(242,196,109,.12);border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:12px;transition:transform .25s}
+.card:hover{transform:translateY(-6px)}
+.pic{height:170px;border-radius:18px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pic .date{position:relative;margin:0 -6px}
+.tag{position:absolute;top:12px;inset-inline-start:12px;background:var(--pist);color:var(--night);font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px}
+.card h3{margin:0;font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.1}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.price{font-weight:600;font-size:20px;font-variant-numeric:tabular-nums}
+.add{border:0;background:var(--cream);color:var(--night);font:600 14px var(--body);border-radius:999px;padding:10px 16px;cursor:pointer}
+.add.done{background:var(--pist)}
+.gift{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;background:linear-gradient(120deg,#5a2a12,#2b150c);border-radius:32px;padding:40px}
+.box{height:240px;border-radius:24px;background:linear-gradient(135deg,var(--cream),#efdcc0);position:relative;box-shadow:0 30px 50px -20px rgba(0,0,0,.6)}
+.box:before,.box:after{content:"";position:absolute;background:var(--caramel)}
+.box:before{left:0;right:0;top:46%;height:22px}.box:after{top:0;bottom:0;left:46%;width:22px}
+.box .bow{position:absolute;left:50%;top:46%;width:70px;height:40px;margin:-28px 0 0 -24px;border-radius:50%;border:10px solid var(--honey);z-index:2}
+.gift ul{list-style:none;padding:0;margin:18px 0 24px;display:grid;gap:8px;color:var(--muted)}
+.gift li:before{content:"✦ ";color:var(--honey)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.steps div{border-top:2px solid var(--caramel);padding-top:14px}
+.steps b{font-family:var(--serif);font-size:26px;display:block}
+.steps span{color:var(--muted);font-size:15px}
+footer{text-align:center;padding:50px 20px calc(50px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(242,196,109,.12);color:var(--muted);font-size:14px}
+footer .logo{display:block;margin-bottom:8px;color:var(--cream)}
+.wa{position:fixed;inset-inline-end:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:14px 20px;font-weight:600;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+[dir=rtl] body,[dir=rtl] .card h3,[dir=rtl] h2,[dir=rtl] .hero h1{font-family:var(--body)}
+[dir=rtl] .hero h1{font-size:clamp(40px,10vw,84px);line-height:1.15}
+@media (max-width:500px){header{padding:12px 14px;gap:8px}.logo{font-size:19px;letter-spacing:.1em}.switch button{padding:6px 10px;font-size:13px}.cart{padding:8px 12px}}
+@media (max-width:760px){.gift{grid-template-columns:1fr;padding:26px}.steps{grid-template-columns:1fr}.hero{min-height:600px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="sample" data-i="sample">Sample design by Pixel &amp; Co. · Example brand</div>
+<header>
+  <a class="logo" href="#top">TAMRA<b>·</b>LAB</a>
+  <div class="switch" role="group" aria-label="Language"><button type="button" data-lang="ar" aria-pressed="false">عربي</button><button type="button" data-lang="en" aria-pressed="true">EN</button></div>
+  <button class="cart" type="button" id="cart">🛒 <span id="count">0</span></button>
+</header>
+
+<div class="hero" id="top">
+  <div class="eyebrow" data-i="eyebrow">Saudi dates · Reimagined</div>
+  <h1 data-i="h1">Dates, but <em>make it</em> dessert.</h1>
+  <div class="ar-big">تمر بطعم جديد</div>
+  <p data-i="lead">Stuffed dates, date spreads and snack bites made with Saudi Sukkari dates.</p>
+  <div class="stage" aria-hidden="true">
+    <div class="float jar"><div class="lbl"><b>TAMRA</b><span>DATE SPREAD</span></div></div>
+    <div class="float date p d1"></div><div class="float date d2"></div><div class="float date p d3"></div><div class="float date d4"></div>
+    <i class="sprinkle" style="left:12%;top:20%"></i><i class="sprinkle" style="left:84%;top:30%;animation-delay:-3s"></i><i class="sprinkle" style="left:22%;top:78%;animation-delay:-5s"></i><i class="sprinkle" style="left:76%;top:82%;animation-delay:-1s"></i>
+  </div>
+  <div class="cta"><a class="btn main" href="#shop" data-i="shop">Shop now</a><a class="btn ghost" href="#gift" data-i="giftbtn">Gift boxes</a></div>
+</div>
+<div class="marquee" aria-hidden="true"><div>✦ Sukkari dates ✦ Pistachio ✦ Dark cacao ✦ Tahini ✦ No added sugar ✦ Made in Riyadh ✦ Sukkari dates ✦ Pistachio ✦ Dark cacao ✦ Tahini ✦ No added sugar ✦ Made in Riyadh&nbsp;</div></div>
+
+<section id="shop">
+  <p class="k" data-i="k1">Our products</p>
+  <h2 data-i="h2a">Pick your favorite.</h2>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="gift">
+  <div class="gift">
+    <div class="box"><div class="bow"></div></div>
+    <div>
+      <p class="k" data-i="k2">Gift box</p>
+      <h2 data-i="h2b">The perfect gift for any visit.</h2>
+      <ul><li data-i="g1">12 stuffed dates, 3 flavors</li><li data-i="g2">Date spread jar + cacao bites</li><li data-i="g3">Handwritten card with your message</li></ul>
+      <button class="btn main add" type="button" data-id="gift" data-i="giftadd">Add gift box · 149 SAR</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="k" data-i="k3">How to order</p>
+  <h2 data-i="h2c">Fresh to your door.</h2>
+  <div class="steps">
+    <div><b>01</b><span data-i="s1">Pick your products and add them to the cart.</span></div>
+    <div><b>02</b><span data-i="s2">Pay with Mada, Apple Pay or cash on delivery.</span></div>
+    <div><b>03</b><span data-i="s3">Delivered in Riyadh within 24 hours.</span></div>
+  </div>
+</section>
+
+<footer><span class="logo">TAMRA·LAB</span><span data-i="foot">Example brand made by Pixel &amp; Co. to show what your food website could look like.</span></footer>
+<a class="wa" href="#shop" data-i="wa">Order on WhatsApp</a>
+
+<script>
+const T={
+ en:{sample:'Sample design by Pixel & Co. · Example brand',eyebrow:'Saudi dates · Reimagined',h1:'Dates, but <em>make it</em> dessert.',lead:'Stuffed dates, date spreads and snack bites made with Saudi Sukkari dates.',shop:'Shop now',giftbtn:'Gift boxes',k1:'Our products',h2a:'Pick your favorite.',k2:'Gift box',h2b:'The perfect gift for any visit.',g1:'12 stuffed dates, 3 flavors',g2:'Date spread jar + cacao bites',g3:'Handwritten card with your message',giftadd:'Add gift box · 149 SAR',k3:'How to order',h2c:'Fresh to your door.',s1:'Pick your products and add them to the cart.',s2:'Pay with Mada, Apple Pay or cash on delivery.',s3:'Delivered in Riyadh within 24 hours.',foot:'Example brand made by Pixel & Co. to show what your food website could look like.',wa:'Order on WhatsApp',add:'Add',added:'Added ✓',sar:'SAR'},
+ ar:{sample:'تصميم تجريبي من Pixel & Co. · علامة تجارية مثال',eyebrow:'تمر سعودي · بطريقة جديدة',h1:'تمر… <em>بس حلى</em>',lead:'تمر محشي، دبس تمر للدهن، وسناكات صحية من تمر السكري السعودي.',shop:'تسوق الآن',giftbtn:'بوكسات الهدايا',k1:'منتجاتنا',h2a:'اختر المفضل لك',k2:'بوكس هدية',h2b:'أحلى هدية لأي زيارة',g1:'١٢ تمرة محشية، ٣ نكهات',g2:'علبة دبس تمر + بايتس الكاكاو',g3:'كرت مكتوب بخط اليد برسالتك',giftadd:'أضف بوكس الهدية · ١٤٩ ر.س',k3:'طريقة الطلب',h2c:'طازج لين باب بيتك',s1:'اختر منتجاتك وأضفها للسلة',s2:'ادفع بمدى، أبل باي، أو عند الاستلام',s3:'التوصيل داخل الرياض خلال ٢٤ ساعة',foot:'علامة مثال صممتها Pixel & Co. عشان تشوف كيف ممكن يكون موقع منتجك',wa:'اطلب واتساب',add:'أضف',added:'تمت ✓',sar:'ر.س'}
+};
+const P=[
+ {id:'pist',en:['Pistachio Stuffed Dates','Sukkari dates filled with roasted pistachio cream.'],ar:['تمر محشي فستق','تمر سكري محشي بكريمة الفستق المحمص.'],price:59,tag:'Best seller',tagAr:'الأكثر مبيعاً',bg:'linear-gradient(135deg,#3d5a22,#8db255)',dates:['p','p','p']},
+ {id:'cacao',en:['Date & Cacao Bites','Bite-size energy balls with dark cacao and almonds.'],ar:['بايتس تمر وكاكاو','كرات طاقة صغيرة بالكاكاو الداكن واللوز.'],price:39,tag:'New',tagAr:'جديد',bg:'linear-gradient(135deg,#2a130a,#6a3418)',dates:['','','']},
+ {id:'spread',en:['Date Spread','Smooth date spread with a touch of tahini. 350 g.'],ar:['دبس تمر للدهن','دبس تمر ناعم مع لمسة طحينة. ٣٥٠ جم.'],price:45,tag:'',tagAr:'',bg:'linear-gradient(135deg,#b56d26,#f2c46d)',dates:['']},
+ {id:'mix',en:['Tasting Box','9 stuffed dates: pistachio, tahini and orange.'],ar:['بوكس التذوق','٩ تمرات محشية: فستق، طحينة، وبرتقال.'],price:89,tag:'Gift idea',tagAr:'فكرة هدية',bg:'linear-gradient(135deg,#5a2a12,#d98a3a)',dates:['p','','p','']}
+];
+let lang='en',count=0;
+function render(){
+  const t=T[lang];
+  document.querySelectorAll('[data-i]').forEach(el=>{el.innerHTML=t[el.dataset.i]});
+  document.getElementById('grid').innerHTML=P.map(p=>{const [n,d]=p[lang];const tg=lang==='en'?p.tag:p.tagAr;return `<article class="card"><div class="pic" style="background:${p.bg}">${tg?`<span class="tag">${tg}</span>`:''}${p.dates.map(c=>`<i class="date ${c}"></i>`).join('')}</div><h3>${n}</h3><p>${d}</p><div class="row"><span class="price">${p.price} ${t.sar}</span><button class="add" type="button" data-id="${p.id}">${t.add}</button></div></article>`}).join('');
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang));
+}
+document.addEventListener('click',e=>{
+  const l=e.target.closest('[data-lang]');if(l){lang=l.dataset.lang;render();return}
+  const a=e.target.closest('.add');if(a){count++;document.getElementById('count').textContent=count;if(!a.classList.contains('main')){a.textContent=T[lang].added;a.classList.add('done')}}
+});
+render();
+</script>
+</body>
+</html>
