@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VÉLOUR | Maison de Nuit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Great+Vibes&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: particle intro, then a pinned scroll stage (turn, back print, crest, six colours) over black, then a cream shop with colour/size picker and cart. */
+:root{
+  --night:#0b0a0b; --ink:#EFE6D6; --gold:#C9A86A; --muted:#9b938a; --cream:#F1EBE1; --paper:#F8F4EE; --dark:#151314; --dmuted:#6f675f; --line:rgba(239,230,214,.14); --dline:rgba(21,19,20,.12);
+  --serif:'Bodoni Moda',Didot,Georgia,serif; --script:'Great Vibes',cursive; --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}button{font-family:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");animation:gr 1s steps(3) infinite}
+@keyframes gr{33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}}
+header{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:18px max(20px,4vw);mix-blend-mode:difference;color:#fff}
+.wm{font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:.42em;text-decoration:none;padding-left:.42em}
+nav{display:flex;gap:28px;font-size:12px;letter-spacing:.24em;text-transform:uppercase}
+nav a{text-decoration:none;opacity:.8}
+.bag{background:none;border:0;color:inherit;font-size:12px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;padding:8px 0}
+/* intro */
+#intro{position:relative;height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(60% 55% at 50% 50%,#1c191a,#0b0a0b 70%)}
+#dots{position:absolute;inset:0;width:100%;height:100%}
+.intro-txt{position:relative;text-align:center;pointer-events:none}
+.intro-txt .tag{font-size:12px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);opacity:0;transition:opacity 1.2s 2.4s}
+.intro-txt h1{margin:0;font-family:var(--serif);font-weight:500;font-size:clamp(54px,11vw,150px);letter-spacing:.32em;padding-left:.32em;line-height:1}
+.intro-txt h1 span{display:inline-block;opacity:0;transform:translateY(30px);filter:blur(10px);transition:opacity 1s,transform 1.2s cubic-bezier(.2,.8,.2,1),filter 1s}
+.intro-txt .sub{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.2vw,24px);opacity:0;transition:opacity 1.2s 2.8s;margin-top:18px;color:#cfc6b8}
+.ready .intro-txt h1 span{opacity:1;transform:none;filter:none}
+.ready .intro-txt .tag,.ready .intro-txt .sub{opacity:1}
+.cue{position:absolute;bottom:28px;left:50%;translate:-50% 0;font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
+.cue i{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);animation:cue 2s ease-in-out infinite;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+/* stage */
+#stage{position:relative;height:720vh}
+.pin{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(50% 60% at 50% 52%,#211e1f,#0b0a0b 72%)}
+.spot{position:absolute;left:50%;bottom:4vh;width:46vh;height:5vh;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.75),transparent);filter:blur(6px)}
+.fig{position:absolute;left:50%;top:50%;height:min(88svh,1060px);aspect-ratio:920/1260;translate:-50% -46%;will-change:transform}
+.fig .cam{position:absolute;inset:0;transform-origin:50% 50%;will-change:transform}
+.fig img{-webkit-mask-image:linear-gradient(transparent,#000 6%);mask-image:linear-gradient(transparent,#000 6%);position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .45s}
+.fig img.hide{opacity:0}
+.cap{position:absolute;max-width:380px;opacity:0;transition:opacity .5s,transform .7s cubic-bezier(.2,.8,.2,1);transform:translateY(24px);pointer-events:none}
+.cap.on{opacity:1;transform:none}
+.cap.l{left:max(24px,6vw);top:50%;translate:0 -50%}
+.cap.r{right:max(24px,6vw);top:50%;translate:0 -50%;text-align:right}
+.cap .n{font-size:11px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase}
+.cap h2{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5vw,72px);line-height:1;margin:14px 0 0;letter-spacing:-.01em}
+.cap h2 em{font-family:var(--script);font-style:normal;font-weight:400;color:var(--gold);font-size:1.2em;letter-spacing:0}
+.cap p{color:#bdb4a7;margin:16px 0 0;font-size:16px}
+.swatches{position:absolute;left:50%;bottom:5vh;translate:-50% 0;display:flex;gap:12px;opacity:0;transition:opacity .5s}
+.swatches.on{opacity:1}
+.swatches i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.25);transition:transform .3s,box-shadow .3s}
+.swatches i.cur{transform:scale(1.5);box-shadow:0 0 0 1px var(--gold),0 0 0 4px rgba(201,168,106,.25)}
+.cname{position:absolute;right:max(24px,6vw);bottom:5vh;font-family:var(--serif);font-style:italic;font-size:clamp(34px,4.5vw,64px);opacity:0;transition:opacity .5s}
+.cname.on{opacity:1}
+.prog{position:absolute;left:max(20px,4vw);bottom:5vh;font-size:11px;letter-spacing:.3em;color:var(--muted)}
+/* transition to cream */
+.fade{height:40vh;background:linear-gradient(var(--night),var(--cream))}
+.shop{background:var(--cream);color:var(--dark)}
+section.s{max-width:1180px;margin:0 auto;padding:90px 20px}
+.k{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:#9a7b45;margin:0}
+.shop h2{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6vw,80px);line-height:1;margin:14px 0 0;letter-spacing:-.01em}
+.shop h2 em{font-family:var(--script);font-style:normal;font-weight:400;color:#9a7b45;font-size:1.15em}
+.pd{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:start;margin-top:50px}
+.gal{position:relative;background:linear-gradient(180deg,#e9e2d6,#ddd3c4);border-radius:4px;aspect-ratio:4/5;overflow:hidden}
+.gal img,.tile img,.thumbs img,.it .th img{-webkit-mask-image:linear-gradient(transparent,#000 6%);mask-image:linear-gradient(transparent,#000 6%)}
+.gal img{position:absolute;inset:4% 0 0;width:100%;height:96%;object-fit:contain;transition:opacity .45s}
+.gal .flipbtn{position:absolute;left:16px;bottom:16px;border:1px solid var(--dline);background:rgba(248,244,238,.8);backdrop-filter:blur(6px);border-radius:999px;padding:9px 16px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}
+.thumbs button{border:1px solid transparent;background:#e6ded1;border-radius:3px;aspect-ratio:3/4;padding:0;overflow:hidden;cursor:pointer}
+.thumbs button[aria-pressed=true]{border-color:var(--dark)}
+.thumbs img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.info .title{font-family:var(--serif);font-size:42px;font-weight:500;line-height:1.05;margin:10px 0 0}
+.info .price{font-size:20px;margin-top:10px}
+.info .desc{color:var(--dmuted);margin:18px 0 0;max-width:46ch}
+.lbl{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.3em;text-transform:uppercase;margin:28px 0 12px}
+.lbl span:last-child{color:var(--dmuted);letter-spacing:.1em;text-transform:none;font-family:var(--serif);font-style:italic;font-size:16px}
+.cols{display:flex;gap:12px;flex-wrap:wrap}
+.cols button{width:34px;height:34px;border-radius:50%;border:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);transition:transform .2s}
+.cols button[aria-pressed=true]{box-shadow:0 0 0 2px var(--cream),0 0 0 3px var(--dark)}
+.pieces,.sizes{display:flex;gap:8px;flex-wrap:wrap}
+.pieces button,.sizes button{border:1px solid var(--dline);background:transparent;border-radius:2px;padding:12px 16px;font-size:13px;letter-spacing:.1em;cursor:pointer;min-width:58px}
+.pieces button[aria-pressed=true],.sizes button[aria-pressed=true]{background:var(--dark);color:var(--paper);border-color:var(--dark)}
+.addbtn{width:100%;margin-top:30px;border:0;background:var(--dark);color:var(--paper);padding:18px;font-size:13px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;transition:background .3s}
+.addbtn:hover{background:#2a2526}
+.addbtn:disabled{opacity:.45;cursor:not-allowed}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;margin-top:26px;font-size:13px;color:var(--dmuted)}
+.notes b{display:block;color:var(--dark);font-weight:500;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+.range{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+.tile{background:linear-gradient(180deg,#e9e2d6,#ddd3c4);border-radius:3px;aspect-ratio:3/4;position:relative;overflow:hidden;cursor:pointer;border:0;padding:0;text-align:left}
+.tile img{position:absolute;inset:6% 0 0;width:100%;height:94%;object-fit:contain;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.tile img.b{opacity:0}
+.tile:hover img{transform:scale(1.04)}.tile:hover img.b{opacity:1}.tile:hover img.f{opacity:0}
+.tile span{position:absolute;left:16px;bottom:14px;font-family:var(--serif);font-style:italic;font-size:24px;color:var(--dark)}
+.tile small{position:absolute;right:16px;bottom:18px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dmuted)}
+.manifesto{background:var(--dark);color:var(--ink);text-align:center;padding:120px 20px}
+.manifesto p{font-family:var(--serif);font-size:clamp(28px,4vw,52px);line-height:1.2;max-width:22ch;margin:0 auto;font-weight:500}
+.manifesto p em{font-family:var(--script);font-style:normal;color:var(--gold);font-weight:400}
+footer{background:var(--night);color:var(--muted);padding:70px 20px calc(50px + env(safe-area-inset-bottom,0px));text-align:center;font-size:13px}
+footer .wm{display:block;color:var(--ink);font-size:30px;margin-bottom:14px}
+footer .row{display:flex;justify-content:center;gap:26px;margin:18px 0;letter-spacing:.24em;text-transform:uppercase;font-size:11px}
+/* cart */
+.scrim{position:fixed;inset:0;background:rgba(11,10,11,.5);z-index:50;opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(420px,100%);background:var(--paper);color:var(--dark);z-index:51;transform:translateX(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:calc(24px + env(safe-area-inset-top,0px)) 24px calc(24px + env(safe-area-inset-bottom,0px))}
+.open .scrim{opacity:1;pointer-events:auto}.open .drawer{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--dline);padding-bottom:16px}
+.dh h3{margin:0;font-family:var(--serif);font-weight:500;font-size:28px}
+.x{border:0;background:none;font-size:26px;cursor:pointer;color:var(--dark)}
+.items{flex:1;overflow:auto;padding:16px 0;display:flex;flex-direction:column;gap:14px}
+.it{display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:center}
+.it .th{width:70px;height:90px;background:#e6ded1;border-radius:2px;overflow:hidden}
+.it .th img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.it .nm{font-family:var(--serif);font-size:18px;line-height:1.2}
+.it small{display:block;color:var(--dmuted);font-family:var(--sans);font-size:12px;margin-top:4px}
+.qty{display:flex;align-items:center;gap:8px;font-size:14px}
+.qty button{width:26px;height:26px;border:1px solid var(--dline);background:none;border-radius:50%;cursor:pointer}
+.empty{color:var(--dmuted);text-align:center;margin-top:60px;font-family:var(--serif);font-style:italic;font-size:20px}
+.tot{display:flex;justify-content:space-between;border-top:1px solid var(--dline);padding-top:16px;font-size:16px}
+.co{display:block;text-align:center;margin-top:14px;background:var(--dark);color:var(--paper);padding:17px;font-size:12px;letter-spacing:.3em;text-transform:uppercase;text-decoration:none}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));translate:-50% 20px;background:var(--dark);color:var(--paper);font-size:13px;letter-spacing:.06em;padding:13px 22px;border-radius:999px;opacity:0;transition:opacity .3s,translate .3s;z-index:70;pointer-events:none}
+.toast.show{opacity:1;translate:-50% 0}
+@media (max-width:860px){
+  nav{display:none}
+  .fig{height:min(64svh,760px);translate:-50% -58%}
+  .cap.l,.cap.r{left:20px;right:20px;top:auto;bottom:13vh;translate:none;text-align:center;max-width:none}
+  .cap h2{font-size:clamp(34px,9vw,48px)}
+  .cap p{font-size:14px;margin-top:8px}
+  .cname{right:auto;left:50%;translate:-50% 0;bottom:auto;top:78px;font-size:30px}
+  .pin::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42vh;background:linear-gradient(transparent,rgba(11,10,11,.92) 55%);pointer-events:none;z-index:1}
+  .cap,.swatches{z-index:2}
+  .tile small{display:none}
+  .swatches{bottom:5vh}
+  .prog{display:none}
+  .pd{grid-template-columns:1fr;gap:30px}
+  .range{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){.grain{animation:none}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<header>
+  <a class="wm" href="#intro">VÉLOUR</a>
+  <nav><a href="#stage">The Set</a><a href="#shop">Shop</a><a href="#range">Colours</a></nav>
+  <button class="bag" type="button" id="openCart">Bag (<span id="badge">0</span>)</button>
+</header>
+
+<section id="intro">
+  <canvas id="dots" aria-hidden="true"></canvas>
+  <div class="intro-txt">
+    <div class="tag">Drop 01 · Maison de Nuit</div>
+    <h1 aria-label="VÉLOUR"><span>V</span><span>É</span><span>L</span><span>O</span><span>U</span><span>R</span></h1>
+    <div class="sub">Soft as velvet. Made for the long nights.</div>
+  </div>
+  <div class="cue">Scroll<i></i></div>
+</section>
+
+<section id="stage">
+  <div class="pin">
+    <div class="spot"></div>
+    <div class="fig" id="fig"><div class="cam" id="cam"><img id="imF" alt="VÉLOUR hoodie and shorts, front"><img id="imB" class="hide" alt="VÉLOUR hoodie and shorts, back with arched VÉLOUR print"></div></div>
+    <div class="cap l" data-c="0"><div class="n">01 — The Set</div><h2>Heavyweight.<br><em>Oversized.</em></h2><p>Brushed fleece, dropped shoulders, a boxy cut that falls just right.</p></div>
+    <div class="cap r" data-c="1"><div class="n">02 — Turn around</div><h2>Made to be<br><em>seen leaving.</em></h2><p>The statement lives on the back.</p></div>
+    <div class="cap l" data-c="2"><div class="n">03 — The back print</div><h2>Raised.<br><em>Puff print.</em></h2><p>An arched VÉLOUR wordmark, Maison de Nuit, and a line for the late hours.</p></div>
+    <div class="cap r" data-c="3"><div class="n">04 — The crest</div><h2>Embroidered,<br><em>quietly.</em></h2><p>The V crest sits on the chest and the leg. Small, clean, unmistakable.</p></div>
+    <div class="cap l" data-c="4"><div class="n">05 — Six colours</div><h2>One set.<br><em>Six moods.</em></h2><p>Noir, Bordeaux, Blanc, Gris, Brun and Marine.</p></div>
+    <div class="swatches" id="sw"></div>
+    <div class="cname" id="cname"></div>
+    <div class="prog" id="prog">01 / 05</div>
+  </div>
+</section>
+
+<div class="fade"></div>
+<main class="shop">
+  <section class="s" id="shop">
+    <p class="k">Drop 01</p>
+    <h2>The <em>Set.</em></h2>
+    <div class="pd">
+      <div>
+        <div class="gal"><img id="gF" alt=""><img id="gB" alt="" style="opacity:0"><button class="flipbtn" type="button" id="flip">Show back</button></div>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+      <div class="info">
+        <p class="k">VÉLOUR · Maison de Nuit</p>
+        <div class="title" id="ptitle">The Set</div>
+        <div class="price" id="pprice"></div>
+        <p class="desc">Heavyweight brushed fleece hoodie and matching shorts. Puff-print arched wordmark on the back, script on the hood, embroidered crest on the chest and leg.</p>
+        <div class="lbl"><span>Piece</span><span></span></div>
+        <div class="pieces" id="pieces"></div>
+        <div class="lbl"><span>Colour</span><span id="cl"></span></div>
+        <div class="cols" id="cols"></div>
+        <div class="lbl"><span>Size</span><span>Oversized fit</span></div>
+        <div class="sizes" id="sizes"></div>
+        <button class="addbtn" type="button" id="add" disabled>Select a size</button>
+        <div class="notes"><div><b>Fabric</b>Heavyweight cotton fleece</div><div><b>Fit</b>Oversized, dropped shoulder</div><div><b>Print</b>Puff print + embroidery</div><div><b>Delivery</b>2–5 working days</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="manifesto"><p>For the long nights and the <em>slow mornings</em> that follow.</p></section>
+  <section class="s" id="range">
+    <p class="k">The range</p>
+    <h2>Six <em>colours.</em></h2>
+    <div class="range" id="tiles"></div>
+  </section>
+</main>
+<footer><span class="wm">VÉLOUR</span>Maison de Nuit · Est. MMXXVI<div class="row"><a href="#top">Instagram</a><a href="#top">TikTok</a><a href="#shop">Shop</a></div>Prototype store · placeholder prices</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" aria-label="Bag">
+  <div class="dh"><h3>Your bag</h3><button class="x" type="button" id="closeCart" aria-label="Close">×</button></div>
+  <div class="items" id="items"></div>
+  <div class="tot"><span>Subtotal</span><span id="sum">0 SAR</span></div>
+  <a class="co" href="#top" id="checkout">Checkout</a>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const IMG=/*IMAGES*/{};
+const C=[
+ {id:'noir',fr:'Noir',en:'Black',hex:'#1b1a1c'},
+ {id:'bordeaux',fr:'Bordeaux',en:'Burgundy',hex:'#5c1a26'},
+ {id:'blanc',fr:'Blanc',en:'White',hex:'#ece8e1'},
+ {id:'gris',fr:'Gris',en:'Grey',hex:'#bcbbb9'},
+ {id:'brun',fr:'Brun',en:'Brown',hex:'#5a3f2e'},
+ {id:'marine',fr:'Marine',en:'Dark blue',hex:'#1c2234'}
+];
+const PIECES=[{id:'set',name:'The Set',sub:'Hoodie + shorts',price:399},{id:'hoodie',name:'The Hoodie',sub:'',price:249},{id:'shorts',name:'The Shorts',sub:'',price:179}];
+const SIZES=['S','M','L','XL','XXL'];
+const $=s=>document.querySelector(s);
+const src=(side,c)=>IMG[side+'-'+c];
+
+/* ---------- intro particles ---------- */
+(function(){
+  const cv=$('#dots'),x=cv.getContext('2d');let W,H,P=[],t0=performance.now(),dpr=Math.min(devicePixelRatio,2);
+  function targets(){
+    const o=document.createElement('canvas');o.width=W;o.height=H;const g=o.getContext('2d');
+    const R=Math.min(W,H)*.2;g.translate(W/2,H/2);g.strokeStyle='#fff';g.fillStyle='#fff';
+    g.lineWidth=Math.max(2,R*.03);g.beginPath();g.arc(0,0,R,0,7);g.stroke();g.lineWidth=Math.max(1,R*.012);g.beginPath();g.arc(0,0,R*.92,0,7);g.stroke();
+    g.font=`${R*1.25}px "Great Vibes", cursive`;g.textAlign='center';g.textBaseline='middle';g.fillText('V',-R*.05,R*.08);
+    const d=g.getImageData(0,0,W,H).data,pts=[],step=Math.max(3,Math.round(Math.min(W,H)/170));
+    for(let y=0;y<H;y+=step)for(let xx=0;xx<W;xx+=step)if(d[(y*W+xx)*4+3]>128)pts.push([xx,y]);return pts;
+  }
+  function init(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+    const T=targets();P=T.map(([tx,ty])=>({x:Math.random()*W,y:Math.random()*H,tx,ty,s:Math.random()*1.4+.5,d:Math.random()*.8}));}
+  function ease(t){return 1-Math.pow(1-t,4)}
+  function f(now){
+    const t=(now-t0)/1000;x.clearRect(0,0,W,H);
+    const sc=Math.min(1,scrollY/(innerHeight*.8));
+    for(const p of P){const k=ease(Math.max(0,Math.min(1,(t-p.d)/2.2)));const fade=t>3.2?Math.max(.18,1-(t-3.2)*.6):1;
+      const px=p.x+(p.tx-p.x)*k+Math.sin(t*1.3+p.tx)*1.2*(1-k*.7), py=p.y+(p.ty-p.y)*k+Math.cos(t+p.ty)*1.2*(1-k*.7)-sc*120*p.s;
+      x.globalAlpha=(.35+.65*k)*fade*(1-sc);x.fillStyle='#C9A86A';x.beginPath();x.arc(px,py,p.s,0,7);x.fill();}
+    if(scrollY<innerHeight*1.2)requestAnimationFrame(f);else{setTimeout(()=>requestAnimationFrame(f),300)}
+  }
+  document.fonts.load('80px "Great Vibes"').finally(()=>{init();requestAnimationFrame(f);setTimeout(()=>document.body.classList.add('ready'),2300)});
+  addEventListener('resize',init);
+})();
+
+/* ---------- scroll stage ---------- */
+const imF=$('#imF'),imB=$('#imB'),cam=$('#cam'),fig=$('#fig'),stage=$('#stage'),caps=[...document.querySelectorAll('.cap')];
+$('#sw').innerHTML=C.map(c=>`<i style="background:${c.hex}"></i>`).join('');
+let curC='noir',showBack=false;
+function setColour(id){if(id===curC&&imF.src)return;curC=id;imF.src=src('f',id);imB.src=src('b',id);
+  document.querySelectorAll('#sw i').forEach((e,i)=>e.classList.toggle('cur',C[i].id===id));const c=C.find(c=>c.id===id);$('#cname').textContent=c.fr;}
+setColour('noir');curC='';setColour('noir');
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a)),sm=t=>t*t*(3-2*t);
+// zoom targets (fractions of the 920x1260 frame)
+const PRINT=[.495,.37,2.1],CREST=[.66,.21,2.5];
+function frame(){
+  const r=stage.getBoundingClientRect(),p=clamp(-r.top/(r.height-innerHeight));
+  // turn: 0.12-0.26 to back, 0.46-0.56 back to front
+  const t1=sm(seg(p,.12,.26)),t2=sm(seg(p,.46,.56));
+  const turn=t1-t2; // 0 front, 1 back
+  const sx=Math.abs(Math.cos(turn*Math.PI));const back=turn>.5;
+  imF.classList.toggle('hide',back);imB.classList.toggle('hide',!back);
+  // zoom
+  const zp=sm(seg(p,.28,.36))*(1-sm(seg(p,.42,.48)));const zc=sm(seg(p,.58,.66))*(1-sm(seg(p,.72,.78)));
+  let s=1,tx=0,ty=0;
+  if(zp>0){s=1+(PRINT[2]-1)*zp;tx=(.5-PRINT[0])*100*zp;ty=(.5-PRINT[1])*100*zp}
+  if(zc>0){s=1+(CREST[2]-1)*zc;tx=(.5-CREST[0])*100*zc;ty=(.5-CREST[1])*100*zc}
+  cam.style.transform=`translate(${tx*s}%,${ty*s}%) scale(${s*Math.max(.04,sx)},${s}) `;
+  cam.style.transformOrigin='50% 50%';
+  const mob=innerWidth<860;
+  fig.style.marginLeft=mob?'0':((p<.3?-1:p<.5?1:p<.8?-1:1)*0)+'px';
+  // captions
+  const ci=p<.12?0:p<.28?1:p<.48?2:p<.76?3:4;caps.forEach((c,i)=>c.classList.toggle('on',i===ci&&p<.995));
+  $('#prog').textContent=`0${ci+1} / 05`;
+  // colours: 0.8 - 0.98
+  const cp=seg(p,.8,.98),on=p>.79;
+  $('#sw').classList.toggle('on',on);$('#cname').classList.toggle('on',on);
+  if(on)setColour(C[Math.min(5,Math.floor(cp*6))].id);else setColour('noir');
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- shop ---------- */
+let sel={piece:'set',col:'noir',size:null,side:'f'},cart=[];
+function renderShop(){
+  const pc=PIECES.find(x=>x.id===sel.piece),c=C.find(x=>x.id===sel.col);
+  $('#gF').src=src('f',sel.col);$('#gB').src=src('b',sel.col);
+  $('#gF').style.opacity=sel.side==='f'?1:0;$('#gB').style.opacity=sel.side==='b'?1:0;$('#flip').textContent=sel.side==='f'?'Show back':'Show front';
+  $('#gF').alt=`${pc.name} in ${c.fr}, front`;$('#gB').alt=`${pc.name} in ${c.fr}, back`;
+  $('#ptitle').textContent=pc.name;$('#pprice').textContent=pc.price+' SAR'+(pc.id==='set'?'  ·  save 29 SAR':'');
+  $('#pieces').innerHTML=PIECES.map(x=>`<button type="button" data-piece="${x.id}" aria-pressed="${x.id===sel.piece}">${x.name.replace('The ','')}</button>`).join('');
+  $('#cols').innerHTML=C.map(x=>`<button type="button" data-col="${x.id}" aria-pressed="${x.id===sel.col}" aria-label="${x.fr}" style="background:${x.hex}"></button>`).join('');
+  $('#cl').textContent=c.fr+' · '+c.en;
+  $('#sizes').innerHTML=SIZES.map(x=>`<button type="button" data-size="${x}" aria-pressed="${x===sel.size}">${x}</button>`).join('');
+  $('#thumbs').innerHTML=C.map(x=>`<button type="button" data-col="${x.id}" aria-pressed="${x.id===sel.col}" aria-label="${x.fr}"><img alt="" src="${src('f',x.id)}"></button>`).join('');
+  const b=$('#add');b.disabled=!sel.size;b.textContent=sel.size?`Add to bag · ${pc.price} SAR`:'Select a size';
+}
+function renderTiles(){$('#tiles').innerHTML=C.map(x=>`<button class="tile" type="button" data-pick="${x.id}"><img class="f" alt="The Set in ${x.fr}, front" src="${src('f',x.id)}"><img class="b" alt="" src="${src('b',x.id)}"><span>${x.fr}</span><small>${x.en}</small></button>`).join('')}
+function renderCart(){
+  const n=cart.reduce((a,i)=>a+i.q,0);$('#badge').textContent=n;
+  $('#items').innerHTML=cart.length?cart.map((i,k)=>{const pc=PIECES.find(x=>x.id===i.piece),c=C.find(x=>x.id===i.col);return `<div class="it"><div class="th"><img alt="" src="${src('f',i.col)}"></div><div><div class="nm">${pc.name}</div><small>${c.fr} · ${i.size} · ${pc.price} SAR</small></div><div class="qty"><button type="button" data-q="${k}" data-d="-1" aria-label="Less">−</button>${i.q}<button type="button" data-q="${k}" data-d="1" aria-label="More">+</button></div></div>`}).join(''):'<p class="empty">Your bag is empty.</p>';
+  $('#sum').textContent=cart.reduce((a,i)=>a+i.q*PIECES.find(x=>x.id===i.piece).price,0)+' SAR';
+}
+let tt;function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),1800)}
+document.addEventListener('click',e=>{
+  const g=k=>e.target.closest(k);let el;
+  if(el=g('[data-piece]')){sel.piece=el.dataset.piece;renderShop()}
+  else if(el=g('[data-col]')){sel.col=el.dataset.col;renderShop()}
+  else if(el=g('[data-size]')){sel.size=el.dataset.size;renderShop()}
+  else if(el=g('[data-pick]')){sel.col=el.dataset.pick;renderShop();$('#shop').scrollIntoView({behavior:'smooth'})}
+  else if(g('#flip')){sel.side=sel.side==='f'?'b':'f';renderShop()}
+  else if(g('#add')&&sel.size){const ex=cart.find(i=>i.piece===sel.piece&&i.col===sel.col&&i.size===sel.size);ex?ex.q++:cart.push({piece:sel.piece,col:sel.col,size:sel.size,q:1});renderCart();toast('Added to your bag');}
+  else if(el=g('[data-q]')){const i=cart[+el.dataset.q];i.q+= +el.dataset.d;if(i.q<=0)cart.splice(+el.dataset.q,1);renderCart()}
+  else if(g('#openCart')){document.body.classList.add('open')}
+  else if(g('#closeCart')||g('#scrim')){document.body.classList.remove('open')}
+  else if(g('#checkout')){e.preventDefault();toast('On the live store this opens secure Shopify checkout')}
+});
+renderShop();renderTiles();renderCart();
+</script>
+</body>
+</html>
