@@ -116,15 +116,20 @@ h1 em{font-style:italic;color:var(--gold2)}
 #ring{position:relative;height:340vh}
 #ring .pin{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;perspective:1600px;cursor:grab;touch-action:pan-y}
 #ring .pin:active{cursor:grabbing}
-.turn{position:relative;height:min(52svh,600px);aspect-ratio:1000/1250;max-width:86vw;margin-top:6vh;border-radius:999px 999px 8px 8px;overflow:hidden;background:radial-gradient(70% 55% at 50% 42%,#e6e4e1,#d4d2cf 70%,#c3c1be);box-shadow:0 60px 120px -40px rgba(0,0,0,.9)}
+.turn{position:relative;height:min(52svh,600px);aspect-ratio:1000/1250;max-width:86vw;margin-top:9vh;border-radius:999px 999px 8px 8px;overflow:hidden;background:radial-gradient(70% 55% at 50% 42%,#e6e4e1,#d4d2cf 70%,#c3c1be);box-shadow:0 60px 120px -40px rgba(0,0,0,.9)}
 .turn img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;will-change:transform,opacity;pointer-events:none;user-select:none}
+.tcols{display:flex;gap:12px;justify-content:center;margin-top:14px;pointer-events:auto}
+.tcols button{width:26px;height:26px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);position:relative}
+.tcols button::after{content:"";position:absolute;inset:-9px}
+.tcols button[aria-pressed=true]{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--gold)}
+.turn img{transition:opacity .25s}
 .views{position:absolute;left:50%;bottom:12vh;translate:-50% 0;display:flex;gap:8px;z-index:2}
 .views button{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,9,.4);backdrop-filter:blur(8px);font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer}
 .views button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
 .card3d{position:absolute;inset:0;border-radius:6px;overflow:hidden;backface-visibility:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.08)}
 .card3d{background:radial-gradient(70% 55% at 50% 42%,#e6e4e1,#d4d2cf 70%,#c3c1be)}
 .card3d img{width:100%;height:100%;object-fit:contain;padding:8%;pointer-events:none;user-select:none}
-.ring-head{position:absolute;top:13vh;left:0;right:0;text-align:center;z-index:2;pointer-events:none}
+.ring-head{position:absolute;top:9vh;left:0;right:0;text-align:center;z-index:2;pointer-events:none}
 .ring-head h2{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5vw,74px);line-height:1;margin:12px 0 0}
 .ring-head h2 em{color:var(--gold2)}
 .deg{position:absolute;bottom:3.5vh;left:50%;translate:-50% 0;font-family:var(--serif);font-size:44px;color:var(--gold);font-variant-numeric:tabular-nums}
@@ -306,7 +311,7 @@ footer.in .fbig path{stroke-dashoffset:0;fill:var(--gold)}
 
 <section id="ring" aria-label="The collection in 360 degrees">
   <div class="pin" id="rpin">
-    <div class="ring-head"><div class="eyebrow">Every angle</div><h2>The hoodie, <em>360°.</em></h2></div>
+    <div class="ring-head"><div class="eyebrow">Every angle</div><h2>The hoodie, <em>360°.</em></h2><div class="tcols" role="group" aria-label="Turntable colour"><button type="button" data-tcol="marine" aria-pressed="true" aria-label="Marine" style="background:#1c2234"></button><button type="button" data-tcol="rose" aria-pressed="false" aria-label="Rose" style="background:#e9b7bd"></button><button type="button" data-tcol="creme" aria-pressed="false" aria-label="Crème" style="background:#ece4d4"></button></div></div>
     <div class="turn" id="turn"></div>
     <div class="views" role="group" aria-label="Choose view"><button type="button" data-ang="0">Front</button><button type="button" data-ang="90">Side</button><button type="button" data-ang="180">Back</button></div>
     <div class="deg"><span id="deg">0°</span><small>Drag or scroll to turn</small></div>
@@ -363,8 +368,8 @@ const mob=()=>innerWidth<820;
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a));
 const C=[
  {id:'marine',name:'Marine',en:'Navy',hex:'#1c2234',bg:'#0e1220',imgs:['navy-front','navy-side','navy-back'],d:'Deep navy, cream script on the chest and down the sleeve.'},
- {id:'rose',name:'Rose',en:'Pink',hex:'#e9b7bd',bg:'#2a1a1d',imgs:['pink-front'],d:'Soft rose with tonal white script. Made to stand out.'},
- {id:'creme',name:'Crème',en:'Cream',hex:'#ece4d4',bg:'#1e1b16',imgs:['creme-close'],d:'Ivory joggers, gold thread, gold-tipped cords.'}
+ {id:'rose',name:'Rose',en:'Pink',hex:'#e9b7bd',bg:'#2a1a1d',imgs:['pink-front','pink-side','pink-back'],d:'Soft rose with tonal white script. Made to stand out.'},
+ {id:'creme',name:'Crème',en:'Cream',hex:'#ece4d4',bg:'#1e1b16',imgs:['creme-front','creme-side','creme-back','creme-close'],d:'Ivory fleece with a tonal gold script. Soft and clean.'}
 ];
 const PIECES=[{id:'set',name:'The Set',price:399},{id:'hoodie',name:'The Hoodie',price:249},{id:'joggers',name:'The Joggers',price:199}];
 const SIZES=['S','M','L','XL','XXL'];
@@ -400,13 +405,14 @@ setC(0);
 $('#sw').addEventListener('click',e=>{const b=e.target.closest('[data-goto]');if(!b)return;const s=$('#colour'),i=+b.dataset.goto;scrollTo({top:s.offsetTop+(s.offsetHeight-innerHeight)*((i+.5)/C.length),behavior:reduce?'auto':'smooth'})});
 
 /* ---------- 360 turntable ---------- */
-const V=['navy-front','navy-side','navy-back','navy-side2'];
+const VS={marine:['navy-front','navy-side','navy-back','navy-side2'],rose:['pink-front','pink-side','pink-back','pink-side2'],creme:['creme-front','creme-side','creme-back','creme-side2']};let tcol='marine';const V=VS.marine;
 const turn=$('#turn');turn.innerHTML=V.map((k,i)=>`<img alt="${['Front','Side','Back','Other side'][i]} of the navy Velour hoodie" src="${IMG[k]}" draggable="false">`).join('');
 const vimgs=$$('#turn img');let rot=0,drag=0,vel=0,dragging=false,lx=0,target=null;
 $('#rpin').addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;dragging=true;lx=e.clientX;vel=0;target=null;$('#rpin').setPointerCapture(e.pointerId)});
 $('#rpin').addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lx;lx=e.clientX;drag+=dx*.45;vel=dx*.45});
 $('#rpin').addEventListener('pointerup',()=>dragging=false);$('#rpin').addEventListener('pointercancel',()=>dragging=false);
 $$('.views button').forEach(b=>b.addEventListener('click',()=>{target=+b.dataset.ang}));
+$$('.tcols button').forEach(b=>b.addEventListener('click',()=>{tcol=b.dataset.tcol;$$('.tcols button').forEach(x=>x.setAttribute('aria-pressed',x===b));const names={marine:'navy',rose:'pink',creme:'cream'};VS[tcol].forEach((k,i)=>{vimgs[i].src=IMG[k];vimgs[i].alt=`${['Front','Side','Back','Other side'][i]} of the ${names[tcol]} Velour hoodie`})}));
 const sm3=t=>t*t*(3-2*t);
 function drawTurn(a){
   a=((a%360)+360)%360;const f=a/90,i=Math.floor(f)%4,t=f-Math.floor(f),j=(i+1)%4;
