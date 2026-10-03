@@ -119,7 +119,7 @@ h1 em{font-style:italic;color:var(--gold2)}
 .turn{position:relative;height:min(52svh,600px);aspect-ratio:1000/1250;max-width:86vw;margin-top:9vh;border-radius:999px 999px 8px 8px;overflow:hidden;background:radial-gradient(70% 55% at 50% 42%,#e6e4e1,#d4d2cf 70%,#c3c1be);box-shadow:0 60px 120px -40px rgba(0,0,0,.9)}
 .turn img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;will-change:transform,opacity;pointer-events:none;user-select:none}
 .tcols{display:flex;gap:12px;justify-content:center;margin-top:14px;pointer-events:auto}
-.tcols button{width:26px;height:26px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);position:relative}
+.tcols button{width:24px;height:24px;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);position:relative}
 .tcols button::after{content:"";position:absolute;inset:-9px}
 .tcols button[aria-pressed=true]{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--gold)}
 .turn img{transition:opacity .25s}
@@ -172,7 +172,7 @@ h1 em{font-style:italic;color:var(--gold2)}
 .shead h2{font-family:var(--serif);font-weight:500;font-size:clamp(48px,7vw,110px);line-height:.9;margin:12px 0 0}
 .shead h2 em{color:var(--gold2)}
 .shead p{color:var(--muted);max-width:34ch;margin:0}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:56px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px}
 @media (max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
 .pc{position:relative;text-align:left;background:none;border:0;padding:0;cursor:pointer}
 .pc .im{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:4px;background:radial-gradient(70% 55% at 50% 42%,#e6e4e1,#d4d2cf 70%,#c3c1be)}
@@ -286,7 +286,7 @@ footer.in .fbig path{stroke-dashoffset:0;fill:var(--gold)}
 
 <main>
 <section id="hero" aria-label="Velour Drop 01">
-  <div class="arch"><img id="heroImg" alt="Navy Velour hoodie with cream script and stars on the chest"></div>
+  <div class="arch"><img id="heroImg" alt="Back of the black Velour hoodie with a large cream script across the shoulders"></div>
   <img id="heroLogo" class="hlogo" alt="" aria-hidden="true">
   <canvas id="gl" aria-hidden="true"></canvas>
   <div class="hero-copy">
@@ -298,7 +298,7 @@ footer.in .fbig path{stroke-dashoffset:0;fill:var(--gold)}
   <div class="scroll-cue">Scroll<i></i></div>
 </section>
 
-<div class="marq" aria-hidden="true"><div>Velour <i>★</i> Marine <i>★</i> Bordeaux <i>★</i> Charbon <i>★</i> Rose <i>★</i> Crème <i>★</i> Velour <i>★</i> Marine <i>★</i> Bordeaux <i>★</i> Charbon <i>★</i> Rose <i>★</i> Crème <i>★</i></div></div>
+<div class="marq" aria-hidden="true"><div>Velour <i>★</i> Noir <i>★</i> Marine <i>★</i> Bordeaux <i>★</i> Charbon <i>★</i> Rose <i>★</i> Crème <i>★</i> Velour <i>★</i> Noir <i>★</i> Marine <i>★</i> Bordeaux <i>★</i> Charbon <i>★</i> Rose <i>★</i> Crème <i>★</i></div></div>
 
 <section id="colour" aria-label="Colourways">
   <div class="pin" id="cpin">
@@ -312,7 +312,7 @@ footer.in .fbig path{stroke-dashoffset:0;fill:var(--gold)}
 
 <section id="ring" aria-label="The collection in 360 degrees">
   <div class="pin" id="rpin">
-    <div class="ring-head"><div class="eyebrow">Every angle</div><h2>The hoodie, <em>360°.</em></h2><div class="tcols" role="group" aria-label="Turntable colour"><button type="button" data-tcol="marine" aria-pressed="true" aria-label="Marine" style="background:#1c2234"></button><button type="button" data-tcol="bordeaux" aria-pressed="false" aria-label="Bordeaux" style="background:#5a1a24"></button><button type="button" data-tcol="charbon" aria-pressed="false" aria-label="Charbon" style="background:#3a3a3c"></button><button type="button" data-tcol="rose" aria-pressed="false" aria-label="Rose" style="background:#e9b7bd"></button><button type="button" data-tcol="creme" aria-pressed="false" aria-label="Crème" style="background:#ece4d4"></button></div></div>
+    <div class="ring-head"><div class="eyebrow">Every angle</div><h2>The hoodie, <em>360°.</em></h2><div class="tcols" role="group" aria-label="Turntable colour"><button type="button" data-tcol="noir" aria-pressed="false" aria-label="Noir" style="background:#121113"></button><button type="button" data-tcol="marine" aria-pressed="true" aria-label="Marine" style="background:#1c2234"></button><button type="button" data-tcol="bordeaux" aria-pressed="false" aria-label="Bordeaux" style="background:#5a1a24"></button><button type="button" data-tcol="charbon" aria-pressed="false" aria-label="Charbon" style="background:#3a3a3c"></button><button type="button" data-tcol="rose" aria-pressed="false" aria-label="Rose" style="background:#e9b7bd"></button><button type="button" data-tcol="creme" aria-pressed="false" aria-label="Crème" style="background:#ece4d4"></button></div></div>
     <div class="turn" id="turn"></div>
     <div class="views" role="group" aria-label="Choose view"><button type="button" data-ang="0">Front</button><button type="button" data-ang="90">Side</button><button type="button" data-ang="180">Back</button></div>
     <div class="deg"><span id="deg">0°</span><small>Drag or scroll to turn</small></div>
@@ -368,6 +368,7 @@ const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const mob=()=>innerWidth<820;
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a));
 const C=[
+ {id:'noir',name:'Noir',en:'Black',hex:'#121113',bg:'#0b0a0b',imgs:['noir-back','noir-front','noir-side2'],d:'Jet black with a full cream script across the back and on the sleeve.'},
  {id:'marine',name:'Marine',en:'Navy',hex:'#1c2234',bg:'#0e1220',imgs:['navy-front','navy-side','navy-back'],d:'Deep navy, cream script on the chest and down the sleeve.'},
  {id:'bordeaux',name:'Bordeaux',en:'Burgundy',hex:'#5a1a24',bg:'#1a0a0e',imgs:['burg-front','burg-side','burg-back'],d:'Deep wine red with five gold stars over the script.'},
  {id:'charbon',name:'Charbon',en:'Charcoal',hex:'#3a3a3c',bg:'#141415',imgs:['char-front','char-side','char-back'],d:'Washed charcoal with tonal black embroidery. Barely there.'},
@@ -384,7 +385,7 @@ function done(){L.classList.add('fill');setTimeout(()=>{L.classList.add('out');$
 setTimeout(done,reduce?100:2300);
 
 /* ---------- images ---------- */
-$('#heroImg').src=IMG['navy-front'];$('#heroLogo').src=IMG['logo'];$('#detailImg').src=IMG['creme-close'];
+$('#heroImg').src=IMG['noir-back'];$('#heroLogo').src=IMG['logo'];$('#detailImg').src=IMG['creme-close'];
 
 /* ---------- cursor + magnetic ---------- */
 const c1=$('.cur'),c2=$('.cur2');let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
@@ -408,14 +409,14 @@ setC(0);
 $('#sw').addEventListener('click',e=>{const b=e.target.closest('[data-goto]');if(!b)return;const s=$('#colour'),i=+b.dataset.goto;scrollTo({top:s.offsetTop+(s.offsetHeight-innerHeight)*((i+.5)/C.length),behavior:reduce?'auto':'smooth'})});
 
 /* ---------- 360 turntable ---------- */
-const VS={marine:['navy-front','navy-side','navy-back','navy-side2'],rose:['pink-front','pink-side','pink-back','pink-side2'],creme:['creme-front','creme-side','creme-back','creme-side2'],bordeaux:['burg-front','burg-side','burg-back','burg-side2'],charbon:['char-front','char-side','char-back','char-side2']};let tcol='marine';const V=VS.marine;
+const VS={noir:['noir-front','noir-side','noir-back','noir-side2'],marine:['navy-front','navy-side','navy-back','navy-side2'],rose:['pink-front','pink-side','pink-back','pink-side2'],creme:['creme-front','creme-side','creme-back','creme-side2'],bordeaux:['burg-front','burg-side','burg-back','burg-side2'],charbon:['char-front','char-side','char-back','char-side2']};let tcol='marine';const V=VS.marine;
 const turn=$('#turn');turn.innerHTML=V.map((k,i)=>`<img alt="${['Front','Side','Back','Other side'][i]} of the navy Velour hoodie" src="${IMG[k]}" draggable="false">`).join('');
 const vimgs=$$('#turn img');let rot=0,drag=0,vel=0,dragging=false,lx=0,target=null;
 $('#rpin').addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;dragging=true;lx=e.clientX;vel=0;target=null;$('#rpin').setPointerCapture(e.pointerId)});
 $('#rpin').addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lx;lx=e.clientX;drag+=dx*.45;vel=dx*.45});
 $('#rpin').addEventListener('pointerup',()=>dragging=false);$('#rpin').addEventListener('pointercancel',()=>dragging=false);
 $$('.views button').forEach(b=>b.addEventListener('click',()=>{target=+b.dataset.ang}));
-$$('.tcols button').forEach(b=>b.addEventListener('click',()=>{tcol=b.dataset.tcol;$$('.tcols button').forEach(x=>x.setAttribute('aria-pressed',x===b));const names={marine:'navy',rose:'pink',creme:'cream',bordeaux:'burgundy',charbon:'charcoal'};VS[tcol].forEach((k,i)=>{vimgs[i].src=IMG[k];vimgs[i].alt=`${['Front','Side','Back','Other side'][i]} of the ${names[tcol]} Velour hoodie`})}));
+$$('.tcols button').forEach(b=>b.addEventListener('click',()=>{tcol=b.dataset.tcol;$$('.tcols button').forEach(x=>x.setAttribute('aria-pressed',x===b));const names={noir:'black',marine:'navy',rose:'pink',creme:'cream',bordeaux:'burgundy',charbon:'charcoal'};VS[tcol].forEach((k,i)=>{vimgs[i].src=IMG[k];vimgs[i].alt=`${['Front','Side','Back','Other side'][i]} of the ${names[tcol]} Velour hoodie`})}));
 const sm3=t=>t*t*(3-2*t);
 function drawTurn(a){
   a=((a%360)+360)%360;const f=a/90,i=Math.floor(f)%4,t=f-Math.floor(f),j=(i+1)%4;
@@ -427,7 +428,7 @@ function drawTurn(a){
   const near=Math.round(a/90)%4;$$('.views button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.ang===[0,90,180,270][near]));
 }
 /* ---------- lookbook ---------- */
-const LB=[['burg-front','Bordeaux','Front'],['char-front','Charbon','Front'],['navy-front','Marine','Front'],['navy-side','Marine','Sleeve script'],['navy-back','Marine','Back'],['pink-front','Rose','Front'],['creme-close','Crème','Joggers detail']];
+const LB=[['noir-back','Noir','Back script'],['burg-front','Bordeaux','Front'],['char-front','Charbon','Front'],['navy-front','Marine','Front'],['navy-side','Marine','Sleeve script'],['navy-back','Marine','Back'],['pink-front','Rose','Front'],['creme-close','Crème','Joggers detail']];
 $('#track').innerHTML=`<div class="lk intro"><div class="eyebrow">The pieces · Drop 01</div><h2>Built to <em>last.</em></h2><p>Heavyweight hoodies and joggers, finished with Velour script embroidery.</p></div>`+LB.map(([k,c,l])=>`<figure class="lk" style="margin:0"><div class="im"><img alt="${l} in ${c}" src="${IMG[k]}" loading="lazy"></div><figcaption class="cap"><b>${c}</b><span>${l}</span></figcaption></figure>`).join('');
 const look=$('#look'),track=$('#track');
 function sizeLook(){look.style.height=(track.scrollWidth-innerWidth+innerHeight*1.15)+'px'}
