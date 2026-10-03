@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VÉLOUR | Maison de Nuit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sky hero with a chrome 3D crest, an exploded-hoodie scroll stage on night, a lookbook rail, then a sky shop of glass cards with a product sheet and bag. */
+:root{
+  --sky1:#0d2a5c; --sky2:#3f7fcf; --sky3:#bcd8f2; --night:#07090f; --ink:#f3f1ec; --gold:#C9A86A; --muted:#9aa4b5;
+  --glass:rgba(255,255,255,.14); --gline:rgba(255,255,255,.35);
+  --serif:'Bodoni Moda',Didot,Georgia,serif; --script:'Great Vibes',cursive; --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}button{font-family:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+header{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:16px max(20px,4vw)}
+header .pill{display:flex;align-items:center;gap:26px;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4)}
+.wm{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:.42em;text-decoration:none;padding-left:.42em}
+nav{display:flex;gap:24px;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+nav a{text-decoration:none;opacity:.85}
+.bag{background:none;border:0;color:inherit;font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;padding:0}
+/* sky */
+.sky{position:relative;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 48%,var(--sky3) 100%);overflow:hidden}
+.clouds{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#hero{height:100svh;min-height:620px}
+#hero canvas.gl{position:absolute;inset:0;width:100%;height:100%}
+.hero-txt{position:absolute;left:0;right:0;bottom:5vh;text-align:center;pointer-events:none}
+.chrome{display:block;margin:0 auto;width:min(78vw,560px);aspect-ratio:1000/460;background:linear-gradient(180deg,#f2f6fb 0%,#9aa8bc 34%,#1f2c44 50%,#c4cfdd 66%,#4d5c76 100%);-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;filter:drop-shadow(0 6px 0 rgba(20,30,50,.35)) drop-shadow(0 18px 30px rgba(10,20,40,.45))}
+.hero-txt p{margin:6px 0 0;font-size:12px;letter-spacing:.5em;text-transform:uppercase;color:#14284a;font-weight:600}
+.cue{position:absolute;left:50%;bottom:22px;translate:-50% 0;width:1px;height:40px;background:linear-gradient(#fff,transparent);animation:cue 2s ease-in-out infinite;transform-origin:top}
+@keyframes cue{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{opacity:0}}
+.marq{overflow:hidden;white-space:nowrap;background:#fff;color:var(--night);padding:13px 0;font-family:var(--serif);font-style:italic;font-size:26px}
+.marq div{display:inline-block;animation:mq 30s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* explode */
+#explode{position:relative;height:520vh;background:radial-gradient(60% 50% at 50% 50%,#141a28,var(--night) 75%)}
+.pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px;-webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent)}
+.fig{position:absolute;left:50%;top:50%;height:min(84svh,980px);aspect-ratio:920/1260;translate:-50% -50%}
+.pc{position:absolute;inset:0;will-change:transform}
+.pc img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .4s}
+.pc.print img{filter:drop-shadow(0 20px 30px rgba(0,0,0,.6))}
+.lbl{position:absolute;z-index:10;text-shadow:0 2px 8px #000;display:flex;align-items:center;gap:10px;opacity:0;transition:opacity .4s;font-size:12px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;pointer-events:none}
+.lbl.on{opacity:1}
+.lbl i{width:46px;height:1px;background:var(--gold)}
+.lbl b{color:var(--gold);font-weight:600}
+.lbl small{display:block;font-size:11px;letter-spacing:.08em;text-transform:none;color:var(--muted)}
+.xhead{position:absolute;left:max(20px,5vw);top:12vh;max-width:360px}
+.xhead .n{font-size:11px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase}
+.xhead h2{font-family:var(--serif);font-weight:500;font-size:clamp(38px,4.6vw,66px);line-height:1;margin:12px 0 0}
+.xhead h2 em{font-family:var(--script);font-style:normal;font-weight:400;color:var(--gold);font-size:1.2em}
+.sw{position:absolute;left:50%;bottom:4vh;translate:-50% 0;display:flex;gap:12px;opacity:0;transition:opacity .4s}
+.sw.on{opacity:1}
+.sw i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.3);transition:transform .3s}
+.sw i.cur{transform:scale(1.5);box-shadow:0 0 0 1px var(--gold),0 0 0 4px rgba(201,168,106,.3)}
+.cname{position:absolute;right:max(20px,5vw);bottom:4vh;font-family:var(--serif);font-style:italic;font-size:clamp(32px,4vw,56px);opacity:0;transition:opacity .4s}
+.cname.on{opacity:1}
+/* lookbook */
+.look{background:var(--night);padding:100px 0}
+.hd{max-width:1180px;margin:0 auto;padding:0 20px}
+.k{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin:0}
+h2.big{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6vw,80px);line-height:1;margin:14px 0 0}
+h2.big em{font-family:var(--script);font-style:normal;font-weight:400;color:var(--gold);font-size:1.15em}
+.rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:40px max(20px,calc((100vw - 1180px)/2 + 20px)) 10px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.lk{flex:none;width:min(76vw,400px);scroll-snap-align:start;cursor:pointer}
+.lk .ph{position:relative;aspect-ratio:460/630;background:radial-gradient(70% 60% at 50% 45%,#1d2433,#0b0e16);border-radius:6px;overflow:hidden}
+.lk .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .5s}
+.lk .ph img.b{opacity:0}.lk:hover .ph img.b,.lk.flip .ph img.b{opacity:1}.lk:hover .ph img.f,.lk.flip .ph img.f{opacity:0}
+.lk .num{position:absolute;left:16px;top:10px;font-family:var(--serif);font-size:42px;color:var(--gold)}
+.lk b{display:block;margin-top:14px;font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+.lk p{margin:4px 0 0;color:var(--muted);font-size:14px}
+/* shop */
+#shop{padding:110px 20px 120px}
+#shop .hd{padding:0;position:relative;z-index:1}
+.cards{position:relative;z-index:1;max-width:1180px;margin:44px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{position:relative;border-radius:22px;padding:14px 14px 18px;background:var(--glass);border:1px solid var(--gline);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);box-shadow:0 30px 60px -30px rgba(10,30,70,.55),inset 0 1px 0 rgba(255,255,255,.4);cursor:pointer;transition:transform .5s cubic-bezier(.2,.8,.2,1);text-align:left;color:inherit;font:inherit}
+.card:hover{transform:translateY(-8px) rotate(-.6deg)}
+.card .ph{position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,.05))}
+.card .ph img{position:absolute;inset:4% 0 0;width:100%;height:96%;object-fit:contain;transition:opacity .5s,transform .7s}
+.card .ph img.b{opacity:0}.card:hover .ph img.b{opacity:1}.card:hover .ph img.f{opacity:0}
+.card .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding:0 4px}
+.card .row b{font-family:var(--serif);font-style:italic;font-weight:500;font-size:26px}
+.card .row span{font-size:13px;letter-spacing:.1em}
+.card small{display:block;padding:0 4px;color:#e6eef8;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.8}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,10,20,.55);z-index:50;opacity:0;pointer-events:none;transition:opacity .3s}
+.sheet,.drawer{position:fixed;z-index:51;background:rgba(240,245,252,.9);color:#0b1220;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.sheet{left:50%;top:50%;width:min(920px,94vw);max-height:92svh;overflow:auto;translate:-50% -46%;opacity:0;pointer-events:none;transition:opacity .35s,translate .45s cubic-bezier(.2,.8,.2,1);border-radius:24px;display:grid;grid-template-columns:1fr 1fr}
+.sheet.on{opacity:1;pointer-events:auto;translate:-50% -50%}
+.sheet .gal{position:relative;background:linear-gradient(180deg,#cfe0f3,#9fbfe2);min-height:460px}
+.sheet .gal img{position:absolute;inset:4% 0 0;width:100%;height:96%;object-fit:contain;transition:opacity .4s}
+.flip{position:absolute;left:14px;bottom:14px;border:0;background:rgba(255,255,255,.8);border-radius:999px;padding:9px 15px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.sheet .info{padding:30px 28px}
+.sheet h3{font-family:var(--serif);font-weight:500;font-size:38px;line-height:1;margin:8px 0 0}
+.sheet .price{margin-top:8px;font-size:18px}
+.sheet .desc{color:#4a5568;font-size:14px;margin:14px 0 0}
+.lab{font-size:11px;letter-spacing:.3em;text-transform:uppercase;margin:22px 0 10px;display:flex;justify-content:space-between}
+.lab span:last-child{letter-spacing:.05em;text-transform:none;font-family:var(--serif);font-style:italic;font-size:15px;color:#4a5568}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{border:1px solid rgba(11,18,32,.18);background:transparent;border-radius:999px;padding:10px 16px;font-size:13px;cursor:pointer;color:#0b1220}
+.opts button[aria-pressed=true]{background:#0b1220;color:#fff;border-color:#0b1220}
+.dots button{width:30px;height:30px;padding:0;border:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+.dots button[aria-pressed=true]{box-shadow:0 0 0 2px #f0f5fc,0 0 0 3px #0b1220}
+.addbtn{width:100%;margin-top:26px;border:0;background:#0b1220;color:#fff;padding:17px;border-radius:999px;font-size:12px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer}
+.addbtn:disabled{opacity:.4;cursor:not-allowed}
+.x{position:absolute;right:14px;top:12px;border:0;background:rgba(255,255,255,.7);width:38px;height:38px;border-radius:50%;font-size:22px;cursor:pointer;color:#0b1220;z-index:2}
+.drawer{top:0;bottom:0;right:0;width:min(400px,100%);transform:translateX(105%);transition:transform .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:calc(22px + env(safe-area-inset-top,0px)) 22px calc(22px + env(safe-area-inset-bottom,0px))}
+.open .drawer{transform:none}.open .scrim,.sheeton .scrim{opacity:1;pointer-events:auto}
+.dh{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:14px}
+.dh h3{margin:0;font-family:var(--serif);font-weight:500;font-size:28px}
+.dh .x{position:static}
+.items{flex:1;overflow:auto;padding:14px 0;display:flex;flex-direction:column;gap:12px}
+.it{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center}
+.it .th{width:62px;height:80px;background:linear-gradient(180deg,#cfe0f3,#9fbfe2);border-radius:8px;overflow:hidden}
+.it .th img{width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.it small{display:block;color:#4a5568;font-size:12px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:26px;height:26px;border:1px solid rgba(0,0,0,.2);background:none;border-radius:50%;cursor:pointer}
+.empty{color:#4a5568;text-align:center;margin-top:50px;font-family:var(--serif);font-style:italic;font-size:20px}
+.tot{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.1);padding-top:14px}
+.co{display:block;text-align:center;margin-top:12px;background:#0b1220;color:#fff;padding:16px;border-radius:999px;font-size:12px;letter-spacing:.3em;text-transform:uppercase;text-decoration:none}
+footer{background:var(--night);color:var(--muted);text-align:center;padding:60px 20px calc(50px + env(safe-area-inset-bottom,0px));font-size:13px}
+footer .wm{display:block;color:var(--ink);font-size:28px;margin-bottom:12px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));translate:-50% 20px;background:#0b1220;color:#fff;font-size:13px;padding:12px 20px;border-radius:999px;opacity:0;transition:opacity .3s,translate .3s;z-index:70;pointer-events:none}
+.toast.show{opacity:1;translate:-50% 0}
+@media (max-width:860px){
+  nav{display:none} header .pill{gap:16px;padding:9px 16px}
+  .fig{height:min(62svh,700px);translate:-50% -56%}
+  .xhead{top:auto;bottom:16vh;left:20px;right:20px;max-width:none;text-align:center}
+  .xhead h2{font-size:34px}
+  .lbl{display:none}
+  .cname{right:auto;left:50%;translate:-50% 0;top:84px;bottom:auto;font-size:30px}
+  .cards{grid-template-columns:1fr 1fr;gap:12px}
+  .card{padding:8px 8px 12px;border-radius:16px}.card .row b{font-size:18px}.card .row span{font-size:11px;white-space:nowrap}.card small{font-size:10px}
+  .sheet{grid-template-columns:1fr;top:auto;bottom:0;translate:-50% 10%;border-radius:24px 24px 0 0;width:100%}
+  .sheet.on{translate:-50% 0}
+  .sheet .gal{min-height:340px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header><div class="pill"><a class="wm" href="#hero">VÉLOUR</a><nav><a href="#explode">The Set</a><a href="#look">Lookbook</a><a href="#shop">Shop</a></nav></div><div class="pill"><button class="bag" type="button" id="openCart">Bag (<span id="badge">0</span>)</button></div></header>
+
+<section class="sky" id="hero">
+  <canvas class="clouds" id="cl1" aria-hidden="true"></canvas>
+  <canvas class="gl" id="gl" aria-hidden="true"></canvas>
+  <div class="hero-txt"><h1 style="margin:0"><span class="chrome" id="chromeWord" role="img" aria-label="VÉLOUR"></span></h1><p>Drop 01 · Maison de Nuit</p></div>
+  <div class="cue"></div>
+</section>
+<div class="marq" aria-hidden="true"><div>Vélour ✦ Maison de Nuit ✦ Est. MMXXVI ✦ Six colours ✦ Drop 01 ✦ Vélour ✦ Maison de Nuit ✦ Est. MMXXVI ✦ Six colours ✦ Drop 01 ✦ </div></div>
+
+<section id="explode">
+  <div class="pin">
+    <div class="grid-bg"></div>
+    <div class="xhead"><div class="n" id="xn">01 — Anatomy</div><h2 id="xh">Every piece<br><em>considered.</em></h2></div>
+    <div class="fig" id="fig"></div>
+    <div class="sw" id="sw"></div>
+    <div class="cname" id="cname"></div>
+  </div>
+</section>
+
+<section class="look" id="look"><div class="hd"><p class="k">The lookbook</p><h2 class="big">Four ways to <em>wear it.</em></h2></div><div class="rail" id="rail"></div></section>
+
+<section class="sky" id="shop">
+  <canvas class="clouds" id="cl2" aria-hidden="true"></canvas>
+  <div class="hd"><p class="k" style="color:#fff">Drop 01 · The Set</p><h2 class="big">Pick your <em style="color:#fff">colour.</em></h2></div>
+  <div class="cards" id="cards"></div>
+</section>
+<footer><span class="wm">VÉLOUR</span>Maison de Nuit · Est. MMXXVI<br>Prototype store · placeholder prices</footer>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Product">
+  <div class="gal"><button class="x" type="button" id="closeSheet" aria-label="Close">×</button><img id="gF" alt=""><img id="gB" alt="" style="opacity:0"><button class="flip" type="button" id="flip">Show back</button></div>
+  <div class="info">
+    <p class="k" style="color:#8a6a35">VÉLOUR · Maison de Nuit</p>
+    <h3 id="ptitle"></h3><div class="price" id="pprice"></div>
+    <p class="desc">Heavyweight brushed fleece. Puff-print back piece with crest and drip script, graffiti tag across the chest, star on the hood, embroidered crest on the leg.</p>
+    <div class="lab"><span>Piece</span><span></span></div><div class="opts" id="pieces"></div>
+    <div class="lab"><span>Colour</span><span id="cl"></span></div><div class="opts dots" id="cols"></div>
+    <div class="lab"><span>Size</span><span>Oversized fit</span></div><div class="opts" id="sizes"></div>
+    <button class="addbtn" type="button" id="add" disabled>Select a size</button>
+  </div>
+</div>
+<aside class="drawer" aria-label="Bag"><div class="dh"><h3>Your bag</h3><button class="x" type="button" id="closeCart" aria-label="Close">×</button></div><div class="items" id="items"></div><div class="tot"><span>Subtotal</span><span id="sum">0 SAR</span></div><a class="co" href="#hero" id="checkout">Checkout</a></aside>
+<div class="toast" id="toast"></div>
+
+<script type="text/plain" id="three-src">/*THREE_SRC*/</script>
+<script type="module">
+const IMG=/*IMAGES*/{};
+const $=s=>document.querySelector(s);
+const C=[{id:'noir',fr:'Noir',en:'Black',hex:'#1b1a1c'},{id:'bordeaux',fr:'Bordeaux',en:'Burgundy',hex:'#3d0e18'},{id:'blanc',fr:'Blanc',en:'White',hex:'#ece8e1'},{id:'gris',fr:'Gris',en:'Grey',hex:'#bcbbb9'},{id:'brun',fr:'Brun',en:'Brown',hex:'#5a3f2e'},{id:'marine',fr:'Marine',en:'Dark blue',hex:'#1c2234'}];
+const PIECES=[{id:'set',name:'The Set',price:399},{id:'hoodie',name:'The Hoodie',price:249},{id:'shorts',name:'The Shorts',price:179}];
+const SIZES=['S','M','L','XL','XXL'];
+const src=(s,c)=>IMG[s+'-'+c];
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+$('#chromeWord').style.setProperty('--m',`url(${IMG['p-drip']})`);
+
+/* ---------- clouds ---------- */
+function cloudTex(w,h,seed){
+  const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');let s=seed;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+  for(let i=0;i<70;i++){const cx=r()*w,cy=h*(.35+r()*.65),R=60+r()*190;const g=x.createRadialGradient(cx,cy,0,cx,cy,R*1.8);const a=.18+r()*.3;g.addColorStop(0,`rgba(255,255,255,${a})`);g.addColorStop(.6,`rgba(240,246,255,${a*.4})`);g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;for(const dx of [-w,0,w]){x.save();x.translate(dx,0);x.beginPath();x.ellipse(cx,cy,R*1.8,R*.7,0,0,7);x.fill();x.restore()}}
+  return c;
+}
+function clouds(id,speed){
+  const cv=document.getElementById(id),x=cv.getContext('2d');const T=[cloudTex(1600,700,7),cloudTex(1600,700,91)];let W,H;
+  const rs=()=>{W=cv.width=cv.clientWidth;H=cv.height=cv.clientHeight};rs();addEventListener('resize',rs);
+  (function f(t){x.clearRect(0,0,W,H);T.forEach((tx,i)=>{const sp=(i?1.7:1)*speed,off=reduce?0:(t*sp/60)%W;const hh=H*(i?.55:.8),y=H-hh;x.globalAlpha=i?.9:.6;x.drawImage(tx,-off,y,W,hh);x.drawImage(tx,W-off,y,W,hh)});requestAnimationFrame(f)})(0);
+}
+clouds('cl1',.6);clouds('cl2',.4);
+
+/* ---------- explode stage ---------- */
+const P=[
+ {k:'shorts',clip:'polygon(0 55%,100% 55%,100% 100%,0 100%)',to:[0,22,0,0],lbl:['Matching shorts','Crest on the leg, star on the back pocket'],at:[72,82]},
+ {k:'body',clip:'polygon(28% 14%,68% 14%,68% 56%,28% 56%)',to:[0,0,0,0]},
+ {k:'sl',clip:'polygon(0 9%,29% 9%,29% 66%,0 66%)',to:[-26,4,-14,0],lbl:['Drop shoulder','Oversized, ribbed cuff'],at:[8,40]},
+ {k:'sr',clip:'polygon(67% 9%,100% 9%,100% 66%,67% 66%)',to:[26,4,14,0],lbl:['450 GSM fleece','Brushed inside, heavy outside'],at:[92,40]},
+ {k:'hood',clip:'polygon(33% 0,67% 0,66% 19%,34% 19%)',to:[0,-20,0,0],lbl:['Lined hood','Embroidered star monogram'],at:[50,2]},
+ {k:'print',clip:'polygon(31% 19%,67% 19%,67% 54%,31% 54%)',to:[0,-4,0,1],lbl:['Puff print back piece','Crest + drip script + Maison de Nuit'],at:[99,22]},
+];
+const fig=$('#fig');
+fig.innerHTML=P.map(p=>`<div class="pc ${p.k}" data-k="${p.k}" style="clip-path:${p.clip};-webkit-clip-path:${p.clip}"><img alt="" src="${src('b','noir')}"></div>`).join('')+P.filter(p=>p.lbl).map(p=>`<div class="lbl" data-l="${p.k}"><i></i><span><b>${p.lbl[0]}</b><small>${p.lbl[1]}</small></span></div>`).join('');
+$('#sw').innerHTML=C.map(c=>`<i style="background:${c.hex}"></i>`).join('');
+const pcs=[...fig.querySelectorAll('.pc')],lbls=[...fig.querySelectorAll('.lbl')];
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a)),sm=t=>t*t*(3-2*t);
+let curC='',side='b';
+function paint(c,s){if(c===curC&&s===side)return;curC=c;side=s;pcs.forEach(e=>e.querySelector('img').src=src(s,c));
+  $('#sw').querySelectorAll('i').forEach((e,i)=>e.classList.toggle('cur',C[i].id===c));$('#cname').textContent=C.find(x=>x.id===c).fr}
+const HEADS=[['01 — Anatomy','Every piece<br><em>considered.</em>'],['02 — Pulled apart','Built to<br><em>last.</em>'],['03 — Six colours','One set.<br><em>Six moods.</em>']];
+function xframe(){
+  const r=$('#explode').getBoundingClientRect(),p=clamp(-r.top/(r.height-innerHeight));
+  const e=sm(seg(p,.08,.42))*(1-sm(seg(p,.58,.72)));const mob=innerWidth<860;
+  pcs.forEach((el,i)=>{const t=P[i].to;const k=mob?.7:1;el.style.transform=`translate(${t[0]*e*k}%,${t[1]*e*k}%) rotate(${t[2]*e}deg) scale(${1+t[3]*e*.18})`;el.style.zIndex=P[i].k==='print'?5:1});
+  lbls.forEach(l=>{const pp=P.find(x=>x.k===l.dataset.l);const t=pp.to,k=mob?.7:1;l.style.left=(pp.at[0]+t[0]*e*k*.9)+'%';l.style.top=(pp.at[1]+t[1]*e*k*.8)+'%';const rgt=pp.at[0]>50;l.style.transform=rgt?'translateX(0)':'translateX(-100%)';l.style.flexDirection=rgt?'row':'row-reverse';l.classList.toggle('on',e>.85)});
+  const hi=p<.45?(e>.5?1:0):p<.74?1:2;$('#xn').textContent=HEADS[hi][0];if($('#xh').dataset.h!=hi){$('#xh').innerHTML=HEADS[hi][1];$('#xh').dataset.h=hi}
+  const on=p>.74;$('#sw').classList.toggle('on',on);$('#cname').classList.toggle('on',on);
+  if(on){const ci=Math.min(5,Math.floor(seg(p,.75,.98)*6));paint(C[ci].id,ci%2?'f':'b')}else paint('noir','b');
+  requestAnimationFrame(xframe);
+}
+requestAnimationFrame(xframe);
+
+/* ---------- lookbook ---------- */
+const LK=[['01','Over the shoulder','Drip script climbs onto the shoulder.'],['02','Bleed','Giant outline VÉLOUR off the sleeves.'],['03','Constellation','Stars falling down the back and leg.'],['04','Split','A huge crest cut off the side.']];
+$('#rail').innerHTML=LK.map(([n,t,d])=>`<div class="lk" tabindex="0"><div class="ph"><img class="f" alt="Layout ${n} ${t}, front" src="${IMG['l-L'+n.slice(1)+'-f']}"><img class="b" alt="Layout ${n} ${t}, back" src="${IMG['l-L'+n.slice(1)+'-b']}"><span class="num">${n}</span></div><b>${t}</b><p>${d}</p></div>`).join('');
+
+/* ---------- shop ---------- */
+$('#cards').innerHTML=C.map(c=>`<button class="card" type="button" data-open="${c.id}"><div class="ph"><img class="f" alt="The Set in ${c.fr}, front" src="${src('f',c.id)}"><img class="b" alt="" src="${src('b',c.id)}"></div><div class="row"><b>${c.fr}</b><span>399 SAR</span></div><small>${c.en} · The Set</small></button>`).join('');
+let sel={piece:'set',col:'noir',size:null,side:'f'},cart=[];
+function renderSheet(){
+  const pc=PIECES.find(x=>x.id===sel.piece),c=C.find(x=>x.id===sel.col);
+  $('#gF').src=src('f',sel.col);$('#gB').src=src('b',sel.col);$('#gF').alt=`${pc.name} in ${c.fr}, front`;$('#gB').alt=`${pc.name} in ${c.fr}, back`;
+  $('#gF').style.opacity=sel.side==='f'?1:0;$('#gB').style.opacity=sel.side==='b'?1:0;$('#flip').textContent=sel.side==='f'?'Show back':'Show front';
+  $('#ptitle').textContent=pc.name;$('#pprice').textContent=pc.price+' SAR';
+  $('#pieces').innerHTML=PIECES.map(x=>`<button type="button" data-piece="${x.id}" aria-pressed="${x.id===sel.piece}">${x.name.replace('The ','')}</button>`).join('');
+  $('#cols').innerHTML=C.map(x=>`<button type="button" data-col="${x.id}" aria-pressed="${x.id===sel.col}" aria-label="${x.fr}" style="background:${x.hex}"></button>`).join('');
+  $('#cl').textContent=c.fr+' · '+c.en;
+  $('#sizes').innerHTML=SIZES.map(x=>`<button type="button" data-size="${x}" aria-pressed="${x===sel.size}">${x}</button>`).join('');
+  const b=$('#add');b.disabled=!sel.size;b.textContent=sel.size?`Add to bag · ${pc.price} SAR`:'Select a size';
+}
+function renderCart(){
+  $('#badge').textContent=cart.reduce((a,i)=>a+i.q,0);
+  $('#items').innerHTML=cart.length?cart.map((i,k)=>{const pc=PIECES.find(x=>x.id===i.piece),c=C.find(x=>x.id===i.col);return `<div class="it"><div class="th"><img alt="" src="${src('f',i.col)}"></div><div>${pc.name}<small>${c.fr} · ${i.size} · ${pc.price} SAR</small></div><div class="qty"><button type="button" data-q="${k}" data-d="-1" aria-label="Less">−</button>${i.q}<button type="button" data-q="${k}" data-d="1" aria-label="More">+</button></div></div>`}).join(''):'<p class="empty">Your bag is empty.</p>';
+  $('#sum').textContent=cart.reduce((a,i)=>a+i.q*PIECES.find(x=>x.id===i.piece).price,0)+' SAR';
+}
+let tt;function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),1800)}
+const closeAll=()=>{$('#sheet').classList.remove('on');document.body.classList.remove('sheeton','open')};
+document.addEventListener('click',e=>{
+  const g=k=>e.target.closest(k);let el;
+  if(el=g('[data-open]')){sel.col=el.dataset.open;sel.side='f';renderSheet();$('#sheet').classList.add('on');document.body.classList.add('sheeton')}
+  else if(el=g('.lk')){el.classList.toggle('flip')}
+  else if(el=g('[data-piece]')){sel.piece=el.dataset.piece;renderSheet()}
+  else if(el=g('[data-col]')){sel.col=el.dataset.col;renderSheet()}
+  else if(el=g('[data-size]')){sel.size=el.dataset.size;renderSheet()}
+  else if(g('#flip')){sel.side=sel.side==='f'?'b':'f';renderSheet()}
+  else if(g('#add')&&sel.size){const ex=cart.find(i=>i.piece===sel.piece&&i.col===sel.col&&i.size===sel.size);ex?ex.q++:cart.push({piece:sel.piece,col:sel.col,size:sel.size,q:1});renderCart();closeAll();toast('Added to your bag')}
+  else if(el=g('[data-q]')){const i=cart[+el.dataset.q];i.q+= +el.dataset.d;if(i.q<=0)cart.splice(+el.dataset.q,1);renderCart()}
+  else if(g('#openCart')){$('#sheet').classList.remove('on');document.body.classList.remove('sheeton');document.body.classList.add('open')}
+  else if(g('#closeCart')||g('#closeSheet')||g('#scrim')){closeAll()}
+  else if(g('#checkout')){e.preventDefault();toast('On the live store this opens secure Shopify checkout')}
+});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+renderSheet();renderCart();
+
+/* ---------- chrome 3D crest ---------- */
+let THREE;
+try{THREE=await import(URL.createObjectURL(new Blob([document.getElementById('three-src').textContent],{type:'text/javascript'})))}catch(err){console.error(err)}
+if(THREE){
+  const cv=$('#gl');
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.outputColorSpace=THREE.SRGBColorSpace;
+  const scene=new THREE.Scene();const cam=new THREE.PerspectiveCamera(32,1,.1,100);cam.position.set(0,0,9);
+  // sky environment for chrome reflections
+  const envScene=new THREE.Scene();
+  const ec=document.createElement('canvas');ec.width=512;ec.height=256;const ex=ec.getContext('2d');const eg=ex.createLinearGradient(0,0,0,256);eg.addColorStop(0,'#0d2a5c');eg.addColorStop(.45,'#4f8fd8');eg.addColorStop(.52,'#ffffff');eg.addColorStop(.6,'#c9dcf0');eg.addColorStop(1,'#2a3a52');ex.fillStyle=eg;ex.fillRect(0,0,512,256);
+  for(let i=0;i<40;i++){ex.fillStyle=`rgba(255,255,255,${Math.random()*.5})`;ex.beginPath();ex.ellipse(Math.random()*512,110+Math.random()*40,20+Math.random()*60,6+Math.random()*10,0,0,7);ex.fill()}
+  const et=new THREE.CanvasTexture(ec);et.mapping=THREE.EquirectangularReflectionMapping;et.colorSpace=THREE.SRGBColorSpace;
+  scene.environment=new THREE.PMREMGenerator(renderer).fromEquirectangular(et).texture;
+  const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(3,4,6);scene.add(key);
+  const img=new Image();img.src=IMG['p-crest'];await img.decode();
+  const HW=320,HH=400;const hc=document.createElement('canvas');hc.width=HW;hc.height=HH;const hx=hc.getContext('2d');
+  hx.filter='blur(2.2px)';hx.drawImage(img,0,0,HW,HH);const hd=hx.getImageData(0,0,HW,HH).data;
+  const ac=document.createElement('canvas');ac.width=HW;ac.height=HH;const ax=ac.getContext('2d');ax.drawImage(img,0,0,HW,HH);const ad=ax.getImageData(0,0,HW,HH).data;
+  const geo=new THREE.PlaneGeometry(3.2,4,HW-1,HH-1);const pos=geo.attributes.position;
+  for(let i=0;i<pos.count;i++){const px=i%HW,py=Math.floor(i/HW);const h=hd[(py*HW+px)*4+3]/255;pos.setZ(i,h*.16)}
+  geo.computeVertexNormals();
+  const at=new THREE.CanvasTexture(ac);
+  const mat=new THREE.MeshPhysicalMaterial({color:0xf2f5f8,metalness:1,roughness:.13,clearcoat:1,clearcoatRoughness:.05,alphaMap:at,transparent:true,alphaTest:.35,side:THREE.DoubleSide});
+  const crest=new THREE.Mesh(geo,mat);const grp=new THREE.Group();grp.add(crest);
+  const back=new THREE.Mesh(geo,mat);back.rotation.y=Math.PI;back.position.z=-.002;grp.add(back);
+  scene.add(grp);
+  function rs(){const w=cv.clientWidth,h=cv.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();const m=w<860;grp.scale.setScalar(m?.5:.68);grp.position.y=m?.75:.62}
+  addEventListener('resize',rs);rs();
+  let mx=0,my=0;addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+  (function f(t){requestAnimationFrame(f);if(scrollY>innerHeight*1.1)return;const s=t/1000;
+    grp.rotation.y=reduce?.3:s*.7+mx*.6;grp.rotation.x=Math.sin(s*.6)*.08+my*.3;grp.position.y+=((innerWidth<860?.75:.62)+Math.sin(s*1.1)*.08-grp.position.y)*.1;
+    renderer.render(scene,cam)})(0);
+}
+</script>
+</body>
+</html>
