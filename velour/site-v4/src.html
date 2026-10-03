@@ -55,8 +55,9 @@ nav a:hover{opacity:1}
 /* hero */
 #hero{position:relative;height:100svh;min-height:640px;overflow:hidden}
 .arch{position:absolute;right:max(20px,7vw);top:50%;width:min(36vw,520px);aspect-ratio:3/4.4;translate:0 -46%;border-radius:999px 999px 6px 6px;overflow:hidden;box-shadow:0 60px 120px -40px rgba(0,0,0,.9)}
-.arch img{width:100%;height:115%;object-fit:cover;object-position:50% 20%;will-change:transform}
-.arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(12,10,9,.6))}
+.arch{background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3)}
+.arch img{width:100%;height:100%;object-fit:contain;padding:12% 6% 4%;will-change:transform;filter:drop-shadow(0 30px 30px rgba(0,0,0,.25))}
+.arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 75%,rgba(12,10,9,.35))}
 #gl{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
 .hero-copy{position:absolute;left:max(20px,6vw);bottom:9vh;z-index:3;max-width:640px}
 .eyebrow{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold)}
@@ -88,7 +89,8 @@ h1 em{font-style:italic;color:var(--gold2)}
 #colour .pin{position:sticky;top:0;height:100svh;overflow:hidden;transition:background-color .8s var(--ease)}
 .giant{position:absolute;left:0;right:0;top:50%;translate:0 -50%;text-align:center;font-family:var(--serif);font-style:italic;font-weight:500;font-size:min(26vw,380px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(245,241,234,.22);white-space:nowrap;pointer-events:none;will-change:transform}
 .frame{position:absolute;left:50%;top:50%;width:min(34vw,440px);aspect-ratio:784/1168;translate:-50% -50%;border-radius:4px;overflow:hidden;box-shadow:0 60px 120px -30px rgba(0,0,0,.85)}
-.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:circle(0% at 50% 50%);will-change:clip-path}
+.frame{background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3)}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6%;background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3);clip-path:circle(0% at 50% 50%);will-change:clip-path}
 .frame img.show{clip-path:circle(150% at 50% 50%)}
 .cinfo{position:absolute;left:max(20px,6vw);top:50%;translate:0 -50%;max-width:300px}
 .cinfo .idx{font-family:var(--serif);font-size:20px;color:var(--gold)}
@@ -108,7 +110,8 @@ h1 em{font-style:italic;color:var(--gold2)}
 #ring .pin:active{cursor:grabbing}
 .stage3d{position:relative;width:300px;height:447px;margin-top:6vh;transform-style:preserve-3d;will-change:transform}
 .card3d{position:absolute;inset:0;border-radius:6px;overflow:hidden;backface-visibility:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.08)}
-.card3d img{width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.card3d{background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3)}
+.card3d img{width:100%;height:100%;object-fit:contain;padding:8%;pointer-events:none;user-select:none}
 .ring-head{position:absolute;top:13vh;left:0;right:0;text-align:center;z-index:2;pointer-events:none}
 .ring-head h2{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5vw,74px);line-height:1;margin:12px 0 0}
 .ring-head h2 em{color:var(--gold2)}
@@ -138,7 +141,8 @@ h1 em{font-style:italic;color:var(--gold2)}
 .lk{flex:none;width:min(30vw,420px)}
 .lk:nth-child(even){margin-top:14vh}
 .lk .im{aspect-ratio:784/1168;overflow:hidden;border-radius:4px}
-.lk .im img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);will-change:transform}
+.lk .im{background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3)}
+.lk .im img{width:100%;height:100%;object-fit:contain;padding:7%;transform:scale(1.15);will-change:transform}
 .lk .cap{display:flex;justify-content:space-between;margin-top:14px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
 .lk .cap b{font-family:var(--serif);font-size:22px;letter-spacing:0;text-transform:none;font-style:italic;color:var(--ink);font-weight:500}
 .lk.intro{width:min(34vw,460px);align-self:center;margin:0}
@@ -153,11 +157,11 @@ h1 em{font-style:italic;color:var(--gold2)}
 .shead p{color:var(--muted);max-width:34ch;margin:0}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:56px}
 .pc{position:relative;text-align:left;background:none;border:0;padding:0;cursor:pointer}
-.pc .im{position:relative;aspect-ratio:784/1168;overflow:hidden;border-radius:4px;background:var(--stone)}
-.pc .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .6s var(--ease),transform 1s var(--ease)}
+.pc .im{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:4px;background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3)}
+.pc .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8% 6% 4%;transition:opacity .6s var(--ease),transform 1s var(--ease)}
 .pc .im img.b{opacity:0}
 .pc:hover .im img{transform:scale(1.05)}.pc:hover .im img.b{opacity:1}
-.pc .tag{position:absolute;left:12px;top:12px;z-index:1;font-size:10px;letter-spacing:.24em;text-transform:uppercase;background:rgba(12,10,9,.55);backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px}
+.pc .tag{position:absolute;left:12px;top:12px;z-index:1;font-size:10px;letter-spacing:.24em;text-transform:uppercase;background:rgba(12,10,9,.75);backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px}
 .pc .qv{position:absolute;left:12px;right:12px;bottom:12px;z-index:1;text-align:center;font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;background:var(--ink);color:var(--bg);border-radius:999px;padding:12px;transform:translateY(140%);transition:transform .5s var(--ease)}
 .pc:hover .qv,.pc:focus-visible .qv{transform:none}
 .pc .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
@@ -169,12 +173,12 @@ h1 em{font-style:italic;color:var(--gold2)}
 .sheeton .scrim,.open .scrim{opacity:1;pointer-events:auto}
 .sheet{position:fixed;z-index:61;left:50%;top:50%;width:min(980px,94vw);max-height:92svh;overflow:auto;translate:-50% -46%;opacity:0;pointer-events:none;background:var(--bg2);border:1px solid var(--line);border-radius:20px;display:grid;grid-template-columns:1fr 1fr;transition:opacity .4s,translate .6s var(--ease)}
 .sheeton .sheet{opacity:1;pointer-events:auto;translate:-50% -50%}
-.sheet .gal{position:relative;min-height:520px;background:var(--stone)}
-.sheet .gal img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s}
+.sheet .gal{position:relative;min-height:520px;background:radial-gradient(70% 55% at 50% 42%,#efe9e0,#cfc7bb 70%,#b9b0a3)}
+.sheet .gal img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8% 6% 14%;transition:opacity .5s}
 .sheet .thumbs{position:absolute;left:14px;bottom:14px;display:flex;gap:8px}
 .sheet .thumbs button{width:52px;height:70px;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.3);padding:0;cursor:pointer;background:none}
 .sheet .thumbs button[aria-pressed=true]{border-color:var(--gold)}
-.sheet .thumbs img{width:100%;height:100%;object-fit:cover}
+.sheet .thumbs button{background:#e4ddd2}.sheet .thumbs img{width:100%;height:100%;object-fit:contain}
 .sheet .info{padding:36px 32px}
 .sheet h3{font-family:var(--serif);font-weight:500;font-size:46px;line-height:1;margin:10px 0 0}
 .sheet .price{font-size:18px;margin-top:10px}
@@ -199,7 +203,7 @@ h1 em{font-style:italic;color:var(--gold2)}
 .dh .x{position:static;background:transparent}
 .items{flex:1;overflow:auto;padding:16px 0;display:flex;flex-direction:column;gap:14px}
 .it{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center}
-.it img{width:64px;height:86px;object-fit:cover;border-radius:6px}
+.it img{width:64px;height:86px;object-fit:contain;border-radius:6px;background:#e4ddd2}
 .it .nm{font-family:var(--serif);font-size:20px;line-height:1.1}
 .it small{display:block;color:var(--muted);font-size:12px}
 .qty{display:flex;align-items:center;gap:6px}
@@ -258,13 +262,13 @@ footer.in .fbig path{stroke-dashoffset:0;fill:var(--gold)}
 
 <header id="hd">
   <a class="brand" href="#hero" aria-label="Velour home"><!--LOGO--></a>
-  <nav aria-label="Main"><a href="#colour">Colours</a><a href="#ring">360°</a><a href="#look">Lookbook</a><a href="#shop">Shop</a></nav>
+  <nav aria-label="Main"><a href="#colour">Colours</a><a href="#ring">360°</a><a href="#look">Pieces</a><a href="#shop">Shop</a></nav>
   <button class="bagbtn" type="button" id="openBag" aria-label="Open bag">Bag <b id="badge">0</b></button>
 </header>
 
 <main>
 <section id="hero" aria-label="Velour Drop 01">
-  <div class="arch"><img id="heroImg" alt="Model in the navy Velour set leaning on a stone wall"></div>
+  <div class="arch"><img id="heroImg" alt="Bordeaux Velour hoodie with five gold stars and script embroidery"></div>
   <canvas id="gl" aria-hidden="true"></canvas>
   <div class="hero-copy">
     <div class="eyebrow">Drop 01 · Heavyweight fleece</div>
@@ -306,7 +310,7 @@ footer.in .fbig path{stroke-dashoffset:0;fill:var(--gold)}
   </div>
 </section>
 
-<section id="look" aria-label="Lookbook">
+<section id="look" aria-label="The pieces">
   <div class="pin"><div class="track" id="track"></div></div>
 </section>
 
@@ -343,11 +347,11 @@ const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const mob=()=>innerWidth<820;
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a));
 const C=[
- {id:'marine',name:'Marine',en:'Navy',hex:'#1c2234',bg:'#0e1220',imgs:['marine-1','marine-2'],d:'Deep navy with cream script. The everyday uniform.'},
- {id:'bordeaux',name:'Bordeaux',en:'Burgundy',hex:'#4a1420',bg:'#1a0a0e',imgs:['bordeaux-1','bordeaux-2'],d:'Dark wine red. Five gold stars on the chest and leg.'},
- {id:'charbon',name:'Charbon',en:'Charcoal',hex:'#3a3a3c',bg:'#141415',imgs:['charbon-1'],d:'Washed charcoal with tonal embroidery. Barely there.'},
- {id:'rose',name:'Rose',en:'Pink',hex:'#e9b7bd',bg:'#2a1a1d',imgs:['rose-1'],d:'Soft rose with white script. Made to stand out.'},
- {id:'creme',name:'Crème',en:'Cream',hex:'#ece4d4',bg:'#1e1b16',imgs:['creme-2','creme-1'],d:'Ivory fleece, gold thread, gold-tipped cords.'}
+ {id:'marine',name:'Marine',en:'Navy',hex:'#1c2234',bg:'#0e1220',imgs:['p-marine-set'],d:'Deep navy with cream script. The everyday uniform.'},
+ {id:'bordeaux',name:'Bordeaux',en:'Burgundy',hex:'#4a1420',bg:'#1a0a0e',imgs:['p-bordeaux-set','p-bordeaux-hoodie','p-bordeaux-joggers'],d:'Dark wine red. Five gold stars on the chest and leg.'},
+ {id:'charbon',name:'Charbon',en:'Charcoal',hex:'#3a3a3c',bg:'#141415',imgs:['p-charbon-set','p-charbon-hoodie'],d:'Washed charcoal with tonal embroidery. Barely there.'},
+ {id:'rose',name:'Rose',en:'Pink',hex:'#e9b7bd',bg:'#2a1a1d',imgs:['p-rose-set','p-rose-hoodie'],d:'Soft rose with white script. Made to stand out.'},
+ {id:'creme',name:'Crème',en:'Cream',hex:'#ece4d4',bg:'#1e1b16',imgs:['p-creme-joggers','creme-2'],d:'Ivory fleece, gold thread, gold-tipped cords.'}
 ];
 const PIECES=[{id:'set',name:'The Set',price:399},{id:'hoodie',name:'The Hoodie',price:249},{id:'joggers',name:'The Joggers',price:199}];
 const SIZES=['S','M','L','XL','XXL'];
@@ -359,7 +363,7 @@ function done(){L.classList.add('fill');setTimeout(()=>{L.classList.add('out');d
 setTimeout(done,reduce?100:2300);
 
 /* ---------- images ---------- */
-$('#heroImg').src=IMG['marine-2'];$('#detailImg').src=IMG['creme-2'];
+$('#heroImg').src=IMG['p-bordeaux-hoodie'];$('#detailImg').src=IMG['creme-2'];
 
 /* ---------- cursor + magnetic ---------- */
 const c1=$('.cur'),c2=$('.cur2');let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
@@ -383,7 +387,7 @@ setC(0);
 $('#sw').addEventListener('click',e=>{const b=e.target.closest('[data-goto]');if(!b)return;const s=$('#colour'),i=+b.dataset.goto;scrollTo({top:s.offsetTop+(s.offsetHeight-innerHeight)*((i+.5)/C.length),behavior:reduce?'auto':'smooth'})});
 
 /* ---------- 360 ring ---------- */
-const R=['marine-1','bordeaux-1','charbon-1','rose-1','creme-1','marine-2','bordeaux-2','creme-2'];
+const R=['p-marine-set','p-bordeaux-hoodie','p-charbon-set','p-rose-hoodie','p-creme-joggers','p-bordeaux-set','p-charbon-hoodie','p-rose-set','p-bordeaux-joggers'];
 const st=$('#stage3d');st.innerHTML=R.map((k,i)=>`<div class="card3d" style="--i:${i}"><img alt="" src="${IMG[k]}" draggable="false"></div>`).join('');
 const cards=$$('.card3d');let rot=0,drag=0,vel=0,dragging=false,lx=0;
 function radius(){return mob()?280:600}
@@ -392,8 +396,8 @@ $('#rpin').addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.cli
 $('#rpin').addEventListener('pointerup',()=>dragging=false);$('#rpin').addEventListener('pointercancel',()=>dragging=false);
 
 /* ---------- lookbook ---------- */
-const LB=[['marine-2','Marine','Look 01'],['bordeaux-2','Bordeaux','Look 02'],['creme-1','Crème','Look 03'],['charbon-1','Charbon','Look 04'],['rose-1','Rose','Look 05'],['marine-1','Marine','Look 06']];
-$('#track').innerHTML=`<div class="lk intro"><div class="eyebrow">Lookbook · Drop 01</div><h2>Worn <em>slow.</em></h2><p>Six looks, five colours, one set built for the long nights.</p></div>`+LB.map(([k,c,l])=>`<figure class="lk" style="margin:0"><div class="im"><img alt="${l}: Velour set in ${c}" src="${IMG[k]}" loading="lazy"></div><figcaption class="cap"><b>${c}</b><span>${l}</span></figcaption></figure>`).join('');
+const LB=[['p-bordeaux-hoodie','Bordeaux','The Hoodie'],['p-bordeaux-joggers','Bordeaux','The Joggers'],['p-charbon-hoodie','Charbon','The Hoodie'],['p-creme-joggers','Crème','The Joggers'],['p-rose-hoodie','Rose','The Hoodie'],['p-marine-set','Marine','The Set']];
+$('#track').innerHTML=`<div class="lk intro"><div class="eyebrow">The pieces · Drop 01</div><h2>Built to <em>last.</em></h2><p>Hoodie and joggers, sold as a set or on their own. Five colours.</p></div>`+LB.map(([k,c,l])=>`<figure class="lk" style="margin:0"><div class="im"><img alt="${l} in ${c}" src="${IMG[k]}" loading="lazy"></div><figcaption class="cap"><b>${c}</b><span>${l}</span></figcaption></figure>`).join('');
 const look=$('#look'),track=$('#track');
 function sizeLook(){look.style.height=(track.scrollWidth-innerWidth+innerHeight*1.15)+'px'}
 addEventListener('resize',sizeLook);setTimeout(sizeLook,50);
@@ -434,7 +438,7 @@ function loop(){
 requestAnimationFrame(loop);
 
 /* ---------- shop ---------- */
-$('#grid').innerHTML=C.map(c=>`<button class="pc" type="button" data-open="${c.id}" aria-label="Quick view: The Set in ${c.name}"><div class="im"><span class="tag">${c.id==='bordeaux'?'Bestseller':c.id==='rose'?'New':'Drop 01'}</span><img class="f" alt="" src="${IMG[c.imgs[0]]}" loading="lazy"><img class="b" alt="" src="${IMG[c.imgs[1]||c.imgs[0]]}" loading="lazy"><span class="qv">Quick view</span></div><div class="row"><b>${c.name}</b><span>from 199 SAR</span></div><small>${c.en} · The Set · 399 SAR</small></button>`).join('');
+$('#grid').innerHTML=C.map(c=>`<button class="pc" type="button" data-open="${c.id}" aria-label="Quick view: The Set in ${c.name}"><div class="im"><span class="tag" style="color:#f5f1ea">${c.id==='bordeaux'?'Bestseller':c.id==='rose'?'New':'Drop 01'}</span><img class="f" alt="" src="${IMG[c.imgs[0]]}" loading="lazy"><img class="b" alt="" src="${IMG[c.imgs[1]||c.imgs[0]]}" loading="lazy"><span class="qv">Quick view</span></div><div class="row"><b>${c.name}</b><span>from 199 SAR</span></div><small>${c.en} · The Set · 399 SAR</small></button>`).join('');
 let sel={piece:'set',col:'marine',size:null,img:0},cart=[];
 function renderSheet(){
   const c=C.find(x=>x.id===sel.col),pc=PIECES.find(x=>x.id===sel.piece);

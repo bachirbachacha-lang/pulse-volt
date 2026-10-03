@@ -7,7 +7,7 @@ logo=f'<svg viewBox="0 0 1000 560" aria-hidden="true" focusable="false"><g fill=
 s=s.replace('<!--LOGO-->',logo,1).replace('<!--LOGO-->',logo.replace('pathLength="1" ',''),1)
 s=s.replace('<!--BIGLOGO-->',f'<svg class="fbig" viewBox="0 0 1000 560" role="img" aria-label="Velour"><g>{inner}</g></svg>')
 I={}
-for f in sorted(os.listdir('img')):I[f[:-5]]='data:image/webp;base64,'+base64.b64encode(open('img/'+f,'rb').read()).decode()
+for f in sorted(os.listdir('img2')):I[f[:-5]]='data:image/webp;base64,'+base64.b64encode(open('img2/'+f,'rb').read()).decode()
 im=Image.open('velour-logo-3stars-gold.png').resize((1000,560),Image.LANCZOS);b=io.BytesIO();im.save(b,'PNG',optimize=True)
 I['logo']='data:image/png;base64,'+base64.b64encode(b.getvalue()).decode()
 s=s.replace('/*IMAGES*/{}',json.dumps(I)).replace('/*THREE_SRC*/',open('/home/user/pulse-volt/js/vendor/three.min.js').read())
