@@ -1,0 +1,100 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="f2.css"><link rel="stylesheet" href="f3.css"><link rel="stylesheet" href="f5.css">
+<style>
+*{margin:0;box-sizing:border-box}
+body{background:transparent;font-family:Inter,sans-serif}
+.m{display:inline-block}
+.sheet{width:1080px;height:1350px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr 1fr 1fr;background:#0d0c0d;color:#EFE6D6}
+.sheet .hd{grid-column:1/3;padding:40px 44px 10px;display:flex;justify-content:space-between;align-items:end}
+.sheet .hd b{font-family:'Bodoni Moda';font-weight:500;font-size:34px;letter-spacing:.4em}
+.sheet .hd span{font-size:13px;letter-spacing:.3em;opacity:.55}
+.t{position:relative;display:flex;align-items:center;justify-content:center;border-top:1px solid #ffffff14}
+.t:nth-child(odd){border-left:1px solid #ffffff14}
+.t .n{position:absolute;left:22px;top:18px;font:600 12px Inter;letter-spacing:.25em;opacity:.5}
+.t .u{position:absolute;right:22px;top:18px;font:500 12px Inter;letter-spacing:.15em;opacity:.45}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+ <filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+ <symbol id="star5" viewBox="-10 -10 20 20"><path d="M0,-9.5 2.8,-3 9.5,-2.9 4.3,1.6 6,8.6 0,4.8 -6,8.6 -4.3,1.6 -9.5,-2.9 -2.8,-3Z"/></symbol>
+ <symbol id="star4" viewBox="-100 -100 200 200"><path d="M0,-96 C9,-28 28,-9 96,0 C28,9 9,28 0,96 C-9,28 -28,9 -96,0 C-28,-9 -9,-28 0,-96Z"/></symbol>
+ <!-- CREST -->
+ <mask id="crestMask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="500">
+  <rect width="400" height="500" fill="#000"/>
+  <path d="M200,62 C262,80 318,80 356,70 L356,262 C356,370 282,428 200,462 C118,428 44,370 44,262 L44,70 C82,80 138,80 200,62Z" fill="#fff"/>
+  <path d="M200,80 C258,96 306,96 340,88 L340,262 C340,358 274,410 200,442 C126,410 60,358 60,262 L60,88 C94,96 142,96 200,80Z" fill="#000"/>
+  <path d="M200,92 C254,107 298,107 328,100 L328,262 C328,350 268,398 200,428 C132,398 72,350 72,262 L72,100 C102,107 146,107 200,92Z" fill="#fff"/>
+  <path d="M200,99 C252,113 293,113 321,107 L321,262 C321,345 264,391 200,420 C136,391 79,345 79,262 L79,107 C107,113 148,113 200,99Z" fill="#000"/>
+  <g transform="translate(200,30)" fill="#fff"><use href="#star5" x="-14" y="-14" width="28" height="28"/><use href="#star5" x="-68" y="-6" width="24" height="24"/><use href="#star5" x="44" y="-6" width="24" height="24"/><use href="#star5" x="-116" y="8" width="20" height="20"/><use href="#star5" x="96" y="8" width="20" height="20"/></g>
+  <g stroke="#fff" stroke-width="9" stroke-linecap="round"><path d="M118,150 L282,358"/><path d="M282,150 L118,358"/></g>
+  <path fill="#fff" d="M104,132 L132,140 L124,168Z M296,132 L268,140 L276,168Z"/>
+  <g stroke="#fff" stroke-width="7" stroke-linecap="round"><path d="M248,330 L290,300 M152,330 L110,300"/></g>
+  <circle cx="200" cy="248" r="76" fill="#000"/>
+  <text x="200" y="300" text-anchor="middle" font-family="Grenze Gotisch" font-weight="900" font-size="170" fill="#fff">V</text>
+  <path d="M70,370 L330,370 L312,392 L330,414 L70,414 L88,392Z" fill="#fff"/>
+  <text x="200" y="402" text-anchor="middle" font-family="Inter" font-weight="700" font-size="22" letter-spacing="9" fill="#000">VÉLOUR</text>
+ </mask>
+ <symbol id="crest" viewBox="0 0 400 500"><g filter="url(#rough)"><rect width="400" height="500" fill="#fff" mask="url(#crestMask)"/></g></symbol>
+ <!-- QUATREFOIL -->
+ <mask id="qMask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="400">
+  <rect width="400" height="400" fill="#000"/>
+  <g fill="#fff"><circle cx="200" cy="118" r="84"/><circle cx="200" cy="282" r="84"/><circle cx="118" cy="200" r="84"/><circle cx="282" cy="200" r="84"/></g>
+  <g fill="#000"><circle cx="200" cy="118" r="72"/><circle cx="200" cy="282" r="72"/><circle cx="118" cy="200" r="72"/><circle cx="282" cy="200" r="72"/></g>
+  <g fill="#fff"><circle cx="200" cy="118" r="62"/><circle cx="200" cy="282" r="62"/><circle cx="118" cy="200" r="62"/><circle cx="282" cy="200" r="62"/></g>
+  <g fill="#000"><circle cx="200" cy="118" r="57"/><circle cx="200" cy="282" r="57"/><circle cx="118" cy="200" r="57"/><circle cx="282" cy="200" r="57"/></g>
+  <rect x="152" y="152" width="96" height="96" transform="rotate(45 200 200)" fill="#fff"/>
+  <text x="200" y="236" text-anchor="middle" font-family="Grenze Gotisch" font-weight="900" font-size="104" fill="#000">V</text>
+ </mask>
+ <symbol id="quatre" viewBox="0 0 400 400"><g filter="url(#rough)"><rect width="400" height="400" fill="#fff" mask="url(#qMask)"/></g></symbol>
+ <!-- OUTLINE TAG -->
+ <mask id="tagMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="360">
+  <rect width="1000" height="360" fill="#000"/>
+  <text x="500" y="240" text-anchor="middle" font-family="Sedgwick Ave Display" font-size="230" fill="#fff" stroke="#fff" stroke-width="18" stroke-linejoin="round">Vélour</text>
+  <text x="500" y="240" text-anchor="middle" font-family="Sedgwick Ave Display" font-size="230" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round">Vélour</text>
+ </mask>
+ <symbol id="tag" viewBox="0 0 1000 360"><rect width="1000" height="360" fill="#fff" mask="url(#tagMask)"/></symbol>
+ <!-- DRIP SCRIPT -->
+ <symbol id="drip" viewBox="0 0 1000 460"><g fill="#fff"><text x="500" y="250" text-anchor="middle" font-family="Yellowtail" font-size="270" transform="rotate(-7 500 250)">Vélour</text><g id="dripG"></g></g></symbol>
+ <!-- STAR MONO -->
+ <mask id="smMask" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="400"><rect width="400" height="400" fill="#000"/><use href="#star4" x="40" y="40" width="320" height="320" fill="#fff"/><circle cx="200" cy="200" r="58" fill="#000"/><circle cx="200" cy="200" r="50" fill="#fff"/><text x="200" y="240" text-anchor="middle" font-family="Grenze Gotisch" font-weight="900" font-size="96" fill="#000">V</text></mask>
+ <symbol id="starmono" viewBox="0 0 400 400"><g filter="url(#rough)"><rect width="400" height="400" fill="#fff" mask="url(#smMask)"/></g></symbol>
+ <!-- BACK PIECE -->
+ <mask id="backTag" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="1300"><rect width="1200" height="1300" fill="#000"/>
+  <text x="600" y="1030" text-anchor="middle" font-family="Sedgwick Ave Display" font-size="104" letter-spacing="6" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round">Maison de Nuit</text>
+  <text x="600" y="1030" text-anchor="middle" font-family="Sedgwick Ave Display" font-size="104" letter-spacing="6" fill="#000" stroke="#000" stroke-width="3" stroke-linejoin="round">Maison de Nuit</text></mask>
+ <symbol id="backpiece" viewBox="0 0 1200 1300">
+  <use href="#crest" x="460" y="0" width="280" height="350"/>
+  <use href="#drip" x="40" y="330" width="1120" height="515"/>
+  <rect width="1200" height="1300" fill="#fff" mask="url(#backTag)"/>
+  <g fill="#fff"><text x="600" y="1130" text-anchor="middle" font-family="Inter" font-weight="700" font-size="34" letter-spacing="20">EST · MMXXVI</text>
+   <use href="#star5" x="300" y="1100" width="34" height="34"/><use href="#star5" x="866" y="1100" width="34" height="34"/>
+   <text x="600" y="1210" text-anchor="middle" font-family="Bodoni Moda" font-style="italic" font-size="34" opacity=".9">for the long nights and the slow mornings that follow</text></g>
+ </symbol>
+</defs></svg>
+
+<!-- print masks (white on transparent) -->
+<div class="m" id="m-crest"><svg width="800" height="1000" viewBox="0 0 400 500"><use href="#crest"/></svg></div>
+<div class="m" id="m-quatre"><svg width="800" height="800" viewBox="0 0 400 400"><use href="#quatre"/></svg></div>
+<div class="m" id="m-tag"><svg width="1600" height="576" viewBox="0 0 1000 360"><use href="#tag"/></svg></div>
+<div class="m" id="m-drip"><svg width="1600" height="736" viewBox="0 0 1000 460"><use href="#drip"/></svg></div>
+<div class="m" id="m-star"><svg width="800" height="800" viewBox="0 0 400 400"><use href="#starmono"/></svg></div>
+<div class="m" id="m-back"><svg width="1200" height="1300" viewBox="0 0 1200 1300"><use href="#backpiece"/></svg></div>
+
+<!-- presentation sheet -->
+<div class="sheet" id="sheet">
+ <div class="hd"><b>VÉLOUR</b><span>NEW IDENTITY · DROP 01</span></div>
+ <div class="t" style="background:#141213"><span class="n">A · THE CREST</span><span class="u">chest / thigh embroidery</span><svg width="260" height="325" viewBox="0 0 400 500"><use href="#crest"/></svg></div>
+ <div class="t" style="background:#3d0e18"><span class="n">B · DRIP SCRIPT</span><span class="u">back / hood</span><svg width="460" height="212" viewBox="0 0 1000 460"><use href="#drip"/></svg></div>
+ <div class="t" style="background:#1c2234"><span class="n">C · OUTLINE TAG</span><span class="u">across chest</span><svg width="470" height="170" viewBox="0 0 1000 360"><use href="#tag"/></svg></div>
+ <div class="t" style="background:#4a3426"><span class="n">D · QUATREFOIL</span><span class="u">leg / sleeve patch</span><svg width="250" height="250" viewBox="0 0 400 400"><use href="#quatre"/></svg></div>
+ <div class="t" style="background:#141213"><span class="n">E · STAR MONOGRAM</span><span class="u">cuff / back pocket</span><svg width="240" height="240" viewBox="0 0 400 400"><use href="#starmono"/></svg></div>
+ <div class="t" style="background:#2a2829"><span class="n">F · THE BACK PIECE</span><span class="u">full back, puff print</span><svg width="300" height="325" viewBox="0 0 1200 1300"><use href="#backpiece"/></svg></div>
+</div>
+<script>
+window.makeDrips=function(){
+ const D=[[262,272,20,58,1],[392,266,22,118,1],[481,255,18,46,0],[631,237,20,92,1],[697,228,18,66,0]];let out='';
+ for(const [cx,by,w,len,drop] of D){const top=by-14;
+  out+=`<path d="M${cx-w/2-5},${top} C${cx-w/2},${top+8} ${cx-w/2},${top+len*.55} ${cx-w*.36},${top+len} a${w*.36},${w*.36} 0 0 0 ${w*.72},0 C${cx+w/2},${top+len*.55} ${cx+w/2},${top+8} ${cx+w/2+5},${top}Z"/>`;
+  if(drop)out+=`<ellipse cx="${cx}" cy="${top+len+w*.9+10}" rx="${w*.28}" ry="${w*.38}"/>`;}
+ document.getElementById('dripG').innerHTML=out;
+};
+</script></body></html>
