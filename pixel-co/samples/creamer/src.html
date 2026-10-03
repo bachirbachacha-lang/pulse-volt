@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>swirl | Coffee Creamer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Readex+Pro:wght@300;400;500;600;700&display=swap">
+<style>
+/* Layout: fixed 3D studio stage (bottles, mug, beans) behind four scroll chapters, then a light shop with a 3-pack builder, how-to, reviews and a cart. Sample brand by Pixel & Co. */
+:root{
+  --bg:#F3EBDF; --paper:#FBF6EF; --ink:#2B1D14; --muted:#7A6555; --accent:#B5703C; --deep:#5A3520; --sage:#6E8F68; --line:rgba(43,29,20,.12);
+  --serif:'Fraunces',Georgia,serif; --body:'Readex Pro',Tahoma,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
+a{color:inherit}
+button{font-family:var(--body)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.sample{position:relative;z-index:21;background:var(--ink);color:var(--paper);text-align:center;font-size:13px;padding:7px 16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px max(20px,4vw);background:rgba(243,235,223,.6);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-family:var(--serif);font-style:italic;font-weight:600;font-size:32px;letter-spacing:-.02em;text-decoration:none;line-height:1}
+.logo b{color:var(--accent);font-weight:600}
+nav{display:flex;gap:26px;font-size:14px;letter-spacing:.12em;text-transform:uppercase}
+nav a{text-decoration:none;color:var(--muted)}
+.hright{display:flex;align-items:center;gap:8px}
+.switch{display:flex;background:rgba(43,29,20,.06);border-radius:999px;padding:4px}
+.switch button{border:0;background:transparent;color:var(--ink);font-size:13px;font-weight:500;padding:7px 12px;border-radius:999px;cursor:pointer}
+.switch button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.cartbtn{position:relative;border:0;background:var(--ink);color:var(--paper);border-radius:999px;width:44px;height:44px;cursor:pointer;display:grid;place-items:center}
+.cartbtn svg{width:22px;height:22px}
+.badge{position:absolute;top:-4px;inset-inline-end:-4px;min-width:20px;height:20px;border-radius:999px;background:var(--accent);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px;transition:transform .3s}
+.badge.pop{transform:scale(1.35)}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(70% 60% at 62% 42%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%)}
+#stage3d{position:fixed;inset:0;z-index:0;pointer-events:none}
+#stage3d canvas{display:block;width:100%;height:100%}
+main,footer{position:relative;z-index:2}
+.chap{min-height:100svh;display:flex;align-items:center;padding:90px max(20px,6vw) 60px}
+.chap .copy{max-width:520px}
+.chap.right{justify-content:flex-end}
+.big{font-family:var(--serif);font-weight:600;font-size:clamp(54px,8.2vw,118px);line-height:.95;letter-spacing:-.035em;margin:14px 0 0}
+.big em{font-style:italic;font-weight:500;color:var(--accent)}
+.eyebrow,.num{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.lead{color:var(--muted);font-size:19px;margin:18px 0 0;max-width:36ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:15px 26px;font-weight:500;font-size:16px;text-decoration:none;border:0;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(43,29,20,.5)}
+.btn.main{background:var(--ink);color:var(--paper)}
+.btn.ghost{background:rgba(255,255,255,.5);color:var(--ink);border:1px solid var(--line)}
+.facts{display:flex;gap:30px;margin-top:24px}
+.facts div b{display:block;font-family:var(--serif);font-weight:600;font-size:42px;line-height:1;letter-spacing:-.02em}
+.facts div span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.pricebar{display:flex;align-items:center;gap:16px;margin-top:26px}
+.pricebar .p{font-size:26px;font-weight:600}
+.scrollhint{position:absolute;left:50%;bottom:26px;translate:-50% 0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);animation:hint 2s ease-in-out infinite}
+@keyframes hint{50%{translate:-50% 8px}}
+.reveal{opacity:.001;translate:0 36px;transition:opacity .9s,translate .9s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;translate:0 0}
+.marquee{overflow:hidden;background:var(--ink);color:var(--paper);font-family:var(--serif);font-style:italic;font-size:28px;white-space:nowrap;padding:14px 0}
+.marquee div{display:inline-block;animation:slide 30s linear infinite}
+@keyframes slide{to{transform:translateX(-50%)}}
+.solid{background:var(--bg)}
+section.s{padding:90px 20px;max-width:1120px;margin:0 auto}
+.k{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0;font-weight:500}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(40px,6vw,72px);line-height:1;letter-spacing:-.03em;margin:10px 0 0}
+h2 em{font-style:italic;font-weight:500;color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-top:30px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:14px;display:flex;flex-direction:column;gap:8px;transition:transform .35s,box-shadow .35s}
+.card:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(43,29,20,.45)}
+.pic{aspect-ratio:1;border-radius:18px;position:relative;overflow:hidden;background:#EDE3D6}
+.pic img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.card:hover .pic img{transform:scale(1.05)}
+.tag{position:absolute;top:12px;inset-inline-start:12px;background:var(--ink);color:var(--paper);font-size:12px;font-weight:500;border-radius:999px;padding:4px 10px;z-index:1}
+.card h3{margin:6px 4px 0;font-family:var(--serif);font-weight:600;font-size:26px;line-height:1.05;letter-spacing:-.02em}
+.card p{margin:0 4px;color:var(--muted);font-size:15px}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding:8px 4px 2px}
+.price{font-weight:600;font-size:20px;font-variant-numeric:tabular-nums}
+.add{border:0;background:var(--ink);color:var(--paper);font-weight:500;font-size:14px;border-radius:999px;padding:11px 18px;cursor:pointer}
+.add.done{background:var(--sage)}
+.builder{display:grid;grid-template-columns:1fr 1.1fr;gap:34px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:34px;padding:40px}
+.tray{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;background:#E6D8C6;border-radius:24px;padding:16px;box-shadow:inset 0 2px 12px rgba(43,29,20,.12)}
+.slot{aspect-ratio:3/4;border-radius:16px;background:#EFE5D8;overflow:hidden;display:grid;place-items:center;color:var(--muted);font-size:30px}
+.slot img{width:100%;height:100%;object-fit:cover;animation:pop .45s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{scale:.5;opacity:0}}
+.flavors{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+.flavors button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:10px 15px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.flavors i{width:14px;height:14px;border-radius:50%}
+.bnote{color:var(--muted);font-size:16px;margin:14px 0 0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px;counter-reset:s}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:26px;counter-increment:s}
+.step::before{content:counter(s);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--serif);font-size:22px;margin-bottom:16px}
+.step h3{margin:0;font-family:var(--serif);font-weight:600;font-size:26px}
+.step p{margin:6px 0 0;color:var(--muted)}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.rev{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:24px}
+.rev .st{color:var(--accent);letter-spacing:.15em}
+.rev p{margin:10px 0 14px;font-family:var(--serif);font-size:20px;line-height:1.35}
+.rev b{font-weight:400;color:var(--muted);font-size:14px}
+footer{text-align:center;padding:56px 20px calc(60px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);color:var(--muted);font-size:14px;background:var(--bg)}
+footer .logo{display:block;margin-bottom:10px;color:var(--ink);font-size:44px}
+.scrim{position:fixed;inset:0;background:rgba(43,29,20,.4);z-index:30;opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(400px,100%);background:var(--paper);z-index:31;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));border-inline-start:1px solid var(--line)}
+[dir=rtl] .drawer{transform:translateX(-105%)}
+.open .scrim{opacity:1;pointer-events:auto}.open .drawer{transform:none}
+.dhead{display:flex;justify-content:space-between;align-items:center}
+.dhead h3{margin:0;font-family:var(--serif);font-weight:600;font-size:32px}
+.x{border:0;background:rgba(43,29,20,.07);color:var(--ink);width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer}
+.items{flex:1;overflow:auto;margin:16px 0;display:flex;flex-direction:column;gap:12px}
+.it{display:flex;gap:12px;align-items:center;background:#fff;border-radius:16px;padding:10px;border:1px solid var(--line)}
+.it img{width:54px;height:54px;border-radius:12px;object-fit:cover;flex:none}
+.it .nm{flex:1;min-width:0;font-size:15px}
+.it .nm small{display:block;color:var(--muted)}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.empty{color:var(--muted);text-align:center;margin-top:40px}
+.total{display:flex;justify-content:space-between;font-size:18px;font-weight:600;border-top:1px solid var(--line);padding-top:14px;margin-bottom:12px}
+.wa{display:flex;justify-content:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:15px;font-weight:500}
+.dnote{text-align:center;color:var(--muted);font-size:12px;margin-top:8px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));translate:-50% 20px;background:var(--ink);color:var(--paper);font-size:14px;border-radius:999px;padding:12px 20px;opacity:0;transition:opacity .25s,translate .25s;z-index:40;pointer-events:none}
+.toast.show{opacity:1;translate:-50% 0}
+[dir=rtl] .big,[dir=rtl] h2,[dir=rtl] .card h3,[dir=rtl] .dhead h3,[dir=rtl] .facts b,[dir=rtl] .step h3,[dir=rtl] .rev p{font-family:var(--body);font-weight:600;letter-spacing:0;line-height:1.2}
+[dir=rtl] .big em,[dir=rtl] h2 em{font-style:normal}
+[dir=rtl] .big{font-size:clamp(42px,6.4vw,92px)}
+@media (max-width:820px){
+  nav{display:none}
+  .chap,.chap.right{align-items:flex-end;justify-content:center;text-align:center;padding-bottom:64px}
+  .chap .copy{background:linear-gradient(rgba(243,235,223,0),rgba(243,235,223,.92) 26%);padding:56px 6px 0;margin:0 auto}
+  .lead{margin-inline:auto}.cta,.facts,.pricebar{justify-content:center}
+  .builder{grid-template-columns:1fr;padding:24px}
+  .steps,.reviews{grid-template-columns:1fr}
+}
+@media (max-width:500px){header{padding:12px 14px}.logo{font-size:28px}.switch button{padding:6px 10px}.big{font-size:clamp(46px,13.5vw,64px)}.facts{gap:20px}.facts div b{font-size:34px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;translate:0 0}}
+</style>
+</head>
+<body>
+<div class="sample" data-i="sample"></div>
+<header>
+  <a class="logo" href="#top">swirl<b>.</b></a>
+  <nav><a href="#spanish" data-i="n1"></a><a href="#cardamom" data-i="n2"></a><a href="#pour" data-i="n3"></a><a href="#shop" data-i="n4"></a></nav>
+  <div class="hright">
+    <div class="switch" role="group" aria-label="Language"><button type="button" data-lang="ar" aria-pressed="false">عربي</button><button type="button" data-lang="en" aria-pressed="true">EN</button></div>
+    <button class="cartbtn" type="button" id="openCart" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span class="badge" id="badge">0</span></button>
+  </div>
+</header>
+<div class="glow"></div>
+<div id="stage3d" aria-hidden="true"></div>
+<main>
+  <div class="chap" id="top" data-stage="0">
+    <div class="copy">
+      <div class="eyebrow reveal" data-i="eyebrow"></div>
+      <h1 class="big reveal" data-i="h1"></h1>
+      <p class="lead reveal" data-i="lead"></p>
+      <div class="cta reveal"><a class="btn main" href="#shop" data-i="shop"></a><a class="btn ghost" href="#pack" data-i="packbtn"></a></div>
+    </div>
+    <div class="scrollhint" data-i="scroll"></div>
+  </div>
+  <div class="chap right" id="spanish" data-stage="1">
+    <div class="copy">
+      <div class="num reveal">01 — <span data-i="c1k"></span></div>
+      <h2 class="big reveal" data-i="c1h"></h2>
+      <p class="lead reveal" data-i="c1p"></p>
+      <div class="facts reveal"><div><b>710</b><span data-i="ml"></span></div><div><b>30+</b><span data-i="cups"></span></div><div><b>0</b><span data-i="dairy"></span></div></div>
+      <div class="pricebar reveal"><span class="p">29 <span data-i="sar"></span></span><button class="btn main" type="button" data-add="spanish" data-i="addc"></button></div>
+    </div>
+  </div>
+  <div class="chap" id="cardamom" data-stage="2">
+    <div class="copy">
+      <div class="num reveal">02 — <span data-i="c2k"></span></div>
+      <h2 class="big reveal" data-i="c2h"></h2>
+      <p class="lead reveal" data-i="c2p"></p>
+      <div class="pricebar reveal"><span class="p">29 <span data-i="sar"></span></span><button class="btn main" type="button" data-add="cardamom" data-i="addc"></button></div>
+    </div>
+  </div>
+  <div class="chap right" id="pour" data-stage="3">
+    <div class="copy">
+      <div class="num reveal">03 — <span data-i="c3k"></span></div>
+      <h2 class="big reveal" data-i="c3h"></h2>
+      <p class="lead reveal" data-i="c3p"></p>
+      <div class="cta reveal"><a class="btn main" href="#shop" data-i="shop"></a></div>
+    </div>
+  </div>
+  <div class="solid" data-stage="4">
+    <div class="marquee" aria-hidden="true"><div id="mq"></div></div>
+    <section class="s" id="shop">
+      <p class="k" data-i="k1"></p>
+      <h2 data-i="h2a"></h2>
+      <div class="grid" id="grid"></div>
+    </section>
+    <section class="s" id="pack">
+      <div class="builder">
+        <div>
+          <p class="k" data-i="k2"></p>
+          <h2 data-i="h2b"></h2>
+          <p class="bnote" data-i="bnote"></p>
+          <div class="flavors" id="flavors"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn main" type="button" id="addPack"></button><button class="btn ghost" type="button" id="clearPack" data-i="clear"></button></div>
+        </div>
+        <div class="tray" id="tray"></div>
+      </div>
+    </section>
+    <section class="s">
+      <p class="k" data-i="k3"></p>
+      <h2 data-i="h2c"></h2>
+      <div class="steps">
+        <div class="step"><h3 data-i="s1h"></h3><p data-i="s1p"></p></div>
+        <div class="step"><h3 data-i="s2h"></h3><p data-i="s2p"></p></div>
+        <div class="step"><h3 data-i="s3h"></h3><p data-i="s3p"></p></div>
+      </div>
+    </section>
+    <section class="s">
+      <p class="k" data-i="k4"></p>
+      <h2 data-i="h2d"></h2>
+      <div class="reviews">
+        <div class="rev"><div class="st">★★★★★</div><p data-i="r1"></p><b data-i="rn"></b></div>
+        <div class="rev"><div class="st">★★★★★</div><p data-i="r2"></p><b data-i="rn"></b></div>
+        <div class="rev"><div class="st">★★★★★</div><p data-i="r3"></p><b data-i="rn"></b></div>
+      </div>
+    </section>
+  </div>
+</main>
+<footer><span class="logo">swirl<b>.</b></span><span data-i="foot"></span></footer>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" aria-label="Cart">
+  <div class="dhead"><h3 data-i="cart"></h3><button class="x" type="button" id="closeCart" aria-label="Close">×</button></div>
+  <div class="items" id="items"></div>
+  <div class="total"><span data-i="total"></span><span id="sum">0</span></div>
+  <a class="wa" href="#top" id="checkout" data-i="checkout"></a>
+  <div class="dnote" data-i="dnote"></div>
+</aside>
+<div class="toast" id="toast"></div>
+<script type="text/plain" id="three-src">/*THREE_SRC*/</script>
+<script type="module">
+const T={
+ en:{sample:'Sample design by Pixel & Co. · Example brand, not a real shop',n1:'Spanish Latte',n2:'Cardamom',n3:'How to',n4:'Shop',
+  eyebrow:'Coffee creamer · Riyadh',h1:'Your coffee, <em>but creamier.</em>',lead:'Four rich, smooth flavours that turn any cup into your favourite café drink. Shake, pour, sip.',shop:'Shop flavours',packbtn:'Build a 3-pack',scroll:'Scroll',
+  c1k:'Bestseller',c1h:'Spanish Latte, <em>at home.</em>',c1p:'Sweet, milky and smooth. The café favourite, now in a bottle. One splash and your morning coffee tastes like it came from a barista.',ml:'mL',cups:'Cups',dairy:'Dairy',addc:'Add to cart',
+  c2k:'Local twist',c2h:'Cardamom, <em>the Saudi way.</em>',c2p:'Warm cardamom and a touch of sweetness, made for everyone who loves the taste of Saudi coffee in their latte.',
+  c3k:'The swirl',c3h:'Two splashes. <em>That’s it.</em>',c3p:'Hot coffee, iced coffee or cold brew. Give the bottle a shake, pour, and watch it swirl.',
+  k1:'The range',h2a:'Pick your <em>flavour.</em>',k2:'3-pack',h2b:'Build your <em>3-pack.</em>',bnote:'Pick any three bottles and save 8 SAR. Mix flavours or go all in on one.',clear:'Clear',
+  k3:'How to',h2c:'Café coffee in <em>ten seconds.</em>',s1h:'Shake',s1p:'Give the bottle a good shake so it pours silky smooth.',s2h:'Pour',s2p:'Two splashes into hot or iced coffee. Add more for extra creamy.',s3h:'Swirl',s3p:'Stir once, watch the colour change, and enjoy.',
+  k4:'Reviews',h2d:'Mornings, <em>upgraded.</em>',r1:'"The Spanish Latte one tastes exactly like my café order. I stopped buying coffee out."',r2:'"Cardamom in iced coffee is unreal. Ordered a second bottle in the same week."',r3:'"Smooth, not too sweet, and the bottle looks so good on the counter."',rn:'Example review',
+  foot:'Example brand made by Pixel & Co. to show what your product website could look like.',cart:'Your cart',total:'Total',checkout:'Order on WhatsApp',dnote:'Your order is sent as a WhatsApp message',empty:'Your cart is empty.',added:'Added to your cart',add:'Add',done:'Added ✓',sar:'SAR',pack:'3-pack',
+  mq:'✦ Spanish Latte ✦ Salted Caramel ✦ Vanilla Bean ✦ Cardamom ✦ Made for coffee lovers ',left:n=>`Pick ${n} more`,addpack:'Add 3-pack · 79 SAR'},
+ ar:{sample:'تصميم تجريبي من Pixel & Co. · علامة مثال وليست متجر حقيقي',n1:'سبانش لاتيه',n2:'هيل',n3:'الطريقة',n4:'المتجر',
+  eyebrow:'كريمة قهوة · الرياض',h1:'قهوتك، <em>بس أطيب.</em>',lead:'أربع نكهات غنية وناعمة تحوّل أي كوب لمشروبك المفضل من الكوفي. رجّ، اسكب، واستمتع.',shop:'تسوّق النكهات',packbtn:'كوّن باقة ٣',scroll:'انزل',
+  c1k:'الأكثر مبيعاً',c1h:'سبانش لاتيه، <em>في بيتك.</em>',c1p:'حلو، كريمي وناعم. مفضّل الكوفيهات صار في علبة. رشّة وحدة وقهوتك الصباحية كأنها من باريستا.',ml:'مل',cups:'كوب',dairy:'ألبان',addc:'أضف للسلة',
+  c2k:'لمسة محلية',c2h:'هيل، <em>على الطريقة السعودية.</em>',c2p:'هيل دافي ولمسة حلا، لكل اللي يحبون طعم القهوة السعودية في اللاتيه.',
+  c3k:'الدوّامة',c3h:'رشّتين. <em>وبس.</em>',c3p:'قهوة حارة، مثلجة أو كولد برو. رجّ العلبة، اسكب، وشوف الدوّامة.',
+  k1:'المجموعة',h2a:'اختر <em>نكهتك.</em>',k2:'باقة ٣',h2b:'كوّن <em>باقتك.</em>',bnote:'اختر أي ثلاث علب ووفّر ٨ ريال. نوّع النكهات أو خذ نكهتك المفضلة.',clear:'مسح',
+  k3:'الطريقة',h2c:'قهوة كوفي <em>في ١٠ ثواني.</em>',s1h:'رجّ',s1p:'رجّ العلبة زين عشان تنسكب ناعمة.',s2h:'اسكب',s2p:'رشّتين في القهوة الحارة أو المثلجة. زيد لو تبيها أكرم.',s3h:'حرّك',s3p:'حرّك مرة، شوف اللون يتغير، واستمتع.',
+  k4:'آراء العملاء',h2d:'صباحك، <em>صار أحلى.</em>',r1:'"نكهة السبانش لاتيه نفس طلبي من الكوفي بالضبط. وقفت أشتري قهوة برا."',r2:'"الهيل مع الآيس كوفي خرافي. طلبت علبة ثانية بنفس الأسبوع."',r3:'"ناعمة ومو حالية مرة، والعلبة شكلها حلو على الطاولة."',rn:'تقييم مثال',
+  foot:'علامة مثال صممتها Pixel & Co. عشان تشوف كيف ممكن يكون موقع منتجك.',cart:'سلتك',total:'المجموع',checkout:'اطلب عبر واتساب',dnote:'طلبك يوصلنا كرسالة واتساب',empty:'سلتك فاضية.',added:'انضاف لسلتك',add:'أضف',done:'تمت ✓',sar:'ر.س',pack:'باقة ٣',
+  mq:'✦ سبانش لاتيه ✦ كراميل مملح ✦ فانيلا ✦ هيل ✦ لعشاق القهوة ',left:n=>`باقي ${n}`,addpack:'أضف الباقة · ٧٩ ر.س'}
+};
+const FL={
+ spanish:{en:'Spanish Latte',ar:'سبانش لاتيه',c:'#C68A5C',t:'#FFF7EC',cap:'#5A3520',d:['Sweet milk, caramelised sugar, smooth finish.','حليب محلى، سكر مكرمل، ونعومة.']},
+ caramel:{en:'Salted Caramel',ar:'كراميل مملح',c:'#D98A2E',t:'#FFF7EC',cap:'#6B3410',d:['Buttery caramel with a pinch of sea salt.','كراميل زبدي مع رشة ملح.']},
+ vanilla:{en:'Vanilla Bean',ar:'فانيلا',c:'#EFE4CC',t:'#3B2416',cap:'#3B2416',d:['Real vanilla, soft and creamy.','فانيلا حقيقية، ناعمة وكريمية.']},
+ cardamom:{en:'Cardamom',ar:'هيل',c:'#7C9C74',t:'#FFF7EC',cap:'#2F4A2C',d:['Warm cardamom, like Saudi coffee in a latte.','هيل دافي، كأنها قهوة سعودية في لاتيه.']}
+};
+const P=[
+ {id:'spanish',price:29,tag:['Bestseller','الأكثر مبيعاً']},
+ {id:'caramel',price:29,tag:['','']},
+ {id:'vanilla',price:29,tag:['','']},
+ {id:'cardamom',price:29,tag:['New','جديد']},
+ {id:'set',price:99,tag:['Save 17 SAR','وفّر ١٧ ر.س'],en:['Discovery Set','All four flavours, one of each.'],ar:['مجموعة التجربة','النكهات الأربع، علبة من كل نكهة.']}
+];
+let lang='en',cart={},pack=[];
+const SHOTS={};
+const $=s=>document.querySelector(s);
+const fmt=n=>lang==='ar'?n.toLocaleString('ar-EG'):n;
+const nameOf=id=>id==='pack'?T[lang].pack:id==='set'?P[4][lang][0]:FL[id][lang];
+const priceOf=id=>id==='pack'?79:P.find(p=>p.id===id).price;
+const shotOf=id=>SHOTS[id==='pack'?'set':id]||'';
+function render(){
+  const t=T[lang];
+  document.querySelectorAll('[data-i]').forEach(el=>{const v=t[el.dataset.i];if(typeof v==='string')el.innerHTML=v});
+  $('#mq').textContent=t.mq.repeat(4);
+  $('#grid').innerHTML=P.map(p=>{const n=p.id==='set'?p[lang][0]:FL[p.id][lang];const d=p.id==='set'?p[lang][1]:FL[p.id].d[lang==='en'?0:1];const tg=p.tag[lang==='en'?0:1];const inC=cart[p.id];
+    return `<article class="card"><div class="pic">${tg?`<span class="tag">${tg}</span>`:''}${SHOTS[p.id]?`<img alt="${n}" src="${SHOTS[p.id]}">`:''}</div><h3>${n}</h3><p>${d}</p><div class="row"><span class="price">${fmt(p.price)} ${t.sar}</span><button class="add ${inC?'done':''}" type="button" data-add="${p.id}">${inC?t.done:t.add}</button></div></article>`}).join('');
+  $('#flavors').innerHTML=Object.keys(FL).map(k=>`<button type="button" data-fl="${k}"><i style="background:${FL[k].c}"></i>${FL[k][lang]}</button>`).join('');
+  renderPack();renderCart();
+  document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang));
+}
+function renderPack(){
+  $('#tray').innerHTML=[0,1,2].map(i=>`<div class="slot">${pack[i]&&SHOTS['t_'+pack[i]]?`<img alt="${FL[pack[i]][lang]}" src="${SHOTS['t_'+pack[i]]}">`:'+'}</div>`).join('');
+  const b=$('#addPack'),t=T[lang];b.textContent=pack.length<3?t.left(fmt(3-pack.length)):t.addpack;b.style.opacity=pack.length<3?.55:1;
+}
+function renderCart(){
+  const t=T[lang],ids=Object.keys(cart),n=ids.reduce((a,k)=>a+cart[k],0);
+  $('#badge').textContent=fmt(n);
+  $('#items').innerHTML=ids.length?ids.map(id=>`<div class="it"><img alt="" src="${shotOf(id)}"><div class="nm">${nameOf(id)}<small>${fmt(priceOf(id))} ${t.sar}</small></div><div class="qty"><button type="button" data-q="${id}" data-d="-1" aria-label="Less">−</button><span>${fmt(cart[id])}</span><button type="button" data-q="${id}" data-d="1" aria-label="More">+</button></div></div>`).join(''):`<p class="empty">${t.empty}</p>`;
+  $('#sum').textContent=`${fmt(ids.reduce((a,k)=>a+cart[k]*priceOf(k),0))} ${t.sar}`;
+}
+function add(id){cart[id]=(cart[id]||0)+1;render();const b=$('#badge');b.classList.add('pop');setTimeout(()=>b.classList.remove('pop'),300);toast(T[lang].added)}
+let tt;function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),1600)}
+document.addEventListener('click',e=>{
+  const g=k=>e.target.closest(k);let el;
+  if(el=g('[data-lang]')){lang=el.dataset.lang;render()}
+  else if(el=g('[data-add]')){add(el.dataset.add)}
+  else if(el=g('[data-fl]')){if(pack.length<3){pack.push(el.dataset.fl);renderPack()}}
+  else if(g('#clearPack')){pack=[];renderPack()}
+  else if(g('#addPack')){if(pack.length===3){pack=[];add('pack')}}
+  else if(el=g('[data-q]')){const id=el.dataset.q;cart[id]+= +el.dataset.d;if(cart[id]<=0)delete cart[id];render()}
+  else if(g('#openCart')){document.body.classList.add('open')}
+  else if(g('#closeCart')||g('#scrim')){document.body.classList.remove('open')}
+  else if(g('#checkout')){e.preventDefault();toast(lang==='en'?'On the real site this opens WhatsApp with the order':'في الموقع الحقيقي يفتح واتساب بالطلب')}
+});
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%6)*0.07+'s';io.observe(el)});
+render();
+
+/* ---------------- 3D studio ---------------- */
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let THREE;
+try{THREE=await import(URL.createObjectURL(new Blob([document.getElementById('three-src').textContent],{type:'text/javascript'})))}catch(err){console.error(err)}
+if(THREE){
+  await Promise.all(['600 100px Fraunces','italic 600 100px Fraunces','500 40px "Readex Pro"','600 40px "Readex Pro"'].map(f=>document.fonts.load(f).catch(()=>{})));
+  const host=$('#stage3d');
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance',preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;renderer.outputColorSpace=THREE.SRGBColorSpace;
+  host.appendChild(renderer.domElement);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(30,1,.1,100);camera.position.set(0,.9,14);camera.lookAt(0,-.2,0);
+  const pmrem=new THREE.PMREMGenerator(renderer);
+  const envTex=pmrem.fromScene(new THREE.RoomEnvironment(),.03).texture;
+  scene.environment=envTex;scene.environmentIntensity=.9;
+  const key=new THREE.DirectionalLight(0xfff3e2,2.1);key.position.set(-5,7,6);scene.add(key);
+  const fill=new THREE.DirectionalLight(0xffe6cc,.7);fill.position.set(6,2,4);scene.add(fill);
+  const back=new THREE.DirectionalLight(0xffffff,1.1);back.position.set(2,4,-8);scene.add(back);
+
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const lathe=(pts,seg=128)=>new THREE.LatheGeometry(pts.map(([x,y])=>new THREE.Vector2(x,y)),seg);
+  const cv=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return [c,c.getContext('2d')]};
+  const tex=c=>{const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t};
+
+  /* ---- coffee swirl art (used on labels and in the mug) ---- */
+  function swirlArt(x,cx,cy,R,coffee='#6B3F22'){
+    const g=x.createRadialGradient(cx,cy,R*.1,cx,cy,R);g.addColorStop(0,'#8A5530');g.addColorStop(.75,coffee);g.addColorStop(1,'#3E2414');
+    x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+    x.save();x.beginPath();x.arc(cx,cy,R*.97,0,7);x.clip();
+    x.lineCap='round';
+    for(const [w,a,blur] of [[R*.16,.55,R*.05],[R*.09,.9,R*.015],[R*.035,1,0]]){
+      x.filter=blur?`blur(${blur}px)`:'none';x.strokeStyle=`rgba(244,230,208,${a})`;x.lineWidth=w;x.beginPath();
+      for(let i=0;i<=260;i++){const th=i/260*Math.PI*5.2,r=R*.06+th*R*.052;const px=cx+Math.cos(th+.6)*r,py=cy+Math.sin(th+.6)*r*.96;i?x.lineTo(px,py):x.moveTo(px,py)}
+      x.stroke();
+    }
+    x.filter='none';
+    for(let i=0;i<500;i++){const a=Math.random()*7,r=Math.sqrt(Math.random())*R*.95;x.fillStyle=`rgba(255,240,220,${Math.random()*.12})`;x.fillRect(cx+Math.cos(a)*r,cy+Math.sin(a)*r,2,2)}
+    x.restore();
+  }
+
+  /* ---- label: wraps all the way round the bottle, front is the middle of the canvas ---- */
+  function labelTex(k){
+    const f=FL[k],W=2048,H=800,[c,x]=cv(W,H);
+    const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,f.c);g.addColorStop(1,f.c);x.fillStyle=g;x.fillRect(0,0,W,H);
+    const sh=x.createLinearGradient(0,0,0,H);sh.addColorStop(0,'rgba(255,255,255,.10)');sh.addColorStop(.5,'rgba(255,255,255,0)');sh.addColorStop(1,'rgba(0,0,0,.08)');x.fillStyle=sh;x.fillRect(0,0,W,H);
+    x.fillStyle=f.t;x.textAlign='center';x.textBaseline='alphabetic';
+    x.font='italic 600 200px Fraunces, Georgia';x.fillText('swirl',1024,215);
+    x.font='600 34px "Readex Pro", sans-serif';x.letterSpacing='10px';x.fillText('COFFEE  CREAMER',1024,272);x.letterSpacing='0px';
+    x.strokeStyle=f.t;x.globalAlpha=.5;x.lineWidth=3;x.beginPath();x.moveTo(840,300);x.lineTo(1208,300);x.stroke();x.globalAlpha=1;
+    x.beginPath();x.arc(1024,470,152,0,7);x.fillStyle=f.t;x.fill();
+    swirlArt(x,1024,470,138);
+    x.fillStyle=f.t;x.font='600 92px Fraunces, Georgia';x.fillText(f.en,1024,712);
+    x.font='500 30px "Readex Pro", sans-serif';x.letterSpacing='6px';x.fillText('NON-DAIRY  ·  710 mL',1024,768);x.letterSpacing='0px';
+    // side panels
+    x.textAlign='left';x.font='600 30px "Readex Pro", sans-serif';x.fillText('INGREDIENTS',1420,240);
+    x.font='400 24px "Readex Pro", sans-serif';x.globalAlpha=.85;
+    ['Water, cane sugar, coconut oil,','oat and almond milk, natural','flavours, sea salt.','','Shake well before use.','Keep refrigerated after opening.','Best within 14 days of opening.'].forEach((l,i)=>x.fillText(l,1420,290+i*36));
+    x.globalAlpha=1;x.font='600 30px "Readex Pro", sans-serif';x.fillText('هيل · فانيلا · كراميل',1420,600);
+    x.textAlign='right';x.font='600 30px "Readex Pro", sans-serif';x.fillText('كريمة قهوة',620,240);x.font='400 24px "Readex Pro", sans-serif';x.globalAlpha=.85;
+    ['مكونات نباتية','رجّ العلبة قبل الاستخدام','يحفظ مبرداً بعد الفتح'].forEach((l,i)=>x.fillText(l,620,290+i*36));
+    x.globalAlpha=1;x.fillStyle='#fff';x.fillRect(330,470,290,150);x.fillStyle='#111';
+    for(let i=0,px=345;px<605;i++){const w=[2,3,5,2,4][i%5];if(i%2===0)x.fillRect(px,482,w,110);px+=w+2}
+    x.font='400 18px "Readex Pro", sans-serif';x.textAlign='center';x.fillText('6 281234 567890',475,612);
+    x.fillStyle=f.t;x.font='400 20px "Readex Pro", sans-serif';x.fillText('Example brand · Pixel & Co.',475,680);
+    return tex(c);
+  }
+
+  const bodyMat=new THREE.MeshPhysicalMaterial({color:0xf6f1ea,roughness:.42,clearcoat:.35,clearcoatRoughness:.3,sheen:.4,sheenColor:new THREE.Color(0xffffff)});
+  const bottleGeo=lathe([[0,-1.9],[.68,-1.9],[.77,-1.88],[.815,-1.82],[.83,-1.7],[.83,.55],[.815,.76],[.76,.96],[.64,1.16],[.5,1.32],[.42,1.42],[.395,1.5],[.395,1.56],[0,1.56]]);
+  const capGeo=(()=>{const g=new THREE.CylinderGeometry(.43,.43,.44,240,1);const p=g.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i),r=Math.hypot(x,z);if(r>.3){const a=Math.atan2(z,x),k=1+.014*Math.sin(a*96);p.setX(i,x*k);p.setZ(i,z*k)}}g.computeVertexNormals();return g})();
+  const capTop=lathe([[0,.24],[.33,.235],[.41,.225],[.43,.2],[.43,.18]],96);
+  const labelGeo=new THREE.CylinderGeometry(.838,.838,2.05,160,1,true,-Math.PI,Math.PI*2);
+  const ringGeo=new THREE.TorusGeometry(.41,.025,10,96);
+  const LT={};
+  function makeBottle(k){
+    LT[k]=LT[k]||labelTex(k);
+    const g=new THREE.Group();
+    g.add(new THREE.Mesh(bottleGeo,bodyMat));
+    const lab=new THREE.Mesh(labelGeo,new THREE.MeshPhysicalMaterial({map:LT[k],roughness:.38,clearcoat:.7,clearcoatRoughness:.18}));lab.position.y=-.58;g.add(lab);
+    const capM=new THREE.MeshPhysicalMaterial({color:FL[k].cap,roughness:.5,clearcoat:.2});
+    const cap=new THREE.Mesh(capGeo,capM);cap.position.y=1.73;g.add(cap);
+    const ct=new THREE.Mesh(capTop,capM);ct.position.y=1.71;g.add(ct);
+    const ring=new THREE.Mesh(ringGeo,capM);ring.rotation.x=Math.PI/2;ring.position.y=1.49;g.add(ring);
+    g.userData.half=1.9;return g;
+  }
+  /* ---- ceramic mug with swirl ---- */
+  let mugTex;
+  function makeMug(){
+    if(!mugTex){const [c,x]=cv(1024,1024);swirlArt(x,512,512,512);mugTex=tex(c)}
+    const g=new THREE.Group();
+    const cer=new THREE.MeshPhysicalMaterial({color:0xf7f3ee,roughness:.16,clearcoat:1,clearcoatRoughness:.08});
+    g.add(new THREE.Mesh(lathe([[0,-.8],[.7,-.8],[.8,-.77],[.86,-.68],[.9,.55],[.93,.74],[.92,.79],[.88,.8],[.84,.76],[.8,.6],[.76,-.6],[0,-.6]]),cer));
+    const top=new THREE.Mesh(new THREE.CircleGeometry(.81,96),new THREE.MeshPhysicalMaterial({map:mugTex,roughness:.25,clearcoat:.6}));top.rotation.x=-Math.PI/2;top.position.y=.56;g.add(top);
+    const h=new THREE.Mesh(new THREE.TorusGeometry(.34,.085,20,64,Math.PI*1.15),cer);h.rotation.z=-Math.PI*.575;h.position.set(.9,.05,0);g.add(h);
+    const sau=new THREE.Mesh(lathe([[0,-.86],[1.25,-.86],[1.4,-.8],[1.48,-.72],[1.45,-.7],[1.3,-.76],[.85,-.8],[0,-.8]]),cer);g.add(sau);
+    g.userData.half=.86;return g;
+  }
+  /* ---- beans + cardamom ---- */
+  const beanGeo=(()=>{const g=new THREE.SphereGeometry(.16,32,20);const p=g.attributes.position;for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i);y*=.74;z*=.6;if(z>0){z*=.55;z-=.045*Math.exp(-Math.pow(x/.02,2))*(1-Math.abs(y)/.12)}p.setXYZ(i,x,y,z)}g.computeVertexNormals();g.rotateZ(Math.PI/2);return g})();
+  const beanMat=new THREE.MeshPhysicalMaterial({color:0x3a1f10,roughness:.32,clearcoat:.7,clearcoatRoughness:.25});
+  const podGeo=(()=>{const g=new THREE.SphereGeometry(.13,32,20);const p=g.attributes.position;for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i);const a=Math.atan2(z,x),k=1+.06*Math.sin(a*6);y*=1.9;y+=y>0?Math.pow(y/.25,6)*.03:0;p.setXYZ(i,x*k,y,z*k)}g.computeVertexNormals();return g})();
+  const podMat=new THREE.MeshPhysicalMaterial({color:0x8fa860,roughness:.62,sheen:.6,sheenColor:new THREE.Color(0xd7e6a8)});
+
+  /* ---- soft contact shadows ---- */
+  const shTex=(()=>{const [c,x]=cv(256,256);const g=x.createRadialGradient(128,128,0,128,128,128);g.addColorStop(0,'rgba(60,35,20,.62)');g.addColorStop(.45,'rgba(60,35,20,.28)');g.addColorStop(1,'rgba(60,35,20,0)');x.fillStyle=g;x.fillRect(0,0,256,256);return new THREE.CanvasTexture(c)})();
+  const shadowFor=(w)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:shTex,transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.userData.w=w;m.renderOrder=-1;scene.add(m);return m};
+
+  const KEYS=Object.keys(FL);
+  const bottles=KEYS.map(k=>{const b=makeBottle(k);scene.add(b);b.userData.sh=shadowFor(2.3);return b});
+  const mug=makeMug();scene.add(mug);mug.userData.sh=shadowFor(3.6);
+  const beans=new THREE.Group();scene.add(beans);
+  for(let i=0;i<16;i++){const b=new THREE.Mesh(beanGeo,beanMat);const a=rnd(0,6.28),r=rnd(1.2,2.4);b.position.set(Math.cos(a)*r*1.4,0,Math.sin(a)*r*.7);b.rotation.set(-Math.PI/2+rnd(-.3,.3),rnd(0,6.28),rnd(-.2,.2));if(i%3===0)b.rotation.x=Math.PI/2;b.position.y=.07;beans.add(b);const s=shadowFor(.5);s.material.opacity=.5;s.userData.bean=b}
+  const pods=[];for(let i=0;i<9;i++){const m=new THREE.Mesh(podGeo,podMat);m.userData.p=[rnd(-2.2,2.2),rnd(-1.6,2.2),rnd(-1.5,1.5)];m.userData.r=[rnd(0,6),rnd(0,6),rnd(0,6)];m.userData.sp=rnd(.3,.7);scene.add(m);pods.push(m)}
+  const stream=new THREE.Mesh(new THREE.CylinderGeometry(.045,.07,1,24,1,true),new THREE.MeshPhysicalMaterial({color:0xf3e3c9,roughness:.25,clearcoat:.6,transparent:true}));scene.add(stream);
+
+  /* ---- scroll layouts: [x,y,z,rx,ry,rz,scale]; y is the base height above the floor ---- */
+  const FLOOR=-2.35, OFF=[0,-12,-6,0,0,0,.001];
+  const L=[
+    {b:[[.9,0,-1.3,0,-.15,0,.92],[2.45,0,.2,0,-.35,0,.95],[4.1,0,.2,0,-.55,0,.95],[5.6,0,-1.3,0,-.75,0,.92]],mug:[3.25,0,2.3,0,-.5,0,.62],beans:[3.2,0,2.4,1],pods:0,bg:'#F3EBDF'},
+    {b:[[-2.3,0,1,0,.1,0,1.22],[-6.4,0,-4,0,.3,0,.95],[-9,0,-5.5,0,-.2,0,.95],[9,0,-4,0,0,0,.9]],mug:[-5.3,0,2.4,0,-.7,0,.62],beans:[-4,0,2.6,.8],pods:0,bg:'#EDDCC8'},
+    {b:[[6.8,0,-5,0,-.4,0,.95],[-9,0,-4,0,0,0,.9],[.4,0,-5.5,0,.2,0,.95],[2.6,0,1,0,-.1,0,1.22]],mug:[5.4,0,2.4,0,-.4,0,.6],beans:[5,0,2.4,1],pods:1,bg:'#E6E7D9'},
+    {b:[[-9,0,-4,0,0,0,.9],[-1.15,2.35,.6,.1,.4,2.35,.8],[-9,0,-5,0,0,0,.9],[9,0,-4,0,0,0,.9]],mug:[-2.4,.25,1.6,.62,-.4,0,1.15],beans:[-2.4,0,1.6,0],pods:0,bg:'#F0E4D4'},
+    {b:[OFF,OFF,OFF,OFF],mug:OFF,beans:[0,-12,0,0],pods:0,bg:'#F3EBDF'}
+  ];
+  const BG=L.map(l=>new THREE.Color(l.bg));
+  const chaps=[...document.querySelectorAll('[data-stage]')];
+  function stageNow(){
+    const mid=scrollY+innerHeight/2;
+    const c=chaps.map(el=>{const r=el.getBoundingClientRect();return el.dataset.stage==='4'?r.top+scrollY+innerHeight*.35:r.top+scrollY+r.height/2});
+    if(mid<=c[0])return 0;
+    for(let i=0;i<c.length-1;i++)if(mid<c[i+1])return i+(mid-c[i])/(c[i+1]-c[i]);
+    return c.length-1;
+  }
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const mob=()=>innerWidth<820;
+  const mapX=x=>mob()?x*.38:x, floorY=()=>mob()?.05:FLOOR, mapS=s=>s*(mob()?.62:1);
+  function place(obj,a,b,t,time,ph,idle){
+    const k=ease(t),I=i=>a[i]+(b[i]-a[i])*k;const s=mapS(I(6)),half=obj.userData.half||0;
+    const lift=I(1);
+    obj.position.set(mapX(I(0)),floorY()+half*s+lift*(mob()?.7:1)+(idle?Math.sin(time*.8+ph)*.05*Math.min(1,lift):0),I(2));
+    obj.rotation.set(I(3),I(4)+(idle?Math.sin(time*.35+ph)*.12:0),I(5));
+    obj.scale.setScalar(s);
+    const sh=obj.userData.sh;if(sh){const w=sh.userData.w*s*(1+lift*.25);sh.position.set(obj.position.x,floorY()+.002,obj.position.z);sh.scale.set(w,w*.62,1);sh.material.opacity=Math.max(0,.95-lift*.45)*(s>.01?1:0)}
+  }
+  let smooth=stageNow();const bgc=new THREE.Color();
+  function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  addEventListener('resize',resize);resize();
+  const va=new THREE.Vector3(),vb=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
+  let last=performance.now();
+  function frame(now){
+    requestAnimationFrame(frame);
+    const dt=Math.min((now-last)/1000,.1);last=now;const time=now/1000;
+    const raw=stageNow();smooth=reduce?raw:THREE.MathUtils.damp(smooth,raw,5,dt);
+    const i=Math.min(Math.floor(smooth),L.length-1),j=Math.min(i+1,L.length-1),t=smooth-i,A=L[i],B=L[j],idle=!reduce;
+    bottles.forEach((b,n)=>place(b,A.b[n],B.b[n],t,time,n*1.4,idle));
+    // feature bottle turns slowly so the whole label shows
+    const feat=smooth>.5&&smooth<1.5?0:smooth>1.5&&smooth<2.5?3:-1;
+    if(feat>=0&&idle)bottles[feat].rotation.y+=Math.sin(time*.45)*.55;
+    place(mug,A.mug,B.mug,t,time,2.2,idle);
+    const k=ease(t),bA=A.beans,bB=B.beans;
+    beans.position.set(mapX(bA[0]+(bB[0]-bA[0])*k),floorY()+(bA[1]+(bB[1]-bA[1])*k),bA[2]+(bB[2]-bA[2])*k);
+    const bs=mapS(1)*(bA[3]+(bB[3]-bA[3])*k);beans.scale.setScalar(Math.max(bs,.001));
+    scene.children.forEach(o=>{const bn=o.userData&&o.userData.bean;if(bn){bn.getWorldPosition(va);o.position.set(va.x,floorY()+.001,va.z);o.scale.set(.5*bs,.32*bs,1);o.material.opacity=.55*Math.min(1,bs)}});
+    const pv=A.pods+(B.pods-A.pods)*k;
+    pods.forEach((p,n)=>{const [x,y,z]=p.userData.p,sp=p.userData.sp;const cx=mob()?0:3.1;p.position.set(cx+x*(mob()?.6:1)+Math.sin(time*sp+n)*.15,(mob()?1.9:.4)+y*(mob()?.6:1)+Math.sin(time*sp*.8+n*2)*.2,z+1.2);p.rotation.set(p.userData.r[0]+time*sp*.5,p.userData.r[1]+time*sp*.4,p.userData.r[2]);p.scale.setScalar(Math.max(.001,pv*mapS(1.4)))});
+    // cream pour in chapter 3
+    const pw=Math.max(0,1-Math.abs(smooth-3)/.35);
+    if(pw>.01){const b=bottles[1];va.set(0,1.62,0);b.localToWorld(va);mug.getWorldPosition(vb);vb.y+=.5*mug.scale.x;vb.x+=.05;const len=va.distanceTo(vb);stream.position.copy(va).lerp(vb,.5);stream.quaternion.setFromUnitVectors(up,vb.clone().sub(va).normalize());stream.scale.set(mapS(1)*(.6+.4*pw),len*pw,mapS(1)*(.6+.4*pw));stream.visible=true;stream.material.opacity=pw}else stream.visible=false;
+    bgc.copy(BG[i]).lerp(BG[j],ease(t));document.body.style.backgroundColor='#'+bgc.getHexString();
+    host.style.opacity=smooth>3.85?Math.max(0,1-(smooth-3.85)/.15):1;
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---- studio product photos for the shop ---- */
+  const shotR=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});shotR.setPixelRatio(1);shotR.setSize(720,720,false);shotR.toneMapping=THREE.ACESFilmicToneMapping;shotR.toneMappingExposure=1.15;shotR.outputColorSpace=THREE.SRGBColorSpace;
+  const ss=new THREE.Scene();ss.environment=envTex;ss.environmentIntensity=.9;[key,fill,back].forEach(l=>ss.add(l.clone()));ss.add(new THREE.HemisphereLight(0xffffff,0xeadfce,1.1));
+  const sc=new THREE.PerspectiveCamera(26,1,.1,60);
+  const flat=(o)=>{const s=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:shTex,transparent:true,depthWrite:false}));s.rotation.x=-Math.PI/2;const w=(o.userData.half>1?2.3:3.6)*o.scale.x;s.scale.set(w,w*.62,1);s.position.set(o.position.x,.003,o.position.z);return s};
+  function shot(items,bg,cam,size=[720,720]){
+    shotR.setSize(size[0],size[1],false);sc.aspect=size[0]/size[1];
+    while(ss.children.length>4)ss.remove(ss.children[4]);
+    const [c,x]=cv(size[0],size[1]);const g=x.createRadialGradient(size[0]*.5,size[1]*.42,10,size[0]*.5,size[1]*.5,size[0]*.8);g.addColorStop(0,'#FBF5EC');g.addColorStop(1,bg);x.fillStyle=g;x.fillRect(0,0,size[0],size[1]);
+    ss.background=tex(c);
+    items.forEach(([o,px,pz,ry,s])=>{o.scale.setScalar(s);o.position.set(px,o.userData.half*s,pz);o.rotation.y=ry;ss.add(o);ss.add(flat(o))});
+    sc.position.set(...cam[0]);sc.lookAt(...cam[1]);sc.updateProjectionMatrix();
+    shotR.render(ss,sc);return shotR.domElement.toDataURL('image/jpeg',.9);
+  }
+  const beanAt=(x,z,r)=>{const b=new THREE.Mesh(beanGeo,beanMat);b.position.set(x,.07,z);b.rotation.set(-Math.PI/2,r,0);b.userData.half=.07;return b};
+  KEYS.forEach(k=>{
+    const items=[[makeBottle(k),0,0,-.25,1]];
+    SHOTS[k]=shot(items,'#E8DCCB',[[0,2.3,9.4],[0,1.75,0]]);
+    SHOTS['t_'+k]=shot([[makeBottle(k),0,0,-.2,1]],'#E8DCCB',[[0,2.2,8.6],[0,1.85,0]],[480,640]);
+  });
+  SHOTS.set=shot(KEYS.map((k,n)=>[makeBottle(k),(n-1.5)*1.75,n%2?.45:-.35,-.2,1]),'#E8DCCB',[[0,3.3,13.2],[0,1.6,0]]);
+  shotR.dispose();
+  render();
+}
+</script>
+</body>
+</html>
