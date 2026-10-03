@@ -32,6 +32,26 @@ nav a{text-decoration:none;opacity:.8}
 .intro-txt h1 span{display:inline-block;opacity:0;transform:translateY(30px);filter:blur(10px);transition:opacity 1s,transform 1.2s cubic-bezier(.2,.8,.2,1),filter 1s}
 .intro-txt .sub{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.2vw,24px);opacity:0;transition:opacity 1.2s 2.8s;margin-top:18px;color:#cfc6b8}
 .ready .intro-txt h1 span{opacity:1;transform:none;filter:none}
+.intro-txt h1.drip{padding:0;letter-spacing:0;line-height:0}
+.intro-txt h1.drip img{width:min(78vw,760px);clip-path:inset(0 0 100% 0);filter:drop-shadow(0 12px 30px rgba(0,0,0,.6));transition:clip-path 2.2s cubic-bezier(.6,0,.2,1) .2s}
+.ready .intro-txt h1.drip img{clip-path:inset(0 0 -10% 0)}
+.marq{overflow:hidden;white-space:nowrap;background:var(--gold);color:var(--night);padding:14px 0;font-family:var(--serif);font-style:italic;font-size:28px}
+.marq div{display:inline-block;animation:mq 28s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.look{background:var(--night);color:var(--ink);padding:100px 0 110px}
+.look .hd{max-width:1180px;margin:0 auto;padding:0 20px}
+.look h2{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6vw,80px);line-height:1;margin:14px 0 0}
+.look h2 em{font-family:var(--script);font-style:normal;font-weight:400;color:var(--gold);font-size:1.15em}
+.rail{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:40px max(20px,calc((100vw - 1180px)/2 + 20px)) 10px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.lk{flex:none;width:min(78vw,420px);scroll-snap-align:start}
+.lk .ph{position:relative;aspect-ratio:460/630;background:radial-gradient(70% 60% at 50% 45%,#2a2627,#121011);border-radius:4px;overflow:hidden}
+.lk .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .5s,transform .8s cubic-bezier(.2,.8,.2,1);-webkit-mask-image:linear-gradient(transparent,#000 6%);mask-image:linear-gradient(transparent,#000 6%)}
+.lk .ph img.b{opacity:0}.lk:hover .ph img.b,.lk.flip .ph img.b{opacity:1}.lk:hover .ph img.f,.lk.flip .ph img.f{opacity:0}.lk:hover .ph img{transform:scale(1.03)}
+.lk .ph .num{position:absolute;left:16px;top:12px;font-family:var(--serif);font-size:44px;color:var(--gold)}
+.lk .ph .hint{position:absolute;right:14px;bottom:12px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.lk b{display:block;margin-top:16px;font-size:13px;letter-spacing:.3em;text-transform:uppercase}
+.lk p{margin:6px 0 0;color:#a8a095;font-size:14px;line-height:1.5}
 .ready .intro-txt .tag,.ready .intro-txt .sub{opacity:1}
 .cue{position:absolute;bottom:28px;left:50%;translate:-50% 0;font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
 .cue i{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);animation:cue 2s ease-in-out infinite;transform-origin:top}
@@ -146,7 +166,7 @@ footer .row{display:flex;justify-content:center;gap:26px;margin:18px 0;letter-sp
 <div class="grain" aria-hidden="true"></div>
 <header>
   <a class="wm" href="#intro">VÉLOUR</a>
-  <nav><a href="#stage">The Set</a><a href="#shop">Shop</a><a href="#range">Colours</a></nav>
+  <nav><a href="#stage">The Set</a><a href="#look">Lookbook</a><a href="#shop">Shop</a><a href="#range">Colours</a></nav>
   <button class="bag" type="button" id="openCart">Bag (<span id="badge">0</span>)</button>
 </header>
 
@@ -154,7 +174,7 @@ footer .row{display:flex;justify-content:center;gap:26px;margin:18px 0;letter-sp
   <canvas id="dots" aria-hidden="true"></canvas>
   <div class="intro-txt">
     <div class="tag">Drop 01 · Maison de Nuit</div>
-    <h1 aria-label="VÉLOUR"><span>V</span><span>É</span><span>L</span><span>O</span><span>U</span><span>R</span></h1>
+    <h1 class="drip" aria-label="VÉLOUR"><img id="dripLogo" alt=""></h1>
     <div class="sub">Soft as velvet. Made for the long nights.</div>
   </div>
   <div class="cue">Scroll<i></i></div>
@@ -166,8 +186,8 @@ footer .row{display:flex;justify-content:center;gap:26px;margin:18px 0;letter-sp
     <div class="fig" id="fig"><div class="cam" id="cam"><img id="imF" alt="VÉLOUR hoodie and shorts, front"><img id="imB" class="hide" alt="VÉLOUR hoodie and shorts, back with arched VÉLOUR print"></div></div>
     <div class="cap l" data-c="0"><div class="n">01 — The Set</div><h2>Heavyweight.<br><em>Oversized.</em></h2><p>Brushed fleece, dropped shoulders, a boxy cut that falls just right.</p></div>
     <div class="cap r" data-c="1"><div class="n">02 — Turn around</div><h2>Made to be<br><em>seen leaving.</em></h2><p>The statement lives on the back.</p></div>
-    <div class="cap l" data-c="2"><div class="n">03 — The back print</div><h2>Raised.<br><em>Puff print.</em></h2><p>An arched VÉLOUR wordmark, Maison de Nuit, and a line for the late hours.</p></div>
-    <div class="cap r" data-c="3"><div class="n">04 — The crest</div><h2>Embroidered,<br><em>quietly.</em></h2><p>The V crest sits on the chest and the leg. Small, clean, unmistakable.</p></div>
+    <div class="cap l" data-c="2"><div class="n">03 — The back piece</div><h2>Raised.<br><em>Dripping.</em></h2><p>Crest, drip script and Maison de Nuit, stacked in puff print.</p></div>
+    <div class="cap r" data-c="3"><div class="n">04 — The crest</div><h2>Stars. Blades.<br><em>The V.</em></h2><p>Embroidered on the leg. Graffiti tag across the chest, star on the hood.</p></div>
     <div class="cap l" data-c="4"><div class="n">05 — Six colours</div><h2>One set.<br><em>Six moods.</em></h2><p>Noir, Bordeaux, Blanc, Gris, Brun and Marine.</p></div>
     <div class="swatches" id="sw"></div>
     <div class="cname" id="cname"></div>
@@ -175,6 +195,9 @@ footer .row{display:flex;justify-content:center;gap:26px;margin:18px 0;letter-sp
   </div>
 </section>
 
+<div class="marq" aria-hidden="true"><div>Vélour ✦ Maison de Nuit ✦ Est. MMXXVI ✦ Six colours ✦ Drop 01 ✦ Vélour ✦ Maison de Nuit ✦ Est. MMXXVI ✦ Six colours ✦ Drop 01 ✦ </div></div>
+<section class="look" id="look"><div class="hd"><p class="k" style="color:var(--gold)">The lookbook</p><h2>Four ways to <em>wear it.</em></h2></div>
+<div class="rail" id="rail"></div></section>
 <div class="fade"></div>
 <main class="shop">
   <section class="s" id="shop">
@@ -189,7 +212,7 @@ footer .row{display:flex;justify-content:center;gap:26px;margin:18px 0;letter-sp
         <p class="k">VÉLOUR · Maison de Nuit</p>
         <div class="title" id="ptitle">The Set</div>
         <div class="price" id="pprice"></div>
-        <p class="desc">Heavyweight brushed fleece hoodie and matching shorts. Puff-print arched wordmark on the back, script on the hood, embroidered crest on the chest and leg.</p>
+        <p class="desc">Heavyweight brushed fleece hoodie and matching shorts. Puff-print back piece with crest and drip script, graffiti tag across the chest, star on the hood, embroidered crest on the leg.</p>
         <div class="lbl"><span>Piece</span><span></span></div>
         <div class="pieces" id="pieces"></div>
         <div class="lbl"><span>Colour</span><span id="cl"></span></div>
@@ -239,9 +262,7 @@ const src=(side,c)=>IMG[side+'-'+c];
   const cv=$('#dots'),x=cv.getContext('2d');let W,H,P=[],t0=performance.now(),dpr=Math.min(devicePixelRatio,2);
   function targets(){
     const o=document.createElement('canvas');o.width=W;o.height=H;const g=o.getContext('2d');
-    const R=Math.min(W,H)*.2;g.translate(W/2,H/2);g.strokeStyle='#fff';g.fillStyle='#fff';
-    g.lineWidth=Math.max(2,R*.03);g.beginPath();g.arc(0,0,R,0,7);g.stroke();g.lineWidth=Math.max(1,R*.012);g.beginPath();g.arc(0,0,R*.92,0,7);g.stroke();
-    g.font=`${R*1.25}px "Great Vibes", cursive`;g.textAlign='center';g.textBaseline='middle';g.fillText('V',-R*.05,R*.08);
+    const hh=Math.min(H*.62,W*.75),ww=hh*.8;g.drawImage(CI,(W-ww)/2,(H-hh)/2,ww,hh);
     const d=g.getImageData(0,0,W,H).data,pts=[],step=Math.max(3,Math.round(Math.min(W,H)/170));
     for(let y=0;y<H;y+=step)for(let xx=0;xx<W;xx+=step)if(d[(y*W+xx)*4+3]>128)pts.push([xx,y]);return pts;
   }
@@ -256,7 +277,8 @@ const src=(side,c)=>IMG[side+'-'+c];
       x.globalAlpha=(.35+.65*k)*fade*(1-sc);x.fillStyle='#C9A86A';x.beginPath();x.arc(px,py,p.s,0,7);x.fill();}
     if(scrollY<innerHeight*1.2)requestAnimationFrame(f);else{setTimeout(()=>requestAnimationFrame(f),300)}
   }
-  document.fonts.load('80px "Great Vibes"').finally(()=>{init();requestAnimationFrame(f);setTimeout(()=>document.body.classList.add('ready'),2300)});
+  const CI=new Image();CI.src=IMG['p-crest'];$('#dripLogo').src=IMG['p-drip'];
+  CI.decode().catch(()=>{}).finally(()=>{init();requestAnimationFrame(f);setTimeout(()=>document.body.classList.add('ready'),2300)});
   addEventListener('resize',init);
 })();
 
@@ -269,7 +291,7 @@ function setColour(id){if(id===curC&&imF.src)return;curC=id;imF.src=src('f',id);
 setColour('noir');curC='';setColour('noir');
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),seg=(p,a,b)=>clamp((p-a)/(b-a)),sm=t=>t*t*(3-2*t);
 // zoom targets (fractions of the 920x1260 frame)
-const PRINT=[.495,.37,2.1],CREST=[.66,.21,2.5];
+const PRINT=[.5,.35,1.9],CREST=[.63,.85,2.8];
 function frame(){
   const r=stage.getBoundingClientRect(),p=clamp(-r.top/(r.height-innerHeight));
   // turn: 0.12-0.26 to back, 0.46-0.56 back to front
@@ -332,6 +354,9 @@ document.addEventListener('click',e=>{
   else if(g('#closeCart')||g('#scrim')){document.body.classList.remove('open')}
   else if(g('#checkout')){e.preventDefault();toast('On the live store this opens secure Shopify checkout')}
 });
+const LK=[['01','Over the shoulder','Drip script climbs onto the shoulder, text runs down the sleeve.'],['02','Bleed','A giant outline VÉLOUR cuts across the back and off the sleeves.'],['03','Constellation','Stars fall from the shoulder down the back and the leg.'],['04','Split','A huge crest cut off the side, drip script across the pocket.']];
+$('#rail').innerHTML=LK.map(([n,t,d])=>`<div class="lk" tabindex="0"><div class="ph"><img class="f" alt="Layout ${n} ${t}, front" src="${IMG['l-L'+n.slice(1)+'-f']}"><img class="b" alt="Layout ${n} ${t}, back" src="${IMG['l-L'+n.slice(1)+'-b']}"><span class="num">${n}</span><span class="hint">Tap to turn</span></div><b>${t}</b><p>${d}</p></div>`).join('');
+document.addEventListener('click',e=>{const l=e.target.closest('.lk');if(l)l.classList.toggle('flip')});
 renderShop();renderTiles();renderCart();
 </script>
 </body>
