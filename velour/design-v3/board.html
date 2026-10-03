@@ -1,0 +1,132 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../vel/f2.css"><link rel="stylesheet" href="../vel/f3.css"><link rel="stylesheet" href="../vel/f4.css"><link rel="stylesheet" href="../vel/f5.css">
+<style>
+*{margin:0;box-sizing:border-box}
+body{background:#111;font-family:Inter,sans-serif;color:#efe9df}
+#board{width:2500px;display:grid;grid-template-columns:repeat(5,500px);background:#0a0a0b}
+.pn{position:relative;height:1240px;padding:34px 30px 26px;border-right:1px solid #ffffff12;border-bottom:1px solid #ffffff12;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.pn .t{align-self:flex-start;font:700 17px Inter;letter-spacing:.18em;text-transform:uppercase}
+.pn .t b{color:var(--acc)}
+.pn .logo{height:240px;width:100%;display:flex;align-items:center;justify-content:center;margin-top:8px}
+.pn .tag{font:600 15px Inter;letter-spacing:.24em;text-transform:uppercase;text-align:center;line-height:1.6;color:var(--tagc,#e9e2d6);opacity:.9;margin-top:4px;min-height:48px}
+.pn .gar{display:flex;gap:0;justify-content:center;margin-top:8px}
+.pn .cu{display:flex;gap:12px;margin-top:auto;width:100%}
+.pn .cu > div{flex:1;height:150px;border:1px solid #ffffff26;border-radius:3px;overflow:hidden}
+.pn .ft{align-self:flex-start;display:flex;align-items:center;gap:10px;margin-top:14px;font:700 12px Inter;letter-spacing:.22em;text-transform:uppercase}
+.pn .ft i{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #ffffff55}
+#foot{grid-column:1/6;height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#ece6dc;color:#151314}
+#foot b{font-family:'Bodoni Moda';font-weight:500;font-size:46px;letter-spacing:.5em;padding-left:.5em}
+#foot span{font:600 14px Inter;letter-spacing:.4em;margin-top:6px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" id="defs"><defs id="D"></defs></svg>
+<div id="board"></div>
+<script>
+const NS='http://www.w3.org/2000/svg';
+const COL={noir:'#1b1a1c',bordeaux:'#3d0e18',blanc:'#ece8e1',gris:'#b9b8b6',brun:'#5a3f2e',marine:'#1c2234'};
+const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16)*.3+((n>>8)&255)*.59+(n&255)*.11)/255};
+let FLEECE;
+const tint={};
+function makeTint(hex){
+  if(tint[hex])return tint[hex];
+  const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');x.drawImage(FLEECE,0,0);
+  const d=x.getImageData(0,0,512,512);const n=parseInt(hex.slice(1),16),R=n>>16,G=(n>>8)&255,B=n&255,L=lum(hex);
+  for(let i=0;i<d.data.length;i+=4){const v=(d.data[i]-128)/22;const add=v*(L<.35?2:2.2),mul=1+v*(L<.35?.035:.025);
+    d.data[i]=R*mul+add;d.data[i+1]=G*mul+add;d.data[i+2]=B*mul+add;d.data[i+3]=255}
+  x.putImageData(d,0,0);return tint[hex]=c.toDataURL('image/jpeg',.9);
+}
+/* ---------- garment geometry ---------- */
+const HF={ // hoodie front 500x560
+ hood:'M168,98 C168,40 208,12 250,12 C292,12 332,40 332,98 Z',
+ sl:'M98,112 C70,118 52,140 46,172 L22,452 L86,460 L106,250 Z',
+ sr:'M402,112 C430,118 448,140 454,172 L478,452 L414,460 L394,250 Z',
+ cl:'M22,452 L86,460 L84,506 L26,500 Z', cr:'M478,452 L414,460 L416,506 L474,500 Z',
+ body:'M150,84 C186,72 214,92 250,92 C286,92 314,72 350,84 L402,112 C410,200 404,330 400,470 L100,470 C96,330 90,200 98,112 Z',
+ hem:'M100,470 L400,470 L398,516 L102,516 Z',
+ open:'M192,84 C196,122 222,154 250,164 C278,154 304,122 308,84 C292,96 272,101 250,101 C228,101 208,96 192,84 Z',
+ inner:'M204,90 C212,120 230,142 250,150 C270,142 288,120 296,90 C281,97 266,100 250,100 C234,100 219,97 204,90 Z',
+ pocket:'M160,332 L340,332 C352,372 362,412 368,454 L132,454 C138,412 148,372 160,332 Z'
+};
+const HB={hoodup:'M156,104 C152,42 198,6 250,6 C302,6 348,42 344,104 C334,156 292,186 250,188 C208,186 166,156 156,104 Z',
+ body:'M150,84 C186,74 214,80 250,80 C286,80 314,74 350,84 L402,112 C410,200 404,330 400,470 L100,470 C96,330 90,200 98,112 Z'};
+const JF={ // joggers 360x600
+ legs:'M62,66 L298,66 C308,200 306,420 290,620 L196,622 L182,250 L178,250 L164,622 L70,620 C54,420 52,200 62,66 Z',
+ waist:'M60,18 L300,18 L299,68 L61,68 Z',
+ cl:'M70,620 L164,622 L161,668 L74,666 Z', cr:'M196,622 L290,620 L286,666 L199,668 Z'
+};
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+let uid=0;
+function garment(kind,colour,prints,w){
+  // kind: hf hb jf jb ; prints: [{sym, x,y,w,rot, ink, fx}]
+  const hex=COL[colour],L=lum(hex),dark=L<.35,id='g'+(uid++);
+  const vb=kind[0]==='h'?[500,560]:[360,700];
+  const s=el('svg',{viewBox:`0 0 ${vb[0]} ${vb[1]}`,width:w,height:w*vb[1]/vb[0]});
+  const df=el('defs',{},s);
+  const pat=el('pattern',{id:id+'p',patternUnits:'userSpaceOnUse',width:260,height:260},df);el('image',{href:makeTint(hex),width:260,height:260},pat);
+  const ribp=el('pattern',{id:id+'r',patternUnits:'userSpaceOnUse',width:5,height:10},df);el('rect',{width:2.2,height:10,fill:'#000',opacity:dark?.35:.16},ribp);
+  const sh=el('filter',{id:id+'sh',x:'-20%',y:'-20%',width:'140%',height:'140%'},df);el('feDropShadow',{dx:0,dy:14,stdDeviation:14,'flood-color':'#000','flood-opacity':.55},sh);
+  const bl=el('filter',{id:id+'b',x:'-30%',y:'-30%',width:'160%',height:'160%'},df);el('feGaussianBlur',{stdDeviation:9},bl);
+  const bl2=el('filter',{id:id+'b2',x:'-30%',y:'-30%',width:'160%',height:'160%'},df);el('feGaussianBlur',{stdDeviation:3.5},bl2);
+  const G=el('g',{filter:`url(#${id}sh)`},s);
+  const part=(d,extra={})=>el('path',Object.assign({d,fill:`url(#${id}p)`},extra),G);
+  const parts=[];
+  const seamC=dark?'rgba(255,255,255,.16)':'rgba(0,0,0,.22)';
+  let all;
+  if(kind==='hf'||kind==='hb'){
+    if(kind==='hf'){parts.push(part(HF.hood))}
+    parts.push(part(HF.sl),part(HF.sr));
+    parts.push(part(kind==='hf'?HF.body:HB.body));
+    parts.push(part(HF.hem),part(HF.cl),part(HF.cr));
+    [HF.hem,HF.cl,HF.cr].forEach(d=>el('path',{d,fill:`url(#${id}r)`},G));
+    if(kind==='hf'){parts.push(part(HF.open));el('path',{d:HF.inner,fill:'#000',opacity:dark?.45:.32},G);el('path',{d:HF.inner,fill:'none',stroke:'#000',opacity:.25,'stroke-width':10,filter:`url(#${id}b2)`},G)}
+    else parts.push(part(HB.hoodup));
+    all=[kind==='hf'?HF.hood:HB.hoodup,HF.sl,HF.sr,kind==='hf'?HF.body:HB.body,HF.hem,HF.cl,HF.cr].join(' ');
+  }else{
+    parts.push(part(JF.legs),part(JF.waist),part(JF.cl),part(JF.cr));
+    [JF.waist,JF.cl,JF.cr].forEach(d=>el('path',{d,fill:`url(#${id}r)`},G));
+    all=[JF.legs,JF.waist,JF.cl,JF.cr].join(' ');
+  }
+  // clip for overlays
+  const cp=el('clipPath',{id:id+'c'},df);el('path',{d:all},cp);
+  // prints (under shading so folds affect them)
+  const P=el('g',{'clip-path':`url(#${id}c)`},G);
+  (prints||[]).forEach(p=>{const u=el('use',{href:'#'+p.sym,x:p.x-p.w/2,y:p.y-p.w*(p.ar||1)/2,width:p.w,height:p.w*(p.ar||1),color:p.ink,filter:'url(#'+(p.fx||'puff')+')'},P);if(p.rot)u.setAttribute('transform',`rotate(${p.rot} ${p.x} ${p.y})`)});
+  // shading
+  const O=el('g',{'clip-path':`url(#${id}c)`},G);
+  const k=dark?.5:.2;
+  // edge darkening
+  el('path',{d:all,fill:'none',stroke:'#000','stroke-width':36,opacity:k*.75,filter:`url(#${id}b)`,style:'mix-blend-mode:multiply'},O);
+  // folds
+  const folds=kind==='hf'||kind==='hb'?
+    ['M120,150 C140,250 132,360 140,460','M380,150 C362,250 368,360 360,460','M60,230 C58,320 48,390 40,440','M440,230 C442,320 452,390 460,440','M180,470 C200,440 230,430 250,440','M70,200 C80,210 92,226 100,250']:
+    ['M120,90 C130,260 120,440 118,620','M240,90 C230,260 240,440 242,620','M180,250 C176,200 170,140 150,90','M90,320 C110,340 140,350 160,346','M200,350 C226,360 256,356 276,336','M100,560 C120,575 140,575 160,566','M206,566 C230,578 252,578 280,562','M90,460 C110,470 140,470 158,462','M204,462 C230,474 256,470 276,456'];
+  folds.forEach((d,i)=>el('path',{d,fill:'none',stroke:'#000','stroke-width':i%2?14:20,opacity:k*.42,filter:`url(#${id}b)`,style:'mix-blend-mode:multiply'},O));
+  const hil=kind[0]==='h'?['M150,140 C170,240 166,340 176,440','M330,140 C318,240 322,340 312,440']:['M100,100 C108,260 102,440 100,600','M262,100 C256,260 262,440 266,600'];
+  hil.forEach(d=>el('path',{d,fill:'none',stroke:'#fff','stroke-width':22,opacity:dark?.045:.14,filter:`url(#${id}b)`},O));
+  // seams + stitching
+  const seams=kind[0]==='h'?['M98,112 C104,200 106,230 106,250','M402,112 C396,200 394,230 394,250','M100,470 L400,470','M22,452 L86,460','M478,452 L414,460']:['M62,66 L298,66','M70,620 L164,622','M196,622 L290,620','M180,70 L180,250'];
+  if(kind==='hf')seams.push('M160,332 L340,332','M160,332 C148,372 138,412 132,454','M340,332 C352,372 362,412 368,454');
+  if(kind==='hb')seams.push('M250,8 L250,186');
+  if(kind==='jf')seams.push('M74,84 C96,112 104,140 106,170','M286,84 C264,112 256,140 254,170');
+  if(kind==='jb')seams.push('M206,112 L268,112 L266,172 L208,172 Z');
+  seams.forEach(d=>{el('path',{d,fill:'none',stroke:seamC,'stroke-width':1.6},O);el('path',{d,fill:'none',stroke:dark?'rgba(255,255,255,.18)':'rgba(0,0,0,.18)','stroke-width':1,'stroke-dasharray':'3 3',transform:'translate(0,4)'},O)});
+  // drawstrings
+  const ds=dark?'#d9d3c8':'#f4f1ec';
+  if(kind==='hf'){[['M232,150 C229,190 230,230 226,262',226,262],['M268,150 C271,190 270,230 274,262',274,262]].forEach(([d,x,y])=>{el('path',{d,fill:'none',stroke:'#000','stroke-width':7,opacity:.25,transform:'translate(2,3)'},G);el('path',{d,fill:'none',stroke:ds,'stroke-width':6,'stroke-linecap':'round'},G);el('rect',{x:x-4,y,width:8,height:16,rx:2,fill:'#c7c2b8'},G)})}
+  if(kind==='jf'){[['M174,34 C170,80 168,110 160,150',160,150],['M186,34 C190,80 194,110 204,150',204,150]].forEach(([d,x,y])=>{el('path',{d,fill:'none',stroke:'#000','stroke-width':6,opacity:.25,transform:'translate(2,3)'},G);el('path',{d,fill:'none',stroke:ds,'stroke-width':5,'stroke-linecap':'round'},G);el('rect',{x:x-3.5,y,width:7,height:14,rx:2,fill:'#c7c2b8'},G)})}
+  return s;
+}
+/* close-up tile: logo stitched on fabric */
+function closeup(colour,sym,ink,ar,fx,scale=.78){
+  const hex=COL[colour],id='cu'+(uid++);
+  const s=el('svg',{viewBox:'0 0 300 220',width:'100%',height:'100%',preserveAspectRatio:'xMidYMid slice'});
+  const df=el('defs',{},s);const pat=el('pattern',{id:id+'p',patternUnits:'userSpaceOnUse',width:300,height:300},df);el('image',{href:makeTint(hex),width:300,height:300},pat);
+  el('rect',{width:300,height:220,fill:`url(#${id}p)`},s);
+  const w=300*scale/(ar>1?ar:1)*(ar>1?1:1);const ww=ar>1?Math.min(300*scale,190/ar*1):300*scale*.62;const hh=ww*ar;
+  el('use',{href:'#'+sym,x:150-ww/2,y:110-hh/2,width:ww,height:hh,color:ink,filter:`url(#${fx||'emb'})`},s);
+  const rg=el('radialGradient',{id:id+'v'},df);el('stop',{offset:'.55','stop-color':'#000','stop-opacity':0},rg);el('stop',{offset:'1','stop-color':'#000','stop-opacity':.45},rg);
+  el('rect',{width:300,height:220,fill:`url(#${id}v)`},s);
+  return s;
+}
+</script>
+<script src="concepts.js"></script>
+</body></html>
