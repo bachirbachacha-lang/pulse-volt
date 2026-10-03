@@ -1,0 +1,83 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="f2.css">
+<style>
+*{margin:0;box-sizing:border-box}
+body{background:#777;font-family:Inter,sans-serif}
+.pg{width:1080px;height:1350px;position:relative;overflow:hidden;display:grid;grid-template-rows:1fr 1fr}
+.h{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.dark{background:radial-gradient(90% 80% at 50% 45%,#1c1a1b,#0b0a0b);color:#EFE6D6}
+.cream{background:radial-gradient(90% 80% at 50% 45%,#f6f0e6,#e9e0d1);color:#15130f}
+.lab{position:absolute;left:44px;top:36px;font-size:15px;letter-spacing:.3em;text-transform:uppercase;opacity:.55}
+.slo{position:absolute;bottom:42px;font-family:'Bodoni Moda',serif;font-style:italic;font-size:26px;opacity:.75}
+/* 1 signature */
+.sig{font-family:'Pinyon Script',cursive;font-size:250px;line-height:1;transform:rotate(-6deg);position:relative}
+/* 2 arched */
+.arch text{font-family:'Bodoni Moda',serif;font-weight:700}
+/* 3 monogram */
+</style></head><body>
+
+<!-- OPTION 1: SIGNATURE -->
+<div class="pg" id="o1">
+ <div class="h dark"><div class="lab">Option 01 · Signature</div>
+  <svg width="900" height="430" viewBox="0 0 900 430">
+   <text x="450" y="250" text-anchor="middle" font-family="Pinyon Script" font-size="250" fill="#EFE6D6" transform="rotate(-6 450 250)">Vélour</text>
+   <path d="M150,330 C300,300 420,350 560,318 C660,296 740,300 790,312" fill="none" stroke="#EFE6D6" stroke-width="3" stroke-linecap="round" transform="rotate(-6 450 250)"/>
+   <path d="M200,350 C330,328 440,366 580,340 C670,323 730,326 760,332" fill="none" stroke="#EFE6D6" stroke-width="1.4" stroke-linecap="round" opacity=".6" transform="rotate(-6 450 250)"/>
+  </svg>
+  <div class="slo">Soft as velvet.</div>
+ </div>
+ <div class="h cream">
+  <svg width="900" height="430" viewBox="0 0 900 430">
+   <text x="450" y="250" text-anchor="middle" font-family="Pinyon Script" font-size="250" fill="#15130f" transform="rotate(-6 450 250)">Vélour</text>
+   <path d="M150,330 C300,300 420,350 560,318 C660,296 740,300 790,312" fill="none" stroke="#15130f" stroke-width="3" stroke-linecap="round" transform="rotate(-6 450 250)"/>
+   <path d="M200,350 C330,328 440,366 580,340 C670,323 730,326 760,332" fill="none" stroke="#15130f" stroke-width="1.4" stroke-linecap="round" opacity=".6" transform="rotate(-6 450 250)"/>
+  </svg>
+  <div class="slo" style="letter-spacing:.3em;font-style:normal;font-family:Inter;font-size:15px;text-transform:uppercase">Riyadh · Est. 2026</div>
+ </div>
+</div>
+
+<!-- OPTION 2: ARCHED (old money) -->
+<div class="pg" id="o2">
+ <div class="h dark"><div class="lab">Option 02 · Maison</div>
+  <svg width="900" height="520" viewBox="0 0 900 520" class="arch">
+   <defs><path id="ar" d="M60,290 Q450,150 840,290"/></defs>
+   <text font-size="112" letter-spacing="20" fill="#EFE6D6" text-anchor="middle"><textPath href="#ar" startOffset="50%">VÉLOUR</textPath></text>
+   <text x="450" y="340" text-anchor="middle" font-family="Pinyon Script" font-size="64" fill="#EFE6D6">20 <tspan font-family="Bodoni Moda" font-size="40">✦</tspan> 26</text>
+   <text x="450" y="400" text-anchor="middle" font-family="Inter" font-weight="600" font-size="15" letter-spacing="7" fill="#EFE6D6">MAISON DE RIYADH</text>
+   <text x="450" y="440" text-anchor="middle" font-family="Bodoni Moda" font-style="italic" font-size="19" fill="#EFE6D6" opacity=".7">For the long nights and the slow mornings that follow.</text>
+  </svg>
+ </div>
+ <div class="h cream">
+  <svg width="900" height="520" viewBox="0 0 900 520" class="arch">
+   <text font-size="112" letter-spacing="20" fill="#1c2234" text-anchor="middle"><textPath href="#ar" startOffset="50%">VÉLOUR</textPath></text>
+   <text x="450" y="340" text-anchor="middle" font-family="Pinyon Script" font-size="64" fill="#1c2234">20 <tspan font-family="Bodoni Moda" font-size="40">✦</tspan> 26</text>
+   <text x="450" y="400" text-anchor="middle" font-family="Inter" font-weight="600" font-size="15" letter-spacing="7" fill="#1c2234">MAISON DE RIYADH</text>
+   <text x="450" y="440" text-anchor="middle" font-family="Bodoni Moda" font-style="italic" font-size="19" fill="#1c2234" opacity=".7">For the long nights and the slow mornings that follow.</text>
+  </svg>
+ </div>
+</div>
+
+<!-- OPTION 3: MONOGRAM CREST -->
+<div class="pg" id="o3">
+ <div class="h dark"><div class="lab">Option 03 · Crest</div>
+  <svg width="520" height="520" viewBox="0 0 520 520" id="crest">
+   <defs><path id="rt" d="M90,260 A170,170 0 0,1 430,260"/><path id="rb" d="M70,260 A190,190 0 0,0 450,260"/></defs>
+   <g fill="none" stroke="currentColor"><circle cx="260" cy="260" r="215" stroke-width="5"/><circle cx="260" cy="260" r="202" stroke-width="1.5"/><circle cx="260" cy="260" r="140" stroke-width="1.5"/></g>
+   <g fill="currentColor">
+    <text font-family="Bodoni Moda" font-weight="700" font-size="34" letter-spacing="12" text-anchor="middle"><textPath href="#rt" startOffset="50%">VÉLOUR</textPath></text>
+    <text font-family="Inter" font-weight="600" font-size="17" letter-spacing="9" text-anchor="middle"><textPath href="#rb" startOffset="50%">RIYADH · MMXXVI</textPath></text>
+    <text x="232" y="335" text-anchor="middle" font-family="Pinyon Script" font-size="230">V</text>
+    <text x="96" y="272" text-anchor="middle" font-size="22">✦</text><text x="424" y="272" text-anchor="middle" font-size="22">✦</text>
+   </g>
+  </svg>
+  <div class="slo" style="color:#EFE6D6">Made to be lived in.</div>
+ </div>
+ <div class="h cream" style="color:#15130f">
+  <div style="display:flex;align-items:center;gap:40px">
+   <svg width="190" height="190" viewBox="0 0 520 520"><use href="#crest"/></svg>
+   <svg width="190" height="190" viewBox="0 0 520 520" style="color:#1c2234"><g fill="none" stroke="currentColor"><circle cx="260" cy="260" r="215" stroke-width="5"/><circle cx="260" cy="260" r="202" stroke-width="1.5"/><circle cx="260" cy="260" r="140" stroke-width="1.5"/></g><g fill="currentColor"><text font-family="Bodoni Moda" font-weight="700" font-size="34" letter-spacing="12" text-anchor="middle"><textPath href="#rt" startOffset="50%">VÉLOUR</textPath></text><text font-family="Inter" font-weight="600" font-size="17" letter-spacing="9" text-anchor="middle"><textPath href="#rb" startOffset="50%">RIYADH · MMXXVI</textPath></text><text x="232" y="335" text-anchor="middle" font-family="Pinyon Script" font-size="230">V</text></g></svg>
+  </div>
+  <div style="margin-top:44px;font-family:'Bodoni Moda',serif;font-weight:500;font-size:64px;letter-spacing:.35em;padding-left:.35em">VÉLOUR</div>
+  <div class="slo" style="letter-spacing:.3em;font-style:normal;font-family:Inter;font-size:15px;text-transform:uppercase">Chest embroidery · Hang tag · Profile picture</div>
+ </div>
+</div>
+</body></html>
