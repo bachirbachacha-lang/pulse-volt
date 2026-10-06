@@ -1,0 +1,194 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../vel/f.css"><link rel="stylesheet" href="../vel/f2.css"><link rel="stylesheet" href="../vel/f3.css"><link rel="stylesheet" href="../vel/f4.css"><link rel="stylesheet" href="../vel/f5.css">
+<style>
+@font-face{font-family:Pinyon;src:url(../vel/PinyonScript.ttf)}
+:root{--ink:#e9e0cf;--gold:#c9a86a;--bg:#0e0d0c}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;width:1600px}
+.sec{padding:70px 80px 30px}
+.k{font:600 13px Inter;letter-spacing:.42em;color:var(--gold);text-transform:uppercase}
+.h{font-family:'Cormorant Garamond';font-weight:500;font-size:58px;margin-top:8px;letter-spacing:.01em}
+.p{font:400 16px/1.65 Inter;color:#a9a090;max-width:620px;margin-top:10px}
+.g{position:relative}.g img.base{display:block;width:100%}.g svg.o{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.row{display:flex;gap:28px;margin-top:34px;align-items:flex-start}
+.card{background:#171513;border-radius:6px;overflow:hidden;position:relative}
+.cap{font:600 12px Inter;letter-spacing:.3em;text-transform:uppercase;padding:16px 18px 6px}
+.sub{font:400 14px/1.6 Inter;color:#9a9282;padding:0 18px 18px}
+.studio{background:radial-gradient(ellipse at 50% 40%,#3a3836,#1c1a19 70%)}
+.fix{position:absolute;top:14px;left:14px;font:700 11px Inter;letter-spacing:.2em;background:var(--gold);color:#111;padding:6px 10px;border-radius:2px}
+ul.spec{list-style:none;padding:0;margin-top:20px;font:400 15px/1.9 Inter;color:#b9b09f}
+ul.spec b{color:var(--ink);font-weight:600}
+.grain:after{content:"";position:absolute;inset:0;background:url(grain.png);mix-blend-mode:overlay;opacity:.55;pointer-events:none}
+.foil{background:linear-gradient(115deg,#7a5a28 0%,#e9cf8f 28%,#a67f3c 46%,#f3e2b0 62%,#8c6a30 80%,#d8b770 100%);-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<filter id="emb" x="-15%" y="-25%" width="130%" height="150%" color-interpolation-filters="sRGB">
+ <feTurbulence type="fractalNoise" baseFrequency="0.06 1.1" numOctaves="2" seed="4" result="n"/>
+ <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 .62" result="na"/>
+ <feComposite in="na" in2="SourceAlpha" operator="in" result="lines"/>
+ <feGaussianBlur in="SourceAlpha" stdDeviation="1.3" result="b"/>
+ <feSpecularLighting in="b" surfaceScale="3.5" specularConstant=".8" specularExponent="18" lighting-color="#ffffff" result="sp"><feDistantLight azimuth="235" elevation="50"/></feSpecularLighting>
+ <feComposite in="sp" in2="SourceAlpha" operator="in" result="sp2"/>
+ <feColorMatrix in="sp2" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .45 0" result="sp3"/>
+ <feDropShadow in="SourceGraphic" dx="0" dy="1.6" stdDeviation="1.2" flood-opacity=".6" result="base"/>
+ <feMerge><feMergeNode in="base"/><feMergeNode in="lines"/><feMergeNode in="sp3"/></feMerge>
+</filter>
+<filter id="sh"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".55"/></filter>
+<filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="3" seed="8"/><feDiffuseLighting surfaceScale="4" lighting-color="#f1e9db"><feDistantLight azimuth="225" elevation="52"/></feDiffuseLighting></filter>
+</defs></svg>
+
+<!-- HEADER -->
+<div style="padding:70px 80px 10px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #2a2724;padding-bottom:40px">
+ <div><div style="font-family:'Cormorant Garamond';font-weight:500;font-size:64px;letter-spacing:.42em">VÉLOUR</div>
+ <div class="k" style="margin-top:12px">Drop 01 · Feel The Weight</div></div>
+ <div style="text-align:right;font:500 13px/2 Inter;letter-spacing:.25em;color:#8d8576">3 PIECES · 50 OF EACH<br>HEAVYWEIGHT 480 GSM<br>ROSE · SCRIPT · V</div>
+</div>
+
+<!-- BRAND KIT -->
+<div class="sec">
+ <div class="k">01 · Brand kit</div><div class="h">One logo. One rose. One line.</div>
+ <div class="p">Same three marks on every piece, tag and box. People should see the rose and know it's Vélour without reading anything.</div>
+ <div class="row" style="gap:20px">
+  <div class="card" style="flex:1.4;height:330px;display:grid;place-items:center;background:#151312"><div style="text-align:center"><div style="font-family:Pinyon;font-size:130px;line-height:1;color:var(--ink)">Velour</div><div style="font:500 15px 'Cormorant Garamond';letter-spacing:.7em;margin-top:22px;color:#cfc5b2">FEEL THE WEIGHT</div></div><div class="cap" style="position:absolute;bottom:4px;left:0;color:#8d8576">The logo · Pinyon Script</div></div>
+  <div class="card" style="flex:1;height:330px;display:grid;place-items:center;background:#151312"><img src="spray.png" style="height:270px;filter:drop-shadow(0 2px 2px #000)"><div class="cap" style="position:absolute;bottom:4px;left:0;color:#8d8576">The rose</div></div>
+  <div class="card" style="flex:.8;height:330px;display:grid;place-items:center;background:#e9e1d2"><img src="monogram-black.png" style="height:200px"><div class="cap" style="position:absolute;bottom:4px;left:0;color:#7a7264">The V</div></div>
+ </div>
+ <div style="display:flex;gap:14px;margin-top:20px">
+  <div style="flex:1;height:66px;border-radius:4px;background:#151314;border:1px solid #2c2926;padding:12px 14px;font:600 11px Inter;letter-spacing:.2em">NOIR<br><span style="font-weight:400;color:#8d8576">#151314</span></div>
+  <div style="flex:1;height:66px;border-radius:4px;background:#e9e1d2;color:#222;padding:12px 14px;font:600 11px Inter;letter-spacing:.2em">CRÈME<br><span style="font-weight:400;color:#6d665a">#E9E1D2</span></div>
+  <div style="flex:1;height:66px;border-radius:4px;background:#46464a;padding:12px 14px;font:600 11px Inter;letter-spacing:.2em">CHARBON<br><span style="font-weight:400;color:#bbb">#46464A</span></div>
+  <div style="flex:1;height:66px;border-radius:4px;background:#1c2234;padding:12px 14px;font:600 11px Inter;letter-spacing:.2em">MARINE<br><span style="font-weight:400;color:#aab">#1C2234</span></div>
+  <div style="flex:1;height:66px;border-radius:4px;background:#7c1d27;padding:12px 14px;font:600 11px Inter;letter-spacing:.2em">ROSE RED<br><span style="font-weight:400;color:#e3b">#7C1D27</span></div>
+  <div style="flex:1;height:66px;border-radius:4px;background:linear-gradient(115deg,#8c6a30,#e9cf8f,#a67f3c);color:#2a1d08;padding:12px 14px;font:600 11px Inter;letter-spacing:.2em">GOLD FOIL<br><span style="font-weight:400">#C9A86A</span></div>
+ </div>
+</div>
+
+<!-- HOODIE -->
+<div class="sec">
+ <div class="k">02 · The hoodie</div><div class="h">"Feel The Weight" hoodie</div>
+ <div class="p">Your idea, cleaned up. The draped cloth is gone because it can't be stitched, and the words do the work now. Rose on the hood, small rose on the chest.</div>
+ <div class="row">
+  <div class="card studio" style="flex:1.25"><div class="g"><img class="base" src="noir-back-blank.png">
+   <svg class="o" viewBox="0 0 1000 1250">
+    <image href="rose-head-mauve.png" x="472" y="150" width="56" height="87" filter="url(#sh)"/>
+    <text x="500" y="560" text-anchor="middle" font-family="Pinyon" font-size="170" textLength="430" lengthAdjust="spacingAndGlyphs" fill="#e6dcc8" filter="url(#emb)">Velour</text>
+    <text x="500" y="625" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="23" letter-spacing="9" fill="#d9cfbb" filter="url(#emb)">FEEL THE WEIGHT</text>
+   </svg></div>
+   <div class="cap">Noir · back</div><div class="sub">Cream thread · script 30 cm wide · 14 cm under the collar</div></div>
+  <div style="flex:1;display:flex;flex-direction:column;gap:28px">
+   <div class="card studio"><div class="g"><img class="base" src="../v5/img/creme-back.webp">
+    <svg class="o" viewBox="0 0 1000 1250">
+     <image href="rose-head-mauve.png" x="472" y="150" width="56" height="87" filter="url(#sh)"/>
+     <text x="500" y="560" text-anchor="middle" font-family="Pinyon" font-size="170" textLength="430" lengthAdjust="spacingAndGlyphs" fill="#b3a387" filter="url(#emb)">Velour</text>
+     <text x="500" y="625" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="23" letter-spacing="9" fill="#a8987c" filter="url(#emb)">FEEL THE WEIGHT</text>
+    </svg></div><div class="cap">Crème · back</div><div class="sub">Tonal: thread a shade darker than the fabric</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;gap:28px">
+   <div class="card studio"><div class="g"><img class="base" src="noir-front-blank.png">
+    <svg class="o" viewBox="0 0 1000 1250"><image href="rose-head-cream.png" x="612" y="395" width="50" height="78" filter="url(#sh)"/></svg></div>
+    <div class="cap">Noir · front</div><div class="sub">Just a small rose, 6 cm, on the left chest</div></div>
+   <ul class="spec">
+    <li><b>Fabric:</b> 480 GSM cotton fleece, brushed inside</li>
+    <li><b>Fit:</b> boxy, dropped shoulder, double-layer hood</li>
+    <li><b>Back:</b> flat embroidery, script + small caps</li>
+    <li><b>Hood:</b> 5 cm rose, 6 cm under the hood seam</li>
+    <li><b>Price idea:</b> 349 SAR</li>
+   </ul>
+  </div>
+ </div>
+</div>
+
+<!-- PANTS -->
+<div class="sec">
+ <div class="k">03 · The pants</div><div class="h">Script down the leg, rose on the knee</div>
+ <div class="p">Wide-leg, heavy, stacked at the ankle. Navy and crème were already right. Charcoal had fake letters, so it now has the real logo.</div>
+ <div class="row">
+  <div class="card" style="flex:1"><div class="g"><img class="base" src="navy-pants.jpg"></div><div class="cap">Marine</div><div class="sub">Cream script + red rose · already right</div></div>
+  <div class="card" style="flex:1"><div class="g"><img class="base" src="cream-pants.jpg"></div><div class="cap">Crème</div><div class="sub">Script on the left leg, rose on the right · <b style="color:var(--gold)">make this first</b></div></div>
+  <div class="card" style="flex:1"><div class="g"><img class="base" src="char-pants-clean.png">
+   <svg class="o" viewBox="0 0 784 1168">
+    <text transform="translate(512,392) rotate(90.5)" text-anchor="middle" font-family="Pinyon" font-size="80" textLength="205" lengthAdjust="spacingAndGlyphs" fill="#6a696d" stroke="#6a696d" stroke-width="1.2" filter="url(#emb)">Velour</text>
+    <text transform="translate(534,690) rotate(90.5)" text-anchor="middle" font-family="Cormorant Garamond" font-weight="700" font-size="14" letter-spacing="5" fill="#6e6d71" filter="url(#emb)">FEEL THE WEIGHT</text>
+   </svg><span class="fix">FIXED</span></div><div class="cap">Charbon</div><div class="sub">Tonal: grey on grey, real logo now</div></div>
+ </div>
+ <ul class="spec" style="display:flex;gap:40px"><li><b>Script:</b> 20 cm long, starts 8 cm under the pocket</li><li><b>Rose:</b> 6 cm, on the knee line</li><li><b>Price idea:</b> 299 SAR · set 599 SAR</li></ul>
+</div>
+
+<!-- CAP -->
+<div class="sec">
+ <div class="k">04 · The cap</div><div class="h">Fixed the letters, kept the vine</div>
+ <div class="row">
+  <div class="card" style="flex:1"><div class="g"><img class="base" src="cap.jpg"></div><div class="cap" style="color:#a55">Before</div><div class="sub">"VElouR": the AI mixed up the capital letters</div></div>
+  <div class="card" style="flex:1"><div class="g"><img class="base" src="cap-clean.png">
+   <svg class="o" viewBox="0 0 784 1168"><text transform="translate(352,520) rotate(-8)" text-anchor="middle" font-family="Pinyon" font-size="150" textLength="330" lengthAdjust="spacingAndGlyphs" fill="#e3d8c3" stroke="#e3d8c3" stroke-width="3.5" stroke-linejoin="round" filter="url(#emb)">Velour</text></svg>
+   <span class="fix">FIXED</span></div><div class="cap">After</div><div class="sub">Real logo in 3D puff embroidery, rose vine onto the brim</div></div>
+  <ul class="spec" style="flex:.8;margin-top:0"><li><b>Cap:</b> black wool-blend, 6-panel, curved brim</li><li><b>Front:</b> 3D puff script, cream</li><li><b>Side:</b> rose vine running onto the brim</li><li><b>Back:</b> metal buckle strap, engraved V</li><li><b>Price idea:</b> 179 SAR</li></ul>
+ </div>
+</div>
+
+<!-- LABELS -->
+<div class="sec">
+ <div class="k">05 · Labels &amp; tags</div><div class="h">The small stuff that makes it real</div>
+ <div class="row" style="align-items:stretch">
+  <div class="card" style="flex:1;background:#d9d0c0;display:grid;place-items:center;min-height:340px" >
+   <div style="position:relative;width:300px;height:92px;background:#131112;border-radius:2px;box-shadow:0 8px 18px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;gap:16px;overflow:hidden">
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgba(0,0,0,.25) 0 1px,transparent 1px 2px)"></div>
+    <div style="position:absolute;left:8px;top:0;bottom:0;border-left:1px dashed #3a3634"></div><div style="position:absolute;right:8px;top:0;bottom:0;border-left:1px dashed #3a3634"></div>
+    <img src="rose-head-cream.png" style="height:56px;position:relative">
+    <div style="position:relative;text-align:center"><div style="font:600 24px 'Cormorant Garamond';letter-spacing:.38em;color:#e6dcc8">VÉLOUR</div><div style="font:600 8px Inter;letter-spacing:.35em;color:#a99f8c;margin-top:4px">FEEL THE WEIGHT · L</div></div>
+   </div>
+   <div class="cap" style="position:absolute;bottom:4px;left:0;color:#544c40">Neck label · woven</div></div>
+  <div class="card" style="flex:1;background:#d9d0c0;display:grid;place-items:center;min-height:340px">
+   <div style="width:130px;height:230px;background:#efe9de;border-radius:2px;box-shadow:0 8px 16px rgba(0,0,0,.25);padding:18px 12px;text-align:center;color:#2a2622;font:500 8.5px/1.9 Inter;letter-spacing:.14em">
+    <div style="font:600 15px 'Cormorant Garamond';letter-spacing:.3em">VÉLOUR</div><div style="margin:10px 0;border-top:1px solid #c9bfae"></div>100% COTTON<br>480 GSM FLEECE<br><br>WASH INSIDE OUT<br>30°C · DO NOT TUMBLE<br>DRY FLAT<br><br>DROP 01<div style="margin-top:12px;font:400 italic 14px 'Cormorant Garamond';letter-spacing:0">the cloth remembers</div></div>
+   <div class="cap" style="position:absolute;bottom:4px;left:0;color:#544c40">Care label · side seam</div></div>
+  <div class="card" style="flex:1;background:#d9d0c0;display:grid;place-items:center;min-height:340px">
+   <div style="position:relative;transform:rotate(-6deg)">
+    <svg width="160" height="70" style="position:absolute;left:30px;top:-56px"><path d="M50,64 C40,30 80,10 110,2" stroke="#1b1817" stroke-width="2" fill="none"/></svg>
+    <div style="width:150px;height:270px;background:#141213;border-radius:3px;box-shadow:0 12px 22px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;padding-top:20px;position:relative">
+     <div style="width:12px;height:12px;border-radius:50%;background:#d9d0c0;box-shadow:inset 0 0 0 2px #8c6a30"></div>
+     <img src="rose-head-gold.png" style="height:100px;margin-top:20px">
+     <div style="font:600 15px 'Cormorant Garamond';letter-spacing:.32em;color:#d8bd85;margin-top:14px">VÉLOUR</div>
+     <div style="font:500 8px/2 Inter;letter-spacing:.25em;color:#8d8576;text-align:center;margin-top:10px">DROP 01<br>Nº 07 / 50<br>FEEL THE WEIGHT</div>
+    </div></div>
+   <div class="cap" style="position:absolute;bottom:4px;left:0;color:#544c40">Hang tag · numbered</div></div>
+ </div>
+</div>
+
+<!-- PACKAGING -->
+<div class="sec" style="padding-bottom:90px">
+ <div class="k">06 · Packaging</div><div class="h">The unboxing</div>
+ <div class="p">Black box, gold foil, cream tissue sealed with a rose sticker, a thank-you card and a dust bag. Made so people film it.</div>
+ <div class="grain" style="position:relative;margin-top:34px;height:860px;border-radius:6px;overflow:hidden;background:radial-gradient(ellipse at 40% 35%,#2b2826,#141211 75%)">
+  <!-- dust bag -->
+  <div style="position:absolute;left:1060px;top:90px;width:330px;height:430px;transform:rotate(7deg);background:#1a1817;border-radius:10px 10px 16px 16px;box-shadow:0 30px 50px rgba(0,0,0,.55),inset 0 0 40px rgba(0,0,0,.6);overflow:hidden">
+   <div style="position:absolute;inset:0;background:url(../hood/fleece.png);opacity:.08;mix-blend-mode:screen"></div>
+   <div style="position:absolute;top:28px;left:0;right:0;height:16px;border-top:1px dashed #3a3633;border-bottom:1px dashed #3a3633"></div>
+   <svg style="position:absolute;left:0;top:0" width="330" height="140"><path d="M150,36 C120,70 110,100 132,130" stroke="#d9cfbb" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M180,36 C200,70 214,96 196,128" stroke="#d9cfbb" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="132" cy="132" r="5" fill="#d9cfbb"/><circle cx="196" cy="130" r="5" fill="#d9cfbb"/></svg>
+   <img src="spray-cream.png" style="position:absolute;left:94px;top:140px;height:200px;opacity:.92">
+   <div style="position:absolute;bottom:42px;left:0;right:0;text-align:center;font:600 16px 'Cormorant Garamond';letter-spacing:.5em;color:#d9cfbb">VÉLOUR</div>
+  </div>
+  <!-- box base with tissue -->
+  <div style="position:absolute;left:110px;top:300px;width:560px;height:440px;transform:rotate(-4deg);background:#121011;border-radius:4px;box-shadow:0 40px 70px rgba(0,0,0,.65)">
+   <div style="position:absolute;inset:14px;background:#0b0a0a;box-shadow:inset 0 10px 24px rgba(0,0,0,.9)"></div>
+   <svg style="position:absolute;inset:22px;width:516px;height:396px"><rect width="516" height="396" filter="url(#paper)"/><path d="M0,190 C140,214 300,170 516,200" stroke="rgba(120,100,70,.25)" stroke-width="2" fill="none"/><path d="M258,0 C250,120 270,260 252,396" stroke="rgba(120,100,70,.18)" stroke-width="2" fill="none"/></svg>
+   <div style="position:absolute;left:228px;top:150px;width:110px;height:110px;border-radius:50%;background:#141213;box-shadow:0 3px 6px rgba(0,0,0,.4);display:grid;place-items:center"><img src="rose-head-gold.png" style="height:80px"></div>
+  </div>
+  <!-- lid -->
+  <div style="position:absolute;left:520px;top:70px;width:520px;height:400px;transform:rotate(9deg);background:linear-gradient(160deg,#1d1b1b,#0f0e0e);border-radius:4px;box-shadow:0 40px 70px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06),inset 0 0 0 1px rgba(255,255,255,.03);display:flex;flex-direction:column;align-items:center;justify-content:center">
+   <img src="monogram-gold.png" style="height:150px;filter:drop-shadow(0 1px 0 rgba(255,240,200,.25)) drop-shadow(0 -1px 0 rgba(0,0,0,.6))">
+   <div class="foil" style="margin-top:22px;width:200px;height:24px;-webkit-mask-image:none;-webkit-background-clip:text;color:transparent;font:600 22px 'Cormorant Garamond';letter-spacing:.5em;text-align:center;padding-left:.5em">VÉLOUR</div>
+  </div>
+  <!-- thank you card -->
+  <div style="position:absolute;left:720px;top:520px;width:380px;height:250px;transform:rotate(-7deg);background:#efe8dc;border-radius:3px;box-shadow:0 20px 34px rgba(0,0,0,.5);padding:30px 34px;color:#2a2521">
+   <div style="font-family:Pinyon;font-size:46px;line-height:1">You feel it now.</div>
+   <div style="font:400 13px/1.7 Inter;color:#5d554b;margin-top:16px">Thank you for being one of the first 50.<br>Wear it heavy. Tag us when you do.</div>
+   <div style="position:absolute;bottom:22px;left:34px;right:34px;display:flex;justify-content:space-between;font:600 10px Inter;letter-spacing:.3em;color:#8a7f70"><span>VÉLOUR</span><span>Nº 07 / 50</span></div>
+  </div>
+  <!-- sticker roll -->
+  <div style="position:absolute;left:1180px;top:600px;width:120px;height:120px;border-radius:50%;background:#141213;box-shadow:0 10px 18px rgba(0,0,0,.5);display:grid;place-items:center;transform:rotate(12deg)"><img src="rose-head-gold.png" style="height:86px"></div>
+  <div style="position:absolute;left:1270px;top:700px;width:84px;height:84px;border-radius:50%;background:#efe8dc;box-shadow:0 8px 14px rgba(0,0,0,.45);display:grid;place-items:center;transform:rotate(-18deg)"><div style="font-family:Pinyon;font-size:30px;color:#1a1715">V</div></div>
+ </div>
+ <ul class="spec" style="display:grid;grid-template-columns:1fr 1fr;gap:0 40px"><li><b>Box:</b> rigid black box, soft-touch matte, gold foil V</li><li><b>Tissue:</b> cream, sealed with a black and gold rose sticker</li><li><b>Card:</b> "You feel it now.", hand-numbered</li><li><b>Dust bag:</b> black cotton, cream rose print, drawstring</li></ul>
+</div>
+</body></html>
