@@ -84,10 +84,11 @@ html[lang=ar] .svc b{font-family:var(--ar);font-weight:700;text-transform:none}
 .tabs button[aria-pressed="true"]{background:var(--wax);color:var(--ink);border-color:var(--wax)}
 
 /* gallery */
-.gal{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto auto;gap:14px}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(160px,20vw,280px);gap:14px}
 .gal>*{border-radius:6px;overflow:hidden;position:relative;min-width:0}
 .gal video,.gal img{width:100%;height:100%;object-fit:cover}
-.gal .big{grid-row:span 2}
+.gal .big{grid-column:span 2;grid-row:span 2}.gal .tall{grid-row:span 2}.gal .wide{grid-column:span 2}
+.banner{position:relative;min-height:min(80vh,720px);display:flex;align-items:flex-end;overflow:hidden}.banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(11,13,16,.92))}.banner .in{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;width:100%;padding-block:0 48px}.banner .in>div{display:flex;flex-direction:column;gap:14px}
 .gal figcaption{position:absolute;left:14px;bottom:12px;font-size:12px;font-weight:700;letter-spacing:.1em;background:rgba(11,13,16,.6);padding:6px 10px;border-radius:3px}
 figure{margin:0}
 
@@ -115,7 +116,7 @@ footer{border-top:1px solid var(--line);padding-block:40px calc(40px + env(safe-
 
 @media (max-width:820px){
   .split,.book{grid-template-columns:1fr}
-  .gal{grid-template-columns:1fr}.gal .big{grid-row:auto}
+  .gal{grid-template-columns:1fr 1fr;grid-auto-rows:170px}.gal .big{grid-column:span 2;grid-row:span 2}.gal .wide{grid-column:span 2}
   .svc{grid-template-columns:36px 1fr auto;gap:12px}
   .svc .t{display:none}
   .sum{position:static}
@@ -165,10 +166,16 @@ footer{border-top:1px solid var(--line);padding-block:40px calc(40px + env(safe-
   <div class="head"><div><div class="k" data-t="k4">Recent work</div><h2 class="h h2" id="gt" data-t="gt">Out the door.</h2></div></div>
   <div class="gal">
     <figure class="big"><video src="m/v2.mp4" poster="m/v2.jpg" autoplay muted loop playsinline aria-label="A black coupe at night with a deep gloss finish"></video><figcaption data-t="g1">Full PPF · Gloss black</figcaption></figure>
+    <figure class="tall"><img src="m/wheel.jpg" alt="Gloss black car with forged wheel and red caliper reflecting on a polished floor" loading="lazy"><figcaption data-t="g4">Wheels &amp; calipers</figcaption></figure>
+    <figure><img src="m/tips.jpg" alt="Quad titanium exhaust tips in a carbon surround" loading="lazy"><figcaption data-t="g5">Carbon &amp; tips</figcaption></figure>
     <figure><img src="m/paint.jpg" alt="Water beading on ceramic coated blue paint" loading="lazy"><figcaption data-t="g2">9H ceramic</figcaption></figure>
+    <figure class="wide"><img src="m/exhaust.jpg" alt="Underside of a car on stands with a titanium exhaust and carbon diffuser" loading="lazy"><figcaption data-t="g6">Underbody clean</figcaption></figure>
+    <figure><img src="m/engine.jpg" alt="Clean engine bay with carbon engine cover" loading="lazy"><figcaption data-t="g7">Engine bay</figcaption></figure>
     <figure><img src="m/interior.jpg" alt="Leather seat being wiped down during interior detailing" loading="lazy"><figcaption data-t="g3">Interior detail</figcaption></figure>
   </div>
 </section>
+
+<section class="banner" aria-labelledby="lt"><img src="m/lineup.jpg" alt="A green coupe, a white sports car and an orange supercar in a lit detailing studio" loading="lazy"><div class="in wrap"><div><div class="k" data-t="k7">Every make</div><h2 class="h h2" id="lt" data-t="lt">Sedan to supercar.</h2></div><p class="lede" style="color:#c3c9d2" data-t="llede">Same products, same hands, same inspection, whatever you drive in with.</p></div></section>
 
 <section class="wrap" id="book" aria-labelledby="bt">
   <div class="head"><div><div class="k" data-t="k5">Booking</div><h2 class="h h2" id="bt" data-t="bt">Build your booking.</h2></div></div>
@@ -200,7 +207,7 @@ footer{border-top:1px solid var(--line);padding-block:40px calc(40px + env(safe-
 <script>
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const T={en:{},ar:{navbook:'احجز الآن',eyebrow:'سيراميك · حماية PPF · تلميع · داخلية',hero:'كأنها <span>جديدة.</span>',herolede:'تصحيح الطلاء، نانو سيراميك، وأفلام الحماية. احجز خلال ٣٠ ثانية، والشغل يدوي بالكامل.',c1:'نستلم ونرجّع السيارة',c2:'منتجات ألمانية وأمريكية',c3:'ضمان حتى ٥ سنوات',k1:'الخدمات',pt:'كل الأسعار في صفحة وحدة.',plede:'بدون ما تدور في الهايلايت. الأسعار لسيارة سيدان، وحجم السيارة تختاره في الحجز.',k2:'كيف نلمّع',polt:'أربع خطوات. بدون اختصارات.',s1:'غسيل رغوة وطين تنظيف يشيل اللي ما يشيله الغسيل العادي.',s2:'نقيس سماكة الطلاء، وبعدها تلميع بالماكينة يشيل الخدوش والدوائر.',s3:'مسح الألواح عشان السيراميك يثبت على طلاء نظيف.',s4:'سيراميك أو PPF، يجف تحت الإضاءة، وبعدها نفحصها معك.',k3:'قبل / بعد',bat:'اسحب وشوف الفرق.',tab1:'الطلاء',tab2:'الداخلية',before:'قبل',after:'بعد',k4:'من شغلنا',gt:'طالعة من عندنا.',g1:'حماية PPF كاملة · أسود لامع',g2:'سيراميك 9H',g3:'تنظيف داخلي',k5:'الحجز',bt:'رتّب حجزك.',l1:'الخدمة',l2:'حجم السيارة',l3:'إضافات',l4:'اليوم',l5:'نوع السيارة',k6:'حجزك',r1:'الخدمة',r2:'الحجم',r3:'إضافات',r4:'اليوم',r5:'التقدير',wa:'أرسل على واتساب',note:'يفتح واتساب ومكتوب فيه حجزك. السعر النهائي بعد الفحص.',foot:'تصميم تجريبي من Pixel & Co.',samp:'موقع تجريبي · PIXEL & CO.'}};
+const T={en:{},ar:{navbook:'احجز الآن',eyebrow:'سيراميك · حماية PPF · تلميع · داخلية',hero:'كأنها <span>جديدة.</span>',herolede:'تصحيح الطلاء، نانو سيراميك، وأفلام الحماية. احجز خلال ٣٠ ثانية، والشغل يدوي بالكامل.',c1:'نستلم ونرجّع السيارة',c2:'منتجات ألمانية وأمريكية',c3:'ضمان حتى ٥ سنوات',k1:'الخدمات',pt:'كل الأسعار في صفحة وحدة.',plede:'بدون ما تدور في الهايلايت. الأسعار لسيارة سيدان، وحجم السيارة تختاره في الحجز.',k2:'كيف نلمّع',polt:'أربع خطوات. بدون اختصارات.',s1:'غسيل رغوة وطين تنظيف يشيل اللي ما يشيله الغسيل العادي.',s2:'نقيس سماكة الطلاء، وبعدها تلميع بالماكينة يشيل الخدوش والدوائر.',s3:'مسح الألواح عشان السيراميك يثبت على طلاء نظيف.',s4:'سيراميك أو PPF، يجف تحت الإضاءة، وبعدها نفحصها معك.',k3:'قبل / بعد',bat:'اسحب وشوف الفرق.',tab1:'الطلاء',tab2:'الداخلية',before:'قبل',after:'بعد',k4:'من شغلنا',gt:'طالعة من عندنا.',g1:'حماية PPF كاملة · أسود لامع',g2:'سيراميك 9H',g3:'تنظيف داخلي',g4:'جنوط وكاليبرات',g5:'كربون وشكمان',g6:'تنظيف أسفل السيارة',g7:'تنظيف المكينة',k7:'كل الأنواع',lt:'من السيدان للسوبر كار.',llede:'نفس المنتجات، نفس الأيادي، ونفس الفحص، مهما كانت سيارتك.',k5:'الحجز',bt:'رتّب حجزك.',l1:'الخدمة',l2:'حجم السيارة',l3:'إضافات',l4:'اليوم',l5:'نوع السيارة',k6:'حجزك',r1:'الخدمة',r2:'الحجم',r3:'إضافات',r4:'اليوم',r5:'التقدير',wa:'أرسل على واتساب',note:'يفتح واتساب ومكتوب فيه حجزك. السعر النهائي بعد الفحص.',foot:'تصميم تجريبي من Pixel & Co.',samp:'موقع تجريبي · PIXEL & CO.'}};
 $$('[data-t]').forEach(el=>T.en[el.dataset.t]=el.innerHTML);
 const S=[
  {id:'wash',p:150,t:'1–2 h',en:['Detail wash','Foam wash, wheels, tyres, glass, quick interior vacuum.'],ar:['غسيل تفصيلي','غسيل رغوة، جنوط، كفرات، زجاج، وشفط داخلي سريع.']},
@@ -210,7 +217,7 @@ const S=[
  {id:'tint',p:800,t:'4 h',en:['Heat-rejection tint','Nano ceramic film, up to 85% heat rejection.'],ar:['عازل حراري','فيلم نانو سيراميك، يعزل حتى ٨٥٪ من الحرارة.']},
  {id:'ppf',p:4500,t:'2–3 days',en:['Full PPF','Self-healing film on the whole body. 5-year warranty.'],ar:['حماية PPF كاملة','فيلم يعالج نفسه لكامل السيارة. ضمان ٥ سنوات.']}];
 const Z=[{id:'sedan',m:1,en:'Sedan',ar:'سيدان'},{id:'suv',m:1.2,en:'SUV',ar:'دفع رباعي'},{id:'xl',m:1.4,en:'Large / pickup',ar:'كبيرة / بيك أب'}];
-const X=[{id:'eng',p:150,en:'Engine bay',ar:'تنظيف المكينة'},{id:'rim',p:250,en:'Rim coating',ar:'سيراميك الجنوط'},{id:'pick',p:100,en:'Pickup & return',ar:'استلام وتوصيل'}];
+const X=[{id:'eng',p:150,en:'Engine bay',ar:'تنظيف المكينة'},{id:'rim',p:250,en:'Rim coating',ar:'سيراميك الجنوط'},{id:'tips',p:200,en:'Carbon & tips polish',ar:'تلميع الكربون والشكمان'},{id:'pick',p:100,en:'Pickup & return',ar:'استلام وتوصيل'}];
 let L='en';
 const sar=n=>L==='ar'?`${n.toLocaleString('ar-SA')} ر.س`:`${n.toLocaleString('en-US')} SAR`;
 function render(){
