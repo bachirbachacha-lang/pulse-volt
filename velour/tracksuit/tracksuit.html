@@ -1,0 +1,343 @@
+<title>VÉLOUR Tracksuit Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Manrope:wght@400;600&family=Pinyon+Script&display=swap">
+<style>
+/* layout: dark atelier board; sections stack, each set = 3 drawings side by side on desktop, swipe row on phone */
+:root{--bg:#0e0d0c;--panel:#171513;--fg:#ece3d2;--muted:#9a9282;--gold:#c9a86a;--rose:#7c1d27;--line:#2a2622;
+--display:'Cormorant Garamond',Georgia,serif;--body:Manrope,system-ui,sans-serif;--script:'Pinyon Script',cursive;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);padding:0 16px}
+main{max-width:1200px;margin:0 auto;padding-block:36px 64px;display:flex;flex-direction:column;gap:56px}
+header{display:flex;flex-direction:column;gap:12px;border-bottom:1px solid var(--line);padding-bottom:28px}
+h1{font:500 clamp(36px,6.4vw,64px)/1.02 var(--display);margin:0;text-wrap:balance}
+h1 em{font-family:var(--script);font-style:normal;color:var(--gold);font-size:1.15em;font-weight:400}
+h2{font:500 clamp(28px,4vw,40px)/1.1 var(--display);margin:0;text-wrap:balance}
+h3{font:500 28px/1.1 var(--display);margin:0}
+.k{font:600 11px var(--body);letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+p,li{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+section{display:flex;flex-direction:column;gap:22px}
+.sh{display:flex;flex-direction:column;gap:8px;max-width:62ch}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+figure{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+figure img{width:100%;height:auto;display:block;border-radius:4px}
+figcaption{font-size:13px;color:var(--muted);line-height:1.5}
+figcaption b{color:var(--fg);font-weight:600}
+.set{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:28px;padding-top:26px;border-top:1px solid var(--line)}
+.meta{display:flex;flex-direction:column;gap:12px;min-width:0}
+.tag{display:flex;align-items:baseline;gap:12px}
+.tag .l{font:500 44px/1 var(--display);color:var(--gold)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:4px 9px 4px 5px}
+.chip i{width:12px;height:12px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.draws{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;min-width:0}
+.dw{background:radial-gradient(120% 90% at 50% 40%,#2a2623 0%,#151311 70%);border:1px solid var(--line);border-radius:6px;padding:10px 8px 8px;display:flex;flex-direction:column;gap:4px;cursor:zoom-in;min-width:0}
+.dw:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.dw svg{width:100%;height:auto;display:block}
+.dw span{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);text-align:center}
+.details{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.det{display:flex;flex-direction:column;gap:8px;min-width:0}
+.det .dw{cursor:zoom-in}
+.det b{font:500 22px var(--display);color:var(--fg)}
+.note{border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:10px;background:var(--panel)}
+.note p{color:var(--fg)}
+#lb{position:fixed;inset:0;background:rgba(8,7,6,.94);display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 20px) 16px calc(env(safe-area-inset-bottom,0px) + 20px);z-index:9;cursor:zoom-out}
+#lb svg{max-width:min(100%,760px);max-height:100%;width:100%;height:100%}
+@media (max-width:760px){
+ .set{grid-template-columns:minmax(0,1fr);gap:16px}
+ .draws{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+ .draws .dw{scroll-snap-align:start}
+}
+@media (prefers-reduced-motion:no-preference){.dw{transition:border-color .2s}.dw:hover{border-color:#4a4239}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+ <filter id="fleece" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="n"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -.9 .55" result="d"/>
+  <feComposite in="d" in2="SourceAlpha" operator="in" result="dots"/>
+  <feComponentTransfer in="dots" result="dots2"><feFuncA type="linear" slope=".22"/></feComponentTransfer>
+  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="dots2"/></feMerge>
+ </filter>
+ <filter id="washed" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feTurbulence type="fractalNoise" baseFrequency=".018 .03" numOctaves="3" seed="11" result="n"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 -.62" result="w"/>
+  <feComposite in="w" in2="SourceAlpha" operator="in" result="wash"/>
+  <feComponentTransfer in="wash" result="wash2"><feFuncA type="linear" slope=".16"/></feComponentTransfer>
+  <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="n2"/>
+  <feColorMatrix in="n2" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -.9 .55" result="d"/>
+  <feComposite in="d" in2="SourceAlpha" operator="in" result="dots"/>
+  <feComponentTransfer in="dots" result="dots2"><feFuncA type="linear" slope=".07"/></feComponentTransfer>
+  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wash2"/><feMergeNode in="dots2"/></feMerge>
+ </filter>
+ <filter id="emb" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+  <feGaussianBlur in="SourceAlpha" stdDeviation=".9" result="b"/>
+  <feSpecularLighting in="b" surfaceScale="2.4" specularConstant=".55" specularExponent="16" lighting-color="#fff" result="s"><feDistantLight azimuth="235" elevation="52"/></feSpecularLighting>
+  <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+  <feOffset in="SourceAlpha" dx=".8" dy="1.2" result="o"/><feGaussianBlur in="o" stdDeviation=".8" result="ob"/>
+  <feColorMatrix in="ob" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .45 0" result="sh"/>
+  <feMerge><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge>
+ </filter>
+ <filter id="puff" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="b"/>
+  <feSpecularLighting in="b" surfaceScale="5" specularConstant=".42" specularExponent="14" lighting-color="#fff" result="s"><feDistantLight azimuth="230" elevation="46"/></feSpecularLighting>
+  <feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+  <feOffset in="SourceAlpha" dx="1.6" dy="2.4" result="o"/><feGaussianBlur in="o" stdDeviation="1.8" result="ob"/>
+  <feColorMatrix in="ob" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0" result="sh"/>
+  <feMerge><feMergeNode in="sh"/><feMergeNode in="SourceGraphic"/><feMergeNode in="s2"/></feMerge>
+ </filter>
+ <linearGradient id="sh" x1="0" x2="1" y1="0" y2="0">
+  <stop offset="0" stop-color="#000" stop-opacity=".30"/><stop offset=".22" stop-color="#000" stop-opacity="0"/>
+  <stop offset=".78" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".30"/>
+ </linearGradient>
+ <linearGradient id="shv" x1="0" x2="0" y1="0" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity=".07"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/>
+ </linearGradient>
+ <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".2"/>
+  <stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset=".7" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+ </linearGradient>
+ <linearGradient id="goldG" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#F0DDA8"/><stop offset=".45" stop-color="#C9A86A"/><stop offset="1" stop-color="#7E6232"/>
+ </linearGradient>
+ <linearGradient id="silverG" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#F4F5F6"/><stop offset=".5" stop-color="#B9BDC2"/><stop offset="1" stop-color="#6E7378"/>
+ </linearGradient>
+ <linearGradient id="gunG" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#8A8C90"/><stop offset=".5" stop-color="#4A4C50"/><stop offset="1" stop-color="#232426"/>
+ </linearGradient>
+ <radialGradient id="velvetR" cx=".4" cy=".35" r=".8">
+  <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/>
+ </radialGradient>
+</defs>
+</svg>
+
+<main>
+<header>
+ <div class="k">VÉLOUR · Drop 01 · Tracksuits</div>
+ <h1>The Tracksuit <em>Board</em></h1>
+ <p>Your 4 pics, your 3 sets with the 7 upgrades added, and 4 new sets I designed myself. All drawings are design sketches (samples), not real products. Tap any drawing to see it big.</p>
+</header>
+
+<section aria-labelledby="refs-t">
+ <div class="sh"><div class="k">Start</div><h2 id="refs-t">Your pics</h2><p>What you sent. These set the direction: wide legs, small script, big back art, script down the sleeve.</p></div>
+ <div class="refs">
+  <figure><img src="ref-creme-pants.jpg" alt="Crème wide-leg sweatpants with a small Velour script on the thigh" loading="lazy"><figcaption><b>Crème pants.</b> Small script on the thigh. The base for every set.</figcaption></figure>
+  <figure><img src="ref-noir-back.jpg" alt="Black hoodie back with draped cloth art, Velour script and Feel The Weight" loading="lazy"><figcaption><b>Noir back.</b> Draped cloth behind the script. Goes on Set C.</figcaption></figure>
+  <figure><img src="ref-ciel-zip.jpg" alt="Baby blue zip hoodie with white Velour script down the sleeve" loading="lazy"><figcaption><b>Ciel zip-up.</b> Script down the sleeve. Becomes Set B.</figcaption></figure>
+  <figure><img src="ref-grey-cargo.jpg" alt="Grey washed cargo jeans with small Velour script" loading="lazy"><figcaption><b>Grey cargo jeans.</b> Not a tracksuit. Kept as an extra piece.</figcaption></figure>
+ </div>
+</section>
+
+<section aria-labelledby="sets-t">
+ <div class="sh"><div class="k">Your sets, upgraded</div><h2 id="sets-t">Sets A, B and C</h2><p>Same signatures on every set: the rose on the back of the hood or collar, and the script on the left thigh. Each set gets heavy 480 GSM fleece and a numbered label.</p></div>
+ <div id="mine"></div>
+</section>
+
+<section aria-labelledby="det-t">
+ <div class="sh"><div class="k">The upgrades, close up</div><h2 id="det-t">The details</h2><p>These small details make it feel expensive in the hand.</p></div>
+ <div class="details" id="details"></div>
+</section>
+
+<section aria-labelledby="new-t">
+ <div class="sh"><div class="k">From me</div><h2 id="new-t">Sets D, E, F and G</h2><p>New ideas that use only our own marks: the script, the rose and the V.</p></div>
+ <div id="new"></div>
+</section>
+
+<div class="note">
+ <div class="k">Your turn</div>
+ <p>Tell me which sets to keep (for example "A, C, E"), and anything to change. Then I'll make clean front and back sheets for the manufacturer and add them to the website.</p>
+</div>
+</main>
+
+<script>
+const C={noir:'#171616',wash:'#262524',creme:'#ECE4D3',ciel:'#BCD5EC',charbon:'#3C3C3E',marine:'#1F2A42',rouge:'#7C1D27',gold:'#C9A86A',bord:'#4F1621',pink:'#E6B5BC',white:'#F6F2EA',stem:'#2E3A2B',silver:'#BFC3C7',grey:'#8E8882'};
+const hx=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+const mix=(a,b,t)=>'#'+hx(a).map((v,i)=>Math.round(v+(hx(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+const lum=c=>{const[r,g,b]=hx(c);return(.299*r+.587*g+.114*b)/255};
+const edge=c=>lum(c)<.22?mix(c,'#ffffff',.2):mix(c,'#000000',.34);
+const P=(d,f,s,x='')=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="1.5" stroke-linejoin="round" ${x}/>`;
+const L=(d,s,w=1,op=.4)=>`<path d="${d}" fill="none" stroke="${s}" stroke-width="${w}" stroke-linecap="round" opacity="${op}"/>`;
+const mirror=g=>`<g>${g}</g><g transform="translate(400,0) scale(-1,1)">${g}</g>`;
+const mirrorP=g=>`<g>${g}</g><g transform="translate(300,0) scale(-1,1)">${g}</g>`;
+
+/* ---------- marks ---------- */
+const script=(t,x,y,sz,col,o={})=>`<text x="${x}" y="${y}" font-family="'Pinyon Script',cursive" font-size="${sz}" fill="${col}" text-anchor="${o.a||'middle'}" ${o.rot!=null?`transform="rotate(${o.rot} ${x} ${y})"`:''} ${o.fx?`filter="url(#${o.fx})"`:''}>${t}</text>`;
+const caps=(t,x,y,sz,col,ls=3,o={})=>`<text x="${x}" y="${y}" font-family="Manrope,sans-serif" font-weight="600" font-size="${sz}" letter-spacing="${ls}" fill="${col}" text-anchor="middle" ${o.rot!=null?`transform="rotate(${o.rot} ${x} ${y})"`:''} ${o.fx?`filter="url(#${o.fx})"`:''}>${t}</text>`;
+function rose(x,y,sz,head=C.rouge,stem=C.stem,fx='emb',bud=false){
+ const k=sz/230,hd=mix(head,'#000000',.4),hl=mix(head,'#ffffff',.22);
+ return `<g transform="translate(${x},${y}) scale(${k}) translate(0,-6)" filter="url(#${fx})">
+ ${bud?'':`<path d="M0,-4 C-4,30 6,62 0,104" fill="none" stroke="${stem}" stroke-width="8" stroke-linecap="round"/>
+ <path d="M4,36 C22,18 48,20 58,32 C46,48 22,50 4,36Z M0,66 C-20,50 -46,52 -56,64 C-44,80 -20,82 0,66Z M-2,18 L-16,12 L-2,28Z M4,46 L18,40 L4,56Z M0,82 L-14,76 L0,92Z" fill="${stem}"/>`}
+ <path d="M-44,-64 C-52,-30 -36,-6 0,-4 C36,-6 52,-30 44,-64 C32,-80 12,-78 4,-64 C-6,-76 -32,-80 -44,-64Z" fill="${head}"/>
+ <g fill="none" stroke-linecap="round" stroke-width="5.5">
+  <path d="M-32,-30 C-16,-20 16,-20 32,-30" stroke="${hd}"/><path d="M-40,-50 C-30,-40 -26,-30 -20,-22 M40,-50 C30,-40 26,-30 20,-22" stroke="${hd}"/>
+  <path d="M2,-64 C-16,-66 -26,-50 -20,-38 C-12,-24 12,-26 18,-40 C22,-52 12,-60 2,-58 C-8,-56 -10,-44 0,-42" stroke="${hl}"/>
+ </g></g>`;
+}
+function drape(base){
+ const f=mix(base,'#ffffff',.09),hi=mix(base,'#ffffff',.2),lo=mix(base,'#000000',.45);
+ return `<g filter="url(#puff)">
+ <path d="M140,102 C168,88 232,88 260,102 C268,150 270,200 276,250 C282,296 292,326 286,342 C240,358 160,358 114,342 C108,326 118,296 124,250 C130,200 132,150 140,102Z" fill="${f}"/>
+ ${L('M168,96 C160,160 148,232 138,338',lo,5,.55)}${L('M232,96 C240,168 252,240 262,338',lo,5,.55)}${L('M200,92 C196,170 206,262 198,352',lo,4,.45)}
+ ${L('M150,96 C146,150 140,210 132,270',hi,3,.5)}${L('M250,98 C256,150 262,210 268,270',hi,3,.5)}${L('M184,94 C178,170 176,250 172,348',hi,2.5,.4)}${L('M218,94 C224,170 230,250 228,348',hi,2.5,.4)}
+ ${L('M126,322 C170,340 230,340 274,322',lo,4,.5)}${L('M132,300 C176,316 226,316 268,300',hi,2,.35)}
+ </g>`;
+}
+const vMono=(x,y,sz,col,fx='emb')=>script('V',x,y,sz,col,{fx});
+
+/* ---------- tops ---------- */
+const SL='M120,74 C92,78 70,98 62,140 L40,336 L88,342 L108,180 Z', CF='M40,336 L88,342 L86,372 L38,366 Z';
+const BODY='M120,74 C160,66 240,66 280,74 L292,374 L108,374 Z', HEM='M108,374 L292,374 L290,404 L110,404 Z';
+function ribs(a,b,c,d,n,s){let o='';for(let i=1;i<n;i++){const t=i/n;o+=L(`M${a[0]+(b[0]-a[0])*t},${a[1]+(b[1]-a[1])*t} L${c[0]+(d[0]-c[0])*t},${c[1]+(d[1]-c[1])*t}`,s,.8,.35)}return o}
+function topG(o){
+ const b=o.body,s=o.sleeve||b,h=o.hood||b,r=o.rib||b,st=edge(b),lin=o.lining||mix(h,'#000000',.38),back=o.view==='back',fx=o.washed?'washed':'fleece';
+ const metal=o.metal||'silverG';
+ let g='';
+ // hood behind (front view) / hood (back view)
+ const hoodBackFront='M146,76 C138,34 164,14 200,14 C236,14 262,34 254,76 Z';
+ const hoodBack='M140,80 C128,24 166,0 200,0 C234,0 272,24 260,80 C232,92 168,92 140,80 Z';
+ const collarF='M160,60 C180,56 220,56 240,60 L246,92 C224,98 176,98 154,92 Z', collarB='M158,56 C180,52 220,52 242,56 L244,86 C222,82 178,82 156,86 Z';
+ let under='',over='';
+ if(!back&&o.type!=='track') under+=P(hoodBackFront,h,edge(h));
+ g+=mirror(P(SL,s,edge(s))+P(CF,r,edge(r))+ribs([40,336],[88,342],[38,366],[86,372],8,edge(r))+L('M70,250 C80,262 92,262 100,254',edge(s),1,.35)+L('M52,300 C62,310 76,312 90,304',edge(s),1,.3));
+ g+=P(BODY,b,st)+P(HEM,r,edge(r))+ribs([108,374],[292,374],[110,404],[290,404],30,edge(r));
+ // shading
+ const sil=`<g pointer-events="none"><path d="${BODY}" fill="url(#sh)"/><path d="${BODY}" fill="url(#shv)"/>${mirror(`<path d="${SL}" fill="url(#sh)"/>`)}</g>`;
+ g+=sil;
+ if(o.sheen) g+=`<g pointer-events="none" style="mix-blend-mode:screen"><path d="${BODY}" fill="url(#sheen)"/>${mirror(`<path d="${SL}" fill="url(#sheen)"/>`)}</g>`;
+ if(o.panel) g+=mirror(`<path d="M120,74 C92,78 70,98 62,140 L40,336 L54,338 L76,142 C84,104 100,86 124,80Z" fill="${o.panel}"/>`);
+ if(o.piping) g+=mirror(L('M118,80 C94,84 74,102 67,142 L46,334',o.piping,3.2,1));
+ if(!back){
+  if(o.type==='hood'){
+   over+=P('M156,78 C156,46 176,32 200,32 C224,32 244,46 244,78 C224,98 176,98 156,78 Z',lin,edge(h));
+   if(o.liningSheen) over+=`<path d="M156,78 C156,46 176,32 200,32 C224,32 244,46 244,78 C224,98 176,98 156,78 Z" fill="url(#velvetR)"/>`;
+   over+=P('M140,262 L260,262 L278,352 L122,352 Z',b,st)+L('M140,262 L122,352 M260,262 L278,352',st,1.2,.6)+`<path d="M140,262 L260,262 L278,352 L122,352 Z" fill="url(#shv)"/>`;
+   over+=cords(o,[186,92],[214,92],178);
+  }else{
+   if(o.type==='zip'){over+=P('M156,78 C156,46 176,32 200,32 C224,32 244,46 244,78 L206,106 L194,106 Z',lin,edge(h));
+    if(o.liningSheen) over+=`<path d="M156,78 C156,46 176,32 200,32 C224,32 244,46 244,78 L206,106 L194,106 Z" fill="url(#velvetR)"/>`;
+    over+=cords(o,[178,90],[222,90],168);}
+   else over+=P(collarF,o.collar||r,edge(o.collar||r))+L('M162,62 C182,70 218,70 238,62',edge(r),1,.6);
+   over+=mirror(L('M132,272 L144,334',st,2,.7));
+   const y0=o.type==='zip'?106:92;
+   over+=`<rect x="197" y="${y0}" width="6" height="${404-y0}" fill="${mix(b,'#000000',.25)}"/><line x1="200" y1="${y0}" x2="200" y2="404" stroke="url(#${metal})" stroke-width="3" stroke-dasharray="1.4 1.2"/>`;
+   over+=pull(200,y0+10,o.vpull,metal);
+   if(o.twoWay) over+=pull(200,394,false,metal,true);
+  }
+ }else{
+  if(o.type==='track'){over+=P(collarB,o.collar||r,edge(o.collar||r))+L('M158,70 C180,66 220,66 242,70',edge(r),1,.5);}
+  else{over+=P(hoodBack,h,edge(h))+L('M200,4 C204,30 202,60 200,88',edge(h),1.2,.6)+`<path d="${hoodBack}" fill="url(#sh)"/>`+(o.sheen?`<path d="${hoodBack}" fill="url(#sheen)" style="mix-blend-mode:screen"/>`:'');}
+ }
+ const deco=(o.deco||[]).join('');
+ return `<svg viewBox="0 -6 400 420" role="img" aria-label="${o.label||''}"><g filter="url(#${fx})">${under}${g}${over}</g>${deco}</svg>`;
+}
+function cords(o,a,b,len){
+ const c=o.cord||edge(o.hood||o.body),ag=o.aglet||'silverG';
+ const one=(p,dx)=>`<path d="M${p[0]},${p[1]} C${p[0]-2+dx},${p[1]+30} ${p[0]+2+dx},${p[1]+60} ${p[0]+dx},${len}" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/><rect x="${p[0]+dx-2.6}" y="${len-2}" width="5.2" height="14" rx="1.4" fill="url(#${ag})"/>`;
+ return one(a,-4)+one(b,4);
+}
+function pull(x,y,v,metal,low){
+ if(v) return `<g transform="translate(${x},${y})"><rect x="-3" y="-6" width="6" height="8" rx="1.5" fill="url(#${metal})"/><path d="M-9,2 L9,2 L0,26 Z" fill="url(#${metal})" stroke="${mix(C.gold,'#000000',.4)}" stroke-width=".6"/><text x="0" y="16" font-family="'Pinyon Script',cursive" font-size="12" text-anchor="middle" fill="#00000066">V</text></g>`;
+ return `<g transform="translate(${x},${y})${low?' scale(1,-1)':''}"><rect x="-4" y="-5" width="8" height="8" rx="1.5" fill="url(#${metal})"/><rect x="-3" y="2" width="6" height="16" rx="3" fill="url(#${metal})"/></g>`;
+}
+
+/* ---------- pants ---------- */
+const LEG='M60,50 L150,50 C150,70 150,86 148,100 L142,414 L38,414 C42,300 48,160 60,50 Z';
+function pants(o){
+ const b=o.body,st=edge(b),fx=o.washed?'washed':'fleece',wb=o.waist||b;
+ let g=mirrorP(P(LEG,b,st)+L('M64,54 C74,76 86,92 100,102',st,1.4,.7)+L('M60,404 L142,404',st,1,.5)+L('M80,330 C96,342 116,342 132,330',st,1,.35)+L('M70,372 C90,386 120,386 138,372',st,1,.35)+L('M100,180 C104,240 102,300 96,360',st,1,.25));
+ g+=P('M60,20 L240,20 L240,50 L60,50 Z',wb,edge(wb))+ribs([60,20],[240,20],[60,50],[240,50],34,edge(wb));
+ g+=`<g pointer-events="none">${mirrorP(`<path d="${LEG}" fill="url(#sh)"/><path d="${LEG}" fill="url(#shv)"/>`)}</g>`;
+ if(o.sheen) g+=`<g style="mix-blend-mode:screen" pointer-events="none">${mirrorP(`<path d="${LEG}" fill="url(#sheen)"/>`)}</g>`;
+ if(o.panel) g+=mirrorP(`<path d="M60,50 L76,50 C68,160 62,300 58,414 L38,414 C42,300 48,160 60,50Z" fill="${o.panel}"/>`);
+ if(o.piping) g+=mirrorP(L('M66,52 C56,160 50,300 47,412',o.piping,3.2,1));
+ const c=o.cord||edge(b),ag=o.aglet||'silverG';
+ g+=`<path d="M146,36 C142,60 140,80 138,100" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round"/><path d="M154,36 C158,60 160,80 162,100" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round"/><rect x="135.5" y="98" width="5" height="13" rx="1.4" fill="url(#${ag})"/><rect x="159.5" y="98" width="5" height="13" rx="1.4" fill="url(#${ag})"/>`;
+ return `<svg viewBox="-50 4 400 420" role="img" aria-label="${o.label||''}"><g filter="url(#${fx})">${g}</g>${(o.deco||[]).join('')}</svg>`;
+}
+
+/* ---------- sets ---------- */
+const sets=[
+ {l:'A',name:'Crème',sub:'Your favourite, made richer',chips:[['Crème',C.creme],['Charbon',C.charbon],['Rose red',C.rouge],['Gold',C.gold]],
+  pts:['Hood lined in rose-red velour','Rose on the back of the hood, VELOUR under it','Big tonal 3D puff "Velour" on the back','Gold-tipped cords on top and pants','Script on the left thigh, rose on the right knee'],
+  front:topG({type:'hood',body:C.creme,lining:C.rouge,liningSheen:1,cord:'#E2D8C3',aglet:'goldG',label:'Crème hoodie front',deco:[rose(246,150,40)]}),
+  back:topG({type:'hood',view:'back',body:C.creme,label:'Crème hoodie back',deco:[rose(200,36,40),caps('VELOUR',200,70,9,C.charbon,4,{fx:'emb'}),script('Velour',200,210,84,mix(C.creme,'#000000',.2),{fx:'puff'}),caps('FEEL THE WEIGHT',200,244,10,mix(C.creme,'#000000',.28),5)]}),
+  pants:pants({body:C.creme,cord:'#E2D8C3',aglet:'goldG',label:'Crème pants',deco:[script('Velour',205,124,30,C.charbon,{fx:'emb'}),rose(92,262,40)]})},
+ {l:'B',name:'Ciel',sub:'Your blue zip-up, finished',chips:[['Ciel',C.ciel],['White',C.white],['Silver',C.silver],['Rose red',C.rouge]],
+  pts:['White 3D puff script down the sleeve','Silver V zip pull','Rose on the back of the hood','White cords with silver tips','Matching ciel pants, white script on the thigh'],
+  front:topG({type:'zip',body:C.ciel,cord:C.white,vpull:1,metal:'silverG',label:'Ciel zip-up front',deco:[script('Velour',336,212,56,C.white,{rot:82,fx:'puff'}),rose(248,146,30)]}),
+  back:topG({type:'zip',view:'back',body:C.ciel,label:'Ciel zip-up back',deco:[rose(200,36,40),script('Velour',64,212,56,C.white,{rot:-82,fx:'puff'}),caps('STAY CLOSE',200,112,8,mix(C.ciel,'#000000',.35),5)]}),
+  pants:pants({body:C.ciel,cord:C.white,label:'Ciel pants',deco:[script('Velour',205,124,30,C.white,{fx:'emb'}),rose(92,262,40)]})},
+ {l:'C',name:'Noir',sub:'Your draped back, on a track jacket',chips:[['Washed noir',C.wash],['Grey',C.grey],['Rose red',C.rouge],['Gunmetal','#4A4C50']],
+  pts:['Track jacket with a stand collar','Two-way zip in gunmetal','Draped cloth art in raised 3D puff, black on black','Washed, slightly faded black','Rose on the back of the collar'],
+  front:topG({type:'track',body:C.wash,washed:1,metal:'gunG',twoWay:1,vpull:1,label:'Noir track jacket front',deco:[rose(248,146,30)]}),
+  back:topG({type:'track',view:'back',body:C.wash,washed:1,label:'Noir track jacket back',deco:[rose(200,70,24,C.rouge,C.stem,'emb',true),drape(C.wash),script('Velour',200,212,68,'#A7A099',{fx:'puff'}),caps('FEEL THE WEIGHT',200,240,9,'#8E8882',5)]}),
+  pants:pants({body:C.wash,washed:1,cord:'#4a4846',aglet:'gunG',label:'Noir pants',deco:[script('Velour',205,124,30,'#8E8882',{fx:'emb'}),rose(92,262,40)]})},
+];
+const vine=(stem,head)=>{
+ const lv=(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="3.2" fill="${stem}" transform="rotate(${r} ${x} ${y})"/>`;
+ return `<g filter="url(#emb)">${L('M122,400 C134,340 114,280 130,220 C142,170 146,128 160,96 C166,80 170,62 176,46',stem,2.4,1)}
+ ${lv(128,370,-30)}${lv(120,330,30)}${lv(126,290,-40)}${lv(122,250,40)}${lv(138,196,-35)}${lv(142,160,40)}${lv(156,112,-30)}${lv(166,76,35)}</g>
+ ${rose(130,226,30,head,stem)}${rose(176,48,26,head,stem,'emb',true)}`;
+};
+const vineBack=(stem,head)=>{
+ const lv=(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="3.2" fill="${stem}" transform="rotate(${r} ${x} ${y})"/>`;
+ return `<g filter="url(#emb)">${L('M278,400 C266,340 286,280 270,220 C258,170 254,130 240,96 C232,70 222,46 212,28',stem,2.4,1)}
+ ${lv(272,370,30)}${lv(280,330,-30)}${lv(274,290,40)}${lv(280,250,-40)}${lv(262,196,35)}${lv(256,150,-40)}${lv(244,110,30)}${lv(228,62,-35)}</g>${rose(210,30,34,head,stem)}`;
+};
+const vineLeg=(stem,head)=>{
+ const lv=(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="3.2" fill="${stem}" transform="rotate(${r} ${x} ${y})"/>`;
+ return `<g filter="url(#emb)">${L('M96,268 C80,220 72,170 66,100 C64,80 64,66 64,56',stem,2.4,1)}${lv(84,230,-50)}${lv(74,190,40)}${lv(70,150,-40)}${lv(66,110,40)}</g>${rose(98,272,40,head,stem)}`;
+};
+const mineNew=[
+ {l:'D',name:'Marine Club',sub:'Old-money track set',chips:[['Marine',C.marine],['Rose red',C.rouge],['Crème',C.creme],['Gold',C.gold]],
+  pts:['Navy track jacket with thin rose-red piping down the arms and legs','Gold V on the chest, gold two-way zip','Small crème script across the shoulders, rose under it','Feels like a private club, not a gym'],
+  front:topG({type:'track',body:C.marine,piping:C.rouge,metal:'goldG',vpull:1,twoWay:1,collar:C.marine,label:'Marine track jacket front',deco:[vMono(248,160,44,C.gold)]}),
+  back:topG({type:'track',view:'back',body:C.marine,piping:C.rouge,label:'Marine track jacket back',deco:[script('Velour',200,128,48,C.creme,{fx:'emb'}),rose(200,170,40)]}),
+  pants:pants({body:C.marine,piping:C.rouge,cord:C.creme,aglet:'goldG',label:'Marine pants',deco:[script('Velour',205,124,30,C.creme,{fx:'emb'})]})},
+ {l:'E',name:'Rose Vine',sub:'"Stay close"',chips:[['Noir',C.noir],['Rose red',C.rouge],['Vine green',C.stem]],
+  pts:['A rose vine is embroidered from the hem, over the shoulder, up to the hood','On the back it climbs the other side and opens into a full rose on the hood','On the pants it grows from the knee rose up the leg','Every vine is stitched by hand, so no two pieces are the same'],
+  front:topG({type:'hood',body:C.noir,lining:C.rouge,liningSheen:1,cord:'#2a2828',label:'Noir rose vine hoodie front',deco:[vine('#3E5038',C.rouge)]}),
+  back:topG({type:'hood',view:'back',body:C.noir,label:'Noir rose vine hoodie back',deco:[vineBack('#3E5038',C.rouge),caps('STAY CLOSE',200,388,8,'#6f6a64',5)]}),
+  pants:pants({body:C.noir,cord:'#2a2828',label:'Noir rose vine pants',deco:[vineLeg('#3E5038',C.rouge),script('Velour',205,124,30,'#6f6a64',{fx:'emb'})]})},
+ {l:'F',name:'Charbon Split',sub:'Two-tone, quiet luxury',chips:[['Charbon',C.charbon],['Crème velour',C.creme],['Gold',C.gold]],
+  pts:['Charcoal zip-up with a crème velour hood, cuffs and hem','Gold V zip pull and gold V on the chest','Big crème script on the back with "the cloth remembers" under it','Pants with a crème stripe down the outside of the leg'],
+  front:topG({type:'zip',body:C.charbon,hood:C.creme,rib:C.creme,lining:mix(C.creme,'#000000',.2),vpull:1,metal:'goldG',cord:C.creme,aglet:'goldG',label:'Charbon split zip-up front',deco:[vMono(250,160,40,C.gold)]}),
+  back:topG({type:'zip',view:'back',body:C.charbon,hood:C.creme,rib:C.creme,label:'Charbon split zip-up back',deco:[rose(200,36,40),script('Velour',200,212,84,C.creme,{fx:'puff'}),caps('THE CLOTH REMEMBERS',200,244,9,mix(C.creme,'#000000',.25),4)]}),
+  pants:pants({body:C.charbon,panel:C.creme,waist:C.creme,cord:C.charbon,aglet:'goldG',label:'Charbon split pants',deco:[script('Velour',205,124,30,C.creme,{fx:'emb'}),rose(92,262,40)]})},
+ {l:'G',name:'Bordeaux Velour',sub:'The night set, real velour',chips:[['Burgundy velour',C.bord],['Gold',C.gold],['Noir',C.noir]],
+  pts:['Whole set in soft crushed velour, the brand name made real','Gold embroidered rose on the chest and knee','Tonal script on the back, gold V zip pull','For dinners and events, not the gym'],
+  front:topG({type:'zip',body:C.bord,sheen:1,vpull:1,metal:'goldG',cord:mix(C.bord,'#000000',.3),aglet:'goldG',label:'Bordeaux velour zip-up front',deco:[rose(250,150,40,C.gold,mix(C.gold,'#000000',.35))]}),
+  back:topG({type:'zip',view:'back',body:C.bord,sheen:1,label:'Bordeaux velour zip-up back',deco:[rose(200,36,40,C.gold,mix(C.gold,'#000000',.35)),script('Velour',200,212,84,mix(C.bord,'#000000',.35),{fx:'emb'}),caps('FEEL THE WEIGHT',200,244,9,C.gold,5)]}),
+  pants:pants({body:C.bord,sheen:1,cord:mix(C.bord,'#000000',.3),aglet:'goldG',label:'Bordeaux velour pants',deco:[script('Velour',205,124,30,mix(C.bord,'#000000',.35),{fx:'emb'}),rose(92,262,40,C.gold,mix(C.gold,'#000000',.35))]})},
+];
+const block=s=>`<article class="set"><div class="meta"><div class="tag"><span class="l">${s.l}</span><h3>${s.name}</h3></div><div class="k">${s.sub}</div>
+ <div class="chips">${s.chips.map(([n,c])=>`<span class="chip"><i style="background:${c}"></i>${n}</span>`).join('')}</div>
+ <ul>${s.pts.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+ <div class="draws"><div class="dw" tabindex="0">${s.front}<span>Top · front</span></div><div class="dw" tabindex="0">${s.back}<span>Top · back</span></div><div class="dw" tabindex="0">${s.pants}<span>Pants</span></div></div></article>`;
+document.getElementById('mine').innerHTML=sets.map(block).join('');
+document.getElementById('new').innerHTML=mineNew.map(block).join('');
+
+/* ---------- details ---------- */
+const box=(inner)=>`<svg viewBox="0 0 300 240" role="img">${inner}</svg>`;
+const fabric=(c,fx='fleece')=>`<rect width="300" height="240" fill="${c}" filter="url(#${fx})"/><rect width="300" height="240" fill="url(#velvetR)" opacity=".5"/>`;
+const det=[
+ ['V zip pull','Solid metal pull shaped like our script V. Gold, silver or gunmetal to match each set.',box(fabric(C.charbon)+`<rect x="138" y="0" width="24" height="240" fill="#2a2a2c"/><line x1="150" y1="0" x2="150" y2="240" stroke="url(#goldG)" stroke-width="7" stroke-dasharray="3 2.4"/>
+  <g transform="translate(150,70)"><rect x="-9" y="-14" width="18" height="22" rx="4" fill="url(#goldG)"/><path d="M-30,6 L30,6 L0,106 Z" fill="url(#goldG)" stroke="#7E6232" stroke-width="1.2"/><text x="0" y="62" font-family="'Pinyon Script',cursive" font-size="54" text-anchor="middle" fill="#6b5226" opacity=".75">V</text></g>`)],
+ ['Engraved cord tips','Metal tips on every drawcord, with VÉLOUR engraved on them.',box(fabric(C.creme)+`<path d="M40,-10 C70,80 90,140 84,196" fill="none" stroke="#E2D8C3" stroke-width="12" stroke-linecap="round" filter="url(#emb)"/><path d="M180,-10 C200,70 216,130 210,190" fill="none" stroke="#E2D8C3" stroke-width="12" stroke-linecap="round" filter="url(#emb)"/>
+  <g transform="translate(84,196) rotate(-4)"><rect x="-10" y="-4" width="20" height="44" rx="5" fill="url(#goldG)"/><text x="0" y="18" font-family="Manrope" font-weight="600" font-size="6" letter-spacing="1" fill="#5d4520" text-anchor="middle" transform="rotate(90 0 18)">VÉLOUR</text></g>
+  <g transform="translate(210,190) rotate(-6)"><rect x="-10" y="-4" width="20" height="44" rx="5" fill="url(#goldG)"/><text x="0" y="18" font-family="Manrope" font-weight="600" font-size="6" letter-spacing="1" fill="#5d4520" text-anchor="middle" transform="rotate(90 0 18)">VÉLOUR</text></g>`)],
+ ['Velour hood lining','Rose-red velour inside the hood. You only see it when it\'s worn. That\'s the point.',box(`<rect width="300" height="240" fill="#1c1a18"/><g transform="translate(150,10) scale(1.3)" filter="url(#fleece)"><path d="M-80,170 C-96,60 -50,0 0,0 C50,0 96,60 80,170 Z" fill="${C.creme}" stroke="${edge(C.creme)}" stroke-width="1.4"/><path d="M-60,170 C-66,80 -36,24 0,24 C36,24 66,80 60,170 Z" fill="${C.rouge}"/><path d="M-60,170 C-66,80 -36,24 0,24 C36,24 66,80 60,170 Z" fill="url(#velvetR)"/></g>`)],
+ ['3D puff, black on black','The back art is raised so you can feel it. "Feel The Weight" becomes real.',box(fabric(C.wash,'washed')+script('Velour',150,140,108,'#3e3c3a',{fx:'puff'})+caps('FEEL THE WEIGHT',150,184,12,'#55524f',6,{fx:'puff'}))],
+ ['Numbered label','Woven label inside every piece. Each one is 1 of 50.',box(fabric(C.noir)+`<g filter="url(#emb)"><rect x="60" y="54" width="180" height="132" rx="3" fill="${C.creme}"/></g>`+script('Velour',150,118,46,C.charbon)+caps('Nº 07 / 50',150,148,12,C.rouge,4)+caps('DROP 01 · 480 GSM',150,170,8,C.grey,3))],
+ ['Hidden message','"the cloth remembers" printed inside the back of the neck, in gold.',box(fabric(C.noir)+`<path d="M30,40 C90,120 210,120 270,40 L270,80 C210,160 90,160 30,80Z" fill="#232120"/><path id="nk" d="M40,80 C100,150 200,150 260,80" fill="none"/><text font-family="'Cormorant Garamond',serif" font-style="italic" font-size="20" fill="${C.gold}" letter-spacing="1"><textPath href="#nk" startOffset="50%" text-anchor="middle">the cloth remembers</textPath></text>`+rose(150,190,40))],
+ ['The set box','Each tracksuit comes in one black box with the numbered card and a matching cap.',box(`<rect width="300" height="240" fill="#1c1a18"/><rect x="34" y="34" width="232" height="172" rx="4" fill="#0f0e0e" stroke="#2c2926"/><path d="M44,44 L256,44 L256,120 L44,120Z" fill="${C.creme}" opacity=".92" filter="url(#fleece)"/><circle cx="150" cy="96" r="20" fill="${C.rouge}" filter="url(#emb)"/>${rose(150,96,26,'#9b2a36',mix(C.rouge,'#000000',.4),'emb',true)}
+  <rect x="88" y="130" width="124" height="66" rx="2" fill="#f2ebdc"/>${caps('YOU FEEL IT NOW.',150,158,8,C.charbon,3)}${caps('Nº 07 / 50',150,180,9,C.rouge,3)}${vMono(240,196,22,C.gold)}`)],
+];
+document.getElementById('details').innerHTML=det.map(([t,p,s])=>`<div class="det"><div class="dw" tabindex="0">${s}</div><b>${t}</b><p>${p}</p></div>`).join('');
+
+/* ---------- tap to enlarge ---------- */
+const open=el=>{const sv=el.querySelector('svg');if(!sv)return;const d=document.createElement('div');d.id='lb';d.tabIndex=0;d.innerHTML=sv.outerHTML;d.onclick=()=>d.remove();d.onkeydown=e=>{if(e.key==='Escape'||e.key==='Enter')d.remove()};document.body.appendChild(d);d.focus()};
+document.addEventListener('click',e=>{const el=e.target.closest('.dw');if(el)open(el)});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){const el=document.activeElement?.closest?.('.dw');if(el)open(el)}});
+</script>
