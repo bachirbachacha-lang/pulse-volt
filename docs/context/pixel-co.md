@@ -11,7 +11,7 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - Messages land in Message Requests: follow, like and comment first, use the WhatsApp number in the bio, follow up after 2–3 days. 20 DMs a day.
 - Claude can't browse Instagram. The owner sends screenshots and Claude judges them and writes the DM.
 
-## Leads (messaged 6 Oct, no replies yet as of 7 Oct)
+## Leads (messaged 6 Oct; as of 10 Oct none have even SEEN the DMs: stuck in Message Requests. Switch to WhatsApp + public comments + a real free sample)
 - Car detailing: riyadh.detailingbeast_autocare (Riyadh, PPF/paint, great), cardetails.sa (Al-Ahsa, prices hidden in highlights), diqqatriyadh26 (brand new, Riyadh), mr.steam001 (Riyadh, already has a site: upgrade pitch).
 - Cars: car_souq_riyadh (used car dealer, no site, English first), car_rental_in_riyadh (VIP luxury rental: Rolls-Royce, G-Class, no site).
 - Barbers: _ericfades_ (Jeddah, English first, home service), barber_jeddah_feras (Jeddah, small).
