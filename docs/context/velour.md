@@ -23,8 +23,12 @@ Read owner.md first.
 - Website v6 (Pulse-style scroll site, WebGL velvet, 360 hoodie, unboxing, shop): velour/site-v6.
   Live: https://claude.ai/artifact/FC599H1CawpHan1LRCPVs5
 - Board pages: https://claude.ai/artifact/FRtBtf6GaNTrQZiD5kPoG2 (drop board), https://claude.ai/artifact/CcbAahxHCvvD6L7zm9RhqN (hood hoodie)
+- Tracksuit board (velour/tracksuit): https://claude.ai/artifact/6uKbAyVK6yMbdWEArbaDJm . Sets A Crème, B Ciel, C Noir (owner's refs, upgraded) + my sets D Marine Club, E Rose Vine, F Charbon Split, G Bordeaux Velour. 7 details: V zip pull, engraved cord tips, rose-red velour hood lining, 3D puff, Nº x/50 label, "the cloth remembers" inside neck, set box. Waiting for owner to pick.
+
+## How we work
+- Owner makes design images with other image AIs. Claude does the business side: website, Shopify, product pages, manufacturer sheets and messages, captions, pricing. Don't make drawn design boards unless asked.
 
 ## Pending
-- Owner will send TRACKSUIT reference pics. Plan: 3 top types (hood hoodie, zip-up like the baby blue sleeve-script one, tracksuit jacket).
+- Tracksuit: refs received, board made. Owner picks sets, then clean manufacturer sheets + add to website.
 - Add puff and hood hoodie versions to the website when the owner picks.
 - Manufacturer message and sample of the black hoodie. Influencers (Semedo Jr / Cris Jr) handled via the dad.
