@@ -11,6 +11,8 @@ Read owner.md first.
 - Owner already has a real PURC bottle at home (AliExpress sample). Film real videos with the home bottle.
 - Owner decided to SKIP the CJ sample (first real order is the test). Plan: CONNECT the CJ product to the existing Shopify "Scalp Elixir" product (don't List a new one). Map 2/3-bottle bundles to qty 2/3. Keep CJ auto-pay off.
 - CONNECTED (11 Oct, done by CJ support agent Elara Liu): Shopify Scalp Elixir <-> CJ PURC SPU CJYD1932731. Shopify stock now synced from CJ (1 Bottle 14854 / 2 Bottles 9529 / 3 Bottles 7813). Orders now flow to CJ Store Orders automatically; owner pays each order in CJ (auto-pay off until dad decides). If CJ web UI is stuck on iPad, ask CJ human support (chat > headset > Fulfillment Manager).
+- Patches CONNECTED (11 Oct, Elara): CJ SPU CJMJ2057486. Purple + Black removed from store (CJ has none); description says 5 colours. Clear maps to 'Transparent 320 pills' (bigger pack). Patch photo 2 still shows 7 colours - swap later.
+- Massager connected in CJ (SPU CJYD1924039) but Shopify stock still 0 on 11 Oct - recheck. CJ maps store 'Beige' to CJ 'Gray' - offer to rename Beige->Gray.
 - Later ideas: add PURC frizz repair serum (~$3.62) and PURC shampoo set via CJ 'List', then rewrite listings.
 - Don't use CJ's before/after bald photo (medical claim).
 
