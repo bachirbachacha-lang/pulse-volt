@@ -17,6 +17,9 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - Barbers: _ericfades_ (Jeddah, English first, home service), barber_jeddah_feras (Jeddah, small).
 - Food: qamra_saa (luxury dates, relaunching), bearbematcha (Jeddah, Linktree). power.teg is an ad agency: pitch a partnership, not a site.
 
+- 11-12 Oct: owner WhatsApped / commented on leads. Per-account last-try messages written; send 14 Oct to anyone still silent, then drop them and focus on new accounts.
+- Still pending: free sample for riyadh.detailingbeast_autocare (needs owner's screenshots of their bio, highlights, posts).
+
 ## Samples
 - LUSTRE detailing, simple: https://claude.ai/artifact/AR3z69XupwBHR82WqycXhx (pixel-co/samples/detailing)
 - LUSTRE cinematic (GSAP + Lenis, frame-sequence hero): https://claude.ai/artifact/SXc9JK28hxTQmxifRkyCZK (pixel-co/samples/detailing-cinematic, with phone and desktop recordings in /video)
