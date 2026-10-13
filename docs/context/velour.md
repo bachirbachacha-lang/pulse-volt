@@ -25,6 +25,9 @@ Read owner.md first.
 - Board pages: https://claude.ai/artifact/FRtBtf6GaNTrQZiD5kPoG2 (drop board), https://claude.ai/artifact/CcbAahxHCvvD6L7zm9RhqN (hood hoodie)
 - Tracksuit board (velour/tracksuit): https://claude.ai/artifact/6uKbAyVK6yMbdWEArbaDJm . Sets A Crème, B Ciel, C Noir (owner's refs, upgraded) + my sets D Marine Club, E Rose Vine, F Charbon Split, G Bordeaux Velour. 7 details: V zip pull, engraved cord tips, rose-red velour hood lining, 3D puff, Nº x/50 label, "the cloth remembers" inside neck, set box. Waiting for owner to pick.
 
+## Priority
+- On hold (Oct 2026): VÉLOUR is the owner's 3rd priority. Main = their Shopify store (waiting on the licence from dad), 2nd = Pixel & Co. Don't push VÉLOUR tasks; pick up when the owner comes back.
+
 ## How we work
 - Designs are now HANDMADE by the owner and their partner (sketches). AI images felt too AI. Claude does NOT design or suggest AI design. Claude turns their sketches into manufacturer specs (sizes, placement, colours, thread), and handles the website, Shopify, messages, captions and pricing.
 
