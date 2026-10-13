@@ -26,7 +26,7 @@ Read owner.md first.
 - Tracksuit board (velour/tracksuit): https://claude.ai/artifact/6uKbAyVK6yMbdWEArbaDJm . Sets A Crème, B Ciel, C Noir (owner's refs, upgraded) + my sets D Marine Club, E Rose Vine, F Charbon Split, G Bordeaux Velour. 7 details: V zip pull, engraved cord tips, rose-red velour hood lining, 3D puff, Nº x/50 label, "the cloth remembers" inside neck, set box. Waiting for owner to pick.
 
 ## How we work
-- Owner makes design images with other image AIs. Claude does the business side: website, Shopify, product pages, manufacturer sheets and messages, captions, pricing. Don't make drawn design boards unless asked.
+- Designs are now HANDMADE by the owner and their partner (sketches). AI images felt too AI. Claude does NOT design or suggest AI design. Claude turns their sketches into manufacturer specs (sizes, placement, colours, thread), and handles the website, Shopify, messages, captions and pricing.
 
 ## Pending
 - Tracksuit: refs received, board made. Owner picks sets, then clean manufacturer sheets + add to website.
