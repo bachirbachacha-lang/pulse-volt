@@ -29,6 +29,8 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 ## Samples
 - LUSTRE detailing, simple: https://claude.ai/artifact/AR3z69XupwBHR82WqycXhx (pixel-co/samples/detailing)
 - LUSTRE cinematic (GSAP + Lenis, frame-sequence hero): https://claude.ai/artifact/SXc9JK28hxTQmxifRkyCZK (pixel-co/samples/detailing-cinematic, with phone and desktop recordings in /video)
+- Bear be matcha ordering sample: https://claude.ai/artifact/9pEEsRFekQjgoNVeX4HDxk (pixel-co/samples/matcha, phone video in /video). Don't post publicly without their OK.
+- Scalp Elixir showcase (owner's own brand, for Pixel & Co. portfolio + cross-promo): https://claude.ai/artifact/NWc5NBt3jd8SjuKmdkZkEF (pixel-co/samples/scalp-elixir, phone video in /video). Branded Scalp Elixir, not PURC. Buttons say 'coming soon' until Tap license.
 - Others: pixel-co/samples/creamer, food (munch), hakwah.
 
 ## Next
