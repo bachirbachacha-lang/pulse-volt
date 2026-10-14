@@ -198,22 +198,23 @@ const cam=new THREE.PerspectiveCamera(32,1,.1,100);cam.position.set(0,0,16);
 function rr(w,h,r){const s=new THREE.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
 const watch=new THREE.Group();scene.add(watch);
 const caseMat=new THREE.MeshStandardMaterial({color:0x17181d,metalness:.85,roughness:.38,envMapIntensity:.32});
-const caseGeo=new THREE.ExtrudeGeometry(rr(3.6,4.2,1.0),{depth:.7,bevelEnabled:true,bevelThickness:.22,bevelSize:.2,bevelSegments:8,curveSegments:24});caseGeo.center();
+const caseGeo=new THREE.ExtrudeGeometry(rr(3.6,4.3,1.2),{depth:.7,bevelEnabled:true,bevelThickness:.22,bevelSize:.2,bevelSegments:8,curveSegments:24});caseGeo.center();
 const body=new THREE.Mesh(caseGeo,caseMat);watch.add(body);
 // screen (canvas texture) + glass
 const SC=document.createElement('canvas');SC.width=512;SC.height=600;const sx=SC.getContext('2d');
 const screenTex=new THREE.CanvasTexture(SC);screenTex.encoding=THREE.sRGBEncoding;
-const scrGeo=new THREE.ShapeGeometry(rr(3.3,3.9,.82),24);
-{const p=scrGeo.attributes.position,uv=scrGeo.attributes.uv;for(let i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)+1.65)/3.3,(p.getY(i)+1.95)/3.9)}
+const scrGeo=new THREE.ShapeGeometry(rr(3.3,4.0,1.0),24);
+{const p=scrGeo.attributes.position,uv=scrGeo.attributes.uv;for(let i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)+1.65)/3.3,(p.getY(i)+2.0)/4.0)}
 const screen=new THREE.Mesh(scrGeo,new THREE.MeshBasicMaterial({map:screenTex,toneMapped:false}));screen.position.z=.58;watch.add(screen);
-const glass=new THREE.Mesh(new THREE.ShapeGeometry(rr(3.42,4.02,.86),24),new THREE.MeshPhysicalMaterial({color:0x000000,metalness:0,roughness:.04,transparent:true,opacity:.35,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:2.2}));glass.position.z=.6;watch.add(glass);
+const glass=new THREE.Mesh(new THREE.ShapeGeometry(rr(3.42,4.12,1.04),24),new THREE.MeshPhysicalMaterial({color:0x000000,metalness:0,roughness:.04,transparent:true,opacity:.35,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:2.2}));glass.position.z=.6;watch.add(glass);
 // crown + button
 const crown=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.38,32),new THREE.MeshStandardMaterial({color:0x2a2d34,metalness:1,roughness:.28}));crown.rotation.z=Math.PI/2;crown.position.set(2.02,.55,0);watch.add(crown);
 for(let i=0;i<24;i++){const g=new THREE.Mesh(new THREE.BoxGeometry(.38,.03,.05),caseMat);const a=i/24*Math.PI*2;g.position.set(2.02,.55+Math.cos(a)*.3,Math.sin(a)*.3);g.rotation.x=-a;watch.add(g)}
-const btn=new THREE.Mesh(new THREE.BoxGeometry(.12,.8,.3),new THREE.MeshStandardMaterial({color:0x22252b,metalness:.9,roughness:.35}));btn.position.set(1.93,-.55,0);watch.add(btn);
+const btn=new THREE.Mesh(new THREE.SphereGeometry(.15,24,16),new THREE.MeshStandardMaterial({color:0x22252b,metalness:.9,roughness:.35}));btn.scale.set(.7,2.8,1);btn.position.set(1.95,-.6,0);watch.add(btn);
 // back sensor
 const sensor=new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.25,.25,48),new THREE.MeshPhysicalMaterial({color:0x0c0d10,roughness:.15,clearcoat:1}));sensor.rotation.x=Math.PI/2;sensor.position.z=-.55;watch.add(sensor);
-for(let i=0;i<4;i++){const d=new THREE.Mesh(new THREE.CircleGeometry(.09,16),new THREE.MeshBasicMaterial({color:0x2bd96b}));const a=i/4*Math.PI*2+.6;d.position.set(Math.cos(a)*.45,Math.sin(a)*.45,-.68);d.rotation.y=Math.PI;watch.add(d)}
+[[.95,.03],[.62,.025],[.3,.02]].forEach(([r,w])=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(r,w,8,64),new THREE.MeshStandardMaterial({color:0x2a2c33,metalness:.8,roughness:.3}));ring.position.z=-.69;watch.add(ring)});
+for(let i=0;i<4;i++){const d=new THREE.Mesh(new THREE.CircleGeometry(.09,16),new THREE.MeshBasicMaterial({color:0x2bd96b}));const a=i/4*Math.PI*2+.6;d.position.set(0,i<2?(i?.16:-.16):(i>2?.46:-.46),-.7);d.rotation.y=Math.PI;watch.add(d)}
 // strap: loop like it is worn on a wrist
 const strapMat=new THREE.MeshLambertMaterial({color:0x0c0c0f});
 {const pts=[];const N=40;for(let i=0;i<N;i++){const a=i/N*Math.PI*2;pts.push(new THREE.Vector3(0,Math.cos(a)*3.25,-2.55+Math.sin(a)*-2.55*1.0+0))}
