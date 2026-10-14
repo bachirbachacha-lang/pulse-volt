@@ -20,6 +20,8 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - 11-12 Oct: owner WhatsApped / commented on leads. Per-account last-try messages written; send 14 Oct to anyone still silent, then drop them and focus on new accounts.
 - Still pending: free sample for riyadh.detailingbeast_autocare (needs owner's screenshots of their bio, highlights, posts).
 
+- 14 Oct: bearbematcha REPLIED ("ممكن توريني مثال؟" = can you show me an example?). Built their sample: pixel-co/samples/matcha (menu, pickup time, order to WhatsApp).
+
 ## Samples
 - LUSTRE detailing, simple: https://claude.ai/artifact/AR3z69XupwBHR82WqycXhx (pixel-co/samples/detailing)
 - LUSTRE cinematic (GSAP + Lenis, frame-sequence hero): https://claude.ai/artifact/SXc9JK28hxTQmxifRkyCZK (pixel-co/samples/detailing-cinematic, with phone and desktop recordings in /video)
