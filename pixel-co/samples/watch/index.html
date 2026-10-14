@@ -107,18 +107,26 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     <div class="stat"><div><b>42<small style="font-size:.5em"> mm</small></b><span data-t="dS1"></span></div><div><b data-t="dS2v"></b><span data-t="dS2"></span></div></div>
   </div></div></section>
 
-  <section class="chapter right" data-key="health"><div class="wrap"><div class="panel">
+  <section class="chapter right" data-key="detail"><div class="wrap"><div class="panel">
+    <p class="kicker" data-t="xK"></p><h2 class="ch-title" data-t="xT"></h2><p data-t="xP"></p>
+  </div></div></section>
+
+  <section class="chapter left" data-key="health"><div class="wrap"><div class="panel">
     <p class="kicker" style="color:var(--pulse)" data-t="hK"></p><h2 class="ch-title" data-t="hT"></h2><p data-t="hP"></p>
     <div class="stat"><div><b id="bpm">72</b><span>BPM</span></div><div><b>24/7</b><span data-t="hS"></span></div></div>
   </div></div></section>
 
-  <section class="chapter left" data-key="move"><div class="wrap"><div class="panel">
+  <section class="chapter right" data-key="move"><div class="wrap"><div class="panel">
     <p class="kicker" style="color:var(--mint)" data-t="mK"></p><h2 class="ch-title" data-t="mT"></h2><p data-t="mP"></p>
     <div class="stat"><div><b id="steps">0</b><span data-t="mS1"></span></div><div><b id="kcal">0</b><span>kcal</span></div></div>
   </div></div></section>
 
-  <section class="chapter right" data-key="voice"><div class="wrap"><div class="panel">
+  <section class="chapter left" data-key="voice"><div class="wrap"><div class="panel">
     <p class="kicker" style="color:var(--ice)" data-t="vK"></p><h2 class="ch-title" data-t="vT"></h2><p data-t="vP"></p>
+  </div></div></section>
+
+  <section class="chapter right" data-key="tough"><div class="wrap"><div class="panel">
+    <p class="kicker" style="color:var(--ice)" data-t="tK"></p><h2 class="ch-title" data-t="tT"></h2><p data-t="tP"></p>
   </div></div></section>
 
   <section class="real" data-key="real" hidden><div class="wrap">
@@ -154,6 +162,10 @@ const T={
  dK:{en:'Design',ar:'التصميم'},dT:{en:'Small. Solid. Black.',ar:'صغيرة. متينة. سوداء.'},
  dP:{en:'A 42 mm case with a curved glass screen, a digital crown and a soft sport band that disappears on your wrist.',ar:'هيكل ٤٢ مم بشاشة زجاج منحنية، تاج رقمي وسير رياضي ناعم تنساه على يدك.'},
  dS1:{en:'case',ar:'الهيكل'},dS2v:{en:'1',ar:'١'},dS2:{en:'crown + button',ar:'تاج + زر'},
+ xK:{en:'Details',ar:'التفاصيل'},xT:{en:'Every edge, considered.',ar:'كل زاوية محسوبة.'},
+ xP:{en:'A knurled digital crown, a pill-shaped side button and a soft-touch band with a matte buckle.',ar:'تاج رقمي محزّز، زر جانبي ناعم وسير بملمس مطفي مع إبزيم أسود.'},
+ tK:{en:'Built tough',ar:'متينة'},tT:{en:'Made for real days.',ar:'مصنوعة ليومك الحقيقي.'},
+ tP:{en:'Heat, sweat, the gym, a late drive home. TORQ keeps up.',ar:'حر، عرق، نادي، مشوار آخر الليل. TORQ تكمل معك.'},
  hK:{en:'Health',ar:'الصحة'},hT:{en:'Every beat, counted.',ar:'كل نبضة محسوبة.'},
  hP:{en:'Heart rate on the screen in one glance, day and night.',ar:'نبضات قلبك على الشاشة بنظرة وحدة، ليل ونهار.'},hS:{en:'tracking',ar:'متابعة'},
  mK:{en:'Activity',ar:'النشاط'},mT:{en:'Close your rings.',ar:'كمّل حلقاتك.'},
@@ -234,7 +246,13 @@ const rimA=new THREE.PointLight(0xf5a35c,1.6,30);rimA.position.set(-7,1,-3);scen
 const rimB=new THREE.PointLight(0x8fb8ff,1.8,30);rimB.position.set(7,3,-2);scene.add(rimB);
 
 // grid floor
-const grid=new THREE.GridHelper(80,80,0x2a2f45,0x1a1d2b);grid.position.y=-5.2;grid.material.transparent=true;grid.material.opacity=.55;scene.add(grid);
+const stoneTex=(()=>{const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');g.fillStyle='#17181c';g.fillRect(0,0,512,512);
+  for(let i=0;i<9000;i++){const v=18+Math.random()*30|0;g.fillStyle=`rgba(${v},${v},${v+4},${Math.random()*.5})`;const r=Math.random()*3;g.fillRect(Math.random()*512,Math.random()*512,r,r)}
+  for(let i=0;i<40;i++){g.strokeStyle=`rgba(80,82,90,${Math.random()*.25})`;g.lineWidth=Math.random()*1.5;g.beginPath();let x=Math.random()*512,y=Math.random()*512;g.moveTo(x,y);for(let j=0;j<6;j++){x+=(Math.random()-.5)*90;y+=(Math.random()-.5)*90;g.lineTo(x,y)}g.stroke()}
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(6,6);t.encoding=THREE.sRGBEncoding;return t})();
+const grid=new THREE.Mesh(new THREE.PlaneGeometry(80,80),new THREE.MeshStandardMaterial({map:stoneTex,roughnessMap:stoneTex,roughness:.55,metalness:.15,envMapIntensity:.6}));grid.rotation.x=-Math.PI/2;grid.position.y=-5.2;scene.add(grid);
+const RN=700,rg=new THREE.BufferGeometry(),rp=new Float32Array(RN*6),rs=[];for(let i=0;i<RN;i++){const x=(Math.random()-.5)*30,y=Math.random()*20-8,z=-Math.random()*14+4;rp.set([x,y,z,x-.05,y-.6,z],i*6);rs.push(.5+Math.random())}
+rg.setAttribute('position',new THREE.BufferAttribute(rp,3));const rainMat=new THREE.LineBasicMaterial({color:0xaac4ff,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});scene.add(new THREE.LineSegments(rg,rainMat));
 // light beams
 const beamTex=(()=>{const c=document.createElement('canvas');c.width=64;c.height=512;const g=c.getContext('2d');const gr=g.createLinearGradient(0,0,64,0);gr.addColorStop(0,'rgba(255,255,255,0)');gr.addColorStop(.5,'rgba(255,255,255,1)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(0,0,64,512);const v=g.createLinearGradient(0,0,0,512);v.addColorStop(0,'rgba(0,0,0,1)');v.addColorStop(1,'rgba(0,0,0,0)');g.globalCompositeOperation='destination-out';g.fillStyle=v;g.fillRect(0,0,64,512);return new THREE.CanvasTexture(c)})();
 const beams=[];[[0xf5a35c,-5,.5],[0x8fb8ff,4.5,-.4],[0xffffff,0,.15],[0x8fb8ff,-2.5,-.2]].forEach(([c,x,r],i)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(2.6,26),new THREE.MeshBasicMaterial({map:beamTex,color:c,transparent:true,opacity:.16,blending:THREE.AdditiveBlending,depthWrite:false}));m.position.set(x,6,-8-i);m.rotation.z=r;scene.add(m);beams.push(m)});
@@ -262,11 +280,13 @@ function face(mode,t,k){const W=512,H=600;sx.fillStyle='#000';sx.fillRect(0,0,W,
   if(mode==='voice'){const g=sx.createRadialGradient(256,300,10,256,300,280);g.addColorStop(0,'#14203a');g.addColorStop(1,'#000');sx.fillStyle=g;sx.fillRect(0,0,W,H);
     for(let i=0;i<15;i++){const h=30+Math.abs(Math.sin(t*.006+i*.7)*Math.sin(t*.0023+i))*170;sx.fillStyle=i%2?'#8FB8FF':'#F1EBDD';const x=256+(i-7)*28;sx.beginPath();sx.roundRect?sx.roundRect(x-8,300-h/2,16,h,8):sx.rect(x-8,300-h/2,16,h);sx.fill()}
     sx.fillStyle='rgba(241,235,221,.75)';sx.font='600 30px Manrope';sx.fillText(lang==='ar'?'...أسمعك':'Listening…',256,500)}
+  if(mode==='rain'){face('clock',t,k);for(const d of DROPS){const r=d.r*(1+.05*Math.sin(t*.002+d.x));const gx=sx.createRadialGradient(d.x-r*.35,d.y-r*.35,1,d.x,d.y,r);gx.addColorStop(0,'rgba(255,255,255,.75)');gx.addColorStop(.35,'rgba(170,200,255,.18)');gx.addColorStop(1,'rgba(255,255,255,.05)');sx.fillStyle=gx;sx.beginPath();sx.ellipse(d.x,d.y,r,r*1.12,0,0,7);sx.fill();sx.strokeStyle='rgba(255,255,255,.25)';sx.lineWidth=2;sx.stroke()}}
   screenTex.needsUpdate=true}
+const DROPS=Array.from({length:26},()=>({x:40+Math.random()*432,y:40+Math.random()*520,r:6+Math.random()*16}));
 
 /* choreography: keyframes per chapter */
-const KF={hero:{x:2.6,y:-.2,ry:-.45,rx:.12,s:1,mode:'clock'},design:{x:3.4,y:0,ry:0,rx:.05,s:1,mode:'clock',spin:1},health:{x:-3.4,y:0,ry:.42,rx:.04,s:1.05,mode:'heart'},
- move:{x:3.4,y:0,ry:-.4,rx:.08,s:1.05,mode:'rings'},voice:{x:-3.2,y:.2,ry:.25,rx:-.15,s:1.1,mode:'voice'},real:{x:0,y:-1,ry:Math.PI,rx:.9,s:.6,mode:'clock'},specs:{x:0,y:-1,ry:Math.PI,rx:.9,s:.6,mode:'clock'}};
+const KF={hero:{x:2.6,y:-.2,ry:-.45,rx:.12,s:1,mode:'clock'},design:{x:3.4,y:0,ry:0,rx:.05,s:1,mode:'clock',spin:1},detail:{x:-3.4,y:-.1,ry:-1.0,rx:.12,s:1.55,mode:'clock'},health:{x:3.4,y:0,ry:-.42,rx:.04,s:1.05,mode:'heart'},
+ move:{x:-3.4,y:0,ry:.4,rx:.08,s:1.05,mode:'rings'},voice:{x:3.2,y:.2,ry:-.25,rx:-.15,s:1.1,mode:'voice'},tough:{x:-3,y:-.3,ry:.35,rx:.3,s:1.1,mode:'rain'},real:{x:0,y:-1,ry:Math.PI,rx:.9,s:.6,mode:'clock'},specs:{x:0,y:-1,ry:Math.PI,rx:.9,s:.6,mode:'clock'}};
 const secs=[...document.querySelectorAll('[data-key]')].filter(s=>!s.hidden);
 let W=0,H=0,mobile=false;
 function size(){W=innerWidth;H=innerHeight;mobile=W<820;R.setSize(W,H,false);cam.aspect=W/H;cam.fov=mobile?44:32;cam.updateProjectionMatrix()}
@@ -284,7 +304,8 @@ function frame(){const t=now(),s=state(),A=s.a,B=s.b,k=s.blend,f=rtl()?-1:1;
   const mode=k>.5?B.mode:A.mode;face(mode,t,s.key==='move'?s.local*1.4:1);
   beams.forEach((b,i)=>{b.rotation.z+=Math.sin(t*.0003+i)*.0006;b.material.opacity=.11+.06*Math.sin(t*.0009+i*2)});
   const pa=pg.attributes.position.array;for(let i=0;i<PN;i++){pa[i*3+1]=((base[i*3+1]+t*.0004*ps[i]*4+11)%22)-11}pg.attributes.position.needsUpdate=true;
-  grid.position.z=(t*.0015)%1;
+  const rainAmt=s.key==='tough'?1-k*(B.mode!=='rain'?1:0):(B.mode==='rain'?k:0);rainMat.opacity=rainAmt*.55;
+  if(rainAmt>0){const a=rg.attributes.position.array;for(let i=0;i<RN;i++){let y=a[i*6+1]-.32*rs[i];if(y<-5.2)y+=20;a[i*6+1]=y;a[i*6+4]=y-.6}rg.attributes.position.needsUpdate=true}
   cam.position.x=Math.sin(t*.0002)*.4;cam.lookAt(0,0,0);
   rimA.position.x=-7+Math.sin(t*.0007)*2;rimB.position.y=3+Math.cos(t*.0006)*2;
   R.render(scene,cam)}
