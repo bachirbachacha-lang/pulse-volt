@@ -26,6 +26,9 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - 14 Oct batch 2: rehabmakkad (artist, Jeddah, art requests, no site) = lead. Skipped: officesartcom + asteris.sa (have websites), ardore.perfume (Turkey, perfume dupes), modhi.8 (designer w/ site), lb.doublem (personal account).
 - Bear be matcha: sample video + basic/premium offer sent 14 Oct, seen, no reply yet. Follow up Thu evening once if silent.
 
+- Boost plan for TORQ video (not paid yet, owner doing it 15 Oct after asking dad): goal More messages, Riyadh + Jeddah, 22-45, interests small business/entrepreneurship/SME/home business/coffeehouse/restaurants/bakery/beauty salon. ~12 SAR/day x 4 days (~78 SAR total incl. Apple fee; in-app adds ~60% fees, web business.facebook.com avoids Apple fee).
+- Bear be matcha: seen, no reply 14 Oct. Follow-up Thu evening: offer free customisation with their real menu.
+
 ## Samples
 - LUSTRE detailing, simple: https://claude.ai/artifact/AR3z69XupwBHR82WqycXhx (pixel-co/samples/detailing)
 - LUSTRE cinematic (GSAP + Lenis, frame-sequence hero): https://claude.ai/artifact/SXc9JK28hxTQmxifRkyCZK (pixel-co/samples/detailing-cinematic, with phone and desktop recordings in /video)
