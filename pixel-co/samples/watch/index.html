@@ -1,4 +1,4 @@
-<title>SAQR Watch</title>
+<title>TORQ Watch</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,600;12..96,800&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Manrope:wght@400;500;700&display=swap">
 <style>
@@ -87,14 +87,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 <canvas id="stage" aria-hidden="true"></canvas>
 <div class="vignette"></div>
 <div class="credit" data-t="credit"></div>
-<header><div class="wrap"><div class="logo"><i></i>SAQR</div><button class="lang" id="lang" type="button">عربي</button></div></header>
+<header><div class="wrap"><div class="logo"><i></i>TORQ</div><button class="lang" id="lang" type="button">عربي</button></div></header>
 
 <main>
   <section class="hero wrap" data-key="hero">
     <span></span>
     <div>
       <p class="kicker" data-t="heroK"></p>
-      <h1>SAQR</h1>
+      <h1>TORQ</h1>
       <div class="hero-row">
         <p data-t="heroP"></p>
         <span class="scroll-hint"><i></i><span data-t="scroll"></span></span>
@@ -142,7 +142,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     <div class="cta"><a class="btn" aria-disabled="true" data-t="soon"></a><small data-t="note"></small></div>
   </div></section>
 </main>
-<footer><div class="wrap"><span>SAQR</span><span data-t="foot"></span></div></footer>
+<footer><div class="wrap"><span>TORQ</span><span data-t="foot"></span></div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -170,14 +170,14 @@ const T={
  s5v:{en:'Health',ar:'الصحة'},s5:{en:'Heart rate and activity',ar:'نبض القلب والنشاط'},
  s6v:{en:'Voice',ar:'الصوت'},s6:{en:'Built-in voice assistant',ar:'مساعد صوتي مدمج'},
  soon:{en:'Coming soon',ar:'قريباً'},
- note:{en:'Concept website. SAQR is a fictional brand.',ar:'موقع تجريبي. صقر اسم براند تخيلي.'},
+ note:{en:'Concept website. TORQ is a fictional brand.',ar:'موقع تجريبي. TORQ اسم براند تخيلي.'},
  foot:{en:'Design & 3D: Pixel & Co.',ar:'تصميم وثري دي: Pixel & Co.'}
 };
-let lang='en';try{lang=localStorage.getItem('saqr-lang')||'en'}catch(e){}
+let lang='en';try{lang=localStorage.getItem('torq-lang')||'en'}catch(e){}
 const $=id=>document.getElementById(id);
 function texts(){const de=document.documentElement;de.lang=lang;de.dir=lang==='ar'?'rtl':'ltr';
   document.querySelectorAll('[data-t]').forEach(el=>el.innerHTML=T[el.dataset.t][lang]);$('lang').textContent=lang==='ar'?'EN':'عربي'}
-$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('saqr-lang',lang)}catch(e){};texts()});
+$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('torq-lang',lang)}catch(e){};texts()});
 texts();
 const now=()=>window.__vt!=null?window.__vt:performance.now();
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)), mix=(a,b,t)=>a+(b-a)*t, ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
