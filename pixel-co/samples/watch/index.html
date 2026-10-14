@@ -1,4 +1,4 @@
-<title>QAMAR Watch</title>
+<title>SAQR Watch</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,600;12..96,800&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Manrope:wght@400;500;700&display=swap">
 <style>
@@ -26,7 +26,7 @@ main,header,footer,.credit{position:relative;z-index:2}
 .credit b{color:var(--ink)}
 header .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:16px}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;letter-spacing:.18em;font-size:18px}
-.logo i{width:22px;height:22px;border-radius:50%;box-shadow:inset -6px -2px 0 0 var(--ink);transform:rotate(-30deg)}
+.logo i{width:24px;height:20px;background:linear-gradient(135deg,var(--amber),#C2410C);clip-path:polygon(0 30%,50% 0,100% 30%,72% 100%,50% 62%,28% 100%)}
 .lang{background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 15px;font-size:14px}
 
 .chapter{min-height:100vh;min-height:100svh;display:flex;align-items:center}
@@ -87,14 +87,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 <canvas id="stage" aria-hidden="true"></canvas>
 <div class="vignette"></div>
 <div class="credit" data-t="credit"></div>
-<header><div class="wrap"><div class="logo"><i></i>QAMAR</div><button class="lang" id="lang" type="button">عربي</button></div></header>
+<header><div class="wrap"><div class="logo"><i></i>SAQR</div><button class="lang" id="lang" type="button">عربي</button></div></header>
 
 <main>
   <section class="hero wrap" data-key="hero">
     <span></span>
     <div>
       <p class="kicker" data-t="heroK"></p>
-      <h1>QAMAR</h1>
+      <h1>SAQR</h1>
       <div class="hero-row">
         <p data-t="heroP"></p>
         <span class="scroll-hint"><i></i><span data-t="scroll"></span></span>
@@ -121,7 +121,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     <p class="kicker" style="color:var(--ice)" data-t="vK"></p><h2 class="ch-title" data-t="vT"></h2><p data-t="vP"></p>
   </div></div></section>
 
-  <section class="real" data-key="real"><div class="wrap">
+  <section class="real" data-key="real" hidden><div class="wrap">
     <p class="kicker" data-t="rK"></p><h2 data-t="rT"></h2>
     <div class="real-grid">
       <figure><img src="img/real-top.jpg" alt="The real watch photographed from above on white paper"><figcaption data-t="rC1"></figcaption></figure>
@@ -142,7 +142,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     <div class="cta"><a class="btn" aria-disabled="true" data-t="soon"></a><small data-t="note"></small></div>
   </div></section>
 </main>
-<footer><div class="wrap"><span>QAMAR</span><span data-t="foot"></span></div></footer>
+<footer><div class="wrap"><span>SAQR</span><span data-t="foot"></span></div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -170,14 +170,14 @@ const T={
  s5v:{en:'Health',ar:'الصحة'},s5:{en:'Heart rate and activity',ar:'نبض القلب والنشاط'},
  s6v:{en:'Voice',ar:'الصوت'},s6:{en:'Built-in voice assistant',ar:'مساعد صوتي مدمج'},
  soon:{en:'Coming soon',ar:'قريباً'},
- note:{en:'Concept website. QAMAR is a fictional brand.',ar:'موقع تجريبي. قمر اسم براند تخيلي.'},
+ note:{en:'Concept website. SAQR is a fictional brand.',ar:'موقع تجريبي. صقر اسم براند تخيلي.'},
  foot:{en:'Design & 3D: Pixel & Co.',ar:'تصميم وثري دي: Pixel & Co.'}
 };
-let lang='en';try{lang=localStorage.getItem('qamar-lang')||'en'}catch(e){}
+let lang='en';try{lang=localStorage.getItem('saqr-lang')||'en'}catch(e){}
 const $=id=>document.getElementById(id);
 function texts(){const de=document.documentElement;de.lang=lang;de.dir=lang==='ar'?'rtl':'ltr';
   document.querySelectorAll('[data-t]').forEach(el=>el.innerHTML=T[el.dataset.t][lang]);$('lang').textContent=lang==='ar'?'EN':'عربي'}
-$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('qamar-lang',lang)}catch(e){};texts()});
+$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('saqr-lang',lang)}catch(e){};texts()});
 texts();
 const now=()=>window.__vt!=null?window.__vt:performance.now();
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)), mix=(a,b,t)=>a+(b-a)*t, ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
@@ -267,7 +267,7 @@ function face(mode,t,k){const W=512,H=600;sx.fillStyle='#000';sx.fillRect(0,0,W,
 /* choreography: keyframes per chapter */
 const KF={hero:{x:2.6,y:-.2,ry:-.45,rx:.12,s:1,mode:'clock'},design:{x:3.4,y:0,ry:0,rx:.05,s:1,mode:'clock',spin:1},health:{x:-3.4,y:0,ry:.42,rx:.04,s:1.05,mode:'heart'},
  move:{x:3.4,y:0,ry:-.4,rx:.08,s:1.05,mode:'rings'},voice:{x:-3.2,y:.2,ry:.25,rx:-.15,s:1.1,mode:'voice'},real:{x:0,y:-1,ry:Math.PI,rx:.9,s:.6,mode:'clock'},specs:{x:0,y:-1,ry:Math.PI,rx:.9,s:.6,mode:'clock'}};
-const secs=[...document.querySelectorAll('[data-key]')];
+const secs=[...document.querySelectorAll('[data-key]')].filter(s=>!s.hidden);
 let W=0,H=0,mobile=false;
 function size(){W=innerWidth;H=innerHeight;mobile=W<820;R.setSize(W,H,false);cam.aspect=W/H;cam.fov=mobile?44:32;cam.updateProjectionMatrix()}
 size();addEventListener('resize',size);
