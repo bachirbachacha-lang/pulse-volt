@@ -1,0 +1,699 @@
+<title>TORQ Atelier</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: one fixed WebGL stage behind the page. A short cinematic intro, a five-scene scroll story that drives the camera and watch, an interactive showroom, then editorial gallery, specifications and a working cart. Single committed night palette: black, charcoal, silver, white. */
+:root{
+  --black:#050506; --char:#0D0E10; --char-2:#141518; --silver:#C9CDD3; --white:#F4F4F2; --mist:rgba(244,244,242,.56); --faint:rgba(244,244,242,.32); --line:rgba(244,244,242,.1); --line-2:rgba(244,244,242,.2);
+  --serif:'Bodoni Moda','Didot','Times New Roman',serif;
+  --sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.2,.75,.15,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--black);color:var(--white);font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.65;overflow-x:hidden}
+body.lock{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:1px solid var(--white);outline-offset:4px}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--mist);font-weight:500}
+.serif{font-family:var(--serif);font-weight:400}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+
+/* stage */
+#stage{position:fixed;inset:0;width:100%;height:100%;z-index:0;transition:opacity 1.2s var(--ease)}
+#stage.dim{opacity:.0}
+.grain{position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
+.fallback{position:fixed;inset:0;z-index:0;display:none;background:var(--black) url(img/g-stone.jpg) center/cover;opacity:.5}
+.no-webgl .fallback{display:block}
+main,footer,.nav{position:relative;z-index:2}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;top:0;z-index:30;padding-top:env(safe-area-inset-top,0px);transition:background .5s var(--ease)}
+.nav.solid{background:rgba(5,5,6,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{font-family:var(--serif);font-size:22px;letter-spacing:.42em;padding-left:.42em}
+.links{display:flex;gap:34px;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+.links a,.u{position:relative}
+.links a::after,.u::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
+.links a:hover::after,.u:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-r{display:flex;align-items:center;gap:22px}
+.bag{font-size:12px;letter-spacing:.2em;text-transform:uppercase;display:flex;gap:8px;align-items:center}
+.bag b{font-weight:500;min-width:20px;height:20px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font-size:11px;font-variant-numeric:tabular-nums;letter-spacing:0}
+.burger{display:none;width:30px;height:20px;position:relative}
+.burger i{position:absolute;left:0;right:0;height:1px;background:var(--white);transition:transform .5s var(--ease),top .5s var(--ease)}
+.burger i:first-child{top:6px}.burger i:last-child{top:14px}
+.menu-open .burger i:first-child{top:10px;transform:rotate(45deg)}.menu-open .burger i:last-child{top:10px;transform:rotate(-45deg)}
+.mmenu{position:fixed;inset:0;z-index:25;background:var(--black);display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 max(24px,env(safe-area-inset-left,0px));clip-path:inset(0 0 100% 0);transition:clip-path .9s var(--ease);pointer-events:none}
+.menu-open .mmenu{clip-path:inset(0 0 0 0);pointer-events:auto}
+.mmenu a{font-family:var(--serif);font-size:clamp(40px,11vw,64px);line-height:1.15;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .8s var(--ease)}
+.menu-open .mmenu a{opacity:1;transform:none}
+.menu-open .mmenu a:nth-child(2){transition-delay:.06s}.menu-open .mmenu a:nth-child(3){transition-delay:.12s}.menu-open .mmenu a:nth-child(4){transition-delay:.18s}.menu-open .mmenu a:nth-child(5){transition-delay:.24s}
+.mmenu small{margin-top:30px;color:var(--faint);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+
+/* buttons */
+.btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 28px;border:1px solid var(--line-2);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;position:relative;overflow:hidden;transition:border-color .4s,color .5s var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--white);transform:translateY(101%);transition:transform .6s var(--ease);z-index:-1}
+.btn:hover{color:var(--black);border-color:var(--white)}
+.btn:hover::before{transform:none}
+.btn:active{transform:scale(.98)}
+.btn.solid{background:var(--white);color:var(--black);border-color:var(--white)}
+.btn.solid::before{background:var(--silver)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.btn[disabled]::before{display:none}
+.btn span{position:relative}
+
+/* hero */
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;position:relative}
+.hero .wrap{width:100%}
+.hero-copy{max-width:560px;padding-top:40px}
+.hero h1{font-size:clamp(54px,8.6vw,132px);line-height:.92;letter-spacing:-.025em;margin:22px 0 26px}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.hero h1 .ln span{display:inline-block}
+.hero h1 em{font-style:italic;color:var(--silver)}
+.hero .sub{color:var(--mist);font-size:17px;margin-bottom:38px;max-width:32ch}
+.hero-foot{position:absolute;left:0;right:0;bottom:28px}
+.hero-foot .wrap{display:flex;justify-content:space-between;align-items:flex-end;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.scrollcue{display:flex;align-items:center;gap:12px}
+.scrollcue i{width:1px;height:48px;background:linear-gradient(var(--white),transparent);transform-origin:top;animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.intro-hide{opacity:0}
+
+/* story */
+.scene{min-height:130vh;display:flex;align-items:center}
+.scene .wrap{width:100%;display:flex}
+.scene.r .wrap{justify-content:flex-end}
+.scene.c .wrap{justify-content:center;text-align:center}
+.panel{max-width:420px;min-width:0}
+.scene.c .panel{max-width:640px}
+.scene .num{font-family:var(--serif);font-style:italic;color:var(--faint);font-size:15px;margin-bottom:18px;display:block}
+.scene h2{font-size:clamp(40px,5.6vw,84px);line-height:1;margin:14px 0 22px}
+.scene p.lead{color:var(--mist);font-size:17px;max-width:38ch}
+.scene.c p.lead{margin:0 auto}
+.callouts{list-style:none;padding:0;margin:30px 0 0;display:grid;gap:0;border-top:1px solid var(--line)}
+.callouts li{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.callouts li b{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--faint)}
+.callouts li span{color:var(--mist)}
+.callouts li strong{display:block;font-weight:500;color:var(--white)}
+
+/* showroom */
+.showroom{position:relative;height:100vh;height:100svh;min-height:620px}
+.showroom .head{position:absolute;top:110px;left:0;right:0;z-index:3;pointer-events:none}
+.showroom .head .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.showroom h2{font-size:clamp(38px,4.6vw,66px);line-height:1}
+.showroom .hint{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+#grab{position:absolute;inset:0;z-index:2;cursor:grab;touch-action:pan-y}
+#grab.dragging{cursor:grabbing}
+.controls{position:absolute;left:0;right:0;bottom:30px;z-index:3}
+.controls .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.views{display:flex;gap:4px;border:1px solid var(--line);padding:4px;background:rgba(5,5,6,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.views button{height:38px;padding:0 14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);transition:color .3s,background .3s}
+.views button[aria-pressed="true"]{background:var(--white);color:var(--black)}
+.tools{display:flex;gap:4px}
+.tools button{height:46px;min-width:46px;padding:0 14px;border:1px solid var(--line);background:rgba(5,5,6,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:11px;letter-spacing:.18em;text-transform:uppercase;display:grid;place-items:center;transition:border-color .3s}
+.tools button:hover{border-color:var(--line-2)}
+.tools button[aria-pressed="true"]{border-color:var(--white)}
+
+/* editorial */
+.edit{padding-block:160px 60px;background:var(--black)}
+.edit-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:70px}
+.edit-head h2{font-size:clamp(44px,6vw,96px);line-height:.95}
+.edit-head p{color:var(--mist);max-width:42ch;justify-self:end}
+.rows{display:grid;gap:120px}
+.row{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}
+.row.flip{grid-template-columns:.75fr 1.25fr}
+.row.flip .media{order:2}
+.media{position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--char)}
+.media img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);will-change:transform}
+.media .tag{position:absolute;left:16px;bottom:14px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.row .txt{min-width:0}
+.row h3{font-size:clamp(32px,3.6vw,52px);line-height:1.04;margin:14px 0 18px}
+.row p{color:var(--mist);max-width:36ch}
+
+/* gallery */
+.gallery{padding-block:120px;background:var(--black);border-top:1px solid var(--line)}
+.g-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:34px}
+.g-head h2{font-size:clamp(40px,5vw,72px);line-height:1}
+.g-stage{position:relative;aspect-ratio:16/8;overflow:hidden;background:var(--char);cursor:zoom-in}
+.g-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .9s var(--ease),transform 1.6s var(--ease)}
+.g-stage img.out{opacity:0;transform:scale(1.06)}
+.g-stage .cap{position:absolute;left:20px;bottom:18px;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.g-stage .count{position:absolute;right:20px;bottom:18px;font-family:var(--serif);font-style:italic;color:var(--mist);font-variant-numeric:tabular-nums}
+.g-thumbs{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:8px}
+.g-thumbs button{aspect-ratio:1;overflow:hidden;opacity:.4;transition:opacity .4s;position:relative}
+.g-thumbs button[aria-current="true"]{opacity:1}
+.g-thumbs button[aria-current="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--white)}
+.g-thumbs img{width:100%;height:100%;object-fit:cover}
+.g-note{margin-top:14px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(5,5,6,.97);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .5s var(--ease);touch-action:pan-y}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lightbox img{max-width:92vw;max-height:82vh;object-fit:contain;transition:transform .4s var(--ease)}
+.lightbox img.zoom{transform:scale(1.8);cursor:zoom-out}
+.lb-btn{position:absolute;width:52px;height:52px;border:1px solid var(--line-2);display:grid;place-items:center;font-size:18px;background:rgba(5,5,6,.6)}
+.lb-close{top:calc(20px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px))}
+.lb-prev{left:max(20px,env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%)}
+.lb-next{right:max(20px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%)}
+
+/* specs */
+.specs{padding-block:120px;background:var(--black);border-top:1px solid var(--line)}
+.spec-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px}
+.specs h2{font-size:clamp(40px,5vw,72px);line-height:1}
+.spec-list{border-top:1px solid var(--line)}
+.spec-list div{display:grid;grid-template-columns:200px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);min-width:0}
+.spec-list dt{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+.spec-list dd{margin:0}
+.tbc{color:var(--faint);font-style:italic;font-family:var(--serif)}
+
+/* shop */
+.shop{padding-block:120px 140px;background:var(--char);border-top:1px solid var(--line)}
+.shop-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center}
+.shop-media{aspect-ratio:1;overflow:hidden;position:relative}
+.shop-media img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.shop-media:hover img{transform:scale(1.04)}
+.shop h2{font-size:clamp(46px,5.4vw,80px);line-height:1;margin:16px 0 10px}
+.price{font-family:var(--serif);font-size:26px;margin-bottom:22px}
+.price small{display:block;font-family:var(--sans);font-size:12px;letter-spacing:.06em;color:var(--faint);margin-top:4px}
+.shop p.desc{color:var(--mist);max-width:44ch;margin-bottom:28px}
+.opt-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.swatch{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--white);padding:10px 16px;font-size:13px;margin-bottom:26px}
+.swatch i{width:14px;height:14px;border-radius:50%;background:#111;border:1px solid var(--line-2)}
+.buy{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.qty{display:flex;border:1px solid var(--line-2);height:52px}
+.qty button{width:46px;font-size:18px}
+.qty output{width:36px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.ship{margin-top:30px;border-top:1px solid var(--line)}
+.ship details{border-bottom:1px solid var(--line)}
+.ship summary{list-style:none;cursor:pointer;padding:18px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;display:flex;justify-content:space-between}
+.ship summary::-webkit-details-marker{display:none}
+.ship summary::after{content:"+";font-size:16px;transition:transform .4s var(--ease)}
+.ship details[open] summary::after{transform:rotate(45deg)}
+.ship details p{color:var(--mist);padding-bottom:18px;font-size:14.5px}
+
+/* cart drawer */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .5s}
+.cart-open .scrim{opacity:1;pointer-events:auto}
+.cart{position:fixed;top:0;right:0;bottom:0;z-index:41;width:min(440px,100%);background:var(--char-2);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .7s var(--ease);display:flex;flex-direction:column;padding:calc(24px + env(safe-area-inset-top,0px)) max(28px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) 28px}
+.cart-open .cart{transform:none}
+.cart-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+.cart-h h3{font-size:30px}
+.cart-x{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mist)}
+.lines{flex:1;overflow:auto}
+.line{display:grid;grid-template-columns:84px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.line img{aspect-ratio:1;object-fit:cover}
+.line .nm{font-family:var(--serif);font-size:20px}
+.line .op{font-size:13px;color:var(--faint)}
+.line .ctl{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.line .qty{height:38px}.line .qty button{width:36px}
+.rm{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.empty{color:var(--mist);padding:30px 0}
+.cart-f{border-top:1px solid var(--line);padding-top:20px;display:grid;gap:14px}
+.sum{display:flex;justify-content:space-between;font-size:14px}
+.sum b{font-family:var(--serif);font-weight:400;font-size:20px}
+.pending{font-size:12.5px;color:var(--faint);line-height:1.55}
+.toast{position:fixed;left:50%;bottom:calc(30px + env(safe-area-inset-bottom,0px));z-index:60;transform:translate(-50%,20px);opacity:0;background:var(--white);color:var(--black);padding:12px 22px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;transition:opacity .4s,transform .5s var(--ease);pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+footer{border-top:1px solid var(--line);background:var(--black)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-block:34px calc(34px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--faint);letter-spacing:.08em}
+
+/* cursor */
+.cursor{position:fixed;left:0;top:0;z-index:70;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(244,244,242,.6);border-radius:50%;pointer-events:none;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background .35s,border-color .35s;mix-blend-mode:difference;display:none}
+.cursor.big{width:72px;height:72px;margin:-36px 0 0 -36px;background:rgba(244,244,242,.95);border-color:transparent}
+.cursor.drag{width:84px;height:84px;margin:-42px 0 0 -42px}
+.cursor.drag::after{content:"DRAG";position:absolute;inset:0;display:grid;place-items:center;font-size:9px;letter-spacing:.24em;color:#fff}
+@media (pointer:fine) and (min-width:900px){.cursor{display:block}}
+
+.rv{opacity:0;transform:translateY(28px)}
+.no-js .rv,.no-gsap .rv{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .links{display:none}.burger{display:block}
+  .hero{align-items:flex-end;padding-bottom:110px}
+  .hero-copy{padding-top:0}
+  .hero .sub{font-size:15.5px}
+  .scene{min-height:110vh;align-items:flex-end;padding-bottom:12vh}
+  .scene .wrap,.scene.r .wrap{justify-content:flex-start}
+  .panel{background:rgba(5,5,6,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);padding:22px}
+  .scene.c .panel{text-align:left}
+  .scene h2{font-size:clamp(34px,10vw,48px)}
+  .scene p.lead{font-size:15.5px}
+  .callouts li{font-size:13.5px;padding:10px 0}
+  .showroom .head{top:90px}
+  .showroom .head .wrap{flex-direction:column;align-items:flex-start;gap:8px}
+  .views{overflow-x:auto;max-width:100%;scrollbar-width:none}
+  .views button{flex:none;padding:0 11px}
+  .edit-head,.row,.row.flip,.spec-grid,.shop-grid{grid-template-columns:1fr}
+  .edit-head p{justify-self:start}
+  .row.flip .media{order:0}
+  .rows{gap:70px}
+  .g-stage{aspect-ratio:4/3}
+  .g-thumbs{grid-template-columns:repeat(4,1fr)}
+  .spec-list div{grid-template-columns:1fr;gap:4px}
+  .edit,.gallery,.specs,.shop{padding-block:90px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}}
+</style>
+
+<canvas id="stage" aria-hidden="true"></canvas>
+<div class="fallback" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" data-brand>TORQ</a>
+    <nav class="links" aria-label="Main">
+      <a href="#scene-1">The Watch</a><a href="#showroom">Showroom</a><a href="#gallery">Gallery</a><a href="#specs">Specifications</a><a href="#shop">Shop</a>
+    </nav>
+    <div class="nav-r">
+      <button class="bag u" id="bagBtn" type="button">Bag <b id="bagCount">0</b></button>
+      <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+<div class="mmenu" id="mmenu">
+  <a href="#scene-1">The Watch</a><a href="#showroom">Showroom</a><a href="#gallery">Gallery</a><a href="#specs">Specifications</a><a href="#shop">Shop</a>
+  <small>Concept by Pixel &amp; Co.</small>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow intro-hide" id="heroEye"><span data-brand>TORQ</span> · 42 mm smartwatch</p>
+        <h1 id="heroTitle"><span class="ln"><span>Time,</span></span><span class="ln"><span><em>redefined.</em></span></span></h1>
+        <p class="sub intro-hide" id="heroSub">Precision in every detail.</p>
+        <div class="btns intro-hide" id="heroBtns">
+          <a class="btn solid mag" href="#scene-1"><span>Explore the watch</span></a>
+          <a class="btn mag" href="#scene-2"><span>Discover the details</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-foot intro-hide" id="heroFoot"><div class="wrap"><span class="scrollcue"><i></i>Scroll</span><span>Concept · Pixel &amp; Co.</span></div></div>
+  </section>
+
+  <div id="story">
+    <section class="scene" id="scene-1"><div class="wrap"><div class="panel rv">
+      <span class="num">I. The reveal</span>
+      <p class="eyebrow">Face to face</p>
+      <h2>Darkness, then light.</h2>
+      <p class="lead">A square face under curved glass, set in a 42 mm case. Matte black from edge to edge.</p>
+    </div></div></section>
+
+    <section class="scene r" id="scene-2"><div class="wrap"><div class="panel rv">
+      <span class="num">II. The details</span>
+      <p class="eyebrow">Up close</p>
+      <h2>Read it at a glance.</h2>
+      <ul class="callouts">
+        <li class="rv"><b>01</b><span><strong>The hands</strong>Slim, silver, sweeping over a dark sunburst face.</span></li>
+        <li class="rv"><b>02</b><span><strong>The indices</strong>Twelve applied markers, doubled at twelve o’clock.</span></li>
+        <li class="rv"><b>03</b><span><strong>The glass</strong>A curved front that rolls into the case edge.</span></li>
+      </ul>
+    </div></div></section>
+
+    <section class="scene" id="scene-3"><div class="wrap"><div class="panel rv">
+      <span class="num">III. The profile</span>
+      <p class="eyebrow">Side view</p>
+      <h2>A crown you can feel.</h2>
+      <p class="lead">A knurled digital crown and a slim side button sit on the right side of the case.</p>
+    </div></div></section>
+
+    <section class="scene r" id="scene-4"><div class="wrap"><div class="panel rv">
+      <span class="num">IV. The strap</span>
+      <p class="eyebrow">Sport band</p>
+      <h2>Soft. Black. Secure.</h2>
+      <p class="lead">A silicone sport band with a pin-and-tuck closure and seven adjustment holes.</p>
+    </div></div></section>
+
+    <section class="scene c" id="scene-5"><div class="wrap"><div class="panel rv">
+      <span class="num">V. The whole</span>
+      <p class="eyebrow">Complete</p>
+      <h2><span data-brand>TORQ</span>. Nothing extra.</h2>
+      <p class="lead">One case, one band, one quiet black finish. Made to be worn every day.</p>
+    </div></div></section>
+  </div>
+
+  <section class="showroom" id="showroom" aria-label="Interactive 3D showroom">
+    <div class="head"><div class="wrap"><h2>The showroom.</h2><span class="hint" id="hint">Drag to rotate · Pinch or use + to zoom</span></div></div>
+    <div id="grab" aria-hidden="true"></div>
+    <div class="controls"><div class="wrap">
+      <div class="views" role="group" aria-label="Camera angles">
+        <button type="button" data-view="front" aria-pressed="true">Front</button>
+        <button type="button" data-view="three">¾</button>
+        <button type="button" data-view="side">Side</button>
+        <button type="button" data-view="back">Back</button>
+        <button type="button" data-view="strap">Strap</button>
+      </div>
+      <div class="tools">
+        <button type="button" id="zIn" aria-label="Zoom in">+</button>
+        <button type="button" id="zOut" aria-label="Zoom out">−</button>
+        <button type="button" id="spinBtn" aria-pressed="true">Auto</button>
+        <button type="button" id="explodeBtn" aria-pressed="false">Explode</button>
+        <button type="button" id="resetBtn">Reset</button>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="edit" id="story-edit">
+    <div class="wrap">
+      <div class="edit-head"><h2 class="rv">Designed in<br><em class="serif" style="font-style:italic;color:var(--silver)">shadow.</em></h2><p class="rv">Every surface of <span data-brand>TORQ</span> is finished in black, so the only thing that shines is the time.</p></div>
+      <div class="rows">
+        <div class="row"><div class="media"><img src="img/g-stone.jpg" alt="Black smartwatch resting on dark stone" loading="lazy"><span class="tag">Concept render</span></div>
+          <div class="txt rv"><p class="eyebrow">Design &amp; silhouette</p><h3>A square, softened.</h3><p>Rounded corners and a curved front keep the 42 mm case compact on the wrist.</p></div></div>
+        <div class="row flip"><div class="media"><img src="img/g-crown.jpg" alt="Close-up of the crown and screen edge" loading="lazy"><span class="tag">Concept render</span></div>
+          <div class="txt rv"><p class="eyebrow">Case &amp; finish</p><h3>Matte, from every angle.</h3><p>A dark case and a knurled crown that turns under your thumb.</p></div></div>
+        <div class="row"><div class="media"><img src="img/g-buckle.jpg" alt="Close-up of the sport band closure" loading="lazy"><span class="tag">Concept render</span></div>
+          <div class="txt rv"><p class="eyebrow">Strap</p><h3>Pin, tuck, forget.</h3><p>The sport band closes with a metal pin and tucks neatly under itself.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="g-head"><h2 class="rv">Gallery</h2><span class="eyebrow rv">Tap to view full screen</span></div>
+      <div class="g-stage" id="gStage" role="button" tabindex="0" aria-label="Open full screen"><img id="gA" alt=""><img id="gB" alt="" class="out"><span class="cap" id="gCap"></span><span class="count" id="gCount"></span></div>
+      <div class="g-thumbs" id="gThumbs"></div>
+      <p class="g-note">Concept renders</p>
+    </div>
+  </section>
+
+  <section class="specs" id="specs">
+    <div class="wrap spec-grid">
+      <div><p class="eyebrow rv">Specifications</p><h2 class="rv" style="margin-top:14px">What we know.</h2></div>
+      <dl class="spec-list" id="specList"></dl>
+    </div>
+  </section>
+
+  <section class="shop" id="shop">
+    <div class="wrap shop-grid">
+      <div class="shop-media rv"><img src="img/g-box.jpg" alt="The watch resting on its black box" loading="lazy"></div>
+      <div class="rv">
+        <p class="eyebrow">Smartwatch · 42 mm</p>
+        <h2 data-brand>TORQ</h2>
+        <div class="price" id="price"></div>
+        <p class="desc">A 42 mm smartwatch in matte black with a silicone sport band and a magnetic charger.</p>
+        <p class="opt-label">Band</p>
+        <span class="swatch"><i></i>Black sport band</span>
+        <div class="buy">
+          <div class="qty"><button type="button" id="qMinus" aria-label="Decrease quantity">−</button><output id="qVal">1</output><button type="button" id="qPlus" aria-label="Increase quantity">+</button></div>
+          <button class="btn solid mag" type="button" id="addBtn"><span>Add to bag</span></button>
+        </div>
+        <div class="ship">
+          <details><summary>In the box</summary><p>Watch, silicone sport band, magnetic charging puck with USB cable.</p></details>
+          <details><summary>Shipping</summary><p class="tbc">Shipping details will be added by the store owner.</p></details>
+          <details><summary>Returns</summary><p class="tbc">Return policy will be added by the store owner.</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span><span data-brand>TORQ</span> is a concept brand.</span><span>Website concept designed &amp; built by Pixel &amp; Co. · @pixelandco.design</span></div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="cart" id="cart" aria-label="Shopping bag" aria-hidden="true">
+  <div class="cart-h"><h3>Your bag</h3><button class="cart-x u" id="cartX" type="button">Close</button></div>
+  <div class="lines" id="lines"></div>
+  <div class="cart-f">
+    <div class="sum"><span>Subtotal</span><b id="subtotal"></b></div>
+    <button class="btn solid" type="button" id="checkout" disabled><span>Checkout</span></button>
+    <p class="pending" id="pending"></p>
+  </div>
+</aside>
+<div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <img id="lbImg" alt="">
+  <button class="lb-btn lb-close" id="lbX" type="button" aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" id="lbP" type="button" aria-label="Previous">←</button>
+  <button class="lb-btn lb-next" id="lbN" type="button" aria-label="Next">→</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+/* ======= EDIT ME: brand + product data ======= */
+const CONFIG={
+  brand:'TORQ',
+  product:'TORQ Smartwatch',
+  price:null,            // e.g. 449  → leave null until the owner sets a price
+  currency:'SAR',
+  checkoutConnected:false // set true once a payment provider is connected
+};
+const SPECS=[
+  ['Case size','42 mm'],
+  ['Display','Square, curved glass'],
+  ['Controls','Digital crown + side button'],
+  ['Band','Silicone sport band, pin-and-tuck'],
+  ['Charging','Magnetic charging puck + USB cable'],
+  ['Colour','Black'],
+  ['Battery life',null],['Water resistance',null],['Sensors',null],['Compatibility',null]
+];
+const GALLERY=[['g-stone','Three-quarter view'],['g-box','On the box'],['g-rain','After the rain'],['g-rock','On stone'],['g-crown','Crown close-up'],['g-sensor','Back sensor'],['g-buckle','Band closure'],['g-edge','Screen edge']];
+/* ============================================ */
+
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine=matchMedia('(pointer:fine)').matches;
+const mobile=()=>innerWidth<900;
+const now=()=>window.__vt!=null?window.__vt:performance.now();
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
+document.querySelectorAll('[data-brand]').forEach(e=>e.textContent=CONFIG.brand);
+if(!window.gsap)document.documentElement.classList.add('no-gsap');
+
+/* ---------- UI: nav, menu, cursor, magnetic ---------- */
+const nav=$('nav');addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
+$('burger').addEventListener('click',()=>{const o=document.body.classList.toggle('menu-open');document.body.classList.toggle('lock',o);$('burger').setAttribute('aria-expanded',o)});
+$('mmenu').addEventListener('click',e=>{if(e.target.tagName==='A'){document.body.classList.remove('menu-open','lock');$('burger').setAttribute('aria-expanded','false')}});
+const cur=$('cursor');let cx=innerWidth/2,cy=innerHeight/2,tx=cx,ty=cy,mx=0,my=0;
+addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+document.addEventListener('pointerover',e=>{cur.classList.toggle('big',!!e.target.closest('a,button:not(.views button),summary,.g-stage'));cur.classList.toggle('drag',!!e.target.closest('#grab'))});
+if(fine&&!reduce)document.querySelectorAll('.mag').forEach(b=>{b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.28}px)`});b.addEventListener('pointerleave',()=>b.style.transform='')});
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200)}
+
+/* ---------- Specs ---------- */
+$('specList').innerHTML=SPECS.map(([k,v])=>`<div class="rv"><dt>${k}</dt><dd>${v??'<span class="tbc">To be confirmed</span>'}</dd></div>`).join('');
+
+/* ---------- Gallery + lightbox ---------- */
+let gi=0,gFront=$('gA'),gBack=$('gB');
+$('gThumbs').innerHTML=GALLERY.map(([f,c],i)=>`<button type="button" data-i="${i}" aria-label="${c}" aria-current="${i===0}"><img src="img/${f}.jpg" alt="" loading="lazy"></button>`).join('');
+function showG(i){gi=(i+GALLERY.length)%GALLERY.length;const[f,c]=GALLERY[gi];gBack.src=`img/${f}.jpg`;gBack.alt=c;gBack.classList.remove('out');gFront.classList.add('out');[gFront,gBack]=[gBack,gFront];
+  $('gCap').textContent=c;$('gCount').textContent=`${String(gi+1).padStart(2,'0')} / ${String(GALLERY.length).padStart(2,'0')}`;
+  document.querySelectorAll('#gThumbs button').forEach((b,j)=>b.setAttribute('aria-current',j===gi));if($('lb').classList.contains('open'))$('lbImg').src=`img/${f}.jpg`}
+gFront.src=`img/${GALLERY[0][0]}.jpg`;gFront.classList.remove('out');gBack.classList.add('out');$('gCap').textContent=GALLERY[0][1];$('gCount').textContent=`01 / ${String(GALLERY.length).padStart(2,'0')}`;
+$('gThumbs').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b)showG(+b.dataset.i)});
+const lb=$('lb'),lbImg=$('lbImg');
+function openLB(){lbImg.src=`img/${GALLERY[gi][0]}.jpg`;lbImg.alt=GALLERY[gi][1];lbImg.classList.remove('zoom');lb.classList.add('open');document.body.classList.add('lock');$('lbX').focus()}
+function closeLB(){lb.classList.remove('open');document.body.classList.remove('lock');$('gStage').focus()}
+$('gStage').addEventListener('click',openLB);$('gStage').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLB()}});
+$('lbX').addEventListener('click',closeLB);$('lbP').addEventListener('click',()=>showG(gi-1));$('lbN').addEventListener('click',()=>showG(gi+1));
+lbImg.addEventListener('click',()=>lbImg.classList.toggle('zoom'));
+addEventListener('keydown',e=>{if(lb.classList.contains('open')){if(e.key==='Escape')closeLB();if(e.key==='ArrowLeft')showG(gi-1);if(e.key==='ArrowRight')showG(gi+1)}else if(e.key==='Escape')closeCart()});
+function swipe(el,fn){let x0=null;el.addEventListener('pointerdown',e=>x0=e.clientX);el.addEventListener('pointerup',e=>{if(x0==null)return;const d=e.clientX-x0;x0=null;if(Math.abs(d)>50)fn(d<0?1:-1)})}
+swipe(lb,d=>showG(gi+d));swipe($('gStage'),d=>{showG(gi+d)});
+
+/* ---------- Cart ---------- */
+let cart=[];try{cart=JSON.parse(localStorage.getItem('torq-cart')||'[]')}catch(e){}
+let q=1;
+const money=n=>CONFIG.price==null?'Price coming soon':`${CONFIG.currency} ${n.toLocaleString('en-US')}`;
+$('price').innerHTML=CONFIG.price==null?'Price coming soon<small>The owner will set the price before launch.</small>':money(CONFIG.price);
+$('qMinus').onclick=()=>{q=Math.max(1,q-1);$('qVal').textContent=q};$('qPlus').onclick=()=>{q=Math.min(9,q+1);$('qVal').textContent=q};
+function saveCart(){try{localStorage.setItem('torq-cart',JSON.stringify(cart))}catch(e){}}
+function renderCart(){const n=cart.reduce((s,l)=>s+l.q,0);$('bagCount').textContent=n;
+  $('lines').innerHTML=cart.length?cart.map((l,i)=>`<div class="line"><img src="img/g-stone.jpg" alt=""><div><div class="nm">${CONFIG.product}</div><div class="op">Black sport band</div>
+    <div class="ctl"><div class="qty"><button type="button" data-i="${i}" data-d="-1" aria-label="Decrease">−</button><output>${l.q}</output><button type="button" data-i="${i}" data-d="1" aria-label="Increase">+</button></div><button class="rm u" type="button" data-rm="${i}">Remove</button></div></div></div>`).join(''):'<p class="empty">Your bag is empty.</p>';
+  $('subtotal').textContent=CONFIG.price==null?'—':money(CONFIG.price*n);
+  const ok=CONFIG.checkoutConnected&&CONFIG.price!=null&&n>0;$('checkout').disabled=!ok;
+  $('pending').textContent=ok?'':'Checkout isn’t connected yet. A payment provider and a price need to be added before orders can be paid.';saveCart()}
+$('lines').addEventListener('click',e=>{const b=e.target.closest('[data-d]');if(b){const l=cart[+b.dataset.i];l.q=clamp(l.q+ +b.dataset.d,0,9);if(!l.q)cart.splice(+b.dataset.i,1);renderCart()}const r=e.target.closest('[data-rm]');if(r){cart.splice(+r.dataset.rm,1);renderCart()}});
+$('addBtn').onclick=()=>{if(cart[0])cart[0].q=Math.min(9,cart[0].q+q);else cart.push({q});renderCart();openCart();toast('Added to bag')};
+let lastFocus;function openCart(){lastFocus=document.activeElement;document.body.classList.add('cart-open');$('cart').setAttribute('aria-hidden','false');$('cartX').focus()}
+function closeCart(){document.body.classList.remove('cart-open');$('cart').setAttribute('aria-hidden','true');lastFocus&&lastFocus.focus&&lastFocus.focus()}
+$('bagBtn').onclick=openCart;$('cartX').onclick=closeCart;$('scrim').onclick=closeCart;
+$('checkout').onclick=()=>{/* connect payment provider here */};
+renderCart();
+
+/* ---------- 3D ---------- */
+let R;
+try{R=new THREE.WebGLRenderer({canvas:$('stage'),antialias:true,alpha:false,powerPreference:'high-performance'})}catch(e){R=null}
+if(!R||!window.THREE){document.documentElement.classList.add('no-webgl');document.querySelectorAll('.intro-hide').forEach(e=>e.classList.remove('intro-hide'))}
+else{
+R.setPixelRatio(Math.min(devicePixelRatio||1,mobile()?1.5:1.75));R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.setClearColor(0x050506);
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x050506,16,40);
+const cam=new THREE.PerspectiveCamera(30,1,.1,120);
+
+// studio environment: soft silver strips for reflections
+(function(){const pm=new THREE.PMREMGenerator(R);const env=new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.BoxGeometry(30,30,30),new THREE.MeshBasicMaterial({color:0x060607,side:THREE.BackSide})));
+  [[0xffffff,[-7,4,6],[1.2,10]],[0xdfe6f0,[8,2,4],[1,8]],[0xffffff,[0,9,2],[12,.8]],[0x9aa3b0,[0,-6,6],[10,.6]]].forEach(([c,p,s])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(s[0],s[1]),new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide}));m.position.set(...p);m.lookAt(0,0,0);env.add(m)});
+  scene.environment=pm.fromScene(env,.03).texture})();
+
+function rr(w,h,r){const s=new THREE.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
+const pivot=new THREE.Group();scene.add(pivot);
+const watch=new THREE.Group();pivot.add(watch);
+const caseMat=new THREE.MeshPhysicalMaterial({color:0x1a1b1f,metalness:.9,roughness:.34,clearcoat:.4,clearcoatRoughness:.25,envMapIntensity:.9});
+const caseGeo=new THREE.ExtrudeGeometry(rr(3.6,4.3,1.2),{depth:.7,bevelEnabled:true,bevelThickness:.24,bevelSize:.2,bevelSegments:10,curveSegments:28});caseGeo.center();
+const body=new THREE.Mesh(caseGeo,caseMat);watch.add(body);
+// polished chamfer ring around the glass
+const chamfer=new THREE.Mesh(new THREE.ExtrudeGeometry((()=>{const o=rr(3.56,4.26,1.18),h=rr(3.4,4.1,1.06);o.holes.push(new THREE.Path(h.getPoints(40).reverse()));return o})(),{depth:.03,bevelEnabled:false,curveSegments:28}),new THREE.MeshStandardMaterial({color:0x8b9099,metalness:1,roughness:.12,envMapIntensity:1.6}));chamfer.position.z=.57;watch.add(chamfer);
+// dial (canvas texture)
+const SC=document.createElement('canvas');SC.width=SC.height=1024;const sx=SC.getContext('2d');
+const dialTex=new THREE.CanvasTexture(SC);dialTex.encoding=THREE.sRGBEncoding;dialTex.anisotropy=R.capabilities.getMaxAnisotropy();
+const scrGeo=new THREE.ShapeGeometry(rr(3.3,4.0,1.0),32);{const p=scrGeo.attributes.position,uv=scrGeo.attributes.uv;for(let i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)+2.0)/4.0,(p.getY(i)+2.0)/4.0)}
+const dialMat=new THREE.MeshBasicMaterial({map:dialTex,toneMapped:false,color:0xffffff});
+const screen=new THREE.Mesh(scrGeo,dialMat);screen.position.z=.615;watch.add(screen);
+const glass=new THREE.Mesh(new THREE.ShapeGeometry(rr(3.42,4.12,1.04),32),new THREE.MeshPhysicalMaterial({color:0x000000,roughness:.03,transparent:true,opacity:.28,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:2.6}));glass.position.z=.63;watch.add(glass);
+// crown + button
+const metal=new THREE.MeshStandardMaterial({color:0x2c2f36,metalness:1,roughness:.24,envMapIntensity:1.2});
+const crownG=new THREE.Group();crownG.position.set(2.02,.55,0);watch.add(crownG);
+const crown=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.4,40),metal);crown.rotation.z=Math.PI/2;crownG.add(crown);
+for(let i=0;i<28;i++){const g=new THREE.Mesh(new THREE.BoxGeometry(.4,.026,.05),metal);const a=i/28*Math.PI*2;g.position.set(0,Math.cos(a)*.3,Math.sin(a)*.3);g.rotation.x=-a;crownG.add(g)}
+const btn=new THREE.Mesh(new THREE.SphereGeometry(.15,24,16),metal);btn.scale.set(.7,2.8,1);btn.position.set(1.95,-.6,0);watch.add(btn);
+// back sensor
+const backG=new THREE.Group();watch.add(backG);
+const sensor=new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.25,.25,56),new THREE.MeshPhysicalMaterial({color:0x0b0c0e,roughness:.12,clearcoat:1}));sensor.rotation.x=Math.PI/2;sensor.position.z=-.55;backG.add(sensor);
+[[.95,.03],[.62,.025],[.3,.02]].forEach(([r,w])=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(r,w,8,72),new THREE.MeshStandardMaterial({color:0x5c616b,metalness:1,roughness:.2}));ring.position.z=-.69;backG.add(ring)});
+[-.16,.16].forEach(y=>{const d=new THREE.Mesh(new THREE.CircleGeometry(.08,20),new THREE.MeshBasicMaterial({color:0x6a6f78}));d.position.set(0,y,-.7);d.rotation.y=Math.PI;backG.add(d)});
+// strap loop + pin stud
+const strapMat=new THREE.MeshStandardMaterial({color:0x060607,roughness:.95,metalness:0,envMapIntensity:.12});
+const strapG=new THREE.Group();watch.add(strapG);
+const pts=[];for(let i=0;i<48;i++){const a=i/48*Math.PI*2;pts.push(new THREE.Vector3(0,Math.cos(a)*3.25,-2.55-Math.sin(a)*2.55))}
+const curve=new THREE.CatmullRomCurve3(pts,true,'centripetal');
+strapG.add(new THREE.Mesh(new THREE.ExtrudeGeometry(rr(2.25,.3,.13),{steps:260,bevelEnabled:false,extrudePath:curve}),strapMat));
+const stud=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.08,32),new THREE.MeshStandardMaterial({color:0xb9bec6,metalness:1,roughness:.15}));
+{const p=curve.getPointAt(.62),n=new THREE.Vector3(0,p.y,p.z+2.55).normalize();stud.position.copy(p).addScaledVector(n,.19);stud.lookAt(p.clone().addScaledVector(n,2));stud.rotateX(Math.PI/2);strapG.add(stud)}
+watch.position.z=1.0; // pivot sits between case and loop
+
+// explode bookkeeping
+const parts=[[glass,0,0,1.6],[chamfer,0,0,.5],[screen,0,0,1.05],[crownG,1.2,0,0],[btn,1.0,0,0],[backG,0,0,-1.4],[strapG,0,0,-1.2]].map(([o,x,y,z])=>({o,b:o.position.clone(),d:new THREE.Vector3(x,y,z)}));
+
+// lights
+const amb=new THREE.AmbientLight(0xffffff,.0);scene.add(amb);
+const key=new THREE.DirectionalLight(0xffffff,0);key.position.set(-5,6,9);scene.add(key);
+const rim=new THREE.PointLight(0xd8e2ff,0,40);rim.position.set(7,3,-3);scene.add(rim);
+const sweep=new THREE.SpotLight(0xffffff,0,40,.16,.6,1.2);sweep.position.set(-12,5,10);scene.add(sweep);scene.add(sweep.target);
+// floor glow + beam + dust
+const glowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');const r=g.createRadialGradient(128,128,0,128,128,128);r.addColorStop(0,'rgba(255,255,255,.55)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,256,256);return new THREE.CanvasTexture(c)})();
+const floorGlow=new THREE.Mesh(new THREE.PlaneGeometry(16,16),new THREE.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,depthWrite:false,color:0x8a919c}));floorGlow.rotation.x=-Math.PI/2;floorGlow.position.y=-5.4;scene.add(floorGlow);
+const beam=new THREE.Mesh(new THREE.PlaneGeometry(3.2,30),new THREE.MeshBasicMaterial({map:(()=>{const c=document.createElement('canvas');c.width=64;c.height=256;const g=c.getContext('2d');const h=g.createLinearGradient(0,0,64,0);h.addColorStop(0,'rgba(255,255,255,0)');h.addColorStop(.5,'#fff');h.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=h;g.fillRect(0,0,64,256);const v=g.createLinearGradient(0,0,0,256);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,1)');g.globalCompositeOperation='destination-in';g.fillStyle=v;g.fillRect(0,0,64,256);return new THREE.CanvasTexture(c)})(),transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));beam.position.set(0,4,-10);beam.rotation.z=.18;scene.add(beam);
+const DN=mobile()?260:600,dg=new THREE.BufferGeometry(),dp=new Float32Array(DN*3),ds=new Float32Array(DN);for(let i=0;i<DN;i++){dp.set([(Math.random()-.5)*36,(Math.random()-.5)*22,-Math.random()*22+4],i*3);ds[i]=Math.random()}
+dg.setAttribute('position',new THREE.BufferAttribute(dp,3));const dust=new THREE.Points(dg,new THREE.PointsMaterial({color:0xdfe3ea,size:.045,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));scene.add(dust);const dBase=dp.slice();
+
+// dial painter: dark sunburst, applied indices, silver hands, live time
+function paintDial(t,bright){const W=1024,c=512;sx.fillStyle='#000';sx.fillRect(0,0,W,W);
+  const g=sx.createRadialGradient(c-120,c-160,40,c,c,620);g.addColorStop(0,`rgba(58,61,68,${.9*bright})`);g.addColorStop(.6,`rgba(18,19,22,${bright})`);g.addColorStop(1,'#020203');sx.fillStyle=g;sx.fillRect(0,0,W,W);
+  sx.save();sx.translate(c,c);for(let i=0;i<180;i++){sx.rotate(Math.PI*2/180);sx.strokeStyle=`rgba(255,255,255,${(i%2?.02:.045)*bright})`;sx.lineWidth=2;sx.beginPath();sx.moveTo(0,40);sx.lineTo(0,700);sx.stroke()}sx.restore();
+  sx.save();sx.translate(c,c);for(let i=0;i<60;i++){const a=i/60*Math.PI*2;sx.save();sx.rotate(a);if(i%5===0){const twelve=i===0;const lg=sx.createLinearGradient(-10,0,10,0);lg.addColorStop(0,'#6d727b');lg.addColorStop(.5,'#f2f4f7');lg.addColorStop(1,'#7c818a');sx.fillStyle=lg;
+      if(twelve){sx.fillRect(-20,-400,14,74);sx.fillRect(6,-400,14,74)}else sx.fillRect(-8,-396,16,62)}else{sx.fillStyle=`rgba(230,233,238,${.35*bright})`;sx.fillRect(-2,-400,4,16)}sx.restore()}sx.restore();
+  sx.fillStyle=`rgba(244,244,242,${.85*bright})`;sx.font='500 34px "Bodoni Moda", serif';sx.textAlign='center';sx.letterSpacing='12px';sx.fillText(CONFIG.brand,c+6,c-190);
+  sx.fillStyle=`rgba(244,244,242,${.4*bright})`;sx.font='500 18px Manrope, sans-serif';sx.fillText('SMART · 42',c+4,c+232);
+  const d=new Date(Date.now()+(window.__vt?window.__vt:0));const s=d.getSeconds()+d.getMilliseconds()/1000,m=d.getMinutes()+s/60,h=(d.getHours()%12)+m/60;
+  const hand=(ang,len,wid,tail,col)=>{sx.save();sx.translate(c,c);sx.rotate(ang);sx.shadowColor='rgba(0,0,0,.7)';sx.shadowBlur=18;sx.shadowOffsetY=8;const lg=sx.createLinearGradient(-wid,0,wid,0);lg.addColorStop(0,'#80858e');lg.addColorStop(.5,col);lg.addColorStop(1,'#80858e');sx.fillStyle=lg;sx.beginPath();sx.moveTo(-wid,tail);sx.lineTo(-wid*.55,-len);sx.lineTo(0,-len-14);sx.lineTo(wid*.55,-len);sx.lineTo(wid,tail);sx.closePath();sx.fill();sx.restore()};
+  hand(h/12*Math.PI*2,230,13,40,'#f4f6f9');hand(m/60*Math.PI*2,340,9,46,'#ffffff');
+  sx.save();sx.translate(c,c);sx.rotate(s/60*Math.PI*2);sx.fillStyle='#d9dde3';sx.fillRect(-2,-380,4,440);sx.restore();
+  sx.fillStyle='#e9ecf0';sx.beginPath();sx.arc(c,c,14,0,7);sx.fill();sx.fillStyle='#111';sx.beginPath();sx.arc(c,c,5,0,7);sx.fill();
+  dialTex.needsUpdate=true}
+
+/* ---------- state + choreography ---------- */
+const S={x:2.6,y:-.1,rx:.18,ry:-.75,camZ:15,dial:.35,light:0,spin:0}; // story pose (GSAP drives this)
+const INTRO={p:reduce?1:0};                                              // opening progress
+const V={m:0,ry:0,rx:0,z:13.5,auto:true,explode:0,vx:0,vy:0,idle:0};   // showroom
+let lastT=now(),autoRY=0;
+
+function size(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.fov=mobile()?42:30;cam.updateProjectionMatrix()}
+size();addEventListener('resize',size);
+
+function frame(){const t=now(),dt=Math.min(.05,(t-lastT)/1000);lastT=t;
+  const ip=INTRO.p, m=V.m, mob=mobile();
+  // lights rise during the intro
+  amb.intensity=.06+.1*ip; key.intensity=.15+1.0*ip*S.light; rim.intensity=1.4*ip; beam.material.opacity=.07*ip; floorGlow.material.opacity=.35*ip; dust.material.opacity=.55*ip;
+  const sw=reduce?1:clamp(ip*1.25,0,1); sweep.position.x=lerp(-12,9,sw); sweep.intensity=ip<1?6*Math.sin(Math.PI*clamp(ip*1.1,0,1)):1.2; sweep.target.position.set(lerp(-1,1,sw),lerp(.8,0,sw),0);
+  // story pose
+  autoRY+=dt*.22*S.spin;
+  let px=mob?0:S.x, py=mob?S.y+1.2:S.y, ry=S.ry+autoRY+mx*.12*(1-m), rx=S.rx+my*.08*(1-m), cz=lerp(7.2,S.camZ,reduce?1:Math.min(1,ip*1.05))*(mob?1.12:1);
+  // showroom pose
+  if(V.auto&&V.idle>2.5&&!dragging)V.ry+=dt*.35;
+  if(!dragging){V.ry+=V.vx;V.rx=clamp(V.rx+V.vy,-1.3,1.3);V.vx*=.92;V.vy*=.92}
+  V.idle+=dt;
+  px=lerp(px,0,m);py=lerp(py,mob?.6:-.2,m);ry=lerp(ry,V.ry,m);rx=lerp(rx,V.rx,m);cz=lerp(cz,V.z*(mob?1.15:1),m);
+  pivot.position.set(px,py,0);pivot.rotation.set(rx,ry,0);
+  cam.position.set(Math.sin(t*.00017)*.25,Math.cos(t*.00013)*.15,cz);cam.lookAt(px*.12,py*.15,0);
+  parts.forEach(p=>p.o.position.copy(p.b).addScaledVector(p.d,V.explode));
+  paintDial(t,lerp(.3,1,clamp(S.dial,0,1))*(.25+.75*ip));
+  const a=dg.attributes.position.array;for(let i=0;i<DN;i++){a[i*3+1]=((dBase[i*3+1]+t*.00018*(.3+ds[i])+11)%22)-11;a[i*3]=dBase[i*3]+Math.sin(t*.0003+ds[i]*9)*.4}dg.attributes.position.needsUpdate=true;
+  cur.style.transform=`translate(${cx+=(tx-cx)*.2}px,${cy+=(ty-cy)*.2}px)`;
+  R.render(scene,cam)}
+window.__render=frame;
+let running=true;document.addEventListener('visibilitychange',()=>{running=!document.hidden;if(running)loop()});
+function loop(){if(!running||window.__frozen)return;frame();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+
+/* ---------- showroom interaction ---------- */
+const grab=$('grab');let dragging=false,ptrs=new Map(),pinch0=0,z0=0;
+grab.addEventListener('pointerdown',e=>{if(V.m<.5)return;grab.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});dragging=true;grab.classList.add('dragging');V.idle=0;
+  if(ptrs.size===2){const[a,b]=[...ptrs.values()];pinch0=Math.hypot(a.x-b.x,a.y-b.y);z0=V.z}});
+grab.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;const p=ptrs.get(e.pointerId),dx=e.clientX-p.x,dy=e.clientY-p.y;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});V.idle=0;
+  if(ptrs.size===2){const[a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);V.z=clamp(z0*pinch0/d,6,19);return}
+  if(e.pointerType==='touch'&&Math.abs(dy)>Math.abs(dx)*1.4&&Math.abs(V.vx)<.002)return; // let vertical swipes scroll the page
+  V.vx=dx*.006;V.vy=dy*.004;V.ry+=V.vx;V.rx=clamp(V.rx+V.vy,-1.3,1.3)});
+const up=e=>{ptrs.delete(e.pointerId);if(!ptrs.size){dragging=false;grab.classList.remove('dragging')}};
+grab.addEventListener('pointerup',up);grab.addEventListener('pointercancel',up);
+grab.addEventListener('dblclick',()=>{zoomTo(V.z>9?7:13.5)});
+const VIEWS={front:[0,0,13.5],three:[-.75,.2,13],side:[-Math.PI/2,0,12],back:[Math.PI,0,13],strap:[-.5,1.1,15]};
+function nearest(a,target){const k=Math.round((a-target)/(Math.PI*2));return target+k*Math.PI*2}
+function goView(n){const[ry,rx,z]=VIEWS[n];V.idle=0;V.vx=V.vy=0;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===n));
+  if(window.gsap)gsap.to(V,{ry:nearest(V.ry,ry),rx,z,duration:reduce?0:1.6,ease:'power3.inOut'});else Object.assign(V,{ry,rx,z})}
+function zoomTo(z){V.idle=0;window.gsap?gsap.to(V,{z,duration:.9,ease:'power3.out'}):V.z=z}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>goView(b.dataset.view)));
+$('zIn').onclick=()=>zoomTo(clamp(V.z-2.2,6,19));$('zOut').onclick=()=>zoomTo(clamp(V.z+2.2,6,19));
+$('spinBtn').onclick=()=>{V.auto=!V.auto;$('spinBtn').setAttribute('aria-pressed',V.auto);$('spinBtn').textContent=V.auto?'Auto':'Paused';V.idle=V.auto?3:0};
+$('explodeBtn').onclick=()=>{const on=$('explodeBtn').getAttribute('aria-pressed')!=='true';$('explodeBtn').setAttribute('aria-pressed',on);window.gsap?gsap.to(V,{explode:on?1:0,duration:1.4,ease:'power3.inOut'}):V.explode=on?1:0;if(on&&V.z<12)zoomTo(15)};
+$('resetBtn').onclick=()=>{if(window.gsap)gsap.to(V,{explode:0,duration:1});else V.explode=0;$('explodeBtn').setAttribute('aria-pressed','false');goView('front')};
+
+/* ---------- GSAP: intro + scroll story ---------- */
+if(window.gsap&&window.ScrollTrigger){
+  gsap.registerPlugin(ScrollTrigger);
+  // intro: light sweep, camera pulls back, headline staggers in
+  const lines=document.querySelectorAll('#heroTitle .ln > span');
+  if(reduce){gsap.set('.intro-hide',{opacity:1});}
+  else{
+    gsap.set(lines,{yPercent:110});
+    const it=gsap.timeline({delay:.15});window.__intro=it;
+    it.to(INTRO,{p:1,duration:3.2,ease:'power2.inOut'},0)
+      .to(S,{light:1,dial:.55,duration:2.6,ease:'power2.out'},.6)
+      .to(lines,{yPercent:0,duration:1.4,stagger:.14,ease:'expo.out'},1.2)
+      .fromTo('#heroEye',{opacity:0,y:14},{opacity:1,y:0,duration:1,ease:'power3.out'},1.1)
+      .fromTo('#heroSub',{opacity:0,y:14},{opacity:1,y:0,duration:1,ease:'power3.out'},1.6)
+      .fromTo('#heroBtns',{opacity:0,y:14},{opacity:1,y:0,duration:1,ease:'power3.out'},1.8)
+      .fromTo('#heroFoot',{opacity:0},{opacity:1,duration:1},2.2);
+  }
+  if(reduce)S.light=1;
+  // the story: one scrubbed timeline across the five scenes
+  const st=gsap.timeline({defaults:{ease:'power2.inOut',duration:1},scrollTrigger:{trigger:'#story',start:'top bottom',end:'bottom bottom',scrub:1.2}});
+  st.to(S,{x:2.2,y:0,rx:0,ry:0,camZ:13.5,dial:1})                                   // I  reveal: front-on, dial lights up
+    .to(S,{x:-2.3,y:0,rx:0,ry:0,camZ:8.4,dial:1})                                   // II details: push in on the dial
+    .to(S,{x:2.4,y:0,rx:.05,ry:-Math.PI/2,camZ:11.5,dial:.8})                       // III profile: crown side
+    .to(S,{x:-2.3,y:.6,rx:1.05,ry:-.35,camZ:12.5,dial:.7})                          // IV strap
+    .to(S,{x:0,y:.1,rx:.12,ry:-.4,camZ:15.5,dial:1,spin:1});                        // V full watch, slow spin
+  // showroom: blend into interactive mode
+  ScrollTrigger.create({trigger:'#showroom',start:'top 55%',end:'bottom 45%',onToggle:self=>{gsap.to(V,{m:self.isActive?1:0,duration:1.4,ease:'power3.inOut'});if(self.isActive){V.ry=nearest(S.ry+autoRY,0);V.rx=0;V.idle=0;$('hint').style.opacity=1}}});
+  ScrollTrigger.create({trigger:'#story-edit',start:'top 70%',onEnter:()=>$('stage').classList.add('dim'),onLeaveBack:()=>$('stage').classList.remove('dim')});
+  // reveals
+  gsap.utils.toArray('.rv').forEach(el=>gsap.to(el,{opacity:1,y:0,duration:1.2,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 88%'}}));
+  gsap.utils.toArray('.callouts li').forEach((el,i)=>gsap.fromTo(el,{opacity:0,x:-20},{opacity:1,x:0,duration:1,delay:i*.12,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 85%'}}));
+  gsap.utils.toArray('.media img').forEach(img=>gsap.fromTo(img,{yPercent:-6,scale:1.18},{yPercent:6,scale:1.06,ease:'none',scrollTrigger:{trigger:img.parentNode,start:'top bottom',end:'bottom top',scrub:true}}));
+  gsap.utils.toArray('.media').forEach(m=>gsap.fromTo(m,{clipPath:'inset(12% 8% 12% 8%)'},{clipPath:'inset(0% 0% 0% 0%)',ease:'expo.out',duration:1.6,scrollTrigger:{trigger:m,start:'top 85%'}}));
+  // smooth anchor jumps
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id.length<2)return;const el=document.querySelector(id);if(!el)return;e.preventDefault();
+    const y=el.getBoundingClientRect().top+scrollY+(id.startsWith('#scene')?el.offsetHeight*.25:0);window.scrollTo({top:y,behavior:reduce?'auto':'smooth'})}));
+}else{
+  INTRO.p=1;S.light=1;S.dial=1;document.querySelectorAll('.intro-hide').forEach(e=>e.classList.remove('intro-hide'));
+}
+}
+</script>
