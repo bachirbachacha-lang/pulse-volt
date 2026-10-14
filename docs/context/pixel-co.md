@@ -23,6 +23,7 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - 14 Oct: bearbematcha REPLIED ("ممكن توريني مثال؟" = can you show me an example?). Built their sample: pixel-co/samples/matcha (menu, pickup time, order to WhatsApp).
 
 - 14 Oct new leads (Riyadh unless noted): chi.chi.ksa (chimney cake cafe, Al-Sahafa, DM'd before, re-sent), wanda.abaya (custom abayas, Hayat Mall), brucafe_sa (cafe + meeting rooms + catering, Linktree), yellow_sugarr1 (sweets cafe, Al-Aridh), minicake_sweets_official (cakes, 3 branches w/ numbers), ola.roa (Mexican roastery, wa.me, boxes/wholesale), caesarhail2016 (restaurant, Ha'il, 0506646464), sh.print1 (packaging printer, low priority, maybe partner). Skipped: 3tacoksa (has ordering app), aylisclinic (has website). Many are followed by power.teg, so they may be its ad clients.
+- 14 Oct batch 2: rehabmakkad (artist, Jeddah, art requests, no site) = lead. Skipped: officesartcom + asteris.sa (have websites), ardore.perfume (Turkey, perfume dupes), modhi.8 (designer w/ site), lb.doublem (personal account).
 - Bear be matcha: sample video + basic/premium offer sent 14 Oct, seen, no reply yet. Follow up Thu evening once if silent.
 
 ## Samples
