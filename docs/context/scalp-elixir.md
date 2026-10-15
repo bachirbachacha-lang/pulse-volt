@@ -16,6 +16,8 @@ Read owner.md first.
 - Later ideas: add PURC frizz repair serum (~$3.62) and PURC shampoo set via CJ 'List', then rewrite listings.
 - Don't use CJ's before/after bald photo (medical claim).
 
+- 15 Oct: new 3D futuristic videos (TORQ style, unbranded amber dropper bottle, labelled '3D RENDER'): ads/video/scalp-elixir-3d-hero.mp4 (15s, AR+EN, ends 'Coming soon'), scalp-elixir-3d-spin.mp4 (8s 360 loop), cover scalp-elixir-3d-hero-cover.jpg. Source: ads/video-3d (index.html + record.js). Silent - add sound in TikTok/CapCut.
+
 ## Next
 - Keep the daily posting schedule. Plan the launch-day post and offer for when the license arrives.
 - Captions in Arabic plus English.
