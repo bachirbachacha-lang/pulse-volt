@@ -36,6 +36,7 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - Scalp Elixir showcase (owner's own brand, for Pixel & Co. portfolio + cross-promo): https://claude.ai/artifact/NWc5NBt3jd8SjuKmdkZkEF (pixel-co/samples/scalp-elixir, phone video in /video). Branded Scalp Elixir, not PURC. Buttons say 'coming soon' until Tap license.
 - TORQ 3D smartwatch concept (fictional brand, owner's own watch as reference): https://claude.ai/artifact/LZyd74GzeVXvR8ShhpHC5J (pixel-co/samples/watch, video/torq-phone.mp4). Gallery = AI renders labelled 'Concept renders'. POSTED on @pixelandco.design 14 Oct.
 - TORQ Atelier luxury cinematic version: https://claude.ai/artifact/Y1WnQmTPAxcvy9c889ei2M (pixel-co/samples/watch-luxe, video/torq-atelier-phone.mp4). Price/checkout/shipping are placeholders (CONFIG at top of script). Plan: post 16 Oct, boost this one, pin it; keep the first TORQ post.
+- TORQ Ultra sport version (style of a TikTok reference): https://claude.ai/artifact/2vSHipxqEXBBvFUnydy7QU (pixel-co/samples/watch-ultra, video/torq-ultra-phone.mp4). Post the day after Atelier.
 - Others: pixel-co/samples/creamer, food (munch), hakwah.
 
 ## Next
