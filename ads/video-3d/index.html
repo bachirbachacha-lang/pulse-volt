@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Scalp Elixir 3D</title>
+<style>
+@font-face{font-family:T;src:url(fonts/tajawal-arabic-400-normal.woff2)format("woff2");font-weight:400;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:T;src:url(fonts/tajawal-arabic-700-normal.woff2)format("woff2");font-weight:700;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:T;src:url(fonts/tajawal-arabic-800-normal.woff2)format("woff2");font-weight:800;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:T;src:url(fonts/tajawal-latin-400-normal.woff2)format("woff2");font-weight:400}
+@font-face{font-family:T;src:url(fonts/tajawal-latin-700-normal.woff2)format("woff2");font-weight:700 800}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#030b09}
+body{font-family:T,sans-serif;color:#eef7f2;
+  background:radial-gradient(120% 70% at 50% 55%,#0d3a31 0%,#06201b 38%,#030b09 75%)}
+canvas{position:absolute;inset:0;width:1080px;height:1920px}
+.l{position:absolute;opacity:0;will-change:opacity,transform}
+.hud{position:absolute;inset:60px;pointer-events:none}
+.hud i{position:absolute;width:70px;height:70px;border-color:rgba(120,240,190,.55);border-style:solid}
+.hud i:nth-child(1){top:0;left:0;border-width:3px 0 0 3px}
+.hud i:nth-child(2){top:0;right:0;border-width:3px 3px 0 0}
+.hud i:nth-child(3){bottom:0;left:0;border-width:0 0 3px 3px}
+.hud i:nth-child(4){bottom:0;right:0;border-width:0 3px 3px 0}
+.mono{font-family:"DejaVu Sans Mono",monospace;letter-spacing:.18em;font-size:22px;color:rgba(150,240,200,.8)}
+#top{top:150px;left:0;right:0;text-align:center}
+#brand{font-weight:700;font-size:44px;letter-spacing:.55em;padding-left:.55em;color:#f3e3c4}
+#topsub{margin-top:14px}
+.big{left:70px;right:70px;text-align:center}
+.ar{font-weight:800;font-size:82px;line-height:1.25;direction:rtl;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+.en{font-weight:400;font-size:38px;letter-spacing:.06em;color:rgba(230,245,238,.82);margin-top:12px}
+.call{display:flex;align-items:center;gap:22px}
+.call .dot{width:22px;height:22px;border-radius:50%;background:#7ef0c0;box-shadow:0 0 24px #7ef0c0}
+.call .ln{height:2px;width:150px;background:linear-gradient(90deg,#7ef0c0,rgba(126,240,192,0))}
+.call .box{border:2px solid rgba(126,240,192,.6);background:rgba(4,30,25,.55);padding:18px 26px;border-radius:6px;backdrop-filter:blur(4px)}
+.call .n{font-family:"DejaVu Sans Mono",monospace;font-size:20px;color:#7ef0c0;letter-spacing:.2em}
+.call .a{font-weight:700;font-size:52px;direction:rtl;line-height:1.2}
+.call .e{font-size:30px;color:rgba(230,245,238,.8)}
+.call.r{flex-direction:row-reverse}
+.call.r .ln{background:linear-gradient(270deg,#7ef0c0,rgba(126,240,192,0))}
+#tag{right:84px;bottom:96px;font-size:20px}
+#scan{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(126,240,192,.9),transparent);box-shadow:0 0 30px rgba(126,240,192,.8);opacity:0}
+#flash{position:absolute;inset:0;background:#cffff0;opacity:0;mix-blend-mode:screen}
+#fade{position:absolute;inset:0;background:#030b09;opacity:1}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div id="scan"></div>
+<div id="shade" style="position:absolute;left:0;right:0;bottom:0;height:720px;background:linear-gradient(180deg,rgba(3,11,9,0),rgba(3,11,9,.82) 55%,rgba(3,11,9,.95))"></div>
+<div class="hud"><i></i><i></i><i></i><i></i></div>
+
+<div id="top" class="l"><div id="brand">SCALP ELIXIR</div><div id="topsub" class="mono">ROSEMARY · SCALP OIL · 50 ML</div></div>
+
+<div id="t1" class="l big" style="top:1450px"><div class="ar">زيت إكليل الجبل<br>لفروة الرأس</div><div class="en">Rosemary oil for your scalp</div></div>
+
+<div id="c1" class="l call" style="left:60px;top:640px"><div class="box"><div class="n">01</div><div class="a">إكليل الجبل</div><div class="e">Rosemary</div></div><div class="ln"></div><div class="dot"></div></div>
+<div id="c2" class="l call r" style="right:60px;top:880px"><div class="box"><div class="n">02</div><div class="a">جوز الهند</div><div class="e">Coconut oil</div></div><div class="ln"></div><div class="dot"></div></div>
+<div id="c3" class="l call" style="left:60px;top:1120px"><div class="box"><div class="n">03</div><div class="a">زيت الزيتون</div><div class="e">Olive oil</div></div><div class="ln"></div><div class="dot"></div></div>
+
+<div id="t2" class="l big" style="top:1460px"><div class="ar">بضع قطرات<br>كل ليلة</div><div class="en">A few drops. Massage in. Every night.</div></div>
+
+<div id="t3" class="l big" style="top:1440px"><div class="ar" style="font-size:96px">قريبًا</div><div class="en" style="font-size:44px;letter-spacing:.3em">COMING SOON</div></div>
+
+<div id="t360" class="l big" style="top:1470px"><div class="ar" style="font-size:120px;font-family:T;letter-spacing:.04em">360°</div><div class="en">Scalp Elixir · 50 ml</div></div>
+
+<div id="real" style="position:absolute;inset:0;overflow:hidden;display:none"><img id="realimg" src="real.jpg" style="position:absolute;left:50%;top:50%;height:1920px;transform-origin:50% 45%"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,11,9,.55),rgba(3,11,9,0) 22%,rgba(3,11,9,0) 55%,rgba(3,11,9,.9) 82%)"></div></div>
+<div id="t4" class="l big" style="top:1330px"><div class="mono" style="margin-bottom:18px">REAL PHOTO · NOT A RENDER</div><div class="ar">هذي العبوة اللي توصلك</div><div class="en">The real bottle you'll get</div></div>
+<div id="t5" class="l big" style="top:1640px"><div class="en" style="font-size:40px;letter-spacing:.3em;color:#f3e3c4">قريبًا · COMING SOON</div></div>
+<div id="tag" class="l mono" style="opacity:.7">3D RENDER</div>
+<div id="flash"></div>
+<div id="fade"></div>
+
+<script src="three.min.js"></script>
+<script>
+const CUT=new URLSearchParams(location.search).get('cut')||'hero';
+const DUR={hero:15,spin:8,real:5.5}[CUT];
+const W=1080,H=1920;
+const R=new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true,alpha:true,preserveDrawingBuffer:true});
+R.setPixelRatio(1);R.setSize(W,H,false);R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=0.95;
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x030b09,18,40);
+const cam=new THREE.PerspectiveCamera(30,W/H,.1,100);
+
+// environment for reflections
+(function(){const pm=new THREE.PMREMGenerator(R);const env=new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.BoxGeometry(20,20,20),new THREE.MeshBasicMaterial({color:0x06140f,side:THREE.BackSide})));
+  [[0xfff0d6,[-6,5,5],[5,2]],[0x8ff5cf,[6,2,-4],[3,7]],[0xffffff,[0,9,0],[10,1.2]],[0xffb862,[-7,-1,-4],[2,6]],[0x8ff5cf,[7,-2,5],[2,5]]].forEach(([c,p,s])=>{
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(s[0],s[1]),new THREE.MeshBasicMaterial({color:c,side:THREE.DoubleSide}));m.position.set(...p);m.lookAt(0,0,0);env.add(m)});
+  scene.environment=pm.fromScene(env,.03).texture})();
+
+scene.add(new THREE.AmbientLight(0x2a5a4c,.5));
+const key=new THREE.DirectionalLight(0xffe2bc,2.2);key.position.set(-4,6,6);scene.add(key);
+const rimA=new THREE.PointLight(0x6ff0bf,3.5,14);rimA.position.set(3.5,3,-3);scene.add(rimA);
+const rimB=new THREE.PointLight(0x6ff0bf,2.5,14);rimB.position.set(-3.5,1,-3);scene.add(rimB);
+const glow=new THREE.PointLight(0xffa640,0,6);glow.position.set(0,1.2,0);scene.add(glow);
+
+// ---- bottle ----
+const bottle=new THREE.Group();scene.add(bottle);
+function lathe(pts,seg=96){return new THREE.LatheGeometry(pts.map(p=>new THREE.Vector2(p[0],p[1])),seg)}
+const outer=[[0,0],[.78,0],[.9,.04],[.96,.16],[.97,.4],[.97,2.0],[.94,2.22],[.8,2.42],[.56,2.6],[.42,2.68],[.4,2.72],[.4,2.98],[.44,3.0]];
+const glassMat=new THREE.MeshPhysicalMaterial({color:0x2a0e02,metalness:.1,roughness:.05,transparent:true,opacity:.86,clearcoat:1,clearcoatRoughness:.03,envMapIntensity:1.6,side:THREE.DoubleSide,depthWrite:false});
+const glass=new THREE.Mesh(lathe(outer),glassMat);glass.renderOrder=2;bottle.add(glass);
+const oilPts=[[0,.07],[.84,.07],[.89,.2],[.9,.4],[.9,1.82],[0,1.82]];
+const oilMat=new THREE.MeshStandardMaterial({color:0x9a4a08,emissive:0x5a2200,emissiveIntensity:.5,metalness:0,roughness:.3,transparent:true,opacity:.92,envMapIntensity:.6});
+const oil=new THREE.Mesh(lathe(oilPts),oilMat);oil.renderOrder=1;bottle.add(oil);
+// silver label like the real bottle (dark amber glass, black dropper)
+function labelTex(){const c=document.createElement('canvas');c.width=2048;c.height=768;const g=c.getContext('2d');
+  const gr=g.createLinearGradient(0,0,2048,0);for(let i=0;i<=16;i++){gr.addColorStop(i/16,i%2?'#cfd4d6':'#a9afb2')}
+  g.fillStyle=gr;g.fillRect(0,0,2048,768);
+  g.globalAlpha=.08;for(let y=0;y<768;y+=3){g.fillStyle=y%6?'#fff':'#000';g.fillRect(0,y,2048,1)}g.globalAlpha=1;
+  function face(cx){g.textAlign='center';
+    g.fillStyle='#1f6b3a';g.font='700 230px "DejaVu Sans"';g.fillText('PURC',cx,250);
+    g.fillStyle='#3b4a44';g.font='700 46px "DejaVu Sans"';g.fillText('PURE',cx,312);
+    g.fillStyle='#16201c';g.font='800 92px T,"DejaVu Sans"';g.fillText('ROSEMARY',cx,450);
+    g.fillStyle='#1f6b3a';g.fillRect(cx-250,478,500,74);g.fillStyle='#e9f3ec';g.font='700 56px "DejaVu Sans"';g.fillText('SCALP OIL',cx,535);
+    g.fillStyle='#16201c';g.font='800 70px T,"DejaVu Sans"';g.fillText('ESSENTIAL OIL',cx,640);
+    g.font='400 40px "DejaVu Sans"';g.fillText('50 ml / 1.69 fl.oz',cx,725)}
+  face(512);face(1536);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+const label=new THREE.Mesh(new THREE.CylinderGeometry(.985,.985,1.55,128,1,true),new THREE.MeshStandardMaterial({map:labelTex(),metalness:.75,roughness:.32,envMapIntensity:1.1}));
+label.position.y=1.05;label.rotation.y=-Math.PI/2;bottle.add(label);
+// dropper (collar + bulb + pipette) as its own group so it can lift out
+const dropper=new THREE.Group();bottle.add(dropper);
+const black=new THREE.MeshStandardMaterial({color:0x070808,metalness:.3,roughness:.38,envMapIntensity:.35});
+const collarGeo=new THREE.CylinderGeometry(.47,.47,.5,48,6);
+{const p=collarGeo.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i),a=Math.atan2(z,x),r=Math.hypot(x,z);if(r>.3){const k=1+.025*Math.cos(a*36);p.setX(i,x*k);p.setZ(i,z*k)}}collarGeo.computeVertexNormals()}
+const collar=new THREE.Mesh(collarGeo,black);collar.position.y=3.2;dropper.add(collar);
+const ring=new THREE.Mesh(new THREE.TorusGeometry(.47,.035,12,64),new THREE.MeshStandardMaterial({color:0xe8c27a,metalness:1,roughness:.2}));ring.rotation.x=Math.PI/2;ring.position.y=2.96;dropper.add(ring);
+const bulb=new THREE.Mesh(lathe([[0,3.42],[.36,3.44],[.39,3.6],[.36,3.85],[.3,4.05],[.18,4.2],[0,4.24]],48),new THREE.MeshStandardMaterial({color:0x080909,metalness:0,roughness:.55,envMapIntensity:.3}));dropper.add(bulb);
+const pipe=new THREE.Mesh(new THREE.CylinderGeometry(.07,.05,2.6,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.35,roughness:.05,clearcoat:1,side:THREE.DoubleSide,depthWrite:false}));pipe.position.y=1.7;dropper.add(pipe);
+const pipeOil=new THREE.Mesh(new THREE.CylinderGeometry(.045,.04,1.2,16),oilMat);pipeOil.position.y=1.0;dropper.add(pipeOil);
+bottle.position.y=-1.6;
+
+// ---- platform ----
+function radTex(stops){const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');const gr=g.createRadialGradient(256,256,0,256,256,256);stops.forEach(s=>gr.addColorStop(s[0],s[1]));g.fillStyle=gr;g.fillRect(0,0,512,512);const t=new THREE.CanvasTexture(c);return t}
+const disc=new THREE.Mesh(new THREE.CircleGeometry(3.4,96),new THREE.MeshBasicMaterial({map:radTex([[0,'rgba(120,240,190,.35)'],[.35,'rgba(40,140,110,.18)'],[.7,'rgba(10,50,40,.08)'],[1,'rgba(0,0,0,0)']]),transparent:true,depthWrite:false}));
+disc.rotation.x=-Math.PI/2;disc.position.y=-1.6;scene.add(disc);
+const ringMat=c=>new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:1});
+const rings=[[1.55,.02,0x8ff5cf],[2.15,.012,0x8ff5cf],[2.8,.008,0xf3d9a4]].map(([r,t,c])=>{const m=new THREE.Mesh(new THREE.TorusGeometry(r,t,8,160),ringMat(c));m.rotation.x=Math.PI/2;m.position.y=-1.59;scene.add(m);return m});
+// tick marks on outer ring (hud dial)
+const ticks=new THREE.Group();ticks.position.y=-1.585;scene.add(ticks);
+for(let i=0;i<72;i++){const a=i/72*Math.PI*2,len=i%6===0?.22:.1;const m=new THREE.Mesh(new THREE.PlaneGeometry(.018,len),new THREE.MeshBasicMaterial({color:0x8ff5cf,transparent:true,opacity:.7,side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.rotation.z=-a;m.position.set(Math.sin(a)*2.45,0,Math.cos(a)*2.45);ticks.add(m)}
+// light beam
+const beam=new THREE.Mesh(new THREE.CylinderGeometry(1.45,1.7,9,64,1,true),new THREE.MeshBasicMaterial({map:(()=>{const c=document.createElement('canvas');c.width=4;c.height=256;const g=c.getContext('2d');const gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,'rgba(120,240,190,0)');gr.addColorStop(1,'rgba(120,240,190,.22)');g.fillStyle=gr;g.fillRect(0,0,4,256);return new THREE.CanvasTexture(c)})(),transparent:true,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));
+beam.position.y=2.9;scene.add(beam);
+
+// ---- rosemary sprigs ----
+const leafMat=new THREE.MeshStandardMaterial({color:0x1f5a36,roughness:.6,metalness:0,emissive:0x061a0e,envMapIntensity:.35});
+const stemMat=new THREE.MeshStandardMaterial({color:0x5a4a2a,roughness:.7});
+function sprig(n){const g=new THREE.Group();const stem=new THREE.Mesh(new THREE.CylinderGeometry(.018,.025,1.6,8),stemMat);g.add(stem);
+  const lg=new THREE.SphereGeometry(1,10,6);
+  for(let i=0;i<n;i++){const y=-.7+i*(1.45/n);for(const s of [-1,1]){const l=new THREE.Mesh(lg,leafMat);l.scale.set(.03,.2,.012);l.position.set(s*.09,y+.05,0);l.rotation.z=s*-.9;l.rotation.y=i*.7;g.add(l)}}
+  return g}
+const sprigs=[0,1,2].map(i=>{const s=sprig(13);scene.add(s);return s});
+
+// ---- particles ----
+const N=700,pg=new THREE.BufferGeometry(),pos=new Float32Array(N*3),seed=new Float32Array(N*3);
+for(let i=0;i<N;i++){const a=Math.random()*Math.PI*2,r=1.4+Math.random()*4.5;seed[i*3]=a;seed[i*3+1]=r;seed[i*3+2]=Math.random()}
+pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+const dotTex=radTex([[0,'rgba(255,255,255,1)'],[.25,'rgba(200,255,230,.6)'],[1,'rgba(0,0,0,0)']]);
+const pts=new THREE.Points(pg,new THREE.PointsMaterial({size:.09,map:dotTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:0xbff7dd}));scene.add(pts);
+
+// ---- drops + ripple ----
+const dropGeo=new THREE.SphereGeometry(.09,24,16);
+const dropMat=new THREE.MeshStandardMaterial({color:0xffb347,emissive:0x8a4200,emissiveIntensity:.8,roughness:.1,metalness:0});
+const drops=[0,1].map(()=>{const d=new THREE.Mesh(dropGeo,dropMat);d.visible=false;scene.add(d);return d});
+const ripple=new THREE.Mesh(new THREE.RingGeometry(.2,.26,64),new THREE.MeshBasicMaterial({color:0xffc070,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));
+ripple.rotation.x=-Math.PI/2;ripple.position.y=-1.58;scene.add(ripple);
+
+// ---- helpers ----
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ease=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const eo=x=>1-Math.pow(1-cl(x),3);
+const win=(t,a,b,f=.45)=>cl((t-a)/f)*cl((b-t)/f); // fade in/out window
+const $=id=>document.getElementById(id);
+function show(id,o,dy=0,sc=1){const e=$(id);e.style.opacity=o;e.style.transform=`translateY(${(1-o)*dy}px) scale(${sc})`}
+
+function renderAt(t){
+  if(CUT==='real'){return renderReal(t)}
+  const hero=CUT==='hero';
+  // rotation
+  let rot,rise=1,camZ=19,camY=1.8,lookY=1.15,lift=0,ring0=1;
+  if(hero){
+    rise=eo((t-.2)/2.0);
+    ring0=eo(t/1.4);
+    rot=-Math.PI*.6*(1-rise)+ease((t-2.4)/5.2)*Math.PI*2 + (t>7.6? (t-7.6)*.18:0);
+    lift=ease((t-7.9)/1.0)*(1-ease((t-11.6)/1.0));
+    const dolly=ease((t-7.7)/1.6)*(1-ease((t-11.4)/1.6));
+    camZ=19-7*dolly; camY=1.8+1.4*dolly; lookY=1.15+1.6*dolly;
+  }else{
+    rot=t/DUR*Math.PI*2; rise=1; ring0=1;
+  }
+  bottle.position.y=-1.6-4*(1-rise)+.06*Math.sin(t*1.6);
+  bottle.rotation.y=rot;
+  dropper.position.y=lift*1.9; dropper.rotation.y=-rot*lift;
+  cam.position.set(0,camY,camZ);cam.lookAt(0,lookY,0);
+
+  rings.forEach((r,i)=>{r.scale.setScalar(.6+.4*ring0);r.material.opacity=ring0*(.9-.2*i);r.rotation.z=t*(i%2?-.25:.18)});
+  ticks.rotation.y=t*.12;ticks.children.forEach(m=>m.material.opacity=.7*ring0);
+  disc.material.opacity=ring0;beam.material.opacity=ring0*(.75+.25*Math.sin(t*3));
+  glow.intensity=1.6*rise+2.5*lift;
+
+  sprigs.forEach((s,i)=>{const a=t*.35+i*Math.PI*2/3;s.position.set(Math.cos(a)*2.7,.6+.5*Math.sin(t*.9+i*2),Math.sin(a)*2.7);s.rotation.set(.5+.2*Math.sin(t+i),a,.4*Math.cos(t*.7+i));s.scale.setScalar(.9*rise)});
+
+  const p=pg.attributes.position.array;
+  for(let i=0;i<N;i++){const a=seed[i*3]+t*.08*(seed[i*3+2]>.5?1:-1),r=seed[i*3+1],y=((seed[i*3+2]*9+t*.35*(.4+seed[i*3+2]))%9)-2.2;p[i*3]=Math.cos(a)*r;p[i*3+1]=y;p[i*3+2]=Math.sin(a)*r-1}
+  pg.attributes.position.needsUpdate=true;pts.material.opacity=.85*cl(t/1.2);
+
+  // drops (hero only): fall from pipette tip (world) to floor
+  drops.forEach((d,i)=>{const t0=9.1+i*1.15;const k=(t-t0)/0.75;
+    if(hero&&k>=-.35&&k<=1){d.visible=true;const tipY=-1.6+.4+lift*1.9; const grow=cl((k+.35)/.35);
+      const y=k<0?tipY-.05:tipY-.05-(tipY+1.5)*k*k; d.position.set(0,y,0);d.scale.set(grow*.85,grow*(k>0?1.35:1),grow*.85)}else d.visible=false});
+  const rk=hero?Math.max(cl((t-9.85)/.9)*(t<10.75?1:0),cl((t-11.0)/.9)*(t<11.9?1:0)):0;
+  const rp=hero?((t>=11.0)?cl((t-11.0)/.9):cl((t-9.85)/.9)):0;
+  ripple.scale.setScalar(1+rp*7);ripple.material.opacity=rk>0?(1-rp)*.9:0;
+  // hide glass oil when dropper is lifted so the pipette reads clearly
+  pipe.material.opacity=.35;
+
+  R.render(scene,cam);
+
+  // ---- overlays ----
+  $('fade').style.opacity=hero?(1-cl(t/.6))+cl((t-14.4)/.6):(1-cl(t/.3));
+  show('top',hero?win(t,.6,15.2):1,-20);
+  show('tag',1*(hero?cl((t-.6)/.4):1)*.7);
+  if(hero){
+    show('t1',win(t,.9,2.9),40);
+    show('c1',win(t,3.0,4.6),0,.96+.04*win(t,3.0,4.6));
+    show('c2',win(t,4.4,6.0),0,.96+.04*win(t,4.4,6.0));
+    show('c3',win(t,5.8,7.6),0,.96+.04*win(t,5.8,7.6));
+    show('t2',win(t,8.4,11.4),40);
+    show('t3',win(t,12.0,16),40);
+    show('t360',0);
+  }else{
+    ['t1','c1','c2','c3','t2','t3'].forEach(i=>show(i,0));
+    show('t360',1);
+  }
+  const sc=hero?((t>2.4&&t<7.6)?((t-2.4)/1.3)%1:-1):((t/2)%1);
+  $('scan').style.opacity=sc>=0?Math.sin(sc*Math.PI)*.9:0;$('scan').style.top=(380+sc*1100)+'px';
+  $('flash').style.opacity=hero?cl(1-Math.abs(t-2.3)/.25)*.35:0;
+}
+function renderReal(t){
+  document.getElementById('c').style.display='none';$('real').style.display='block';
+  const z=1.0+.12*ease(t/DUR);$('realimg').style.transform=`translate(-50%,-50%) scale(${z})`;
+  ['t1','c1','c2','c3','t2','t3','t360','tag'].forEach(i=>show(i,0));
+  show('top',cl((t-.3)/.5),-20);show('t4',cl((t-.6)/.5),40);show('t5',cl((t-1.6)/.5),20);
+  $('flash').style.opacity=cl(1-t/.35)*.8;$('fade').style.opacity=cl((t-DUR+.5)/.5);
+  const sc=(t/1.6)%1;$('scan').style.opacity=t<3.2?Math.sin(sc*Math.PI)*.8:0;$('scan').style.top=(300+sc*1300)+'px';
+}
+window.renderAt=renderAt;window.DUR=DUR;
+document.fonts.ready.then(()=>{window.ready=true});
+if(!/record/.test(location.search)){const s=performance.now();(function loop(){renderAt(((performance.now()-s)/1000)%DUR);requestAnimationFrame(loop)})()}
+</script>
+</body>
+</html>
