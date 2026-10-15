@@ -21,3 +21,4 @@ Read owner.md first.
 ## Next
 - Keep the daily posting schedule. Plan the launch-day post and offer for when the license arrives.
 - Captions in Arabic plus English.
+- Owner wants small safe store fixes (names, colours, descriptions matching what ships) done without asking first. Money stays with owner + dad.
