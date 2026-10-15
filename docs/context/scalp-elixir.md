@@ -22,4 +22,5 @@ Read owner.md first.
 - Keep the daily posting schedule. Plan the launch-day post and offer for when the license arrives.
 - Captions in Arabic plus English.
 - Winter/home store idea (15 Oct): open AFTER Scalp Elixir launches + first sales, target ready late Nov. Owner chose to stick with CJ (not Zendrop/TeemDrop). Heaters/electric blankets need SASO - check with dad. Ask dad before paying for 2nd Shopify plan.
+- Winter product research (15 Oct): Penguin hand warmer SPU CJSJSJCD00121 ($11.33, 338 lists, "Pure Battery") has NO shipping line to SA on CJ - skip unless CJ support says yes. Toast USB hand warmer CJNSFSST00024 ($3.97 + $5.42 = $9.39 to SA, no battery, must stay plugged in). Prefer no-battery products (wearable blankets, USB plush, gloves, thermos, kashta gear). Always check a shipping price shows for SA.
 - Owner wants small safe store fixes (names, colours, descriptions matching what ships) done without asking first. Money stays with owner + dad.
