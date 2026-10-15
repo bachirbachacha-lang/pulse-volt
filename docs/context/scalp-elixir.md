@@ -21,4 +21,5 @@ Read owner.md first.
 ## Next
 - Keep the daily posting schedule. Plan the launch-day post and offer for when the license arrives.
 - Captions in Arabic plus English.
+- Winter/home store idea (15 Oct): open AFTER Scalp Elixir launches + first sales, target ready late Nov. Owner chose to stick with CJ (not Zendrop/TeemDrop). Heaters/electric blankets need SASO - check with dad. Ask dad before paying for 2nd Shopify plan.
 - Owner wants small safe store fixes (names, colours, descriptions matching what ships) done without asking first. Money stays with owner + dad.
