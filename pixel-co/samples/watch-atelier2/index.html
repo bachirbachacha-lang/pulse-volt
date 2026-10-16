@@ -80,11 +80,13 @@ em.g{font-style:italic;color:var(--gold-2)}
 .specline span{font-size:12px;color:var(--faint);letter-spacing:.06em}
 
 /* taken apart */
-.apart{position:relative;height:300vh}
+.apart{position:relative;height:420vh}
 .apart .pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center;overflow:hidden}
 .apart .inner{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:center;width:100%}
-.ex{position:relative;aspect-ratio:356/286;min-width:0}
-.ex img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 60%,transparent 100%);will-change:transform}
+.ex{position:relative;aspect-ratio:944/1132;height:min(86vh,860px);max-width:100%;justify-self:center;min-width:0;overflow:hidden}
+.ex .sq{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;-webkit-mask-image:radial-gradient(ellipse 78% 76% at 50% 48%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 78% 76% at 50% 48%,#000 62%,transparent 100%);will-change:opacity,transform}
+.ex .sq:first-child{opacity:1}
+.seqbar{position:absolute;left:12%;right:12%;bottom:3%;height:1px;background:var(--line)}.seqbar i{display:block;height:100%;width:0;background:var(--gold);box-shadow:0 0 10px var(--gold)}
 .hot{position:absolute;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
 .hot.on{opacity:1;transform:none}
 .hot i{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(212,163,90,.2),0 0 18px var(--gold);flex:none}
@@ -162,7 +164,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
   .hero h1{font-size:clamp(68px,22vw,110px)}
   .statement{padding-block:110px 90px}
   .design .grid,.apart .inner{grid-template-columns:1fr;gap:30px}
-  .apart{height:260vh}
+  .apart{height:360vh}
+  .ex{height:auto;width:min(100%,58vh*.834)}
+  .apart .pin{padding-top:84px;align-content:start}
   .apart .copy-side{order:2}
   .parts{margin-top:14px}.parts li{padding:9px 0;font-size:14px}
   .hot span{font-size:9.5px;padding:4px 8px;letter-spacing:.14em}
@@ -220,20 +224,25 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
         <p class="eyebrow">II · Taken apart</p>
         <h2 class="sec-h" style="margin-top:18px">Every layer,<br><em class="g">in order.</em></h2>
         <ol class="parts" id="parts">
-          <li><b>01</b><span>Curved glass front</span></li>
-          <li><b>02</b><span>Display and inner frame</span></li>
-          <li><b>03</b><span>Battery</span></li>
-          <li><b>04</b><span>Case and back sensor</span></li>
-          <li><b>05</b><span>Sport band</span></li>
+          <li><b>01</b><span>Closed, complete</span></li>
+          <li><b>02</b><span>The case turns clear</span></li>
+          <li><b>03</b><span>The battery slides out</span></li>
+          <li><b>04</b><span>Glass, display and frame lift away</span></li>
+          <li><b>05</b><span>Every part, in the air</span></li>
         </ol>
       </div>
       <div class="ex" id="ex">
-        <img src="img/exploded.jpg" alt="Exploded view of the watch with its layers floating apart">
-        <div class="hot" style="left:58%;top:12%"><i></i><span>Glass</span></div>
-        <div class="hot" style="left:60%;top:36%"><i></i><span>Display</span></div>
-        <div class="hot" style="left:60%;top:56%"><i></i><span>Battery</span></div>
-        <div class="hot l" style="right:60%;top:78%"><i></i><span>Case</span></div>
-        <div class="hot l" style="right:76%;top:50%"><i></i><span>Band</span></div>
+        <img src="img/open-1.jpg" alt="The watch, closed" class="sq">
+        <img src="img/open-2.jpg" alt="" class="sq">
+        <img src="img/open-3.jpg" alt="" class="sq">
+        <img src="img/open-4.jpg" alt="" class="sq">
+        <img src="img/open-5.jpg" alt="The watch fully taken apart, every part floating" class="sq">
+        <div class="hot" style="left:66%;top:12%"><i></i><span>Glass</span></div>
+        <div class="hot l" style="right:76%;top:27%"><i></i><span>Display</span></div>
+        <div class="hot l" style="right:74%;top:41%"><i></i><span>Case</span></div>
+        <div class="hot" style="left:70%;top:58%"><i></i><span>Battery</span></div>
+        <div class="hot l" style="right:76%;top:62%"><i></i><span>Band</span></div>
+        <div class="seqbar" aria-hidden="true"><i id="seqFill"></i></div>
       </div>
     </div></div>
   </section>
@@ -342,10 +351,15 @@ gsap.to('#state .w',{opacity:1,stagger:.08,ease:'none',scrollTrigger:{trigger:'#
 const bt=gsap.timeline({scrollTrigger:{trigger:'#bp',start:'top 75%',end:'bottom 35%',scrub:1}});
 bt.to('#bp img',{clipPath:'inset(0 0% 0 0)',ease:'none'},0).fromTo('#scan',{left:'0%'},{left:'100%',ease:'none'},0).to('#scan',{opacity:0,duration:.1},.95);
 
-/* taken apart: pinned, callouts one by one */
-const hots=[...document.querySelectorAll('.hot')],parts=[...document.querySelectorAll('#parts li')];
-ScrollTrigger.create({trigger:'#apart',start:'top top',end:'bottom bottom',scrub:true,onUpdate:s=>{const k=Math.floor(s.progress*6-.4);hots.forEach((h,i)=>h.classList.toggle('on',i<=k));parts.forEach((p,i)=>p.classList.toggle('on',i<=k))}});
-gsap.fromTo('#ex img',{scale:.86,rotate:-3},{scale:1.04,rotate:0,ease:'none',scrollTrigger:{trigger:'#apart',start:'top top',end:'bottom bottom',scrub:true}});
+/* taken apart: scroll plays the 5-frame opening, then labels appear */
+const hots=[...document.querySelectorAll('.hot')],parts=[...document.querySelectorAll('#parts li')],frames=[...document.querySelectorAll('#ex .sq')];
+function seq(p){const f=Math.min(frames.length-1,p*(frames.length-1)*1.18);const a=Math.floor(f),t=f-a;
+  frames.forEach((im,i)=>{let o=0;if(i===a)o=1;else if(i===a+1)o=t;im.style.opacity=i<a?1:o;im.style.transform='scale('+(1.04-.04*Math.min(1,f/(frames.length-1)))+')'});
+  parts.forEach((li,i)=>li.classList.toggle('on',i<=Math.round(f)));
+  const lab=Math.max(0,(p-.86)/.12);hots.forEach((h,i)=>h.classList.toggle('on',lab*hots.length>i+.2));
+  document.getElementById('seqFill').style.width=(Math.min(1,p/.85)*100)+'%'}
+seq(0);
+ScrollTrigger.create({trigger:'#apart',start:'top top',end:'bottom bottom',scrub:true,onUpdate:s=>seq(s.progress)});
 
 /* details: horizontal reel on desktop */
 const mm=gsap.matchMedia();
