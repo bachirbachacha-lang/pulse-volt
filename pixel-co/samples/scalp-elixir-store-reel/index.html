@@ -128,7 +128,7 @@ function render(t){
   st.style.opacity=on?1:0;
   $('v').style.background=t>=beat(8)&&t<beat(16)&&[9,11,13,15].some(()=>0)?'':'var(--cream)';
   if(on){
-    const s=[...SC].reverse().find(x=>t>=x[0]);const i=SC.indexOf(s);
+    const s=[...SC].reverse().find(x=>t>=x[0])||SC[0];const i=SC.indexOf(s);
     const f=Math.min(SEQ[s[1]],1+Math.floor((t-s[0])*30)),src=`seq/${s[1]}/${String(f).padStart(3,'0')}.jpg`;
     if(src!==lastSrc){$('frame').src=src;lastSrc=src}
     const enter=k(t,beat(0),.7,'expo');
