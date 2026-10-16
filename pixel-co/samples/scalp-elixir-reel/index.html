@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=540,initial-scale=1">
+<title>Scalp Elixir Reel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=IBM+Plex+Sans+Arabic:wght@500;700&display=swap">
+<style>
+/* 9:16 motion reel, 540x960 CSS px rendered at 2x. Every move is placed on the beat grid of the owner's song clip (117.5 BPM, first beat 3.85 s). */
+:root{--cream:#F3EEE4;--deep:#0E2C27;--deep2:#123A33;--leaf:#3CCB5A;--soft:#9FE0AE;--gold:#E2B862;--ink:#10251f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:540px;height:960px;overflow:hidden;background:#000}
+#v{position:relative;width:540px;height:960px;overflow:hidden;background:var(--cream);font-family:Manrope,system-ui,sans-serif;color:var(--ink)}
+.layer{position:absolute;inset:0}
+.ar{font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl}
+/* blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(36px);opacity:.9;will-change:transform}
+#b1{width:420px;height:420px;background:radial-gradient(circle at 40% 40%,#C8F07A,#3CCB5A 60%,transparent 72%);left:-120px;top:-60px}
+#b2{width:360px;height:360px;background:radial-gradient(circle at 50% 50%,#9FE0AE,#3CCB5A 55%,transparent 72%);right:-140px;bottom:120px}
+#b3{width:260px;height:260px;background:radial-gradient(circle,#D9F59C,transparent 70%);left:180px;top:520px}
+#bg2{background:radial-gradient(ellipse at 50% 40%,var(--deep2),var(--deep) 70%);opacity:0}
+.type{position:absolute;left:40px;right:40px;top:410px;font-weight:800;font-size:56px;line-height:1.02;letter-spacing:-.03em}
+.type .caret{display:inline-block;width:4px;height:52px;background:var(--leaf);margin-left:4px;vertical-align:-6px}
+#q2{color:var(--cream);opacity:0;top:380px;font-size:74px}
+#q2 em{font-family:Fraunces,serif;font-style:italic;font-weight:300;color:var(--soft)}
+#q2 .ar{display:block;font-size:34px;margin-top:16px;color:var(--soft);font-weight:700}
+/* bottle scene */
+#card{position:absolute;left:70px;right:70px;top:150px;height:560px;border-radius:34px;background:#fff;overflow:hidden;opacity:0;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+#card img{position:absolute;left:50%;top:50%;width:118%;transform:translate(-50%,-50%)}
+#streak{position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 42%,rgba(226,184,98,.0) 45%,rgba(255,214,140,.75) 50%,transparent 55%);mix-blend-mode:screen;transform:translateX(-80%)}
+.word{position:absolute;left:0;right:0;top:752px;text-align:center;color:var(--cream);opacity:0}
+.word b{display:block;font-weight:800;font-size:58px;letter-spacing:-.02em;line-height:1}
+.word span{display:block;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:30px;color:var(--soft);margin-top:10px}
+.tick{position:absolute;top:96px;left:0;right:0;display:flex;justify-content:center;gap:10px;opacity:0}
+.tick i{width:34px;height:3px;border-radius:3px;background:rgba(243,238,228,.25)}
+.tick i.on{background:var(--leaf)}
+/* phone */
+#wipe{background:var(--cream);clip-path:circle(0% at 50% 50%)}
+#phone{position:absolute;left:115px;top:180px;width:310px;height:640px;border-radius:46px;background:#0b0b0b;padding:12px;box-shadow:0 40px 90px -30px rgba(14,44,39,.7);opacity:0}
+#screen{position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:var(--deep)}
+#screen img{position:absolute;left:0;top:0;width:100%}
+#notch{position:absolute;left:50%;top:22px;width:92px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:2}
+#pcap{position:absolute;left:0;right:0;top:84px;text-align:center;opacity:0}
+#pcap b{display:block;font-weight:800;font-size:40px;letter-spacing:-.02em}
+#pcap span{display:block;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:24px;color:#2f7a4c;margin-top:4px}
+#purl{position:absolute;left:0;right:0;top:850px;text-align:center;font-size:16px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#2f7a4c;opacity:0}
+/* rapid cuts */
+.cut{opacity:0;display:grid;place-items:center;overflow:hidden}
+.cut img{width:100%;height:100%;object-fit:cover}
+.cut.t{background:var(--deep);color:var(--cream);text-align:center}
+.cut.t.l{background:var(--cream);color:var(--deep)}
+.cut .big{font-weight:800;font-size:110px;letter-spacing:-.05em;line-height:.9}
+.cut .out{font-weight:800;font-size:96px;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:2px var(--leaf)}
+.cut .sub{font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:34px;color:var(--soft);margin-top:12px}
+.cut.l .sub{color:#2f7a4c}
+#flash{background:#fff;opacity:0;mix-blend-mode:screen}
+/* end */
+#end{background:radial-gradient(ellipse at 50% 42%,var(--deep2),#071713 75%);opacity:0;text-align:center;color:var(--cream)}
+#logo{position:absolute;left:50%;top:250px;width:150px;height:186px;transform:translateX(-50%)}
+#logo path,#logo ellipse{transform-box:fill-box;transform-origin:center}
+#ename{position:absolute;left:0;right:0;top:470px;font-family:Fraunces,serif;font-weight:300;font-size:72px;letter-spacing:-.01em}
+#ename .ar{display:block;font-size:34px;margin-top:4px;color:var(--soft);font-weight:500}
+#soon{position:absolute;left:0;right:0;top:640px;font-size:15px;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:var(--gold)}
+#soon .ar{display:block;font-size:26px;letter-spacing:0;margin-top:8px}
+#handle{position:absolute;left:0;right:0;top:740px;font-size:22px;font-weight:700;color:var(--cream)}
+#made{position:absolute;left:0;right:0;bottom:60px;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:rgba(243,238,228,.5)}
+.vg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.28))}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+</style></head>
+<body>
+<div id="v">
+  <div class="layer" id="blobs"><div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div></div>
+  <div class="layer" id="bg2"></div>
+  <div class="type" id="q1"><span id="q1t"></span><span class="caret" id="caret"></span></div>
+  <div class="type" id="q2">felt <em>stronger?</em><span class="ar">شعرك يستاهل أقوى.</span></div>
+
+  <div id="card"><img src="img/bottle.jpg" alt=""><div id="streak"></div></div>
+  <div class="tick" id="tick"><i></i><i></i><i></i><i></i></div>
+  <div class="word" id="w0"><b>Rosemary.</b><span>إكليل الجبل</span></div>
+  <div class="word" id="w1"><b>3–5 drops.</b><span>٣–٥ قطرات</span></div>
+  <div class="word" id="w2"><b>2 minutes.</b><span>دقيقتين مساج</span></div>
+  <div class="word" id="w3"><b>Every night.</b><span>كل ليلة</span></div>
+
+  <div class="layer" id="wipe">
+    <div class="blob" style="width:360px;height:360px;left:-140px;top:640px;background:radial-gradient(circle,#C8F07A,#3CCB5A 55%,transparent 72%)"></div>
+    <div id="pcap"><b>Our new website.</b><span>موقعنا الجديد</span></div>
+    <div id="phone"><div id="screen"><div id="notch"></div><img id="site" src="img/site.jpg" alt=""></div></div>
+    <div id="purl">Designed by Pixel &amp; Co.</div>
+  </div>
+
+  <div class="layer cut" id="c0"><img src="img/bottle.jpg" alt="" style="object-position:50% 40%;transform:scale(1.6)"></div>
+  <div class="layer cut t" id="c1"><div><div class="out">ROSEMARY</div><div class="sub">إكليل الجبل</div></div></div>
+  <div class="layer cut" id="c2"><img src="img/oil.jpg" alt=""></div>
+  <div class="layer cut t l" id="c3"><div><div class="big">3–5</div><div class="sub">قطرات فقط</div></div></div>
+  <div class="layer cut" id="c4"><img src="img/bottle.jpg" alt="" style="object-position:50% 70%;transform:scale(2.1) rotate(-6deg)"></div>
+  <div class="layer cut t" id="c5"><div><div class="big" style="font-size:96px">30-DAY</div><div class="out" style="font-size:54px">GUARANTEE</div><div class="sub">ضمان ٣٠ يوم</div></div></div>
+  <div class="layer cut" id="c6"><img src="img/oil.jpg" alt="" style="transform:scale(1.5);object-position:30% 30%"></div>
+  <div class="layer cut t l" id="c7"><div><div class="big" style="font-size:88px">99 SAR</div><div class="sub">تبدأ من ٩٩ ريال</div></div></div>
+  <div class="layer" id="flash"></div>
+
+  <div class="layer" id="end">
+    <svg id="logo" viewBox="0 0 26 32" aria-hidden="true"><path id="drop" d="M13 1C8 9 2 15 2 21a11 11 0 0 0 22 0C24 15 18 9 13 1z" fill="#F3EEE4"/><path id="stem" d="M13 9v18" stroke="#0E2C27" stroke-width="1.6" stroke-linecap="round" fill="none"/><g fill="#3CCB5A"><ellipse class="lf" cx="10" cy="15" rx="1.8" ry="3.2" transform="rotate(-35 10 15)"/><ellipse class="lf" cx="16" cy="15" rx="1.8" ry="3.2" transform="rotate(35 16 15)"/><ellipse class="lf" cx="10" cy="21" rx="1.8" ry="3.2" transform="rotate(-35 10 21)"/><ellipse class="lf" cx="16" cy="21" rx="1.8" ry="3.2" transform="rotate(35 16 21)"/><ellipse class="lf" cx="13" cy="10" rx="1.4" ry="2.4"/></g></svg>
+    <div id="ename">Scalp Elixir<span class="ar">سكالب إليكسير</span></div>
+    <div id="soon">Coming soon<span class="ar">قريبًا</span></div>
+    <div id="handle">@scalp.elixir</div>
+    <div id="made">Made by Pixel &amp; Co.</div>
+  </div>
+  <div class="vg"></div><div class="grain"></div>
+</div>
+<script>
+/* Deterministic renderer: render(t) sets every element from the beat-timed tracks below, so any frame can be drawn exactly. */
+const BEAT=0.51,B0=3.85,beat=n=>B0+n*BEAT,DUR=19.6;
+const E={expo:t=>t===1?1:1-Math.pow(2,-10*t),p2:t=>1-(1-t)*(1-t),p2i:t=>t*t,io:t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,sine:t=>-(Math.cos(Math.PI*t)-1)/2,lin:t=>t,back:t=>{const c=2.2;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)},p3io:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2};
+const tracks=[];const add=(sel,t0,dur,from,to,ease='p2')=>tracks.push({els:[...document.querySelectorAll(sel)],t0,t1:t0+dur,from,to,ease:E[ease]});
+const setAt=(sel,t,props)=>add(sel,t,0,props,props,'lin');
+const base={opacity:null,x:0,y:0,scale:1,rotate:0,blur:0,clip:null,sx:0};
+const els=new Set();
+/* 0–2.86 */
+add('#b1',0,DUR,{x:0,y:0,scale:1},{x:120,y:90,scale:1.25},'sine');
+add('#b2',0,DUR,{x:0,y:0,scale:1},{x:-150,y:-140,scale:1.4},'sine');
+add('#b3',0,DUR,{x:0,y:0,scale:1},{x:-60,y:-200,scale:1.6},'sine');
+const Q='What if your hair';
+/* 2.86 hit */
+setAt('#bg2',0,{opacity:0});setAt('#bg2',2.86,{opacity:1});
+setAt('#q1',0,{opacity:1});setAt('#q1',2.86,{opacity:0});
+setAt('#q2',0,{opacity:0});
+add('#q2',2.86,.32,{opacity:0,scale:1.35,blur:12},{opacity:1,scale:1,blur:0},'expo');
+add('#q2',2.86,.9,{y:0},{y:-30},'lin');
+add('#q2',3.6,.25,{opacity:1,y:-30},{opacity:0,y:-80},'p2i');
+add('#blobs',2.86,.3,{opacity:1},{opacity:.55});
+/* 3.85 bottle + words */
+setAt('#card',0,{opacity:0});
+add('#card',B0,.5,{opacity:0,y:420,rotate:-6},{opacity:1,y:0,rotate:0},'expo');
+add('#streak',B0+.15,.9,{x:-80},{x:80},'io');
+add('#streak',beat(5),.8,{x:-80},{x:80},'io');
+setAt('#tick',0,{opacity:0});setAt('#tick',B0,{opacity:1});
+['#w0','#w1','#w2','#w3'].forEach((w,i)=>{const t=beat(1+i*2);setAt(w,0,{opacity:0});
+  add(w,t,.22,{opacity:0,y:40,scale:.9},{opacity:1,y:0,scale:1},'back');
+  add('#card',t,.4,{scale:1.045},{scale:1});
+  add('#card img',t,.45,{rotate:i%2?2:-2},{rotate:0});
+  if(i<3)add(w,beat(2+i*2)+.33,.16,{opacity:1,y:0},{opacity:0,y:-30},'p2i')});
+/* 7.87 wipe + phone */
+setAt('#wipe',0,{clip:0});
+add('#wipe',beat(8)-.1,.45,{clip:0},{clip:150},'p3io');
+setAt('#phone',0,{opacity:0});
+add('#phone',beat(8),.6,{opacity:0,y:300,rotate:8},{opacity:1,y:0,rotate:0},'expo');
+setAt('#pcap',0,{opacity:0});add('#pcap',beat(9),.4,{opacity:0,y:20},{opacity:1,y:0},'expo');
+setAt('#purl',0,{opacity:0});add('#purl',beat(10),.4,{opacity:0},{opacity:1});
+let SITE_SCROLL=0;
+add('#site',beat(8)+.3,beat(16)-beat(8)-.3,{y:0},{y:-1},'io'); // -1 = full scroll, scaled in render
+[10,12,14].forEach((n,i)=>add('#phone',beat(n),.45,{rotate:i%2?-3:3,scale:1.03},{rotate:0,scale:1}));
+/* 11.87 cuts */
+for(let i=0;i<8;i++){const t=beat(16+i),id='#c'+i;setAt(id,0,{opacity:0});setAt(id,t,{opacity:1});setAt(id,t+BEAT-.001,{opacity:0});
+  add(id+' > *',t,BEAT,{scale:1.18},{scale:1});add('#flash',t,.18,{opacity:.35},{opacity:0})}
+setAt('#flash',0,{opacity:0});
+/* 15.86 end */
+const EE=beat(24);
+setAt('#end',0,{opacity:0});setAt('#end',EE,{opacity:1});
+setAt('#drop',0,{opacity:0});add('#drop',EE,.7,{opacity:0,scale:0},{opacity:1,scale:1},'back');
+add('#stem',EE+.3,.6,{dash:20},{dash:0});setAt('#stem',0,{dash:20});
+document.querySelectorAll('#logo .lf').forEach((lf,k)=>{tracks.push({els:[lf],t0:0,t1:0,from:{scale:0},to:{scale:0},ease:E.lin});tracks.push({els:[lf],t0:EE+.45+k*.08,t1:EE+.95+k*.08,from:{scale:0},to:{scale:1},ease:E.back})});
+setAt('#ename',0,{opacity:0});add('#ename',EE+.6,1.2,{opacity:0,y:30,ls:.2},{opacity:1,y:0,ls:-.01},'expo');
+setAt('#soon',0,{opacity:0});add('#soon',EE+1.3,.8,{opacity:0},{opacity:1});
+setAt('#handle',0,{opacity:0});add('#handle',EE+1.7,.8,{opacity:0,y:10},{opacity:1,y:0},'expo');
+setAt('#made',0,{opacity:0});add('#made',EE+2.2,.8,{opacity:0},{opacity:1});
+add('#logo',EE+.8,3,{y:0},{y:-10},'sine');
+tracks.forEach(tr=>tr.els.forEach(e=>els.add(e)));
+const lerp=(a,b,k)=>a+(b-a)*k;
+function render(t){
+  const st=new Map();els.forEach(e=>st.set(e,{}));
+  for(const tr of tracks){if(t<tr.t0)continue;const k=tr.t1>tr.t0?tr.ease(Math.min(1,(t-tr.t0)/(tr.t1-tr.t0))):1;
+    for(const e of tr.els){const s=st.get(e);for(const key in tr.to){s[key]=lerp(tr.from[key],tr.to[key],k)}}}
+  st.forEach((s,e)=>{const isSvg=e instanceof SVGElement;
+    if('opacity' in s)e.style.opacity=s.opacity;
+    const tf=[];if(e.parentNode&&e.parentNode.id==='card')tf.push('translate(-50%,-50%)');if(e.id==='streak')tf.push(`translateX(${s.x??-80}%)`);else if(s.x||s.y)tf.push(`translate(${s.x||0}px,${e.id==='site'?0:(s.y||0)}px)`);
+    if(e.id==='site'){const h=e.offsetHeight-document.getElementById('screen').offsetHeight;e.style.transform=`translateY(${(s.y||0)*h*.82}px)`}
+    else{if(s.rotate)tf.push(`rotate(${s.rotate}deg)`);if('scale' in s)tf.push(`scale(${s.scale})`);
+      if(e.id==='logo')e.style.transform=`translateX(-50%) translateY(${s.y||0}px)`;else if(tf.length||e.style.transform)e.style.transform=tf.join(' ')}
+    if('blur' in s)e.style.filter=s.blur>0.01?`blur(${s.blur}px)`:'none';
+    if('clip' in s)e.style.clipPath=`circle(${s.clip}% at 50% 50%)`;
+    if('dash' in s){e.style.strokeDasharray=20;e.style.strokeDashoffset=s.dash}
+    if('ls' in s)e.style.letterSpacing=s.ls+'em';
+    if(isSvg&&'scale' in s){e.style.transformBox='fill-box';e.style.transformOrigin='center'}
+  });
+  // typing + caret + ticks
+  const n=Math.max(0,Math.min(Q.length,Math.round((t-.35)/2.1*Q.length)));document.getElementById('q1t').textContent=Q.slice(0,n);
+  document.getElementById('caret').style.opacity=(t<2.5&&Math.floor(t/.26)%2)?0:1;
+  const wi=[1,3,5,7].filter(b=>t>=beat(b)).length-1;document.querySelectorAll('#tick i').forEach((x,j)=>x.classList.toggle('on',j<=wi));
+}
+window.DURATION=DUR;window.render=render;render(0);
+if(!/record/.test(location.hash)){const s0=performance.now();(function f(){const t=(performance.now()-s0)/1000%DUR;render(t);requestAnimationFrame(f)})()}
+</script>
+</body></html>
