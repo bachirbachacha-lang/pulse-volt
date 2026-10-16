@@ -1,0 +1,369 @@
+<title>TORQ Atelier II</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: editorial luxury in the manner of a haute horlogerie house. Black and warm gold, one serif voice, generous space. Chapters: hero with sweeping light, the design (blueprint wipe), taken apart (pinned exploded view with callouts), finishes and bands (spotlight selectors), details (horizontal reel), a concept timeline, then the closing card. Single committed dark look. */
+:root{
+  --black:#050404; --char:#0c0a09; --char-2:#14110e; --gold:#D4A35A; --gold-2:#F0CB8A; --ink:#F3EEE6; --mist:rgba(243,238,230,.58); --faint:rgba(243,238,230,.3); --line:rgba(243,238,230,.1); --gline:rgba(212,163,90,.35);
+  --serif:'Cormorant Garamond','Times New Roman',Georgia,serif;
+  --sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.2,.75,.15,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:var(--black);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--serif);font-weight:300;margin:0;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0}
+.eyebrow{font-size:10.5px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.lead{color:var(--mist);font-size:17px;max-width:40ch}
+em.g{font-style:italic;color:var(--gold-2)}
+.grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(3) infinite}
+@keyframes grain{33%{transform:translate(-2%,1%)}66%{transform:translate(1%,-2%)}}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:40;padding-top:env(safe-area-inset-top,0px);transition:background .6s,border-color .6s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(5,4,4,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.nav .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:74px}
+.nav .l,.nav .r{display:flex;gap:30px;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.nav .r{justify-content:flex-end}
+.brand{font-family:var(--serif);font-size:26px;letter-spacing:.5em;padding-left:.5em;font-weight:400}
+.u{position:relative}.u::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}.u:hover::after{transform:scaleX(1);transform-origin:left}
+.menu-btn{display:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.mmenu{position:fixed;inset:0;z-index:35;background:var(--black);display:flex;flex-direction:column;justify-content:center;gap:6px;padding-inline:max(24px,env(safe-area-inset-left,0px));clip-path:inset(0 0 100% 0);transition:clip-path .9s var(--ease);pointer-events:none}
+.open .mmenu{clip-path:inset(0);pointer-events:auto}
+.mmenu a{font-family:var(--serif);font-size:clamp(40px,12vw,64px);line-height:1.15;font-weight:300}
+.mmenu a em{font-style:italic;color:var(--gold-2)}
+
+/* hero */
+.hero{position:relative;height:100vh;height:100svh;min-height:600px;overflow:hidden;background:#000}
+.hero .bg{position:absolute;inset:0}
+.hero .bg img{position:absolute;top:-4%;right:-2%;width:62%;height:108%;object-fit:cover;object-position:50% 45%;will-change:transform;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%);mask-image:linear-gradient(90deg,transparent 0,#000 28%)}
+.hero .streak{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:linear-gradient(115deg,transparent 40%,rgba(255,200,120,.0) 44%,rgba(255,206,140,.55) 50%,rgba(255,200,120,0) 56%,transparent 60%);background-size:260% 100%;background-position:120% 0;animation:sweep 7s var(--ease) 1.2s infinite}
+@keyframes sweep{0%{background-position:130% 0}55%,100%{background-position:-60% 0}}
+.hero .vg{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,4,4,.88) 0%,rgba(5,4,4,.55) 34%,transparent 62%),linear-gradient(0deg,rgba(5,4,4,.9),transparent 30%)}
+.hero .copy{position:absolute;left:0;right:0;bottom:12vh}
+.hero h1{font-size:clamp(76px,13vw,220px);line-height:.82;letter-spacing:.02em;font-weight:300;margin:18px 0 26px}
+.hero h1 .ch{display:inline-block;will-change:transform}
+.hero h1 small{display:block;font-size:.2em;letter-spacing:.5em;margin-top:18px;color:var(--gold-2);font-style:italic}
+.hero .lead{margin-bottom:34px}
+.btn{display:inline-flex;align-items:center;gap:14px;height:54px;padding:0 30px;border:1px solid var(--gline);font-size:11px;letter-spacing:.28em;text-transform:uppercase;position:relative;overflow:hidden;transition:color .5s var(--ease),border-color .4s}
+.btn::before{content:"";position:absolute;inset:0;background:var(--gold);transform:translateY(101%);transition:transform .6s var(--ease);z-index:-1}
+.btn:hover{color:var(--black);border-color:var(--gold)}.btn:hover::before{transform:none}
+.btn.fill{background:var(--gold);color:var(--black);border-color:var(--gold)}.btn.fill::before{background:var(--gold-2)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.hero .meta{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:12vh;text-align:right;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--faint);display:grid;gap:6px}
+.hero .meta b{color:var(--ink);font-weight:500}
+
+/* intro statement */
+.statement{padding-block:180px 140px;text-align:center}
+.statement p{font-family:var(--serif);font-weight:300;font-size:clamp(30px,4.2vw,62px);line-height:1.18;max-width:22ch;margin:22px auto 0}
+.statement p .w{display:inline-block;opacity:.12;transition:opacity .2s}
+
+/* design / blueprint */
+.design{padding-block:60px 140px}
+.design .grid{display:grid;grid-template-columns:1fr 1.25fr;gap:70px;align-items:center}
+.design h2,.sec-h{font-size:clamp(46px,6vw,96px);line-height:.95}
+.bp{position:relative;aspect-ratio:432/346;background:#060505;border:1px solid var(--line);overflow:hidden}
+.bp img{width:100%;height:100%;object-fit:cover;clip-path:inset(0 100% 0 0)}
+.bp .scan{position:absolute;top:0;bottom:0;width:1px;background:var(--gold);box-shadow:0 0 24px 4px rgba(212,163,90,.6);left:0}
+.bp .gridlines{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;opacity:.5;pointer-events:none}
+.specline{display:flex;gap:40px;margin-top:40px;flex-wrap:wrap}
+.specline div{border-top:1px solid var(--gline);padding-top:12px;min-width:110px}
+.specline b{display:block;font-family:var(--serif);font-weight:300;font-size:40px;line-height:1;color:var(--gold-2)}
+.specline span{font-size:12px;color:var(--faint);letter-spacing:.06em}
+
+/* taken apart */
+.apart{position:relative;height:300vh}
+.apart .pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center;overflow:hidden}
+.apart .inner{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:center;width:100%}
+.ex{position:relative;aspect-ratio:356/286;min-width:0}
+.ex img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 60%,transparent 100%);will-change:transform}
+.hot{position:absolute;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(8px);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
+.hot.on{opacity:1;transform:none}
+.hot i{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(212,163,90,.2),0 0 18px var(--gold);flex:none}
+.hot span{white-space:nowrap;font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:rgba(5,4,4,.8);border:1px solid var(--gline);padding:6px 12px}
+.hot.l{flex-direction:row-reverse}
+.parts{list-style:none;padding:0;margin:34px 0 0;border-top:1px solid var(--line)}
+.parts li{display:grid;grid-template-columns:44px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--line);color:var(--faint);transition:color .5s}
+.parts li b{font-family:var(--serif);font-style:italic;font-weight:300;font-size:18px}
+.parts li.on{color:var(--ink)}
+.parts li.on b{color:var(--gold-2)}
+
+/* selectors */
+.sel{padding-block:150px 60px}
+.sel+.sel{padding-top:60px}
+.sel .head,.sel-name,.sel-note{width:min(100%,1200px);margin-inline:auto}
+.sel .head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:40px}
+.stage{position:relative;overflow:hidden;background:#000;border:1px solid var(--line);width:min(100%,calc(74vh * var(--ar,1.6)));margin-inline:auto;cursor:pointer}
+.stage img{width:100%;height:auto;filter:brightness(1.25) contrast(1.05)}
+.stage .spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--sx,50%) var(--sy,50%),transparent 0,transparent var(--sr,16%),rgba(0,0,0,.66) calc(var(--sr,16%) + 7%));transition:--sx .8s var(--ease)}
+.chips{display:flex;gap:4px;flex-wrap:wrap;border:1px solid var(--line);padding:4px}
+.chips button{height:42px;padding:0 18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);display:flex;align-items:center;gap:10px;transition:background .4s,color .4s}
+.chips button i{width:12px;height:12px;border-radius:50%;border:1px solid var(--line)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--black)}
+.sel-name{font-family:var(--serif);font-size:clamp(28px,3vw,40px);font-style:italic;color:var(--gold-2);margin-top:22px}
+.sel-note{font-size:12px;color:var(--faint);margin-top:6px}
+
+/* details reel */
+.reel{position:relative}
+.reel .pin{height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.reel .track{display:flex;gap:28px;padding-left:max(24px,calc((100vw - 1360px)/2 + 24px));will-change:transform;margin-top:40px}
+.card{flex:none;width:min(46vw,560px)}
+.card .img{aspect-ratio:4/5;overflow:hidden;background:var(--char)}
+.card img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);will-change:transform}
+.card .cap{display:flex;justify-content:space-between;gap:14px;margin-top:14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+.card .cap span:last-child{color:var(--faint)}
+.reel .hh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+
+/* timeline */
+.time{padding-block:160px;border-top:1px solid var(--line);background:linear-gradient(var(--black),var(--char))}
+.years{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:60px;border-top:1px solid var(--gline)}
+.yr{padding:30px 30px 0 0;position:relative}
+.yr::before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 16px var(--gold)}
+.yr b{display:block;font-family:var(--serif);font-weight:300;font-size:clamp(70px,9vw,140px);line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(212,163,90,.6)}
+.yr.on b{color:var(--gold-2);-webkit-text-stroke:0}
+.yr h3{font-size:28px;margin:18px 0 8px}
+.yr p{color:var(--mist);font-size:15px;max-width:30ch}
+.tnote{margin-top:40px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+
+/* finale */
+.finale{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden}
+.finale .bg{position:absolute;inset:0}
+.finale .bg img{width:100%;height:120%;object-fit:cover;object-position:50% 60%;will-change:transform}
+.finale .vg{position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,4,4,.95) 8%,rgba(5,4,4,.25) 60%,rgba(5,4,4,.6))}
+.finale .wrap{position:relative;width:100%;padding-block:0 12vh;display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.finale h2{font-size:clamp(64px,10vw,170px);line-height:.85}
+.fcard{border:1px solid var(--gline);background:rgba(5,4,4,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:28px;max-width:380px;min-width:0}
+.fcard h3{font-size:30px}
+.fcard p{color:var(--mist);font-size:14.5px;margin:6px 0 20px}
+.fcard .btn{width:100%;justify-content:center}
+.fcard .btn[aria-disabled=true]{cursor:default}
+footer{border-top:1px solid var(--line);background:var(--black)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-block:30px calc(30px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--faint);letter-spacing:.06em}
+
+.rv{opacity:0;transform:translateY(30px)}
+.mask{clip-path:inset(100% 0 0 0)}
+.no-gsap .rv{opacity:1;transform:none}.no-gsap .mask{clip-path:none}.no-gsap .bp img{clip-path:none}.no-gsap .hot{opacity:1;transform:none}.no-gsap .statement .w{opacity:1}
+
+@media (max-width:900px){
+  .hero .bg img{inset:-4%;width:108%;height:108%;right:auto;-webkit-mask-image:none;mask-image:none}
+  .nav .l,.nav .r .u{display:none}.menu-btn{display:block}
+  .nav .wrap{grid-template-columns:auto 1fr auto}.brand{grid-column:1;font-size:22px}.nav .r{grid-column:3}
+  .hero .bg img{object-position:66% 40%}
+  .hero .vg{background:linear-gradient(0deg,rgba(5,4,4,.95) 10%,rgba(5,4,4,.4) 55%,transparent 80%)}
+  .hero .copy{bottom:8vh}.hero .meta{display:none}
+  .hero h1{font-size:clamp(68px,22vw,110px)}
+  .statement{padding-block:110px 90px}
+  .design .grid,.apart .inner{grid-template-columns:1fr;gap:30px}
+  .apart{height:260vh}
+  .apart .copy-side{order:2}
+  .parts{margin-top:14px}.parts li{padding:9px 0;font-size:14px}
+  .hot span{font-size:9.5px;padding:4px 8px;letter-spacing:.14em}
+  .sel{padding-block:100px 40px}
+  .card{width:78vw}
+  .years{grid-template-columns:1fr;border-top:0}
+  .yr{border-left:1px solid var(--gline);padding:0 0 40px 26px}.yr::before{left:-5px;top:8px}
+  .finale .wrap{padding-bottom:8vh}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}.rv{opacity:1;transform:none}.mask{clip-path:none}.bp img{clip-path:none}.hot{opacity:1;transform:none}.statement .w{opacity:1!important}}
+</style>
+
+<div class="grain" aria-hidden="true"></div>
+<header class="nav" id="nav"><div class="wrap">
+  <nav class="l" aria-label="Main"><a class="u" href="#design">The Design</a><a class="u" href="#apart">Taken Apart</a><a class="u" href="#finishes">Finishes</a></nav>
+  <a class="brand" href="#top">TORQ</a>
+  <div class="r"><a class="u" href="#details">Details</a><a class="u" href="#time">Story</a><button class="menu-btn" id="menuBtn" type="button" aria-expanded="false">Menu</button></div>
+</div></header>
+<div class="mmenu" id="mmenu"><a href="#design">The <em>Design</em></a><a href="#apart">Taken <em>Apart</em></a><a href="#finishes">Finishes</a><a href="#bands">Bands</a><a href="#details">Details</a><a href="#time">Story</a></div>
+
+<main id="top">
+  <section class="hero" aria-label="TORQ">
+    <div class="bg"><img id="heroImg" src="img/hero.jpg" alt="Black TORQ smartwatch floating in a beam of gold light"></div>
+    <div class="streak" aria-hidden="true"></div>
+    <div class="vg" aria-hidden="true"></div>
+    <div class="copy wrap">
+      <p class="eyebrow rv" id="hEye">Atelier · Collection II</p>
+      <h1 id="hTitle" aria-label="TORQ">TORQ<small>Atelier</small></h1>
+      <p class="lead rv" id="hLead">A black watch, lit like gold. Designed to be looked at closely.</p>
+      <div class="btns rv" id="hBtns"><a class="btn fill" href="#design"><span>Discover</span></a><a class="btn" href="#apart"><span>Taken apart</span></a></div>
+    </div>
+    <div class="meta" aria-hidden="true"><span>Concept <b>No. 02</b></span><span>Pixel &amp; Co.</span></div>
+  </section>
+
+  <section class="statement wrap">
+    <p class="eyebrow">The idea</p>
+    <p id="state">Light finds it first. Then the eye follows, from the curve of the glass to the turn of the crown.</p>
+  </section>
+
+  <section class="design wrap" id="design">
+    <div class="grid">
+      <div>
+        <p class="eyebrow rv">I · The design</p>
+        <h2 class="rv" style="margin:18px 0 24px">Drawn before<br>it was <em class="g">built.</em></h2>
+        <p class="lead rv">Front, side, back and band, worked out line by line until every curve agreed with the next.</p>
+        <div class="specline rv"><div><b>42</b><span>mm case</span></div><div><b>1</b><span>crown, 1 button</span></div><div><b>4</b><span>finishes</span></div></div>
+      </div>
+      <div class="bp rv" id="bp"><div class="gridlines"></div><img src="img/blueprint.jpg" alt="Line drawing of the watch from front, side, back and top"><span class="scan" id="scan"></span></div>
+    </div>
+  </section>
+
+  <section class="apart" id="apart">
+    <div class="pin"><div class="wrap inner">
+      <div class="copy-side">
+        <p class="eyebrow">II · Taken apart</p>
+        <h2 class="sec-h" style="margin-top:18px">Every layer,<br><em class="g">in order.</em></h2>
+        <ol class="parts" id="parts">
+          <li><b>01</b><span>Curved glass front</span></li>
+          <li><b>02</b><span>Display and inner frame</span></li>
+          <li><b>03</b><span>Battery</span></li>
+          <li><b>04</b><span>Case and back sensor</span></li>
+          <li><b>05</b><span>Sport band</span></li>
+        </ol>
+      </div>
+      <div class="ex" id="ex">
+        <img src="img/exploded.jpg" alt="Exploded view of the watch with its layers floating apart">
+        <div class="hot" style="left:58%;top:12%"><i></i><span>Glass</span></div>
+        <div class="hot" style="left:60%;top:36%"><i></i><span>Display</span></div>
+        <div class="hot" style="left:60%;top:56%"><i></i><span>Battery</span></div>
+        <div class="hot l" style="right:60%;top:78%"><i></i><span>Case</span></div>
+        <div class="hot l" style="right:76%;top:50%"><i></i><span>Band</span></div>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="sel wrap" id="finishes">
+    <div class="head"><div><p class="eyebrow rv">III · Finishes</p><h2 class="sec-h rv" style="margin-top:16px">Four ways<br>to wear <em class="g">it.</em></h2></div>
+      <div class="chips rv" id="finChips" role="group" aria-label="Finish"></div></div>
+    <div class="stage rv" id="finStage" style="--ar:1.776"><img src="img/finishes.jpg" alt="Four watches side by side in black, white, gold and graphite"><div class="spot"></div></div>
+    <p class="sel-name" id="finName"></p><p class="sel-note">Concept finishes</p>
+  </section>
+
+  <section class="sel wrap" id="bands">
+    <div class="head"><div><p class="eyebrow rv">IV · Bands</p><h2 class="sec-h rv" style="margin-top:16px">Change it<br>in <em class="g">seconds.</em></h2></div>
+      <div class="chips rv" id="bandChips" role="group" aria-label="Band"></div></div>
+    <div class="stage rv" id="bandStage" style="--ar:1.162"><img src="img/bands.jpg" alt="Five watch bands in a row: sport, woven, black link, steel link and loop"><div class="spot"></div></div>
+    <p class="sel-name" id="bandName"></p><p class="sel-note">Concept bands</p>
+  </section>
+
+  <section class="reel" id="details">
+    <div class="pin">
+      <div class="wrap hh"><div><p class="eyebrow">V · Details</p><h2 class="sec-h" style="margin-top:16px">Up <em class="g">close.</em></h2></div><span class="eyebrow" style="color:var(--faint)" id="reelHint">Scroll</span></div>
+      <div class="track" id="track">
+        <figure class="card"><div class="img"><img src="img/crown.jpg" alt="Close-up of the knurled crown and side button"></div><figcaption class="cap"><span>The crown</span><span>01</span></figcaption></figure>
+        <figure class="card"><div class="img"><img src="img/side.jpg" alt="Side profile of the case with the crown and button"></div><figcaption class="cap"><span>The profile</span><span>02</span></figcaption></figure>
+        <figure class="card"><div class="img"><img src="img/back.jpg" alt="Back of the case with its round sensor"></div><figcaption class="cap"><span>The sensor</span><span>03</span></figcaption></figure>
+        <figure class="card"><div class="img"><img src="img/pin.jpg" alt="Close-up of the band's metal pin"></div><figcaption class="cap"><span>The pin</span><span>04</span></figcaption></figure>
+        <figure class="card"><div class="img"><img src="img/front.jpg" alt="Front of the watch showing a dial with gold indices"></div><figcaption class="cap"><span>The face</span><span>05</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="time" id="time"><div class="wrap">
+    <p class="eyebrow rv">VI · The story</p>
+    <h2 class="sec-h rv" style="margin-top:16px">From a sketch<br>to your <em class="g">wrist.</em></h2>
+    <div class="years" id="years">
+      <div class="yr"><b>2024</b><h3>The sketch</h3><p>A square face, a single crown, and one rule: nothing extra.</p></div>
+      <div class="yr"><b>2025</b><h3>The light</h3><p>Black on black, with warm gold only where the light lands.</p></div>
+      <div class="yr"><b>2026</b><h3>The wrist</h3><p>Collection II, ready to be worn.</p></div>
+    </div>
+    <p class="tnote">Concept timeline</p>
+  </div></section>
+
+  <section class="finale">
+    <div class="bg"><img id="finImg" src="img/stone.jpg" alt="The watch resting on dark volcanic stone at sunset"></div>
+    <div class="vg"></div>
+    <div class="wrap">
+      <h2 class="rv">Made to be<br><em class="g">seen.</em></h2>
+      <div class="fcard rv"><p class="eyebrow">TORQ Atelier · II</p><h3 style="margin-top:12px">Coming soon</h3><p>Price and release date to be announced.</p><a class="btn fill" aria-disabled="true"><span>Join the waitlist soon</span></a></div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>TORQ is a concept brand. All images are AI-generated concept renders.</span><span>Website concept by Pixel &amp; Co. · @pixelandco.design</span></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FIN=[['Obsidian','#1a1816',22,46],['Pearl','#e9e4da',43,46],['Champagne','#d8b98a',65,46],['Graphite','#3a3a3c',87,46]];
+const BAND=[['Sport','#111',6,50],['Woven','#2b2b2b',25,50],['Black link','#1c1c1c',43,50],['Steel link','#8d8a84',61,50],['Loop','#5b5a52',80,50]];
+
+/* nav + menu */
+addEventListener('scroll',()=>$('nav').classList.toggle('solid',scrollY>40),{passive:true});
+$('menuBtn').onclick=()=>{const o=document.body.classList.toggle('open');$('menuBtn').setAttribute('aria-expanded',o);$('menuBtn').textContent=o?'Close':'Menu'};
+$('mmenu').addEventListener('click',e=>{if(e.target.closest('a')){document.body.classList.remove('open');$('menuBtn').textContent='Menu'}});
+
+/* selectors */
+function selector(chipsId,stageId,nameId,list,r){const st=$(stageId).querySelector('.spot');st.style.setProperty('--sr',r);
+  $(chipsId).innerHTML=list.map(([n,c],i)=>`<button type="button" data-i="${i}" aria-pressed="${i===0}"><i style="background:${c}"></i>${n}</button>`).join('');
+  const set=i=>{const[n,,x,y]=list[i];document.querySelectorAll('#'+chipsId+' button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));$(nameId).textContent=n;
+    if(window.gsap&&!reduce){gsap.to(st,{'--sx':x+'%','--sy':y+'%',duration:.9,ease:'power3.inOut'})}else{st.style.setProperty('--sx',x+'%');st.style.setProperty('--sy',y+'%')}};
+  $(chipsId).addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b)set(+b.dataset.i)});
+  $(stageId).addEventListener('click',e=>{const r=$(stageId).getBoundingClientRect(),px=(e.clientX-r.left)/r.width*100;let best=0,d=1e9;list.forEach((l,i)=>{const dd=Math.abs(l[2]-px);if(dd<d){d=dd;best=i}});set(best)});
+  st.style.setProperty('--sx',list[0][2]+'%');st.style.setProperty('--sy',list[0][3]+'%');$(nameId).textContent=list[0][0]}
+selector('finChips','finStage','finName',FIN,'15%');
+selector('bandChips','bandStage','bandName',BAND,'11%');
+
+/* statement words */
+$('state').innerHTML=$('state').textContent.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');
+
+if(!window.gsap||!window.ScrollTrigger){document.documentElement.classList.add('no-gsap')}
+else{
+gsap.registerPlugin(ScrollTrigger);
+/* smooth scroll */
+let lenis=null;
+if(window.Lenis&&!reduce){lenis=new Lenis({lerp:.09,smoothWheel:true});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);window.__lenis=lenis;
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id.length>1&&document.querySelector(id)){e.preventDefault();lenis.scrollTo(id,{offset:0,duration:1.6})}}))}
+
+/* hero intro */
+const t=$('hTitle');const word=t.firstChild.textContent;t.firstChild.replaceWith(...[...word].map(c=>{const s=document.createElement('span');s.className='ch';s.textContent=c;return s}));
+if(!reduce){const it=gsap.timeline({delay:.2});window.__intro=it;
+  window.__intro=it;it.fromTo('#heroImg',{scale:1.18,filter:'brightness(.2)'},{scale:1.04,filter:'brightness(1)',duration:2.6,ease:'power2.out'},0)
+    .fromTo('.hero h1 .ch',{yPercent:110,opacity:0},{yPercent:0,opacity:1,duration:1.4,stagger:.08,ease:'expo.out'},.6)
+    .fromTo('.hero h1 small',{opacity:0,letterSpacing:'1.2em'},{opacity:1,letterSpacing:'.5em',duration:1.6,ease:'expo.out'},1.1)
+    .to('#hEye',{opacity:1,y:0,duration:1,ease:'expo.out'},.9).to('#hLead',{opacity:1,y:0,duration:1,ease:'expo.out'},1.3).to('#hBtns',{opacity:1,y:0,duration:1,ease:'expo.out'},1.5);}
+else gsap.set('#hEye,#hLead,#hBtns',{opacity:1,y:0});
+gsap.to('#heroImg',{yPercent:12,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+gsap.to('.hero .copy',{yPercent:-30,opacity:0,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom 20%',scrub:true}});
+addEventListener('pointermove',e=>{if(reduce)return;const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;gsap.to('#heroImg',{x:x*-18,y:y*-12,duration:1.2,ease:'power2.out',overwrite:'auto'})},{passive:true});
+
+/* statement: words light up */
+gsap.to('#state .w',{opacity:1,stagger:.08,ease:'none',scrollTrigger:{trigger:'#state',start:'top 80%',end:'bottom 45%',scrub:true}});
+
+/* blueprint wipe */
+const bt=gsap.timeline({scrollTrigger:{trigger:'#bp',start:'top 75%',end:'bottom 35%',scrub:1}});
+bt.to('#bp img',{clipPath:'inset(0 0% 0 0)',ease:'none'},0).fromTo('#scan',{left:'0%'},{left:'100%',ease:'none'},0).to('#scan',{opacity:0,duration:.1},.95);
+
+/* taken apart: pinned, callouts one by one */
+const hots=[...document.querySelectorAll('.hot')],parts=[...document.querySelectorAll('#parts li')];
+ScrollTrigger.create({trigger:'#apart',start:'top top',end:'bottom bottom',scrub:true,onUpdate:s=>{const k=Math.floor(s.progress*6-.4);hots.forEach((h,i)=>h.classList.toggle('on',i<=k));parts.forEach((p,i)=>p.classList.toggle('on',i<=k))}});
+gsap.fromTo('#ex img',{scale:.86,rotate:-3},{scale:1.04,rotate:0,ease:'none',scrollTrigger:{trigger:'#apart',start:'top top',end:'bottom bottom',scrub:true}});
+
+/* details: horizontal reel on desktop */
+const mm=gsap.matchMedia();
+mm.add('(min-width: 901px)',()=>{const tr=$('track');const dist=()=>tr.scrollWidth-innerWidth+48;
+  const tw=gsap.to(tr,{x:()=>-dist(),ease:'none',scrollTrigger:{trigger:'#details',start:'top top',end:()=>'+='+dist(),pin:'#details .pin',scrub:1,invalidateOnRefresh:true}});
+  document.querySelectorAll('.card img').forEach(img=>gsap.fromTo(img,{xPercent:6},{xPercent:-6,ease:'none',scrollTrigger:{trigger:img,containerAnimation:tw,start:'left right',end:'right left',scrub:true}}));
+  $('reelHint').textContent='Scroll →'});
+mm.add('(max-width: 900px)',()=>{const tr=$('track');tr.style.overflowX='auto';tr.style.scrollSnapType='x mandatory';tr.style.paddingRight='24px';tr.querySelectorAll('.card').forEach(c=>c.style.scrollSnapAlign='start');$('reelHint').textContent='Swipe →';$('details').querySelector('.pin').style.height='auto';$('details').querySelector('.pin').style.paddingBlock='100px 40px'});
+
+/* timeline */
+document.querySelectorAll('.yr').forEach((y,i)=>ScrollTrigger.create({trigger:y,start:'top 70%',onEnter:()=>y.classList.add('on'),onLeaveBack:()=>y.classList.remove('on')}));
+gsap.fromTo('.years',{'--w':0},{'--w':1});
+
+/* finale parallax */
+gsap.fromTo('#finImg',{yPercent:-10},{yPercent:0,ease:'none',scrollTrigger:{trigger:'.finale',start:'top bottom',end:'bottom bottom',scrub:true}});
+
+/* reveals */
+gsap.utils.toArray('.rv').filter(e=>!e.closest('.hero')).forEach(el=>gsap.to(el,{opacity:1,y:0,duration:1.3,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 88%'}}));
+gsap.utils.toArray('.stage').forEach(s=>gsap.fromTo(s.querySelector('img'),{scale:1.12},{scale:1,ease:'none',scrollTrigger:{trigger:s,start:'top bottom',end:'bottom top',scrub:true}}));
+}
+</script>
