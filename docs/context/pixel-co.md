@@ -29,6 +29,9 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 - Boost plan for TORQ video (not paid yet, owner doing it 15 Oct after asking dad): goal More messages, Riyadh + Jeddah, 22-45, interests small business/entrepreneurship/SME/home business/coffeehouse/restaurants/bakery/beauty salon. ~12 SAR/day x 4 days (~78 SAR total incl. Apple fee; in-app adds ~60% fees, web business.facebook.com avoids Apple fee).
 - Bear be matcha: seen, no reply 14 Oct. Follow-up Thu evening: offer free customisation with their real menu.
 
+- OWNER RULE (16 Oct): NEVER use the PURC bottle photo on the black table (ads/photos/purc-real*.jpg) anywhere. For Scalp Elixir visuals use the Shopify store itself (owner's screen recordings) and store product images.
+- Scalp Elixir reel v1 (pixel-co/samples/scalp-elixir-reel) judged low quality by owner. Next: store-recording ad in the style of the Shopify 'Big ideas need stores' reels, built around the owner's own screen recording of the live store. No fake sales notifications.
+
 ## Samples
 - LUSTRE detailing, simple: https://claude.ai/artifact/AR3z69XupwBHR82WqycXhx (pixel-co/samples/detailing)
 - LUSTRE cinematic (GSAP + Lenis, frame-sequence hero): https://claude.ai/artifact/SXc9JK28hxTQmxifRkyCZK (pixel-co/samples/detailing-cinematic, with phone and desktop recordings in /video)
