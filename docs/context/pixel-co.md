@@ -45,3 +45,7 @@ Websites for small Saudi businesses that have Instagram but no website. Free sam
 
 ## Next
 - The owner wants a MOTION-DESIGN level showreel site like the TikTok "5.5 is ridiculous at motion": dark screen, glowing light beams, moving grids, particle fields, a wavy 3D surface, kinetic type, self-building charts. Pure code (canvas/WebGL/GSAP). Build a Pixel & Co. motion showreel site in that style and record phone and desktop videos (frame-by-frame Playwright capture, see detailing-cinematic rec.mjs approach).
+- 18 Oct: Bear be matcha sent logo + menu (images) → built v3 sample in their brand: https://claude.ai/artifact/T27EQuLWRbkoQRQtvMzMRK (pixel-co/samples/bearbematcha, video/bearbematcha-v3-phone.mp4). Owner sent video + message; waiting. Price/payment only after dad approves.
+- 18 Oct: alfdesserts politely declined (keep friendly, no more msgs). Old 30 Sep template had unfilled "[the piece you liked]" brackets: always personalise.
+- 18 Oct new DMs sent (Riyadh cafés, no website): ashbloom123 (ASH·BLOOM Chinese tea), oakleaves.sa (café+flowers, Faisaliah), breathcoffeesa (matcha, Linktree), andarena_coffee (Linktree), carvecoffee.sa (pink matcha, catering), littlehenrii (boutique café). beyond.theroom: DMs closed, followed/commented. Skipped: las_cafe0, calibrated.sa, drop_ksa (have sites), qamariacoffeeksa (chain), coucoubakes (Malaysia), noor30law (Iraq).
+- I can't browse IG/TikTok; owner searches, I judge + write DMs. Owner wanted to buy followers: advised against (fake, hurts reach, dishonest).
