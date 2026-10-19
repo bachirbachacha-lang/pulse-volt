@@ -1,0 +1,550 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Qamaria Riyadh</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: phone-first café page. Sticky header, hero with the Al Manar opening countdown, Coffee Day strip,
+   sticky category tabs, menu cards that open a sheet (serving size / frappe), then branch + pickup + WhatsApp checkout.
+   One look: deep Yemeni-mountain green on warm cream, with a tan accent. */
+:root{
+  --cream:#F6F1E7; --paper:#FFFCF6; --green:#1F5B3A; --green-deep:#143D27; --green-soft:#E3ECE3;
+  --tan:#B98A5A; --tan-soft:#F1E4D2; --ink:#1D2A21; --muted:#66705F; --line:#E6DCCB;
+  --wa:#1FA855; --wa-bubble:#DCF8C6; --wa-bg:#ECE5DD;
+  --display:'Noto Kufi Arabic',system-ui,sans-serif;
+  --body:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  --r:18px; color-scheme:light;
+}
+html[lang=en]{--display:'Playfair Display',Georgia,serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+body.locked{overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--tan);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance}
+.sample{background:var(--green-deep);color:var(--green-soft);font-size:12.5px;text-align:center;padding-block:6px}
+
+/* header */
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(246,241,231,.93);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+.head.scrolled{border-bottom-color:var(--line)}
+.head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;flex-direction:column;line-height:1;text-decoration:none;color:var(--green)}
+.brand b{font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;letter-spacing:.01em}
+.brand small{font-size:9.5px;letter-spacing:.32em;font-weight:600;margin-top:3px;color:var(--green)}
+.head-actions{display:flex;align-items:center;gap:8px}
+.lang{border:1.5px solid var(--green);background:transparent;border-radius:999px;padding:4px 14px;font-weight:600;font-size:14px;color:var(--green)}
+.cart-btn{position:relative;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--green);color:var(--paper);text-decoration:none}
+.cart-btn svg{width:20px;height:20px}
+.badge{position:absolute;top:-4px;inset-inline-end:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--tan);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.badge[hidden]{display:none}
+.bump{animation:bump .45s ease}
+@keyframes bump{30%{transform:scale(1.35)}60%{transform:scale(.9)}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--green-deep);color:var(--paper)}
+.hero .mtn{position:absolute;inset:auto 0 0 0;width:100%;height:auto;opacity:.5}
+.hero .wrap{position:relative;padding-block:38px 46px}
+.kick{display:inline-block;font-size:12.5px;font-weight:600;letter-spacing:.06em;color:#CFE0CF;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:3px 12px}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,8.6vw,62px);line-height:1.18;margin:14px 0 10px}
+html[lang=en] .hero h1{font-weight:600;line-height:1.08}
+.hero h1 em{font-style:normal;color:#E7C79C}
+.hero p{margin:0 0 22px;max-width:40ch;color:#D7E2D6;font-size:16.5px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--paper);color:var(--green-deep);border:0;border-radius:14px;padding:12px 22px;font-weight:600;text-decoration:none}
+.cta.ghost{background:transparent;color:var(--paper);border:1.5px solid rgba(255,255,255,.45)}
+.open{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:14px 16px;max-width:520px}
+.open .t{font-size:13.5px;color:#CFE0CF;line-height:1.45}
+.open .t b{display:block;color:var(--paper);font-size:16px}
+.count{display:flex;gap:8px}
+.count div{background:var(--paper);color:var(--green-deep);border-radius:12px;min-width:52px;padding:6px 4px;text-align:center;line-height:1.1}
+.count b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.count small{font-size:10.5px;font-weight:600;color:var(--muted)}
+
+/* coffee day */
+.cday{display:flex;align-items:center;gap:14px;margin-block:22px 6px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:12px 14px}
+.cday .price{flex:none;width:70px;height:70px;border-radius:50%;background:var(--green);color:var(--paper);display:grid;place-items:center;text-align:center;line-height:1;font-weight:700}
+.cday .price b{font-size:24px;display:block}
+.cday .price small{font-size:10px;font-weight:600}
+.cday h3{margin:0;font-family:var(--display);font-size:18px;color:var(--green)}
+.cday p{margin:2px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
+.cday button{margin-inline-start:auto;flex:none;border:0;background:var(--tan);color:#fff;border-radius:12px;padding:9px 14px;font-weight:600;font-size:14px}
+
+/* layout */
+.shop{display:grid;grid-template-columns:1fr;gap:24px;align-items:start;padding-top:18px}
+@media (min-width:920px){.shop{grid-template-columns:minmax(0,1fr) 380px}.checkout{position:sticky;top:76px}}
+h2{font-family:var(--display);font-weight:700;font-size:28px;margin:0;color:var(--green-deep);line-height:1.25}
+html[lang=en] h2{font-weight:600}
+.menu-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.note{font-size:12.5px;color:var(--muted)}
+.tabs{position:sticky;top:64px;z-index:10;display:flex;gap:8px;overflow-x:auto;padding-block:12px;margin-inline:-4px;padding-inline:4px;scrollbar-width:none;background:linear-gradient(var(--cream) 80%,rgba(246,241,231,0))}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 16px;font-weight:600;font-size:14px}
+.tab[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--paper)}
+.cat-title{display:flex;align-items:baseline;gap:10px;font-family:var(--display);font-weight:700;font-size:20px;color:var(--green);margin:16px 0 8px}
+.cat-title small{font-family:var(--body);font-weight:500;font-size:12.5px;color:var(--muted)}
+.items{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:600px){.items{grid-template-columns:1fr 1fr}}
+.item{display:grid;grid-template-columns:68px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:11px;text-align:start;width:100%;transition:transform .15s,box-shadow .15s}
+.item:hover{transform:translateY(-2px);box-shadow:0 10px 22px -14px rgba(20,61,39,.45)}
+.item .art{width:68px;height:84px;display:grid;place-items:center;background:var(--green-soft);border-radius:14px}
+.item .art svg{width:54px;height:70px}
+.item h3{margin:0;font-size:16px;font-weight:600;line-height:1.35}
+.item .desc{margin:2px 0 3px;font-size:12.8px;color:var(--muted);line-height:1.45}
+.item .price{font-weight:600;color:var(--green);font-size:14px;font-variant-numeric:tabular-nums}
+.star{color:var(--tan);margin-inline-end:4px}
+.tag{display:inline-block;font-size:11px;font-weight:600;background:var(--tan-soft);color:#7A5328;border-radius:999px;padding:1px 8px;margin-inline-start:6px;vertical-align:2px}
+.plus{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--paper);display:grid;place-items:center;font-size:22px;line-height:1;position:relative}
+.plus .n{position:absolute;top:-6px;inset-inline-end:-6px;min-width:20px;height:20px;border-radius:999px;background:var(--tan);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px;border:2px solid var(--paper)}
+.season{margin-top:18px;background:linear-gradient(135deg,#6E3B24,#3E2216);color:#F7E9D6;border-radius:20px;padding:16px 18px}
+.season h3{margin:0 0 2px;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:24px;font-weight:600}
+.season p{margin:0 0 10px;font-size:13px;opacity:.85}
+.season ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.season li{border:1px solid rgba(247,233,214,.35);border-radius:999px;padding:4px 12px;font-size:13.5px}
+
+/* checkout */
+.checkout{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:20px;scroll-margin-top:80px}
+.checkout h2{font-size:24px;margin-bottom:12px}
+.lines{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:10px}
+.line{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center}
+.line svg{width:34px;height:44px}
+.line .nm{font-weight:600;font-size:14.5px;line-height:1.35}
+.line .op{font-size:12.5px;color:var(--muted);line-height:1.4}
+.line .pr{font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;text-align:end}
+.mini{display:flex;align-items:center;gap:4px;margin-top:4px}
+.mini button{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:var(--cream);font-size:15px;line-height:1;display:grid;place-items:center}
+.mini output{min-width:18px;text-align:center;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:12px 0}
+.total{display:flex;justify-content:space-between;border-top:1.5px dashed var(--line);padding-top:12px;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.lbl{display:block;font-weight:600;font-size:14px;margin:18px 0 8px}
+.branches{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.br{border:1.5px solid var(--line);background:var(--cream);border-radius:14px;padding:9px 10px;text-align:start;line-height:1.3}
+.br b{display:block;font-size:14.5px}
+.br small{font-size:12px;color:var(--muted)}
+.br[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft)}
+.br:disabled{opacity:.6;cursor:not-allowed}
+.br .soon{display:inline-block;margin-top:3px;font-size:11px;font-weight:600;background:var(--tan-soft);color:#7A5328;border-radius:999px;padding:0 7px}
+.times{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.time{border:1.5px solid var(--line);background:var(--cream);border-radius:12px;padding:8px 4px;font-size:13.5px;text-align:center;line-height:1.3;font-weight:600}
+.time small{display:block;color:var(--muted);font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums}
+.time[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft);color:var(--green-deep)}
+input[type=text]{width:100%;border:1.5px solid var(--line);background:var(--cream);border-radius:12px;padding:11px 12px;font:inherit;color:var(--ink)}
+input[type=text][aria-invalid="true"]{border-color:#C0563F}
+.err{color:#A8432F;font-size:13px;margin:6px 0 0}
+.send{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px;background:var(--wa);color:#fff;border:0;border-radius:14px;padding:14px;font-weight:600;font-size:16px}
+.send svg{width:22px;height:22px}
+.send:disabled{opacity:.45;cursor:not-allowed}
+.shop-sees{margin-top:20px;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+.shop-sees .bar{display:flex;align-items:center;gap:10px;background:#075E54;color:#fff;padding:9px 12px;font-size:14px;font-weight:600}
+.shop-sees .bar i{width:30px;height:30px;border-radius:50%;background:var(--green);display:grid;place-items:center;font-style:normal;font-family:'Playfair Display',serif;font-weight:700;font-size:15px}
+.shop-sees .bar small{display:block;font-weight:400;font-size:11.5px;opacity:.85}
+.chat{background:var(--wa-bg);padding:14px 12px}
+.bubble{background:var(--wa-bubble);color:#1d2a1d;border-radius:12px;padding:9px 12px 6px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;max-width:92%;margin-inline-start:auto;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.bubble .meta{display:block;text-align:end;font-size:11px;color:#667;margin-top:2px}
+.caption{font-size:12.5px;color:var(--muted);margin:8px 2px 0}
+
+/* sticky cart bar */
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding-bottom:env(safe-area-inset-bottom,0px);transform:translateY(130%);transition:transform .3s cubic-bezier(.2,.9,.3,1.2)}
+.cartbar.show{transform:none}
+.cartbar .wrap{padding-block:10px}
+.cartbar a{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--green-deep);color:var(--paper);border-radius:16px;padding:13px 18px;text-decoration:none;font-weight:600;box-shadow:0 10px 30px -10px rgba(20,61,39,.7)}
+.cartbar .ct{display:flex;align-items:center;gap:10px}
+.cartbar .ct b{background:var(--paper);color:var(--green-deep);border-radius:999px;min-width:26px;height:26px;display:grid;place-items:center;font-size:14px;font-variant-numeric:tabular-nums}
+@media (min-width:920px){.cartbar{display:none}}
+
+/* sheet */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(20,30,22,.45);opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:92vh;max-height:92dvh;overflow-y:auto;background:var(--paper);border-radius:26px 26px 0 0;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);padding-bottom:env(safe-area-inset-bottom,0px);overscroll-behavior:contain}
+.sheet.open{transform:none}
+@media (min-width:700px){.sheet{left:50%;right:auto;width:560px;bottom:auto;top:50%;border-radius:26px;transform:translate(-50%,-40%) scale(.96);opacity:0;pointer-events:none;transition:transform .3s,opacity .25s}.sheet.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.sheet-in{padding:10px max(20px,env(safe-area-inset-right,0px)) 20px max(20px,env(safe-area-inset-left,0px))}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 6px}
+.x{position:absolute;top:12px;inset-inline-end:14px;width:36px;height:36px;border-radius:50%;border:0;background:var(--cream);font-size:20px;display:grid;place-items:center}
+.sheet-top{display:grid;grid-template-columns:116px minmax(0,1fr);gap:16px;align-items:center;margin-top:6px}
+.stage{height:146px;border-radius:20px;background:var(--green-soft);display:grid;place-items:center}
+.stage svg{width:90px;height:118px}
+.sheet h3{font-family:var(--display);font-weight:700;font-size:23px;margin:0;line-height:1.25;color:var(--green-deep)}
+.sheet .desc{color:var(--muted);font-size:14px;margin:4px 0 0}
+.opt{margin-top:16px}
+.opt-label{font-weight:600;font-size:14px;margin-bottom:8px;display:flex;justify-content:space-between}
+.opt-label small{font-weight:400;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--cream);border-radius:12px;padding:8px 13px;font-size:14px;font-weight:500;line-height:1.3;text-align:start}
+.chip small{color:var(--muted);font-size:12px;margin-inline-start:4px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft);color:var(--green-deep);font-weight:600}
+.sheet-foot{position:sticky;bottom:0;display:flex;gap:12px;align-items:center;background:var(--paper);padding-top:14px;margin-top:18px;border-top:1px solid var(--line)}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--cream);border-radius:14px;padding:4px}
+.stepper button{width:38px;height:38px;border-radius:11px;border:0;background:var(--paper);font-size:20px;line-height:1}
+.stepper output{min-width:22px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.add-btn{flex:1;display:flex;justify-content:space-between;align-items:center;border:0;border-radius:14px;background:var(--green);color:var(--paper);padding:13px 18px;font-weight:600;font-size:16px}
+.add-btn span:last-child{font-variant-numeric:tabular-nums}
+.pour .fill{transform-box:fill-box;transform-origin:center bottom;animation:pour .8s cubic-bezier(.3,.8,.3,1) both}
+.pour .fill:nth-child(2){animation-delay:.12s}.pour .fill:nth-child(3){animation-delay:.24s}
+@keyframes pour{from{transform:scaleY(0)}}
+.steam path{animation:steam 2.4s ease-in-out infinite;opacity:0}
+.steam path:nth-child(2){animation-delay:.8s}.steam path:nth-child(3){animation-delay:1.6s}
+@keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-10px)}}
+
+.done{text-align:center;padding:10px 4px 6px}
+.done svg{width:110px}
+.done h3{font-family:var(--display);font-size:24px;color:var(--green-deep);margin:6px 0}
+.done p{color:var(--muted);margin:0 0 6px}
+.done .num{display:inline-block;font-weight:700;font-size:19px;background:var(--green-soft);color:var(--green-deep);border-radius:12px;padding:4px 14px;margin:8px 0;font-variant-numeric:tabular-nums}
+.ghostb{border:1.5px solid var(--line);background:transparent;border-radius:12px;padding:10px 16px;font-weight:600;margin-top:10px}
+
+/* visit */
+.visit{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;padding-block:40px 30px}
+.visit div{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px;min-width:0}
+.visit b{display:block;font-family:var(--display);font-size:18px;color:var(--green-deep)}
+.visit span{display:block;font-size:14px;color:var(--muted)}
+.visit a{display:inline-block;margin-top:6px;color:var(--green);font-weight:600}
+footer{text-align:center;font-size:13px;color:var(--muted);padding-block:0 110px}
+@media (min-width:920px){footer{padding-bottom:30px}}
+.toast{position:fixed;z-index:50;left:50%;top:calc(env(safe-area-inset-top,0px) + 74px);transform:translate(-50%,-20px);background:var(--ink);color:var(--paper);border-radius:999px;padding:9px 18px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:420px){.times{grid-template-columns:1fr 1fr}.sheet-top{grid-template-columns:96px minmax(0,1fr)}.stage{height:128px}.count div{min-width:46px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<div class="sample"><div class="wrap" data-t="sample"></div></div>
+
+<header class="head" id="head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Qamaria"><b>Qamaria</b><small>YEMENI COFFEE</small></a>
+    <div class="head-actions">
+      <button class="lang" id="lang" type="button">EN</button>
+      <a class="cart-btn" href="#checkout" id="cartBtn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1.2 11.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="badge" id="badge" hidden>0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="mtn" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true"><path d="M0 260V170l90-40 70 30 110-80 90 60 80-30 120 70 100-90 110 70 90-40 120 60 90-50 130 60v70z" fill="#1F5B3A"/><path d="M0 260v-50l120-30 100 20 140-50 120 40 160-60 140 50 120-30 160 40 140-20v90z" fill="#2A6E48" opacity=".8"/></svg>
+    <div class="wrap">
+      <span class="kick" data-t="kick"></span>
+      <h1 id="heroTitle"></h1>
+      <p data-t="heroSub"></p>
+      <div class="ctas"><a class="cta" href="#menu" data-t="orderNow"></a><a class="cta ghost" href="#visit" data-t="branchesBtn"></a></div>
+      <div class="open"><div class="count" id="count" aria-live="off"></div><div class="t"><b data-t="openT"></b><span data-t="openS"></span></div></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="cday"><div class="price"><span><b>10</b><small data-t="sarW"></small></span></div><div><h3 data-t="cdayT"></h3><p data-t="cdayS"></p></div><button type="button" data-open="cday" data-t="add"></button></div>
+  </section>
+
+  <div class="wrap shop">
+    <section id="menu">
+      <div class="menu-head"><h2 data-t="menu"></h2><span class="note" data-t="fromMenu"></span></div>
+      <div class="tabs" id="tabs"></div>
+      <div id="cats"></div>
+      <div class="season"><h3>Harvest the Season</h3><p data-t="seasonS"></p><ul id="season"></ul></div>
+    </section>
+    <aside class="checkout" id="checkout"><div id="checkoutBody"></div></aside>
+  </div>
+
+  <section class="wrap visit" id="visit">
+    <div><b data-t="hittin"></b><span>Hittin, Riyadh 13512</span><a href="https://www.google.com/maps/search/?api=1&query=Qamaria+Yemeni+Coffee+Hittin+Riyadh" target="_blank" rel="noopener" data-t="map"></a></div>
+    <div><b data-t="manar"></b><span>Imam Al-Shafi'i St., Riyadh 14221</span><span data-t="manarOpen"></span><a href="https://www.google.com/maps/search/?api=1&query=Imam+Al-Shafi'i+St+Al+Manar+Riyadh" target="_blank" rel="noopener" data-t="map"></a></div>
+    <div><b>Instagram</b><span><a href="https://www.instagram.com/qamariacoffeeksa/" target="_blank" rel="noopener">@qamariacoffeeksa</a></span></div>
+  </section>
+</main>
+<footer class="wrap" data-t="footer"></footer>
+
+<div class="cartbar" id="cartbar"><div class="wrap"><a href="#checkout"><span class="ct"><b id="cbCount">0</b><span data-t="viewOrder"></span></span><span id="cbTotal"></span></a></div></div>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-in" id="sheetIn"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const T={
+  sample:{ar:'تصميم تجريبي من Pixel & Co. — ليس الموقع الرسمي لـ Qamaria',en:'Sample design by Pixel & Co. — not Qamaria’s official website'},
+  kick:{ar:'قهوة يمنية أصيلة · الرياض',en:'Authentic Yemeni coffee · Riyadh'},
+  heroTitle:{ar:'من مزارع حراز<br>إلى <em>فنجانك</em>',en:'From the farms of Haraz<br>to <em>your cup</em>'},
+  heroSub:{ar:'قهوة يمنية ١٠٠٪ من مزارع حراز على ارتفاع ٣٠٠٠ متر. اطلب مسبقاً واستلم طلبك جاهز من الفرع.',en:'100% Yemeni beans from single farms in Haraz, grown at 3,000 m. Order ahead and pick it up ready.'},
+  orderNow:{ar:'اطلب مسبقاً',en:'Order ahead'},
+  branchesBtn:{ar:'فروعنا',en:'Our branches'},
+  openT:{ar:'فرع المنار يفتح قريباً',en:'Al Manar opens soon'},
+  openS:{ar:'الأحد ١ نوفمبر · شارع الإمام الشافعي',en:'Sunday 1 November · Imam Al-Shafi’i St.'},
+  days:{ar:'يوم',en:'days'},hrs:{ar:'ساعة',en:'hrs'},mins:{ar:'دقيقة',en:'min'},
+  sarW:{ar:'ريال',en:'SAR'},
+  cdayT:{ar:'يوم القهوة، كل يوم ☕',en:'Coffee Day, every day'},
+  cdayS:{ar:'فنجان قهوة يمنية سوداء أصيلة بـ ١٠ ريال',en:'Your daily cup of authentic Yemeni black coffee for 10 SAR'},
+  menu:{ar:'المنيو',en:'Menu'},
+  fromMenu:{ar:'الأصناف والأسعار من منيو Qamaria',en:'Items and prices from Qamaria’s menu'},
+  seasonS:{ar:'مشروبات الموسم، متوفرة في الفرع',en:'Seasonal drinks, available in store'},
+  yourOrder:{ar:'طلبك',en:'Your order'},
+  emptyCart:{ar:'السلة فاضية. اختر قهوتك من المنيو ☕',en:'Your cart is empty. Pick your coffee ☕'},
+  total:{ar:'المجموع',en:'Total'},
+  branch:{ar:'الفرع',en:'Branch'},
+  hittin:{ar:'فرع حطين',en:'Hittin'},manar:{ar:'فرع المنار',en:'Al Manar'},
+  soon:{ar:'يفتح ١ نوفمبر',en:'Opens 1 Nov'},
+  manarOpen:{ar:'يفتح الأحد ١ نوفمبر',en:'Opening Sunday 1 November'},
+  pickup:{ar:'وقت الاستلام',en:'Pickup time'},
+  inMin:{ar:'بعد {m} د',en:'In {m} min'},
+  name:{ar:'الاسم',en:'Name'},namePh:{ar:'عشان نناديك باسمك',en:'So we can call your name'},
+  nameErr:{ar:'اكتب اسمك عشان نعرف الطلب لمين',en:'Add your name so we know whose order it is'},
+  send:{ar:'أرسل الطلب على الواتساب',en:'Send order on WhatsApp'},
+  shopSees:{ar:'هذا اللي يوصل للفرع على الواتساب',en:'This is what the branch gets on WhatsApp'},
+  shopSeesCap:{ar:'الطلب يوصل مرتب: الأصناف، الحجم، الفرع، الوقت والمجموع.',en:'Orders arrive tidy: items, size, branch, time and total.'},
+  viewOrder:{ar:'عرض الطلب',en:'View order'},
+  add:{ar:'أضف',en:'Add'},update:{ar:'حدّث',en:'Update'},added:{ar:'انضاف للسلة ✓',en:'Added to cart ✓'},
+  serve:{ar:'طريقة التقديم',en:'Serving'},size:{ar:'الحجم',en:'Size'},frappe:{ar:'ترقية',en:'Upgrade'},optional:{ar:'اختياري',en:'Optional'},
+  doneTitle:{ar:'طلبك جاهز للإرسال!',en:'Your order is ready to send!'},
+  doneText:{ar:'فتحنا لك الواتساب والرسالة مكتوبة. اضغط إرسال هناك، ونجهز طلبك على الوقت.',en:'WhatsApp is open with your order written out. Press send there and we’ll have it ready on time.'},
+  doneNum:{ar:'رقم الطلب',en:'Order'},newOrder:{ar:'طلب جديد',en:'New order'},
+  map:{ar:'افتح الخريطة ←',en:'Open map →'},
+  footer:{ar:'Qamaria Yemeni Coffee · الرياض — تصميم تجريبي من Pixel & Co.',en:'Qamaria Yemeni Coffee · Riyadh — sample by Pixel & Co.'},
+  sar:{ar:'{n} ر.س',en:'SAR {n}'},
+  orderAhead:{ar:'اطلب مسبقاً',en:'Order ahead'},
+  msgHead:{ar:'طلب جديد من الموقع ☕',en:'New website order ☕'},
+  msgName:{ar:'الاسم',en:'Name'},msgPick:{ar:'الاستلام',en:'Pickup'},msgNum:{ar:'رقم الطلب',en:'Order no.'},msgBr:{ar:'الفرع',en:'Branch'}
+};
+// Prices as printed on the Qamaria menu. Specialty coffees & teas share one serving table.
+const OPTS={
+  serve:[{id:'s12',ar:'حصة واحدة 12oz',en:'Single 12oz',p:17},{id:'s16',ar:'حصة واحدة 16oz',en:'Single 16oz',p:21},{id:'km',ar:'إبريق · وسط',en:'Kettle · Medium',p:50},{id:'kl',ar:'إبريق · كبير',en:'Kettle · Large',p:70},{id:'tg',ar:'سفري للمسافر 96oz',en:'To-Go Traveler 96oz',p:120,tag:'orderAhead'}],
+  size:[{id:'12',ar:'12oz',en:'12oz',p:0},{id:'16',ar:'16oz',en:'16oz',p:4}],
+  frappe:[{id:'yes',ar:'فرابيه',en:'Frappe',p:4}]
+};
+const cats=[{id:'spec',ar:'القهوة والشاي اليمني',en:'Yemeni coffee & tea',sub:{ar:'بالطرق التقليدية',en:'Traditional methods'}},{id:'hot',ar:'مشروبات حارة',en:'Hot drinks'},{id:'cold',ar:'مشروبات باردة',en:'Cold drinks',sub:{ar:'فرابيه +٤',en:'Frappe +4'}},{id:'meals',ar:'وجبات يمنية',en:'Yemeni meals'}];
+const C={coffee:'#5B3720',dark:'#3A2216',cream:'#F3E6D2',milk:'#F7F1E6',cascara:'#9B4A2E',tea:'#8A4B1F',matcha:'#7FA65A',pist:'#A9BC7A',mango:'#F2B544',straw:'#E58A9A',choc:'#4A2C1E',hib:'#B8324B'};
+const S=(o)=>Object.assign({cat:'spec',kind:'spec',opts:['serve'],p:17},o);
+const menu=[
+  {id:'cday',cat:'none',kind:'black',ar:'قهوة Coffee Day السوداء',en:'Coffee Day black coffee',dar:'قهوة يمنية سوداء أصيلة',den:'Authentic Yemeni black coffee',p:10,opts:[]},
+  S({id:'mufawaar',ar:'مفوار',en:'Mufawaar',dar:'تحميص متوسط مع كريمة وهيل',den:'Medium roast coffee + cream with cardamom',star:1,c:C.coffee}),
+  S({id:'juban',ar:'جُبن',en:'Juban',dar:'قهوة مع قشر مع هيل وزنجبيل وقرفة',den:'Coffee + qishr (cascara) blend with cardamom, ginger & cinnamon',c:C.cascara}),
+  S({id:'sanaa',ar:'صنعاء',en:'Sana’a',dar:'تحميص متوسط مع هيل وزنجبيل وقرفة',den:'Medium roast with cardamom, ginger & cinnamon',c:C.coffee}),
+  S({id:'marib',ar:'مأرب',en:'Marib',dar:'تحميص متوسط مع هيل',den:'Medium roast coffee with cardamom',c:C.coffee}),
+  S({id:'sheeba',ar:'شبوة',en:'Sheeba',dar:'قشر مع زنجبيل وقرفة',den:'Qishr (cascara) with ginger & cinnamon',c:C.cascara}),
+  S({id:'radaa',ar:'رداع',en:'Rada’a',dar:'تحميص فاتح مع زنجبيل وهيل',den:'Light roast with ginger & cardamom',c:'#7A4A2A'}),
+  S({id:'adeni',ar:'عدني',en:'Adeni',dar:'شاي عدني بالحليب',den:'Adeni milk tea',star:1,c:C.tea,tea:1}),
+  S({id:'aidaroos',ar:'عيدروس',en:'Aidaroos',dar:'شاي أسود فاخر مع قرنفل ونعناع',den:'Premium black tea with cloves & mint',c:'#6E2E14',tea:1}),
+  {id:'qlatte',cat:'hot',kind:'hot',ar:'قمرية لاتيه',en:'Qamaria Latte',dar:'دبل شوت إسبريسو وحليب مبخر مع هيل وقرفة',den:'Double shot espresso + steamed milk with cardamom & cinnamon',p:25,opts:[],star:1,c:'#C99A6B'},
+  {id:'latte',cat:'hot',kind:'hot',ar:'لاتيه',en:'Latte',dar:'دبل شوت إسبريسو وحليب مبخر',den:'Double shot espresso + steamed milk',p:20,opts:[],c:'#D8B48A'},
+  {id:'mocha',cat:'hot',kind:'hot',ar:'موكا لاتيه',en:'Mocha Latte',dar:'إسبريسو وحليب مع شوكولاتة داكنة',den:'Double shot espresso + steamed milk with dark chocolate',p:25,opts:[],c:'#7A4E34'},
+  {id:'adenlatte',cat:'hot',kind:'hot',ar:'عدن شاي لاتيه',en:'Aden Shai Latte',dar:'شاي أسود فاخر وحليب مبخر مع هيل',den:'Premium black tea + steamed milk with cardamom & milk foam',p:20,opts:[],c:'#B07A4C'},
+  {id:'matcha',cat:'hot',kind:'hot',ar:'ماتشا لاتيه',en:'Matcha Latte',dar:'ماتشا عضوية فاخرة مع حليب مبخر',den:'Organic ceremonial grade matcha with steamed milk',p:26,opts:[],star:1,c:C.matcha},
+  {id:'pistachio',cat:'hot',kind:'hot',ar:'فستق لاتيه',en:'Pistachio Latte',dar:'إسبريسو وحليب مبخر مع صوص الفستق',den:'Double shot espresso + steamed milk with pistachio sauce',p:27,opts:[],star:1,c:C.pist},
+  {id:'spanish',cat:'hot',kind:'hot',ar:'سبانيش لاتيه',en:'Spanish Latte',dar:'حليب محلى مع دبل شوت إسبريسو',den:'Sweetened milk with double shot espresso',p:25,opts:[],c:'#CFA477'},
+  {id:'hotchoc',cat:'hot',kind:'hot',ar:'كاكاو ساخن',en:'Hot Chocolate',dar:'كاكاو مع حليب مبخر ورغوة',den:'Cocoa + steamed milk with milk foam',p:19,opts:['size'],c:C.choc},
+  {id:'affogato',cat:'hot',kind:'cup',ar:'أفوجاتو',en:'Affogato',dar:'آيس كريم فانيلا مع دبل شوت إسبريسو',den:'Vanilla ice cream with double shot espresso',p:26,opts:[],c:C.cream},
+  {id:'imufawaar',cat:'cold',kind:'iced',ar:'مفوار المثلج',en:'Iced Mufawaar',dar:'تحميص متوسط مع كريمة وهيل',den:'Medium roast coffee + cream with cardamom',p:22,opts:['frappe'],layers:[C.cream,C.coffee,C.coffee]},
+  {id:'imarib',cat:'cold',kind:'iced',ar:'مأرب المثلج',en:'Iced Marib',dar:'تحميص متوسط مع هيل',den:'Medium roast coffee with cardamom',p:20,opts:['frappe'],layers:[C.dark,C.dark,C.coffee]},
+  {id:'iqlatte',cat:'cold',kind:'iced',ar:'قمرية لاتيه مثلج',en:'Iced Qamaria Latte',dar:'دبل شوت إسبريسو وحليب مع هيل وقرفة',den:'Double shot espresso + milk with cardamom & cinnamon',p:26,opts:['frappe'],star:1,layers:[C.milk,C.milk,C.coffee]},
+  {id:'ipist',cat:'cold',kind:'iced',ar:'فستق لاتيه مثلج',en:'Iced Pistachio Latte',dar:'دبل شوت إسبريسو وحليب مع صوص الفستق',den:'Double shot espresso + milk with pistachio sauce',p:28,opts:['frappe'],star:1,layers:[C.pist,C.milk,C.coffee]},
+  {id:'imatcha',cat:'cold',kind:'iced',ar:'ماتشا لاتيه مثلج',en:'Iced Matcha Latte',dar:'ماتشا عضوية فاخرة مع حليب',den:'Organic ceremonial grade matcha + milk',p:26,opts:['frappe'],star:1,layers:[C.milk,C.milk,C.matcha]},
+  {id:'banmatcha',cat:'cold',kind:'iced',ar:'بنانا كرمبل ماتشا',en:'Banana Crumble Matcha',dar:'ماتشا مع موز وكرمبل',den:'Matcha with banana and crumble',p:27,opts:[],layers:['#F1D27A',C.milk,C.matcha]},
+  {id:'icaramel',cat:'cold',kind:'iced',ar:'كراميل ماكياتو مثلج',en:'Iced Caramel Macchiato',dar:'دبل شوت إسبريسو وحليب مع كراميل',den:'Double shot espresso + milk with caramel',p:26,opts:['frappe'],layers:['#D9A35B',C.milk,C.coffee]},
+  {id:'imocha',cat:'cold',kind:'iced',ar:'موكا لاتيه مثلج',en:'Iced Mocha Latte',dar:'دبل شوت إسبريسو وكاكاو مع حليب',den:'Double shot espresso + cocoa with milk',p:25,opts:['frappe'],layers:[C.choc,C.milk,C.coffee]},
+  {id:'ilatte',cat:'cold',kind:'iced',ar:'لاتيه مثلج',en:'Iced Latte',dar:'إسبريسو مع حليب بارد',den:'Espresso over cold milk',p:22,opts:['frappe'],layers:[C.milk,C.milk,C.coffee]},
+  {id:'iadeni',cat:'cold',kind:'iced',ar:'عدني مثلج',en:'Iced Adeni',dar:'شاي أسود فاخر مع كريمة وهيل',den:'Premium black tea + cream with cardamom',p:18,opts:[],layers:[C.cream,'#B9875C','#B9875C']},
+  {id:'ichoc',cat:'cold',kind:'iced',ar:'كاكاو مثلج',en:'Iced Chocolate',dar:'كاكاو بارد مع حليب',den:'Cold cocoa with milk',p:23,opts:['frappe'],layers:[C.choc,'#8A5A3E','#8A5A3E']},
+  {id:'iamericano',cat:'cold',kind:'iced',ar:'أمريكانو مثلج',en:'Iced Americano',dar:'إسبريسو مع ماء بارد',den:'Espresso over iced water',p:16,opts:[],layers:[C.dark,C.dark,C.dark]},
+  {id:'arayasi',cat:'cold',kind:'iced',ar:'عريسي',en:'Arayasi',dar:'هريس مانجو مع صوص الفيمتو',den:'Blended mango purée with Vimto drizzle',p:26,opts:[],star:1,layers:['#7A1E3A',C.mango,C.mango]},
+  {id:'sstraw',cat:'cold',kind:'iced',ar:'سموذي الفراولة',en:'Strawberry Smoothie',dar:'فراولة مخفوقة',den:'Blended strawberry',p:28,opts:[],layers:[C.straw,C.straw,'#F2A9B4']},
+  {id:'smango',cat:'cold',kind:'iced',ar:'سموذي المانجو',en:'Mango Smoothie',dar:'مانجو مخفوق',den:'Blended mango',p:28,opts:[],layers:[C.mango,C.mango,'#F6C76A']},
+  {id:'refresh',cat:'cold',kind:'iced',ar:'منعشات',en:'Refreshers',dar:'كركديه (بدون كافيين)، تمر وتوت، باشن جوز الهند، أوشن',den:'Hibiscus (caffeine-free), Dates & Berries, Coconut Passion, Ocean',p:23,opts:[],star:1,layers:[C.hib,C.hib,'#D0546B']},
+  {id:'lemonade',cat:'cold',kind:'iced',ar:'ليموناضة التفاح الأخضر / الخوخ',en:'Green Apple Lemonade / Wild Peach',dar:'منعش وبارد',den:'Cold and refreshing',p:20,opts:[],layers:['#BFD86A','#D6E58E','#D6E58E']},
+  {id:'rosechai',cat:'cold',kind:'iced',ar:'روز عدني تشاي',en:'Rose Adeni Chai',dar:'شاي عدني بالورد',den:'Adeni chai with rose',p:21,opts:[],layers:['#E7A9B2',C.milk,'#C98A6A']},
+  {id:'eggtawa',cat:'meals',kind:'wrap',ar:'خبز الطاوة بالبيض',en:'Egg Tawa Bread',dar:'بيض ولبنة وزعتر',den:'Egg, labneh and zaatar',p:15,opts:[]},
+  {id:'eggmuffin',cat:'meals',kind:'muffin',ar:'مافن البيض',en:'Egg Muffin',dar:'بيض ولبنة وزعتر',den:'Egg, labneh and zaatar',p:15,opts:[]},
+  {id:'eggcroissant',cat:'meals',kind:'croissant',ar:'كرواسون البيض',en:'Egg Croissant',dar:'بيض ولبنة وزعتر',den:'Egg, labneh and zaatar',p:20,opts:[]},
+  {id:'vegmuffin',cat:'meals',kind:'muffin',ar:'مافن الخضار',en:'Vegetable Muffin',dar:'خضار مع لبنة وزعتر',den:'Vegetables with labneh and zaatar',p:12,opts:[]},
+  {id:'chickenwrap',cat:'meals',kind:'wrap',ar:'لفائف الدجاج',en:'Chicken Wrap',dar:'لفة دجاج',den:'Chicken wrap',p:25,opts:[]},
+  {id:'kibdawrap',cat:'meals',kind:'wrap',ar:'لفائف الكبدة',en:'Kibda Wrap',dar:'لفة كبدة',den:'Kibda (liver) wrap',p:25,opts:[]},
+  {id:'meatwrap',cat:'meals',kind:'wrap',ar:'لفائف اللحم',en:'Meat Wrap',dar:'لفة لحم',den:'Meat wrap',p:25,opts:[]},
+  {id:'zinger',cat:'meals',kind:'wrap',ar:'لفائف دجاج زنجر',en:'Zinger Chicken Wrap',dar:'لفة دجاج زنجر',den:'Zinger chicken wrap',p:25,opts:[]}
+];
+const SEASON=['Pumpkin Spice','Carrot Cake Matcha','Salted Maple Cold Brew'];
+const TIMES=[15,30,45,60];
+const OPEN=new Date('2026-11-01T07:00:00+03:00');
+const byId=Object.fromEntries(menu.map(m=>[m.id,m]));
+let lang='ar', cart=[], pick=15, name='', branch='hittin', activeCat='spec', sheet=null, done=null, nameErr=false;
+try{const s=JSON.parse(localStorage.getItem('qamaria1')||'{}');if(s.lang)lang=s.lang;if(Array.isArray(s.cart))cart=s.cart.filter(l=>byId[l.id]);if(s.name)name=s.name;}catch(e){}
+if(!cart.length)cart=[{id:'mufawaar',o:{serve:'s16'},q:1},{id:'ipist',o:{frappe:[]},q:2}];
+
+const $=id=>document.getElementById(id);
+const tx=(k,v={})=>{let s=(T[k]||{})[lang]??k;for(const x in v)s=s.replace('{'+x+'}',v[x]);return s};
+const L=o=>lang==='ar'?o.ar:o.en;
+const sar=n=>tx('sar',{n});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function save(){try{localStorage.setItem('qamaria1',JSON.stringify({lang,cart,name}))}catch(e){}}
+function clock(min){const d=new Date(Date.now()+min*60000);let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');const pm=h>=12;h=h%12||12;return `${h}:${m} ${lang==='ar'?(pm?'م':'ص'):(pm?'PM':'AM')}`}
+const manarOpen=()=>Date.now()>=OPEN.getTime();
+const find=(g,id)=>OPTS[g].find(o=>o.id===id);
+function defaults(it){return{serve:'s12',size:'12',frappe:[]}}
+function unit(it,o){
+  if(it.opts.includes('serve'))return find('serve',o.serve).p;
+  let p=it.p; if(it.opts.includes('size'))p+=find('size',o.size).p; if(it.opts.includes('frappe'))p+=o.frappe.length?4:0; return p;
+}
+function optText(it,o){const out=[];
+  if(it.opts.includes('serve'))out.push(L(find('serve',o.serve)));
+  if(it.opts.includes('size'))out.push(L(find('size',o.size)));
+  if(it.opts.includes('frappe')&&o.frappe.length)out.push('+ '+L(OPTS.frappe[0]));
+  return out.join(' · ')}
+const sig=(id,o)=>id+'|'+JSON.stringify(o);
+let uid=0;
+
+/* drawings */
+function art(it,o,{pour=false}={}){
+  o=o||defaults(it); const k='c'+(uid++), P=pour?'pour':'';
+  if(it.kind==='spec'){
+    const s=o.serve||'s12';
+    if(s==='km'||s==='kl')return `<svg viewBox="0 0 100 130" aria-hidden="true"><g class="steam" fill="none" stroke="#9BA897" stroke-width="3" stroke-linecap="round"><path d="M46 30q-6-8 0-16"/><path d="M58 30q-6-8 0-16"/></g>
+      <path d="M30 48c-8-20 48-20 40 0l8 50c2 14-58 14-56 0z" fill="#B98A5A"/><path d="M30 48c-8-20 48-20 40 0" fill="#9C7046"/><path d="M76 62q18 0 14 24-2 10-14 12" fill="none" stroke="#9C7046" stroke-width="6" stroke-linecap="round"/><path d="M26 66q-14-10-18-26" fill="none" stroke="#9C7046" stroke-width="5" stroke-linecap="round"/><rect x="44" y="30" width="12" height="8" rx="3" fill="#7A5328"/><ellipse cx="50" cy="114" rx="34" ry="5" fill="#C7D3C4"/></svg>`;
+    if(s==='tg')return `<svg viewBox="0 0 100 130" aria-hidden="true"><ellipse cx="50" cy="116" rx="40" ry="5" fill="#C7D3C4"/><rect x="14" y="44" width="72" height="68" rx="8" fill="#1F5B3A"/><rect x="34" y="30" width="32" height="18" rx="5" fill="none" stroke="#143D27" stroke-width="6"/><rect x="40" y="70" width="20" height="14" rx="3" fill="#F6F1E7"/><path d="M14 58h72" stroke="#143D27" stroke-width="2"/></svg>`;
+    const big=s==='s16'?1:.9;
+    return `<svg viewBox="0 0 100 130" aria-hidden="true"><g transform="translate(${50-50*big} ${130-130*big}) scale(${big})"><g class="steam" fill="none" stroke="#9BA897" stroke-width="3" stroke-linecap="round"><path d="M40 34q-6-8 0-16"/><path d="M54 34q-6-8 0-16"/><path d="M66 34q-6-8 0-16"/></g>
+      <path d="M22 46h56l-6 66H28z" fill="#FFFCF6" stroke="#D8CDBA" stroke-width="2"/><g class="${P}"><path class="fill" d="M24.6 64h50.8l-4.2 44H28.8z" fill="${it.c}"/></g>
+      <path d="M28 86h44" stroke="#1F5B3A" stroke-width="7" opacity=".9"/><rect x="18" y="40" width="64" height="9" rx="4" fill="#1F5B3A"/>${it.tea?'':`<circle cx="50" cy="64" r="0"/>`}</g></svg>`;
+  }
+  if(it.kind==='black')return `<svg viewBox="0 0 100 130" aria-hidden="true"><g class="steam" fill="none" stroke="#9BA897" stroke-width="3" stroke-linecap="round"><path d="M44 52q-6-8 0-16"/><path d="M58 52q-6-8 0-16"/></g><ellipse cx="50" cy="104" rx="38" ry="7" fill="#E6DCCB"/><path d="M22 62h56c0 26-10 40-28 40S22 88 22 62z" fill="#FFFCF6" stroke="#D8CDBA" stroke-width="2"/><ellipse class="fill" cx="50" cy="63" rx="26" ry="5" fill="#2A170E"/><path d="M78 68q14 0 10 12-3 8-14 8" fill="none" stroke="#D8CDBA" stroke-width="4"/></svg>`;
+  if(it.kind==='hot'||it.kind==='cup'){const big=o.size==='16'?1:.9;
+    return `<svg viewBox="0 0 100 130" aria-hidden="true"><g transform="translate(${50-50*big} ${130-130*big}) scale(${big})"><g class="steam" fill="none" stroke="#9BA897" stroke-width="3" stroke-linecap="round"><path d="M40 34q-6-8 0-16"/><path d="M54 34q-6-8 0-16"/><path d="M66 34q-6-8 0-16"/></g>
+      <path d="M22 46h56l-6 66H28z" fill="#FFFCF6" stroke="#D8CDBA" stroke-width="2"/><g class="${P}"><path class="fill" d="M24.6 64h50.8l-4.2 44H28.8z" fill="${it.c}"/></g>
+      <path d="M28 86h44" stroke="#1F5B3A" stroke-width="7" opacity=".9"/><rect x="18" y="40" width="64" height="9" rx="4" fill="#B98A5A"/></g></svg>`}
+  if(it.kind==='iced'){
+    const fr=o.frappe&&o.frappe.length, top=fr?44:34, bot=124, h=(bot-top)/it.layers.length;
+    const rects=it.layers.map((c,i)=>`<rect class="fill" x="0" y="${(bot-(i+1)*h).toFixed(1)}" width="100" height="${(h+.6).toFixed(1)}" fill="${c}"/>`).join('');
+    const cream=fr?`<path class="fill" d="M14 46q8-14 18-6 8-12 18-4 10-10 18 2 10-4 18 8v4H14z" fill="#FFFDF8"/>`:'';
+    const ice=fr?'':[[28,46,-12],[52,58,10],[36,78,6]].map(([x,y,r])=>`<rect x="${x}" y="${y}" width="16" height="16" rx="3" fill="#fff" opacity=".45" transform="rotate(${r} ${x+8} ${y+8})"/>`).join('');
+    return `<svg viewBox="0 0 100 130" aria-hidden="true"><defs><clipPath id="${k}"><path d="M15 20H85L77.5 124H22.5Z"/></clipPath></defs>
+      <rect x="56" y="0" width="7" height="58" rx="3.5" fill="#1F5B3A" transform="rotate(10 60 30)"/>
+      <path d="M15 20H85L77.5 124H22.5Z" fill="rgba(255,255,255,.55)"/><g clip-path="url(#${k})" class="${P}">${rects}${ice}</g>${cream}
+      <path d="M15 20H85L77.5 124H22.5Z" fill="none" stroke="#C9BFAE" stroke-width="2"/><path d="M23 28L28 116" stroke="#fff" stroke-width="4" opacity=".55" stroke-linecap="round"/>
+      <path d="M33 78h34" stroke="#1F5B3A" stroke-width="6" opacity=".85"/><rect x="10" y="14" width="80" height="8" rx="4" fill="#E6DCCB"/></svg>`;
+  }
+  const plate=`<ellipse cx="50" cy="104" rx="42" ry="9" fill="#FFFCF6" stroke="#D8CDBA" stroke-width="2"/>`;
+  if(it.kind==='croissant')return `<svg viewBox="0 0 100 130" aria-hidden="true"><g class="${P}"><g class="fill">${plate}<path d="M14 92q4-30 36-34 32 4 36 34-8 6-16 0-6-18-20-20-14 2-20 20-8 6-16 0z" fill="#D9A15B"/><path d="M32 80q18-12 36 0" stroke="#B57A36" stroke-width="3" fill="none"/><path d="M28 90q22 6 44 0" stroke="#F3E6D2" stroke-width="5" fill="none"/></g></g></svg>`;
+  if(it.kind==='muffin')return `<svg viewBox="0 0 100 130" aria-hidden="true"><g class="${P}"><g class="fill">${plate}<path d="M26 74h48l-6 26H32z" fill="#C9934F"/><path d="M22 76q0-26 28-26t28 26z" fill="#E2B56E"/><circle cx="40" cy="64" r="3" fill="#7FA65A"/><circle cx="58" cy="60" r="3" fill="#F2B544"/><circle cx="52" cy="70" r="2.5" fill="#7FA65A"/></g></g></svg>`;
+  return `<svg viewBox="0 0 100 130" aria-hidden="true"><g class="${P}"><g class="fill">${plate}<path d="M16 96l58-42 12 16-58 42z" fill="#EBCB91"/><path d="M74 54l12 16-6 4-12-16z" fill="#7FA65A"/><path d="M24 98l46-34" stroke="#C9934F" stroke-width="3"/><path d="M30 104l46-34" stroke="#C9934F" stroke-width="3"/></g></g></svg>`;
+}
+
+/* rendering */
+function countdown(){
+  const ms=Math.max(0,OPEN-Date.now()), d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
+  $('count').innerHTML=[[d,'days'],[h,'hrs'],[m,'mins']].map(([v,k])=>`<div><b>${String(v).padStart(2,'0')}</b><small>${tx(k)}</small></div>`).join('');
+}
+function renderStatic(){
+  const de=document.documentElement; de.lang=lang; de.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=tx(el.dataset.t));
+  $('heroTitle').innerHTML=tx('heroTitle');
+  $('lang').textContent=lang==='ar'?'EN':'عربي';
+  $('cartBtn').setAttribute('aria-label',tx('yourOrder'));
+  $('season').innerHTML=SEASON.map(s=>`<li>${s}</li>`).join('');
+  countdown();
+}
+function renderMenu(){
+  $('tabs').innerHTML=cats.map(c=>`<button class="tab" type="button" data-cat="${c.id}" aria-pressed="${c.id===activeCat}">${L(c)}</button>`).join('');
+  $('cats').innerHTML=cats.map(c=>`<div class="cat" id="cat-${c.id}"><h3 class="cat-title">${L(c)}${c.sub?`<small>${L(c.sub)}</small>`:''}</h3><div class="items">${
+    menu.filter(i=>i.cat===c.id).map(i=>{const n=cart.filter(l=>l.id===i.id).reduce((s,l)=>s+l.q,0);
+      const from=i.opts.includes('serve')?`${lang==='ar'?'من':'from'} ${sar(17)}`:sar(i.p);
+      return `<button class="item" type="button" data-open="${i.id}"><span class="art">${art(i)}</span>
+        <span style="min-width:0"><h3>${i.star?'<span class="star">★</span>':''}${L(i)}</h3><p class="desc">${L({ar:i.dar,en:i.den})}</p><span class="price">${from}</span></span>
+        <span class="plus" aria-hidden="true">+${n?`<span class="n">${n}</span>`:''}</span></button>`}).join('')}</div></div>`).join('');
+}
+function totals(){return{count:cart.reduce((s,l)=>s+l.q,0),total:cart.reduce((s,l)=>s+unit(byId[l.id],l.o)*l.q,0)}}
+function orderNo(){return 'QM-'+String(1000+((Date.now()/60000|0)%9000))}
+function message(no){const {total}=totals();
+  return [tx('msgHead'),`${tx('msgNum')}: ${no}`,`${tx('msgName')}: ${name.trim()||'—'}`,`${tx('msgBr')}: ${tx(branch)}`,`${tx('msgPick')}: ${clock(pick)} (${tx('inMin',{m:pick})})`,'',
+    ...cart.map(l=>{const it=byId[l.id],ot=optText(it,l.o);return `• ${l.q}× ${L(it)} — ${sar(unit(it,l.o)*l.q)}${ot?'\n   '+ot:''}`}),'',`${tx('total')}: ${sar(total)}`].join('\n')}
+const WA='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3a.4.4 0 0 0 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg>';
+function renderCheckout(){
+  const {count,total}=totals();
+  const b=$('badge'); b.hidden=!count; b.textContent=count;
+  $('cartbar').classList.toggle('show',count>0&&!done);
+  $('cbCount').textContent=count; $('cbTotal').textContent=sar(total);
+  if(done){$('checkoutBody').innerHTML=`<div class="done"><svg viewBox="0 0 120 100" aria-hidden="true"><circle cx="60" cy="50" r="44" fill="#E3ECE3"/><path d="M40 52l13 13 28-30" stroke="#1F5B3A" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h3>${tx('doneTitle')}</h3><p>${tx('doneText')}</p><span class="num">${tx('doneNum')} ${done}</span><br><button class="ghostb" type="button" id="again">${tx('newOrder')}</button></div>`;return}
+  const lines=cart.length?cart.map((l,i)=>{const it=byId[l.id],ot=optText(it,l.o);return `<li class="line">${art(it,l.o)}<div style="min-width:0"><div class="nm">${L(it)}</div>${ot?`<div class="op">${esc(ot)}</div>`:''}
+    <div class="mini"><button type="button" data-line="${i}" data-d="-1" aria-label="−">−</button><output>${l.q}</output><button type="button" data-line="${i}" data-d="1" aria-label="+">+</button></div></div><div class="pr">${sar(unit(it,l.o)*l.q)}</div></li>`}).join('')
+    :`<li class="empty">${tx('emptyCart')}</li>`;
+  const mo=manarOpen();
+  $('checkoutBody').innerHTML=`<h2>${tx('yourOrder')}</h2><ul class="lines">${lines}</ul>
+    <div class="total"><span>${tx('total')}</span><span>${sar(total)}</span></div>
+    <span class="lbl">${tx('branch')}</span>
+    <div class="branches"><button class="br" type="button" data-br="hittin" aria-pressed="${branch==='hittin'}"><b>${tx('hittin')}</b><small>Hittin, Riyadh</small></button>
+      <button class="br" type="button" data-br="manar" aria-pressed="${branch==='manar'}" ${mo?'':'disabled'}><b>${tx('manar')}</b><small>Al Manar, Riyadh</small>${mo?'':`<br><span class="soon">${tx('soon')}</span>`}</button></div>
+    <span class="lbl">${tx('pickup')}</span>
+    <div class="times">${TIMES.map(m=>`<button class="time" type="button" data-m="${m}" aria-pressed="${m===pick}">${tx('inMin',{m})}<small>${clock(m)}</small></button>`).join('')}</div>
+    <label class="lbl" for="name">${tx('name')}</label>
+    <input type="text" id="name" autocomplete="given-name" value="${esc(name)}" placeholder="${tx('namePh')}" aria-invalid="${nameErr}">
+    ${nameErr?`<p class="err">${tx('nameErr')}</p>`:''}
+    <button class="send" type="button" id="send" ${cart.length?'':'disabled'}>${WA}${tx('send')}</button>
+    ${cart.length?`<div class="shop-sees"><div class="bar"><i>Q</i><span>Qamaria · ${tx(branch)}<small>${tx('shopSees')}</small></span></div>
+      <div class="chat"><div class="bubble">${esc(message(orderNo()))}<span class="meta">${clock(0)} ✓✓</span></div></div></div><p class="caption">${tx('shopSeesCap')}</p>`:''}`;
+}
+function renderAll(){renderStatic();renderMenu();renderCheckout();if(sheet)renderSheet(false)}
+
+/* sheet */
+function openSheet(id,lineIndex=null){
+  const it=byId[id], base=lineIndex!=null?cart[lineIndex]:null;
+  sheet={id,o:base?JSON.parse(JSON.stringify(base.o)):defaults(it),q:base?base.q:1,line:lineIndex,last:document.activeElement};
+  renderSheet(true);$('scrim').classList.add('open');$('sheet').classList.add('open');document.body.classList.add('locked');
+  setTimeout(()=>{const x=$('sheetIn').querySelector('.x');x&&x.focus()},50);
+}
+function closeSheet(){if(!sheet)return;const last=sheet.last;sheet=null;$('scrim').classList.remove('open');$('sheet').classList.remove('open');document.body.classList.remove('locked');last&&last.focus&&last.focus()}
+function chips(g){
+  const multi=g==='frappe';
+  return `<div class="opt"><div class="opt-label">${tx(g)}${multi?`<small>${tx('optional')}</small>`:''}</div><div class="chips">${OPTS[g].map(o=>{
+    const on=multi?sheet.o.frappe.includes(o.id):sheet.o[g]===o.id;
+    const pr=g==='serve'?sar(o.p):(o.p?'+'+o.p:'');
+    return `<button class="chip" type="button" data-g="${g}" data-v="${o.id}" aria-pressed="${on}"><bdi>${L(o)}</bdi>${pr?` <small><bdi>${pr}</bdi></small>`:''}${o.tag?`<span class="tag">${tx(o.tag)}</span>`:''}</button>`}).join('')}</div></div>`;
+}
+function renderSheet(pour){
+  const it=byId[sheet.id];
+  $('sheetIn').innerHTML=`<div class="grab"></div><button class="x" type="button" data-close aria-label="Close">×</button>
+    <div class="sheet-top"><div class="stage">${art(it,sheet.o,{pour})}</div><div style="min-width:0"><h3 id="sheetTitle">${L(it)}</h3><p class="desc">${L({ar:it.dar,en:it.den})}</p></div></div>
+    ${it.opts.map(chips).join('')}
+    <div class="sheet-foot"><div class="stepper"><button type="button" data-q="-1" aria-label="−">−</button><output>${sheet.q}</output><button type="button" data-q="1" aria-label="+">+</button></div>
+      <button class="add-btn" type="button" id="addBtn"><span>${tx(sheet.line!=null?'update':'add')}</span><span>${sar(unit(it,sheet.o)*sheet.q)}</span></button></div>`;
+}
+function clean(it,o){const r={};for(const g of it.opts)r[g]=o[g];return r}
+function commit(){const s=sheet;if(!s)return;const it=byId[s.id],o=clean(it,s.o);
+  if(s.line!=null)cart.splice(s.line,1);
+  const k=sig(s.id,o),same=cart.find(l=>sig(l.id,l.o)===k);
+  if(same)same.q+=s.q;else cart.push({id:s.id,o,q:s.q});
+  done=null;save();closeSheet();renderMenu();renderCheckout();toast(tx('added'));
+  const b=$('badge');b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');
+}
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1600)}
+
+/* events */
+$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';save();renderAll()});
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;activeCat=b.dataset.cat;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-pressed',t===b));
+  const el=$('cat-'+activeCat);window.scrollTo({top:el.getBoundingClientRect().top+scrollY-122,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b&&!e.target.closest('#sheet'))openSheet(b.dataset.open)});
+$('scrim').addEventListener('click',closeSheet);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+$('sheetIn').addEventListener('click',e=>{
+  if(e.target.closest('[data-close]'))return closeSheet();
+  if(e.target.closest('#addBtn'))return commit();
+  const q=e.target.closest('[data-q]');if(q){sheet.q=Math.max(1,Math.min(20,sheet.q+Number(q.dataset.q)));return renderSheet(false)}
+  const c=e.target.closest('[data-g]');if(c){const g=c.dataset.g,v=c.dataset.v;
+    if(g==='frappe'){const a=sheet.o.frappe,i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)}else sheet.o[g]=v;renderSheet(true)}
+});
+$('checkoutBody').addEventListener('click',e=>{
+  const ln=e.target.closest('[data-line]');if(ln){const l=cart[+ln.dataset.line];l.q+=Number(ln.dataset.d);if(l.q<=0)cart.splice(+ln.dataset.line,1);save();renderMenu();return renderCheckout()}
+  const br=e.target.closest('[data-br]');if(br&&!br.disabled){branch=br.dataset.br;return renderCheckout()}
+  const tm=e.target.closest('[data-m]');if(tm){pick=+tm.dataset.m;return renderCheckout()}
+  if(e.target.closest('#again')){done=null;cart=[];save();renderMenu();renderCheckout();return $('menu').scrollIntoView()}
+  if(e.target.closest('#send')){
+    if(!name.trim()){nameErr=true;renderCheckout();return $('name').focus()}
+    const no=orderNo(),a=document.createElement('a');a.href='https://wa.me/?text='+encodeURIComponent(message(no));a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+    done=no;renderCheckout();$('checkout').scrollIntoView({block:'start'});
+  }
+});
+$('checkoutBody').addEventListener('input',e=>{if(e.target.id!=='name')return;name=e.target.value;save();if(nameErr&&name.trim()){nameErr=false;e.target.setAttribute('aria-invalid','false');const er=document.querySelector('.err');er&&er.remove()}
+  const bub=document.querySelector('.bubble');if(bub)bub.innerHTML=esc(message(orderNo()))+`<span class="meta">${clock(0)} ✓✓</span>`});
+addEventListener('scroll',()=>{$('head').classList.toggle('scrolled',scrollY>8);
+  if(sheet)return;let cur=activeCat;for(const c of cats){const el=$('cat-'+c.id);if(el&&el.getBoundingClientRect().top<170)cur=c.id}
+  if(cur!==activeCat){activeCat=cur;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-pressed',t.dataset.cat===cur))}},{passive:true});
+setInterval(countdown,30000);
+renderAll();
+</script>
