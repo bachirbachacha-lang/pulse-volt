@@ -1,0 +1,782 @@
+<meta charset="utf-8">
+<title>Bear be matcha 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Delius&display=swap">
+<style>
+/* Layout: phone-first ordering page in Bear be matcha's own look: butter-yellow paper, brown hand-drawn ink, the bear's blue-grey outline as the accent. Sticky header, hero with their bear, menu cards that open an add-ons sheet, then pickup + WhatsApp checkout. On wide screens the checkout sits in a sticky column. */
+:root{
+  --butter:#F5DD91; --butter-deep:#EDCF72; --cream:#FFF7DC; --cream-2:#FCEFC4;
+  --ink:#4B2A1E; --ink-soft:#7A5442; --blue:#7E93B2; --blue-soft:#DCE3EE;
+  --matcha:#7FA65A; --matcha-deep:#55803A; --pink:#EE9DAA; --line:#E2C77E;
+  --wa:#1FA855; --wa-bubble:#DCF8C6; --wa-bg:#ECE5DD;
+  --display:'Baloo Bhaijaan 2',system-ui,sans-serif;
+  --body:'Baloo Bhaijaan 2',system-ui,-apple-system,sans-serif;
+  --r:20px;
+  color-scheme:light;
+}
+html[lang=en]{--display:'Delius','Baloo Bhaijaan 2',system-ui,sans-serif;--body:'Delius','Baloo Bhaijaan 2',system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--butter);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;font-weight:500}
+body.locked{overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance}
+.card{background:var(--cream);border:2px solid var(--ink);border-radius:var(--r);box-shadow:4px 4px 0 var(--blue)}
+
+.sample{background:var(--ink);color:var(--cream);font-size:12.5px;text-align:center;padding-block:6px}
+
+/* header */
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(255,247,220,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:2px solid transparent;transition:border-color .2s}
+.head.scrolled{border-bottom-color:var(--ink)}
+.head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:8px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-family:var(--display);font-weight:700;font-size:20px}
+.brand img{height:46px;width:auto;display:block}
+.head-actions{display:flex;align-items:center;gap:8px}
+.lang{border:2px solid var(--ink);background:transparent;border-radius:999px;padding:3px 14px;font-weight:600;font-size:14px}
+.cart-btn{position:relative;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--cream);text-decoration:none}
+.cart-btn svg{width:20px;height:20px}
+.badge{position:absolute;top:-4px;inset-inline-end:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;font-family:system-ui,sans-serif}
+.badge[hidden]{display:none}
+.bump{animation:bump .45s ease}
+@keyframes bump{30%{transform:scale(1.35)}60%{transform:scale(.9)}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:8px;padding-block:26px 30px}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(32px,8.4vw,62px);line-height:1.1;margin:0 0 12px}
+html[lang=en] .hero h1{font-weight:400}
+.hero h1 em{font-style:normal;position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;inset-inline:-2px;bottom:.06em;height:.32em;background:var(--blue);opacity:.45;border-radius:40% 60% 50% 40%;z-index:-1}
+.hero p{margin:0 0 20px;color:var(--ink-soft);max-width:34ch;font-size:17px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--cream);border:0;border-radius:16px;padding:12px 26px;font-weight:600;font-size:17px;text-decoration:none;box-shadow:4px 4px 0 var(--blue);transition:transform .12s,box-shadow .12s}
+.cta:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--blue)}
+.ready{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600}
+.ready i{width:9px;height:9px;border-radius:50%;background:var(--wa);animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(31,168,85,.5)}70%,100%{box-shadow:0 0 0 9px rgba(31,168,85,0)}}
+.hero-art{position:relative;justify-self:center;width:min(100%,290px)}
+.hero-art .blob{position:absolute;inset:10% 0 4% 6%;background:var(--cream);border:2px solid var(--ink);border-radius:46% 54% 42% 58%/52% 44% 56% 48%;box-shadow:5px 5px 0 var(--blue)}
+.hero-art img{position:relative;display:block;width:82%;height:auto;margin:0 auto;animation:sway 5s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes sway{50%{transform:rotate(-2.5deg) translateY(-4px)}}
+.spark{position:absolute;width:22px;height:22px;animation:twinkle 3s ease-in-out infinite}
+.spark.s1{top:4%;inset-inline-end:6%}
+.spark.s2{bottom:20%;inset-inline-start:-2%;animation-delay:-1.5s;width:16px;height:16px}
+@keyframes twinkle{50%{transform:scale(.6) rotate(25deg);opacity:.5}}
+
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-bottom:30px}
+.how div{padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0;box-shadow:3px 3px 0 var(--blue)}
+.how b{font-family:var(--display);font-size:24px;line-height:1}
+.how span{font-size:14px;font-weight:600;line-height:1.35}
+
+/* layout */
+.shop{display:grid;grid-template-columns:1fr;gap:26px;align-items:start}
+@media (min-width:920px){.shop{grid-template-columns:minmax(0,1fr) 380px}.checkout{position:sticky;top:80px}}
+
+/* menu */
+h2{font-family:var(--display);font-weight:800;font-size:30px;margin:0;line-height:1.2}
+html[lang=en] h2{font-weight:400}
+.menu-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.note{font-size:13px;color:var(--ink-soft)}
+.items{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:600px){.items{grid-template-columns:1fr 1fr}}
+.item{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;text-align:start;width:100%;transition:transform .15s,box-shadow .15s}
+.item:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--blue)}
+.item:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--blue)}
+.item .art{width:72px;height:90px;display:grid;place-items:center;background:var(--butter);border-radius:14px}
+.item .art svg{width:58px;height:76px}
+.item h3{margin:0;font-family:var(--display);font-size:18px;font-weight:700;line-height:1.3}
+html[lang=en] .item h3{font-weight:400}
+.item .desc{margin:2px 0 4px;font-size:13.5px;color:var(--ink-soft);line-height:1.45}
+.item .price{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.plus{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;font-size:22px;line-height:1;position:relative;font-family:system-ui,sans-serif}
+.plus .n{position:absolute;top:-6px;inset-inline-end:-6px;min-width:20px;height:20px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px;border:2px solid var(--cream)}
+.addons{margin-top:18px;padding:16px 18px;position:relative;overflow:hidden}
+.addons h3{font-family:var(--display);font-size:20px;margin:0 0 6px;font-weight:700}
+html[lang=en] .addons h3{font-weight:400}
+.addons ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;max-width:calc(100% - 70px)}
+.addons li{display:flex;justify-content:space-between;gap:8px;font-size:14px;border-bottom:1.5px dotted var(--line);padding-block:3px}
+.addons li span:last-child{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.addons img{position:absolute;inset-inline-end:8px;bottom:-14px;width:66px;transform:rotate(-6deg)}
+html[dir=rtl] .addons img{transform:scaleX(-1) rotate(-6deg)}
+@media (max-width:480px){.addons ul{grid-template-columns:1fr}}
+
+/* checkout */
+.checkout{padding:20px;scroll-margin-top:80px}
+.checkout h2{font-size:26px;margin-bottom:12px}
+.lines{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:10px}
+.line{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center}
+.line svg{width:36px;height:46px}
+.line .nm{font-weight:700;font-size:15px;line-height:1.35}
+.line .op{font-size:12.5px;color:var(--ink-soft);line-height:1.4}
+.line .pr{font-variant-numeric:tabular-nums;font-size:14.5px;font-weight:700;text-align:end}
+.mini{display:flex;align-items:center;gap:4px;margin-top:4px}
+.mini button{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-size:15px;line-height:1;display:grid;place-items:center;font-family:system-ui,sans-serif}
+.mini output{min-width:18px;text-align:center;font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.empty{color:var(--ink-soft);font-size:14.5px;text-align:center;padding:10px 0}
+.empty img{width:70px;display:block;margin:0 auto 6px}
+.total{display:flex;justify-content:space-between;border-top:2px dashed var(--ink);padding-top:12px;font-weight:800;font-size:19px;font-variant-numeric:tabular-nums}
+.lbl{display:block;font-weight:700;font-size:15px;margin:18px 0 8px}
+.times{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.time{border:2px solid var(--line);background:var(--cream-2);border-radius:12px;padding:7px 4px;font-size:14px;text-align:center;line-height:1.3;font-weight:700}
+.time small{display:block;color:var(--ink-soft);font-size:12px;font-weight:500;font-variant-numeric:tabular-nums}
+.time[aria-pressed="true"]{border-color:var(--ink);background:var(--blue-soft)}
+input[type=text]{width:100%;border:2px solid var(--line);background:var(--cream-2);border-radius:12px;padding:10px 12px;font:inherit;color:var(--ink)}
+input[type=text]:focus{border-color:var(--ink);outline:none}
+input[type=text][aria-invalid="true"]{border-color:#C0563F}
+.err{color:#A8432F;font-size:13.5px;margin:6px 0 0}
+.send{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px;background:var(--wa);color:#fff;border:2px solid var(--ink);border-radius:14px;padding:13px;font-weight:700;font-size:16.5px;box-shadow:3px 3px 0 var(--ink)}
+.send svg{width:22px;height:22px}
+.send:disabled{opacity:.45;cursor:not-allowed}
+
+/* what the shop sees */
+.shop-sees{margin-top:20px;border-radius:16px;overflow:hidden;border:2px solid var(--ink)}
+.shop-sees .bar{display:flex;align-items:center;gap:10px;background:#075E54;color:#fff;padding:8px 12px;font-size:14px;font-weight:700;font-family:system-ui,sans-serif}
+.shop-sees .bar img{width:32px;height:32px;border-radius:50%;background:var(--butter);object-fit:cover;object-position:50% 20%}
+.shop-sees .bar small{display:block;font-weight:400;font-size:11.5px;opacity:.85}
+.chat{background:var(--wa-bg);padding:14px 12px}
+.bubble{background:var(--wa-bubble);color:#1d2a1d;border-radius:12px;padding:9px 12px 6px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;max-width:92%;margin-inline-start:auto;box-shadow:0 1px 1px rgba(0,0,0,.08);font-family:system-ui,-apple-system,sans-serif}
+.bubble .meta{display:block;text-align:end;font-size:11px;color:#667;margin-top:2px}
+.caption{font-size:13px;color:var(--ink-soft);margin:8px 2px 0}
+
+/* sticky cart bar (phones) */
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding-bottom:env(safe-area-inset-bottom,0px);transform:translateY(130%);transition:transform .3s cubic-bezier(.2,.9,.3,1.2)}
+.cartbar.show{transform:none}
+.cartbar .wrap{padding-block:10px}
+.cartbar a{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);color:var(--cream);border-radius:16px;padding:12px 18px;text-decoration:none;font-weight:700;box-shadow:4px 4px 0 var(--blue)}
+.cartbar .ct{display:flex;align-items:center;gap:10px}
+.cartbar .ct b{background:var(--cream);color:var(--ink);border-radius:999px;min-width:26px;height:26px;display:grid;place-items:center;font-size:14px;font-variant-numeric:tabular-nums}
+@media (min-width:920px){.cartbar{display:none}}
+
+/* add-ons sheet */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(75,42,30,.45);opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:92vh;max-height:92dvh;overflow-y:auto;background:var(--cream);border-top:2px solid var(--ink);border-radius:26px 26px 0 0;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);padding-bottom:env(safe-area-inset-bottom,0px);overscroll-behavior:contain}
+.sheet.open{transform:none}
+@media (min-width:700px){.sheet{left:50%;right:auto;width:560px;bottom:auto;top:50%;border:2px solid var(--ink);border-radius:26px;box-shadow:6px 6px 0 var(--blue);transform:translate(-50%,-40%) scale(.96);opacity:0;pointer-events:none;transition:transform .3s,opacity .25s}.sheet.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.sheet-in{padding:10px max(20px,env(safe-area-inset-right,0px)) 20px max(20px,env(safe-area-inset-left,0px))}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 6px}
+.x{position:absolute;top:12px;inset-inline-end:14px;width:36px;height:36px;border-radius:50%;border:2px solid var(--ink);background:var(--cream);font-size:20px;display:grid;place-items:center;font-family:system-ui,sans-serif}
+.sheet-top{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:center;margin-top:6px}
+.stage{height:150px;border-radius:20px;background:var(--butter);border:2px solid var(--ink);display:grid;place-items:center}
+.stage svg{width:94px;height:124px}
+.sheet h3{font-family:var(--display);font-weight:800;font-size:25px;margin:0;line-height:1.2}
+html[lang=en] .sheet h3{font-weight:400}
+.sheet .desc{color:var(--ink-soft);font-size:14.5px;margin:4px 0 0}
+.opt{margin-top:18px}
+.opt-label{font-weight:700;font-size:15px;margin-bottom:8px;display:flex;justify-content:space-between}
+.opt-label small{font-weight:500;color:var(--ink-soft)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);background:var(--cream-2);border-radius:12px;padding:6px 14px;font-size:14.5px;font-weight:600;line-height:1.35}
+.chip small{color:var(--ink-soft);font-size:12.5px;margin-inline-start:4px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--blue-soft)}
+.chip[aria-pressed="true"]::before{content:"✓ "}
+.sheet-foot{position:sticky;bottom:0;display:flex;gap:12px;align-items:center;background:var(--cream);padding-top:14px;margin-top:18px;border-top:2px dashed var(--line)}
+.stepper{display:flex;align-items:center;gap:6px;background:var(--cream-2);border:2px solid var(--line);border-radius:14px;padding:3px}
+.stepper button{width:36px;height:36px;border-radius:10px;border:0;background:var(--cream);font-size:20px;line-height:1;font-family:system-ui,sans-serif}
+.stepper output{min-width:22px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.add-btn{flex:1;display:flex;justify-content:space-between;align-items:center;border:0;border-radius:14px;background:var(--ink);color:var(--cream);padding:12px 18px;font-weight:700;font-size:16.5px;box-shadow:3px 3px 0 var(--blue)}
+.add-btn span:last-child{font-variant-numeric:tabular-nums}
+
+/* pour animation */
+.pour .fill{transform-box:fill-box;transform-origin:center bottom;animation:pour .8s cubic-bezier(.3,.8,.3,1) both}
+.pour .fill:nth-child(2){animation-delay:.12s}
+.pour .fill:nth-child(3){animation-delay:.24s}
+.pour .fill:nth-child(4){animation-delay:.36s}
+.pour .fill:nth-child(5){animation-delay:.48s}
+@keyframes pour{from{transform:scaleY(0)}}
+
+/* done screen */
+.done{text-align:center;padding:6px 4px}
+.done img{width:110px}
+.done h3{font-family:var(--display);font-size:26px;margin:6px 0}
+.done p{color:var(--ink-soft);margin:0 0 6px}
+.done .num{display:inline-block;font-weight:800;font-size:19px;background:var(--blue-soft);border:2px solid var(--ink);border-radius:12px;padding:2px 14px;margin:8px 0;font-variant-numeric:tabular-nums}
+.ghost{border:2px solid var(--ink);background:transparent;border-radius:12px;padding:8px 16px;font-weight:700;margin-top:10px}
+
+/* visit */
+.visit{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding-block:40px 30px}
+.visit div{padding:16px;min-width:0}
+.visit b{display:block;font-family:var(--display);font-size:19px}
+.visit span{font-size:14.5px;color:var(--ink-soft)}
+.visit a{color:var(--ink);font-weight:700}
+footer{text-align:center;font-size:13.5px;color:var(--ink-soft);padding-block:0 110px}
+@media (min-width:920px){footer{padding-bottom:30px}}
+
+.toast{position:fixed;z-index:50;left:50%;top:calc(env(safe-area-inset-top,0px) + 74px);transform:translate(-50%,-20px);background:var(--ink);color:var(--cream);border-radius:999px;padding:8px 18px;font-size:14.5px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:420px){
+  .hero{grid-template-columns:1fr 130px;gap:4px}
+  .hero p{font-size:15.5px}
+  .times{grid-template-columns:1fr 1fr}
+  .sheet-top{grid-template-columns:100px minmax(0,1fr)}
+  .stage{height:130px}
+  .brand span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+/* 3D story: a pinned stage. The cup stays in place while each scroll step pours the next drink into it. */
+#story{position:relative;height:calc(6 * 100svh)}
+.stage3{position:sticky;top:62px;height:calc(100svh - 62px);overflow:hidden}
+.glow3{position:absolute;left:50%;top:40%;width:130vmin;height:130vmin;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--g,#FFF6D6) 0%,rgba(255,246,214,0) 62%);transition:--g .8s}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.intro3{position:absolute;top:22px;left:16px;right:16px;text-align:center;transition:opacity .5s,transform .5s;pointer-events:none}
+.intro3 h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,9vw,64px);line-height:1.08;margin:0}
+html[lang=en] .intro3 h1{font-weight:400}
+.intro3 h1 em{font-style:normal;color:var(--blue)}
+.intro3.off{opacity:0;transform:translateY(-16px)}
+.card3{position:absolute;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);max-width:460px;margin-inline:auto;padding:16px 18px;transition:opacity .35s,transform .35s}
+.card3.swap{opacity:0;transform:translateY(12px)}
+.card3.first{bottom:calc(env(safe-area-inset-bottom,0px) + 74px)}
+.card3 .kick{font-size:13px;font-weight:700;color:var(--ink-soft);letter-spacing:.04em}
+.card3 h2{font-size:27px;margin:2px 0 4px}
+.card3 p{margin:0;color:var(--ink-soft);font-size:14.5px;line-height:1.5}
+.card3 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.card3 .pr{font-weight:800;font-size:20px;font-variant-numeric:tabular-nums}
+.card3 .add3{border:0;border-radius:14px;background:var(--ink);color:var(--cream);padding:10px 22px;font-weight:700;font-size:16px;box-shadow:3px 3px 0 var(--blue)}
+.card3 .hint{display:flex;align-items:center;gap:10px;justify-content:center;font-weight:700;margin-top:10px}
+.card3 .hint i{width:22px;height:34px;border:2.5px solid var(--ink);border-radius:12px;position:relative}
+.card3 .hint i::after{content:"";position:absolute;left:50%;top:6px;width:4px;height:7px;margin-left:-2px;border-radius:2px;background:var(--ink);animation:wheel 1.6s ease-in-out infinite}
+@keyframes wheel{60%{transform:translateY(9px);opacity:0}}
+body.instory .cartbar{transform:translateY(130%)}
+.dots3{position:absolute;inset-inline-end:12px;top:50%;transform:translateY(-50%);display:grid;gap:8px}
+.dots3 b{width:8px;height:8px;border-radius:50%;background:var(--ink);opacity:.25;transition:opacity .3s,transform .3s}
+.dots3 b.on{opacity:1;transform:scale(1.35)}
+@media (min-width:900px){
+  .card3{left:auto;right:8vw;bottom:auto;top:52%;transform:translateY(-50%);width:400px}
+  .card3.swap{transform:translateY(calc(-50% + 12px))}
+  .intro3{text-align:start;left:8vw;right:auto;top:auto;bottom:16vh;max-width:520px}
+}
+</style>
+
+<div class="sample"><div class="wrap" data-t="sample"></div></div>
+
+<header class="head" id="head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Bear be matcha"><img src="img/logo.png" alt=""><span>Bear be matcha</span></a>
+    <div class="head-actions">
+      <button class="lang" id="lang" type="button">EN</button>
+      <a class="cart-btn" href="#checkout" id="cartBtn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1.2 11.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="badge" id="badge" hidden>0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section id="story" aria-label="3D">
+    <div class="stage3">
+      <div class="glow3" id="glow3"></div>
+      <canvas id="gl" aria-hidden="true"></canvas>
+      <div class="intro3" id="intro3"><h1 id="t3"></h1></div>
+      <div class="card card3" id="card3"></div>
+      <div class="dots3" id="dots3" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="how">
+      <div class="card"><b>1</b><span data-t="how1"></span></div>
+      <div class="card"><b>2</b><span data-t="how2"></span></div>
+      <div class="card"><b>3</b><span data-t="how3"></span></div>
+    </div>
+  </section>
+
+  <div class="wrap shop">
+    <section id="menu">
+      <div class="menu-head">
+        <h2 data-t="menu"></h2>
+        <span class="note" data-t="fromMenu"></span>
+      </div>
+      <div class="items" id="items"></div>
+      <div class="card addons"><h3 data-t="addonsTitle"></h3><ul id="addonList"></ul><img src="img/bear.png" alt=""></div>
+    </section>
+
+    <aside class="card checkout" id="checkout">
+      <div id="checkoutBody"></div>
+    </aside>
+  </div>
+
+  <section class="wrap visit">
+    <div class="card"><b data-t="visitTitle"></b><span data-t="visitText"></span></div>
+    <div class="card"><b data-t="hoursTitle"></b><span data-t="hoursText"></span></div>
+    <div class="card"><b>Instagram</b><span><a href="https://www.instagram.com/bearbematcha/" target="_blank" rel="noopener">@bearbematcha</a></span></div>
+  </section>
+</main>
+
+<footer class="wrap" data-t="footer"></footer>
+
+<div class="cartbar" id="cartbar"><div class="wrap"><a href="#checkout"><span class="ct"><b id="cbCount">0</b><span data-t="viewOrder"></span></span><span id="cbTotal"></span></a></div></div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-in" id="sheetIn"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const T={
+  sample:{ar:'نسخة 3D تجريبية من Pixel & Co. — ليس الموقع الرسمي لـ Bear be matcha',en:'3D sample by Pixel & Co. — not Bear be matcha’s official website'},
+  heroTitle:{ar:'ماتشا الدب، <em>جاهزة</em> أول ما توصل',en:'Bear’s matcha, <em>ready</em> when you arrive'},
+  heroSub:{ar:'اختر مشروبك، زد الإضافات اللي تحبها، حدد وقت الاستلام، والطلب يوصلنا على الواتساب.',en:'Pick your drink, add the extras you love, choose a pickup time, and your order lands on our WhatsApp.'},
+  orderNow:{ar:'اطلب الحين',en:'Order now'},
+  readyIn:{ar:'جاهز خلال ١٥ دقيقة',en:'Ready in 15 min'},
+  how1:{ar:'اختر مشروبك',en:'Pick your drink'},
+  how2:{ar:'زد الإضافات',en:'Add your extras'},
+  how3:{ar:'استلمه جاهز',en:'Grab it, ready'},
+  menu:{ar:'المنيو',en:'Menu'},
+  fromMenu:{ar:'الأصناف والأسعار من منيو Bear be matcha',en:'Items and prices from Bear be matcha’s menu'},
+  addonsTitle:{ar:'الإضافات',en:'Add ons'},
+  yourOrder:{ar:'طلبك',en:'Your order'},
+  emptyCart:{ar:'السلة فاضية. الدب ينتظر طلبك 🐻',en:'Your cart is empty. The bear is waiting 🐻'},
+  total:{ar:'المجموع',en:'Total'},
+  pickup:{ar:'وقت الاستلام',en:'Pickup time'},
+  inMin:{ar:'بعد {m} د',en:'In {m} min'},
+  name:{ar:'الاسم',en:'Name'},
+  namePh:{ar:'عشان نناديك باسمك',en:'So we can call your name'},
+  nameErr:{ar:'اكتب اسمك عشان نعرف الطلب لمين',en:'Add your name so we know whose order it is'},
+  send:{ar:'أرسل الطلب على الواتساب',en:'Send order on WhatsApp'},
+  shopSees:{ar:'هذا اللي يوصل للمحل على الواتساب',en:'This is what the shop gets on WhatsApp'},
+  shopSeesCap:{ar:'الطلب يوصل مرتب: الأصناف، الإضافات، الوقت والمجموع. بدون أخذ ورد بالرسائل.',en:'Orders arrive tidy: items, add ons, time and total. No back-and-forth in DMs.'},
+  viewOrder:{ar:'عرض الطلب',en:'View order'},
+  add:{ar:'أضف',en:'Add'},
+  update:{ar:'حدّث',en:'Update'},
+  added:{ar:'انضاف للسلة ✓',en:'Added to cart ✓'},
+  extra:{ar:'الإضافات',en:'Add ons'},
+  optional:{ar:'اختياري · كل إضافة +٣',en:'Optional · +3 each'},
+  doneTitle:{ar:'طلبك جاهز للإرسال!',en:'Your order is ready to send!'},
+  doneText:{ar:'فتحنا لك الواتساب والرسالة مكتوبة. اضغط إرسال هناك، ونجهز طلبك على الوقت.',en:'WhatsApp is open with your order written out. Press send there and we’ll have it ready on time.'},
+  doneNum:{ar:'رقم الطلب',en:'Order'},
+  newOrder:{ar:'طلب جديد',en:'New order'},
+  visitTitle:{ar:'الفرع',en:'Branch'},
+  visitText:{ar:'العنوان ورابط الخريطة يُضاف من صاحب المحل',en:'Address and map link added by the owner'},
+  hoursTitle:{ar:'أوقات العمل',en:'Opening hours'},
+  hoursText:{ar:'تُضاف من صاحب المحل',en:'Added by the owner'},
+  footer:{ar:'Bear be matcha 🐻🍵 — تصميم تجريبي من Pixel & Co.',en:'Bear be matcha 🐻🍵 — sample by Pixel & Co.'},
+  sar:{ar:'{n} ر.س',en:'SAR {n}'},
+  msgHead:{ar:'طلب جديد من الموقع 🐻🍵',en:'New website order 🐻🍵'},
+  msgName:{ar:'الاسم',en:'Name'},
+  msgPick:{ar:'الاستلام',en:'Pickup'},
+  msgNum:{ar:'رقم الطلب',en:'Order no.'}
+};
+// Add ons exactly as on their menu, all +3.
+const EXTRAS=[
+  {id:'dose',ar:'جرعة ماتشا',en:'Matcha dose',p:3},
+  {id:'coco',ar:'حليب جوز الهند',en:'Coconut milk',p:3},
+  {id:'sstr',ar:'سيروب فراولة منزلي',en:'In house strawberry',p:3},
+  {id:'cfoam',ar:'فوم منزلي كريمي',en:'In house cream foam',p:3},
+  {id:'sfoam',ar:'فوم فراولة منزلي كريمي',en:'In house strawberry foam',p:3},
+  {id:'party',ar:'كيس الإحتفالات',en:'Partee bag',p:3}
+];
+const G='#7FA65A', GD='#55803A', MILK='#FBF3DC';
+// layers bottom → top: syrup, milk, matcha
+const menu=[
+  {id:'classic',ar:'كلاسيك فانيلا ماتشا',en:'Classic vanilla matcha',dar:'ماتشا ناعمة بلمسة فانيلا حلوه.',den:'Smooth matcha sweetened with a touch of vanilla.',p:23,syrup:'#F3E3B3'},
+  {id:'banana',ar:'بنانا جليز ماتشا',en:'Banana glaze matcha',dar:'سيروب الموز المنزلي مع الماتشا الفاخرة.',den:'In house banana syrup with high quality matcha.',p:26,syrup:'#F2CB4E'},
+  {id:'seasalt',ar:'سي سولت فانيلا ماتشا',en:'Sea salt vanilla matcha',dar:'فانيلا حلوه ممزوجة بملوحة ملح البحر.',den:'Sweet vanilla balanced with a hint of sea salt.',p:24,syrup:'#E9E4D2',salt:true},
+  {id:'pancake',ar:'بانكيك ميبل ماتشا',en:'Pancake maple matcha',dar:'سيروب الميبل الممزوج بالقرفة مستوحاة من البانكيك الطازج.',den:'Maple sweetness with warm cinnamon and a touch of salt.',p:24,syrup:'#C98A3D'},
+  {id:'bday',ar:'بيرثداي كيك ماتشا',en:'Birthdaee cake matcha',dar:'ماتشا بطبقة الفوم الكريمي او فوم الفراولة المنزلي ورشات سبرينكلز ملونة.',den:'A playful matcha topped with creamy foam and colorful sprinkles.',p:25,syrup:'#F3E3B3',foam:true,sprinkles:true}
+];
+const TIMES=[15,30,45,60];
+const byId=Object.fromEntries(menu.map(m=>[m.id,m]));
+let lang='ar', cart=[], pick=15, name='', sheet=null, done=null, nameErr=false;
+try{const s=JSON.parse(localStorage.getItem('bbm3')||'{}');if(s.lang)lang=s.lang;if(Array.isArray(s.cart))cart=s.cart.filter(l=>byId[l.id]);if(s.name)name=s.name;}catch(e){}
+if(!cart.length) cart=[ // example order so the page opens filled in
+  {id:'banana',o:{extra:['cfoam']},q:2},
+  {id:'bday',o:{extra:['sfoam']},q:1}];
+
+const $=id=>document.getElementById(id);
+const tx=(k,v={})=>{let s=(T[k]||{})[lang]??k;for(const x in v)s=s.replace('{'+x+'}',v[x]);return s};
+const L=o=>lang==='ar'?o.ar:o.en;
+const sar=n=>tx('sar',{n});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function save(){try{localStorage.setItem('bbm3',JSON.stringify({lang,cart,name}))}catch(e){}}
+function clock(min){const d=new Date(Date.now()+min*60000);let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');const pm=h>=12;h=h%12||12;return `${h}:${m} ${lang==='ar'?(pm?'م':'ص'):(pm?'PM':'AM')}`}
+const defaults=()=>({extra:[]});
+const ex=id=>EXTRAS.find(e=>e.id===id);
+const unit=(it,o)=>it.p+o.extra.reduce((s,e)=>s+ex(e).p,0);
+const optText=(it,o)=>o.extra.map(e=>'+ '+L(ex(e))).join(' · ');
+const sig=(id,o)=>id+'|'+[...o.extra].sort().join(',');
+let uid=0;
+
+/* drink drawing: brown hand-drawn cup, blue straw like the bear's outline */
+function art(it,o,{pour=false}={}){
+  o=o||defaults(); const k='c'+(uid++), has=e=>o.extra.includes(e);
+  const milk=has('coco')?'#FFFDF6':MILK, tea=has('dose')?GD:G;
+  const layers=[]; if(has('sstr'))layers.push('#EE9DAA'); layers.push(it.syrup,milk,milk,tea);
+  const foamC=has('sfoam')?'#F6C2CB':(has('cfoam')||it.foam)?'#FFFBEF':null;
+  const top=foamC?42:34, bot=124, h=(bot-top)/layers.length;
+  const rects=layers.map((c,i)=>`<rect class="fill" x="0" y="${(bot-(i+1)*h).toFixed(1)}" width="100" height="${(h+.6).toFixed(1)}" fill="${c}"/>`).join('');
+  const foam=foamC?`<path class="fill" d="M0 ${top+1} q12 -10 25 -3 q12 -9 25 -2 q12 -9 25 -2 q12 -8 25 0 V${top+4} H0z" fill="${foamC}"/><rect class="fill" x="0" y="${top-1}" width="100" height="5" fill="${foamC}"/>`:'';
+  const spr=it.sprinkles?[[30,34,'#EE9DAA',20],[44,31,'#7E93B2',-30],[58,35,'#F2CB4E',40],[70,32,'#7FA65A',-10],[38,38,'#7E93B2',60],[63,39,'#EE9DAA',-50]].map(([x,y,c,r])=>`<rect x="${x}" y="${y}" width="7" height="2.6" rx="1.3" fill="${c}" transform="rotate(${r} ${x+3} ${y+1})"/>`).join(''):'';
+  const salt=it.salt?[[34,38],[48,36],[62,39],[72,37]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.6" fill="#fff"/>`).join(''):'';
+  const cubes=[[30,58,-12],[54,70,10]].map(([x,y,r])=>`<rect x="${x}" y="${y}" width="16" height="16" rx="3" fill="#fff" opacity=".45" transform="rotate(${r} ${x+8} ${y+8})"/>`).join('');
+  return `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <defs><clipPath id="${k}"><path d="M15 20H85L77.5 124H22.5Z"/></clipPath></defs>
+    <path d="M60 2 L54 64" stroke="#7E93B2" stroke-width="7" stroke-linecap="round"/>
+    <path d="M15 20H85L77.5 124H22.5Z" fill="rgba(255,255,255,.5)"/>
+    <g clip-path="url(#${k})" class="${pour?'pour':''}">${rects}${cubes}${foam}</g>
+    <g clip-path="url(#${k})">${spr}${salt}</g>
+    <path d="M15 20H85L77.5 124H22.5Z" fill="none" stroke="#4B2A1E" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M24 30 L29 114" stroke="#fff" stroke-width="3.5" opacity=".6" stroke-linecap="round"/>
+    <path d="M10 15.5 Q50 12 90 15.5 L89 23 Q50 20 11 23Z" fill="#FFF7DC" stroke="#4B2A1E" stroke-width="2.6" stroke-linejoin="round"/>
+    ${has('party')?`<g transform="translate(66 92) rotate(10)"><path d="M0 8h22l-2 22H2z" fill="#EE9DAA" stroke="#4B2A1E" stroke-width="2.2" stroke-linejoin="round"/><path d="M6 8q5 -9 10 0" fill="none" stroke="#4B2A1E" stroke-width="2.2"/><path d="M11 14l1.6 3.4 3.6.4-2.7 2.4.8 3.6-3.3-1.9-3.3 1.9.8-3.6-2.7-2.4 3.6-.4z" fill="#FFF7DC"/></g>`:''}
+  </svg>`;
+}
+
+/* rendering */
+function renderStatic(){
+  const de=document.documentElement; de.lang=lang; de.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=tx(el.dataset.t));
+
+  $('lang').textContent=lang==='ar'?'EN':'عربي';
+  $('cartBtn').setAttribute('aria-label',tx('yourOrder'));
+  $('addonList').innerHTML=EXTRAS.map(e=>`<li><span>${L(e)}</span><span>+${e.p}</span></li>`).join('');
+}
+function renderMenu(){
+  $('items').innerHTML=menu.map(i=>{const n=cart.filter(l=>l.id===i.id).reduce((s,l)=>s+l.q,0);
+    return `<button class="item card" type="button" data-open="${i.id}">
+      <span class="art">${art(i)}</span>
+      <span style="min-width:0"><h3>${L(i)}</h3><p class="desc">${L({ar:i.dar,en:i.den})}</p><span class="price">${sar(i.p)}</span></span>
+      <span class="plus" aria-hidden="true">+${n?`<span class="n">${n}</span>`:''}</span></button>`}).join('');
+}
+function totals(){return{count:cart.reduce((s,l)=>s+l.q,0),total:cart.reduce((s,l)=>s+unit(byId[l.id],l.o)*l.q,0)}}
+function orderNo(){return 'BB-'+String(1000+((Date.now()/60000|0)%9000))}
+function message(no){
+  const {total}=totals();
+  return [tx('msgHead'), `${tx('msgNum')}: ${no}`, `${tx('msgName')}: ${name.trim()||'—'}`, `${tx('msgPick')}: ${clock(pick)} (${tx('inMin',{m:pick})})`, '',
+    ...cart.map(l=>{const it=byId[l.id],ot=optText(it,l.o);return `• ${l.q}× ${L(it)} — ${sar(unit(it,l.o)*l.q)}${ot?'\n   '+ot:''}`}),'',
+    `${tx('total')}: ${sar(total)}`].join('\n');
+}
+function renderCheckout(){
+  const {count,total}=totals();
+  const b=$('badge'); b.hidden=!count; b.textContent=count;
+  $('cartbar').classList.toggle('show',count>0&&!done);
+  $('cbCount').textContent=count; $('cbTotal').textContent=sar(total);
+  if(done){
+    $('checkoutBody').innerHTML=`<div class="done"><img src="img/logo.png" alt="">
+      <h3>${tx('doneTitle')}</h3><p>${tx('doneText')}</p>
+      <span class="num">${tx('doneNum')} ${done}</span><br>
+      <button class="ghost" type="button" id="again">${tx('newOrder')}</button></div>`;
+    return;
+  }
+  const lines=cart.length?cart.map((l,i)=>{const it=byId[l.id],ot=optText(it,l.o);return `<li class="line">${art(it,l.o)}<div style="min-width:0"><div class="nm">${L(it)}</div>${ot?`<div class="op">${esc(ot)}</div>`:''}
+      <div class="mini"><button type="button" data-line="${i}" data-d="-1" aria-label="−">−</button><output>${l.q}</output><button type="button" data-line="${i}" data-d="1" aria-label="+">+</button></div></div>
+      <div class="pr">${sar(unit(it,l.o)*l.q)}</div></li>`}).join('')
+    :`<li class="empty"><img src="img/bear.png" alt="">${tx('emptyCart')}</li>`;
+  const no=orderNo();
+  $('checkoutBody').innerHTML=`<h2>${tx('yourOrder')}</h2><ul class="lines">${lines}</ul>
+    <div class="total"><span>${tx('total')}</span><span>${sar(total)}</span></div>
+    <span class="lbl">${tx('pickup')}</span>
+    <div class="times">${TIMES.map(m=>`<button class="time" type="button" data-m="${m}" aria-pressed="${m===pick}">${tx('inMin',{m})}<small>${clock(m)}</small></button>`).join('')}</div>
+    <label class="lbl" for="name">${tx('name')}</label>
+    <input type="text" id="name" autocomplete="given-name" value="${esc(name)}" placeholder="${tx('namePh')}" aria-invalid="${nameErr}">
+    ${nameErr?`<p class="err">${tx('nameErr')}</p>`:''}
+    <button class="send" type="button" id="send" ${cart.length?'':'disabled'}><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3a.4.4 0 0 0 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg>${tx('send')}</button>
+    ${cart.length?`<div class="shop-sees"><div class="bar"><img src="img/bear.png" alt=""><span>Bear be matcha<small>${tx('shopSees')}</small></span></div>
+      <div class="chat"><div class="bubble">${esc(message(no))}<span class="meta">${clock(0)} ✓✓</span></div></div></div>
+      <p class="caption">${tx('shopSeesCap')}</p>`:''}`;
+}
+function renderAll(){renderStatic();renderMenu();renderCheckout();if(sheet)renderSheet(false)}
+
+/* add-ons sheet */
+function openSheet(id,lineIndex=null){
+  const base=lineIndex!=null?cart[lineIndex]:null;
+  sheet={id,o:base?{extra:[...base.o.extra]}:defaults(),q:base?base.q:1,line:lineIndex,last:document.activeElement};
+  renderSheet(true);
+  $('scrim').classList.add('open'); $('sheet').classList.add('open'); document.body.classList.add('locked');
+  setTimeout(()=>{const x=$('sheetIn').querySelector('.x');x&&x.focus()},50);
+}
+function closeSheet(){
+  if(!sheet)return; const last=sheet.last; sheet=null;
+  $('scrim').classList.remove('open'); $('sheet').classList.remove('open'); document.body.classList.remove('locked');
+  last&&last.focus&&last.focus();
+}
+function renderSheet(pour){
+  const it=byId[sheet.id];
+  $('sheetIn').innerHTML=`<div class="grab"></div><button class="x" type="button" data-close aria-label="Close">×</button>
+    <div class="sheet-top"><div class="stage">${art(it,sheet.o,{pour})}</div>
+      <div style="min-width:0"><h3 id="sheetTitle">${L(it)}</h3><p class="desc">${L({ar:it.dar,en:it.den})}</p></div></div>
+    <div class="opt"><div class="opt-label">${tx('extra')}<small>${tx('optional')}</small></div><div class="chips">${EXTRAS.map(e=>
+      `<button class="chip" type="button" data-v="${e.id}" aria-pressed="${sheet.o.extra.includes(e.id)}">${L(e)}<small>+${e.p}</small></button>`).join('')}</div></div>
+    <div class="sheet-foot"><div class="stepper"><button type="button" data-q="-1" aria-label="−">−</button><output>${sheet.q}</output><button type="button" data-q="1" aria-label="+">+</button></div>
+      <button class="add-btn" type="button" id="addBtn"><span>${tx(sheet.line!=null?'update':'add')}</span><span>${sar(unit(it,sheet.o)*sheet.q)}</span></button></div>`;
+}
+function commit(){
+  const s=sheet; if(!s)return;
+  if(s.line!=null) cart.splice(s.line,1);
+  const k=sig(s.id,s.o), same=cart.find(l=>sig(l.id,l.o)===k);
+  if(same) same.q+=s.q; else cart.push({id:s.id,o:s.o,q:s.q});
+  done=null; save(); closeSheet(); renderMenu(); renderCheckout(); toast(tx('added'));
+  const b=$('badge'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+}
+let tt; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1600)}
+
+/* events */
+$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';save();renderAll()});
+$('items').addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openSheet(b.dataset.open)});
+$('scrim').addEventListener('click',closeSheet);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+$('sheetIn').addEventListener('click',e=>{
+  if(e.target.closest('[data-close]'))return closeSheet();
+  if(e.target.closest('#addBtn'))return commit();
+  const q=e.target.closest('[data-q]'); if(q){sheet.q=Math.max(1,Math.min(20,sheet.q+Number(q.dataset.q)));return renderSheet(false)}
+  const c=e.target.closest('[data-v]'); if(c){const a=sheet.o.extra,v=c.dataset.v,i=a.indexOf(v);i<0?a.push(v):a.splice(i,1);
+    // the two foams don't stack: picking one swaps the other
+    if(i<0&&(v==='cfoam'||v==='sfoam')){const o=v==='cfoam'?'sfoam':'cfoam',j=a.indexOf(o);if(j>=0)a.splice(j,1)}
+    renderSheet(true)}
+});
+$('checkoutBody').addEventListener('click',e=>{
+  const ln=e.target.closest('[data-line]'); if(ln){const l=cart[+ln.dataset.line];l.q+=Number(ln.dataset.d);if(l.q<=0)cart.splice(+ln.dataset.line,1);save();renderMenu();return renderCheckout()}
+  const tm=e.target.closest('[data-m]'); if(tm){pick=+tm.dataset.m;return renderCheckout()}
+  if(e.target.closest('#again')){done=null;cart=[];save();renderMenu();renderCheckout();return $('menu').scrollIntoView()}
+  if(e.target.closest('#send')){
+    if(!name.trim()){nameErr=true;renderCheckout();return $('name').focus()}
+    const no=orderNo(); const a=document.createElement('a');a.href='https://wa.me/?text='+encodeURIComponent(message(no));a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+    done=no; renderCheckout(); $('checkout').scrollIntoView({block:'start'});
+  }
+});
+$('checkoutBody').addEventListener('input',e=>{if(e.target.id!=='name')return;name=e.target.value;save();if(nameErr&&name.trim()){nameErr=false;e.target.setAttribute('aria-invalid','false');const er=document.querySelector('.err');er&&er.remove()}
+  const bub=document.querySelector('.bubble');if(bub)bub.innerHTML=esc(message(orderNo()))+`<span class="meta">${clock(0)} ✓✓</span>`});
+addEventListener('scroll',()=>$('head').classList.toggle('scrolled',scrollY>8),{passive:true});
+renderAll();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* 3D story: one glass cup with the Bear be matcha logo. Each scroll step pours the next drink
+   from the bottom up (syrup, milk, matcha, then foam and sprinkles for the birthday cake).
+   In #record mode the page is driven frame by frame through window.__step(dt). */
+(function(){
+const T3={
+  title:{ar:'ماتشا الدب<br><em>بالـ 3D</em> 🐻',en:'Bear’s matcha,<br><em>in 3D</em> 🐻'},
+  introK:{ar:'Bear be matcha',en:'Bear be matcha'},
+  introH:{ar:'كل كوب له قصة',en:'Every cup has a story'},
+  introP:{ar:'اسحب للأسفل وشوف كل مشروب ينصب قدامك.',en:'Scroll down and watch each drink being poured.'},
+  hint:{ar:'اسحب',en:'Scroll'},
+  addIt:{ar:'أضف للطلب',en:'Add to order'}
+};
+const t3=k=>T3[k][lang];
+// bottom → top: [colour, top of layer as a fraction of the fill]
+const DRINKS={
+  classic:{layers:[['#E9D9A8',.2],['#F7F1E3',.62],['#6F9B45',1]],glow:'#FFF3CF'},
+  banana:{layers:[['#F2C935',.24],['#F7F1E3',.62],['#6F9B45',1]],glow:'#FFE89A'},
+  seasalt:{layers:[['#E4E1D3',.18],['#F7F1E3',.6],['#6F9B45',1]],glow:'#EEF2F6',salt:true},
+  pancake:{layers:[['#B06A25',.22],['#F4E6CC',.6],['#6F9B45',1]],glow:'#FFD9A6'},
+  bday:{layers:[['#E9D9A8',.16],['#F7F1E3',.55],['#6F9B45',1]],glow:'#FFD6DE',foam:'#FFF8EC',sprinkles:true}
+};
+const ORDER=['classic','banana','seasalt','pancake','bday'];
+const N=ORDER.length;
+const REC=location.hash==='#record';
+let prog=0;
+
+const cv=document.getElementById('gl');
+const card=document.getElementById('card3'), intro=document.getElementById('intro3'), glow=document.getElementById('glow3'), dots=document.getElementById('dots3');
+dots.innerHTML='<b></b>'.repeat(N+1);
+
+function texts(){
+  document.getElementById('t3').innerHTML=t3('title');
+  renderCard(true);
+}
+let chap=-1;
+function renderCard(force){
+  const c=Math.round(prog);
+  if(c===chap&&!force)return;
+  const first=chap<0; chap=c;
+  const fill=()=>{
+    if(c===0){
+      card.innerHTML=`<div class="kick">${t3('introK')}</div><h2>${t3('introH')}</h2><p>${t3('introP')}</p><div class="hint"><i></i>${t3('hint')}</div>`;
+    }else{
+      const it=byId[ORDER[c-1]];
+      card.innerHTML=`<div class="kick">${c} / ${N}</div><h2>${L(it)}</h2><p>${L({ar:it.dar,en:it.den})}</p>
+        <div class="row"><span class="pr">${sar(it.p)}</span><button class="add3" type="button" data-open="${it.id}">${t3('addIt')}</button></div>`;
+    }
+    card.classList.remove('swap'); card.classList.toggle('first',c===0);
+  };
+  if(first||force){fill()}else{card.classList.add('swap');setTimeout(fill,REC?0:220)}
+  intro.classList.toggle('off',c!==0);
+  dots.querySelectorAll('b').forEach((b,i)=>b.classList.toggle('on',i===c));
+  const d=DRINKS[ORDER[Math.max(0,c-1)]];
+  glow.style.background=`radial-gradient(circle,${d.glow} 0%,rgba(255,246,214,0) 62%)`;
+  if(c>0)pourTo(ORDER[c-1]);
+}
+card.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openSheet(b.dataset.open)});
+
+/* ---------- three.js ---------- */
+if(!window.THREE){texts();return}
+const R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,preserveDrawingBuffer:REC});
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+R.outputEncoding=THREE.sRGBEncoding;
+R.toneMapping=THREE.ACESFilmicToneMapping; R.toneMappingExposure=1.0;
+R.physicallyCorrectLights=true;
+const S=new THREE.Scene();
+const C=new THREE.PerspectiveCamera(28,1,.1,100);
+
+// soft studio environment for the glass reflections
+(function(){
+  const pm=new THREE.PMREMGenerator(R), es=new THREE.Scene();
+  es.add(new THREE.Mesh(new THREE.BoxGeometry(24,14,24),new THREE.MeshBasicMaterial({color:0x9b8a63,side:THREE.BackSide})));
+  const panel=(w,h,p,k)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(k,k,k*.95)}));m.position.set(...p);m.lookAt(0,0,0);es.add(m)};
+  panel(5,9,[-8,1,4],6); panel(3,10,[8,0,2],4); panel(12,3,[0,6.8,0],3); panel(6,6,[0,1,-11],2);
+  S.environment=pm.fromScene(es,.03).texture;
+})();
+const key=new THREE.DirectionalLight(0xfff4e0,2.2); key.position.set(-3,5,4); S.add(key);
+const rim=new THREE.DirectionalLight(0xdfe8ff,1.6); rim.position.set(4,2,-3); S.add(rim);
+S.add(new THREE.HemisphereLight(0xfff6dc,0x8a6a3a,.6));
+
+const H=2.6, r0=.74, r1=.98, WALL=.035;
+const rOut=y=>r0+(r1-r0)*y/H;
+const rIn=y=>rOut(y)-WALL-.012;
+const cup=new THREE.Group(); S.add(cup);
+
+// glass
+const glass=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.05,transmission:1,thickness:.08,ior:1.42,clearcoat:1,clearcoatRoughness:.05,envMapIntensity:1.3,transparent:true});
+const prof=[new THREE.Vector2(0,0),new THREE.Vector2(r0,0)];
+for(let i=1;i<=24;i++){const y=H*i/24;prof.push(new THREE.Vector2(rOut(y),y))}
+prof.push(new THREE.Vector2(rOut(H)-WALL,H));
+for(let i=24;i>=1;i--){const y=Math.max(.07,H*i/24);prof.push(new THREE.Vector2(rOut(y)-WALL,y))}
+prof.push(new THREE.Vector2(0,.07));
+cup.add(new THREE.Mesh(new THREE.LatheGeometry(prof,96),glass));
+const rimM=new THREE.Mesh(new THREE.TorusGeometry(r1-WALL/2,.022,12,96),new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.15,transmission:.6,transparent:true,opacity:.9}));
+rimM.rotation.x=Math.PI/2; rimM.position.y=H; cup.add(rimM);
+
+// liquid: one lathe with per-vertex colours, recoloured every frame while pouring
+const FILL=2.05;
+const lp=[new THREE.Vector2(0,.075)];
+const STEPS=70;
+for(let i=0;i<=STEPS;i++){const y=.075+(FILL-.075)*i/STEPS;lp.push(new THREE.Vector2(rIn(y),y))}
+for(let i=1;i<=8;i++)lp.push(new THREE.Vector2(rIn(FILL)*(1-i/8),FILL));
+const lg=new THREE.LatheGeometry(lp,72);
+const lpos=lg.attributes.position, lcol=new Float32Array(lpos.count*3);
+lg.setAttribute('color',new THREE.BufferAttribute(lcol,3));
+const liquid=new THREE.Mesh(lg,new THREE.MeshPhysicalMaterial({vertexColors:true,roughness:.32,metalness:0,clearcoat:.4,clearcoatRoughness:.4}));
+cup.add(liquid);
+
+// foam cap + sprinkles (birthday cake)
+const fp=[];
+for(let i=0;i<=10;i++){const a=i/10;fp.push(new THREE.Vector2(rIn(FILL+.3*a)*(1-.02*a),FILL-.02+.3*a))}
+for(let i=1;i<=10;i++){const a=i/10;fp.push(new THREE.Vector2(rIn(FILL+.3)*Math.cos(a*Math.PI/2),FILL+.28+.1*Math.sin(a*Math.PI/2)))}
+const foam=new THREE.Mesh(new THREE.LatheGeometry(fp,72),new THREE.MeshPhysicalMaterial({color:0xFFF8EC,roughness:.75,sheen:new THREE.Color(0x888888)}));
+cup.add(foam);
+const SPR=46, sprG=new THREE.CylinderGeometry(.024,.024,.13,6);
+const spr=new THREE.InstancedMesh(sprG,new THREE.MeshStandardMaterial({roughness:.4}),SPR);
+const sprCols=['#EE8FA0','#7E93B2','#F2C935','#7FA65A','#FFFFFF'];
+const dummy=new THREE.Object3D();
+for(let i=0;i<SPR;i++){
+  const a=i*2.399, rr=Math.sqrt((i+.5)/SPR)*(rIn(FILL+.3)-.08);
+  const x=Math.cos(a)*rr, z=Math.sin(a)*rr, top=FILL+.28+.1*Math.cos(Math.min(1,rr/rIn(FILL+.3))*Math.PI/2);
+  dummy.position.set(x,top+.01,z); dummy.rotation.set(Math.PI/2,0,a*3.1); dummy.updateMatrix();
+  spr.setMatrixAt(i,dummy.matrix); spr.setColorAt(i,new THREE.Color(sprCols[i%5]).convertSRGBToLinear());
+}
+cup.add(spr);
+// sea salt flakes on top of the matcha
+const salt=new THREE.InstancedMesh(new THREE.OctahedronGeometry(.025,0),new THREE.MeshStandardMaterial({color:0xffffff,roughness:.3}),26);
+for(let i=0;i<26;i++){const a=i*2.399,rr=Math.sqrt((i+.5)/26)*(rIn(FILL)-.12);dummy.position.set(Math.cos(a)*rr,FILL+.005,Math.sin(a)*rr);dummy.rotation.set(i,i*2,i*3);dummy.updateMatrix();salt.setMatrixAt(i,dummy.matrix)}
+cup.add(salt);
+
+// ice
+function roundedBox(s,r){
+  const g=new THREE.BoxGeometry(s,s,s,6,6,6), p=g.attributes.position, v=new THREE.Vector3(), c=new THREE.Vector3(), a=s/2-r;
+  for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);c.set(Math.max(-a,Math.min(a,v.x)),Math.max(-a,Math.min(a,v.y)),Math.max(-a,Math.min(a,v.z)));v.sub(c).normalize().multiplyScalar(r).add(c);p.setXYZ(i,v.x,v.y,v.z)}
+  g.computeVertexNormals();return g;
+}
+const iceM=new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.12,transmission:1,thickness:.35,ior:1.31,clearcoat:1,transparent:true});
+const ices=[[-.28,.12,.22,.4],[.3,.05,-.18,1.1],[.05,.18,.4,2.2],[-.2,.08,-.35,2.9]].map(([x,dy,z,r],i)=>{const m=new THREE.Mesh(roundedBox(.4,.07),iceM);m.position.set(x,FILL-.16+dy,z);m.rotation.set(r,r*1.7,r*.6);m.userData={y:FILL-.16+dy,k:i};cup.add(m);return m});
+
+// straw, in the bear's blue-grey
+const straw=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([new THREE.Vector3(-.1,.25,.05),new THREE.Vector3(.18,H*.8,.12),new THREE.Vector3(.32,H+1.1,.18)]),40,.065,16),new THREE.MeshPhysicalMaterial({color:new THREE.Color(0x7E93B2).convertSRGBToLinear(),roughness:.35,clearcoat:.6}));
+cup.add(straw);
+
+// printed logo on the front of the cup
+const tex=new THREE.TextureLoader().load('img/logo.png',()=>{needs=true});
+tex.encoding=THREE.sRGBEncoding; tex.anisotropy=8;
+const LY0=.6, LY1=1.6, th=1.1;
+const logo=new THREE.Mesh(new THREE.CylinderGeometry(rOut(LY1)+.004,rOut(LY0)+.004,LY1-LY0,48,1,true,-th/2,th),new THREE.MeshStandardMaterial({map:tex,alphaTest:.45,roughness:.55,side:THREE.FrontSide}));
+logo.position.y=(LY0+LY1)/2; cup.add(logo);
+
+// soft contact shadow
+const sc=document.createElement('canvas');sc.width=sc.height=128;const sx=sc.getContext('2d');
+const gr=sx.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(75,42,30,.55)');gr.addColorStop(1,'rgba(75,42,30,0)');sx.fillStyle=gr;sx.fillRect(0,0,128,128);
+const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.2,3.2),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(sc),transparent:true,depthWrite:false}));
+shadow.rotation.x=-Math.PI/2; shadow.position.y=.002; S.add(shadow);
+
+/* colouring */
+const cA=new THREE.Color(), cB=new THREE.Color(), tmp=new THREE.Color();
+const parsed={}; for(const k in DRINKS)parsed[k]=DRINKS[k].layers.map(([c,h])=>[new THREE.Color(c).convertSRGBToLinear(),h]);
+function layerColor(k,f,out){
+  const L=parsed[k], soft=.06;
+  out.copy(L[0][0]);
+  for(let i=1;i<L.length;i++){const b=L[i-1][1],t=Math.min(1,Math.max(0,(f-b+soft)/(soft*2)));const s=t*t*(3-2*t);if(s>0)out.lerp(L[i][0],s)}
+  return out;
+}
+let from='classic', to='classic', pourT=99, fromFoam=0, toFoam=0;
+function pourTo(k){if(k===to&&pourT>1)return;from=to;to=k;pourT=0;fromFoam=foamV;toFoam=DRINKS[k].foam?1:0}
+let foamV=0, saltV=0;
+function colour(time){
+  const p=Math.min(1,pourT), lvl=p*1.25-.12;
+  for(let i=0;i<lpos.count;i++){
+    const x=lpos.getX(i),y=lpos.getY(i),z=lpos.getZ(i);
+    const ang=Math.atan2(z,x), f=(y-.075)/(FILL-.075);
+    const wave=Math.sin(ang*3+f*6+time*.7)*.035+Math.sin(ang*5-time*.4)*.015;
+    const ff=Math.min(1,Math.max(0,f+wave));
+    layerColor(from,ff,cA); layerColor(to,ff,cB);
+    const m=Math.min(1,Math.max(0,(lvl-f+wave*2)/.12));
+    tmp.copy(cA).lerp(cB,m*m*(3-2*m));
+    lcol[i*3]=tmp.r;lcol[i*3+1]=tmp.g;lcol[i*3+2]=tmp.b;
+  }
+  lg.attributes.color.needsUpdate=true;
+  const fT=Math.min(1,Math.max(0,(p-.75)/.25));
+  foamV=fromFoam+(toFoam-fromFoam)*(toFoam?fT:Math.min(1,p*3));
+  foam.scale.set(1,Math.max(.001,foamV),1); foam.position.y=(FILL-.02)*(1-foamV); foam.visible=foamV>.01;
+  spr.visible=foamV>.6&&DRINKS[to].sprinkles; spr.scale.setScalar(1);
+  saltV=DRINKS[to].salt?Math.min(1,Math.max(0,(p-.8)/.2)):0; salt.visible=saltV>.05; salt.scale.setScalar(Math.max(.01,saltV));
+}
+
+/* layout */
+let W=0,Hh=0,needs=true;
+function size(){
+  const w=cv.clientWidth,h=cv.clientHeight; if(w===W&&h===Hh)return; W=w;Hh=h;
+  R.setSize(w,h,false); C.aspect=w/h;
+  const wide=w/h>1.1;
+  const dist=wide?10.5:Math.max(10.5,12.8/Math.min(1,w/h*1.75));
+  C.position.set(0,4.3,dist); C.lookAt(0,wide?1.75:1.05,0);
+  cup.position.x=wide?-Math.min(2.4,w/h*1.05):0; glow.style.left=wide?'34%':'50%'; shadow.position.x=cup.position.x;
+  C.updateProjectionMatrix(); needs=true;
+}
+
+/* scroll → progress */
+const story=document.getElementById('story');
+function readScroll(){
+  const r=story.getBoundingClientRect(), span=r.height-innerHeight;
+  prog=Math.min(N,Math.max(0,-r.top/span*N));
+}
+
+let time=0;
+function frame(dt){
+  time+=dt; if(pourT<=1.5)pourT+=dt/1.5;
+  size(); readScroll(); renderCard(false);
+  document.body.classList.toggle('instory',story.getBoundingClientRect().bottom>innerHeight*.6);
+  const near=Math.round(prog), d=prog-near;
+  cup.rotation.y=Math.sin(time*.45)*.3+d*2.6+(near===0?time*.35:0)*(1-Math.min(1,prog*2));
+  cup.rotation.x=.06+Math.sin(time*.6)*.015;
+  cup.position.y=Math.sin(time*1.1)*.04;
+  ices.forEach(m=>{m.position.y=m.userData.y+Math.sin(time*1.3+m.userData.k)*.025;m.rotation.y+=dt*.15});
+  colour(time);
+  R.render(S,C);
+}
+texts(); pourTo('classic'); pourT=2;
+if(REC){
+  window.__step=dt=>frame(dt);
+  window.__ready=true;
+}else{
+  let last=performance.now();
+  const loop=now=>{const dt=Math.min(.05,(now-last)/1000);last=now;frame(dt);requestAnimationFrame(loop)};
+  requestAnimationFrame(loop);
+}
+// keep the story text in step with the language toggle
+document.getElementById('lang').addEventListener('click',()=>setTimeout(texts,0));
+})();
+</script>
+
