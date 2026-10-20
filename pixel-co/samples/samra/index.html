@@ -1,0 +1,375 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>SAMRA Abayas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&family=Reem+Kufi:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: an abaya boutique store. Full-bleed photo hero, a quiet delivery strip, a 2-up collection grid,
+   craft and fabric story, a height-to-size finder, gift wrapping, boutique visit, then a bag drawer that
+   writes the order for WhatsApp. One committed look: warm stone, ink black, antique gold. */
+:root{
+  --stone:#EDE4D6; --sand:#F6F1E8; --paper:#FFFCF7; --ink:#1B1915; --ink-2:#4A443B; --muted:#857B6D;
+  --gold:#A3854F; --gold-soft:#E7DBC3; --line:#DDD1BE; --olive:#4C5536; --wa:#1FA855;
+  --display:'Reem Kufi','IBM Plex Sans Arabic',system-ui,sans-serif;
+  --latin:'Bodoni Moda',Georgia,serif;
+  --body:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+html[lang=en]{--display:'Bodoni Moda',Georgia,serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sand);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
+body.locked{overflow:hidden}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;font-weight:500}
+.sample{background:var(--ink);color:var(--gold-soft);font-size:12px;text-align:center;padding-block:6px;letter-spacing:.02em}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--sand)}
+
+/* header */
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(246,241,232,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+.head.scrolled{border-bottom-color:var(--line)}
+.head .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:12px}
+.nav{display:flex;gap:18px;font-size:14px}
+.nav a{color:var(--ink-2);text-decoration:none}
+.logo{text-align:center;text-decoration:none;color:var(--ink);line-height:1}
+.logo b{display:block;font-family:var(--latin);font-weight:500;font-size:24px;letter-spacing:.42em;margin-inline-end:-.42em}
+.logo small{font-family:'Reem Kufi',sans-serif;font-size:12px;color:var(--gold);letter-spacing:.1em}
+.tools{display:flex;justify-content:flex-end;gap:10px;align-items:center}
+.lang{border:1px solid var(--ink);background:transparent;border-radius:999px;padding:3px 13px;font-size:13px}
+.bagbtn{position:relative;border:0;background:transparent;width:38px;height:38px;display:grid;place-items:center}
+.bagbtn svg{width:22px;height:22px}
+.badge{position:absolute;top:2px;inset-inline-end:0;min-width:18px;height:18px;border-radius:999px;background:var(--gold);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 4px;font-variant-numeric:tabular-nums}
+.badge[hidden]{display:none}
+@media (max-width:640px){.nav{display:none}.head .wrap{grid-template-columns:auto 1fr auto}.logo{text-align:start}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--stone)}
+.hero .img{position:absolute;inset:0;background:url(img/hero.jpg) center 30%/cover no-repeat;animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:scale(1.07) translateY(-1.5%)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,25,21,.0) 30%,rgba(27,25,21,.55) 100%)}
+html[dir=ltr] .hero::after{background:linear-gradient(270deg,rgba(27,25,21,0) 30%,rgba(27,25,21,.55) 100%)}
+.hero .wrap{position:relative;z-index:1;min-height:min(78vh,720px);display:flex;flex-direction:column;justify-content:flex-end;padding-block:48px 46px}
+.hero .copy{max-width:470px;color:#FFFCF7;margin-inline-start:auto}
+html[dir=ltr] .hero .copy{margin-inline-start:0}
+.kick{font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft)}
+.hero h1{font-family:var(--display);font-size:clamp(36px,8vw,66px);line-height:1.15;margin:10px 0 12px}
+.hero p{margin:0 0 22px;color:#EFE6D8;max-width:36ch}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--paper);color:var(--ink);border:0;border-radius:2px;padding:13px 26px;font-weight:500;text-decoration:none;letter-spacing:.04em}
+.cta.dark{background:var(--ink);color:var(--paper)}
+.render{position:absolute;z-index:1;bottom:12px;inset-inline-start:max(16px,env(safe-area-inset-left,0px));font-size:11px;color:rgba(255,252,247,.75);letter-spacing:.08em}
+@media (max-width:640px){.hero .wrap{min-height:560px}.hero::after{background:linear-gradient(0deg,rgba(27,25,21,.7) 0%,rgba(27,25,21,0) 60%)!important}.hero .copy{margin-inline-start:0}}
+
+.strip{border-block:1px solid var(--line);background:var(--paper)}
+.strip .wrap{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;padding-block:12px;font-size:13.5px;color:var(--ink-2)}
+.strip span::before{content:"✦";color:var(--gold);margin-inline-end:8px;font-size:10px}
+
+/* sections */
+section{padding-block:64px}
+.sh{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.sh h2{font-family:var(--display);font-size:clamp(28px,5vw,40px);line-height:1.2;margin:0}
+.sh p{margin:0;color:var(--muted);max-width:42ch;font-size:14.5px}
+.label{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+.prod{border:0;background:transparent;padding:0;text-align:start;min-width:0}
+.prod .ph{aspect-ratio:4/5;background:var(--stone);overflow:hidden;position:relative}
+.prod .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.prod:hover .ph img{transform:scale(1.04)}
+.prod .ph .new{position:absolute;top:10px;inset-inline-start:10px;background:var(--paper);font-size:11px;letter-spacing:.12em;padding:3px 9px}
+.prod h3{font-family:var(--display);font-size:17px;margin:12px 0 2px}
+.prod .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;color:var(--ink-2)}
+.prod .meta b{font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink)}
+.sw{display:flex;gap:5px}
+.sw i{width:11px;height:11px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+
+.craft{background:var(--paper)}
+.split{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(20px,5vw,64px);align-items:center}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+.split .tall{aspect-ratio:1/1;overflow:hidden}
+.split .tall img{width:100%;height:100%;object-fit:cover}
+.split h2{font-family:var(--display);font-size:clamp(28px,4.6vw,40px);line-height:1.25;margin:0 0 14px}
+.split p{color:var(--ink-2);margin:0 0 16px;max-width:46ch}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.facts b{display:block;font-family:var(--latin);font-size:26px;font-weight:500;color:var(--gold);font-variant-numeric:lining-nums}
+.facts span{font-size:13px;color:var(--muted)}
+.swatch{display:flex;gap:12px;align-items:center;margin-top:18px}
+.swatch img{width:96px;height:96px;object-fit:cover}
+.swatch p{margin:0;font-size:14px}
+
+/* size finder */
+.finder{background:var(--ink);color:var(--paper)}
+.finder .split{grid-template-columns:1fr 1fr}
+@media (max-width:820px){.finder .split{grid-template-columns:1fr}}
+.finder h2{color:var(--paper)}
+.finder p{color:#CFC5B5}
+.calc{background:#24211C;border:1px solid #3A352D;padding:22px}
+.calc label{display:block;font-size:13px;color:#CFC5B5;margin-bottom:8px}
+.range{display:flex;align-items:center;gap:14px}
+.range input{flex:1;accent-color:var(--gold)}
+.range output{font-family:var(--latin);font-size:22px;min-width:84px;text-align:end;font-variant-numeric:tabular-nums}
+.result{margin-top:18px;display:flex;align-items:baseline;gap:12px;border-top:1px solid #3A352D;padding-top:16px}
+.result b{font-family:var(--latin);font-size:48px;font-weight:500;color:var(--gold);line-height:1}
+.result span{color:#CFC5B5;font-size:14px}
+.chart{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:12px;text-align:center}
+.chart div{direction:ltr;border:1px solid #3A352D;padding:6px 2px;color:#CFC5B5;font-variant-numeric:tabular-nums}
+.chart div.on{border-color:var(--gold);color:var(--paper);background:rgba(163,133,79,.15)}
+.chart b{display:block;font-size:14px;color:var(--paper);font-weight:500}
+
+.visit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:820px){.visit{grid-template-columns:1fr}}
+.panel{background:var(--paper);display:grid;grid-template-rows:auto 1fr}
+.panel .ph{aspect-ratio:16/10;overflow:hidden}
+.panel .ph img{width:100%;height:100%;object-fit:cover}
+.panel .tx{padding:20px}
+.panel h3{font-family:var(--display);font-size:22px;margin:0 0 6px}
+.panel p{margin:0 0 14px;color:var(--ink-2);font-size:15px}
+footer{border-top:1px solid var(--line);padding-block:26px 120px;font-size:13px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* product sheet + bag drawer */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(27,25,21,.5);opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:94dvh;overflow:auto;background:var(--paper);transform:translateY(104%);transition:transform .38s cubic-bezier(.2,.9,.3,1);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet.open{transform:none}
+@media (min-width:860px){.sheet{left:50%;right:auto;top:50%;bottom:auto;width:860px;max-height:88vh;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:transform .3s,opacity .25s}.sheet.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.sheet-in{display:grid;grid-template-columns:1fr 1fr}
+@media (max-width:859px){.sheet-in{grid-template-columns:1fr}}
+.gal{background:var(--stone);position:relative}
+.gal .main{aspect-ratio:4/5;overflow:hidden}
+.gal .main img{width:100%;height:100%;object-fit:cover}
+@media (max-width:859px){.gal .main{aspect-ratio:1/1}}
+.thumbs{position:absolute;bottom:10px;inset-inline-start:10px;display:flex;gap:6px}
+.thumbs button{width:46px;height:46px;padding:0;border:1px solid var(--paper);opacity:.75;background:var(--stone);overflow:hidden}
+.thumbs button[aria-pressed="true"]{opacity:1;border-color:var(--gold);border-width:2px}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.info{padding:22px max(20px,env(safe-area-inset-right,0px)) 22px max(20px,env(safe-area-inset-left,0px));position:relative}
+.x{position:absolute;top:12px;inset-inline-end:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--paper);font-size:18px;display:grid;place-items:center}
+.info h3{font-family:var(--display);font-size:26px;margin:4px 0 4px;padding-inline-end:40px}
+.info .pr{font-size:18px;font-variant-numeric:tabular-nums}
+.info .d{color:var(--ink-2);font-size:14.5px;margin:10px 0 0}
+.opt{margin-top:18px}
+.opt .ol{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;color:var(--ink-2)}
+.opt .ol button{border:0;background:none;padding:0;color:var(--gold);text-decoration:underline;font-size:13px}
+.sizes{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sizes button{border:1px solid var(--line);background:var(--paper);padding:9px 0;font-variant-numeric:tabular-nums}
+.sizes button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);padding:11px 12px;width:100%;background:var(--paper);text-align:start}
+.tog i{width:38px;height:22px;border-radius:999px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.tog i::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.tog[aria-pressed="true"] i{background:var(--gold)}
+.tog[aria-pressed="true"] i::after{transform:translateX(16px)}
+html[dir=rtl] .tog[aria-pressed="true"] i::after{transform:translateX(-16px)}
+.tog small{display:block;color:var(--muted);font-size:12.5px}
+.addrow{display:flex;gap:10px;margin-top:20px}
+.qty{display:flex;align-items:center;border:1px solid var(--line)}
+.qty button{width:40px;height:46px;border:0;background:transparent;font-size:18px}
+.qty output{min-width:24px;text-align:center;font-variant-numeric:tabular-nums}
+.addbtn{flex:1;display:flex;justify-content:space-between;align-items:center;border:0;background:var(--ink);color:var(--paper);padding:0 18px;height:48px;letter-spacing:.03em}
+.addbtn:disabled{opacity:.4;cursor:not-allowed}
+.hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+.drawer{position:fixed;z-index:42;top:0;bottom:0;inset-inline-end:0;width:min(420px,100%);background:var(--paper);transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html[dir=rtl] .drawer{transform:translateX(-105%)}
+.drawer.open{transform:none!important}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dh h3{font-family:var(--display);font-size:20px;margin:0}
+.dh .x{position:static}
+.db{flex:1;overflow:auto;padding:14px 18px}
+.line{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;padding-block:12px;border-bottom:1px solid var(--line)}
+.line img{width:64px;height:80px;object-fit:cover}
+.line .nm{font-family:var(--display);font-size:15px}
+.line .op{font-size:12.5px;color:var(--muted)}
+.line .pr{font-variant-numeric:tabular-nums;font-size:14px;text-align:end}
+.line .rm{border:0;background:none;color:var(--muted);text-decoration:underline;font-size:12px;padding:0;margin-top:4px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+.df{border-top:1px solid var(--line);padding:14px 18px;display:grid;gap:10px}
+.df .tot{display:flex;justify-content:space-between;font-size:17px;font-variant-numeric:tabular-nums}
+.df textarea{width:100%;border:1px solid var(--line);background:var(--sand);padding:9px 11px;font:inherit;font-size:14px;min-height:60px;resize:vertical}
+.wa{display:flex;align-items:center;justify-content:center;gap:10px;border:0;background:var(--wa);color:#fff;height:48px;font-weight:500}
+.wa svg{width:20px;height:20px}
+.pay{border:1px solid var(--line);background:transparent;height:44px;color:var(--muted);cursor:not-allowed}
+.preview{background:#ECE5DD;padding:10px;font-size:12.5px}
+.preview .bub{background:#DCF8C6;border-radius:10px;padding:8px 10px;white-space:pre-wrap;line-height:1.5;font-family:system-ui,-apple-system,sans-serif}
+.toast{position:fixed;z-index:60;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:var(--paper);padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<div class="sample"><div class="wrap" data-t="sample"></div></div>
+<header class="head" id="head"><div class="wrap">
+  <nav class="nav"><a href="#shop" data-t="navShop"></a><a href="#craft" data-t="navCraft"></a><a href="#size" data-t="navSize"></a></nav>
+  <a class="logo" href="#top" aria-label="SAMRA"><b>SAMRA</b><small>سـمـرا</small></a>
+  <div class="tools"><button class="lang" id="lang" type="button">EN</button>
+    <button class="bagbtn" id="bagBtn" type="button" aria-label="Bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.3 12H6.3z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="badge" id="badge" hidden>0</span></button></div>
+</div></header>
+
+<main id="top">
+  <section class="hero" style="padding:0"><div class="img" aria-hidden="true"></div>
+    <div class="wrap"><div class="copy"><div class="kick" data-t="heroKick"></div><h1 data-t="heroTitle"></h1><p data-t="heroSub"></p><a class="cta" href="#shop" data-t="heroCta"></a></div></div>
+    <div class="render" data-t="render"></div>
+  </section>
+  <div class="strip"><div class="wrap"><span data-t="s1"></span><span data-t="s2"></span><span data-t="s3"></span></div></div>
+
+  <section id="shop"><div class="wrap">
+    <div class="sh"><div><div class="label" data-t="collLabel"></div><h2 data-t="collTitle"></h2></div><p data-t="collSub"></p></div>
+    <div class="grid" id="grid"></div>
+  </div></section>
+
+  <section class="craft" id="craft"><div class="wrap split">
+    <div class="tall"><img src="img/embroidery.jpg" alt="" loading="lazy"></div>
+    <div><div class="label" data-t="craftLabel"></div><h2 data-t="craftTitle"></h2><p data-t="craftP"></p>
+      <div class="swatch"><img src="img/fabrics.jpg" alt="" loading="lazy"><p data-t="fabricP"></p></div>
+      <div class="facts"><div><b>3</b><span data-t="f1"></span></div><div><b>14</b><span data-t="f2"></span></div><div><b>5</b><span data-t="f3"></span></div></div>
+    </div>
+  </div></section>
+
+  <section class="finder" id="size"><div class="wrap split">
+    <div><div class="label" data-t="sizeLabel"></div><h2 data-t="sizeTitle"></h2><p data-t="sizeP"></p></div>
+    <div class="calc">
+      <label for="height" data-t="heightL"></label>
+      <div class="range"><input type="range" id="height" min="145" max="180" value="162"><output id="hOut"></output></div>
+      <div class="result"><b id="sizeOut">56</b><span data-t="sizeRes"></span></div>
+      <div class="chart" id="chart"></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap visit">
+    <div class="panel"><div class="ph"><img src="img/gift.jpg" alt="" loading="lazy"></div><div class="tx"><h3 data-t="giftT"></h3><p data-t="giftP"></p><a class="cta dark" href="#shop" data-t="giftCta"></a></div></div>
+    <div class="panel"><div class="ph"><img src="img/boutique.jpg" alt="" loading="lazy"></div><div class="tx"><h3 data-t="visitT"></h3><p data-t="visitP"></p><button class="cta dark" type="button" id="bookBtn" data-t="visitCta"></button></div></div>
+  </div></section>
+</main>
+<footer><div class="wrap"><span data-t="foot1"></span><span data-t="foot2"></span></div></footer>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="pName"><div class="sheet-in" id="sheetIn"></div></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="bagH"><div class="dh"><h3 id="bagH" data-t="bag"></h3><button class="x" type="button" id="closeBag" aria-label="Close">×</button></div><div class="db" id="bagBody"></div><div class="df" id="bagFoot"></div></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const T={
+  sample:{ar:'متجر تجريبي من Pixel & Co. · SAMRA علامة تخيلية والصور تصاميم مولّدة',en:'Sample store by Pixel & Co. · SAMRA is a concept brand, photos are concept renders'},
+  navShop:{ar:'المجموعة',en:'Collection'},navCraft:{ar:'الحرفة',en:'Craft'},navSize:{ar:'مقاسك',en:'Your size'},
+  heroKick:{ar:'مجموعة الخريف',en:'Autumn collection'},
+  heroTitle:{ar:'عباءات تُلبس بهدوء',en:'Abayas, worn quietly'},
+  heroSub:{ar:'كريب ناعم، كتان خفيف، وتطريز ذهبي بالإبرة. قطع قليلة، مصنوعة لتدوم.',en:'Soft crepe, light linen and needle-worked gold embroidery. A few pieces, made to last.'},
+  heroCta:{ar:'تسوّقي المجموعة',en:'Shop the collection'},
+  render:{ar:'صور تصميمية',en:'Concept renders'},
+  s1:{ar:'توصيل لكل مدن المملكة',en:'Delivery across the Kingdom'},s2:{ar:'تعديل الطول مجاناً',en:'Free length adjustment'},s3:{ar:'تغليف هدية عند الطلب',en:'Gift wrapping on request'},
+  collLabel:{ar:'المجموعة',en:'The collection'},collTitle:{ar:'أربع قطع، لكل يوم ومناسبة',en:'Four pieces, for every day and occasion'},
+  collSub:{ar:'كل عباءة متوفرة بالمقاسات من ٥٢ إلى ٦٠. اضغطي على القطعة لاختيار مقاسك.',en:'Every abaya comes in sizes 52 to 60. Tap a piece to choose your size.'},
+  craftLabel:{ar:'الحرفة',en:'The craft'},craftTitle:{ar:'غصن ذهبي، غرزة بغرزة',en:'A golden vine, stitch by stitch'},
+  craftP:{ar:'تطريز الأكمام يتم يدوياً بخيط ذهبي مطفي، فلا يلمع بقسوة ولا يبهت مع الغسيل. كل كمّ يأخذ ساعات من العمل.',en:'The sleeve embroidery is worked by hand in a matte gold thread that never looks harsh and holds its colour through washing. Each sleeve takes hours.'},
+  fabricP:{ar:'ثلاثة أقمشة: كريب أسود، كتان رملي، وكريب زيتوني.',en:'Three fabrics: black crepe, sand linen and olive crepe.'},
+  f1:{ar:'أقمشة مختارة',en:'chosen fabrics'},f2:{ar:'ساعة تطريز للقطعة',en:'hours of embroidery per piece'},f3:{ar:'مقاسات من ٥٢ إلى ٦٠',en:'sizes from 52 to 60'},
+  sizeLabel:{ar:'مقاسك',en:'Your size'},sizeTitle:{ar:'اعرفي مقاسك في ثانية',en:'Find your size in a second'},
+  sizeP:{ar:'مقاس العباءة هو طولها بالإنش. حركي المؤشر لطولك ونقترح لك المقاس، ونعدّل الطول مجاناً إذا احتجتِ.',en:'An abaya’s size is its length in inches. Slide to your height and we’ll suggest a size; we adjust the length for free if needed.'},
+  heightL:{ar:'طولك',en:'Your height'},sizeRes:{ar:'المقاس المقترح لك',en:'is your suggested size'},cm:{ar:'سم',en:'cm'},
+  giftT:{ar:'تغليف هدية',en:'Gift wrapping'},giftP:{ar:'علبة بيج مطفية، ورق حرير، وزهرة مجففة، مع بطاقة بكلماتك. أضيفيها من السلة.',en:'A matte beige box, tissue paper and a dried flower, with a card in your words. Add it from the bag.'},giftCta:{ar:'اختاري هديتك',en:'Choose a gift'},
+  visitT:{ar:'زورينا في البوتيك',en:'Visit the boutique'},visitP:{ar:'جربي القطع واختاري قماشك براحتك. الزيارة بموعد، احجزيه على الواتساب.',en:'Try the pieces and choose your fabric at your own pace. Visits are by appointment, booked on WhatsApp.'},visitCta:{ar:'احجزي موعد',en:'Book a visit'},
+  foot1:{ar:'SAMRA · سمرا — علامة تخيلية لتصميم تجريبي',en:'SAMRA — a concept brand for a sample design'},foot2:{ar:'تصميم وتطوير Pixel & Co.',en:'Designed and built by Pixel & Co.'},
+  sar:{ar:'{n} ر.س',en:'SAR {n}'},size:{ar:'المقاس',en:'Size'},guide:{ar:'دليل المقاسات',en:'Size guide'},
+  hijab:{ar:'أضيفي طرحة مطابقة',en:'Add a matching hijab'},hijabS:{ar:'من نفس القماش · +٤٥ ر.س',en:'Same fabric · +45 SAR'},
+  add:{ar:'أضيفي للسلة',en:'Add to bag'},pick:{ar:'اختاري المقاس أولاً',en:'Choose a size first'},added:{ar:'انضافت للسلة ✓',en:'Added to bag ✓'},
+  bag:{ar:'سلتك',en:'Your bag'},empty:{ar:'سلتك فاضية. اختاري قطعتك من المجموعة.',en:'Your bag is empty. Pick a piece from the collection.'},
+  remove:{ar:'إزالة',en:'Remove'},giftWrap:{ar:'تغليف هدية',en:'Gift wrapping'},giftWrapS:{ar:'علبة وبطاقة · +٣٠ ر.س',en:'Box and card · +30 SAR'},
+  cardPh:{ar:'كلمات البطاقة (اختياري)',en:'Card message (optional)'},total:{ar:'المجموع',en:'Total'},
+  wa:{ar:'أرسلي الطلب على الواتساب',en:'Send order on WhatsApp'},pay:{ar:'الدفع بمدى و Apple Pay يتفعّل عند الإطلاق',en:'Mada & Apple Pay connect at launch'},
+  shopGets:{ar:'هذا اللي يوصل للمتجر:',en:'What the store receives:'},
+  msgHead:{ar:'طلب جديد من موقع سمرا 🤍',en:'New order from the SAMRA site 🤍'},msgGift:{ar:'تغليف هدية',en:'Gift wrapping'},msgCard:{ar:'البطاقة',en:'Card'},
+  book:{ar:'السلام عليكم، أبي أحجز موعد لزيارة البوتيك 🤍',en:'Hello, I’d like to book a boutique visit 🤍'},
+  newT:{ar:'جديد',en:'New'}
+};
+// Sample prices for a concept brand.
+const P=[
+  {id:'vine',ar:'عباءة الغصن الذهبي',en:'Golden Vine Abaya',dar:'كريب أسود بتطريز يدوي بالخيط الذهبي على الأكمام.',den:'Black crepe with hand embroidery in gold thread along the sleeves.',p:890,imgs:['back','embroidery','hero'],sw:['#1B1915'],isNew:1},
+  {id:'classic',ar:'الكلاسيكية بحاشية ذهبية',en:'Classic Gold Trim',dar:'عباءة مفتوحة من الكريب الأسود بحاشية ذهبية رفيعة.',den:'An open black crepe abaya with a fine gold trim.',p:520,imgs:['classic'],sw:['#1B1915','#A3854F']},
+  {id:'linen',ar:'كتان رملي',en:'Sand Linen',dar:'كتان خفيف بلون الرمل مع كسرات ناعمة، مثالي للنهار.',den:'Light sand-coloured linen with soft pleats, made for daytime.',p:480,imgs:['linen'],sw:['#D9CDB8']},
+  {id:'olive',ar:'زيتوني بحزام',en:'Olive Belted',dar:'كريب زيتوني غامق بأكمام واسعة وحزام من نفس القماش.',den:'Deep olive crepe with wide sleeves and a self belt.',p:560,imgs:['olive'],sw:['#4C5536']}
+];
+const SIZES=[52,54,56,58,60], H2S=[[0,152,52],[152,158,54],[158,164,56],[164,170,58],[170,999,60]];
+const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+let lang='ar',bag=[],gift=false,card='',sheet=null;
+try{const s=JSON.parse(localStorage.getItem('samra1')||'{}');if(s.lang)lang=s.lang;if(Array.isArray(s.bag))bag=s.bag.filter(l=>byId[l.id])}catch(e){}
+if(!bag.length)bag=[{id:'vine',size:56,hijab:true,q:1}];
+const $=id=>document.getElementById(id);
+const tx=(k,v={})=>{let s=(T[k]||{})[lang]??k;for(const x in v)s=s.replace('{'+x+'}',v[x]);return s};
+const L=o=>lang==='ar'?o.ar:o.en, sar=n=>tx('sar',{n:n.toLocaleString(lang==='ar'?'ar-SA':'en-US')});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const unit=l=>byId[l.id].p+(l.hijab?45:0);
+const total=()=>bag.reduce((s,l)=>s+unit(l)*l.q,0)+(gift&&bag.length?30:0);
+function save(){try{localStorage.setItem('samra1',JSON.stringify({lang,bag}))}catch(e){}}
+const sizeFor=h=>H2S.find(([a,b])=>h>=a&&h<b)[2];
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1600)}
+
+function renderStatic(){
+  const de=document.documentElement;de.lang=lang;de.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=tx(el.dataset.t));
+  $('lang').textContent=lang==='ar'?'EN':'عربي';
+  $('grid').innerHTML=P.map(p=>`<button class="prod" type="button" data-open="${p.id}"><div class="ph"><img src="img/${p.imgs[0]}.jpg" alt="${esc(L(p))}" loading="lazy">${p.isNew?`<span class="new">${tx('newT')}</span>`:''}</div>
+    <h3>${L(p)}</h3><div class="meta"><b>${sar(p.p)}</b><span class="sw">${p.sw.map(c=>`<i style="background:${c}"></i>`).join('')}</span></div></button>`).join('');
+  sizeCalc();
+}
+function sizeCalc(){
+  const h=+$('height').value, s=sizeFor(h);
+  $('hOut').textContent=h+' '+tx('cm'); $('sizeOut').textContent=s;
+  $('chart').innerHTML=H2S.map(([a,b,z])=>`<div class="${z===s?'on':''}"><b>${z}</b>${a?a:'<152'}${b<999?'–'+b:'+'}</div>`).join('');
+}
+function renderBag(){
+  const n=bag.reduce((s,l)=>s+l.q,0),b=$('badge');b.hidden=!n;b.textContent=n;
+  $('bagBody').innerHTML=bag.length?bag.map((l,i)=>{const p=byId[l.id];return `<div class="line"><img src="img/${p.imgs[0]}.jpg" alt=""><div style="min-width:0"><div class="nm">${L(p)}</div>
+    <div class="op">${tx('size')} ${l.size}${l.hijab?' · '+tx('hijab'):''} · ×${l.q}</div><button class="rm" type="button" data-rm="${i}">${tx('remove')}</button></div><div class="pr">${sar(unit(l)*l.q)}</div></div>`}).join('')
+    :`<div class="empty">${tx('empty')}</div>`;
+  $('bagFoot').innerHTML=bag.length?`<button class="tog" type="button" id="giftTog" aria-pressed="${gift}"><span>${tx('giftWrap')}<small>${tx('giftWrapS')}</small></span><i></i></button>
+    ${gift?`<textarea id="card" placeholder="${tx('cardPh')}" maxlength="200">${esc(card)}</textarea>`:''}
+    <div class="tot"><span>${tx('total')}</span><span>${sar(total())}</span></div>
+    <button class="wa" type="button" id="waBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>${tx('wa')}</button>
+    <button class="pay" type="button" disabled>${tx('pay')}</button>
+    <div class="preview"><div style="margin-bottom:6px;color:#555">${tx('shopGets')}</div><div class="bub" id="bub">${esc(msg())}</div></div>`:'';
+}
+function msg(){return [tx('msgHead'),'',...bag.map(l=>{const p=byId[l.id];return `• ${l.q}× ${L(p)} — ${tx('size')} ${l.size}${l.hijab?' + '+tx('hijab'):''} — ${sar(unit(l)*l.q)}`}),
+  ...(gift?['',`${tx('msgGift')} (+30)`+(card.trim()?`\n${tx('msgCard')}: ${card.trim()}`:'')]:[]),'',`${tx('total')}: ${sar(total())}`].join('\n')}
+
+function openSheet(id){
+  const p=byId[id];sheet={id,size:null,hijab:false,q:1,img:0,last:document.activeElement};renderSheet();
+  $('scrim').classList.add('open');$('sheet').classList.add('open');document.body.classList.add('locked');
+}
+function renderSheet(){
+  const p=byId[sheet.id];
+  $('sheetIn').innerHTML=`<div class="gal"><div class="main"><img src="img/${p.imgs[sheet.img]}.jpg" alt="${esc(L(p))}"></div>${p.imgs.length>1?`<div class="thumbs">${p.imgs.map((m,i)=>`<button type="button" data-img="${i}" aria-pressed="${i===sheet.img}" aria-label="${i+1}"><img src="img/${m}.jpg" alt=""></button>`).join('')}</div>`:''}</div>
+    <div class="info"><button class="x" type="button" data-close aria-label="Close">×</button><div class="label">SAMRA</div><h3 id="pName">${L(p)}</h3><div class="pr">${sar(p.p)}</div><p class="d">${L({ar:p.dar,en:p.den})}</p>
+      <div class="opt"><div class="ol"><span>${tx('size')}</span><button type="button" data-guide>${tx('guide')}</button></div><div class="sizes">${SIZES.map(s=>`<button type="button" data-size="${s}" aria-pressed="${sheet.size===s}">${s}</button>`).join('')}</div></div>
+      <div class="opt"><button class="tog" type="button" data-hijab aria-pressed="${sheet.hijab}"><span>${tx('hijab')}<small>${tx('hijabS')}</small></span><i></i></button></div>
+      <div class="addrow"><div class="qty"><button type="button" data-q="-1" aria-label="−">−</button><output>${sheet.q}</output><button type="button" data-q="1" aria-label="+">+</button></div>
+        <button class="addbtn" type="button" id="addBtn" ${sheet.size?'':'disabled'}><span>${sheet.size?tx('add'):tx('pick')}</span><span>${sar((p.p+(sheet.hijab?45:0))*sheet.q)}</span></button></div>
+      <p class="hint">${tx('s2')}</p></div>`;
+}
+function closeAll(){if(sheet){const l=sheet.last;sheet=null;l&&l.focus&&l.focus()}$('scrim').classList.remove('open');$('sheet').classList.remove('open');$('drawer').classList.remove('open');document.body.classList.remove('locked')}
+function openBag(){renderBag();$('scrim').classList.add('open');$('drawer').classList.add('open');document.body.classList.add('locked')}
+function wa(text){const a=document.createElement('a');a.href='https://wa.me/?text='+encodeURIComponent(text);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]');if(o)return openSheet(o.dataset.open);
+  if(e.target.closest('[data-close]')||e.target.id==='scrim')return closeAll();
+  if(!sheet)return;
+  const im=e.target.closest('[data-img]');if(im){sheet.img=+im.dataset.img;return renderSheet()}
+  const sz=e.target.closest('[data-size]');if(sz){sheet.size=+sz.dataset.size;return renderSheet()}
+  if(e.target.closest('[data-hijab]')){sheet.hijab=!sheet.hijab;return renderSheet()}
+  const q=e.target.closest('[data-q]');if(q){sheet.q=Math.max(1,Math.min(9,sheet.q+ +q.dataset.q));return renderSheet()}
+  if(e.target.closest('[data-guide]')){closeAll();return $('size').scrollIntoView()}
+  if(e.target.closest('#addBtn')&&sheet.size){const s=sheet,same=bag.find(l=>l.id===s.id&&l.size===s.size&&l.hijab===s.hijab);
+    if(same)same.q+=s.q;else bag.push({id:s.id,size:s.size,hijab:s.hijab,q:s.q});save();closeAll();renderBag();toast(tx('added'));setTimeout(openBag,250)}
+});
+$('bagBtn').addEventListener('click',openBag);$('closeBag').addEventListener('click',closeAll);
+$('bagBody').addEventListener('click',e=>{const r=e.target.closest('[data-rm]');if(r){bag.splice(+r.dataset.rm,1);save();renderBag()}});
+$('bagFoot').addEventListener('click',e=>{if(e.target.closest('#giftTog')){gift=!gift;return renderBag()}if(e.target.closest('#waBtn'))wa(msg())});
+$('bagFoot').addEventListener('input',e=>{if(e.target.id==='card'){card=e.target.value;const b=$('bub');if(b)b.textContent=msg()}});
+$('bookBtn').addEventListener('click',()=>wa(tx('book')));
+$('height').addEventListener('input',sizeCalc);
+$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';save();renderStatic();renderBag();if(sheet)renderSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+addEventListener('scroll',()=>$('head').classList.toggle('scrolled',scrollY>8),{passive:true});
+renderStatic();renderBag();
+</script>
