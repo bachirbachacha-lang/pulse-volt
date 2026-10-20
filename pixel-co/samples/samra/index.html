@@ -47,7 +47,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* hero */
 .hero{position:relative;overflow:hidden;background:var(--stone)}
-.hero .img{position:absolute;inset:0;background:url(img/hero.jpg) center 30%/cover no-repeat;animation:drift 18s ease-in-out infinite alternate}
+.hero .img{position:absolute;inset:-30% 0 0 0;background:url(img/hero.jpg) center 30%/cover no-repeat;animation:drift 18s ease-in-out infinite alternate}
 @keyframes drift{to{transform:scale(1.07) translateY(-1.5%)}}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,25,21,.0) 30%,rgba(27,25,21,.55) 100%)}
 html[dir=ltr] .hero::after{background:linear-gradient(270deg,rgba(27,25,21,0) 30%,rgba(27,25,21,.55) 100%)}
@@ -193,6 +193,26 @@ html[dir=rtl] .drawer{transform:translateX(-105%)}
 .pay{border:1px solid var(--line);background:transparent;height:44px;color:var(--muted);cursor:not-allowed}
 .preview{background:#ECE5DD;padding:10px;font-size:12.5px}
 .preview .bub{background:#DCF8C6;border-radius:10px;padding:8px 10px;white-space:pre-wrap;line-height:1.5;font-family:system-ui,-apple-system,sans-serif}
+.hero .copy>*{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.hero .copy>*:nth-child(2){animation-delay:.12s}.hero .copy>*:nth-child(3){animation-delay:.24s}.hero .copy>*:nth-child(4){animation-delay:.36s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+.hero .img{will-change:transform}
+.prod .ph .alt{position:absolute;inset:0;opacity:0;transition:opacity .5s}
+.prod:hover .ph .alt,.prod:focus-visible .ph .alt,.prod.peek .ph .alt{opacity:1}
+.mag{position:relative;cursor:crosshair;touch-action:none}
+.mag .lens{position:absolute;width:150px;height:150px;border-radius:50%;border:2px solid var(--paper);box-shadow:0 10px 30px rgba(0,0,0,.35);background-repeat:no-repeat;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.8);transition:opacity .2s,transform .2s}
+.mag.on .lens{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.mag .tip{position:absolute;bottom:12px;inset-inline-start:12px;background:rgba(27,25,21,.7);color:var(--paper);font-size:12px;padding:4px 10px;letter-spacing:.04em}
+.look{padding-block:64px 24px;overflow:hidden}
+.strip2{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
+.strip2 figure{flex:none;width:min(62vw,300px);margin:0;scroll-snap-align:start}
+.strip2 img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.strip2 figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+.shopsize{margin-top:16px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold);background:transparent;color:var(--paper);padding:10px 18px;letter-spacing:.03em}
+.bagbar{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(120%);transition:transform .3s}
+.bagbar.show{transform:none}
+.bagbar button{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;background:var(--ink);color:var(--paper);height:50px;padding:0 18px;letter-spacing:.03em;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+@media (min-width:900px){.bagbar{display:none}}
 .toast{position:fixed;z-index:60;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:var(--paper);padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
@@ -219,7 +239,7 @@ html[dir=rtl] .drawer{transform:translateX(-105%)}
   </div></section>
 
   <section class="craft" id="craft"><div class="wrap split">
-    <div class="tall"><img src="img/embroidery.jpg" alt="" loading="lazy"></div>
+    <div class="tall mag" id="mag"><img src="img/embroidery.jpg" alt="" loading="lazy"><span class="lens" id="lens"></span><span class="tip" data-t="magTip"></span></div>
     <div><div class="label" data-t="craftLabel"></div><h2 data-t="craftTitle"></h2><p data-t="craftP"></p>
       <div class="swatch"><img src="img/fabrics.jpg" alt="" loading="lazy"><p data-t="fabricP"></p></div>
       <div class="facts"><div><b>3</b><span data-t="f1"></span></div><div><b>14</b><span data-t="f2"></span></div><div><b>5</b><span data-t="f3"></span></div></div>
@@ -231,11 +251,12 @@ html[dir=rtl] .drawer{transform:translateX(-105%)}
     <div class="calc">
       <label for="height" data-t="heightL"></label>
       <div class="range"><input type="range" id="height" min="145" max="180" value="162"><output id="hOut"></output></div>
-      <div class="result"><b id="sizeOut">56</b><span data-t="sizeRes"></span></div>
+      <div class="result"><b id="sizeOut">56</b><span data-t="sizeRes"></span></div><button class="shopsize" type="button" id="shopSize"></button>
       <div class="chart" id="chart"></div>
     </div>
   </div></section>
 
+  <section class="look"><div class="wrap"><div class="sh"><div><div class="label" data-t="lookLabel"></div><h2 data-t="lookTitle"></h2></div><p data-t="lookSub"></p></div><div class="strip2" id="look"></div></div></section>
   <section><div class="wrap visit">
     <div class="panel"><div class="ph"><img src="img/gift.jpg" alt="" loading="lazy"></div><div class="tx"><h3 data-t="giftT"></h3><p data-t="giftP"></p><a class="cta dark" href="#shop" data-t="giftCta"></a></div></div>
     <div class="panel"><div class="ph"><img src="img/boutique.jpg" alt="" loading="lazy"></div><div class="tx"><h3 data-t="visitT"></h3><p data-t="visitP"></p><button class="cta dark" type="button" id="bookBtn" data-t="visitCta"></button></div></div>
@@ -246,6 +267,7 @@ html[dir=rtl] .drawer{transform:translateX(-105%)}
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="pName"><div class="sheet-in" id="sheetIn"></div></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="bagH"><div class="dh"><h3 id="bagH" data-t="bag"></h3><button class="x" type="button" id="closeBag" aria-label="Close">×</button></div><div class="db" id="bagBody"></div><div class="df" id="bagFoot"></div></aside>
+<div class="bagbar" id="bagbar"><button type="button" id="bagbarBtn"><span id="bbCount"></span><span id="bbTotal"></span></button></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -280,14 +302,19 @@ const T={
   shopGets:{ar:'هذا اللي يوصل للمتجر:',en:'What the store receives:'},
   msgHead:{ar:'طلب جديد من موقع سمرا 🤍',en:'New order from the SAMRA site 🤍'},msgGift:{ar:'تغليف هدية',en:'Gift wrapping'},msgCard:{ar:'البطاقة',en:'Card'},
   book:{ar:'السلام عليكم، أبي أحجز موعد لزيارة البوتيك 🤍',en:'Hello, I’d like to book a boutique visit 🤍'},
-  newT:{ar:'جديد',en:'New'}
+  newT:{ar:'جديد',en:'New'},
+  magTip:{ar:'مرري إصبعك للتكبير',en:'Drag to zoom into the stitches'},
+  shopIn:{ar:'تسوّقي بمقاس {s}',en:'Shop in size {s}'},
+  lookLabel:{ar:'اللوك بوك',en:'Lookbook'},lookTitle:{ar:'تفاصيل المجموعة',en:'Details of the collection'},lookSub:{ar:'اسحبي لتشوفي كل قطعة عن قرب.',en:'Swipe to see every piece up close.'},
+  viewBag:{ar:'عرض السلة',en:'View bag'},
+  look:{ar:['الغصن الذهبي، من الخلف','الكلاسيكية','كتان رملي','زيتوني بحزام','الأقمشة','تغليف الهدية'],en:['Golden Vine, back','Classic Gold Trim','Sand Linen','Olive Belted','The fabrics','Gift box']}
 };
 // Sample prices for a concept brand.
 const P=[
   {id:'vine',ar:'عباءة الغصن الذهبي',en:'Golden Vine Abaya',dar:'كريب أسود بتطريز يدوي بالخيط الذهبي على الأكمام.',den:'Black crepe with hand embroidery in gold thread along the sleeves.',p:890,imgs:['back','embroidery','hero'],sw:['#1B1915'],isNew:1},
-  {id:'classic',ar:'الكلاسيكية بحاشية ذهبية',en:'Classic Gold Trim',dar:'عباءة مفتوحة من الكريب الأسود بحاشية ذهبية رفيعة.',den:'An open black crepe abaya with a fine gold trim.',p:520,imgs:['classic'],sw:['#1B1915','#A3854F']},
-  {id:'linen',ar:'كتان رملي',en:'Sand Linen',dar:'كتان خفيف بلون الرمل مع كسرات ناعمة، مثالي للنهار.',den:'Light sand-coloured linen with soft pleats, made for daytime.',p:480,imgs:['linen'],sw:['#D9CDB8']},
-  {id:'olive',ar:'زيتوني بحزام',en:'Olive Belted',dar:'كريب زيتوني غامق بأكمام واسعة وحزام من نفس القماش.',den:'Deep olive crepe with wide sleeves and a self belt.',p:560,imgs:['olive'],sw:['#4C5536']}
+  {id:'classic',ar:'الكلاسيكية بحاشية ذهبية',en:'Classic Gold Trim',dar:'عباءة مفتوحة من الكريب الأسود بحاشية ذهبية رفيعة.',den:'An open black crepe abaya with a fine gold trim.',p:520,imgs:['classic','fabrics'],sw:['#1B1915','#A3854F']},
+  {id:'linen',ar:'كتان رملي',en:'Sand Linen',dar:'كتان خفيف بلون الرمل مع كسرات ناعمة، مثالي للنهار.',den:'Light sand-coloured linen with soft pleats, made for daytime.',p:480,imgs:['linen','fabrics'],sw:['#D9CDB8']},
+  {id:'olive',ar:'زيتوني بحزام',en:'Olive Belted',dar:'كريب زيتوني غامق بأكمام واسعة وحزام من نفس القماش.',den:'Deep olive crepe with wide sleeves and a self belt.',p:560,imgs:['olive','fabrics'],sw:['#4C5536']}
 ];
 const SIZES=[52,54,56,58,60], H2S=[[0,152,52],[152,158,54],[158,164,56],[164,170,58],[170,999,60]];
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
@@ -308,17 +335,19 @@ function renderStatic(){
   const de=document.documentElement;de.lang=lang;de.dir=lang==='ar'?'rtl':'ltr';
   document.querySelectorAll('[data-t]').forEach(el=>el.textContent=tx(el.dataset.t));
   $('lang').textContent=lang==='ar'?'EN':'عربي';
-  $('grid').innerHTML=P.map(p=>`<button class="prod" type="button" data-open="${p.id}"><div class="ph"><img src="img/${p.imgs[0]}.jpg" alt="${esc(L(p))}" loading="lazy">${p.isNew?`<span class="new">${tx('newT')}</span>`:''}</div>
+  $('grid').innerHTML=P.map(p=>`<button class="prod" type="button" data-open="${p.id}"><div class="ph"><img src="img/${p.imgs[0]}.jpg" alt="${esc(L(p))}" loading="lazy">${p.imgs[1]?`<img class="alt" src="img/${p.imgs[1]}.jpg" alt="" loading="lazy">`:''}${p.isNew?`<span class="new">${tx('newT')}</span>`:''}</div>
     <h3>${L(p)}</h3><div class="meta"><b>${sar(p.p)}</b><span class="sw">${p.sw.map(c=>`<i style="background:${c}"></i>`).join('')}</span></div></button>`).join('');
+  $('look').innerHTML=['back','classic','linen','olive','fabrics','gift'].map((m,i)=>`<figure><img src="img/${m}.jpg" alt="" loading="lazy"><figcaption>${T.look[lang][i]}</figcaption></figure>`).join('');
   sizeCalc();
 }
 function sizeCalc(){
   const h=+$('height').value, s=sizeFor(h);
-  $('hOut').textContent=h+' '+tx('cm'); $('sizeOut').textContent=s;
+  $('hOut').textContent=h+' '+tx('cm'); $('sizeOut').textContent=s; $('shopSize').textContent=tx('shopIn',{s})+' ←';
   $('chart').innerHTML=H2S.map(([a,b,z])=>`<div class="${z===s?'on':''}"><b>${z}</b>${a?a:'<152'}${b<999?'–'+b:'+'}</div>`).join('');
 }
 function renderBag(){
   const n=bag.reduce((s,l)=>s+l.q,0),b=$('badge');b.hidden=!n;b.textContent=n;
+  $('bbCount').textContent=tx('viewBag')+' · '+n; $('bbTotal').textContent=sar(total()); bagbarVis();
   $('bagBody').innerHTML=bag.length?bag.map((l,i)=>{const p=byId[l.id];return `<div class="line"><img src="img/${p.imgs[0]}.jpg" alt=""><div style="min-width:0"><div class="nm">${L(p)}</div>
     <div class="op">${tx('size')} ${l.size}${l.hijab?' · '+tx('hijab'):''} · ×${l.q}</div><button class="rm" type="button" data-rm="${i}">${tx('remove')}</button></div><div class="pr">${sar(unit(l)*l.q)}</div></div>`}).join('')
     :`<div class="empty">${tx('empty')}</div>`;
@@ -332,8 +361,9 @@ function renderBag(){
 function msg(){return [tx('msgHead'),'',...bag.map(l=>{const p=byId[l.id];return `• ${l.q}× ${L(p)} — ${tx('size')} ${l.size}${l.hijab?' + '+tx('hijab'):''} — ${sar(unit(l)*l.q)}`}),
   ...(gift?['',`${tx('msgGift')} (+30)`+(card.trim()?`\n${tx('msgCard')}: ${card.trim()}`:'')]:[]),'',`${tx('total')}: ${sar(total())}`].join('\n')}
 
+let presetSize=null;
 function openSheet(id){
-  const p=byId[id];sheet={id,size:null,hijab:false,q:1,img:0,last:document.activeElement};renderSheet();
+  const p=byId[id];sheet={id,size:presetSize,hijab:false,q:1,img:0,last:document.activeElement};renderSheet();
   $('scrim').classList.add('open');$('sheet').classList.add('open');document.body.classList.add('locked');
 }
 function renderSheet(){
@@ -371,5 +401,22 @@ $('height').addEventListener('input',sizeCalc);
 $('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';save();renderStatic();renderBag();if(sheet)renderSheet()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
 addEventListener('scroll',()=>$('head').classList.toggle('scrolled',scrollY>8),{passive:true});
+function bagbarVis(){const n=bag.reduce((s,l)=>s+l.q,0);$('bagbar').classList.toggle('show',n>0&&scrollY>window.innerHeight*.6&&!document.body.classList.contains('locked'))}
+$('bagbarBtn').addEventListener('click',openBag);
+$('shopSize').addEventListener('click',()=>{presetSize=sizeFor(+$('height').value);toast(tx('shopIn',{s:presetSize}));$('shop').scrollIntoView()});
+// hero parallax
+const heroImg=document.querySelector('.hero .img');let ticking=false;
+addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{const y=Math.min(scrollY,900);heroImg.style.translate=`0 ${y*.35}px`;bagbarVis();ticking=false})},{passive:true});
+// touch: first tap on a card shows the second photo briefly on phones
+document.querySelectorAll('#grid').forEach(g=>g.addEventListener('touchstart',e=>{const c=e.target.closest('.prod');if(c){c.classList.add('peek');setTimeout(()=>c.classList.remove('peek'),900)}},{passive:true}));
+// embroidery magnifier
+(()=>{const m=$('mag'),lens=$('lens'),img=m.querySelector('img'),Z=2.6;
+  const move=e=>{const r=m.getBoundingClientRect(),x=(e.clientX-r.left),y=(e.clientY-r.top);if(x<0||y<0||x>r.width||y>r.height)return;
+    lens.style.left=x+'px';lens.style.top=y+'px';lens.style.backgroundImage=`url(${img.currentSrc||img.src})`;
+    lens.style.backgroundSize=`${r.width*Z}px ${r.height*Z}px`;lens.style.backgroundPosition=`${-(x*Z-75)}px ${-(y*Z-75)}px`;};
+  m.addEventListener('pointerdown',e=>{m.classList.add('on');move(e);m.setPointerCapture&&m.setPointerCapture(e.pointerId)});
+  m.addEventListener('pointermove',e=>{if(e.pointerType==='mouse')m.classList.add('on');if(m.classList.contains('on'))move(e)});
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>m.addEventListener(t,()=>m.classList.remove('on')));
+})();
 renderStatic();renderBag();
 </script>
