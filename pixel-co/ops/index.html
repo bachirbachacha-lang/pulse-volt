@@ -1,0 +1,240 @@
+<title>Pixel &amp; Co. Ops Board</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column on phones, two on iPad/desktop. Top: money + pipeline strip. Left: Today (tasks + follow-ups due). Right: leads grouped by stage; tap a lead to edit it in a sheet. Pixel & Co. night palette: deep indigo ground, violet accent. */
+:root{
+  --bg:#100E22; --panel:#18153A; --panel-2:#211D4A; --line:#2E2960; --fg:#F2F0FF; --muted:#A39FCB;
+  --accent:#8C7DFF; --accent-soft:#2C2668; --good:#4CCB8E; --warn:#F2B544; --bad:#F07A7A;
+  --display:'Sora',system-ui,sans-serif; --body:'IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{display:grid;grid-template-columns:12px 12px;gap:4px}
+.mark i{width:12px;height:12px;border-radius:3px;background:var(--fg)}.mark i:nth-child(2){background:var(--accent)}.mark i:nth-child(4){background:transparent;border:2px solid var(--fg)}
+h1{font-family:var(--display);font-size:22px;margin:0;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px}
+.status{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.status.live i{background:var(--good)}
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:720px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 14px;min-width:0}
+.tile .k{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile .v{font-family:var(--display);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+.tile .v small{font-size:13px;color:var(--muted);font-weight:500}
+.pipe{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:600;background:var(--panel-2);border:1px solid var(--line)}
+.pill b{font-family:var(--mono);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+@media (min-width:900px){.cols{grid-template-columns:360px minmax(0,1fr)}}
+section{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px;min-width:0}
+h2{font-family:var(--display);font-size:16px;margin:0 0 10px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:8px}
+h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:12.5px}
+.list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.task{display:flex;gap:10px;align-items:flex-start;background:var(--panel-2);border-radius:12px;padding:9px 11px}
+.task button.chk{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--accent);background:transparent;display:grid;place-items:center;margin-top:1px}
+.task.done button.chk{background:var(--accent)}
+.task.done button.chk::after{content:"";width:9px;height:5px;border:2.5px solid var(--bg);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.task span{min-width:0}
+.task.done span{color:var(--muted);text-decoration:line-through}
+.task .del{margin-inline-start:auto;border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;padding:0 2px}
+.due{display:flex;gap:10px;align-items:center;background:var(--panel-2);border-radius:12px;padding:9px 11px;border:0;width:100%;text-align:start}
+.due .t{min-width:0}.due .t b{display:block;font-size:14px}.due .t span{font-size:12.5px;color:var(--muted)}
+.due .when{margin-inline-start:auto;font-family:var(--mono);font-size:12px;color:var(--warn);white-space:nowrap}
+.add{display:flex;gap:8px;margin-top:10px}
+.add input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.btn{border:0;border-radius:10px;background:var(--accent);color:#100E22;font-weight:600;padding:8px 14px;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scrollbar-width:none}
+.filters button{flex:none;border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
+.group{margin-top:14px}.group:first-child{margin-top:0}
+.group h3{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.leads{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.lead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;text-align:start;background:var(--panel-2);border:1px solid transparent;border-inline-start:4px solid var(--c,var(--muted));border-radius:12px;padding:10px 12px;width:100%}
+.lead:hover{border-color:var(--line);border-inline-start-color:var(--c,var(--muted))}
+.lead b{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lead .h{font-family:var(--mono);font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lead .val{font-family:var(--mono);font-size:12.5px;color:var(--good);text-align:end}
+.lead .n{grid-column:1/-1;font-size:12.8px;color:var(--muted);line-height:1.4}
+.lead .n.next{color:var(--fg)}
+.empty{color:var(--muted);font-size:13.5px;padding:14px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,4,15,.6);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:90dvh;overflow:auto;background:var(--panel);border-top:1px solid var(--line);border-radius:22px 22px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.9,.3,1)}
+.sheet.open{transform:none}
+@media (min-width:700px){.sheet{left:50%;right:auto;width:560px;bottom:auto;top:50%;border:1px solid var(--line);border-radius:22px;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:transform .25s,opacity .2s}.sheet.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.sheet h3{font-family:var(--display);margin:0 0 12px;font-size:18px}
+.f{display:grid;gap:4px;margin-bottom:10px}
+.f label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.f input,.f textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%}
+.f textarea{min-height:70px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stages{display:flex;flex-wrap:wrap;gap:6px}
+.stages button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.stages button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.actions{display:flex;gap:8px;justify-content:space-between;margin-top:14px;flex-wrap:wrap}
+.danger{background:transparent;border:1px solid var(--line);color:var(--bad);border-radius:10px;padding:8px 12px;font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--fg);color:var(--bg);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13.5px;opacity:0;transition:opacity .2s,transform .2s;z-index:50;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.ro{font-size:12.5px;color:var(--warn)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div><h1>Ops Board</h1><div class="sub">Pixel &amp; Co. · leads, follow-ups and money</div></div></div>
+    <div class="status" id="status"><i></i><span>Connecting…</span></div>
+  </header>
+
+  <div class="summary" id="summary">
+    <div class="tile"><div class="k">Deals agreed</div><div class="v" id="sDeals">–</div></div>
+    <div class="tile"><div class="k">Money received</div><div class="v" id="sPaid">–</div></div>
+    <div class="tile"><div class="k">Still owed</div><div class="v" id="sOwed">–</div></div>
+    <div class="tile"><div class="k">Active leads</div><div class="v" id="sActive">–</div></div>
+  </div>
+  <div class="pipe" id="pipe"></div>
+
+  <div class="cols">
+    <section aria-labelledby="todayH">
+      <h2 id="todayH">Today <small id="todayDate"></small></h2>
+      <ul class="list" id="tasks"></ul>
+      <form class="add" id="addTask"><input id="taskText" placeholder="Add a task" aria-label="New task" maxlength="140"><button class="btn" type="submit">Add</button></form>
+      <h2 style="margin-top:18px">Follow up <small>next step due</small></h2>
+      <div class="list" id="dueList"></div>
+    </section>
+
+    <section aria-labelledby="leadsH">
+      <h2 id="leadsH">Leads <button class="btn" type="button" id="newLead">+ New lead</button></h2>
+      <div class="filters" id="filters"></div>
+      <div id="groups"></div>
+    </section>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetH">
+  <h3 id="sheetH">Lead</h3>
+  <form id="leadForm">
+    <div class="row2"><div class="f"><label for="fName">Business</label><input id="fName" required maxlength="80"></div><div class="f"><label for="fHandle">Instagram / TikTok</label><input id="fHandle" maxlength="80" placeholder="@handle"></div></div>
+    <div class="row2"><div class="f"><label for="fType">Type · city</label><input id="fType" maxlength="80" placeholder="Café · Riyadh"></div><div class="f"><label for="fValue">Deal (SAR)</label><input id="fValue" inputmode="numeric" maxlength="7" placeholder="0"></div></div>
+    <div class="f"><label>Stage</label><div class="stages" id="fStages"></div></div>
+    <div class="row2"><div class="f"><label for="fNext">Next step</label><input id="fNext" maxlength="120"></div><div class="f"><label for="fDate">When</label><input id="fDate" type="date"></div></div>
+    <div class="row2"><div class="f"><label for="fPaid">Paid so far (SAR)</label><input id="fPaid" inputmode="numeric" maxlength="7" placeholder="0"></div><div class="f"><label for="fWhere">Contact via</label><input id="fWhere" maxlength="60" placeholder="IG DM, WhatsApp…"></div></div>
+    <div class="f"><label for="fNote">Notes</label><textarea id="fNote" maxlength="600"></textarea></div>
+    <div class="actions"><button class="danger" type="button" id="delLead">Delete</button><span style="display:flex;gap:8px"><button class="btn ghost" type="button" id="cancel">Cancel</button><button class="btn" type="submit">Save</button></span></div>
+  </form>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const STAGES=[
+  {id:'found',name:'Found',c:'#A39FCB'},
+  {id:'dm',name:'DM sent',c:'#8C7DFF'},
+  {id:'replied',name:'Replied',c:'#5FB7F2'},
+  {id:'sample',name:'Sample sent',c:'#F2B544'},
+  {id:'deal',name:'Deal agreed',c:'#4CCB8E'},
+  {id:'paid',name:'Paid · done',c:'#2FA36B'},
+  {id:'no',name:'Not now',c:'#6B6794'}
+];
+const ACTIVE=['found','dm','replied','sample','deal'];
+const S=Object.fromEntries(STAGES.map(s=>[s.id,s]));
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sar=n=>(+n||0).toLocaleString('en-US')+' SAR';
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let leads=[], tasks=[], db=null, canWrite=true, filter='active', editing=null, editStage='dm';
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1500)}
+function setStatus(live,text){const s=$('status');s.classList.toggle('live',live);s.querySelector('span').textContent=text}
+
+function render(){
+  $('todayDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+  const deals=leads.filter(l=>l.stage==='deal'||l.stage==='paid');
+  const agreed=deals.reduce((s,l)=>s+(+l.value||0),0), paid=leads.reduce((s,l)=>s+(+l.paid||0),0);
+  $('sDeals').innerHTML=`${deals.length} <small>· ${sar(agreed)}</small>`;
+  $('sPaid').textContent=sar(paid);
+  $('sOwed').textContent=sar(Math.max(0,agreed-paid));
+  $('sActive').textContent=leads.filter(l=>ACTIVE.includes(l.stage)).length;
+  $('pipe').innerHTML=STAGES.map(s=>`<span class="pill"><span class="dot" style="background:${s.c}"></span>${s.name}<b>${leads.filter(l=>l.stage===s.id).length}</b></span>`).join('');
+
+  $('tasks').innerHTML=tasks.length?tasks.map(t=>`<li class="task${t.done?' done':''}"><button class="chk" type="button" data-task="${esc(t.id)}" aria-label="${t.done?'Mark not done':'Mark done'}" aria-pressed="${!!t.done}"></button><span>${esc(t.text)}</span><button class="del" type="button" data-deltask="${esc(t.id)}" aria-label="Delete task">×</button></li>`).join('')
+    :`<li class="empty">No tasks for today. Add one below.</li>`;
+
+  const t0=today();
+  const due=leads.filter(l=>ACTIVE.includes(l.stage)&&l.nextDate&&l.nextDate<=t0).sort((a,b)=>(a.nextDate||'').localeCompare(b.nextDate||''));
+  $('dueList').innerHTML=due.length?due.map(l=>`<button class="due" type="button" data-lead="${esc(l.id)}"><span class="dot" style="background:${S[l.stage].c}"></span><span class="t"><b>${esc(l.name)}</b><span>${esc(l.next||'Follow up')}</span></span><span class="when">${l.nextDate<t0?'overdue':'today'}</span></button>`).join('')
+    :`<div class="empty">Nothing due. Follow-ups with a date of today or earlier show here.</div>`;
+
+  const fl=[{id:'active',name:'Active'},{id:'all',name:'All'},...STAGES.map(s=>({id:s.id,name:s.name}))];
+  $('filters').innerHTML=fl.map(f=>`<button type="button" data-filter="${f.id}" aria-pressed="${filter===f.id}">${f.name}</button>`).join('');
+  const shown=leads.filter(l=>filter==='all'?true:filter==='active'?ACTIVE.includes(l.stage):l.stage===filter);
+  const groups=STAGES.filter(s=>shown.some(l=>l.stage===s.id));
+  $('groups').innerHTML=groups.length?groups.map(s=>`<div class="group"><h3><span class="dot" style="background:${s.c}"></span>${s.name} · ${shown.filter(l=>l.stage===s.id).length}</h3><div class="leads">${
+    shown.filter(l=>l.stage===s.id).sort((a,b)=>(a.nextDate||'9').localeCompare(b.nextDate||'9')).map(l=>`<button class="lead" type="button" data-lead="${esc(l.id)}" style="--c:${s.c}">
+      <b>${esc(l.name)}</b><span class="val">${+l.value?sar(l.value):''}</span>
+      <span class="h">${esc([l.handle,l.type].filter(Boolean).join(' · '))}</span><span></span>
+      ${l.next?`<span class="n next">→ ${esc(l.next)}${l.nextDate?` · ${esc(l.nextDate.slice(5))}`:''}</span>`:''}
+      ${l.note?`<span class="n">${esc(l.note)}</span>`:''}</button>`).join('')}</div></div>`).join('')
+    :`<div class="empty">${leads.length?'No leads in this view.':'No leads yet. Tap “+ New lead” to add the first business you found.'}</div>`;
+}
+
+/* sheet */
+function openLead(id){
+  editing=id?leads.find(l=>l.id===id):null; const l=editing||{};
+  $('sheetH').textContent=editing?l.name:'New lead';
+  $('fName').value=l.name||'';$('fHandle').value=l.handle||'';$('fType').value=l.type||'';$('fValue').value=l.value||'';
+  $('fNext').value=l.next||'';$('fDate').value=l.nextDate||'';$('fPaid').value=l.paid||'';$('fWhere').value=l.via||'';$('fNote').value=l.note||'';
+  editStage=l.stage||'found'; drawStages(); $('delLead').hidden=!editing;
+  $('scrim').classList.add('open');$('sheet').classList.add('open');setTimeout(()=>$('fName').focus(),60);
+}
+function drawStages(){$('fStages').innerHTML=STAGES.map(s=>`<button type="button" data-stage="${s.id}" aria-pressed="${editStage===s.id}"><span class="dot" style="background:${s.c}"></span>${s.name}</button>`).join('')}
+function closeLead(){$('scrim').classList.remove('open');$('sheet').classList.remove('open');editing=null}
+async function write(fn,ok){
+  if(!db){toast('Not connected, so this change was not saved');return}
+  try{await fn();if(ok)toast(ok)}catch(e){if(e&&e.code==='invalid_argument'){canWrite=false;toast('This view is read-only')}else toast('Could not save. Try again.')}
+}
+
+document.addEventListener('click',e=>{
+  const ld=e.target.closest('[data-lead]');if(ld)return openLead(ld.dataset.lead);
+  const f=e.target.closest('[data-filter]');if(f){filter=f.dataset.filter;return render()}
+  const st=e.target.closest('[data-stage]');if(st){editStage=st.dataset.stage;return drawStages()}
+  const tk=e.target.closest('[data-task]');if(tk){const t=tasks.find(x=>x.id===tk.dataset.task);if(t)write(()=>db.doc('tasks/'+t.id).update({done:!t.done}));return}
+  const dt=e.target.closest('[data-deltask]');if(dt){write(()=>db.doc('tasks/'+dt.dataset.deltask).delete(),'Task removed');return}
+});
+$('newLead').addEventListener('click',()=>openLead(null));
+$('cancel').addEventListener('click',closeLead);$('scrim').addEventListener('click',closeLead);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLead()});
+$('leadForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const body={name:$('fName').value.trim(),handle:$('fHandle').value.trim(),type:$('fType').value.trim(),value:+$('fValue').value.replace(/\D/g,'')||0,
+    stage:editStage,next:$('fNext').value.trim(),nextDate:$('fDate').value,paid:+$('fPaid').value.replace(/\D/g,'')||0,via:$('fWhere').value.trim(),note:$('fNote').value.trim(),updated:today()};
+  if(!body.name)return $('fName').focus();
+  const id=editing?editing.id:null;closeLead();
+  write(()=>id?db.doc('leads/'+id).set(body):db.collection('leads').add(body),'Saved');
+});
+$('delLead').addEventListener('click',()=>{const id=editing&&editing.id;if(!id)return;
+  if($('delLead').dataset.armed!=='1'){$('delLead').dataset.armed='1';$('delLead').textContent='Tap again to delete';return}
+  $('delLead').dataset.armed='';$('delLead').textContent='Delete';closeLead();write(()=>db.doc('leads/'+id).delete(),'Lead deleted')});
+$('addTask').addEventListener('submit',e=>{e.preventDefault();const text=$('taskText').value.trim();if(!text)return;$('taskText').value='';
+  write(()=>db.collection('tasks').add({text,done:false,order:Date.now()}))});
+
+render();
+(async()=>{
+  db=window.claude&&window.claude.use?await window.claude.use('db'):null;
+  if(!db){setStatus(false,'Offline · sign in to see your data');return}
+  setStatus(true,'Live');
+  db.collection('leads').onSnapshot(s=>{leads=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>setStatus(false,'Disconnected'));
+  db.collection('tasks').orderBy('order').onSnapshot(s=>{tasks=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>setStatus(false,'Disconnected'));
+})();
+</script>
