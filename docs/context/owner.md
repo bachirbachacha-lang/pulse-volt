@@ -7,3 +7,4 @@
 - Never ask for or paste API keys or passwords in chat.
 - Repo: bachirbachacha-lang/pulse-volt, branch claude/shopify-product-website-mrj6f2. Commit and push work there.
 - Published sites are claude.ai artifacts. They're private until the owner presses Share.
+- 22 Oct: Owner plans to buy a MacBook. When they say they got it, remind them of: the app/product idea they want to launch (see pixel-co.md "App idea"), Claude desktop app, CapCut/Final Cut for reels, local dev setup.
