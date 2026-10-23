@@ -1,0 +1,147 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Bear be matcha Ad</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;800&family=Delius&display=swap">
+<style>html,body{margin:0;background:#F5DD91;overflow:hidden}canvas{display:block}</style>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+/* 15 s vertical ad for Bear be matcha, 120 BPM (beat 0.5 s). render(t) is pure, recorded at 60 fps.
+   Brand: butter paper, brown hand-drawn ink, the bear's blue-grey, matcha green. */
+const W=1080,H=1920,BEAT=.5;
+const C={butter:'#F5DD91',cream:'#FFF7DC',ink:'#4B2A1E',inkS:'#7A5442',blue:'#7E93B2',matcha:'#7FA65A',matchaD:'#55803A',milk:'#FBF3DC',pink:'#EE9DAA'};
+const cv=document.getElementById('c'),x=cv.getContext('2d');
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v)),lerp=(a,b,t)=>a+(b-a)*t,prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eOut=t=>1-Math.pow(1-t,4),eIn=t=>t*t*t,eIO=t=>t<.5?8*t**4:1-Math.pow(-2*t+2,4)/2;
+const eBack=t=>{const c=2.4;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
+const eEl=t=>t===0||t===1?t:Math.pow(2,-9*t)*Math.sin((t*9-.75)*2*Math.PI/3)+1;
+const pulse=(t,d=7)=>{const b=t/BEAT;return Math.exp(-(b-Math.floor(b))*d)};
+const hash=n=>{const s=Math.sin(n*127.1)*43758.5453;return s-Math.floor(s)};
+const AR=(w,s)=>`${w} ${s}px 'Baloo Bhaijaan 2', sans-serif`, EN=s=>`400 ${s}px Delius, sans-serif`;
+const bear=new Image(),logo=new Image();bear.src='bear.png';logo.src='logo.png';
+const DRINKS=[
+ {ar:'كلاسيك فانيلا ماتشا',en:'Classic vanilla',p:23,syrup:'#F3E3B3',bg:'#F5DD91'},
+ {ar:'بنانا جليز ماتشا',en:'Banana glaze',p:26,syrup:'#F2CB4E',bg:'#F8E7A4'},
+ {ar:'سي سولت فانيلا ماتشا',en:'Sea salt vanilla',p:24,syrup:'#E9E4D2',bg:'#DCE3EE',salt:1},
+ {ar:'بانكيك ميبل ماتشا',en:'Pancake maple',p:24,syrup:'#C98A3D',bg:'#F1D7A9'},
+ {ar:'بيرثداي كيك ماتشا',en:'Birthdaee cake',p:25,syrup:'#F3E3B3',bg:'#F6CDD3',foam:1,spr:1}
+];
+
+function paper(col){x.fillStyle=col;x.fillRect(0,0,W,H);x.save();x.globalAlpha=.06;for(let i=0;i<700;i++){x.fillStyle=i%2?C.ink:'#fff';x.fillRect(hash(i)*W,hash(i+.5)*H,3,3)}x.restore()}
+function spark(cx,cy,s,rot,col){x.save();x.translate(cx,cy);x.rotate(rot);x.scale(s,s);x.fillStyle=col;x.beginPath();x.moveTo(0,-24);x.quadraticCurveTo(3,-3,24,0);x.quadraticCurveTo(3,3,0,24);x.quadraticCurveTo(-3,3,-24,0);x.quadraticCurveTo(-3,-3,0,-24);x.fill();x.restore()}
+function wobbleText(str,cx,cy,font,col,t,amp=6){x.font=font;x.fillStyle=col;x.textAlign='center';x.textBaseline='middle';x.fillText(str,cx,cy+Math.sin(t*6)*amp*.3)}
+
+/* hand-drawn cup: layers pour from the bottom, the drawing outline wobbles slightly like a sketch */
+function cup(cx,cy,s,d,fill,t){
+  x.save();x.translate(cx,cy);x.scale(s,s);
+  const top=-230,bot=230,wT=180,wB=140,j=a=>Math.sin(t*9+a)*1.6;
+  const path=()=>{x.beginPath();x.moveTo(-wT+j(1),top);x.lineTo(wT+j(2),top);x.lineTo(wB+j(3),bot);x.lineTo(-wB+j(4),bot);x.closePath()};
+  path();x.fillStyle='rgba(255,255,255,.55)';x.fill();
+  x.save();path();x.clip();
+  const layers=[d.syrup,C.milk,C.milk,C.matcha],lvl=fill,hh=(bot-top-70)/layers.length;
+  layers.forEach((c,i)=>{const p=clamp(lvl*layers.length-i);if(p<=0)return;const y1=bot-(i)*hh,y0=y1-hh*eOut(p);
+    x.fillStyle=c;x.beginPath();x.moveTo(-260,y1);x.lineTo(-260,y0);for(let k=0;k<=20;k++){const xx=-260+k*26;x.lineTo(xx,y0+Math.sin(k*1.3+t*8)*5*(1-p+.2))}x.lineTo(260,y1);x.fill()});
+  // ice
+  [[-70,-40,-12],[40,10,14]].forEach(([ix,iy,r])=>{x.save();x.translate(ix,iy+Math.sin(t*3+ix)*6);x.rotate(r*Math.PI/180);x.fillStyle='rgba(255,255,255,.5)';x.beginPath();x.roundRect(-36,-36,72,72,12);x.fill();x.restore()});
+  if(d.foam&&fill>.95){const f=eBack(prog(fill,.95,1));x.fillStyle='#FFFBEF';x.beginPath();x.moveTo(-200,top+70);for(let k=0;k<=8;k++)x.quadraticCurveTo(-200+k*50-25,top+30-20*f,-200+k*50,top+70);x.lineTo(200,top+110);x.lineTo(-200,top+110);x.fill()}
+  x.restore();
+  if(d.spr&&fill>.97)[...Array(14)].forEach((_,k)=>{x.save();x.translate(-150+k*22,top+18+hash(k)*30);x.rotate(hash(k+3)*3);x.fillStyle=[C.pink,C.blue,'#F2CB4E',C.matcha][k%4];x.fillRect(-11,-4,22,8);x.restore()});
+  if(d.salt&&fill>.97)[...Array(9)].forEach((_,k)=>{x.fillStyle='#fff';x.beginPath();x.arc(-120+k*30,top+80+hash(k)*20,5,0,7);x.fill()});
+  // straw + outline + lid
+  x.strokeStyle=C.blue;x.lineWidth=26;x.lineCap='round';x.beginPath();x.moveTo(40,170);x.lineTo(80,-400);x.stroke();
+  path();x.strokeStyle=C.ink;x.lineWidth=9;x.lineJoin='round';x.stroke();
+  x.fillStyle=C.cream;x.beginPath();x.moveTo(-wT-22,top-22);x.quadraticCurveTo(0,top-40,wT+22,top-22);x.lineTo(wT+16,top+10);x.quadraticCurveTo(0,top-6,-wT-16,top+10);x.closePath();x.fill();x.stroke();
+  x.restore();
+}
+
+/* 1 · 0–2: the bear drops in and bounces, name writes on */
+function s1(t){
+  paper(C.butter);
+  const p=prog(t,.1,1.1),y=lerp(-600,820,eEl(p)),sq=1+.12*Math.sin(clamp(t-.6)*14)*Math.exp(-(t-.6)*5)*(t>.6?1:0);
+  x.save();x.translate(W/2,y+380);x.scale(1/sq,sq);x.translate(0,-380);
+  // shadow
+  x.restore();x.fillStyle='rgba(75,42,30,.12)';x.beginPath();x.ellipse(W/2,1260,220*eOut(p),30*eOut(p),0,0,7);x.fill();
+  x.save();x.translate(W/2,y+380);x.scale(1/sq,sq);x.drawImage(bear,-318*.95,-478*1.9,636*.95,956*.95);x.restore();
+  [[200,420,.9],[880,560,1.1],[180,1380,.7],[900,1320,.8]].forEach(([sx,sy,ss],i)=>spark(sx,sy,ss*eBack(prog(t,.8+i*.1,1.3+i*.1))*(1+.15*pulse(t)),t*1.5+i,i%2?C.blue:C.ink));
+  const tw=eOut(prog(t,.9,1.6));x.globalAlpha=tw;wobbleText('Bear be matcha',W/2,1460+(1-tw)*40,EN(110),C.ink,t);
+  x.font=AR(800,64);x.fillText('ماتشا الدب 🍵',W/2,1580+(1-tw)*40);x.globalAlpha=1;
+  const wipe=eIn(prog(t,1.75,2));if(wipe>0){x.fillStyle=C.cream;x.beginPath();x.arc(W/2,H/2,wipe*1300,0,7);x.fill()}
+}
+
+/* 2 · 2–4: a cup is poured layer by layer */
+function s2(t){
+  const lt=t-2;paper(C.cream);
+  const d=DRINKS[0];cup(W/2,1000,1.35,d,eIO(prog(lt,.15,1.5)),t);
+  const k=eOut(prog(lt,.2,.6));x.globalAlpha=k;x.font=AR(800,118);x.fillStyle=C.ink;x.textAlign='center';x.textBaseline='middle';
+  x.fillText('ماتشا تحبها',W/2,330+(1-k)*-60);x.font=EN(52);x.fillStyle=C.inkS;x.fillText('poured fresh, every cup',W/2,440);x.globalAlpha=1;
+  x.font=AR(600,40);x.fillStyle=C.inkS;x.fillText('ماتشا · حليب · سيروب منزلي',W/2,1560);
+}
+
+/* 3 · 4–9: the menu, one drink per beat-pair, sliding carousel with price tags */
+function s3(t){
+  const lt=t-4,dur=1,i=Math.min(4,Math.floor(lt/dur)),f=lt-i*dur,d=DRINKS[i];
+  paper(d.bg);
+  // previous drink slides out
+  const inP=eOut(prog(f,0,.35));
+  if(i>0&&f<.35){const pd=DRINKS[i-1];cup(W/2-W*inP,980,1.15,pd,1,t)}
+  cup(W/2+W*(1-inP),980,1.15,d,clamp(f/.5+.3),t);
+  // price tag pops on beat
+  const tag=eBack(prog(f,.25,.55));x.save();x.translate(840,560);x.rotate(-.18+Math.sin(t*4)*.04);x.scale(tag,tag);
+  x.fillStyle=C.ink;x.beginPath();x.arc(0,0,120,0,7);x.fill();x.fillStyle=C.cream;x.textAlign='center';x.textBaseline='middle';
+  x.font=AR(800,96);x.fillText(String(d.p),0,-14);x.font=AR(600,34);x.fillText('ريال',0,52);x.restore();
+  const nm=eOut(prog(f,.15,.45));x.globalAlpha=nm;x.textAlign='center';x.textBaseline='middle';x.fillStyle=C.ink;
+  x.font=AR(800,84);x.fillText(d.ar,W/2,1500+(1-nm)*50);x.font=EN(46);x.fillStyle=C.inkS;x.fillText(d.en,W/2,1600+(1-nm)*50);x.globalAlpha=1;
+  // dots
+  DRINKS.forEach((_,k)=>{x.fillStyle=k===i?C.ink:'rgba(75,42,30,.25)';x.beginPath();x.arc(W/2-80+k*40,1720,k===i?11:8,0,7);x.fill()});
+  x.font=AR(800,52);x.fillStyle=C.ink;x.fillText('المنيو',W/2,250);
+}
+
+/* 4 · 9–11: add-ons rain down as chips */
+function s4(t){
+  const lt=t-9;paper(C.butter);
+  x.textAlign='center';x.textBaseline='middle';const k=eOut(prog(lt,0,.4));x.globalAlpha=k;x.font=AR(800,110);x.fillStyle=C.ink;x.fillText('زِد الإضافات',W/2,330);x.font=EN(50);x.fillStyle=C.inkS;x.fillText('every add-on +3',W/2,440);x.globalAlpha=1;
+  const chips=['جرعة ماتشا','حليب جوز الهند','سيروب فراولة','فوم كريمي','فوم فراولة','كيس الإحتفالات'];
+  chips.forEach((c,i)=>{const st=.15+i*.17,p=prog(lt,st,st+.6),y=lerp(-200,680+Math.floor(i/2)*240,eEl(p)),xx=i%2?W/2+215:W/2-215;
+    x.save();x.translate(xx,y);x.rotate((i%2?.06:-.06)+Math.sin(t*5+i)*.02);x.fillStyle=C.cream;x.strokeStyle=C.ink;x.lineWidth=6;
+    x.beginPath();x.roundRect(-200,-75,400,150,40);x.fill();x.stroke();x.fillStyle=C.blue;x.beginPath();x.roundRect(-196,-71,400,150,40);x.globalAlpha=0;x.fill();x.globalAlpha=1;
+    x.fillStyle=C.ink;x.font=AR(800,44);const tw=x.measureText(c).width,sc=Math.min(1,250/tw);x.save();x.translate(30,-4);x.scale(sc,1);x.fillText(c,0,0);x.restore();x.fillStyle=C.matchaD;x.font=AR(800,40);x.fillText('+3',-152,-4);x.restore()});
+  x.drawImage(bear,W/2-110,1440,220,330);
+}
+
+/* 5 · 11–13: order on WhatsApp — a phone, the order bubble types itself */
+function s5(t){
+  const lt=t-11;paper(C.cream);
+  const up=eBack(prog(lt,0,.5));x.save();x.translate(W/2,1020+(1-up)*900);x.rotate(-.05);
+  x.fillStyle=C.ink;x.beginPath();x.roundRect(-300,-560,600,1120,80);x.fill();x.fillStyle='#ECE5DD';x.beginPath();x.roundRect(-272,-530,544,1060,60);x.fill();
+  x.fillStyle='#075E54';x.beginPath();x.roundRect(-272,-530,544,130,[60,60,0,0]);x.fill();x.fillStyle='#fff';x.font=AR(800,40);x.textAlign='right';x.textBaseline='middle';x.fillText('Bear be matcha',220,-468);
+  const lines=['طلب جديد من الموقع 🐻🍵','• 2× بنانا جليز ماتشا','   + فوم منزلي كريمي','• 1× بيرثداي كيك ماتشا','الاستلام: بعد ١٥ د','المجموع: ٨٣ ر.س'];
+  const shown=Math.floor(prog(lt,.45,1.5)*lines.length*1.0001);
+  x.fillStyle='#DCF8C6';x.beginPath();x.roundRect(-240,-360,480,90+Math.max(1,shown)*62,24);x.fill();
+  x.fillStyle='#1d2a1d';x.font=AR(600,33);x.direction='rtl';lines.slice(0,shown).forEach((l,i)=>x.fillText(l,210,-310+i*62));
+  if(lt>1.5){const ck=eOut(prog(lt,1.5,1.8));x.fillStyle='#34B7F1';x.font=AR(800,34);x.globalAlpha=ck;x.fillText('✓✓',-180,-300+shown*62);x.globalAlpha=1}
+  x.restore();
+  const k=eOut(prog(lt,.2,.6));x.globalAlpha=k;x.textAlign='center';x.font=AR(800,100);x.fillStyle=C.ink;x.fillText('اطلب على الواتساب',W/2,250);
+  x.font=EN(48);x.fillStyle=C.inkS;x.fillText('pick · customise · send',W/2,350);x.globalAlpha=1;
+}
+
+/* 6 · 13–15: end card — logo stamp, handle, sparkle burst */
+function s6(t){
+  const lt=t-13;paper(C.butter);
+  const st=eEl(prog(lt,0,.8));x.save();x.translate(W/2,820);x.rotate((1-st)*-.4);x.scale(st,st);x.drawImage(logo,-457*.8,-500*.8,457*1.6,500*1.6);x.restore();
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2,r=eOut(prog(lt,.1,.9))*520;spark(W/2+Math.cos(a)*r,820+Math.sin(a)*r*.9,.7*(1-eIn(prog(lt,.5,1.4))),a+lt*3,i%2?C.blue:C.ink)}
+  const k=eOut(prog(lt,.6,1.1));x.globalAlpha=k;x.textAlign='center';x.textBaseline='middle';x.fillStyle=C.ink;
+  x.font=AR(800,90);x.fillText('جاهز خلال ١٥ دقيقة',W/2,1340+(1-k)*40);
+  x.fillStyle=C.ink;x.beginPath();x.roundRect(W/2-300,1450,600,120,60);x.fill();x.fillStyle=C.cream;x.font=EN(56);x.fillText('@bearbematcha',W/2,1512);x.globalAlpha=1;
+  const out=eIn(prog(lt,1.75,2));if(out>0){x.fillStyle=`rgba(245,221,145,${out})`;x.fillRect(0,0,W,H)}
+}
+
+const SC=[[0,s1],[2,s2],[4,s3],[9,s4],[11,s5],[13,s6]];
+function render(t){
+  x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;
+  let k=0;for(let i=0;i<SC.length;i++)if(t>=SC[i][0])k=i;
+  const punch=1+.01*pulse(t,9)*(t>2?1:0);x.save();x.translate(W/2,H/2);x.scale(punch,punch);x.translate(-W/2,-H/2);SC[k][1](t);x.restore();
+  // tiny sample label
+  x.font=EN(24);x.fillStyle='rgba(75,42,30,.45)';x.textAlign='left';x.textBaseline='bottom';x.fillText('sample ad · Pixel & Co.',36,H-30);
+}
+window.render=render;
+Promise.all([document.fonts.ready,new Promise(r=>bear.complete?r():bear.onload=r),new Promise(r=>logo.complete?r():logo.onload=r)]).then(()=>{window.READY=true;if(!location.hash)(function loop(){render((performance.now()/1000)%15);requestAnimationFrame(loop)})()});
+</script>
