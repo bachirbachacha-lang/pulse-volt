@@ -18,6 +18,17 @@ const pulse=(t,d=7)=>{const b=t/BEAT;return Math.exp(-(b-Math.floor(b))*d)};
 const hash=n=>{const s=Math.sin(n*127.1)*43758.5453;return s-Math.floor(s)};
 const AR=(w,s)=>`${w} ${s}px 'Baloo Bhaijaan 2', sans-serif`, EN=s=>`400 ${s}px Delius, sans-serif`;
 const bear=new Image(),logo=new Image();bear.src='bear.png';logo.src='logo.png';
+const PH={};['tray','birthday','whimsical','autumn','foam'].forEach(k=>{PH[k]=new Image();PH[k].src='photos/'+k+'.jpg'});
+/* a photo printed like a sticker card: cream border, ink outline, slight tilt, cover-cropped */
+function photo(img,cx,cy,w,h,rot,zoom=1,fx=.5,fy=.5){
+  x.save();x.translate(cx,cy);x.rotate(rot);
+  x.fillStyle='rgba(75,42,30,.18)';x.beginPath();x.roundRect(-w/2+14,-h/2+18,w,h,38);x.fill();
+  x.fillStyle=C.cream;x.beginPath();x.roundRect(-w/2,-h/2,w,h,38);x.fill();x.lineWidth=8;x.strokeStyle=C.ink;x.stroke();
+  const iw=w-40,ih=h-40;x.save();x.beginPath();x.roundRect(-iw/2,-ih/2,iw,ih,26);x.clip();
+  const sc=Math.max(iw/img.width,ih/img.height)*zoom,dw=img.width*sc,dh=img.height*sc;
+  x.drawImage(img,-dw/2+(.5-fx)*(dw-iw),-dh/2+(.5-fy)*(dh-ih),dw,dh);
+  x.restore();x.restore();
+}
 const DRINKS=[
  {ar:'كلاسيك فانيلا ماتشا',en:'Classic vanilla',p:23,syrup:'#F3E3B3',bg:'#F5DD91'},
  {ar:'بنانا جليز ماتشا',en:'Banana glaze',p:26,syrup:'#F2CB4E',bg:'#F8E7A4'},
@@ -67,31 +78,35 @@ function s1(t){
   const wipe=eIn(prog(t,1.75,2));if(wipe>0){x.fillStyle=C.cream;x.beginPath();x.arc(W/2,H/2,wipe*1300,0,7);x.fill()}
 }
 
-/* 2 · 2–4: a cup is poured layer by layer */
+/* 2 · 2–4: their real drinks, a slow push-in on the tray shot */
 function s2(t){
   const lt=t-2;paper(C.cream);
-  const d=DRINKS[0];cup(W/2,1000,1.35,d,eIO(prog(lt,.15,1.5)),t);
+  const p=eBack(prog(lt,0,.55));photo(PH.tray,W/2,1010,900*p,1000*p,lerp(.25,-.04,eOut(prog(lt,0,.6))),1+lt*.06);
+  [[160,520,.8],[930,1460,1],[140,1500,.6]].forEach(([sx,sy,ss],i)=>spark(sx,sy,ss*eBack(prog(lt,.3+i*.1,.8+i*.1))*(1+.15*pulse(t)),t*1.5+i,i%2?C.blue:C.ink));
   const k=eOut(prog(lt,.2,.6));x.globalAlpha=k;x.font=AR(800,118);x.fillStyle=C.ink;x.textAlign='center';x.textBaseline='middle';
-  x.fillText('ماتشا تحبها',W/2,330+(1-k)*-60);x.font=EN(52);x.fillStyle=C.inkS;x.fillText('poured fresh, every cup',W/2,440);x.globalAlpha=1;
-  x.font=AR(600,40);x.fillStyle=C.inkS;x.fillText('ماتشا · حليب · سيروب منزلي',W/2,1560);
+  x.fillText('ماتشا تحبها',W/2,300+(1-k)*-60);x.font=EN(52);x.fillStyle=C.inkS;x.fillText('poured fresh, every cup',W/2,410);x.globalAlpha=1;
+  x.font=AR(600,44);x.fillStyle=C.inkS;x.fillText('ماتشا فاخرة · سيروب منزلي · فوم كريمي',W/2,1640);
 }
 
-/* 3 · 4–9: the menu, one drink per beat-pair, sliding carousel with price tags */
+/* 3 · 4–9: the menu with their real photos, one drink every 1.67 s, sticker price tags */
+const REAL=[
+ {img:'birthday',ar:'بيرثداي كيك ماتشا',en:'Birthdaee cake matcha',tag:'25',sub:'ريال',bg:'#F6CDD3',fy:.4},
+ {img:'whimsical',ar:'ويمزيكال ماتشا',en:'Whimsical matcha · make your own',tag:'✦',sub:'على ذوقك',bg:'#DCE3EE',fy:.55},
+ {img:'autumn',ar:'ماتشا كراميل التفاح',en:'Caramelized apple crumble',tag:'',sub:'',bg:'#F1D7A9',fy:.5,limited:1}];
 function s3(t){
-  const lt=t-4,dur=1,i=Math.min(4,Math.floor(lt/dur)),f=lt-i*dur,d=DRINKS[i];
+  const lt=t-4,dur=5/3,i=Math.min(2,Math.floor(lt/dur)),f=lt-i*dur,d=REAL[i];
   paper(d.bg);
-  // previous drink slides out
-  const inP=eOut(prog(f,0,.35));
-  if(i>0&&f<.35){const pd=DRINKS[i-1];cup(W/2-W*inP,980,1.15,pd,1,t)}
-  cup(W/2+W*(1-inP),980,1.15,d,clamp(f/.5+.3),t);
-  // price tag pops on beat
-  const tag=eBack(prog(f,.25,.55));x.save();x.translate(840,560);x.rotate(-.18+Math.sin(t*4)*.04);x.scale(tag,tag);
+  const inP=eOut(prog(f,0,.4));
+  if(i>0&&f<.4){const pd=REAL[i-1];photo(PH[pd.img],W/2-W*inP*1.1,980,820,1060,-.05-inP*.3,1.02,.5,pd.fy)}
+  photo(PH[d.img],W/2+W*(1-inP)*1.1,980,820,1060,(1-inP)*.3+Math.sin(t*2)*.012,1.04+f*.04,.5,d.fy);
+  const tag=d.tag?eBack(prog(f,.3,.6)):0;x.save();x.translate(860,520);x.rotate(-.18+Math.sin(t*4)*.04);x.scale(tag||.0001,tag||.0001);
   x.fillStyle=C.ink;x.beginPath();x.arc(0,0,120,0,7);x.fill();x.fillStyle=C.cream;x.textAlign='center';x.textBaseline='middle';
-  x.font=AR(800,96);x.fillText(String(d.p),0,-14);x.font=AR(600,34);x.fillText('ريال',0,52);x.restore();
-  const nm=eOut(prog(f,.15,.45));x.globalAlpha=nm;x.textAlign='center';x.textBaseline='middle';x.fillStyle=C.ink;
-  x.font=AR(800,84);x.fillText(d.ar,W/2,1500+(1-nm)*50);x.font=EN(46);x.fillStyle=C.inkS;x.fillText(d.en,W/2,1600+(1-nm)*50);x.globalAlpha=1;
-  // dots
-  DRINKS.forEach((_,k)=>{x.fillStyle=k===i?C.ink:'rgba(75,42,30,.25)';x.beginPath();x.arc(W/2-80+k*40,1720,k===i?11:8,0,7);x.fill()});
+  x.font=AR(800,d.tag.length>2?80:96);x.fillText(d.tag,0,-14);x.font=AR(600,34);x.fillText(d.sub,0,52);x.restore();
+  if(d.limited){const lp=eBack(prog(f,.5,.8));x.save();x.translate(230,1420);x.rotate(-.2);x.scale(lp,lp);x.strokeStyle='#C4562F';x.lineWidth=7;x.fillStyle='#FCE3C8';
+    x.beginPath();x.ellipse(0,0,150,70,0,0,7);x.fill();x.stroke();x.fillStyle='#C4562F';x.font=AR(800,40);x.textAlign='center';x.textBaseline='middle';x.fillText('لفترة محدودة',0,2);x.restore()}
+  const nm=eOut(prog(f,.2,.5));x.globalAlpha=nm;x.textAlign='center';x.textBaseline='middle';x.fillStyle=C.ink;
+  x.font=AR(800,84);x.fillText(d.ar,W/2,1590+(1-nm)*50);x.font=EN(44);x.fillStyle=C.inkS;x.fillText(d.en,W/2,1690+(1-nm)*50);x.globalAlpha=1;
+  REAL.forEach((_,k)=>{x.fillStyle=k===i?C.ink:'rgba(75,42,30,.25)';x.beginPath();x.arc(W/2-40+k*40,1790,k===i?11:8,0,7);x.fill()});
   x.font=AR(800,52);x.fillStyle=C.ink;x.fillText('المنيو',W/2,250);
 }
 
@@ -99,12 +114,12 @@ function s3(t){
 function s4(t){
   const lt=t-9;paper(C.butter);
   x.textAlign='center';x.textBaseline='middle';const k=eOut(prog(lt,0,.4));x.globalAlpha=k;x.font=AR(800,110);x.fillStyle=C.ink;x.fillText('زِد الإضافات',W/2,330);x.font=EN(50);x.fillStyle=C.inkS;x.fillText('every add-on +3',W/2,440);x.globalAlpha=1;
-  const chips=['جرعة ماتشا','حليب جوز الهند','سيروب فراولة','فوم كريمي','فوم فراولة','كيس الإحتفالات'];
+  const chips=['جرعة ماتشا','حليب جوز الهند','سيروب فراولة','فوم كريمي','فوم فراولة','كيس الإحتفالات'];x.save();x.translate(0,-120);
   chips.forEach((c,i)=>{const st=.15+i*.17,p=prog(lt,st,st+.6),y=lerp(-200,680+Math.floor(i/2)*240,eEl(p)),xx=i%2?W/2+215:W/2-215;
     x.save();x.translate(xx,y);x.rotate((i%2?.06:-.06)+Math.sin(t*5+i)*.02);x.fillStyle=C.cream;x.strokeStyle=C.ink;x.lineWidth=6;
     x.beginPath();x.roundRect(-200,-75,400,150,40);x.fill();x.stroke();x.fillStyle=C.blue;x.beginPath();x.roundRect(-196,-71,400,150,40);x.globalAlpha=0;x.fill();x.globalAlpha=1;
-    x.fillStyle=C.ink;x.font=AR(800,44);const tw=x.measureText(c).width,sc=Math.min(1,250/tw);x.save();x.translate(30,-4);x.scale(sc,1);x.fillText(c,0,0);x.restore();x.fillStyle=C.matchaD;x.font=AR(800,40);x.fillText('+3',-152,-4);x.restore()});
-  x.drawImage(bear,W/2-110,1440,220,330);
+    x.fillStyle=C.ink;x.font=AR(800,44);const tw=x.measureText(c).width,sc=Math.min(1,250/tw);x.save();x.translate(30,-4);x.scale(sc,1);x.fillText(c,0,0);x.restore();x.fillStyle=C.matchaD;x.font=AR(800,40);x.fillText('+3',-152,-4);x.restore()});x.restore();
+  const fp=eBack(prog(lt,.9,1.4));photo(PH.foam,W/2,1560,420*fp,480*fp,.06,1.05,.5,.35);
 }
 
 /* 5 · 11–13: order on WhatsApp — a phone, the order bubble types itself */
@@ -143,5 +158,5 @@ function render(t){
   x.font=EN(24);x.fillStyle='rgba(75,42,30,.45)';x.textAlign='left';x.textBaseline='bottom';x.fillText('sample ad · Pixel & Co.',36,H-30);
 }
 window.render=render;
-Promise.all([document.fonts.ready,new Promise(r=>bear.complete?r():bear.onload=r),new Promise(r=>logo.complete?r():logo.onload=r)]).then(()=>{window.READY=true;if(!location.hash)(function loop(){render((performance.now()/1000)%15);requestAnimationFrame(loop)})()});
+Promise.all([...Object.values(PH).map(im=>new Promise(r=>im.complete?r():im.onload=r)),document.fonts.ready,new Promise(r=>bear.complete?r():bear.onload=r),new Promise(r=>logo.complete?r():logo.onload=r)]).then(()=>{window.READY=true;if(!location.hash)(function loop(){render((performance.now()/1000)%15);requestAnimationFrame(loop)})()});
 </script>

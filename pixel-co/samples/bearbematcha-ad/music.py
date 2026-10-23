@@ -52,7 +52,7 @@ for k in range(int(DUR/.5)):
     if k%2 and 2<=s<13:
         n=int(.12*SR);nz=rng.standard_normal(n);add((nz-lp(nz,1500))*np.exp(-np.arange(n)/SR*30),s,pan=-.1,gain=.18)
 # pops: drink tags (4.25 + i), add-on chips, phone ticks, final logo bell
-for i in range(5): add(glock(84+[0,2,4,5,7][i],.8),4.25+i,pan=.2,gain=.22)
+for i in range(3): add(glock(84+[0,4,7][i],.8),4.3+i*5/3,pan=.2,gain=.22)
 for i in range(6): add(glock(79+[0,4,7,12,7,4][i],.6),9.15+i*.17,pan=(-.3,.3)[i%2],gain=.16)
 for i in range(6):
     t=tt(.05);add(np.sin(2*np.pi*1800*t)*np.exp(-t*90),11.45+i*.175,gain=.12)
