@@ -1,0 +1,192 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Pixel & Co. Showreel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap">
+<style>html,body{margin:0;background:#07060F;overflow:hidden}canvas{display:block}</style>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+/* 15 s motion showreel, 120 BPM (beat = 0.5 s). Every frame is a pure function of t, so the
+   recorder can step it frame by frame at 60 fps. Scenes cut on the bar lines of the music. */
+const W=1920,H=1080,BPM=120,BEAT=60/BPM;
+const C={bg:'#07060F',ink:'#F4F1FF',dim:'#8C88B5',vio:'#7C6CFF',vio2:'#B3A8FF',hot:'#FF5A36',mint:'#3CF2C0'};
+const cv=document.getElementById('c'),x=cv.getContext('2d');
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eOut=t=>1-Math.pow(1-t,4), eIn=t=>t*t*t*t, eIO=t=>t<.5?8*t*t*t*t:1-Math.pow(-2*t+2,4)/2;
+const eBack=t=>{const c=2.2;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
+const eEl=t=>t===0||t===1?t:Math.pow(2,-10*t)*Math.sin((t*10-.75)*2*Math.PI/3)+1;
+const hash=n=>{const s=Math.sin(n*127.1)*43758.5453;return s-Math.floor(s)};
+const pulse=(t,decay=8)=>{const b=t/BEAT;return Math.exp(-(b-Math.floor(b))*decay)};
+const F=(w,s,f='Unbounded')=>`${w} ${s}px ${f}, Arial Black, sans-serif`;
+const MONO=s=>`400 ${s}px 'JetBrains Mono', monospace`;
+
+function hud(t,label,idx){
+  x.save();x.font=MONO(20);x.fillStyle=C.dim;x.textBaseline='top';
+  x.fillText('PIXEL & CO. — MOTION REEL 2026',60,50);
+  x.textAlign='right';x.fillText(`${String(idx).padStart(2,'0')} / 07   ${label}`,W-60,50);
+  x.textAlign='left';x.textBaseline='bottom';
+  const tc=t.toFixed(2).padStart(5,'0');x.fillText(`TC ${tc}s   ${Math.floor(t*60)%60} f   ${BPM} BPM`,60,H-50);
+  // timeline scrub
+  x.fillStyle='rgba(244,241,255,.12)';x.fillRect(W-460,H-62,400,3);x.fillStyle=C.vio;x.fillRect(W-460,H-62,400*(t/15),3);
+  x.restore();
+}
+function grain(t){const n=Math.floor(t*60);x.save();x.globalAlpha=.05;for(let i=0;i<900;i++){const a=hash(i+n*13.7),b=hash(i*3.1+n);x.fillStyle=i%2?'#fff':'#000';x.fillRect(a*W,b*H,2,2)}x.restore()}
+function vignette(){const g=x.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.95);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.55)');x.fillStyle=g;x.fillRect(0,0,W,H)}
+
+/* 1 · 0.0–2.0 — an easing curve draws itself, a dot rides it, the graph wipes away */
+function s1(t){
+  const lt=t, ox=560,oy=820,sw=800,sh=560;
+  x.strokeStyle='rgba(244,241,255,.08)';x.lineWidth=1;
+  for(let i=0;i<=10;i++){const p=eOut(prog(lt,0,.6));x.beginPath();x.moveTo(ox+i*sw/10,oy);x.lineTo(ox+i*sw/10,oy-sh*p);x.stroke();x.beginPath();x.moveTo(ox,oy-i*sh/10);x.lineTo(ox+sw*p,oy-i*sh/10);x.stroke()}
+  const d=eIO(prog(lt,.2,1.2));
+  const p1=[ox+sw*.42,oy],p2=[ox+sw*.58,oy-sh];
+  // handles
+  x.strokeStyle=C.dim;x.setLineDash([6,8]);x.lineWidth=2;x.globalAlpha=eOut(prog(lt,.3,.7));
+  x.beginPath();x.moveTo(ox,oy);x.lineTo(...p1);x.moveTo(ox+sw,oy-sh);x.lineTo(...p2);x.stroke();x.setLineDash([]);
+  [p1,p2].forEach(p=>{x.fillStyle=C.bg;x.strokeStyle=C.vio2;x.beginPath();x.arc(p[0],p[1],10,0,7);x.fill();x.stroke()});x.globalAlpha=1;
+  const B=(u)=>{const m=1-u;return[m*m*m*ox+3*m*m*u*p1[0]+3*m*u*u*p2[0]+u*u*u*(ox+sw),m*m*m*oy+3*m*m*u*p1[1]+3*m*u*u*p2[1]+u*u*u*(oy-sh)]};
+  x.strokeStyle=C.hot;x.lineWidth=6;x.lineCap='round';x.shadowColor=C.hot;x.shadowBlur=24;x.beginPath();
+  for(let i=0;i<=120*d;i++){const q=B(i/120);i?x.lineTo(...q):x.moveTo(...q)}x.stroke();x.shadowBlur=0;
+  const ride=eIO(prog(lt,1.1,1.75)),q=B(ride);
+  if(lt>1.1){x.fillStyle=C.ink;x.beginPath();x.arc(q[0],q[1],16+10*pulse(t),0,7);x.fill();
+    x.fillStyle=C.hot;x.fillRect(ox+sw+40,q[1]-2,90*ride+20,4);}
+  x.font=MONO(22);x.fillStyle=C.ink;x.globalAlpha=eOut(prog(lt,.5,.9));
+  x.fillText('cubic-bezier(.42, 0, .58, 1)',ox,oy+60);x.fillStyle=C.dim;x.fillText('ease · in · out',ox+sw-210,oy+60);x.globalAlpha=1;
+  // wipe out
+  const wp=eIn(prog(lt,1.72,2));if(wp>0){x.fillStyle=C.vio;x.fillRect(0,H*(1-wp),W,H*wp)}
+}
+
+/* 2 · 2.0–4.0 — kinetic type: letters slam in on the beat, then slice */
+function s2(t){
+  const lt=t-2;x.fillStyle=C.vio;x.fillRect(0,0,W,H);
+  const word='MOTION';x.font=F(900,300);x.textBaseline='middle';
+  const widths=[...word].map(ch=>x.measureText(ch).width),tot=widths.reduce((a,b)=>a+b,0)+20*5;
+  let cx=W/2-tot/2;
+  [...word].forEach((ch,i)=>{const st=i*.09,p=prog(lt,st,st+.5),e=eBack(p);
+    const y=H/2+lerp(-700,0,eOut(p))*(1-p)+(1-e)*-120, s=lerp(2.2,1,e), rot=(1-e)*(i%2?.4:-.4);
+    const slice=eIO(prog(lt,1.45,1.85));
+    x.save();x.translate(cx+widths[i]/2,y);x.rotate(rot);x.scale(s,s);
+    // top half / bottom half slide apart
+    for(const half of[-1,1]){x.save();x.beginPath();x.rect(-300,half<0?-300:0,600,300);x.clip();x.translate(half*slice*(i%2?260:-260),0);
+      x.fillStyle=half<0?C.ink:C.bg;x.fillText(ch,-widths[i]/2,0);x.restore()}
+    x.restore();cx+=widths[i]+20});
+  x.font=MONO(24);x.fillStyle=C.bg;x.globalAlpha=eOut(prog(lt,.7,1));x.fillText('01 — TYPE THAT HITS THE BEAT',120,H-180);x.globalAlpha=1;
+  const flash=Math.exp(-lt*14);x.fillStyle=`rgba(255,255,255,${flash*.8})`;x.fillRect(0,0,W,H);
+}
+
+/* 3 · 4.0–6.0 — a field of shapes ripples outward and morphs circle → square → plus */
+function s3(t){
+  const lt=t-4;x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+  const cols=26,rows=14,gx=W/cols,gy=H/rows;
+  for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+    const px=gx*(i+.5),py=gy*(j+.5),d=Math.hypot(px-W/2,py-H/2)/W;
+    const wave=Math.sin(lt*7-d*14),m=(lt*1.1-d*1.3);
+    const shape=((Math.floor(m*2)%3)+3)%3, appear=eBack(prog(lt,d*.9,d*.9+.4));
+    const s=(14+10*wave)*appear*(1+.35*pulse(t,6));
+    x.save();x.translate(px,py);x.rotate(wave*.8+lt);
+    x.fillStyle=wave>.55?C.hot:(wave<-.6?C.vio:C.ink);x.globalAlpha=clamp(.35+.65*(wave*.5+.5));
+    if(shape===0){x.beginPath();x.arc(0,0,s,0,7);x.fill()}
+    else if(shape===1){x.fillRect(-s,-s,s*2,s*2)}
+    else{x.fillRect(-s,-s*.32,s*2,s*.64);x.fillRect(-s*.32,-s,s*.64,s*2)}
+    x.restore()}
+  x.globalAlpha=1;x.font=F(900,120);x.fillStyle=C.ink;x.textBaseline='middle';x.textAlign='center';
+  const k=eOut(prog(lt,.4,.8));x.globalAlpha=k;x.fillText('SYSTEMS',W/2,H/2+(1-k)*60);x.textAlign='left';x.globalAlpha=1;
+  const zo=eIn(prog(lt,1.75,2));if(zo>0){x.fillStyle=C.ink;x.beginPath();x.arc(W/2,H/2,zo*W*1.1,0,7);x.fill()}
+}
+
+/* 4 · 6.0–8.0 — liquid metaballs melt through outlined type */
+function s4(t){
+  const lt=t-6;x.fillStyle=C.ink;x.fillRect(0,0,W,H);
+  x.font=F(900,330);x.textAlign='center';x.textBaseline='middle';x.lineWidth=3;x.strokeStyle='#C9C4E6';x.strokeText('FLUID',W/2,H/2);
+  // metaball field on a low-res grid, drawn as smooth blobs
+  const balls=[...Array(6)].map((_,i)=>{const a=lt*(1.2+i*.27)+i*1.7;return{x:W/2+Math.cos(a)*(250+i*40)*Math.min(1,lt*1.5),y:H/2+Math.sin(a*1.3)*(140+i*12),r:(110+30*Math.sin(lt*3+i))*eBack(prog(lt,i*.06,i*.06+.5))}});
+  // field evaluated on a quarter-res buffer with a soft threshold, then upscaled: smooth liquid edges
+  const mw=480,mh=270,sx=W/mw;if(!s4.m){s4.m=new OffscreenCanvas(mw,mh);s4.L=new OffscreenCanvas(W,H)}
+  const mc=s4.m.getContext('2d'),id=mc.createImageData(mw,mh),dd=id.data;
+  for(let yy=0;yy<mh;yy++)for(let xx=0;xx<mw;xx++){let v=0;const px=xx*sx,py=yy*sx;for(const b of balls)v+=b.r*b.r/((px-b.x)**2+(py-b.y)**2+1);
+    const al=clamp((v-.97)*26),k=(yy*mw+xx)*4,gy=yy/mh;dd[k]=255;dd[k+1]=lerp(150,80,gy)|0;dd[k+2]=lerp(100,50,gy)|0;dd[k+3]=al*255|0}
+  mc.putImageData(id,0,0);
+  const L=s4.L.getContext('2d');L.globalCompositeOperation='source-over';L.clearRect(0,0,W,H);L.imageSmoothingQuality='high';L.drawImage(s4.m,0,0,W,H);
+  L.globalCompositeOperation='source-atop';L.font=F(900,330);L.textAlign='center';L.textBaseline='middle';L.fillStyle=C.ink;L.fillText('FLUID',W/2,H/2);
+  x.drawImage(s4.L,0,0);
+  x.textAlign='left';x.font=MONO(24);x.fillStyle=C.bg;x.fillText('02 — SHAPES THAT FEEL ALIVE',120,H-180);
+  const sl=eIn(prog(lt,1.8,2));if(sl>0){x.fillStyle=C.bg;for(let i=0;i<8;i++)x.fillRect(0,i*H/8,W*clamp(sl*1.6-i*.08),H/8+1)}
+}
+
+/* 5 · 8.0–10.0 — isometric 3D wave of extruded tiles, a hot spot moves through */
+function s5(t){
+  const lt=t-8;const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#14112E');g.addColorStop(1,C.bg);x.fillStyle=g;x.fillRect(0,0,W,H);
+  const N=16,sz=44,cx=W/2,cy=H/2-60;const iso=(i,j,h)=>[cx+(i-j)*sz*.98,cy+(i+j)*sz*.52-h-(N*sz*.52)/2+80];
+  const hot=[N/2+Math.cos(lt*1.6)*5,N/2+Math.sin(lt*1.6)*5],rise=eOut(prog(lt,0,.6));
+  for(let s=0;s<N*2;s++)for(let i=0;i<N;i++){const j=s-i;if(j<0||j>=N)continue;
+    const d=Math.hypot(i-hot[0],j-hot[1]);const h=(20+90*Math.exp(-d*d/6)+18*Math.sin(lt*4-(i+j)*.5))*rise*(1+.3*pulse(t,5));
+    const heat=Math.exp(-d*d/8);const top=iso(i,j,h),a=iso(i+1,j,h),b=iso(i+1,j+1,h),c=iso(i,j+1,h),a0=iso(i+1,j,0),b0=iso(i+1,j+1,0),c0=iso(i,j+1,0);
+    const col=(k)=>{const r=lerp(240,255,heat),gg=lerp(238,90,heat),bb=lerp(255,54,heat);return `rgb(${r*k|0},${gg*k|0},${bb*k|0})`};
+    x.fillStyle=col(.62);x.beginPath();x.moveTo(...c);x.lineTo(...b);x.lineTo(...b0);x.lineTo(...c0);x.fill();
+    x.fillStyle=col(.8);x.beginPath();x.moveTo(...a);x.lineTo(...b);x.lineTo(...b0);x.lineTo(...a0);x.fill();
+    x.fillStyle=col(1);x.beginPath();x.moveTo(...top);x.lineTo(...a);x.lineTo(...b);x.lineTo(...c);x.fill();}
+  x.font=F(900,96);x.fillStyle=C.ink;const k=eOut(prog(lt,.3,.7));x.globalAlpha=k;x.fillText('DEPTH',120,240);x.globalAlpha=1;
+  x.font=MONO(24);x.fillStyle=C.dim;x.fillText('03 — 3D WITHOUT A 3D APP',120,H-180);
+}
+
+/* 6 · 10.0–12.0 — swiss layout: a counter, an equalizer locked to the drums, then a riser */
+function s6(t){
+  const lt=t-10;x.fillStyle=C.hot;x.fillRect(0,0,W,H);
+  const n=Math.min(60,Math.floor(eOut(prog(lt,0,1.2))*60));
+  x.font=F(900,560);x.fillStyle=C.bg;x.textBaseline='alphabetic';x.fillText(String(n).padStart(2,'0'),60+(1-eOut(prog(lt,0,.4)))*-400,H-80);
+  x.font=MONO(28);x.fillText('FPS',80,H-60+200*(1-eOut(prog(lt,.2,.5))));
+  x.font=F(900,74);const lines=['EVERY','FRAME','IS CODE.'];
+  lines.forEach((l,i)=>{const p=eOut(prog(lt,.25+i*.12,.6+i*.12));x.save();x.beginPath();x.rect(1080,190+i*90,800,90);x.clip();x.fillStyle=i===2?C.ink:C.bg;x.fillText(l,1100,265+i*90+(1-p)*90);x.restore()});
+  // equalizer
+  for(let i=0;i<32;i++){const v=(.25+.75*Math.abs(Math.sin(i*1.7+lt*9)))*(.45+.55*pulse(t,7))*eOut(prog(lt,.3,.7));x.fillStyle=i%5?C.bg:C.ink;x.fillRect(1100+i*24,H-110-v*380,14,v*380)}
+  // riser: everything shakes and zooms toward center
+  const r=eIn(prog(lt,1.4,2));if(r>0){x.fillStyle=`rgba(7,6,15,${r})`;x.fillRect(0,0,W,H)}
+}
+
+/* 7 · 12.0–15.0 — hyperspace burst into the logo reveal */
+function s7(t){
+  const lt=t-12;x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+  const sp=Math.max(0,1-lt*.9)*1+.08;
+  x.save();x.translate(W/2,H/2);
+  for(let i=0;i<420;i++){const a=hash(i)*Math.PI*2,base=hash(i+9),z=((base+lt*sp*2.2)%1),r0=z*z*1400,len=(40+z*520)*sp;
+    x.strokeStyle=i%7===0?C.hot:(i%5===0?C.vio2:'rgba(244,241,255,.75)');x.lineWidth=1+z*3;x.globalAlpha=clamp(z*1.4)*clamp(1.6-lt*.5);
+    x.beginPath();x.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);x.lineTo(Math.cos(a)*(r0+len),Math.sin(a)*(r0+len));x.stroke()}
+  x.restore();x.globalAlpha=1;
+  const flash=Math.exp(-lt*9);x.fillStyle=`rgba(255,255,255,${flash})`;x.fillRect(0,0,W,H);
+  // logo mark: four tiles snap into place
+  const S=86,G=20,mx=W/2-S-G/2,my=H/2-S-G/2-90;
+  const tiles=[[0,0,C.ink],[1,0,C.vio],[0,1,C.ink],[1,1,null]];
+  tiles.forEach(([i,j,col],k)=>{const p=eBack(prog(lt,.25+k*.08,.75+k*.08));const fx=mx+i*(S+G),fy=my+j*(S+G);
+    const dx=(i?1:-1)*500*(1-p),dy=(j?1:-1)*300*(1-p);x.save();x.translate(fx+S/2+dx,fy+S/2+dy);x.rotate((1-p)*(k%2?2:-2));x.scale(p,p);
+    if(col){x.fillStyle=col;x.beginPath();x.roundRect(-S/2,-S/2,S,S,16);x.fill()}else{x.strokeStyle=C.ink;x.lineWidth=12;x.beginPath();x.roundRect(-S/2+6,-S/2+6,S-12,S-12,12);x.stroke()}
+    x.restore()});
+  // wordmark reveal through a rising mask, letter tracking tightens
+  const wp=eOut(prog(lt,.9,1.7)),track=lerp(60,6,wp);x.font=F(900,120);x.textBaseline='middle';
+  const word='PIXEL & CO.';let w=0;[...word].forEach(ch=>w+=x.measureText(ch).width+track);w-=track;
+  let cx=W/2-w/2;x.save();x.beginPath();x.rect(0,H/2+90-80,W,160*wp);x.clip();
+  [...word].forEach((ch,i)=>{x.fillStyle=ch==='&'?C.vio2:C.ink;x.fillText(ch,cx,H/2+150-60*eOut(prog(lt,.9+i*.03,1.6+i*.03)));cx+=x.measureText(ch).width+track});x.restore();
+  const sub=eOut(prog(lt,1.7,2.2));x.globalAlpha=sub;x.font=MONO(26);x.fillStyle=C.dim;x.textAlign='center';
+  x.fillText('MOTION · WEB · 3D — MADE 100% IN CODE',W/2,H/2+300);x.textAlign='left';x.globalAlpha=1;
+  // underline sweep
+  const ul=eIO(prog(lt,1.5,2.3));x.fillStyle=C.hot;x.fillRect(W/2-w/2,H/2+230,w*ul,6);
+  // final fade
+  const out=eIn(prog(lt,2.7,3));if(out>0){x.fillStyle=`rgba(7,6,15,${out})`;x.fillRect(0,0,W,H)}
+}
+
+const SCENES=[[0,s1,'EASING'],[2,s2,'KINETIC TYPE'],[4,s3,'SYSTEMS'],[6,s4,'FLUID'],[8,s5,'DEPTH'],[10,s6,'RHYTHM'],[12,s7,'IDENTITY']];
+function render(t){
+  x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.shadowBlur=0;x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+  let k=0;for(let i=0;i<SCENES.length;i++)if(t>=SCENES[i][0])k=i;
+  // camera: small beat punch + drift, hard shake on the riser into scene 7
+  const punch=1+.012*pulse(t,10)*(t>2?1:0);const shake=t>11.4&&t<12.2?(1-Math.abs(t-11.95)/.6)*14:0;
+  x.save();x.translate(W/2+Math.sin(t*61)*shake,H/2+Math.cos(t*47)*shake);x.scale(punch,punch);x.translate(-W/2,-H/2);
+  SCENES[k][1](t);x.restore();
+  // RGB split on cuts
+  const cut=SCENES.reduce((m,s)=>Math.min(m,Math.abs(t-s[0])),9);
+  if(cut<.08&&t>.1){const img=x.getImageData(0,0,W,H);x.globalCompositeOperation='screen';x.globalAlpha=.5;x.putImageData(img,0,0);x.drawImage(cv,14,0);x.globalCompositeOperation='source-over';x.globalAlpha=1}
+  vignette();grain(t);if(t<14.6)hud(t,SCENES[k][2],k+1);
+}
+window.render=render;
+document.fonts.ready.then(()=>{window.READY=true;if(!location.hash)(function loop(){const t=(performance.now()/1000)%15;render(t);requestAnimationFrame(loop)})()});
+</script>
