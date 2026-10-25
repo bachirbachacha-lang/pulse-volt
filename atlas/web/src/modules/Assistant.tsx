@@ -68,7 +68,7 @@ export default function Assistant() {
               <Button size="sm" type="submit">Save</Button>
             </form>
           ) : (
-            <h1 className="min-w-0 flex-1 truncate text-sm font-semibold">{current?.title ?? "New chat"}</h1>
+            <h1 className="min-w-0 flex-1 truncate text-sm font-semibold text-fg">{current?.title ?? "New chat"}</h1>
           )}
           {current ? (
             <>

@@ -168,7 +168,7 @@ function Experiments() {
           {list.data.map((e) => (
             <Card key={e.id} className="p-4">
               <div className="flex items-start gap-2">
-                <h3 className="flex-1 font-medium">{e.title}</h3>
+                <h3 className="flex-1 font-medium text-fg">{e.title}</h3>
                 <Badge tone={EXP_TONE[e.status as keyof typeof EXP_TONE]}>{e.status}</Badge>
               </div>
               {e.hypothesis && <p className="mt-2 text-sm text-fg-2"><span className="text-muted">Hypothesis: </span>{e.hypothesis}</p>}

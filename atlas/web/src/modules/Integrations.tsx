@@ -51,7 +51,7 @@ export default function Integrations() {
             {data!.filter((i) => i.category === g).map((i) => (
               <Card key={i.id} className="flex flex-col p-4">
                 <div className="flex items-start gap-2">
-                  <h3 className="flex-1 font-medium">{i.name}</h3>
+                  <h3 className="flex-1 font-medium text-fg">{i.name}</h3>
                   <Badge tone={STATUS[i.status].tone}>{STATUS[i.status].label}</Badge>
                 </div>
                 <p className="mt-1 text-sm text-muted">{i.detail}</p>

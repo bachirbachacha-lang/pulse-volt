@@ -57,7 +57,7 @@ export default function Projects() {
                       <span className="mt-1.5 size-3 shrink-0 rounded-full" style={{ background: PROJECT_COLORS[p.color], boxShadow: `0 0 12px ${PROJECT_COLORS[p.color]}66` }} aria-hidden />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <h2 className="truncate font-semibold">{p.name}</h2>
+                          <h2 className="truncate font-semibold text-fg">{p.name}</h2>
                           {p.pinned && <Pin className="size-3.5 text-gold" aria-label="Pinned" />}
                         </div>
                         <p className="mt-1 line-clamp-2 min-h-10 text-sm text-muted">{p.description || "No description"}</p>

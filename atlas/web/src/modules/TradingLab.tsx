@@ -35,7 +35,7 @@ function ImportModal({ open, onClose, onDone, avReady }: { open: boolean; onClos
     <Modal open={open} onClose={onClose} title="Add price data" wide>
       <div className="space-y-5">
         <section className="space-y-3">
-          <h3 className="text-sm font-semibold">1. Import a CSV (works offline)</h3>
+          <h3 className="text-sm font-semibold text-fg">1. Import a CSV (works offline)</h3>
           <p className="text-sm text-muted">Columns: Date, Open, High, Low, Close, Volume. Download daily history as CSV from your broker or a finance site, then pick the file.</p>
           <div className="grid gap-3 sm:grid-cols-[160px_1fr]">
             <Field label="Symbol" htmlFor="imp-sym"><Input id="imp-sym" value={symbol} onChange={(e) => setSymbol(e.target.value.toUpperCase())} placeholder="AAPL" /></Field>
@@ -49,12 +49,12 @@ function ImportModal({ open, onClose, onDone, avReady }: { open: boolean; onClos
           <Button variant="primary" loading={busy} disabled={!symbol || !csv} onClick={() => run(() => post("/api/trading/datasets/csv", { symbol, csv }))}>Import CSV</Button>
         </section>
         <section className="space-y-3 border-t border-line pt-4">
-          <h3 className="flex items-center gap-2 text-sm font-semibold">2. Download from Alpha Vantage {!avReady && <NeedsSetup what="ALPHAVANTAGE_API_KEY" />}</h3>
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-fg">2. Download from Alpha Vantage {!avReady && <NeedsSetup what="ALPHAVANTAGE_API_KEY" />}</h3>
           <p className="text-sm text-muted">Last ~100 trading days for a stock symbol. Needs a free API key in <code>atlas/.env</code>.</p>
           <Button disabled={!avReady || !symbol} loading={busy} icon={Download} onClick={() => run(() => post("/api/trading/datasets/alphavantage", { symbol }))}>Download {symbol || "symbol"}</Button>
         </section>
         <section className="space-y-3 border-t border-line pt-4">
-          <h3 className="text-sm font-semibold">3. Practice data</h3>
+          <h3 className="text-sm font-semibold text-fg">3. Practice data</h3>
           <p className="text-sm text-muted">A computer-generated price series, clearly labelled <b>SYNTH</b>. Good for learning the tools. It is not real market data.</p>
           <Button loading={busy} onClick={() => run(() => post("/api/trading/datasets/sample"))}>Add synthetic sample</Button>
         </section>
@@ -195,7 +195,7 @@ function Backtest({ datasets }: { datasets: any[] }) {
         {!result ? <EmptyState icon={CandlestickChart} title="Run a backtest to see results">Results compare your strategy with simply buying and holding.</EmptyState> : (
           <div className="space-y-4 p-4">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="font-semibold">{STRATEGIES[result.strategy as keyof typeof STRATEGIES]?.label ?? result.strategy} on {result.dataset?.symbol ?? result.symbol}</h2>
+              <h2 className="font-semibold text-fg">{STRATEGIES[result.strategy as keyof typeof STRATEGIES]?.label ?? result.strategy} on {result.dataset?.symbol ?? result.symbol}</h2>
               {result.dataset?.source === "synthetic" && <Badge tone="warn">synthetic data</Badge>}
             </div>
             {result.warnings?.map((w: string) => <p key={w} className="flex items-center gap-2 rounded-lg border border-warn/30 bg-warn/10 px-3 py-2 text-sm text-warn"><AlertTriangle className="size-4 shrink-0" />{w}</p>)}

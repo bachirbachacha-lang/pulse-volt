@@ -62,7 +62,7 @@ export default function ProjectDetail() {
         <span className="mt-2 size-3.5 rounded-full" style={{ background: PROJECT_COLORS[p.color], boxShadow: `0 0 14px ${PROJECT_COLORS[p.color]}` }} aria-hidden />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl font-semibold">{p.name}</h1>
+            <h1 className="text-xl font-semibold text-fg">{p.name}</h1>
             <Badge tone={p.status === "active" ? "accent" : p.status === "done" ? "ok" : p.status === "paused" ? "warn" : "neutral"}>{p.status}</Badge>
           </div>
           {p.description && <p className="mt-1 max-w-3xl whitespace-pre-wrap text-sm text-fg-2">{p.description}</p>}
