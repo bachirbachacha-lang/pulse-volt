@@ -3,6 +3,8 @@ import { Bot, ChevronsLeft, ChevronsRight, Keyboard, Menu, Search, X } from "luc
 import { useEffect, useRef } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { get } from "../../lib/api";
+import { DEMO } from "../../lib/demo";
+import { DemoBanner } from "../DemoBanner";
 import { MODULES } from "../../lib/modules";
 import { isTyping, useUI } from "../../lib/ui-state";
 import { Button, cx, StatusDot } from "../ui/primitives";
@@ -128,7 +130,9 @@ export function AppShell() {
   const current = MODULES.find((m) => (m.path === "/" ? loc.pathname === "/" : loc.pathname.startsWith(m.path)));
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-bg">
+    <div className="flex h-full flex-col overflow-hidden bg-bg">
+      {DEMO && <DemoBanner />}
+      <div className="flex min-h-0 flex-1">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[70] focus:rounded-lg focus:bg-accent focus:px-3 focus:py-2 focus:text-accent-ink">Skip to content</a>
 
       {/* Desktop sidebar */}
@@ -173,7 +177,7 @@ export function AppShell() {
 
         <div className="flex min-h-0 flex-1">
           <main id="main" className="min-w-0 flex-1 overflow-y-auto">
-            <div className="mx-auto w-full max-w-[1500px] px-4 py-5 pb-[calc(env(safe-area-inset-bottom)+2rem)] sm:px-6">
+            <div className={"mx-auto w-full max-w-[1500px] px-4 py-5 pb-[calc(env(safe-area-inset-bottom)+2rem)] sm:px-6"}>
               <Outlet />
             </div>
           </main>
@@ -181,6 +185,7 @@ export function AppShell() {
         </div>
       </div>
 
+      </div>
       <CommandPalette />
       <ShortcutsHelp />
     </div>

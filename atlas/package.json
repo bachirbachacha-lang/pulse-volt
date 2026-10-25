@@ -12,6 +12,7 @@
     "dev:api": "tsx watch --clear-screen=false server/index.ts",
     "dev:web": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "build:demo": "VITE_DEMO=1 vite build",
     "start": "NODE_ENV=production tsx server/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "NODE_OPTIONS=--disable-warning=ExperimentalWarning vitest run",

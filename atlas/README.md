@@ -114,6 +114,10 @@ Design choices, kept deliberately simple:
 ### Environment variables
 See `.env.example`. Main ones: `ATLAS_PORT` (4317), `ATLAS_HOST` (127.0.0.1), `ATLAS_ACCESS_TOKEN`, `ATLAS_DATA_DIR` (./data), `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (default `claude-opus-5-5`), `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_IMAGE_MODEL`, `OLLAMA_BASE_URL`, `OLLAMA_MODEL`, `OLLAMA_TOOLS=1` (let local models use tools), `GITHUB_TOKEN`, `FIGMA_TOKEN`, `ALPHAVANTAGE_API_KEY`.
 
+## Demo build
+
+`npm run build:demo` builds `dist-demo/`: the same interface with an in-browser stand-in for the server (`web/src/demo/mock.ts`) and sample data, for showing Atlas without a computer running it. Scripts, git, AI replies and system numbers are simulated there, and every screen says so.
+
 ## Tests
 
 ```bash

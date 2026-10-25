@@ -7,12 +7,13 @@ import "./styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/shell/AppShell";
 import { ConfirmProvider, ToastProvider } from "./components/ui/overlay";
 import { EmptyState, Spinner } from "./components/ui/primitives";
 import { UIProvider } from "./lib/ui-state";
 import { ApiError } from "./lib/api";
+import { DEMO } from "./lib/demo";
 import MissionControl from "./modules/MissionControl";
 
 // Heavier modules load on demand so the first screen is fast.
@@ -37,13 +38,17 @@ const qc = new QueryClient({
 
 const page = (el: React.ReactNode) => <Suspense fallback={<Spinner className="p-6" />}>{el}</Suspense>;
 
+// The demo build has no server: an in-browser mock answers /api, and routing stays in memory.
+if (DEMO) (await import("./demo/mock")).installDemo();
+const Router = DEMO ? MemoryRouter : BrowserRouter;
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={qc}>
       <ToastProvider>
         <ConfirmProvider>
           <UIProvider>
-            <BrowserRouter>
+            <Router>
               <Routes>
                 <Route element={<AppShell />}>
                   <Route index element={<MissionControl />} />
@@ -63,7 +68,7 @@ createRoot(document.getElementById("root")!).render(
                   <Route path="*" element={<EmptyState title="Page not found">That address doesn't match any module.</EmptyState>} />
                 </Route>
               </Routes>
-            </BrowserRouter>
+            </Router>
           </UIProvider>
         </ConfirmProvider>
       </ToastProvider>

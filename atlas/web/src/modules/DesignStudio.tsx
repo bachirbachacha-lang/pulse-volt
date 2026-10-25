@@ -8,6 +8,7 @@ import { Modal, useAction, useConfirm } from "../components/ui/overlay";
 import { Badge, Button, Card, CardHeader, cx, EmptyState, ErrorNote, Field, Input, NeedsSetup, PageHeader, Planned, Select, Spinner, Textarea } from "../components/ui/primitives";
 import { del, get, patch, post } from "../lib/api";
 import { ago, bytes } from "../lib/format";
+import { assetUrl, DEMO } from "../lib/demo";
 
 const KINDS = { moodboard: "Moodboard", references: "References", "ui-concept": "UI concept", assets: "Asset collection" } as const;
 
@@ -74,8 +75,8 @@ function AssetCard({ a, boards, onChange }: { a: any; boards: any[]; onChange: (
   const isImg = a.mime.startsWith("image/");
   return (
     <figure className="group overflow-hidden rounded-xl border border-line bg-surface">
-      <a href={`/api/assets/${a.id}/file`} target="_blank" rel="noreferrer" className="block aspect-square bg-bg grid-bg">
-        {isImg ? <img src={`/api/assets/${a.id}/file`} alt={a.note || a.original_name} loading="lazy" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center text-xs text-muted">{a.original_name.split(".").pop()?.toUpperCase()}</div>}
+      <a href={assetUrl(a)} target="_blank" rel="noreferrer" className="block aspect-square bg-bg grid-bg">
+        {isImg ? <img src={assetUrl(a)} alt={a.note || a.original_name} loading="lazy" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center text-xs text-muted">{a.original_name.split(".").pop()?.toUpperCase()}</div>}
       </a>
       <figcaption className="space-y-1.5 p-2">
         <div className="flex items-center gap-1">
@@ -88,7 +89,7 @@ function AssetCard({ a, boards, onChange }: { a: any; boards: any[]; onChange: (
             <option value="">No board</option>
             {boards.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
           </select>
-          <a href={`/api/assets/${a.id}/file?download=1`} aria-label="Download" className="grid size-7 place-items-center rounded-md text-muted hover:bg-hover hover:text-fg"><Download className="size-3.5" /></a>
+          {!DEMO && <a href={assetUrl(a, true)} aria-label="Download" className="grid size-7 place-items-center rounded-md text-muted hover:bg-hover hover:text-fg"><Download className="size-3.5" /></a>}
           <button aria-label={`Delete ${a.original_name}`} className="grid size-7 place-items-center rounded-md text-muted hover:bg-hover hover:text-danger" onClick={async () => { if (await confirm({ title: "Delete file?", body: `${a.original_name} (${bytes(a.size)}) will be deleted permanently.`, danger: true, confirmLabel: "Delete" })) act(async () => (await del(`/api/assets/${a.id}`), onChange()), "Deleted"); }}><Trash2 className="size-3.5" /></button>
         </div>
       </figcaption>

@@ -9,6 +9,7 @@ import { Modal, useAction, useConfirm } from "../components/ui/overlay";
 import { Badge, Button, Card, CardHeader, cx, EmptyState, ErrorNote, Field, Input, PageHeader, Select, Spinner, Tabs, Textarea } from "../components/ui/primitives";
 import { del, get, patch, post } from "../lib/api";
 import { ago, bytes } from "../lib/format";
+import { assetUrl, DEMO } from "../lib/demo";
 
 const Mermaid = lazy(() => import("../components/Mermaid"));
 const ModelViewer = lazy(() => import("../components/ModelViewer"));
@@ -235,11 +236,11 @@ function Models() {
               {tools.filter((t) => t.status === "connected").map((t) => (
                 <Button key={t.id} size="sm" onClick={() => act(() => post(`/api/assets/${a.id}/open-with`, { tool: t.id }), `Opening in ${t.name}`)}>Open in {t.name}</Button>
               ))}
-              <a href={`/api/assets/${a.id}/file?download=1`} className="inline-flex h-8 items-center rounded-lg px-3 text-xs text-accent hover:bg-hover">Download</a>
+              {!DEMO && <a href={assetUrl(a, true)} className="inline-flex h-8 items-center rounded-lg px-3 text-xs text-accent hover:bg-hover">Download</a>}
               <Button size="icon-sm" variant="ghost" icon={Trash2} aria-label="Delete file" onClick={async () => { if (await confirm({ title: `Delete ${a.original_name}?`, danger: true, confirmLabel: "Delete" })) { await act(() => del(`/api/assets/${a.id}`), "Deleted"); setSel(null); qc.invalidateQueries({ queryKey: ["assets", "engineering"] }); } }} />
             </div>
             <div className="min-h-[50vh] flex-1 bg-bg grid-bg">
-              {viewable ? <Suspense fallback={<Spinner className="p-4" />}><ModelViewer url={`/api/assets/${a.id}/file`} name={a.original_name} /></Suspense> : a.mime.startsWith("image/") ? <img src={`/api/assets/${a.id}/file`} alt={a.original_name} className="mx-auto max-h-[60vh]" /> : <EmptyState title="No in-browser preview for this format">STEP, FCStd, blend and DXF open in FreeCAD or Blender. Use the buttons above if they're installed.</EmptyState>}
+              {viewable ? <Suspense fallback={<Spinner className="p-4" />}><ModelViewer url={assetUrl(a)} name={a.original_name} /></Suspense> : a.mime.startsWith("image/") ? <img src={assetUrl(a)} alt={a.original_name} className="mx-auto max-h-[60vh]" /> : <EmptyState title="No in-browser preview for this format">STEP, FCStd, blend and DXF open in FreeCAD or Blender. Use the buttons above if they're installed.</EmptyState>}
             </div>
           </>
         )}

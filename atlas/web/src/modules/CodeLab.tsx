@@ -6,6 +6,7 @@ import { Modal, useAction, useConfirm, useToast } from "../components/ui/overlay
 import { Badge, Button, Card, cx, EmptyState, ErrorNote, Field, Input, PageHeader, Select, Spinner, Tabs, Textarea } from "../components/ui/primitives";
 import { del, get, post, put } from "../lib/api";
 import { ago, bytes } from "../lib/format";
+import { DEMO } from "../lib/demo";
 
 const CodeEditor = lazy(() => import("../components/CodeEditor"));
 
@@ -284,6 +285,16 @@ function PreviewTab({ wsId, initial }: { wsId: number; initial: string }) {
   const [nonce, setNonce] = useState(0);
   const settings = useQuery({ queryKey: ["settings"], queryFn: () => get("/api/settings") });
   useEffect(() => setPath(initial), [initial]);
+  // The demo has no server to serve files from, so it renders the sample page inline (CSS included).
+  const demoDoc = useQuery({
+    queryKey: ["demo-preview", path, nonce],
+    queryFn: async () => {
+      const page = await get(`/api/workspaces/${wsId}/file?path=${encodeURIComponent(path.endsWith("/") || !path ? path + "index.html" : path)}`);
+      const css = await get(`/api/workspaces/${wsId}/file?path=css/style.css`).catch(() => null);
+      return String(page.content).replace(/<link[^>]+href="css\/style\.css"[^>]*>/, css ? `<style>${css.content}</style>` : "");
+    },
+    enabled: DEMO,
+  });
   if (!settings.data) return <Spinner className="p-4" />;
   const src = `/preview/${settings.data.previewToken}/${wsId}/${path.split("/").map(encodeURIComponent).join("/")}`;
   return (
@@ -292,10 +303,10 @@ function PreviewTab({ wsId, initial }: { wsId: number; initial: string }) {
         <Globe className="size-4 text-muted" aria-hidden />
         <Input value={path} onChange={(e) => setPath(e.target.value)} className="h-8 flex-1 font-mono text-xs" aria-label="Page to preview" placeholder="index.html or folder/" />
         <Button size="sm" type="submit" icon={RefreshCw}>Reload</Button>
-        <a href={src} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs text-accent hover:bg-hover"><ExternalLink className="size-3.5" />New tab</a>
+        {!DEMO && <a href={src} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs text-accent hover:bg-hover"><ExternalLink className="size-3.5" />New tab</a>}
       </form>
       <p className="border-b border-line bg-surface px-3 py-1 text-[11px] text-muted">Static preview, sandboxed. For apps with a dev server (Vite, Next.js), run their dev script and open the URL it prints.</p>
-      <iframe key={nonce} title="Site preview" src={src} sandbox="allow-scripts allow-forms allow-popups allow-modals" className="min-h-0 w-full flex-1 bg-white" />
+      <iframe key={nonce} title="Site preview" {...(DEMO ? { srcDoc: demoDoc.data ?? "" } : { src })} sandbox="allow-scripts allow-forms allow-popups allow-modals" className="min-h-0 w-full flex-1 bg-white" />
     </div>
   );
 }
