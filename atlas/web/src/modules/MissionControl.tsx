@@ -1,12 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Activity, ArrowDown, ArrowUp, Bot, CheckCircle2, Cpu, DatabaseBackup, Eye, EyeOff, FileText, FolderKanban, FolderPlus, Gauge, LayoutGrid, ListChecks, ListPlus, Loader2, Sparkles, XCircle, Zap } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ProjectModal, TaskModal } from "../components/forms";
 import { TaskRow } from "../components/TaskRow";
 import { Gauge as Ring, Sparkline } from "../components/ui/charts";
 import { useAction } from "../components/ui/overlay";
-import { Badge, Button, Card, CardHeader, cx, EmptyState, PageHeader, ProgressBar, Spinner, Stat, StatusDot } from "../components/ui/primitives";
+import { Badge, Button, Card, CardHeader, cx, EmptyState, ProgressBar, Spinner, Stat, StatusDot } from "../components/ui/primitives";
+import { HoloGlobe } from "../components/holo/HoloGlobe";
 import { get, patch, post } from "../lib/api";
 import { ago, bytes } from "../lib/format";
 import { PROJECT_COLORS } from "../lib/modules";
@@ -171,6 +172,59 @@ function SystemWidget() {
   );
 }
 
+function Clock() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <p className="font-mono text-4xl font-semibold tabular-nums text-fg glow-text sm:text-5xl" aria-label={`Time ${now.toLocaleTimeString()}`}>
+      {now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+      <span className="ml-1 text-xl text-accent/70">{String(now.getSeconds()).padStart(2, "0")}</span>
+    </p>
+  );
+}
+
+/** Readout chip placed around the globe. Values are real counts from the dashboard. */
+function Readout({ label, value, tone, className }: { label: string; value: ReactNode; tone?: "warn" | "danger" | "ok"; className?: string }) {
+  return (
+    <div className={cx("rounded-md border border-accent/30 bg-[rgb(2_12_24/0.75)] px-3 py-1.5 shadow-[0_0_18px_-6px_rgb(63_224_255/0.6)] backdrop-blur", className)}>
+      <p className="hud-title text-[10px] text-accent/70">{label}</p>
+      <p className={cx("glow-text font-mono text-lg font-semibold tabular-nums", tone === "warn" && "text-warn", tone === "danger" && "text-danger", tone === "ok" && "text-ok")}>{value}</p>
+    </div>
+  );
+}
+
+function Hero({ greet, counts, customize, onCustomize }: { greet: string; counts: any; customize: boolean; onCustomize: () => void }) {
+  const metrics = useQuery({ queryKey: ["metrics"], queryFn: () => get("/api/system/metrics"), refetchInterval: 4000 });
+  const cpu = metrics.data?.cpu.usage;
+  const status = !counts ? "Loading status" : counts.overdue ? `${counts.overdue} task${counts.overdue > 1 ? "s" : ""} overdue` : counts.due_today ? `${counts.due_today} due today` : "Nothing overdue";
+  return (
+    <section className="hud scanlines relative mb-5 overflow-hidden rounded-[var(--radius-card)]">
+      <div className="grid items-center gap-4 p-5 md:grid-cols-[1fr_auto]">
+        <div className="min-w-0 space-y-3">
+          <p className="hud-title text-xs text-accent/80">{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</p>
+          <h1 className="hud-title glow-text text-3xl text-fg sm:text-4xl">{greet}</h1>
+          <Clock />
+          <p className="flex items-center gap-2 text-sm text-fg-2">
+            <StatusDot tone={counts?.overdue ? "danger" : counts?.due_today ? "warn" : "ok"} pulse />
+            {status}
+          </p>
+          <Button variant={customize ? "primary" : "secondary"} icon={LayoutGrid} onClick={onCustomize}>{customize ? "Done" : "Customize"}</Button>
+        </div>
+        <div className="relative mx-auto grid place-items-center px-12 py-2 sm:px-16 md:mr-6">
+          <HoloGlobe size={typeof window !== "undefined" ? Math.max(200, Math.min(280, window.innerWidth - 150)) : 280} label="Holographic globe" />
+          <Readout label="Active projects" value={counts?.active_projects ?? "—"} className="absolute left-0 top-4 -translate-x-1/4" />
+          <Readout label="Open tasks" value={counts?.open_tasks ?? "—"} className="absolute right-0 top-10 translate-x-1/4" />
+          <Readout label="Due today" value={counts?.due_today ?? "—"} tone={counts?.due_today ? "warn" : undefined} className="absolute bottom-8 left-0 -translate-x-1/4" />
+          <Readout label="CPU" value={cpu == null ? "—" : `${Math.round(cpu)}%`} className="absolute bottom-2 right-0 translate-x-1/4" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function MissionControl() {
   const qc = useQueryClient();
   const settings = useQuery({ queryKey: ["settings"], queryFn: () => get("/api/settings") });
@@ -210,11 +264,7 @@ export default function MissionControl() {
 
   return (
     <>
-      <PageHeader
-        title={`${greet}${name ? `, ${name}` : ""}`}
-        description={new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
-        actions={<Button variant={customize ? "primary" : "secondary"} icon={LayoutGrid} onClick={() => setCustomize((v) => !v)}>{customize ? "Done" : "Customize"}</Button>}
-      />
+      <Hero greet={`${greet}${name ? `, ${name}` : ""}`} counts={dash.data?.counts} customize={customize} onCustomize={() => setCustomize((v) => !v)} />
       {customize && <p className="mb-4 rounded-lg border border-accent/30 bg-accent-soft px-3 py-2 text-sm text-fg-2">Show, hide and reorder widgets. Changes save automatically.</p>}
       <div className="grid gap-4 lg:grid-cols-3">
         {order.map((id) => {

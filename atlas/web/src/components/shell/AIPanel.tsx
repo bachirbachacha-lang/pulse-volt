@@ -25,11 +25,11 @@ export function AIPanel() {
   return (
     <>
       <div className="fixed inset-0 z-30 bg-black/50 xl:hidden" onClick={() => ui.setAiOpen(false)} aria-hidden />
-      <aside aria-label="AI assistant panel" className={cx("fixed inset-y-0 right-0 z-30 flex w-full max-w-[420px] flex-col border-l border-line bg-card pt-[env(safe-area-inset-top)] shadow-2xl", "xl:static xl:z-auto xl:w-[400px] xl:shadow-none")}>
+      <aside aria-label="AI assistant panel" className={cx("fixed inset-y-0 right-0 z-30 flex w-full max-w-[420px] flex-col border-l border-accent/30 bg-[#030f1c]/95 pt-[env(safe-area-inset-top)] shadow-[-20px_0_60px_-20px_rgb(63_224_255/0.35)] backdrop-blur-xl", "xl:static xl:z-auto xl:w-[400px] xl:shadow-none")}>
         <div className="flex h-14 shrink-0 items-center gap-2 border-b border-line px-3">
           <Bot className="size-4 text-accent" aria-hidden />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold">AI Assistant</p>
+            <p className="hud-title glow-text text-sm text-accent-strong">AI Assistant</p>
             {project ? <Badge tone="accent" className="max-w-full truncate">Context: {project.name}</Badge> : <p className="text-xs text-muted">General</p>}
           </div>
           <Button variant="ghost" size="icon-sm" icon={History} aria-label="Chat history" aria-pressed={showHistory} onClick={() => setShowHistory((v) => !v)} />

@@ -134,17 +134,28 @@ function niceStep(raw: number) {
   return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p;
 }
 
-/** Ring gauge for a single percentage. */
+/** HUD ring gauge for a single percentage: tick ring, glowing arc, centred readout. */
 export function Gauge({ value, label, size = 76 }: { value: number | null; label: string; size?: number }) {
   const v = value == null ? 0 : Math.max(0, Math.min(100, value));
-  const r = (size - 10) / 2;
-  const c = 2 * Math.PI * r;
+  const c = size / 2;
+  const r = size / 2 - 9;
+  const circ = 2 * Math.PI * r;
   const tone = v > 90 ? "var(--color-danger)" : v > 75 ? "var(--color-warn)" : "var(--color-accent)";
+  const ticks = Array.from({ length: 36 }, (_, i) => {
+    const a = (i / 36) * Math.PI * 2 - Math.PI / 2;
+    const r1 = size / 2 - 2;
+    const r2 = size / 2 - (i % 3 === 0 ? 6 : 4);
+    return { x1: c + Math.cos(a) * r1, y1: c + Math.sin(a) * r1, x2: c + Math.cos(a) * r2, y2: c + Math.sin(a) * r2, on: i / 36 < v / 100 };
+  });
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`${label}: ${value == null ? "unknown" : v.toFixed(0) + "%"}`}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-raised)" strokeWidth="6" />
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={tone} strokeWidth="6" strokeLinecap="round" strokeDasharray={`${(v / 100) * c} ${c}`} transform={`rotate(-90 ${size / 2} ${size / 2})`} style={{ transition: "stroke-dasharray .5s" }} />
-      <text x="50%" y="52%" dominantBaseline="middle" textAnchor="middle" fontSize="15" fontWeight="600" fill="var(--color-fg)" fontFamily="var(--font-mono)">{value == null ? "—" : `${Math.round(v)}%`}</text>
+      {ticks.map((t, i) => (
+        <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke={t.on ? tone : "var(--color-line-strong)"} strokeWidth="1.2" opacity={t.on ? 0.9 : 0.5} />
+      ))}
+      <circle cx={c} cy={c} r={r} fill="rgb(63 224 255 / 0.05)" stroke="var(--color-line)" strokeWidth="4" />
+      <circle cx={c} cy={c} r={r} fill="none" stroke={tone} strokeWidth="4" strokeLinecap="round" strokeDasharray={`${(v / 100) * circ} ${circ}`} transform={`rotate(-90 ${c} ${c})`} style={{ transition: "stroke-dasharray .5s", filter: `drop-shadow(0 0 4px ${tone})` }} />
+      <circle className="spin-slow" cx={c} cy={c} r={r - 7} fill="none" stroke="var(--color-accent)" strokeWidth="0.8" strokeDasharray="2 5" opacity="0.5" />
+      <text x="50%" y="52%" dominantBaseline="middle" textAnchor="middle" fontSize={size > 90 ? 18 : 14} fontWeight="600" fill="var(--color-fg)" fontFamily="var(--font-mono)" style={{ filter: "drop-shadow(0 0 6px rgb(63 224 255 / 0.6))" }}>{value == null ? "—" : `${Math.round(v)}%`}</text>
     </svg>
   );
 }

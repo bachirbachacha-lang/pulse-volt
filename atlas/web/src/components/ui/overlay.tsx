@@ -35,9 +35,9 @@ export function Modal({ open, onClose, title, children, footer, wide }: { open: 
   if (!open) return null;
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div ref={ref} role="dialog" aria-modal="true" aria-label={title} className={cx("flex max-h-[92dvh] w-full flex-col rounded-t-2xl border border-line bg-card shadow-2xl sm:rounded-2xl", wide ? "sm:max-w-3xl" : "sm:max-w-lg")}>
+      <div ref={ref} role="dialog" aria-modal="true" aria-label={title} className={cx("hud flex max-h-[92dvh] w-full flex-col rounded-t-lg bg-[#041322] shadow-2xl sm:rounded-lg", wide ? "sm:max-w-3xl" : "sm:max-w-lg")}>
         <div className="flex items-center gap-2 border-b border-line px-5 py-3.5">
-          <h2 className="flex-1 font-semibold">{title}</h2>
+          <h2 className="hud-title flex-1 text-accent-strong">{title}</h2>
           <Button data-close variant="ghost" size="icon-sm" icon={X} aria-label="Close" onClick={onClose} />
         </div>
         <div className="overflow-y-auto px-5 py-4">{children}</div>
@@ -127,7 +127,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => {
           const Icon = t.tone === "ok" ? CheckCircle2 : t.tone === "error" ? XCircle : Info;
           return (
-            <div key={t.id} role={t.tone === "error" ? "alert" : "status"} className="pointer-events-auto flex max-w-sm items-start gap-2 rounded-xl border border-line bg-raised px-4 py-3 text-sm shadow-xl">
+            <div key={t.id} role={t.tone === "error" ? "alert" : "status"} className="hud pointer-events-auto flex max-w-sm items-start gap-2 rounded-md bg-[#041322] px-4 py-3 text-sm shadow-xl">
               <Icon className={cx("mt-0.5 size-4 shrink-0", t.tone === "ok" && "text-ok", t.tone === "error" && "text-danger", t.tone === "info" && "text-info")} aria-hidden />
               <span>{t.text}</span>
             </div>

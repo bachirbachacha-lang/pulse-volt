@@ -7,15 +7,15 @@ type Variant = "primary" | "secondary" | "ghost" | "danger" | "outline";
 type Size = "sm" | "md" | "icon" | "icon-sm";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-accent-ink hover:bg-accent-strong font-medium shadow-[0_0_20px_-6px_rgb(34_211_238/0.6)]",
-  secondary: "bg-raised text-fg hover:bg-hover border border-line",
+  primary: "border border-accent/70 bg-accent/15 text-accent-strong font-semibold shadow-[0_0_18px_-4px_rgb(63_224_255/0.7),inset_0_0_12px_rgb(63_224_255/0.15)] hover:bg-accent/25 hover:text-white",
+  secondary: "bg-raised/70 text-fg hover:bg-hover hover:border-accent/40 border border-line",
   outline: "border border-line-strong text-fg hover:bg-hover",
   ghost: "text-fg-2 hover:bg-hover hover:text-fg",
   danger: "bg-danger-strong/90 text-white hover:bg-danger-strong font-medium",
 };
 const sizes: Record<Size, string> = {
-  sm: "h-8 px-3 text-[13px] gap-1.5 rounded-lg",
-  md: "h-10 px-4 text-sm gap-2 rounded-lg",
+  sm: "h-8 px-3 text-[13px] gap-1.5 rounded-md",
+  md: "h-10 px-4 text-sm gap-2 rounded-md",
   icon: "h-10 w-10 rounded-lg",
   "icon-sm": "h-8 w-8 rounded-lg",
 };
@@ -44,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 
 export function Card({ className, children, as: As = "section", ...rest }: { className?: string; children: ReactNode; as?: "section" | "div" | "article" } & React.HTMLAttributes<HTMLElement>) {
   return (
-    <As className={cx("rounded-[var(--radius-card)] border border-line bg-card", className)} {...rest}>
+    <As className={cx("hud rounded-[var(--radius-card)]", className)} {...rest}>
       {children}
     </As>
   );
@@ -53,9 +53,9 @@ export function Card({ className, children, as: As = "section", ...rest }: { cla
 export function CardHeader({ title, icon: Icon, actions, subtitle }: { title: ReactNode; icon?: LucideIcon; actions?: ReactNode; subtitle?: ReactNode }) {
   return (
     <header className="flex items-center gap-2 border-b border-line px-4 py-3">
-      {Icon && <Icon className="size-4 text-accent" aria-hidden />}
+      {Icon ? <Icon className="size-4 text-accent drop-shadow-[0_0_6px_rgb(63_224_255/0.8)]" aria-hidden /> : <span className="size-1.5 rotate-45 bg-accent shadow-[0_0_8px_rgb(63_224_255)]" aria-hidden />}
       <div className="min-w-0 flex-1">
-        <h2 className="truncate text-sm font-semibold tracking-wide">{title}</h2>
+        <h2 className="hud-title truncate text-[13px] text-accent-strong">{title}</h2>
         {subtitle && <p className="truncate text-xs text-muted">{subtitle}</p>}
       </div>
       {actions}
@@ -134,7 +134,7 @@ export function EmptyState({ icon: Icon, title, children, action }: { icon?: Luc
   return (
     <div className="flex flex-col items-center justify-center gap-3 px-6 py-10 text-center">
       {Icon && (
-        <div className="grid size-12 place-items-center rounded-xl border border-line bg-raised">
+        <div className="grid size-12 place-items-center rounded-full border border-accent/30 bg-accent-soft shadow-[0_0_18px_-4px_rgb(63_224_255/0.6)]">
           <Icon className="size-5 text-accent" aria-hidden />
         </div>
       )}
@@ -151,12 +151,12 @@ export function PageHeader({ title, description, icon: Icon, actions }: { title:
   return (
     <div className="mb-5 flex flex-wrap items-start gap-3">
       {Icon && (
-        <div className="grid size-10 shrink-0 place-items-center rounded-xl border border-accent/25 bg-accent-soft">
+        <div className="grid size-11 shrink-0 place-items-center rounded-full border border-accent/40 bg-accent-soft shadow-[0_0_20px_-4px_rgb(63_224_255/0.7)]">
           <Icon className="size-5 text-accent" aria-hidden />
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="hud-title glow-text text-2xl text-fg">{title}</h1>
         {description && <p className="mt-0.5 text-sm text-muted">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -174,8 +174,8 @@ export function Tabs<T extends string>({ tabs, value, onChange, className }: { t
           aria-selected={value === t.id}
           onClick={() => onChange(t.id)}
           className={cx(
-            "-mb-px inline-flex h-10 shrink-0 items-center gap-2 border-b-2 px-3 text-sm transition-colors",
-            value === t.id ? "border-accent text-fg" : "border-transparent text-muted hover:text-fg",
+            "hud-title -mb-px inline-flex h-10 shrink-0 items-center gap-2 border-b-2 px-3 text-[13px] transition-colors",
+            value === t.id ? "border-accent text-accent-strong [text-shadow:0_0_10px_rgb(63_224_255/0.7)]" : "border-transparent text-muted hover:text-fg",
           )}
         >
           {t.icon && <t.icon className="size-4" aria-hidden />}
@@ -189,7 +189,7 @@ export function Tabs<T extends string>({ tabs, value, onChange, className }: { t
 
 export function ProgressBar({ value, label, tone = "accent" }: { value: number; label?: string; tone?: "accent" | "ok" | "warn" | "danger" }) {
   const v = Math.max(0, Math.min(100, value));
-  const color = { accent: "bg-accent", ok: "bg-ok", warn: "bg-warn", danger: "bg-danger" }[tone];
+  const color = { accent: "bg-accent shadow-[0_0_10px_rgb(63_224_255)]", ok: "bg-ok shadow-[0_0_10px_rgb(63_240_176)]", warn: "bg-warn", danger: "bg-danger" }[tone];
   return (
     <div role="progressbar" aria-valuenow={Math.round(v)} aria-valuemin={0} aria-valuemax={100} aria-label={label} className="h-1.5 w-full overflow-hidden rounded-full bg-raised">
       <div className={cx("h-full rounded-full transition-[width] duration-500", color)} style={{ width: `${v}%` }} />
@@ -209,9 +209,9 @@ export function StatusDot({ tone, pulse }: { tone: "ok" | "warn" | "danger" | "m
 
 export function Stat({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "ok" | "warn" | "danger" }) {
   return (
-    <div className="min-w-0 rounded-xl border border-line bg-surface px-3 py-2.5">
-      <p className="truncate text-xs text-muted">{label}</p>
-      <p className={cx("mt-0.5 font-mono text-lg font-semibold tabular-nums", tone === "ok" && "text-ok", tone === "warn" && "text-warn", tone === "danger" && "text-danger")}>{value}</p>
+    <div className="min-w-0 rounded-md border border-line bg-[rgb(3_14_26/0.55)] px-3 py-2.5 shadow-[inset_0_0_18px_-8px_rgb(63_224_255/0.35)]">
+      <p className="hud-title truncate text-[11px] text-muted">{label}</p>
+      <p className={cx("glow-text mt-0.5 font-mono text-lg font-semibold tabular-nums", tone === "ok" && "text-ok", tone === "warn" && "text-warn", tone === "danger" && "text-danger")}>{value}</p>
       {hint && <p className="truncate text-xs text-muted">{hint}</p>}
     </div>
   );

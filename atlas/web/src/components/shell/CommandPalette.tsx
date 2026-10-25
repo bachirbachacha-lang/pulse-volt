@@ -69,7 +69,7 @@ export function CommandPalette() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-3 pt-[12vh] backdrop-blur-sm" onMouseDown={(e) => e.target === e.currentTarget && ui.setPaletteOpen(false)}>
-      <Command label="Command palette" className="w-full max-w-xl overflow-hidden rounded-2xl border border-line bg-card shadow-2xl" shouldFilter={true} loop onKeyDown={(e) => e.key === "Escape" && ui.setPaletteOpen(false)}>
+      <Command label="Command palette" className="hud w-full max-w-xl overflow-hidden rounded-lg bg-[#041322] shadow-2xl" shouldFilter={true} loop onKeyDown={(e) => e.key === "Escape" && ui.setPaletteOpen(false)}>
         <div className="flex items-center gap-2 border-b border-line px-4">
           <Search className="size-4 text-muted" aria-hidden />
           <Command.Input autoFocus value={q} onValueChange={setQ} placeholder="Search projects, tasks, notes, chats… or type a command" className="h-12 flex-1 bg-transparent text-sm text-fg outline-none placeholder:text-muted" />
