@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/*
+ * Atlas design tokens. Dark "OLED" developer style (UI/UX Pro Max: Dark Mode OLED,
+ * IBM Plex Sans + JetBrains Mono). Components use these semantic tokens, never raw hex.
+ */
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-bg: #07090f;
+  --color-surface: #0b0f18;
+  --color-card: #0e1320;
+  --color-raised: #141b2b;
+  --color-hover: #1a2336;
+  --color-line: #1e293b;
+  --color-line-strong: #334155;
+
+  --color-fg: #e6edf7;
+  --color-fg-2: #b6c2d3;
+  --color-muted: #8494a8; /* 5.6:1 on card */
+
+  --color-accent: #22d3ee;
+  --color-accent-strong: #67e8f9;
+  --color-accent-ink: #04141a;
+  --color-accent-soft: rgb(34 211 238 / 0.12);
+
+  --color-gold: #f5b544;
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-danger: #f87171;
+  --color-danger-strong: #ef4444;
+  --color-info: #60a5fa;
+
+  /* Chart series (validated with the dataviz palette checker against --color-card). */
+  --color-series-1: #0891b2;
+  --color-series-2: #d97706;
+
+  --radius-card: 14px;
+  --shadow-glow: 0 0 0 1px rgb(34 211 238 / 0.25), 0 0 24px -6px rgb(34 211 238 / 0.35);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    background: rgb(34 211 238 / 0.3);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button,
+  [role="button"],
+  a,
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+  .kbd {
+    @apply inline-flex min-w-5 items-center justify-center rounded border border-line-strong bg-raised px-1 font-mono text-[11px] leading-5 text-fg-2;
+  }
+  .prose-atlas {
+    @apply text-[15px] leading-relaxed text-fg;
+  }
+  .prose-atlas h1 { @apply mt-4 mb-2 text-xl font-semibold; }
+  .prose-atlas h2 { @apply mt-4 mb-2 text-lg font-semibold; }
+  .prose-atlas h3 { @apply mt-3 mb-1 font-semibold; }
+  .prose-atlas p { @apply my-2; }
+  .prose-atlas ul { @apply my-2 list-disc pl-5; }
+  .prose-atlas ol { @apply my-2 list-decimal pl-5; }
+  .prose-atlas li { @apply my-0.5; }
+  .prose-atlas a { @apply text-accent underline underline-offset-2; }
+  .prose-atlas code { @apply rounded bg-raised px-1 py-0.5 text-[13px] text-accent-strong; }
+  .prose-atlas pre { @apply my-3 overflow-x-auto rounded-lg border border-line bg-bg p-3 text-[13px] leading-snug; }
+  .prose-atlas pre code { @apply bg-transparent p-0 text-fg; }
+  .prose-atlas blockquote { @apply my-2 border-l-2 border-line-strong pl-3 text-fg-2; }
+  .prose-atlas table { @apply my-3 w-full border-collapse text-sm; }
+  .prose-atlas th, .prose-atlas td { @apply border border-line px-2 py-1 text-left; }
+  .prose-atlas hr { @apply my-4 border-line; }
+  .grid-bg {
+    background-image: radial-gradient(rgb(148 163 184 / 0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
