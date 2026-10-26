@@ -4,3 +4,4 @@ Read owner.md and pixel-co.md first (outreach method + lead list live in pixel-c
 ## Updates
 - 25 Oct: Chat started. Read notes, asked owner for screenshots.
 - 26 Oct: Owner asked who to DM. Gave today's follow-up list (Bear be matcha, qamariacoffeeksa, 18 Oct cafés, 14 Oct batch last try) with ready messages, plus niches and Arabic search terms for ~20 new accounts. Waiting on screenshots.
+- 26 Oct: Owner wants ALL small-business types, not just 4 niches. Gave a wide search list (food, beauty, fashion, services, home, health, education, events, shops). Niches without a sample: DM still offers a free sample, build it after they reply.
