@@ -1,2 +1,1 @@
-"""Dashboard (next stage). It will read only from the SQLite database
-(``trading.database.Database``) and render charts with ``trading.charts``."""
+"""Read-only PAPER / SIMULATION dashboard (``python -m trading dashboard``)."""

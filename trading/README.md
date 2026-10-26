@@ -60,6 +60,24 @@ Run `python -m trading` from the repository root (the folder that contains `trad
 - **Restart:** restores the account, positions, pending orders, the last processed bar and the setups already approved, so no duplicate orders are placed.
 - **Account size warning:** at $1,000 with 0.5% risk per trade ($5), no ES and almost no MES stop fits the risk budget, so the risk manager rejects those trades. Raise the balance or the risk setting deliberately if you want futures trades to size.
 
+## Dashboard (PAPER / SIMULATION, read-only)
+
+Run `python -m trading dashboard` and open http://127.0.0.1:8050. It refreshes every 5 seconds.
+
+- **Reads the existing state only.** The SQLite database is opened read-only, and charts use the validated-data cache. There are no write endpoints, and the browser holds no trading state of its own.
+- **Account overview:** starting balance, virtual balance, equity, today's and total P&L, current and maximum drawdown, win rate, profit factor, average win and loss, trade count, exposure.
+- **Live market:**
+  - candles and the strategy's stop level (HL / LH)
+  - strategy setups (grey circles)
+  - **SIGNAL** (violet diamond: Agent 1 approved)
+  - **FILLED paper entry** (blue triangle) and paper exit (square)
+  - stop and target lines, and pending limit orders
+  - hover any bar for details
+- **Agent panel:** SIGNAL / RISK / EXECUTION AGENT, each with ✓ / ✕ and an expandable reason listing every check, followed by the consensus result. The decision feed lets you inspect any past bar.
+- **Positions and trade history.** Click a trade to open an inspector with its chart, strategy conditions, the three agent decisions, the signal, the paper order, the simulated fills and the exit.
+- **Analytics:** equity curve, drawdown, wins and losses, performance by setup grade and direction, and the last 20 trades in R.
+- **No external dependencies:** standard library only, and the front end loads nothing from a CDN.
+
 ## Decision system (paper trading only)
 
 `python -m trading paper-step -s ES=F -i 5m` evaluates the latest closed bar for each symbol.

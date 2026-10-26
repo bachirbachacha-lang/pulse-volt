@@ -8,6 +8,7 @@
     python -m trading backtest -s ES=F NQ=F -i 5m -p 60d            # dev + validation only
     python -m trading backtest -s ES=F NQ=F -i 5m -p 60d --include-test   # final report (logged)
     python -m trading paper-step -s ES=F NQ=F -i 5m  # one forward paper-trading decision per symbol (audited)
+    python -m trading dashboard [--port 8050]        # read-only PAPER / SIMULATION dashboard
 """
 
 from __future__ import annotations
@@ -63,6 +64,9 @@ def main(argv: list[str] | None = None) -> int:
     ps.add_argument("-s", "--symbols", nargs="+", required=True)
     ps.add_argument("-i", "--interval", default="5m")
     ps.add_argument("-p", "--period", default="5d")
+    dash = sub.add_parser("dashboard")
+    dash.add_argument("--host", default="127.0.0.1")
+    dash.add_argument("--port", type=int, default=8050)
     bt = sub.add_parser("backtest")
     bt.add_argument("-s", "--symbols", nargs="+", required=True)
     bt.add_argument("-i", "--interval", default="5m")
@@ -172,6 +176,10 @@ def _run(args: argparse.Namespace, settings) -> int:
         print(f"  account: balance {a['cash']:,.2f} | equity {a['equity']:,.2f} | realised {a['realized_pnl']:+,.2f} "
               f"| unrealised {a['unrealized_pnl']:+,.2f} | today {a['daily_pnl']:+,.2f} | drawdown "
               f"{a['drawdown']:,.2f} ({a['drawdown_pct']:.1%}) | exposure {a['open_exposure']:,.2f}")
+    elif args.cmd == "dashboard":
+        from trading.dashboard.server import serve
+
+        serve(settings, args.host, args.port)
     elif args.cmd == "account":
         from trading.database import Database
         from trading.paper_trading import PaperBroker
