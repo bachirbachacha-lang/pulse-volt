@@ -15,6 +15,16 @@ Trading System + Live Backtest)" (youtu.be/DD9A9hHYqvc), chapters 6:10-40:41:
 * A trend reverses only after 3 steps: CHoCH, a lower high (or higher low),
   then a BOS (27:59). Between CHoCH and that BOS the market is "neutral".
 
+From "How to Actually Achieve an 85% Win Rate Trading No Wick Strategy"
+(youtu.be/VafqLoSOve8):
+
+* A CHoCH preceded by internal counter-structure (high, low, lower high,
+  lower low, then the CHoCH) already makes reversal setups tradeable: the
+  "A setup" (10:52). A CHoCH without that structure is a "C setup" (4:13).
+* A no-wick that forms right after the BOS, in the trend's last leg, is the
+  clean "grandma" kind; one that forms in the retracement towards the
+  potential higher low is "valid but not good" (20:27, 25:02).
+
 DISCRETIONARY COMPONENT -> deterministic interpretation (NOT from the video):
 the creator only counts "proper" pullbacks ("push, pullback, push"; small
 candles do not count, 22:36). Here a swing turn counts only once price has
@@ -38,6 +48,14 @@ class Trend(StrEnum):
     DOWN = "down"
     NEUTRAL_AFTER_BEARISH_CHOCH = "neutral_after_bearish_choch"  # was up, CHoCH down, not confirmed
     NEUTRAL_AFTER_BULLISH_CHOCH = "neutral_after_bullish_choch"  # was down, CHoCH up, not confirmed
+
+
+class Phase(StrEnum):
+    NONE = "none"
+    IMPULSE = "impulse"  # from the BOS until the leg's extreme is confirmed by a real pullback
+    RETRACEMENT = "retracement"  # pulling back / building the next leg before the next BOS
+    REVERSAL_A = "reversal_a"  # neutral phase after a CHoCH that had internal structure before it
+    REVERSAL_C = "reversal_c"  # neutral phase after a CHoCH with no internal structure
 
 
 @dataclass(frozen=True)
@@ -70,6 +88,8 @@ class StructureState:
     choch_index: int | None = None
     pre_choch_extreme: Pivot | None = None  # HH (or LL) that existed before the CHoCH
     choch_leg_extreme: Pivot | None = None  # low (or high) made by the CHoCH leg
+    a_quality: bool = False  # internal counter-structure formed before the CHoCH (A setup)
+    a_stop: Pivot | None = None  # most recent internal lower high / higher low (A-setup stop)
 
     @property
     def protective(self) -> Pivot | None:
@@ -78,6 +98,27 @@ class StructureState:
             return self.recent_low
         if self.trend == Trend.DOWN:
             return self.recent_high
+        if self.a_quality:
+            return self.a_stop
+        return None
+
+    @property
+    def phase(self) -> Phase:
+        if self.trend == Trend.UP:
+            return Phase.IMPULSE if self.recent_high is None else Phase.RETRACEMENT
+        if self.trend == Trend.DOWN:
+            return Phase.IMPULSE if self.recent_low is None else Phase.RETRACEMENT
+        if self.trend in (Trend.NEUTRAL_AFTER_BEARISH_CHOCH, Trend.NEUTRAL_AFTER_BULLISH_CHOCH):
+            return Phase.REVERSAL_A if self.a_quality else Phase.REVERSAL_C
+        return Phase.NONE
+
+    @property
+    def tradeable_direction(self) -> str | None:
+        """Direction no-wick setups may be taken in after this bar (None = no trading)."""
+        if self.trend == Trend.UP or (self.trend == Trend.NEUTRAL_AFTER_BULLISH_CHOCH and self.a_quality):
+            return "long"
+        if self.trend == Trend.DOWN or (self.trend == Trend.NEUTRAL_AFTER_BEARISH_CHOCH and self.a_quality):
+            return "short"
         return None
 
 
@@ -87,6 +128,8 @@ class StructureResult:
     protective_level: pd.Series  # wick price of HL (up) / LH (down), NaN otherwise
     protective_index: pd.Series  # bar position of that pivot (-1 if none)
     protective_set_at: pd.Series  # bar position where it was fixed by a BOS (-1 if none)
+    phase: pd.Series = None  # Phase value after each bar
+    tradeable: pd.Series = None  # "long" / "short" / None after each bar
     pivots: list[Pivot] = field(default_factory=list)
     events: list[StructureEvent] = field(default_factory=list)
 
@@ -124,6 +167,8 @@ class StructureEngine:
         lvl_out = np.full(n, np.nan)
         pidx_out = np.full(n, -1, dtype=int)
         pset_out = np.full(n, -1, dtype=int)
+        phase_out = np.empty(n, dtype=object)
+        trade_out = np.empty(n, dtype=object)
 
         # Zig-zag state
         direction = 0  # +1 tracking a high, -1 tracking a low, 0 undecided
@@ -160,6 +205,25 @@ class StructureEngine:
             span = range(start if start is not None else 0, bar + 1)
             k = max(span, key=lambda j: h[j]) if kind == "high" else min(span, key=lambda j: lo[j])
             return make(kind, k, bar)
+
+        def internal_structure(bearish: bool, extreme: Pivot, bar: int) -> Pivot | None:
+            """Counter-structure between the trend extreme and the CHoCH bar.
+
+            Bearish case: a swing low L1, then a lower high H2 (below the HH), then a
+            body close below L1's body (a lower low) before ``bar``. Returns H2 (the
+            A-setup stop reference) or None."""
+            first, second = ("low", "high") if bearish else ("high", "low")
+            for p2 in reversed([q for q in pivots if q.kind == second and extreme.index < q.index < bar]):
+                lower = p2.wick < extreme.wick if bearish else p2.wick > extreme.wick
+                if not lower:
+                    continue
+                p1 = last_pivot(first, before=p2.index, after=extreme.index)
+                if p1 is None:
+                    continue
+                broke = any((c[k] < p1.body) if bearish else (c[k] > p1.body) for k in range(p2.index + 1, bar))
+                if broke:
+                    return last_pivot(second, before=bar, after=extreme.index) or p2
+            return None
 
         for i in range(n):
             # ---------------------------------------------------- zig-zag pivots
@@ -210,9 +274,13 @@ class StructureEngine:
                 if new_pivot is not None and new_pivot.kind == "high" and st.recent_high is None:
                     st.recent_high = new_pivot  # the BOS leg finished: this is the HH
                 if c[i] < st.recent_low.body:
-                    events.append(StructureEvent(i, "CHOCH", "bearish", st.recent_low.body))
+                    hh = st.recent_high or extreme("high", st.protective_set_at, i)
+                    a_stop = internal_structure(True, hh, i)
+                    events.append(StructureEvent(i, "CHOCH", "bearish", st.recent_low.body,
+                                                 "A (structure before CHoCH)" if a_stop else "C (no structure)"))
                     st = StructureState(trend=Trend.NEUTRAL_AFTER_BEARISH_CHOCH, choch_index=i,
-                                        pre_choch_extreme=st.recent_high or extreme("high", st.protective_set_at, i))
+                                        pre_choch_extreme=hh, a_quality=a_stop is not None, a_stop=a_stop,
+                                        protective_set_at=i)
                 elif st.recent_high is not None and c[i] > st.recent_high.body:
                     events.append(StructureEvent(i, "BOS", "bullish", st.recent_high.body))
                     hl = snake("low", i, after=st.recent_high.index)
@@ -224,9 +292,13 @@ class StructureEngine:
                 if new_pivot is not None and new_pivot.kind == "low" and st.recent_low is None:
                     st.recent_low = new_pivot
                 if c[i] > st.recent_high.body:
-                    events.append(StructureEvent(i, "CHOCH", "bullish", st.recent_high.body))
+                    ll = st.recent_low or extreme("low", st.protective_set_at, i)
+                    a_stop = internal_structure(False, ll, i)
+                    events.append(StructureEvent(i, "CHOCH", "bullish", st.recent_high.body,
+                                                 "A (structure before CHoCH)" if a_stop else "C (no structure)"))
                     st = StructureState(trend=Trend.NEUTRAL_AFTER_BULLISH_CHOCH, choch_index=i,
-                                        pre_choch_extreme=st.recent_low or extreme("low", st.protective_set_at, i))
+                                        pre_choch_extreme=ll, a_quality=a_stop is not None, a_stop=a_stop,
+                                        protective_set_at=i)
                 elif st.recent_low is not None and c[i] < st.recent_low.body:
                     events.append(StructureEvent(i, "BOS", "bearish", st.recent_low.body))
                     lh = snake("high", i, after=st.recent_low.index)
@@ -235,6 +307,9 @@ class StructureEngine:
                     st.protective_set_at = i
 
             elif st.trend == Trend.NEUTRAL_AFTER_BEARISH_CHOCH:
+                if st.a_quality and new_pivot is not None and new_pivot.kind == "high" \
+                        and new_pivot.wick < st.pre_choch_extreme.wick:
+                    st.a_stop, st.protective_set_at = new_pivot, i  # newer lower high (snake method)
                 # Step 1 done (CHoCH). Step 2: the CHoCH leg's low, then a lower high.
                 if st.choch_leg_extreme is None and new_pivot is not None and new_pivot.kind == "low" \
                         and new_pivot.index >= st.choch_index:
@@ -255,6 +330,9 @@ class StructureEngine:
                     st = StructureState(trend=Trend.UP, recent_low=hl, protective_set_at=i)
 
             elif st.trend == Trend.NEUTRAL_AFTER_BULLISH_CHOCH:
+                if st.a_quality and new_pivot is not None and new_pivot.kind == "low" \
+                        and new_pivot.wick > st.pre_choch_extreme.wick:
+                    st.a_stop, st.protective_set_at = new_pivot, i
                 if st.choch_leg_extreme is None and new_pivot is not None and new_pivot.kind == "high" \
                         and new_pivot.index >= st.choch_index:
                     st.choch_leg_extreme = new_pivot
@@ -271,6 +349,8 @@ class StructureEngine:
                     st = StructureState(trend=Trend.DOWN, recent_high=lh, protective_set_at=i)
 
             trend_out[i] = st.trend.value
+            phase_out[i] = st.phase.value
+            trade_out[i] = st.tradeable_direction
             prot = st.protective
             if prot is not None:
                 lvl_out[i] = prot.wick
@@ -283,6 +363,8 @@ class StructureEngine:
             protective_level=pd.Series(lvl_out, index=idx, name="protective_level"),
             protective_index=pd.Series(pidx_out, index=idx, name="protective_index"),
             protective_set_at=pd.Series(pset_out, index=idx, name="protective_set_at"),
+            phase=pd.Series(phase_out, index=idx, name="phase"),
+            tradeable=pd.Series(trade_out, index=idx, name="tradeable"),
             pivots=pivots,
             events=events,
         )

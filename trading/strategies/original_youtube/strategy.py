@@ -22,7 +22,19 @@ Rules (video timestamps):
   then hits TP without filling (1:38:11); price creates new structure before
   tapping (1:39:00); anything in the no-trading zone, and open trades are
   closed before it (1:40:16); trend reversals before the 3-step confirmation
-  (1:48:08).
+  (1:48:08), except the A setup below.
+
+Setup grades from "How to Actually Achieve an 85% Win Rate Trading No Wick
+Strategy" (youtu.be/VafqLoSOve8). The creator trades only Grandma, A and S
+setups (32:03):
+* GRANDMA: with-trend no-wick right after the BOS, in the trend's last leg (20:27).
+* A: reversal no-wick after a CHoCH that had internal structure before it,
+  even without the 3-step BOS (10:52).
+* S: the no-wick's opposite wick is bigger than its body; entered straight
+  after the candle closes; upgrades a "valid but not good" setup (16:22, 29:18).
+* Not traded: C (CHoCH with no structure, 4:13), B (trading the internal trend
+  against the external trend, 8:01; never generated, as setups must follow the
+  external trend), VALID_NOT_GOOD (no-wick in a retracement, 25:02).
 """
 
 from __future__ import annotations
@@ -41,7 +53,7 @@ from trading.data.instruments import interval_delta
 from trading.strategies.base import Strategy, register
 from trading.strategies.original_youtube.instruments import InstrumentSpec, instrument_spec
 from trading.strategies.original_youtube.nowick import nowick_flags
-from trading.strategies.original_youtube.structure import StructureEngine, StructureResult, Trend
+from trading.strategies.original_youtube.structure import Phase, StructureEngine, StructureResult
 
 STRATEGY_NAME = "ORIGINAL_YOUTUBE_STRATEGY"
 logger = get_logger("strategies.original_youtube")
@@ -72,6 +84,18 @@ class OriginalParams:
     zone_timezone: str = "America/New_York"
     # System safeguard (not from the video): ignore no-wicks on bars the data validator flagged.
     skip_flagged_bars: bool = True
+    # --- setup grades (video 2); defaults = what the creator says he trades
+    trade_a_setups: bool = True
+    trade_valid_not_good_with_s: bool = True  # "the S setup can make a valid but not good setup a good setup"
+    s_setup_market_entry: bool = True  # "I like to enter directly after the candle closes"
+    s_setup_target: str = "1:1"  # or "wick_fill" (creator: 1:1 for higher win rate, wick fill for higher R)
+
+
+class SetupCategory(StrEnum):
+    GRANDMA = "grandma"
+    A = "A"
+    VALID_NOT_GOOD = "valid_not_good"
+    C = "C"
 
 
 class SetupStatus(StrEnum):
@@ -98,6 +122,12 @@ class Setup:
     protective_level: float
     protective_index: int
     omar_entry: bool = False
+    category: SetupCategory = SetupCategory.GRANDMA
+    s_setup: bool = False
+    entry_mode: str = "limit"  # "limit" at the no-wick open, or "market" at the next open (S setups)
+    clean_trend: bool = False  # >= 2 BOS in this trend (interpretation of "super clean", report only)
+    nowick_high: float = float("nan")
+    nowick_low: float = float("nan")
     status: SetupStatus = SetupStatus.PENDING
     reason: str = ""
     came_close: bool = False
@@ -207,6 +237,9 @@ class OriginalYoutubeScanner:
         idx = df.index
         n = len(df)
         trend = structure.trend.to_numpy(object)
+        tradeable = structure.tradeable.to_numpy(object)
+        phase = structure.phase.to_numpy(object)
+        bos_run = self._bos_run(structure, n)
         prot_lvl = structure.protective_level.to_numpy(float)
         prot_idx = structure.protective_index.to_numpy(int)
         prot_set = structure.protective_set_at.to_numpy(int)
@@ -242,12 +275,11 @@ class OriginalYoutubeScanner:
             for s in list(pending):
                 age = j - s.nowick_index
                 long = s.direction == "long"
-                want = Trend.UP.value if long else Trend.DOWN.value
                 if blocked[j]:
                     cancel(s, "reached the no-trading zone / news window before filling")
                 elif age > p.max_return_candles:
                     cancel(s, f"price did not return within {p.max_return_candles} candles")
-                elif trend[j - 1] != want:
+                elif tradeable[j - 1] != s.direction:
                     cancel(s, f"trend changed before the tap ({trend[j - 1]})")
                 elif prot_set[j - 1] > s.nowick_index:
                     cancel(s, "price created new structure before tapping")
@@ -255,14 +287,22 @@ class OriginalYoutubeScanner:
                     pending.remove(s)
                     continue
 
-                touched = lo[j] <= s.entry if long else h[j] >= s.entry
+                if s.entry_mode == "market":  # S setup: enter at the open after the no-wick closed
+                    touched = True
+                else:
+                    touched = lo[j] <= s.entry if long else h[j] >= s.entry
                 if touched and (open_pos is None or not p.one_position_at_a_time):
                     gapped_past_stop = o[j] <= s.stop if long else o[j] >= s.stop
                     if gapped_past_stop:
                         cancel(s, "bar opened beyond the stop (gap); no valid entry")
                         pending.remove(s)
                         continue
-                    fill = min(s.entry, o[j]) if long else max(s.entry, o[j])
+                    if s.entry_mode == "market":
+                        fill = o[j]
+                        s.entry = fill
+                        s.target = self._target(s, fill)
+                    else:
+                        fill = min(s.entry, o[j]) if long else max(s.entry, o[j])
                     s.status, s.fill_index, s.fill_time, s.fill_price = SetupStatus.OPEN, j, idx[j], fill
                     pending.remove(s)
                     stop_hit = lo[j] <= s.stop if long else h[j] >= s.stop
@@ -286,13 +326,33 @@ class OriginalYoutubeScanner:
                         pending.remove(s)
 
             # 4) new no-wick setups on this bar's close
-            direction = ("long" if flags["nowick_bull"].iat[j] and trend[j] == Trend.UP.value else
-                         "short" if flags["nowick_bear"].iat[j] and trend[j] == Trend.DOWN.value else None)
+            bull, bear = flags["nowick_bull"].iat[j], flags["nowick_bear"].iat[j]
+            direction = "long" if bull else "short" if bear else None
             if direction is None:
                 continue
-            s = self._build(direction, j, idx[j], o[j], prot_lvl[j], prot_idx[j], spec)
+            ph = phase[j]
+            if ph == Phase.REVERSAL_C.value:
+                choch_dir = "short" if trend[j] == "neutral_after_bearish_choch" else "long"
+                if direction == choch_dir:  # record C setups so they are visible, never traded
+                    s = self._build(direction, j, idx[j], o[j], h[j], lo[j], c[j], np.nan, -1, spec)
+                    s.category, s.status = SetupCategory.C, SetupStatus.REJECTED
+                    s.reason = "C setup: CHoCH without structure before it (not traded)"
+                    setups.append(s)
+                continue
+            if tradeable[j] != direction:
+                continue  # counter-trend no-wick: ignored (1:27:50)
+            s = self._build(direction, j, idx[j], o[j], h[j], lo[j], c[j], prot_lvl[j], prot_idx[j], spec)
+            s.category = {Phase.IMPULSE.value: SetupCategory.GRANDMA, Phase.RETRACEMENT.value:
+                          SetupCategory.VALID_NOT_GOOD, Phase.REVERSAL_A.value: SetupCategory.A}[ph]
+            s.clean_trend = bos_run[j] >= 2
             setups.append(s)
-            if blocked[j]:
+            if s.status != SetupStatus.PENDING:
+                pass
+            elif s.category == SetupCategory.A and not p.trade_a_setups:
+                s.status, s.reason = SetupStatus.REJECTED, "A setups disabled"
+            elif s.category == SetupCategory.VALID_NOT_GOOD and not (s.s_setup and p.trade_valid_not_good_with_s):
+                s.status, s.reason = SetupStatus.REJECTED, "valid but not good: no-wick formed in a retracement"
+            elif blocked[j]:
                 s.status, s.reason = SetupStatus.REJECTED, "no-wick formed in the no-trading zone / news window"
             elif flagged[j]:
                 s.status, s.reason = SetupStatus.REJECTED, "bar flagged by the data validator"
@@ -301,7 +361,8 @@ class OriginalYoutubeScanner:
             if s.status == SetupStatus.PENDING:
                 pending.append(s)
                 log_event(logger, "strategy.setup_detected", symbol=symbol, direction=direction, ts=idx[j],
-                          entry=s.entry, stop=s.stop, target=s.target, omar_entry=s.omar_entry)
+                          category=s.category, s_setup=s.s_setup, entry_mode=s.entry_mode, entry=s.entry,
+                          stop=s.stop, target=s.target, omar_entry=s.omar_entry)
 
         for s in pending:
             s.reason = "still pending at the end of the data"
@@ -310,15 +371,21 @@ class OriginalYoutubeScanner:
         return ScanResult(setups=setups, structure=structure, flags=flags, warnings=warnings)
 
     # ------------------------------------------------------------------ helpers
-    def _build(self, direction: str, j: int, ts: pd.Timestamp, nowick_open: float, prot: float,
-               prot_i: int, spec: InstrumentSpec) -> Setup:
+    def _build(self, direction: str, j: int, ts: pd.Timestamp, nowick_open: float, high: float, low: float,
+               close: float, prot: float, prot_i: int, spec: InstrumentSpec) -> Setup:
         p = self.params
         long = direction == "long"
-        raw = (nowick_open - prot) if long else (prot - nowick_open)
+        wick = (high - close) if long else (close - low)
+        body = abs(close - nowick_open)
+        is_s = wick > body
+        market = is_s and p.s_setup_market_entry
+        ref = close if market else nowick_open
+        raw = (ref - prot) if long else (prot - ref)
         s = Setup(direction=direction, nowick_index=j, nowick_time=ts, nowick_open=nowick_open,
-                  entry=nowick_open, stop=prot, target=nowick_open, raw_risk=raw,
+                  entry=ref, stop=prot, target=ref, raw_risk=raw,
                   raw_risk_units=spec.units(raw) if not np.isnan(raw) else float("nan"),
-                  protective_level=prot, protective_index=int(prot_i))
+                  protective_level=prot, protective_index=int(prot_i), s_setup=is_s,
+                  entry_mode="market" if market else "limit", nowick_high=high, nowick_low=low)
         if np.isnan(raw) or raw <= 0:
             s.status, s.reason = SetupStatus.REJECTED, "stop level is not beyond the entry"
             return s
@@ -330,12 +397,35 @@ class OriginalYoutubeScanner:
         sign = 1 if long else -1
         breathing = raw * p.breathing_room_pct
         s.stop = prot - sign * breathing
-        if spec.kind == "forex" and s.raw_risk_units > p.omar_entry_min_stop_pips:
+        if not market and spec.kind == "forex" and s.raw_risk_units > p.omar_entry_min_stop_pips:
             s.entry = nowick_open + sign * p.omar_entry_offset_pips * spec.unit
             s.omar_entry = True
-        risk = abs(s.entry - s.stop)
-        s.target = s.entry + sign * p.reward_risk * risk
+        s.target = self._target(s, s.entry)
         return s
+
+    def _target(self, s: Setup, entry: float) -> float:
+        sign = 1 if s.direction == "long" else -1
+        one_to_one = entry + sign * self.params.reward_risk * abs(entry - s.stop)
+        if s.s_setup and self.params.s_setup_target == "wick_fill":
+            fill = s.nowick_high if s.direction == "long" else s.nowick_low
+            if (fill - one_to_one) * sign > 0:  # only when the wick fill is beyond 1:1
+                return fill
+        return one_to_one
+
+    @staticmethod
+    def _bos_run(structure: StructureResult, n: int) -> np.ndarray:
+        """Number of with-trend BOS events since the trend began, after each bar."""
+        out = np.zeros(n, dtype=int)
+        count, last = 0, 0
+        for e in sorted(structure.events, key=lambda e: e.index):
+            out[last:e.index] = count
+            if e.kind == "BOS":
+                count = 1 if ("reversal confirmed" in e.note or "resumed" in e.note) else count + 1
+            else:
+                count = 0
+            last = e.index
+        out[last:] = count
+        return out
 
     @staticmethod
     def _manage(s: Setup, j: int, o: float, h: float, lo: float, close) -> None:
@@ -407,11 +497,13 @@ class OriginalYoutubeStrategy(Strategy):
                 price=s.entry,
                 stop=s.stop,
                 target=s.target,
-                reason=(f"{'bullish' if s.direction == 'long' else 'bearish'} no-wick in "
-                        f"{'up' if s.direction == 'long' else 'down'}trend; LIMIT entry"
-                        f"{' (Omar entry)' if s.omar_entry else ''}; valid for "
-                        f"{self.params.max_return_candles} candles"),
+                reason=(f"{s.category.value}{' + S' if s.s_setup else ''} setup: "
+                        f"{'bullish' if s.direction == 'long' else 'bearish'} no-wick; "
+                        + ("MARKET entry at the next open" if s.entry_mode == "market" else
+                           f"LIMIT entry{' (Omar entry)' if s.omar_entry else ''}, valid for "
+                           f"{self.params.max_return_candles} candles")),
                 indicators={"raw_risk_units": s.raw_risk_units, "protective_level": s.protective_level,
+                            "s_setup": float(s.s_setup), "market_entry": float(s.entry_mode == "market"),
                             "expires_after_bars": float(self.params.max_return_candles)},
                 data_quality=quality if isinstance(quality, DataQualityStatus) else DataQualityStatus.WARNING,
             ))

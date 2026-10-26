@@ -10,10 +10,11 @@ from trading.strategies.original_youtube.strategy import (
     OriginalYoutubeStrategy,
     ScanResult,
     Setup,
+    SetupCategory,
     SetupStatus,
     default_definition,
 )
-from trading.strategies.original_youtube.structure import StructureEngine, Trend
+from trading.strategies.original_youtube.structure import Phase, StructureEngine, Trend
 
 __all__ = ["STRATEGY_NAME", "OriginalParams", "OriginalYoutubeScanner", "OriginalYoutubeStrategy", "ScanResult",
-           "Setup", "SetupStatus", "StructureEngine", "Trend", "default_definition"]
+           "Phase", "Setup", "SetupCategory", "SetupStatus", "StructureEngine", "Trend", "default_definition"]

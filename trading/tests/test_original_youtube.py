@@ -14,12 +14,14 @@ from trading.strategies.original_youtube import (
     STRATEGY_NAME,
     OriginalParams,
     OriginalYoutubeScanner,
+    SetupCategory,
     SetupStatus,
     StructureEngine,
     Trend,
     default_definition,
 )
 from trading.strategies.original_youtube.instruments import instrument_spec
+from trading.strategies.original_youtube.structure import Phase
 from trading.strategies.original_youtube.nowick import nowick_flags
 
 UP6, DN3 = [+1] * 6, [-1] * 3
@@ -176,15 +178,16 @@ def test_new_structure_before_tap_invalidates():
     assert s.status == SetupStatus.CANCELLED and "structure" in s.reason
 
 
-def test_no_trades_during_neutral_phase_after_choch():
-    # 1:48:08 avoid trend reversals: no trade before the 3-step confirmation.
+def test_c_setup_after_choch_without_structure_is_not_traded():
+    # Video 1 1:48:08 avoid reversals; video 2 4:13 "C setup": CHoCH with no structure before it.
     steps = UP6 + DN3 + UP6 + DN3 + UP6 + [-1] * 8 + [+1] * 2
     df = path(steps)
     choch = next(e for e in StructureEngine().run(df).events if e.kind == "CHOCH")
     i = choch.index + 1
     o = df["close"].iloc[i - 1]
     df.iloc[i, :4] = (o, o, o - 1.25, o - 1)  # bearish no-wick right after the CHoCH
-    assert scan(df).setups == []
+    setups = scan(df).setups
+    assert setups and all(x.category == SetupCategory.C and x.status == SetupStatus.REJECTED for x in setups)
 
 
 def test_nowick_inside_futures_no_trade_zone_is_rejected():
@@ -255,3 +258,70 @@ def test_default_params_are_the_documented_original():
     p = OriginalParams()
     assert (p.max_return_candles, p.reward_risk, p.min_stop_pips_forex, p.omar_entry_min_stop_pips,
             p.omar_entry_offset_pips) == (10, 1.0, 5.0, 10.0, 2.0)
+
+
+# ------------------------------------------------------------- video 2: setup grades
+# youtu.be/VafqLoSOve8
+
+
+def a_setup_df():
+    """Uptrend, then internal structure (L1, lower high H2, body close below L1), then CHoCH."""
+    steps = BASE_UP + [-1] * 3 + [+1] * 2 + [-1] * 6
+    return path(steps + [0] * 14)
+
+
+def test_a_setup_reversal_after_internal_structure_is_tradeable():
+    # 10:52 "we made structure and then ... the change of character. I would take this trade."
+    df = a_setup_df()
+    r = StructureEngine().run(df)
+    choch = next(e for e in r.events if e.kind == "CHOCH")
+    assert choch.note.startswith("A")
+    assert r.phase.iloc[choch.index] == Phase.REVERSAL_A and r.tradeable.iloc[choch.index] == "short"
+    i = choch.index + 1
+    o = df["close"].iloc[choch.index]
+    df.iloc[i, :4] = (o, o, o - 1.25, o - 1)  # bearish no-wick (small bottom wick: not an S setup)
+    df.iloc[i + 1, :4] = (o - 1, o + 0.1, o - 1.1, o - 0.5)  # taps the no-wick open
+    for k in range(i + 2, len(df)):
+        prev = df["close"].iloc[k - 1]
+        df.iloc[k, :4] = (prev, prev + 0.25, prev - 1.25, prev - 1)
+    s = scan(df).setups[0]
+    assert s.category == SetupCategory.A and s.direction == "short"
+    assert s.protective_level == pytest.approx(108.25)  # the internal lower high ("stop loss at the high")
+    assert s.fill_index == i + 1 and s.status == SetupStatus.WON
+
+
+def test_retracement_nowick_is_valid_but_not_good():
+    # 25:02 "If the no-wick shows up in the retracement, I don't like to take these trades."
+    steps = BASE_UP + [-1] * 3 + [+1] + [0] * 6
+    df = path(steps)
+    i = 18
+    o = df["close"].iloc[17]
+    df.iloc[i, :4] = (o, o + 1.25, o, o + 1)  # bullish no-wick at the potential higher low
+    s = scan(df).setups[0]
+    assert s.category == SetupCategory.VALID_NOT_GOOD and s.status == SetupStatus.REJECTED
+
+
+def test_s_setup_upgrades_valid_not_good_and_enters_at_next_open():
+    # 16:51 S = wick bigger than body; 18:25 enter directly after the candle closes; 29:30 upgrade.
+    steps = BASE_UP + [-1] * 3 + [+1] + [0] * 6
+    df = path(steps)
+    o = df["close"].iloc[17]
+    df.iloc[18, :4] = (o, o + 2.5, o, o + 0.5)  # top wick 2.0 > body 0.5
+    df.iloc[19, :4] = (o + 0.6, o + 1.0, o + 0.4, o + 0.8)
+    s = scan(df).setups[0]
+    assert s.category == SetupCategory.VALID_NOT_GOOD and s.s_setup and s.entry_mode == "market"
+    assert s.fill_index == 19 and s.fill_price == pytest.approx(o + 0.6)
+    assert s.target - s.fill_price == pytest.approx(s.fill_price - s.stop)
+
+
+def test_grandma_setup_is_the_post_bos_nowick():
+    # 26:11 grandma: the no-wick came right after the break of structure, not in a retracement.
+    s = scan(bull_setup_df(RALLY)).setups[0]
+    assert s.category == SetupCategory.GRANDMA and not s.s_setup and s.entry_mode == "limit"
+
+
+def test_s_setup_wick_fill_target_option():
+    df = bull_setup_df(RALLY)
+    df.iloc[14, :4] = (108.0, 125.0, 108.0, 109.0)  # huge top wick
+    s = scan(df, s_setup_target="wick_fill").setups[0]
+    assert s.s_setup and s.target == 125.0

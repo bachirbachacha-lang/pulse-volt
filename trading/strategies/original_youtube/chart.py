@@ -41,6 +41,8 @@ def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250
         if t < start:
             continue
         label = {"BOS": "BOS", "CHOCH": "CHoCH", "TREND_START": "trend"}[e.kind]
+        if e.kind == "CHOCH":
+            label += " (A)" if e.note.startswith("A") else " (C)"
         price = df["high"].iat[e.index] if e.direction == "bullish" else df["low"].iat[e.index]
         notes.append(Annotation(t, price, text=label, color="#2e7d32" if e.direction == "bullish" else "#c62828"))
 
@@ -48,8 +50,8 @@ def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250
         if s.nowick_time < start:
             continue
         color = STATUS_COLOR[s.status]
-        tag = "L" if s.direction == "long" else "S"
-        notes.append(Annotation(s.nowick_time, s.nowick_open, text=f"{tag}:{s.status.value}", color=color,
+        tag = ("L" if s.direction == "long" else "Sh") + f" {s.category.value}{'+S' if s.s_setup else ''}"
+        notes.append(Annotation(s.nowick_time, s.nowick_open, text=f"{tag}: {s.status.value}", color=color,
                                 marker="o", size=22))
         if s.status in (SetupStatus.REJECTED,):
             continue
@@ -92,7 +94,9 @@ def setups_table(result: ScanResult) -> pd.DataFrame:
     rows = []
     for s in result.setups:
         rows.append({
-            "nowick_time": s.nowick_time, "direction": s.direction, "status": s.status.value,
+            "nowick_time": s.nowick_time, "direction": s.direction, "category": s.category.value,
+            "s_setup": s.s_setup, "entry_mode": s.entry_mode, "clean_trend": s.clean_trend,
+            "status": s.status.value,
             "entry": s.entry, "stop": s.stop, "target": s.target, "risk_units": round(s.raw_risk_units, 1),
             "omar_entry": s.omar_entry, "fill_time": s.fill_time, "exit_time": s.exit_time,
             "exit_price": s.exit_price, "r": s.r_multiple, "reason": s.reason or s.exit_reason or "",

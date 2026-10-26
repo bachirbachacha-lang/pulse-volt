@@ -1,8 +1,12 @@
 # ORIGINAL_YOUTUBE_STRATEGY: No Wick Strategy (omarnowick)
 
-**Source studied:** video 1, "No Wick Strategy (85% Win Rate Trading System + Live Backtest)" by omarnowick, youtu.be/DD9A9hHYqvc (2:33:21). I read the full transcript the user pasted. Timestamps below refer to that video.
+**Sources studied** (full transcripts pasted by the user):
+- **V1:** "No Wick Strategy (85% Win Rate Trading System + Live Backtest)", youtu.be/DD9A9hHYqvc (2:33:21)
+- **V2:** "How to Actually Achieve an 85% Win Rate Trading No Wick Strategy", youtu.be/VafqLoSOve8 (34:50)
 
-**Not yet studied:** video 2, "How to Actually Achieve an 85% Win Rate Trading No Wick Strategy", youtu.be/VafqLoSOve8 (setup grades S / A / B / C / Grandma, "valid but not good", exceptions). Its transcript hasn't been provided yet. Video 1 says the "S setup" and the exceptions to the 3-step confirmation are mentorship material (2:27:53).
+Timestamps without a prefix refer to V1.
+
+**Where the videos differ.** V1 says to avoid all trend-reversal setups, and promises that the exceptions come "at the end of this video" (1:49:18). V2 gives that exception: the **A setup**. The implementation follows V2 for reversals: A setups are traded, C setups are not.
 
 **Tags used below:**
 - **[E] Explicit:** stated or clearly demonstrated by the creator.
@@ -75,10 +79,41 @@ ORIGINAL_YOUTUBE_STRATEGY: No Wick strategy, core "A setup" as taught publicly.
 ### Short setup and trigger
 Mirror of the long side: confirmed downtrend + bearish no-wick (open = high), sell limit at the no-wick open, tapped within 10 candles. [E] 1:23:38, 1:24:46
 
+### Setup grades (V2)
+The creator's own trading is "grandma setups, S setups, and A setups" (V2 32:03).
+
+| Grade | Definition | Creator's win rate | Traded? | Tag | Source |
+|---|---|---|---|---|---|
+| **Grandma** | Super clean trend; no-wick "came exactly after the break of structure", in the trend's last leg, not in a retracement. Obvious stop | highest | yes | E | V2 20:27, 26:11 |
+| **S** | The no-wick's opposite wick is bigger than its body ("the bigger the wick, the better"). Must follow the trend. Enter right after the candle closes instead of waiting for the tap. TP 1:1, or at the wick fill for more R | 80–90% | yes | E | V2 16:51, 18:25, 19:18 |
+| **A** | External trend, then internal counter-structure (high, low, lower high, lower low), then a CHoCH, then a no-wick in the new direction. Taken even without the 3-step BOS. Stop "at the high" | ~78% | yes | E | V2 10:52–14:08 |
+| **Valid but not good** | With-trend no-wick that forms in the retracement towards the potential higher low | ~70% | no | E | V2 25:02 |
+| **Valid but not good + S** | The S setup "can make a valid but not good setup a good setup" | ~75% | yes | E | V2 29:30 |
+| **B** | Trading the internal trend against the external trend, with no CHoCH | ~65% | no | E | V2 8:04 |
+| **C** | CHoCH with no structure before it ("reversal attempt"), then a no-wick | ~60% | no | E | V2 4:13, 14:22 |
+| **C + S, B + S** | Combinations that "can happen". He doesn't say whether to take them | | not traded in code | U | V2 28:41 |
+| **Super-clean trend + S** | "Super super high win rate" | | yes (counts as Grandma + S) | E | V2 30:30 |
+
+How the code decides each grade:
+- **Grandma vs valid but not good:**
+  - Grandma: no-wick in the impulse leg after a BOS, while the leg's extreme hasn't yet been confirmed by a real pullback.
+  - Valid but not good: no-wick after that pullback began, before the next BOS.
+  - This is an inference from his description [I].
+- **"Super clean":** he judges it by eye [D]. The code only reports a `clean_trend` flag (at least 2 BOS in the trend) and doesn't filter on it.
+- **A setup:**
+  - "Structure before the CHoCH" is read as: after the trend extreme, a swing low L1, then a lower high H2, then a body close below L1 (a lower low), all before the CHoCH bar [I].
+  - The stop goes at the most recent internal lower high, updated if a newer lower high forms [I].
+- **S setup:**
+  - Bullish: top wick > body. Bearish: bottom wick > body [E].
+  - Entry is at the next candle's open, his "directly after the candle closes" [I].
+- **B setups** never appear in the code, because setups must follow the external trend.
+- **24-hour rule for B (V2 10:19):** if an internal counter-trend runs for 24 hours with no CHoCH/BOS, he counts it as the new trend. That's stated, but not defined enough to code [U]. Not implemented.
+- **Extra confluences:** support/resistance, trend lines, fair value gaps, imbalances and "decision areas" are mentioned as optional extras (V2 31:14). Not part of the original.
+
 ### Confirmations
 | Rule | Tag | Source |
 |---|---|---|
-| Trend must be confirmed (3-step rule). No trading right after a CHoCH; reversal setups win about 70% and are avoided | E | 1:48:08 |
+| Trend must be confirmed (3-step rule), except A setups (V2). C setups right after a CHoCH are avoided | E | 1:48:08, V2 10:52 |
 | Opposite-direction no-wicks are ignored while the trend holds | E | 1:27:50 |
 
 ### Invalidation (before entry)
@@ -103,7 +138,9 @@ Mirror of the long side: confirmed downtrend + bearish no-wick (open = high), se
 | Code default: no futures minimum (explicit rule only); configurable | | |
 
 ### Target
-Fixed 1:1 risk-to-reward. [E] 1:21:41. Above 1:1 is discussed only as mentorship material. [E] 2:28:34
+Fixed 1:1 risk-to-reward [E] 1:21:41, V2 2:58.
+- S setups may target the wick fill for more than 1:1 [E] V2 18:38. The code default is 1:1; `s_setup_target="wick_fill"` is available.
+- Grandma setups "could even aim for more than one to one" [D] V2 28:13. Not implemented.
 
 ### Entry refinement: "Omar entry"
 | Rule | Tag | Source |
@@ -174,7 +211,14 @@ Fixed 1:1 risk-to-reward. [E] 1:21:41. Above 1:1 is discussed only as mentorship
   - forex minimum stop and Omar entry
 
   The code gives his answer in every case.
+- **Setup-grade tests (V2):**
+  - A setup after internal structure is traded, with the stop at the internal lower high
+  - C setup is recorded but not traded
+  - a retracement no-wick is valid but not good
+  - S upgrades a valid-but-not-good setup and enters at the next open
+  - the post-BOS no-wick is a Grandma setup
+  - the S wick-fill target option works
 - **Real-chart comparison: not done yet.**
-  - His examples (USDCHF, ES, USDJPY, CADJPY, and the NQ 5m live backtest on a random 2024 date) don't show their dates in the transcript.
+  - His examples (USDCHF, ES, USDJPY, CADJPY, the NQ 5m live backtest on a random 2024 date, and V2's chart examples) don't show their dates in the transcripts.
   - Yahoo Finance is also blocked in the build environment.
   - Comparing needs the example dates/times (from screenshots) and network access to yfinance.
