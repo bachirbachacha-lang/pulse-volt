@@ -68,6 +68,38 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 .px .pill{background:#C6FF3D;color:#0C0B14}
 .px-logo{font:700 44px/1 Taj;letter-spacing:-.01em;direction:ltr}
 .px-logo span{color:#7B61FF}
+
+/* ---------- Pixel & Co.: menu -> WhatsApp order ad ---------- */
+.ph2{left:270px;top:560px;width:540px;height:1150px;padding:14px}
+.scr{position:absolute;inset:14px;border-radius:52px;overflow:hidden;background:#fff;color:#1d1a1a;direction:rtl;font-family:Taj}
+.scr img.full{width:100%;height:100%;object-fit:cover;object-position:top}
+.pf-top{height:120px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px;font:700 30px/1 Taj;border-bottom:1px solid #eee}
+.pf-head{display:flex;align-items:center;gap:26px;padding:28px 30px 10px}
+.pf-av{width:130px;height:130px;border-radius:50%;background:#4a2c2a;color:#f6e7e1;display:flex;align-items:center;justify-content:center;font:400 54px/1 Fraunces;flex:none;box-shadow:0 0 0 4px #fff,0 0 0 7px #e6cfc8}
+.pf-name{font:800 36px/1.2 Taj}
+.pf-name small{display:block;font:400 25px/1.4 Taj;color:#777}
+.pf-bio{padding:8px 30px 0;font:400 26px/1.55 Taj;color:#333}
+.pf-link{margin:20px 30px 0;height:74px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:12px;font:700 26px/1 Taj;position:relative}
+.pf-none{border:3px dashed #d9534f;color:#c0392b;background:#fdf1f0}
+.pf-yes{background:#4a2c2a;color:#fff}
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:28px}
+.pf-grid img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.chat{background:#efe7dc}
+.ch-top{height:140px;background:#3b2a28;color:#fff;display:flex;align-items:flex-end;gap:18px;padding:0 26px 20px}
+.ch-top .pf-av{width:70px;height:70px;font-size:30px;box-shadow:none;background:#f6e7e1;color:#4a2c2a}
+.ch-top b{font:700 30px/1.2 Taj;display:block}
+.ch-top small{font:400 22px/1.2 Taj;opacity:.75}
+.bub{position:absolute;left:26px;right:70px;white-space:pre-wrap;font:400 26px/1.5 Taj;border-radius:22px;padding:20px 24px}
+.bub.out{background:#d9f2cf;border-top-right-radius:6px}
+.bub .tm{display:block;text-align:left;font-size:19px;color:#5b7a52;margin-top:6px;direction:ltr}
+.comp{position:absolute;left:18px;right:18px;bottom:26px;display:flex;gap:12px;align-items:flex-end}
+.comp .box{flex:1;background:#fff;border-radius:28px;padding:18px 22px;font:400 23px/1.45 Taj;white-space:pre-wrap;color:#222;max-height:420px;overflow:hidden}
+.comp .send{width:84px;height:84px;border-radius:50%;background:#3b2a28;color:#fff;display:flex;align-items:center;justify-content:center;font:700 22px/1 Taj;flex:none;position:relative}
+.ring{position:absolute;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(255,255,255,.45);border:4px solid rgba(40,20,20,.55);pointer-events:none}
+.cornerlbl{left:56px;top:80px;background:rgba(244,242,255,.12);color:#F4F2FF;border:2px solid rgba(244,242,255,.25);letter-spacing:.04em;font:700 28px/1 Taj;padding:14px 22px;border-radius:12px;direction:rtl;z-index:5}
+.stepcap{top:300px}
+.stepcap .a{font:800 70px/1.2 Taj;direction:rtl}
+.stepcap .e{font:400 36px/1.3 Taj;opacity:.75;margin-top:10px}
 </style>
 </head>
 <body>
@@ -191,6 +223,75 @@ pixel: { dur: 15, cls: 'px', html: `
     <div class="ar hook-ar" style="font-size:96px">نسوي لك عينة</div>
     <div class="ar hook-ar hook-sub" style="font-size:96px">مجانية أول</div>
     <div class="hook-en" style="margin-top:26px">We'll make you a free sample first.</div>
+    <div class="ar pill">راسلنا · DM us</div>
+    <div class="px-logo" style="margin-top:64px">Pixel <span>&amp;</span> Co. · @pixelandco.design</div>
+  </div>
+`},
+
+/* Pixel & Co.: "customers ask for your menu every day?" -> site -> WhatsApp order */
+order: { dur: 15, cls: 'px', html: `
+  <div class="grid" data-drift="1"></div>
+  <div class="glow" style="left:-10px;top:620px" data-pulse="1"></div>
+  <div class="abs cornerlbl">نموذج تصميم · Design sample</div>
+
+  <div class="abs c" style="top:190px" data-in="0" data-out="2.0" data-a="pop" data-dur=".3">
+    <div class="ar hook-ar" style="font-size:104px">زبائنك يسألونك</div>
+    <div class="ar hook-ar hook-sub" style="font-size:104px">عن المنيو كل يوم؟</div>
+    <div class="hook-en" style="margin-top:20px">Customers ask for your menu every day?</div>
+  </div>
+
+  ${[
+    [2.1, 4.2, 'بايو بدون موقع… والكل يسأل بالخاص', 'A bio with no website, so everyone asks in DMs'],
+    [4.2, 6.6, 'موقعك: المنيو كامل بالأسعار', 'Your site: the full menu with prices'],
+    [6.6, 8.4, 'الزبون يختار ويطلب بنفسه', 'Customers pick and order on their own'],
+    [8.4, 11.9, 'والطلب يوصلك جاهز على الواتساب', 'The order arrives ready on WhatsApp'],
+  ].map(([a, b, ar, en]) => `<div class="abs c stepcap" data-in="${a}" data-out="${b - .1}" data-a="up">
+      <div class="a">${ar}</div><div class="e">${en}</div></div>`).join('')}
+
+  <div class="phone ph2" data-in="0.15" data-out="11.9" data-a="up" data-dur=".6">
+    <!-- 1: social profile with no website (generic layout, fictional SUKKAR) -->
+    <div class="scr" data-in="0" data-out="4.15" data-a="fade" data-dur=".01">
+      <div class="pf-top">sukkar · سُكّر</div>
+      <div class="pf-head"><div class="pf-av">S</div>
+        <div class="pf-name">سُكّر SUKKAR<small>كيك وحلا حسب الطلب</small></div></div>
+      <div class="pf-bio">كيك مناسبات وبوكسات حلا<br>الرياض · استلام وتوصيل<br>للطلب والأسعار: راسلونا بالخاص</div>
+      <div style="position:relative;height:74px;margin:20px 30px 0">
+        <div class="pf-link pf-none abs" style="inset:0;margin:0" data-in="0" data-out="3.0" data-a="fade" data-dur=".01">لا يوجد رابط موقع · No website</div>
+        <div class="pf-link pf-yes abs" style="inset:0;margin:0" data-in="3.0" data-a="pop" data-dur=".3">المنيو والطلب · Menu &amp; order</div>
+        <div class="ring" data-in="3.55" data-out="4.0" data-a="pop" data-dur=".2" style="left:50%;top:50%"></div></div>
+      <div class="pf-grid">${['celebration','macarons','chocolate','pistachio','cups','giftbox','bakery','piping','macarons'].map(i => `<img src="../../pixel-co/samples/sukkar/img/${i}.jpg">`).join('')}</div>
+    </div>
+    <!-- 2: the real SUKKAR sample site, recorded -->
+    <div class="scr" data-in="4.15" data-out="8.35" data-a="fade" data-dur=".15">
+      <img class="full" data-seq="frames/sukkar-order/%03d.jpg" data-n="126" data-t0="4.2"></div>
+    <!-- 3: the order message opening in a chat -->
+    <div class="scr chat" data-in="8.35" data-a="up" data-dur=".35">
+      <div class="ch-top"><span style="font-size:40px;margin-left:6px">‹</span><div class="pf-av">S</div>
+        <div><b>سُكّر · SUKKAR</b><small>واتساب · WhatsApp</small></div></div>
+      <div class="bub out" style="top:200px" data-in="10.25" data-a="pop" data-dur=".3">طلب جديد من موقع سُكّر 🎂
+
+• ١× بوكس ماكرون ١٢ حبة — ٨٥ ر.س
+• ١× كاسات حلا (٣ حبات) — ٥٤ ر.س
+
+استلام
+المجموع: ١٣٩ ر.س<span class="tm">12:41 ✓✓</span></div>
+      <div class="comp"><div class="box" data-in="8.35" data-out="10.2" data-a="fade" data-dur=".01">طلب جديد من موقع سُكّر 🎂
+
+• ١× بوكس ماكرون ١٢ حبة — ٨٥ ر.س
+• ١× كاسات حلا (٣ حبات) — ٥٤ ر.س
+
+استلام
+المجموع: ١٣٩ ر.س</div>
+        <div class="box" style="color:#aaa;position:absolute;left:0;right:96px;bottom:0" data-in="10.2" data-a="fade" data-dur=".01">رسالة</div>
+        <div class="send">إرسال</div></div>
+      <div class="ring" data-in="9.7" data-out="10.3" data-a="pop" data-dur=".2" style="right:60px;bottom:68px"></div>
+    </div>
+  </div>
+
+  <div class="abs c" style="top:560px" data-in="12.05" data-a="up">
+    <div class="ar hook-ar" style="font-size:100px">نموذج مجاني</div>
+    <div class="ar hook-ar hook-sub" style="font-size:100px">لمشروعك، راسلنا</div>
+    <div class="hook-en" style="margin-top:26px">Free sample for your business - message us</div>
     <div class="ar pill">راسلنا · DM us</div>
     <div class="px-logo" style="margin-top:64px">Pixel <span>&amp;</span> Co. · @pixelandco.design</div>
   </div>

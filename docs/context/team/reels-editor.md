@@ -15,3 +15,7 @@ Hook in first 2 s; Arabic then English text; label 3D/AI ("3D RENDER", "AI SAMPL
 - Sat: scalp-elixir-ar-brush-nails.mp4 (14 s): "تحك فروة راسك بأظافرك؟" then massage brush, 3 points from the store copy, ends "Coming soon".
 - Pixel & Co. (either day): pixelco-ar-no-website.mp4 (15 s): "عندك انستقرام… بس ما عندك موقع؟", SAMRA / TORQ / SUKKAR samples (AI SAMPLE tags), ends "free sample first · DM us".
 - Covers: same names + -cover.jpg. Captions were given in chat.
+
+## 26 Oct: Pixel & Co. "menu every day?" ad
+- pixelco-ar-menu-whatsapp.mp4 (15 s, silent) + -cover.jpg. Hook «زبائنك يسألونك عن المنيو كل يوم؟» → generic profile (no website, no Instagram UI/logo) → real SUKKAR sample recording (scroll menu, add, order, "send on WhatsApp") → chat screen with the site's real order message → «نموذج مجاني لمشروعك، راسلنا» + @pixelandco.design. Corner label «نموذج تصميم · Design sample» throughout.
+- Source: ads/reels-src (cut=order) + record-sukkar-order.js (frames to frames/sukkar-order). Chat screen is a generic look with no WhatsApp logo; the word "WhatsApp" is only text.
