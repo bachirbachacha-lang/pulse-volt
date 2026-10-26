@@ -137,3 +137,40 @@ raw_dir = "data/raw"
 clean_dir = "data/clean"
 cache_dir = "data/cache"
 reports_dir = "reports"
+
+[backtest]
+# Chronological split of the first dataset a split is created for. The split
+# boundaries are then frozen in `splits_dir` so the untouched test period never
+# moves; data after the test end becomes "post_test" (forward) data.
+dev_fraction = 0.50
+val_fraction = 0.25            # test = the remaining 25%
+splits_dir = "backtests/splits"
+test_ledger = "backtests/test_ledger.jsonl"   # every look at test results is recorded here
+results_dir = "reports/backtests"
+
+# Simulated execution costs. "ticks" = ticks for futures, pips for forex.
+# These are ASSUMPTIONS, not measured from a broker. Adjust to your broker/prop firm.
+# commission_per_unit_side: account currency per contract (futures) or per lot (forex) per side.
+[backtest.costs.futures_default]
+spread_ticks = 0.0             # futures bars are trade prices; spread cost is covered by slippage
+slippage_ticks = 1.0           # on stop and market fills
+limit_through_ticks = 1.0      # a limit fills only if price trades 1 tick through it
+commission_per_unit_side = 2.25
+quantity = 1.0
+
+[backtest.costs.forex_default]
+spread_ticks = 1.2             # Yahoo FX bars ~ mid/bid quotes; typical retail spread in pips
+slippage_ticks = 0.2
+limit_through_ticks = 0.0
+commission_per_unit_side = 0.0 # spread-only account assumed
+quantity = 1.0
+lot_size = 100000
+
+[backtest.costs.symbols]
+"MES=F" = { commission_per_unit_side = 0.62 }
+"MNQ=F" = { commission_per_unit_side = 0.62 }
+"USDJPY=X" = { spread_ticks = 1.0 }
+"AUDUSD=X" = { spread_ticks = 1.0 }
+"EURUSD=X" = { spread_ticks = 0.8 }
+"CADJPY=X" = { spread_ticks = 2.0 }
+"AUDCAD=X" = { spread_ticks = 2.0 }

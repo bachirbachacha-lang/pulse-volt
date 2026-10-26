@@ -62,6 +62,8 @@ class ChartSpec:
     show_volume: bool = True
     show_flags: bool = True
     last_n: int | None = None
+    start: pd.Timestamp | None = None  # optional time window (inclusive)
+    end: pd.Timestamp | None = None
     width: float = 14.0
     height: float = 8.0
 
@@ -83,6 +85,8 @@ def _positions(index: pd.DatetimeIndex, stamps: Iterable[pd.Timestamp]) -> np.nd
 def render_chart(md: MarketData, spec: ChartSpec | None = None, path: str | Path | None = None) -> plt.Figure:
     spec = spec or ChartSpec()
     df = md.frame
+    if spec.start is not None or spec.end is not None:
+        df = df.loc[spec.start:spec.end]
     if spec.last_n:
         df = df.iloc[-spec.last_n:]
     if df.empty:

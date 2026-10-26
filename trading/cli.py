@@ -5,6 +5,8 @@
     python -m trading chart ES=F -i 1h -p 60d    # same, plus a PNG in reports/
     python -m trading account                    # paper account state from the database
     python -m trading nowick ES=F -i 5m -p 30d   # run ORIGINAL_YOUTUBE_STRATEGY over the data, chart + CSV
+    python -m trading backtest -s ES=F NQ=F -i 5m -p 60d            # dev + validation only
+    python -m trading backtest -s ES=F NQ=F -i 5m -p 60d --include-test   # final report (logged)
 """
 
 from __future__ import annotations
@@ -55,6 +57,16 @@ def main(argv: list[str] | None = None) -> int:
         if name in ("chart", "nowick"):
             sp.add_argument("--last", type=int, default=200)
     sub.add_parser("account")
+    bt = sub.add_parser("backtest")
+    bt.add_argument("-s", "--symbols", nargs="+", required=True)
+    bt.add_argument("-i", "--interval", default="5m")
+    bt.add_argument("-p", "--period")
+    bt.add_argument("--start")
+    bt.add_argument("--end")
+    bt.add_argument("--split", help="split name (defaults to interval + symbols)")
+    bt.add_argument("--include-test", action="store_true", help="also compute the untouched TEST period (logged)")
+    bt.add_argument("--experiment", help="run EXPERIMENT_NN instead of the original")
+    bt.add_argument("--force", action="store_true", help="re-download data")
     args = p.parse_args(argv)
 
     settings = get_settings()
@@ -108,6 +120,36 @@ def _run(args: argparse.Namespace, settings) -> int:
         if len(table):
             print(table.tail(15).to_string(index=False))
         print(f"  chart: {out}\n  setups: {stem}.csv")
+    elif args.cmd == "backtest":
+        from datetime import datetime, timezone
+
+        from trading.backtests.report import write_report
+        from trading.backtests.runner import run_backtest
+        from trading.strategies.experiments import EXPERIMENTS, experiment_definition
+        from trading.strategies.original_youtube import default_definition
+
+        if args.experiment:
+            if args.experiment not in EXPERIMENTS:
+                print(f"error: unknown experiment {args.experiment}; registered: {sorted(EXPERIMENTS)}",
+                      file=sys.stderr)
+                return 1
+            definition = experiment_definition(args.experiment, args.symbols, args.interval)
+        else:
+            definition = default_definition(args.symbols, args.interval)
+        res = run_backtest(settings, definition, args.symbols, args.interval, period=args.period,
+                           start=args.start, end=args.end, split_name=args.split,
+                           include_test=args.include_test, force_download=args.force)
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        out = settings.resolve(settings.backtest.results_dir) / f"{definition.name}_{stamp}"
+        report = write_report(res, settings, out)
+        for w in res.warnings:
+            print(f"  warning: {w}")
+        for period, m in res.metrics.items():
+            print(f"  {period:<12} trades={m['trades']:<4} win_rate={m['win_rate']:.1%} net_r={m['net_r']:+.2f} "
+                  f"pf={m['profit_factor']:.2f} maxdd={m['max_drawdown']:,.0f}" if m["trades"] else
+                  f"  {period:<12} trades=0")
+        print(f"  integrity: {'all passed' if res.integrity_ok else 'FAILED (see report)'}")
+        print(f"  report: {report}")
     elif args.cmd == "account":
         from trading.database import Database
         from trading.paper_trading import PaperBroker

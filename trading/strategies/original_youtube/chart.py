@@ -22,15 +22,20 @@ STATUS_COLOR = {
 }
 
 
-def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250) -> ChartSpec:
+def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250,
+                    start: pd.Timestamp | None = None, end: pd.Timestamp | None = None) -> ChartSpec:
     df = md.frame
     idx = df.index
-    start = idx[-last_n] if last_n and last_n < len(idx) else idx[0]
+    if start is None:
+        start = idx[-last_n] if last_n and last_n < len(idx) else idx[0]
+    else:
+        last_n = None
+    end = end if end is not None else idx[-1]
     notes: list[Annotation] = []
     levels: list[Level] = []
     trades: list[ClosedTrade] = []
 
-    for t, row in result.flags.loc[start:].iterrows():
+    for t, row in result.flags.loc[start:end].iterrows():
         if row["nowick_bull"]:
             notes.append(Annotation(t, df.at[t, "low"], marker="^", color="#26a69a", size=14))
         elif row["nowick_bear"]:
@@ -38,7 +43,7 @@ def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250
 
     for e in result.structure.events:
         t = idx[e.index]
-        if t < start:
+        if t < start or t > end:
             continue
         label = {"BOS": "BOS", "CHOCH": "CHoCH", "TREND_START": "trend"}[e.kind]
         if e.kind == "CHOCH":
@@ -47,7 +52,7 @@ def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250
         notes.append(Annotation(t, price, text=label, color="#2e7d32" if e.direction == "bullish" else "#c62828"))
 
     for s in result.setups:
-        if s.nowick_time < start:
+        if s.nowick_time < start or s.nowick_time > end:
             continue
         color = STATUS_COLOR[s.status]
         tag = ("L" if s.direction == "long" else "Sh") + f" {s.category.value}{'+S' if s.s_setup else ''}"
@@ -81,6 +86,7 @@ def scan_chart_spec(md: MarketData, result: ScanResult, last_n: int | None = 250
         title=title,
         overlays={"protective level (HL/LH)": result.structure.protective_level},
         levels=levels, trades=trades, annotations=notes, last_n=last_n, height=9,
+        start=start if last_n is None else None, end=end if last_n is None else None,
     )
 
 

@@ -45,3 +45,24 @@ def equity_hourly(session: Session, start: str = "2024-03-04", end: str = "2024-
 def daily(start: str = "2024-01-02", periods: int = 120, tz: str = "America/New_York", **kw) -> pd.DataFrame:
     idx = pd.bdate_range(start, periods=periods, tz=tz)
     return make_ohlcv(idx, vol=0.01, **kw)
+
+
+def random_futures_bars(session: Session, start: str, end: str, seed: int = 1, price: float = 5100.0,
+                        tick: float = 0.25, yf_columns: bool = True) -> pd.DataFrame:
+    """Tick-grid random walk with ~8% no-wick candles, aligned to ``session``. Test data only."""
+    idx = session_index(session, start, end, "5min")
+    rng = np.random.default_rng(seed)
+    n = len(idx)
+    steps = np.round(rng.normal(0.0, 1.2, n) / tick) * tick
+    close = price + np.cumsum(steps)
+    open_ = np.r_[price, close[:-1]]
+    wu = np.round(np.abs(rng.normal(0, 0.8, n)) / tick) * tick
+    wd = np.round(np.abs(rng.normal(0, 0.8, n)) / tick) * tick
+    nw = rng.random(n) < 0.08
+    wd[nw & (close > open_)] = 0
+    wu[nw & (close < open_)] = 0
+    df = pd.DataFrame({"open": open_, "high": np.maximum(open_, close) + wu, "low": np.minimum(open_, close) - wd,
+                       "close": close, "volume": 1000.0}, index=idx)
+    if yf_columns:
+        df.columns = ["Open", "High", "Low", "Close", "Volume"]
+    return df

@@ -125,6 +125,52 @@ class PathSettings(_Strict):
     reports_dir: Path = Path("reports")
 
 
+class CostEntry(_Strict):
+    spread_ticks: float = Field(0.0, ge=0)
+    slippage_ticks: float = Field(0.0, ge=0)
+    limit_through_ticks: float = Field(0.0, ge=0)
+    commission_per_unit_side: float = Field(0.0, ge=0)
+    quantity: float = Field(1.0, gt=0)
+    lot_size: float = Field(100_000, gt=0)
+
+
+class CostOverride(_Strict):
+    spread_ticks: float | None = None
+    slippage_ticks: float | None = None
+    limit_through_ticks: float | None = None
+    commission_per_unit_side: float | None = None
+    quantity: float | None = None
+    lot_size: float | None = None
+
+
+class BacktestCosts(_Strict):
+    futures_default: CostEntry = Field(default_factory=CostEntry)
+    forex_default: CostEntry = Field(default_factory=CostEntry)
+    symbols: dict[str, CostOverride] = Field(default_factory=dict)
+
+    def for_symbol(self, symbol: str, kind: str) -> CostEntry:
+        base = self.forex_default if kind == "forex" else self.futures_default
+        over = self.symbols.get(symbol)
+        if over is None:
+            return base
+        return base.model_copy(update={k: v for k, v in over.model_dump().items() if v is not None})
+
+
+class BacktestSettings(_Strict):
+    dev_fraction: float = Field(0.5, gt=0, lt=1)
+    val_fraction: float = Field(0.25, gt=0, lt=1)
+    splits_dir: Path = Path("backtests/splits")
+    test_ledger: Path = Path("backtests/test_ledger.jsonl")
+    results_dir: Path = Path("reports/backtests")
+    costs: BacktestCosts = Field(default_factory=BacktestCosts)
+
+    @model_validator(mode="after")
+    def _fractions(self) -> "BacktestSettings":
+        if self.dev_fraction + self.val_fraction >= 1:
+            raise ValueError("dev_fraction + val_fraction must leave room for a test period")
+        return self
+
+
 class Settings(_Strict):
     mode: Literal["paper"] = "paper"
     market_data: MarketDataSettings = Field(default_factory=MarketDataSettings)
@@ -139,6 +185,7 @@ class Settings(_Strict):
     database: DatabaseSettings = Field(default_factory=DatabaseSettings)
     logging: LoggingSettings = Field(default_factory=LoggingSettings)
     paths: PathSettings = Field(default_factory=PathSettings)
+    backtest: BacktestSettings = Field(default_factory=BacktestSettings)
     # Directory relative paths resolve against. Not read from the file.
     root: Path = Field(default=TRADING_ROOT, exclude=True)
 

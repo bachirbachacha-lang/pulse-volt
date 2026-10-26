@@ -50,6 +50,7 @@ import pandas as pd
 from trading.core.log import get_logger, log_event
 from trading.core.schemas import DataQualityStatus, MarketData, Signal, SignalAction, StrategyDefinition
 from trading.data.instruments import interval_delta
+from trading.execution.fills import FillConfig, FillModel
 from trading.strategies.base import Strategy, register
 from trading.strategies.original_youtube.instruments import InstrumentSpec, instrument_spec
 from trading.strategies.original_youtube.nowick import nowick_flags
@@ -218,17 +219,19 @@ def news_mask(index: pd.DatetimeIndex, events: Sequence[pd.Timestamp], minutes: 
 class OriginalYoutubeScanner:
     """Walks the clean OHLCV bar by bar (causal) and records every setup's life cycle.
 
-    The fill/exit simulation exists so setups can be verified on charts; it is
-    deliberately simple and pessimistic and is not the project's backtester.
+    Fills and exits are priced by a :class:`FillModel`. The default (zero costs,
+    touch = fill) is used for verification charts; the backtester passes a
+    realistic :class:`FillConfig`. The fill model never changes strategy rules.
     """
 
     def __init__(self, params: OriginalParams | None = None) -> None:
         self.params = params or OriginalParams()
 
     def scan(self, df: pd.DataFrame, symbol: str, interval: str,
-             news_events: Sequence[pd.Timestamp] = ()) -> ScanResult:
+             news_events: Sequence[pd.Timestamp] = (), fill_config: FillConfig | None = None) -> ScanResult:
         p = self.params
         spec = instrument_spec(symbol)
+        fm = FillModel(spec.unit, fill_config or FillConfig())  # costs in pips (forex) / ticks (futures)
         warnings = self._timeframe_warnings(spec, interval)
         structure = StructureEngine(p.swing_atr_mult, p.atr_length).run(df)
         flags = nowick_flags(df, spec.precision)
@@ -263,11 +266,12 @@ class OriginalYoutubeScanner:
         for j in range(n):
             # 1) open position: forced close before the no-trading zone / news
             if open_pos is not None and blocked[j] and j > 0:
-                close(open_pos, j - 1, c[j - 1], "closed before no-trading zone/news", SetupStatus.CLOSED)
+                close(open_pos, j - 1, fm.forced_exit(open_pos.direction == "long", c[j - 1]),
+                      "closed before no-trading zone/news", SetupStatus.CLOSED)
                 open_pos = None
             # 2) open position: stop / target on this bar (stop first if both)
             if open_pos is not None:
-                self._manage(open_pos, j, o[j], h[j], lo[j], close)
+                self._manage(open_pos, j, o[j], h[j], lo[j], close, fm)
                 if open_pos.status != SetupStatus.OPEN:
                     open_pos = None
 
@@ -288,9 +292,11 @@ class OriginalYoutubeScanner:
                     continue
 
                 if s.entry_mode == "market":  # S setup: enter at the open after the no-wick closed
+                    limit_fill = None
                     touched = True
                 else:
-                    touched = lo[j] <= s.entry if long else h[j] >= s.entry
+                    limit_fill = fm.limit_entry(long, s.entry, o[j], h[j], lo[j])
+                    touched = limit_fill is not None
                 if touched and (open_pos is None or not p.one_position_at_a_time):
                     gapped_past_stop = o[j] <= s.stop if long else o[j] >= s.stop
                     if gapped_past_stop:
@@ -298,17 +304,23 @@ class OriginalYoutubeScanner:
                         pending.remove(s)
                         continue
                     if s.entry_mode == "market":
-                        fill = o[j]
+                        fill = fm.market_entry(long, o[j])
                         s.entry = fill
                         s.target = self._target(s, fill)
                     else:
-                        fill = min(s.entry, o[j]) if long else max(s.entry, o[j])
+                        fill = limit_fill
                     s.status, s.fill_index, s.fill_time, s.fill_price = SetupStatus.OPEN, j, idx[j], fill
                     pending.remove(s)
-                    stop_hit = lo[j] <= s.stop if long else h[j] >= s.stop
-                    if stop_hit:  # entry and stop in the same bar: pessimistic, count the loss
-                        close(s, j, s.stop, "stop (same bar as entry)", SetupStatus.LOST)
+                    if fm.stop_triggered(long, s.stop, h[j], lo[j]):
+                        # Entry and stop inside the same bar: the order is unknown, assume the loss.
+                        close(s, j, fm.stop_exit(long, s.stop, o[j], same_bar_as_entry=True),
+                              "stop (same bar as entry)", SetupStatus.LOST)
+                    elif s.entry_mode == "market" and (tp := fm.target_exit(long, s.target, o[j], h[j], lo[j])):
+                        # Entered at the open, stop untouched: the target is reachable after the entry.
+                        close(s, j, tp, "target (same bar as entry)", SetupStatus.WON)
                     else:
+                        # A limit entry filled mid-bar: whether the target traded after the fill is
+                        # unknowable, so the target is never credited on the entry bar.
                         open_pos = s
                     if p.one_position_at_a_time:
                         for other in pending:
@@ -428,18 +440,14 @@ class OriginalYoutubeScanner:
         return out
 
     @staticmethod
-    def _manage(s: Setup, j: int, o: float, h: float, lo: float, close) -> None:
+    def _manage(s: Setup, j: int, o: float, h: float, lo: float, close, fm: FillModel) -> None:
         long = s.direction == "long"
-        if long:
-            if lo <= s.stop:
-                close(s, j, min(s.stop, o), "stop", SetupStatus.LOST)
-            elif h >= s.target:
-                close(s, j, max(s.target, o), "target", SetupStatus.WON)
-        else:
-            if h >= s.stop:
-                close(s, j, max(s.stop, o), "stop", SetupStatus.LOST)
-            elif lo <= s.target:
-                close(s, j, min(s.target, o), "target", SetupStatus.WON)
+        if fm.stop_triggered(long, s.stop, h, lo):  # checked first: stop wins any same-bar tie
+            close(s, j, fm.stop_exit(long, s.stop, o), "stop", SetupStatus.LOST)
+            return
+        tp = fm.target_exit(long, s.target, o, h, lo)
+        if tp is not None:
+            close(s, j, tp, "target", SetupStatus.WON)
 
     @staticmethod
     def _timeframe_warnings(spec: InstrumentSpec, interval: str) -> list[str]:
@@ -475,8 +483,9 @@ class OriginalYoutubeStrategy(Strategy):
         self.params = OriginalParams(**definition.params) if definition.params else OriginalParams()
         self.scanner = OriginalYoutubeScanner(self.params)
 
-    def scan(self, md: MarketData, news_events: Sequence[pd.Timestamp] = ()) -> ScanResult:
-        return self.scanner.scan(md.frame, md.symbol, md.interval, news_events)
+    def scan(self, md: MarketData, news_events: Sequence[pd.Timestamp] = (),
+             fill_config: FillConfig | None = None) -> ScanResult:
+        return self.scanner.scan(md.frame, md.symbol, md.interval, news_events, fill_config)
 
     def evaluate(self, md: MarketData) -> list[Signal]:
         if len(md.frame) < 2:
