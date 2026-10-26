@@ -1,8 +1,8 @@
 """Consensus engine: combines agent decisions into one go/no-go.
 
-Default rule is unanimous approval with veto: any REJECT blocks the trade,
-ABSTAIN counts as neither, and at least one APPROVE plus a risk decision with
-a positive quantity is required.
+Unanimous approval with veto: every required agent must APPROVE, any REJECT
+blocks the trade, a missing decision blocks the trade, and the risk decision
+must carry a positive quantity. One rejection is always enough to stop a trade.
 """
 
 from __future__ import annotations
@@ -26,10 +26,12 @@ class ConsensusEngine:
 
         if any(d.signal_id != signal_id for d in decisions):
             approved, reason = False, "decision for a different signal supplied"
-        elif missing:
-            approved, reason = False, f"missing decisions from {sorted(missing)}"
         elif rejects:
             approved, reason = False, "; ".join(f"{d.agent}: {d.reason}" for d in rejects)
+        elif missing:
+            approved, reason = False, f"missing decisions from {sorted(missing)}"
+        elif any(d.verdict != Verdict.APPROVE for d in decisions if d.agent in self.required_agents):
+            approved, reason = False, "a required agent did not approve"
         elif not approves:
             approved, reason = False, "no agent approved"
         elif risk is None or risk.verdict != Verdict.APPROVE or risk.quantity <= 0:

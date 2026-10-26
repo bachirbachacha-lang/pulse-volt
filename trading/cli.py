@@ -7,6 +7,7 @@
     python -m trading nowick ES=F -i 5m -p 30d   # run ORIGINAL_YOUTUBE_STRATEGY over the data, chart + CSV
     python -m trading backtest -s ES=F NQ=F -i 5m -p 60d            # dev + validation only
     python -m trading backtest -s ES=F NQ=F -i 5m -p 60d --include-test   # final report (logged)
+    python -m trading paper-step -s ES=F NQ=F -i 5m  # one forward paper-trading decision per symbol (audited)
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime, timezone
 
 from trading.config.settings import get_settings
 from trading.core.log import setup_logging
@@ -57,6 +59,10 @@ def main(argv: list[str] | None = None) -> int:
         if name in ("chart", "nowick"):
             sp.add_argument("--last", type=int, default=200)
     sub.add_parser("account")
+    ps = sub.add_parser("paper-step")
+    ps.add_argument("-s", "--symbols", nargs="+", required=True)
+    ps.add_argument("-i", "--interval", default="5m")
+    ps.add_argument("-p", "--period", default="5d")
     bt = sub.add_parser("backtest")
     bt.add_argument("-s", "--symbols", nargs="+", required=True)
     bt.add_argument("-i", "--interval", default="5m")
@@ -150,12 +156,32 @@ def _run(args: argparse.Namespace, settings) -> int:
                   f"  {period:<12} trades=0")
         print(f"  integrity: {'all passed' if res.integrity_ok else 'FAILED (see report)'}")
         print(f"  report: {report}")
+    elif args.cmd == "paper-step":
+        from trading.agents.controller import DecisionController, fill_models_from_settings
+        from trading.data.pipeline import MarketDataPipeline
+        from trading.database import Database
+        from trading.paper_trading import PaperBroker
+        from trading.strategies import get_strategy
+        from trading.strategies.original_youtube import default_definition
+
+        pipeline = MarketDataPipeline.from_settings(settings)
+        with Database(settings.database_path) as db:
+            broker = PaperBroker(settings, db, fill_models=fill_models_from_settings(settings, args.symbols))
+            ctl = DecisionController(settings, get_strategy(default_definition(args.symbols, args.interval)),
+                                     broker, db, clock=lambda: datetime.now(timezone.utc))
+            for sym in args.symbols:
+                md = pipeline.load(sym, interval=args.interval, period=args.period, force=True)
+                rec = ctl.step(md)
+                print(f"  {sym} {rec['bar_time']}: {rec['outcome']} - {rec['consensus']['reason'][:160]}")
+            a = broker.account_state()
+            print(f"  account: equity {a.equity:,.2f}, open positions {a.open_positions}, "
+                  f"pending orders {len(broker.pending)}")
     elif args.cmd == "account":
         from trading.database import Database
         from trading.paper_trading import PaperBroker
 
         with Database(settings.database_path) as db:
-            broker = PaperBroker(settings, db)
+            broker = PaperBroker(settings, db, require_consensus=False)  # read-only view of the account
             a = broker.account_state()
             print(json.dumps({**a.model_dump(mode="json"), "equity": a.equity}, indent=2))
             for pos in broker.positions.values():

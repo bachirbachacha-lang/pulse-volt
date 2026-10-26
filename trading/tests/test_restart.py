@@ -24,7 +24,7 @@ def bar(i, price):
 
 def test_broker_state_survives_restart(settings):
     with Database(settings.database_path) as db:
-        b = PaperBroker(settings, db)
+        b = PaperBroker(settings, db, require_consensus=False)
         b.submit(PaperOrder(symbol="ES=F", side=Side.BUY, quantity=2, stop_loss=4900, take_profit=5200))
         b.on_bar("ES=F", bar(1, 5000))
         b.submit(PaperOrder(symbol="ES=F", side=Side.SELL, quantity=1))
@@ -33,7 +33,7 @@ def test_broker_state_survives_restart(settings):
         before = b.account_state()
 
     with Database(settings.database_path) as db:
-        b2 = PaperBroker(settings, db)
+        b2 = PaperBroker(settings, db, require_consensus=False)
         after = b2.account_state()
         assert after.cash == pytest.approx(before.cash)
         assert after.realized_pnl == pytest.approx(before.realized_pnl)
@@ -52,7 +52,7 @@ def test_broker_state_survives_restart(settings):
 
 def test_fresh_database_starts_at_configured_balance(settings):
     with Database(settings.database_path) as db:
-        b = PaperBroker(settings, db)
+        b = PaperBroker(settings, db, require_consensus=False)
         assert b.account_state().cash == settings.account.starting_balance
         assert b.positions == {} and b.pending == {}
 

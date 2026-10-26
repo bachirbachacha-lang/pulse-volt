@@ -15,7 +15,7 @@ def bar(i, o, h, l, c):
 
 @pytest.fixture
 def broker(settings):
-    return PaperBroker(settings)
+    return PaperBroker(settings, require_consensus=False)  # broker mechanics only
 
 
 def test_market_order_fills_at_next_open(broker):
@@ -29,7 +29,7 @@ def test_market_order_fills_at_next_open(broker):
 def test_round_trip_pnl_with_costs(settings):
     s = settings.model_copy(update={"costs": settings.costs.model_copy(
         update={"commission_per_order": 2.0, "slippage_bps": 10.0})})
-    b = PaperBroker(s)
+    b = PaperBroker(s, require_consensus=False)
     b.submit(PaperOrder(symbol="ES=F", side=Side.BUY, quantity=1))
     f1 = b.on_bar("ES=F", bar(1, 5000, 5005, 4995, 5002))[0]
     assert f1.price == pytest.approx(5005.0)  # 10 bps adverse
@@ -61,7 +61,7 @@ def test_gap_through_stop_fills_at_open(broker):
 
 def test_take_profit(settings):
     db = Database(":memory:")
-    b = PaperBroker(settings, db)
+    b = PaperBroker(settings, db, require_consensus=False)
     b.submit(PaperOrder(symbol="SPY", side=Side.BUY, quantity=2, stop_loss=95, take_profit=104))
     b.on_bar("SPY", bar(1, 100, 101, 99, 100))
     b.on_bar("SPY", bar(2, 101, 105, 100, 104.5))
@@ -83,12 +83,12 @@ def test_partial_close_and_reversal(broker):
     assert broker.realized_pnl == pytest.approx(2 + 3)
 
 
-def test_rejects_out_of_order_bars_and_non_market_orders(broker):
+def test_rejects_out_of_order_bars_and_unsupported_orders(broker):
     broker.on_bar("SPY", bar(5, 100, 100, 100, 100))
     with pytest.raises(PaperTradingError):
         broker.on_bar("SPY", bar(4, 100, 100, 100, 100))
     with pytest.raises(PaperTradingError):
-        broker.submit(PaperOrder(symbol="SPY", side=Side.BUY, quantity=1, order_type="limit", limit_price=99))
+        broker.submit(PaperOrder(symbol="SPY", side=Side.BUY, quantity=1, order_type="stop", stop_price=101))
 
 
 def test_cancel(broker):

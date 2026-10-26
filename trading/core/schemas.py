@@ -260,6 +260,9 @@ class Signal(Model):
     reason: str = ""
     indicators: dict[str, float | None] = Field(default_factory=dict)
     data_quality: DataQualityStatus = DataQualityStatus.OK
+    entry_type: OrderType = OrderType.MARKET  # LIMIT at ``price``, or MARKET at the next bar's open
+    expires_after_bars: int | None = Field(default=None, ge=1)  # pending-entry lifetime in bars
+    setup_key: str | None = None  # identifies the strategy setup (duplicate detection)
 
     _aware = field_validator("timestamp")(_require_aware)
 
@@ -321,6 +324,10 @@ class PaperOrder(Model):
     signal_id: str | None = None
     created_at: datetime = Field(default_factory=utcnow)
     reason: str = ""
+    strategy: str | None = None
+    setup_key: str | None = None
+    expires_after_bars: int | None = Field(default=None, ge=1)
+    bars_waited: int = Field(default=0, ge=0)
 
 
 class PaperFill(Model):
@@ -348,6 +355,8 @@ class PaperPosition(Model):
     entry_commission: float = 0.0
     last_price: float | None = None
     signal_id: str | None = None
+    entry_bar: datetime | None = None  # bar on which the position was opened
+    entry_was_limit: bool = False  # a mid-bar limit fill: target not credited on the entry bar
 
     @property
     def is_open(self) -> bool:

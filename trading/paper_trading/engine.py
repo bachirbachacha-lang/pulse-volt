@@ -13,7 +13,16 @@ with configurable commission and adverse slippage:
 Accounting is margin-style for every asset: ``cash`` changes only by realised
 P&L and commissions; ``equity = cash + unrealised P&L``.
 
-The same engine is meant to serve both backtests and forward paper trading.
+Opening orders require an approved :class:`ConsensusResult` from the
+three-agent decision system (signal analyst, risk manager, execution
+validator). ``submit`` refuses anything else, so nothing can bypass the
+consensus controller. Risk-reducing actions (cancelling a pending order,
+closing a position before the no-trading zone) do not need consensus.
+
+Optional per-symbol :class:`~trading.execution.fills.FillModel` objects apply
+the same conservative fill rules as the backtester: limit orders need price to
+trade through, a mid-bar limit fill never gets its target credited on the same
+bar, and the stop wins any same-bar tie.
 """
 
 from __future__ import annotations
@@ -34,9 +43,14 @@ from trading.core.schemas import (
     PaperPosition,
     PositionSide,
     Side,
+    Verdict,
     utcnow,
 )
+from trading.core.schemas import ConsensusResult
+
+REQUIRED_AGENTS = ("signal_analyst", "risk_manager", "execution_validator")
 from trading.database.store import Database
+from trading.execution.fills import FillModel
 
 logger = get_logger("paper_trading")
 
@@ -46,7 +60,8 @@ class PaperTradingError(RuntimeError):
 
 
 class PaperBroker:
-    def __init__(self, settings: Settings, db: Database | None = None, *, restore: bool = True) -> None:
+    def __init__(self, settings: Settings, db: Database | None = None, *, restore: bool = True,
+                 require_consensus: bool = True, fill_models: dict[str, FillModel] | None = None) -> None:
         if settings.mode != "paper":
             raise PaperTradingError("PaperBroker only runs in paper mode")
         self.settings = settings
@@ -59,7 +74,10 @@ class PaperBroker:
         self.trade_count = 0
         self.positions: dict[str, PaperPosition] = {}
         self.pending: dict[str, PaperOrder] = {}
+        self.closed_trades: list[ClosedTrade] = []
         self.last_timestamp: datetime | None = None
+        self.require_consensus = require_consensus
+        self.fill_models = fill_models or {}
         if db is not None and restore:
             self.restore()
 
@@ -77,6 +95,7 @@ class PaperBroker:
             self.last_timestamp = acct.timestamp
         self.positions = {p.symbol: p for p in self.db.positions() if p.is_open}
         self.pending = {o.id: o for o in self.db.orders(status=OrderStatus.PENDING.value)}
+        self.closed_trades = self.db.trades()
         log_event(
             logger,
             "paper.restored",
@@ -104,20 +123,40 @@ class PaperBroker:
                 self.db.save_account(self.account_state())
 
     # --------------------------------------------------------------- orders
-    def submit(self, order: PaperOrder) -> PaperOrder:
-        if order.order_type != OrderType.MARKET:
-            raise PaperTradingError("only market orders are supported at this stage")
+    def submit(self, order: PaperOrder, consensus: ConsensusResult | None = None) -> PaperOrder:
+        if order.order_type not in (OrderType.MARKET, OrderType.LIMIT):
+            raise PaperTradingError("only market and limit orders are supported")
+        if order.order_type == OrderType.LIMIT and order.limit_price is None:
+            raise PaperTradingError("limit order without a limit price")
         if order.status != OrderStatus.PENDING:
             raise PaperTradingError("only pending orders can be submitted")
+        if self.require_consensus:
+            self._check_consensus(order, consensus)
         self.pending[order.id] = order
         log_event(logger, "paper.order_submitted", order=order)
         self._persist(order=order)
         return order
 
-    def cancel(self, order_id: str) -> PaperOrder:
+    @staticmethod
+    def _check_consensus(order: PaperOrder, consensus: ConsensusResult | None) -> None:
+        if consensus is None:
+            raise PaperTradingError("order rejected: no consensus result (orders must come from the controller)")
+        if not consensus.approved:
+            raise PaperTradingError(f"order rejected: consensus did not approve ({consensus.reason})")
+        if order.signal_id is None or consensus.signal_id != order.signal_id:
+            raise PaperTradingError("order rejected: consensus belongs to a different signal")
+        votes = {d.agent: d.verdict for d in consensus.decisions if d.signal_id == consensus.signal_id}
+        missing = [a for a in REQUIRED_AGENTS if votes.get(a) != Verdict.APPROVE]
+        if missing:
+            raise PaperTradingError(f"order rejected: no APPROVE from {missing}")
+        if abs(consensus.quantity - order.quantity) > 1e-9:
+            raise PaperTradingError("order rejected: quantity differs from the approved quantity")
+
+    def cancel(self, order_id: str, reason: str = "") -> PaperOrder:
         order = self.pending.pop(order_id)
         order.status = OrderStatus.CANCELLED
-        log_event(logger, "paper.order_cancelled", order_id=order_id)
+        order.reason = reason or order.reason
+        log_event(logger, "paper.order_cancelled", order_id=order_id, reason=reason)
         self._persist(order=order)
         return order
 
@@ -134,13 +173,40 @@ class PaperBroker:
         if self.last_timestamp is not None and candle.timestamp < self.last_timestamp:
             raise PaperTradingError(f"bar {candle.timestamp} is older than the last processed bar")
         fills: list[PaperFill] = []
+        fm = self.fill_models.get(symbol)
 
         for order in [o for o in self.pending.values() if o.symbol == symbol]:
-            fills.append(self._fill_order(order, candle.open, candle.timestamp))
+            order.bars_waited += 1
+            long = order.side == Side.BUY
+            if order.order_type == OrderType.LIMIT:
+                if order.expires_after_bars is not None and order.bars_waited > order.expires_after_bars:
+                    self.cancel(order.id, f"expired after {order.expires_after_bars} bars")
+                    continue
+                if fm is not None:
+                    price = fm.limit_entry(long, order.limit_price, candle.open, candle.high, candle.low)
+                else:
+                    touched = candle.low <= order.limit_price if long else candle.high >= order.limit_price
+                    price = (min(order.limit_price, candle.open) if long else max(order.limit_price, candle.open)) \
+                        if touched else None
+                if price is None:
+                    self._persist(order=order)
+                    continue
+                fills.append(self._fill_order(order, order.limit_price, candle.timestamp, final_price=price,
+                                              commission=self._fm_commission(fm, order.quantity)))
+                self.positions[symbol].entry_was_limit = True
+            elif fm is not None:
+                fills.append(self._fill_order(order, candle.open, candle.timestamp,
+                                              final_price=fm.market_entry(long, candle.open),
+                                              commission=self._fm_commission(fm, order.quantity)))
+            else:
+                fills.append(self._fill_order(order, candle.open, candle.timestamp))
+            pos = self.positions.get(symbol)
+            if pos is not None and pos.is_open and pos.entry_bar is None:
+                pos.entry_bar = candle.timestamp
 
         pos = self.positions.get(symbol)
         if pos is not None and pos.is_open:
-            exit_fill = self._check_protective_exits(pos, candle)
+            exit_fill = self._check_protective_exits(pos, candle, fm)
             if exit_fill:
                 fills.append(exit_fill)
 
@@ -154,9 +220,46 @@ class PaperBroker:
                   equity=self.account_state().equity, fills=len(fills))
         return fills
 
-    def _check_protective_exits(self, pos: PaperPosition, candle: Candle) -> PaperFill | None:
+    @staticmethod
+    def _fm_commission(fm: FillModel | None, qty: float) -> float | None:
+        return None if fm is None else fm.config.commission_per_unit_side * qty
+
+    def close_position(self, symbol: str, price: float, ts: datetime, reason: str = "manual") -> PaperFill | None:
+        """Risk-reducing market exit (e.g. before the no-trading zone). No consensus needed."""
+        pos = self.positions.get(symbol)
+        if pos is None or not pos.is_open:
+            return None
+        long = pos.side == PositionSide.LONG
+        fm = self.fill_models.get(symbol)
+        order = PaperOrder(symbol=symbol, side=Side.SELL if long else Side.BUY, quantity=pos.quantity,
+                           reason=reason, signal_id=pos.signal_id, created_at=ts)
+        self._persist(order=order)
+        final = fm.forced_exit(long, price) if fm is not None else None
+        return self._fill_order(order, price, ts, exit_reason=ExitReason.MANUAL, final_price=final,
+                                commission=self._fm_commission(fm, pos.quantity))
+
+    def _check_protective_exits(self, pos: PaperPosition, candle: Candle,
+                                fm: FillModel | None = None) -> PaperFill | None:
         long = pos.side == PositionSide.LONG
         stop, target = pos.stop_loss, pos.take_profit
+        entry_bar = pos.entry_bar is not None and pos.entry_bar == candle.timestamp
+        if entry_bar and pos.entry_was_limit:
+            target = None  # mid-bar limit fill: whether the target traded afterwards is unknowable
+        if fm is not None:
+            order_side = Side.SELL if long else Side.BUY
+            if stop is not None and fm.stop_triggered(long, stop, candle.high, candle.low):
+                price = fm.stop_exit(long, stop, candle.open, same_bar_as_entry=entry_bar and pos.entry_was_limit)
+                reason = ExitReason.STOP
+            elif target is not None and (tp := fm.target_exit(long, target, candle.open, candle.high, candle.low)):
+                price, reason = tp, ExitReason.TARGET
+            else:
+                return None
+            order = PaperOrder(symbol=pos.symbol, side=order_side, quantity=pos.quantity, reason=reason.value,
+                               signal_id=pos.signal_id, created_at=candle.timestamp)
+            self._persist(order=order)
+            return self._fill_order(order, stop if reason == ExitReason.STOP else target, candle.timestamp,
+                                    exit_reason=reason, final_price=price,
+                                    commission=self._fm_commission(fm, pos.quantity))
         price: float | None = None
         reason: ExitReason | None = None
         if stop is not None:
@@ -177,9 +280,13 @@ class PaperBroker:
         return self._fill_order(order, price, candle.timestamp, exit_reason=reason)
 
     def _fill_order(self, order: PaperOrder, ref_price: float, ts: datetime,
-                    exit_reason: ExitReason = ExitReason.SIGNAL) -> PaperFill:
-        price, slip = self._slipped(ref_price, order.side)
-        commission = self._commission(order.quantity)
+                    exit_reason: ExitReason = ExitReason.SIGNAL, final_price: float | None = None,
+                    commission: float | None = None) -> PaperFill:
+        if final_price is None:
+            price, slip = self._slipped(ref_price, order.side)
+        else:
+            price, slip = final_price, abs(final_price - ref_price)
+        commission = self._commission(order.quantity) if commission is None else commission
         fill = PaperFill(order_id=order.id, symbol=order.symbol, side=order.side, quantity=order.quantity,
                          price=price, reference_price=ref_price, commission=commission, slippage=slip, timestamp=ts)
         order.status = OrderStatus.FILLED
@@ -191,6 +298,7 @@ class PaperBroker:
         log_event(logger, "paper.fill", fill=fill)
         log_event(logger, "paper.position", position=pos)
         if trade:
+            self.closed_trades.append(trade)
             log_event(logger, "paper.trade_closed", trade=trade)
         self._persist(order=order, fill=fill, position=pos, trade=trade)
         return fill

@@ -31,7 +31,7 @@ from trading.core.schemas import (
 )
 
 logger = get_logger("database")
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 M = TypeVar("M", bound=BaseModel)
 
 _SCHEMA = """
@@ -75,6 +75,12 @@ CREATE TABLE IF NOT EXISTS account_snapshots (
 CREATE TABLE IF NOT EXISTS events (
     id INTEGER PRIMARY KEY AUTOINCREMENT, event TEXT NOT NULL, ts TEXT NOT NULL, payload TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS evaluations (
+    id TEXT PRIMARY KEY, bar_time TEXT NOT NULL, symbol TEXT NOT NULL, interval TEXT, strategy TEXT,
+    outcome TEXT NOT NULL, stage TEXT, signal_id TEXT, order_id TEXT, created_at TEXT NOT NULL,
+    payload TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ix_evaluations_symbol_bar ON evaluations(symbol, bar_time);
 CREATE INDEX IF NOT EXISTS ix_signals_symbol_ts ON signals(symbol, ts);
 CREATE INDEX IF NOT EXISTS ix_fills_symbol_ts ON fills(symbol, ts);
 CREATE INDEX IF NOT EXISTS ix_trades_symbol_ts ON closed_trades(symbol, exit_ts);
@@ -125,6 +131,9 @@ class Database:
             self._conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
         elif row["version"] > SCHEMA_VERSION:
             raise RuntimeError(f"database schema v{row['version']} is newer than this code (v{SCHEMA_VERSION})")
+        elif row["version"] < SCHEMA_VERSION:
+            # v1 -> v2 only adds the evaluations table, created above by CREATE TABLE IF NOT EXISTS.
+            self._conn.execute("UPDATE schema_version SET version = ?", (SCHEMA_VERSION,))
 
     @property
     def schema_version(self) -> int:
@@ -194,6 +203,37 @@ class Database:
             (a.cash, a.equity, _iso(a.timestamp), a.model_dump_json()),
         )
 
+    def save_evaluation(self, ev: dict[str, Any]) -> None:
+        """Store one decision-system evaluation (the full audit record) as JSON."""
+        self._exec(
+            "INSERT OR REPLACE INTO evaluations (id, bar_time, symbol, interval, strategy, outcome, stage, signal_id,"
+            " order_id, created_at, payload) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            (ev["id"], str(ev["bar_time"]), ev["symbol"], ev.get("interval"), ev.get("strategy"), ev["outcome"],
+             ev.get("stage"), ev.get("signal_id"), ev.get("order_id"), str(ev["created_at"]),
+             json.dumps(ev, default=str)),
+        )
+
+    def evaluations(self, symbol: str | None = None, outcome: str | None = None) -> list[dict[str, Any]]:
+        sql, params = "SELECT payload FROM evaluations", []
+        where = []
+        if symbol:
+            where.append("symbol = ?")
+            params.append(symbol)
+        if outcome:
+            where.append("outcome = ?")
+            params.append(outcome)
+        if where:
+            sql += " WHERE " + " AND ".join(where)
+        return [json.loads(r["payload"]) for r in self._conn.execute(sql + " ORDER BY bar_time, created_at", params)]
+
+    def evaluation(self, evaluation_id: str) -> dict[str, Any] | None:
+        row = self._conn.execute("SELECT payload FROM evaluations WHERE id = ?", (evaluation_id,)).fetchone()
+        return json.loads(row["payload"]) if row else None
+
+    def order(self, order_id: str) -> PaperOrder | None:
+        rows = self._load(PaperOrder, "SELECT payload FROM orders WHERE id=?", (order_id,))
+        return rows[0] if rows else None
+
     def log_event(self, event: str, **payload: Any) -> None:
         self._exec(
             "INSERT INTO events (event, ts, payload) VALUES (?,?,?)",
@@ -261,7 +301,7 @@ class Database:
 
     def count(self, table: str) -> int:
         allowed = {"signals", "agent_decisions", "consensus", "orders", "fills", "positions", "closed_trades",
-                   "account_snapshots", "events", "data_quality"}
+                   "account_snapshots", "events", "data_quality", "evaluations"}
         if table not in allowed:
             raise ValueError(f"unknown table {table}")
         return int(self._conn.execute(f"SELECT COUNT(*) AS n FROM {table}").fetchone()["n"])
