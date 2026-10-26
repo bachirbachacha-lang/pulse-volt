@@ -38,6 +38,18 @@ class Level:
 
 
 @dataclass
+class Annotation:
+    """A marker and/or text label at a bar (e.g. BOS / CHoCH, a detected setup)."""
+
+    timestamp: pd.Timestamp
+    price: float
+    text: str = ""
+    color: str = "#424242"
+    marker: str | None = None  # matplotlib marker, e.g. "^", "v", "o"
+    size: float = 40.0
+
+
+@dataclass
 class ChartSpec:
     title: str | None = None
     overlays: dict[str, pd.Series] = field(default_factory=dict)  # drawn on the price pane
@@ -46,6 +58,7 @@ class ChartSpec:
     fills: Sequence[PaperFill] = ()
     trades: Sequence[ClosedTrade] = ()
     levels: Sequence[Level] = ()
+    annotations: Sequence[Annotation] = ()
     show_volume: bool = True
     show_flags: bool = True
     last_n: int | None = None
@@ -144,6 +157,17 @@ def render_chart(md: MarketData, spec: ChartSpec | None = None, path: str | Path
                 linewidth=1.2, linestyle="-", alpha=0.8)
         ax.scatter([e], [t.entry_price], marker="o", s=30, color="white", edgecolors="black", zorder=6)
         ax.scatter([xpos], [t.exit_price], marker="s", s=30, color="black", zorder=6)
+
+    # --- annotations
+    for a in spec.annotations:
+        if not (idx[0] <= pd.Timestamp(a.timestamp) <= idx[-1]):
+            continue
+        pos = _positions(idx, [a.timestamp])[0]
+        if a.marker:
+            ax.scatter(pos, a.price, marker=a.marker, s=a.size, color=a.color, zorder=7, linewidths=0.5)
+        if a.text:
+            ax.annotate(a.text, (pos, a.price), xytext=(0, 6), textcoords="offset points", ha="center",
+                        fontsize=6.5, color=a.color)
 
     status = md.quality.value if md.quality else "UNVALIDATED"
     ax.set_title(spec.title or f"{md.symbol}  {md.interval}  [{status}]", fontsize=11, loc="left")

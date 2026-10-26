@@ -4,6 +4,7 @@
     python -m trading fetch ES=F -i 1h -p 60d    # download, validate, cache; print the report
     python -m trading chart ES=F -i 1h -p 60d    # same, plus a PNG in reports/
     python -m trading account                    # paper account state from the database
+    python -m trading nowick ES=F -i 5m -p 30d   # run ORIGINAL_YOUTUBE_STRATEGY over the data, chart + CSV
 """
 
 from __future__ import annotations
@@ -43,7 +44,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="trading", description="Paper-trading research system (simulated money only)")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("config")
-    for name in ("fetch", "chart"):
+    for name in ("fetch", "chart", "nowick"):
         sp = sub.add_parser(name)
         sp.add_argument("symbol")
         sp.add_argument("-i", "--interval")
@@ -51,7 +52,7 @@ def main(argv: list[str] | None = None) -> int:
         sp.add_argument("--start")
         sp.add_argument("--end")
         sp.add_argument("--force", action="store_true", help="ignore the cache")
-        if name == "chart":
+        if name in ("chart", "nowick"):
             sp.add_argument("--last", type=int, default=200)
     sub.add_parser("account")
     args = p.parse_args(argv)
@@ -86,6 +87,27 @@ def _run(args: argparse.Namespace, settings) -> int:
         fig = render_chart(md, ChartSpec(overlays={"EMA 20": ema(md.frame["close"], 20)}, last_n=args.last), out)
         close_figure(fig)
         print(f"  chart: {out}")
+    elif args.cmd == "nowick":
+        from trading.strategies import get_strategy
+        from trading.strategies.original_youtube import default_definition
+        from trading.strategies.original_youtube.chart import render_scan, setups_table
+
+        settings, md = _load(args)
+        _print_report(md)
+        strat = get_strategy(default_definition([md.symbol], md.interval))
+        result = strat.scan(md)
+        for w in result.warnings:
+            print(f"  warning: {w}")
+        table = setups_table(result)
+        stem = settings.reports_dir / f"nowick_{md.request_key}"
+        stem.parent.mkdir(parents=True, exist_ok=True)
+        table.to_csv(f"{stem}.csv", index=False)
+        out = render_scan(md, result, f"{stem}.png", last_n=args.last)
+        print("\n  " + "  ".join(f"{k}={v:.2f}" if isinstance(v, float) else f"{k}={v}"
+                                   for k, v in result.summary().items()))
+        if len(table):
+            print(table.tail(15).to_string(index=False))
+        print(f"  chart: {out}\n  setups: {stem}.csv")
     elif args.cmd == "account":
         from trading.database import Database
         from trading.paper_trading import PaperBroker
