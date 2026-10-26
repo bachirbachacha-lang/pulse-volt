@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Reels</title>
+<style>
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-400-normal.woff2);font-weight:400}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-700-normal.woff2);font-weight:700}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-800-normal.woff2);font-weight:800}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-400-normal.woff2);font-weight:400;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-700-normal.woff2);font-weight:700;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-700-normal.woff2);font-weight:800;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Fraunces;src:url(fonts/fraunces-latin.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Taj,sans-serif}
+.abs{position:absolute}
+.c{left:0;right:0;text-align:center}
+.ar{direction:rtl}
+.en{direction:ltr;font-weight:400;opacity:.82}
+.tag{position:absolute;font:700 22px/1 Taj;letter-spacing:.18em;padding:12px 18px;border-radius:8px;direction:ltr}
+
+/* ---------- Scalp Elixir: dark green ---------- */
+.se-dark{background:radial-gradient(120% 70% at 50% 55%,#174536 0%,#0b2219 55%,#05110c 100%);color:#f3ead8}
+.se-dark .beam{position:absolute;top:-200px;width:340px;height:2400px;background:linear-gradient(180deg,rgba(214,240,222,.10),rgba(214,240,222,0) 80%);filter:blur(30px)}
+.brandbar{top:110px;font:700 30px/1 Taj;letter-spacing:.5em;direction:ltr;color:#e9dcc0}
+.brandbar small{display:block;margin-top:14px;font-size:20px;letter-spacing:.32em;opacity:.6}
+.hook-ar{font:800 128px/1.05 Taj}
+.hook-sub{font:700 62px/1.2 Taj;color:#d8b46a}
+.hook-en{font:400 40px/1.3 Taj}
+.step{top:260px}
+.num{display:inline-flex;width:120px;height:120px;border-radius:50%;align-items:center;justify-content:center;background:#d8b46a;color:#0b2219;font:800 72px/1 Taj;padding-top:8px}
+.step-ar{font:800 92px/1.15 Taj;margin-top:34px}
+.step-en{font:400 42px/1.3 Taj;margin-top:18px}
+.dots{top:1560px;display:flex;gap:18px;justify-content:center}
+.dots i{width:18px;height:18px;border-radius:50%;background:rgba(243,234,216,.25)}
+.dots i.on{background:#d8b46a;width:54px;border-radius:9px}
+.end-name{font:400 132px/1 Fraunces;letter-spacing:-.01em}
+.end-ar{font:700 54px/1.3 Taj;margin-top:30px}
+.end-en{font:400 38px/1.3 Taj;margin-top:8px}
+.pill{display:inline-block;margin-top:56px;padding:22px 46px;border-radius:999px;font:800 46px/1 Taj;background:#d8b46a;color:#0b2219}
+.follow{font:700 36px/1 Taj;margin-top:40px;opacity:.85}
+
+/* ---------- Scalp Elixir: light cream ---------- */
+.se-light{background:linear-gradient(180deg,#f4eee3 0%,#ebe2d2 100%);color:#16362b}
+.se-light .hook-sub{color:#4c7a5f}
+.photo{border-radius:44px;overflow:hidden;box-shadow:0 40px 90px rgba(40,50,40,.22);background:#fff}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.chip{position:absolute;right:90px;left:90px;background:#fffdf8;border-radius:30px;padding:28px 36px;box-shadow:0 18px 50px rgba(40,50,40,.16);display:flex;gap:26px;align-items:center}
+.chip b{flex:none;width:76px;height:76px;border-radius:50%;background:#16362b;color:#f4eee3;font:800 44px/1 Taj;display:flex;align-items:center;justify-content:center;padding-top:6px}
+.chip div{flex:1;text-align:right}
+.chip .a{font:800 52px/1.15 Taj;direction:rtl}
+.chip .e{font:400 32px/1.3 Taj;direction:ltr;opacity:.7;margin-top:6px}
+.strike{position:absolute;height:12px;background:#c4553f;border-radius:6px;transform-origin:right center}
+
+/* ---------- Pixel & Co. ---------- */
+.px{background:#0C0B14;color:#F4F2FF}
+.grid{position:absolute;inset:-200px;background-image:linear-gradient(rgba(123,97,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(123,97,255,.16) 1px,transparent 1px);background-size:90px 90px}
+.glow{position:absolute;width:1100px;height:1100px;border-radius:50%;background:radial-gradient(circle,rgba(123,97,255,.45),rgba(123,97,255,0) 65%)}
+.px .hook-ar{font:800 116px/1.1 Taj}
+.px .hook-sub{color:#C6FF3D}
+.lime{color:#C6FF3D}
+.phone{position:absolute;left:280px;top:520px;width:520px;height:1126px;border-radius:64px;background:#000;padding:14px;box-shadow:0 0 0 3px #2A2743,0 50px 120px rgba(0,0,0,.6),0 0 160px rgba(123,97,255,.35)}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:52px;display:block}
+.cap{top:280px}
+.cap-ar{font:800 84px/1.15 Taj}
+.cap-en{font:400 40px/1.3 Taj;opacity:.8;margin-top:12px}
+.px .pill{background:#C6FF3D;color:#0C0B14}
+.px-logo{font:700 44px/1 Taj;letter-spacing:-.01em;direction:ltr}
+.px-logo span{color:#7B61FF}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const P = new URLSearchParams(location.search);
+const CUT = P.get('cut') || 'ritual';
+const AD = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+const CUTS = {
+/* Fri: 5-minute Friday scalp ritual, 3D bottle */
+ritual: { dur: 15, cls: 'se-dark', html: `
+  <div class="beam" style="left:120px" data-sway="1"></div>
+  <div class="beam" style="left:620px" data-sway="-1"></div>
+  <div class="abs c brandbar">SCALP ELIXIR<small>ROSEMARY · SCALP OIL · 50 ML</small></div>
+  <img class="abs" data-seq="frames/spin_%03d.jpg" data-n="240" style="left:0;top:720px;width:1080px;height:1040px;object-fit:cover;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 18%,#000 88%,transparent 100%)"
+       data-in="0" data-a="fade" data-dur=".2">
+  <div class="tag" style="left:70px;top:1660px;background:rgba(243,234,216,.12);color:#e9dcc0">3D RENDER</div>
+
+  <div class="abs c" style="top:270px" data-in="0" data-out="2.7" data-a="pop" data-dur=".3">
+    <div class="ar hook-ar">عندك ${AD(5)} دقايق؟</div>
+  </div>
+  <div class="abs c" style="top:430px" data-in=".35" data-out="2.7" data-a="up">
+    <div class="ar hook-sub">طقوس الجمعة لفروة راسك</div>
+    <div class="hook-en" style="margin-top:14px">Got 5 minutes? Your Friday scalp ritual.</div>
+  </div>
+
+  ${[
+    ['تقسيم الشعر لأقسام', 'Part your hair into sections'],
+    [`${AD(3)} قطرات لكل قسم`, '3 drops on each section'],
+    [`مساج دائري ${AD(5)} دقايق`, 'Massage in small circles · 5 min'],
+    ['يُترك ساعة أو للصبح ثم يُغسل', 'Leave 1 hour or overnight, then wash'],
+  ].map(([a, e], i) => {
+    const t0 = 2.9 + i * 2.2;
+    return `<div class="abs c step" data-in="${t0}" data-out="${t0 + 2.0}" data-a="up">
+      <div class="num">${AD(i + 1)}</div>
+      <div class="ar step-ar">${a}</div>
+      <div class="en step-en">${e}</div></div>`;
+  }).join('')}
+  <div class="abs c dots" data-in="2.9" data-out="11.6" data-a="fade" id="dots"><i></i><i></i><i></i><i></i></div>
+
+  <div class="abs" style="inset:0;background:linear-gradient(180deg,rgba(5,17,12,.92) 0%,rgba(5,17,12,.75) 55%,rgba(5,17,12,.4) 100%)" data-in="11.6" data-a="fade" data-dur=".5"></div>
+  <div class="abs c" style="top:470px" data-in="11.8" data-a="up">
+    <div class="end-name">Scalp Elixir</div>
+    <div class="ar end-ar">زيت إكليل الجبل لفروة الراس</div>
+    <div class="end-en">Rosemary scalp oil · 50 ml</div>
+    <div class="ar pill">قريبًا · Coming soon</div>
+    <div class="follow">تابعنا · Follow @scalp.elixir</div>
+  </div>
+`},
+
+/* Sat: stop using your nails, use the massage brush */
+nails: { dur: 14, cls: 'se-light', html: `
+  <div class="abs c brandbar" style="color:#16362b">SCALP ELIXIR</div>
+
+  <div class="abs c" style="top:230px" data-in="0" data-out="2.8" data-a="pop" data-dur=".3">
+    <div class="ar hook-ar" style="font-size:112px">تحك فروة راسك</div>
+    <div class="ar hook-ar" style="font-size:112px;position:relative;display:inline-block">بأظافرك؟
+      <span class="strike" data-strike="1.0" style="left:-10px;right:-10px;top:52%"></span></div>
+    <div class="hook-en" style="margin-top:22px">Still scratching your scalp with your nails?</div>
+  </div>
+
+  <div class="abs c" style="top:240px" data-in="2.9" data-out="5.6" data-a="up">
+    <div class="ar hook-ar" style="font-size:104px">جرّب هذي بدالها</div>
+    <div class="hook-en" style="margin-top:18px">Try this instead.</div>
+  </div>
+  <div class="abs photo" style="left:150px;top:640px;width:780px;height:780px" data-in="0" data-out="5.6" data-a="up" data-zoom="1,1.12,0,5.6">
+    <img src="frames/scalp-massager-3.jpg"></div>
+
+  <div class="abs photo" style="left:150px;top:200px;width:780px;height:780px" data-in="5.6" data-out="11.2" data-a="up" data-zoom="1.12,1,5.6,11.2">
+    <img src="frames/scalp-massager-1.jpg"></div>
+  ${[
+    ['شعيرات ناعمة ومرنة', 'Soft, flexible bristles'],
+    ['يوزّع الزيت بالتساوي', 'Spreads the oil evenly'],
+    ['للشعر الرطب أو الجاف', 'Works on wet or dry hair'],
+  ].map(([a, e], i) => `<div class="chip" style="top:${1040 + i * 170}px" data-in="${6.0 + i * 0.9}" data-out="11.2" data-a="left">
+      <div><div class="a">${a}</div><div class="e">${e}</div></div><b>${AD(i + 1)}</b></div>`).join('')}
+
+  <div class="abs photo" style="left:290px;top:300px;width:500px;height:500px" data-in="11.2" data-a="pop">
+    <img src="frames/scalp-massager-2.jpg"></div>
+  <div class="abs c" style="top:860px" data-in="11.4" data-a="up">
+    <div class="end-name" style="font-size:110px">Scalp Elixir</div>
+    <div class="ar end-ar">فرشاة مساج فروة الراس · ${AD(4)} ألوان</div>
+    <div class="end-en">Scalp massage brush · 4 colours</div>
+    <div class="ar pill" style="background:#16362b;color:#f4eee3">قريبًا · Coming soon</div>
+    <div class="follow">تابعنا · Follow @scalp.elixir</div>
+  </div>
+`},
+
+/* Pixel & Co.: Instagram but no website? */
+pixel: { dur: 15, cls: 'px', html: `
+  <div class="grid" data-drift="1"></div>
+  <div class="glow" style="left:-10px;top:500px" data-pulse="1"></div>
+
+  <div class="abs c" style="top:300px" data-in="0" data-out="2.7" data-a="pop" data-dur=".3">
+    <div class="ar hook-ar">عندك انستقرام…</div>
+  </div>
+  <div class="abs c" style="top:470px" data-in=".45" data-out="2.7" data-a="up">
+    <div class="ar hook-ar hook-sub">بس ما عندك موقع؟</div>
+    <div class="hook-en" style="margin-top:30px">Got Instagram… but no website?</div>
+  </div>
+  <div class="abs c" style="top:1120px" data-in="1.0" data-out="2.7" data-a="fade">
+    <div class="ar" style="font:700 52px/1.3 Taj;opacity:.7">خلّ زبائنك يطلبون منك مباشرة</div>
+    <div class="en" style="font-size:36px;margin-top:10px;opacity:.6">Let customers order from you directly</div>
+  </div>
+
+  ${[
+    ['samra', 'متجر عبايات', 'Abaya store', 'AI SAMPLE'],
+    ['torq-atelier', 'ساعات فاخرة', 'Luxury watches', 'AI SAMPLE'],
+    ['sukkar', 'محل كيك · صمّم كيكتك', 'Cake shop · build-your-cake', 'AI SAMPLE'],
+  ].map(([k, a, e, tag], i) => {
+    const t0 = 2.8 + i * 3, t1 = t0 + 3;
+    return `<div class="abs c cap" data-in="${t0}" data-out="${t1 - .15}" data-a="up">
+        <div class="ar cap-ar">${a}</div><div class="cap-en">${e}</div></div>
+      <div class="phone" data-in="${t0}" data-out="${i == 2 ? 11.5 : t1}" data-a="${i ? 'swap' : 'up'}">
+        <img data-seq="frames/${k}/%03d.jpg" data-n="120" data-t0="${t0}">
+        <div class="tag" style="right:-26px;top:40px;background:#7B61FF;color:#fff">${tag}</div></div>`;
+  }).join('')}
+
+  <div class="abs c" style="top:470px" data-in="11.7" data-a="up">
+    <div class="ar hook-ar" style="font-size:96px">نسوي لك عينة</div>
+    <div class="ar hook-ar hook-sub" style="font-size:96px">مجانية أول</div>
+    <div class="hook-en" style="margin-top:26px">We'll make you a free sample first.</div>
+    <div class="ar pill">راسلنا · DM us</div>
+    <div class="px-logo" style="margin-top:64px">Pixel <span>&amp;</span> Co. · @pixelandco.design</div>
+  </div>
+`},
+};
+
+const cut = CUTS[CUT];
+window.DUR = cut.dur;
+const stage = document.getElementById('stage');
+stage.className = cut.cls;
+stage.innerHTML = cut.html;
+
+const clamp = x => Math.max(0, Math.min(1, x));
+const ease = x => 1 - Math.pow(1 - x, 3);
+
+// Dots highlight the current step (ritual only)
+function dots(t) {
+  const d = document.getElementById('dots');
+  if (!d) return;
+  const k = Math.floor((t - 2.9) / 2.2);
+  [...d.children].forEach((el, i) => el.className = i === k ? 'on' : '');
+}
+
+window.renderAt = async t => {
+  for (const el of stage.querySelectorAll('[data-in]')) {
+    const tin = +el.dataset.in, dur = +(el.dataset.dur || .5);
+    const tout = el.dataset.out ? +el.dataset.out : Infinity;
+    const pin = ease(clamp((t - tin) / dur)), pout = ease(clamp((t - tout) / .35));
+    const a = el.dataset.a || 'up';
+    let tf = '';
+    if (a === 'up') tf = `translateY(${(1 - pin) * 60 - pout * 40}px)`;
+    if (a === 'pop') tf = `scale(${0.86 + 0.14 * pin + pout * 0.06})`;
+    if (a === 'left') tf = `translateX(${(1 - pin) * -120}px)`;
+    if (a === 'swap') tf = `translateX(${(1 - pin) * 700 - pout * 700}px) rotate(${(1 - pin) * 6 - pout * 6}deg)`;
+    if (el.dataset.zoom) {
+      const [z0, z1, s, e] = el.dataset.zoom.split(',').map(Number);
+      const img = el.querySelector('img');
+      img.style.transform = `scale(${z0 + (z1 - z0) * clamp((t - s) / (e - s))})`;
+    }
+    el.style.opacity = pin * (1 - pout);
+    el.style.transform = tf;
+    el.style.visibility = pin * (1 - pout) > 0.001 ? 'visible' : 'hidden';
+  }
+  for (const el of stage.querySelectorAll('[data-strike]')) {
+    const p = ease(clamp((t - +el.dataset.strike) / .35));
+    el.style.transform = `scaleX(${p})`;
+  }
+  for (const el of stage.querySelectorAll('[data-sway]')) el.style.transform = `translateX(${Math.sin(t * .6) * 60 * +el.dataset.sway}px) rotate(${8 * +el.dataset.sway}deg)`;
+  for (const el of stage.querySelectorAll('[data-drift]')) el.style.transform = `translate(${-(t * 18) % 90}px,${-(t * 30) % 90}px) perspective(900px) rotateX(${8}deg)`;
+  for (const el of stage.querySelectorAll('[data-pulse]')) el.style.transform = `scale(${1 + 0.08 * Math.sin(t * 1.7)})`;
+  dots(t);
+  const loads = [];
+  for (const img of stage.querySelectorAll('[data-seq]')) {
+    const n = +img.dataset.n, t0 = +(img.dataset.t0 || 0);
+    const i = Math.min(n - 1, Math.max(0, Math.floor((t - t0) * 30))) % n;
+    const idx = img.dataset.n == 240 ? Math.floor(t * 30) % n : i;
+    const src = img.dataset.seq.replace('%03d', String(idx + 1).padStart(3, '0'));
+    if (!img.src.endsWith(src)) { img.src = src; loads.push(img.decode().catch(() => {})); }
+  }
+  await Promise.all(loads);
+};
+document.fonts.ready.then(async () => {
+  await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  await renderAt(0);
+  window.ready = true;
+});
+</script>
+</body>
+</html>
