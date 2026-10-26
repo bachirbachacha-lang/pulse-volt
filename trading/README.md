@@ -60,6 +60,31 @@ Run `python -m trading` from the repository root (the folder that contains `trad
 - **Restart:** restores the account, positions, pending orders, the last processed bar and the setups already approved, so no duplicate orders are placed.
 - **Account size warning:** at $1,000 with 0.5% risk per trade ($5), no ES and almost no MES stop fits the risk budget, so the risk manager rejects those trades. Raise the balance or the risk setting deliberately if you want futures trades to size.
 
+## Discord notifications (PAPER / SIMULATION)
+
+Discord is for notifications only. Messages are built from the system's own stored state after each step, and nothing is ever read back from Discord.
+
+Messages sent (each starts with **[PAPER / SIMULATION]**):
+- **PAPER SIGNAL DETECTED**
+- **AGENT DECISION:** each agent's ✓ / ✕ and APPROVED / REJECTED with the reason. Sent only for bars that had a signal.
+- **PAPER TRADE OPENED**, sent when the entry is actually filled.
+- **PAPER TRADE CLOSED:** WIN / LOSS / BREAKEVEN, entry, exit, P&L, exit reason, updated virtual balance.
+
+**To enable:**
+1. Put the webhook URL only in the `DISCORD_WEBHOOK_URL` environment variable, never in a file.
+2. Set `[discord] enabled = true` and `dry_run = false`.
+
+**Security:**
+- Only `https://discord.com/api/webhooks/...` URLs are accepted.
+- The URL and token are redacted from every log line and error.
+- `@everyone` and role mentions are disabled.
+
+**Reliability:**
+- Messages go through a bounded background queue, so they never block the engine.
+- Up to 3 attempts per message with exponential backoff, honouring Discord's rate-limit wait time.
+- Messages that still fail are logged and dropped.
+- A Discord outage or a bug in the notifier cannot stop or change the simulation.
+
 ## Dashboard (PAPER / SIMULATION, read-only)
 
 Run `python -m trading dashboard` and open http://127.0.0.1:8050. It refreshes every 5 seconds.

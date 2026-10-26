@@ -16,6 +16,9 @@ Rules:
   pending orders, the last processed bar and the setups already approved
   (no duplicate orders after a restart).
 
+Discord notifications (optional) are sent after each step from the stored
+state; they are fire-and-forget and can never change or stop the simulator.
+
 There is no brokerage connection anywhere in this module.
 """
 
@@ -33,6 +36,7 @@ from trading.core.log import get_logger, log_event
 from trading.core.schemas import SIMULATION_LABEL, DataQualityStatus, new_id, utcnow
 from trading.data.pipeline import MarketDataPipeline
 from trading.database.store import Database
+from trading.notifications.paper_events import PaperEventNotifier
 from trading.paper_trading.engine import PaperBroker
 from trading.strategies.base import get_strategy
 from trading.strategies.original_youtube import default_definition
@@ -46,7 +50,8 @@ class PaperTradingEngine:
 
     def __init__(self, settings: Settings, symbols: Sequence[str], interval: str, *, db: Database | None = None,
                  pipeline: MarketDataPipeline | None = None, period: str = "5d",
-                 clock: Callable[[], datetime] | None = None) -> None:
+                 clock: Callable[[], datetime] | None = None,
+                 notifier: PaperEventNotifier | None = None) -> None:
         if settings.mode != "paper":
             raise RuntimeError("PAPER / SIMULATION only")
         self.settings = settings
@@ -59,6 +64,7 @@ class PaperTradingEngine:
         self.broker = PaperBroker(settings, self.db, fill_models=fill_models_from_settings(settings, self.symbols))
         self.controller = DecisionController(settings, get_strategy(default_definition(self.symbols, interval)),
                                              self.broker, self.db)
+        self.notifier = notifier or PaperEventNotifier(settings.discord)
         log_event(logger, "paper.engine_started", label=self.label, symbols=self.symbols, interval=interval,
                   cash=self.broker.cash, open_positions=list(self.broker.positions), pending=len(self.broker.pending))
 
@@ -104,8 +110,26 @@ class PaperTradingEngine:
         outcomes = []
         for i in new_idx:
             window = md.window(end=md.frame.index[i])
+            closed_before = len(self.broker.closed_trades)
             rec = self.controller.step(window, now=now)
+            self._notify(rec, closed_before)
             outcomes.append({"bar": rec["bar_time"], "outcome": rec["outcome"], "reason": rec["consensus"]["reason"],
                              "order_id": rec["order_id"]})
         return {"outcome": outcomes[-1]["outcome"] if outcomes else "NO_NEW_BAR", "bars_processed": len(outcomes),
                 "evaluations": outcomes}
+
+    def _notify(self, rec: dict[str, Any], closed_before: int) -> None:
+        """Hand the already-stored results to the notifier. Never raises."""
+        if not self.notifier.enabled:
+            return
+        try:
+            fills = [e["fill"] for e in rec.get("broker_events", []) if e.get("type") == "fill"]
+            orders = {f["order_id"]: self.db.order(f["order_id"]) for f in fills}
+            new_trades = list(self.broker.closed_trades[closed_before:])
+            self.notifier.after_step(rec, fills, orders, new_trades, self.broker.cash)
+        except Exception as exc:
+            log_event(logger, "paper.notify_failed", level=40, error=repr(exc))
+
+    def close(self) -> None:
+        """Deliver queued notifications (bounded wait) and release resources."""
+        self.notifier.close()

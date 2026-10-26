@@ -99,8 +99,15 @@ class RiskSettings(_Strict):
 class DiscordSettings(_Strict):
     enabled: bool = False
     webhook_env_var: str = "DISCORD_WEBHOOK_URL"
-    username: str = "Paper Trader"
+    username: str = "Paper Trader (SIMULATION)"
     dry_run: bool = True
+    timeout_seconds: float = Field(5.0, gt=0)
+    max_attempts: int = Field(3, ge=1, le=10)
+    backoff_seconds: float = Field(1.0, ge=0)
+    queue_size: int = Field(200, ge=1)
+    notify_signals: bool = True
+    notify_decisions: bool = True
+    notify_trades: bool = True
 
     @property
     def webhook_url(self) -> str | None:

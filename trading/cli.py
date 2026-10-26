@@ -164,7 +164,10 @@ def _run(args: argparse.Namespace, settings) -> int:
         from trading.paper_trading.runner import PaperTradingEngine
 
         engine = PaperTradingEngine(settings, args.symbols, args.interval, period=args.period)
-        out = engine.run_once()
+        try:
+            out = engine.run_once()
+        finally:
+            engine.close()  # flush Discord notifications (bounded); never affects the simulation
         print(f"=== {out['label']} - virtual money only, no brokerage connection ===")
         for sym, r in out["symbols"].items():
             print(f"  {sym}: {r['outcome']} ({r['bars_processed']} new bar(s))")

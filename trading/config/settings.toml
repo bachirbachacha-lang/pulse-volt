@@ -118,10 +118,20 @@ max_daily_loss_pct = 2.0
 require_stop = true
 
 [discord]
+# Notifications only. Discord never holds or changes trading-system state.
+# The webhook URL is a secret: set it ONLY in the environment variable named
+# below (e.g. in your shell or the cloud environment's secrets), never here.
 enabled = false
 webhook_env_var = "DISCORD_WEBHOOK_URL"
-username = "Paper Trader"
+username = "Paper Trader (SIMULATION)"
 dry_run = true                  # log messages instead of sending them
+timeout_seconds = 5.0
+max_attempts = 3                # per message, with exponential backoff
+backoff_seconds = 1.0
+queue_size = 200                # messages beyond this are dropped (and logged)
+notify_signals = true           # PAPER SIGNAL DETECTED
+notify_decisions = true         # agent votes + consensus, for bars that had a signal
+notify_trades = true            # PAPER TRADE OPENED / CLOSED
 
 [database]
 path = "database/paper_trading.sqlite3"

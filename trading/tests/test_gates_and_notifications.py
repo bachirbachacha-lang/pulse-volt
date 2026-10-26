@@ -125,10 +125,10 @@ def test_discord_dry_run_and_send(settings, monkeypatch):
     live = settings.discord.model_copy(update={"enabled": True, "dry_run": False})
     monkeypatch.delenv("DISCORD_WEBHOOK_URL", raising=False)
     assert DiscordNotifier(live, http).send("hi") is False  # no webhook configured
-    monkeypatch.setenv("DISCORD_WEBHOOK_URL", "https://example.invalid/hook")
+    monkeypatch.setenv("DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/123/abc-DEF")
     assert DiscordNotifier(live, http).send("x" * 5000)
     url, payload = http.posts[0]
-    assert payload["content"].startswith("[PAPER] ") and len(payload["content"]) == 2000
+    assert payload["content"].startswith("**[PAPER / SIMULATION]**") and len(payload["content"]) == 2000
 
 
 def test_discord_errors_never_raise(settings, monkeypatch):
@@ -136,8 +136,8 @@ def test_discord_errors_never_raise(settings, monkeypatch):
         def post(self, *a, **k):
             raise ConnectionError("down")
 
-    monkeypatch.setenv("DISCORD_WEBHOOK_URL", "https://example.invalid/hook")
-    live = settings.discord.model_copy(update={"enabled": True, "dry_run": False})
+    monkeypatch.setenv("DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/123/abc-DEF")
+    live = settings.discord.model_copy(update={"enabled": True, "dry_run": False, "backoff_seconds": 0.0})
     assert DiscordNotifier(live, Boom()).send("hi") is False
 
 
