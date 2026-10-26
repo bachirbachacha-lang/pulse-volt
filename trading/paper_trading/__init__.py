@@ -1,4 +1,4 @@
-"""Paper-trading engine. Simulated money only; there is no live-broker code."""
+"""PAPER / SIMULATION trading: simulated broker and forward engine. No live-broker code exists."""
 
 from trading.paper_trading.engine import PaperBroker, PaperTradingError
 

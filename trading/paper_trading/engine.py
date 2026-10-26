@@ -1,4 +1,4 @@
-"""Simulated (paper) broker. SIMULATED MONEY ONLY.
+"""Simulated (paper) broker. PAPER / SIMULATION - SIMULATED MONEY ONLY.
 
 There is no code path to a real brokerage. Orders are filled against bar data
 with configurable commission and adverse slippage:
@@ -28,6 +28,8 @@ bar, and the stop wins any same-bar tie.
 from __future__ import annotations
 
 from datetime import datetime
+
+import pandas as pd
 
 from trading.config.settings import Settings
 from trading.core.log import get_logger, log_event
@@ -76,6 +78,7 @@ class PaperBroker:
         self.pending: dict[str, PaperOrder] = {}
         self.closed_trades: list[ClosedTrade] = []
         self.last_timestamp: datetime | None = None
+        self.peak_equity = self.starting_balance
         self.require_consensus = require_consensus
         self.fill_models = fill_models or {}
         if db is not None and restore:
@@ -93,6 +96,7 @@ class PaperBroker:
             self.total_commission = acct.total_commission
             self.trade_count = acct.trade_count
             self.last_timestamp = acct.timestamp
+            self.peak_equity = max(acct.peak_equity or acct.starting_balance, acct.cash)
         self.positions = {p.symbol: p for p in self.db.positions() if p.is_open}
         self.pending = {o.id: o for o in self.db.orders(status=OrderStatus.PENDING.value)}
         self.closed_trades = self.db.trades()
@@ -152,10 +156,11 @@ class PaperBroker:
         if abs(consensus.quantity - order.quantity) > 1e-9:
             raise PaperTradingError("order rejected: quantity differs from the approved quantity")
 
-    def cancel(self, order_id: str, reason: str = "") -> PaperOrder:
+    def cancel(self, order_id: str, reason: str = "", ts: datetime | None = None) -> PaperOrder:
         order = self.pending.pop(order_id)
         order.status = OrderStatus.CANCELLED
         order.reason = reason or order.reason
+        order.cancelled_at = ts or self.last_timestamp or utcnow()
         log_event(logger, "paper.order_cancelled", order_id=order_id, reason=reason)
         self._persist(order=order)
         return order
@@ -180,7 +185,7 @@ class PaperBroker:
             long = order.side == Side.BUY
             if order.order_type == OrderType.LIMIT:
                 if order.expires_after_bars is not None and order.bars_waited > order.expires_after_bars:
-                    self.cancel(order.id, f"expired after {order.expires_after_bars} bars")
+                    self.cancel(order.id, f"expired after {order.expires_after_bars} bars", candle.timestamp)
                     continue
                 if fm is not None:
                     price = fm.limit_entry(long, order.limit_price, candle.open, candle.high, candle.low)
@@ -215,6 +220,7 @@ class PaperBroker:
             pos.last_price = candle.close
             self._persist(position=pos)
         self.last_timestamp = candle.timestamp
+        self.peak_equity = max(self.peak_equity, self.account_state().equity)
         self._persist(snapshot=True)
         log_event(logger, "paper.bar", symbol=symbol, ts=candle.timestamp, close=candle.close,
                   equity=self.account_state().equity, fills=len(fills))
@@ -290,6 +296,7 @@ class PaperBroker:
         fill = PaperFill(order_id=order.id, symbol=order.symbol, side=order.side, quantity=order.quantity,
                          price=price, reference_price=ref_price, commission=commission, slippage=slip, timestamp=ts)
         order.status = OrderStatus.FILLED
+        order.filled_at, order.fill_price = ts, price
         self.pending.pop(order.id, None)
         self.cash -= commission
         self.total_commission += commission
@@ -356,7 +363,19 @@ class PaperBroker:
     # --------------------------------------------------------------- state
     def account_state(self) -> AccountState:
         unreal = sum(p.unrealized_pnl for p in self.positions.values())
+        open_pos = [p for p in self.positions.values() if p.is_open]
+        now = self.last_timestamp or utcnow()
+        day = pd.Timestamp(now).tz_convert("America/New_York").date()
+        realized_today = sum(t.net_pnl for t in self.closed_trades
+                             if pd.Timestamp(t.exit_time).tz_convert("America/New_York").date() == day)
+        exposure = sum(abs(p.quantity * (p.last_price or p.avg_price) * p.point_value) for p in open_pos)
+        risk = sum(max(0.0, (p.avg_price - p.stop_loss) if p.side == PositionSide.LONG else (p.stop_loss - p.avg_price))
+                   * p.quantity * p.point_value for p in open_pos if p.stop_loss is not None)
         return AccountState(
+            peak_equity=max(self.peak_equity, self.cash + unreal),
+            daily_pnl=realized_today + unreal,
+            open_exposure=exposure,
+            open_risk=risk,
             starting_balance=self.starting_balance,
             cash=self.cash,
             realized_pnl=self.realized_pnl,

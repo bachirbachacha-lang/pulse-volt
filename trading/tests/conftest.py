@@ -12,7 +12,9 @@ def settings(tmp_path):
     s = load_settings(
         environ={},
         root=tmp_path,
-        overrides={"logging": {"console": False}, "costs": {"slippage_bps": 0.0, "commission_per_order": 0.0}},
+        # Most tests size real futures contracts, which needs more than the $1,000 default.
+        overrides={"logging": {"console": False}, "costs": {"slippage_bps": 0.0, "commission_per_order": 0.0},
+                   "account": {"starting_balance": 100000.0}},
     )
     setup_logging(s, force=True)
     return s

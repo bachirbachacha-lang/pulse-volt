@@ -328,6 +328,9 @@ class PaperOrder(Model):
     setup_key: str | None = None
     expires_after_bars: int | None = Field(default=None, ge=1)
     bars_waited: int = Field(default=0, ge=0)
+    filled_at: datetime | None = None
+    fill_price: float | None = None
+    cancelled_at: datetime | None = None
 
 
 class PaperFill(Model):
@@ -392,7 +395,13 @@ class ClosedTrade(Model):
         return self.net_pnl / notional * 100 if notional else 0.0
 
 
+SIMULATION_LABEL = "PAPER / SIMULATION"
+
+
 class AccountState(Model):
+    """Virtual account. ``cash`` is the current virtual balance (realised P&L and costs applied)."""
+
+    label: str = SIMULATION_LABEL
     starting_balance: float
     cash: float
     realized_pnl: float = 0.0
@@ -400,8 +409,22 @@ class AccountState(Model):
     total_commission: float = 0.0
     open_positions: int = 0
     trade_count: int = 0
+    peak_equity: float | None = None  # highest equity seen (for drawdown)
+    daily_pnl: float = 0.0  # realised today (New York date) + current unrealised
+    open_exposure: float = 0.0  # notional value of open positions
+    open_risk: float = 0.0  # money lost if every open position hit its stop
     timestamp: datetime = Field(default_factory=utcnow)
 
     @property
     def equity(self) -> float:
         return self.cash + self.unrealized_pnl
+
+    @property
+    def drawdown(self) -> float:
+        peak = max(self.peak_equity or self.starting_balance, self.equity)
+        return self.equity - peak
+
+    @property
+    def drawdown_pct(self) -> float:
+        peak = max(self.peak_equity or self.starting_balance, self.equity)
+        return self.drawdown / peak if peak else 0.0

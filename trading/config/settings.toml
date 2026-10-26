@@ -82,7 +82,8 @@ overnight = true
 # Optional per-symbol overrides, e.g. "CL=F" = "futures"
 
 [account]
-starting_balance = 100000.0
+# PAPER / SIMULATION: virtual money only.
+starting_balance = 1000.0
 currency = "USD"
 
 [costs]

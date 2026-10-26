@@ -7,7 +7,7 @@ from trading.config.settings import DEFAULT_CONFIG_PATH, load_settings
 def test_default_file_loads_in_paper_mode():
     s = load_settings(environ={})
     assert s.mode == "paper"
-    assert s.account.starting_balance > 0
+    assert s.account.starting_balance == 1000.0  # PAPER / SIMULATION default virtual balance
     assert s.market_data.source == "yfinance"
     assert s.strategy.active == ""  # no strategy selected at this stage
 
@@ -48,7 +48,7 @@ def test_paths_resolve_against_root(tmp_path):
 
 def test_config_file_via_env(tmp_path):
     alt = tmp_path / "alt.toml"
-    alt.write_text(DEFAULT_CONFIG_PATH.read_text().replace("starting_balance = 100000.0", "starting_balance = 777.0"))
+    alt.write_text(DEFAULT_CONFIG_PATH.read_text().replace("starting_balance = 1000.0", "starting_balance = 777.0"))
     assert load_settings(environ={"TRADING_CONFIG": str(alt)}).account.starting_balance == 777.0
 
 

@@ -46,6 +46,20 @@ Run `python -m trading` from the repository root (the folder that contains `trad
 | `tests/` | pytest suite (offline; yfinance is faked) |
 | `reports/`, `logs/` | Charts and `trading.jsonl` structured logs (git-ignored) |
 
+## Paper-trading engine (PAPER / SIMULATION)
+
+`python -m trading paper-step -s MES=F -i 5m` runs one cycle. Run it on a schedule, e.g. every 5 minutes.
+
+- **Virtual balance:** $1,000 by default (`[account] starting_balance`). No brokerage connection exists anywhere in the code.
+- **Lifecycle:** yfinance data → validation → for every new closed bar, oldest first: strategy signal → agents 1/2/3 → consensus → paper order → simulated fill → open position → monitoring → simulated exit → P&L → account update.
+- **Separate tables:** signals, orders (with fill and cancel timestamps), fills, positions and closed trades are stored separately.
+- **Order types:** the strategy's own orders only. That's a limit at the no-wick open that expires after 10 candles, or a next-open market order for S setups, each with its stop and 1:1 target.
+- **Fills:** use the backtest cost model (`[backtest.costs]`): spread, slippage, commission, and trade-through for limit orders. A gap past the stop fills at the open, minus slippage.
+- **Account:** tracks starting balance, current virtual balance, realised and unrealised P&L, equity, peak equity and drawdown, daily P&L, open exposure and open risk.
+- **Missing or failed data:** that symbol is skipped, open positions are left unchanged, and the gap is recorded. Missed bars are caught up in order once data returns.
+- **Restart:** restores the account, positions, pending orders, the last processed bar and the setups already approved, so no duplicate orders are placed.
+- **Account size warning:** at $1,000 with 0.5% risk per trade ($5), no ES and almost no MES stop fits the risk budget, so the risk manager rejects those trades. Raise the balance or the risk setting deliberately if you want futures trades to size.
+
 ## Decision system (paper trading only)
 
 `python -m trading paper-step -s ES=F -i 5m` evaluates the latest closed bar for each symbol.

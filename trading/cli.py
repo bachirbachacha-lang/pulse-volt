@@ -157,25 +157,21 @@ def _run(args: argparse.Namespace, settings) -> int:
         print(f"  integrity: {'all passed' if res.integrity_ok else 'FAILED (see report)'}")
         print(f"  report: {report}")
     elif args.cmd == "paper-step":
-        from trading.agents.controller import DecisionController, fill_models_from_settings
-        from trading.data.pipeline import MarketDataPipeline
-        from trading.database import Database
-        from trading.paper_trading import PaperBroker
-        from trading.strategies import get_strategy
-        from trading.strategies.original_youtube import default_definition
+        from trading.paper_trading.runner import PaperTradingEngine
 
-        pipeline = MarketDataPipeline.from_settings(settings)
-        with Database(settings.database_path) as db:
-            broker = PaperBroker(settings, db, fill_models=fill_models_from_settings(settings, args.symbols))
-            ctl = DecisionController(settings, get_strategy(default_definition(args.symbols, args.interval)),
-                                     broker, db, clock=lambda: datetime.now(timezone.utc))
-            for sym in args.symbols:
-                md = pipeline.load(sym, interval=args.interval, period=args.period, force=True)
-                rec = ctl.step(md)
-                print(f"  {sym} {rec['bar_time']}: {rec['outcome']} - {rec['consensus']['reason'][:160]}")
-            a = broker.account_state()
-            print(f"  account: equity {a.equity:,.2f}, open positions {a.open_positions}, "
-                  f"pending orders {len(broker.pending)}")
+        engine = PaperTradingEngine(settings, args.symbols, args.interval, period=args.period)
+        out = engine.run_once()
+        print(f"=== {out['label']} - virtual money only, no brokerage connection ===")
+        for sym, r in out["symbols"].items():
+            print(f"  {sym}: {r['outcome']} ({r['bars_processed']} new bar(s))")
+            for e in r.get("evaluations", [])[-3:]:
+                print(f"    {e['bar']}: {e['outcome']} - {e['reason'][:150]}")
+            if r["outcome"] == "NO_DATA":
+                print(f"    {r['reason']}")
+        a = out["account"]
+        print(f"  account: balance {a['cash']:,.2f} | equity {a['equity']:,.2f} | realised {a['realized_pnl']:+,.2f} "
+              f"| unrealised {a['unrealized_pnl']:+,.2f} | today {a['daily_pnl']:+,.2f} | drawdown "
+              f"{a['drawdown']:,.2f} ({a['drawdown_pct']:.1%}) | exposure {a['open_exposure']:,.2f}")
     elif args.cmd == "account":
         from trading.database import Database
         from trading.paper_trading import PaperBroker
@@ -183,7 +179,8 @@ def _run(args: argparse.Namespace, settings) -> int:
         with Database(settings.database_path) as db:
             broker = PaperBroker(settings, db, require_consensus=False)  # read-only view of the account
             a = broker.account_state()
-            print(json.dumps({**a.model_dump(mode="json"), "equity": a.equity}, indent=2))
+            print(json.dumps({**a.model_dump(mode="json"), "equity": a.equity, "drawdown": a.drawdown,
+                              "drawdown_pct": a.drawdown_pct}, indent=2))
             for pos in broker.positions.values():
                 print(pos.model_dump_json())
     return 0
