@@ -11,3 +11,4 @@ Read owner.md first. Job: plan paid boosts/ads (Instagram, TikTok, Snapchat) for
 
 ## Updates
 - 25 Oct: Chat started. Read notes. Asked owner what to promote and budget idea.
+- 26 Oct: Recommended plan (not approved/paid yet): Instagram only for week 1. Pixel & Co. TORQ Atelier (or best portfolio post) boost, goal More messages, Riyadh+Jeddah 22-45 small-biz interests, 15 SAR/day x7 = 105. Scalp Elixir scalp-elixir-3d-purc.mp4, goal Profile visits (no store link), Riyadh+Jeddah 18-40 mostly women, hair care/natural beauty, 10 SAR/day x7 = 70. Total 175 SAR (~200 with VAT). AR+EN ad text given. Check results after 3 days via screenshots. TikTok/Snapchat later.
