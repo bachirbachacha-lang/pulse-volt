@@ -305,6 +305,7 @@ class ConsensusResult(Model):
     reason: str = ""
     quantity: float = 0.0
     timestamp: datetime = Field(default_factory=utcnow)
+    seal: str = ""  # set by the consensus engine (trading.core.seal); the broker verifies it
 
 
 # -------------------------------------------------------------------- paper trading
@@ -328,6 +329,10 @@ class PaperOrder(Model):
     setup_key: str | None = None
     expires_after_bars: int | None = Field(default=None, ge=1)
     bars_waited: int = Field(default=0, ge=0)
+    # Market entries: re-anchor take_profit to the actual fill (reward:risk from the fill;
+    # target_level replaces it when it lies beyond). Mirrors the backtester.
+    target_rr: float | None = Field(default=None, gt=0)
+    target_level: float | None = None
     filled_at: datetime | None = None
     fill_price: float | None = None
     cancelled_at: datetime | None = None

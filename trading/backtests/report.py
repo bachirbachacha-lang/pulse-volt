@@ -150,6 +150,18 @@ def plot_examples(res: BacktestResult, out: Path, n_random: int = 3, seed: int =
     return paths
 
 
+def _feasibility(trades, settings: Settings) -> str:
+    risk = settings.account.starting_balance * settings.risk.max_risk_per_trade_pct / 100
+    if trades.empty or "sizable_at_account" not in trades:
+        return "- Position sizing feasibility: no trades"
+    ok = int(trades["sizable_at_account"].sum())
+    med = trades["min_size_risk"].median()
+    return (f"- Position sizing feasibility: only {ok} of {len(trades)} trades could be placed by the paper "
+            f"engine at this account size (1 contract / micro lot risks a median {med:,.2f} vs a {risk:,.2f} "
+            f"budget). The P&L below is risk-normalised with fractional size and is NOT achievable as shown "
+            f"when this number is low.")
+
+
 def write_report(res: BacktestResult, settings: Settings, out_dir: Path, title: str | None = None) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     balance = settings.account.starting_balance
@@ -183,6 +195,7 @@ def write_report(res: BacktestResult, settings: Settings, out_dir: Path, title: 
         f"test results have been viewed {len(ledger)} time(s) for this split",
         f"- Sizing: each trade risks {settings.account.starting_balance * settings.risk.max_risk_per_trade_pct / 100:,.0f} "
         f"({settings.risk.max_risk_per_trade_pct}% of {balance:,.0f}); P&L = net R x risk",
+        _feasibility(res.trades, settings),
         f"- Integrity checks: {'ALL PASSED' if res.integrity_ok else 'FAILURES - results not trustworthy'}",
         "",
         "## Results (after simulated costs)",

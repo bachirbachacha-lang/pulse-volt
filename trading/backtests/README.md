@@ -63,3 +63,13 @@ Trades that were open across bars flagged as possible rolls, gaps, missing data 
 - fill rules and intrabar ties
 - hand-calculated P&L and metrics
 - split freezing and the test ledger
+
+## Backtest vs paper engine equivalence
+
+`python -m trading.backtests.equivalence 1 2 3` feeds the same validated bars to the
+backtester and to the live path (three agents -> consensus -> paper broker, one bar at a
+time) and compares every trade. Risk limits are opened wide so only strategy and execution
+logic are compared. After the audit (see `trading/AUDIT.md`) they are identical; a test
+(`tests/test_audit_fixes.py`) keeps it that way. Dollar sizing still differs by design:
+the backtest is risk-normalised, the paper engine trades whole contracts (see the
+"Position sizing feasibility" line in every report).

@@ -33,6 +33,7 @@ from trading.core.schemas import (
     new_id,
 )
 from trading.data.instruments import interval_delta
+from trading.execution.fills import FillConfig
 from trading.strategies.original_youtube.instruments import instrument_spec
 from trading.strategies.original_youtube.strategy import (
     OriginalYoutubeStrategy,
@@ -66,6 +67,10 @@ class SignalAnalysis(Model):
     stop: float | None = None
     target: float | None = None
     expires_after_bars: int | None = None
+    # Market entries: the target is re-anchored to the actual fill (1:1 from the entry, as the
+    # backtester does). `target_level` is the S-setup wick fill when that target mode is on.
+    target_rr: float | None = None
+    target_level: float | None = None
     setup_key: str | None = None
     decision: Verdict = Verdict.REJECT
     reason: str = ""
@@ -82,8 +87,13 @@ class SignalAnalyst:
         self.strategy = strategy
 
     def analyze(self, md: MarketData, evaluation_id: str | None = None, news_events=(),
-                scan: ScanResult | None = None) -> tuple[SignalAnalysis, Signal | None, ScanResult | None, dict]:
-        """Returns (analysis, signal if approved, the scan used, strategy state snapshot)."""
+                scan: ScanResult | None = None, fill_config: FillConfig | None = None,
+                ) -> tuple[SignalAnalysis, Signal | None, ScanResult | None, dict]:
+        """Returns (analysis, signal if approved, the scan used, strategy state snapshot).
+
+        ``fill_config`` must be the paper broker's fill rules for this symbol: the scan decides
+        whether earlier setups filled, were invalidated or are still pending, and with other
+        rules (e.g. touch = fill) it disagrees with the broker and the backtester (audit fix H6)."""
         p = self.strategy.params
         eid = evaluation_id or new_id("eval")
         checks: list[Check] = []
@@ -127,7 +137,7 @@ class SignalAnalyst:
                             detail=", ".join(flags) if flags else "clean"))
 
         # --- strategy state on the latest bar (read-only scan)
-        scan = scan or self.strategy.scan(md, news_events)
+        scan = scan or self.strategy.scan(md, news_events, fill_config=fill_config)
         st = scan.structure
         j = len(df) - 1
         trend, phase, tradeable = st.trend.iat[j], st.phase.iat[j], st.tradeable.iat[j]
@@ -164,6 +174,10 @@ class SignalAnalyst:
         out.invalidation = None if np.isnan(setup.protective_level) else float(setup.protective_level)
         out.setup_key = setup_key(md.symbol, md.interval, df.index[j], nowick_dir)
         out.expires_after_bars = p.max_return_candles if setup.entry_mode == "limit" else None
+        if setup.entry_mode == "market":
+            out.target_rr = p.reward_risk
+            if setup.s_setup and p.s_setup_target == "wick_fill":
+                out.target_level = setup.nowick_high if nowick_dir == "long" else setup.nowick_low
 
         grade_ok = (setup.category == SetupCategory.GRANDMA
                     or (setup.category == SetupCategory.A and p.trade_a_setups)
@@ -203,7 +217,9 @@ class SignalAnalyst:
             reason=f"{a.setup_category}{' + S' if a.s_setup else ''} setup",
             entry_type=OrderType.MARKET if market else OrderType.LIMIT,
             expires_after_bars=a.expires_after_bars, setup_key=a.setup_key,
-            indicators={"invalidation": a.invalidation},
+            indicators={"invalidation": a.invalidation,
+                        **({"target_rr": a.target_rr} if a.target_rr is not None else {}),
+                        **({"target_level": a.target_level} if a.target_level is not None else {})},
             data_quality=signal_data_quality(md),
         )
 

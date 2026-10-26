@@ -115,6 +115,23 @@ class Database:
 
     @contextmanager
     def transaction(self) -> Iterator[sqlite3.Connection]:
+        """Atomic block. Nested calls become savepoints, so a whole bar (broker fills,
+        positions, account snapshot and the audit record) commits together or not at all."""
+        if self._conn.in_transaction:
+            self._depth = getattr(self, "_depth", 0) + 1
+            name = f"sp_{self._depth}"
+            self._conn.execute(f"SAVEPOINT {name}")
+            try:
+                yield self._conn
+            except BaseException:
+                self._conn.execute(f"ROLLBACK TO {name}")
+                self._conn.execute(f"RELEASE {name}")
+                raise
+            else:
+                self._conn.execute(f"RELEASE {name}")
+            finally:
+                self._depth -= 1
+            return
         self._conn.execute("BEGIN")
         try:
             yield self._conn

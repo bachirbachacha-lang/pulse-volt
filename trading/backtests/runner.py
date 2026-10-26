@@ -170,6 +170,17 @@ def trade_rows(run: SymbolRun, settings: Settings, risk_per_trade: float, split:
             "fill_index": s.fill_index, "exit_index": s.exit_index,
             "period": split.label(s.fill_time),
         }
+        # Smallest real position (1 contract / 1 micro lot) and whether the configured paper account
+        # could place it. The backtest P&L is risk-normalised (fractional size); the paper engine
+        # trades whole contracts and rejects trades it cannot size (audit fix H4).
+        if spec.kind == "futures":
+            min_risk = risk_price * pv
+        elif run.symbol.upper().replace("=X", "")[3:6] == "USD":
+            min_risk = risk_price * 1_000
+        else:
+            min_risk = np.nan
+        row["min_size_risk"] = min_risk
+        row["sizable_at_account"] = bool(min_risk <= risk_per_trade + 1e-9)
         row.update({k: feats[k].iat[s.nowick_index] for k in feats.columns})
         if s.exit_price is not None and risk_price > 0:
             move = sign * (s.exit_price - s.fill_price)

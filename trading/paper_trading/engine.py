@@ -51,6 +51,7 @@ from trading.core.schemas import (
 from trading.core.schemas import ConsensusResult
 
 REQUIRED_AGENTS = ("signal_analyst", "risk_manager", "execution_validator")
+from trading.core.seal import is_sealed
 from trading.database.store import Database
 from trading.execution.fills import FillModel
 
@@ -81,6 +82,7 @@ class PaperBroker:
         self.peak_equity = self.starting_balance
         self.require_consensus = require_consensus
         self.fill_models = fill_models or {}
+        self._consumed_signals: set[str] = set()
         if db is not None and restore:
             self.restore()
 
@@ -89,7 +91,13 @@ class PaperBroker:
         """Rebuild state from the database after a restart."""
         assert self.db is not None
         acct = self.db.latest_account()
-        if acct is not None:
+        if acct is None:  # nothing stored yet: back to a fresh account
+            self.starting_balance = self.settings.account.starting_balance
+            self.cash = self.peak_equity = self.starting_balance
+            self.realized_pnl = self.total_commission = 0.0
+            self.trade_count = 0
+            self.last_timestamp = None
+        else:
             self.starting_balance = acct.starting_balance
             self.cash = acct.cash
             self.realized_pnl = acct.realized_pnl
@@ -136,6 +144,9 @@ class PaperBroker:
             raise PaperTradingError("only pending orders can be submitted")
         if self.require_consensus:
             self._check_consensus(order, consensus)
+            if order.signal_id in self._consumed_signals:
+                raise PaperTradingError("order rejected: this consensus was already used for an order")
+            self._consumed_signals.add(order.signal_id)
         self.pending[order.id] = order
         log_event(logger, "paper.order_submitted", order=order)
         self._persist(order=order)
@@ -155,6 +166,8 @@ class PaperBroker:
             raise PaperTradingError(f"order rejected: no APPROVE from {missing}")
         if abs(consensus.quantity - order.quantity) > 1e-9:
             raise PaperTradingError("order rejected: quantity differs from the approved quantity")
+        if not is_sealed(consensus):
+            raise PaperTradingError("order rejected: consensus was not issued by the consensus engine")
 
     def cancel(self, order_id: str, reason: str = "", ts: datetime | None = None) -> PaperOrder:
         order = self.pending.pop(order_id)
@@ -196,18 +209,29 @@ class PaperBroker:
                 if price is None:
                     self._persist(order=order)
                     continue
+                if self._gapped_past_stop(order, candle):
+                    continue
                 fills.append(self._fill_order(order, order.limit_price, candle.timestamp, final_price=price,
                                               commission=self._fm_commission(fm, order.quantity)))
                 self.positions[symbol].entry_was_limit = True
+            elif self._gapped_past_stop(order, candle):
+                continue
             elif fm is not None:
                 fills.append(self._fill_order(order, candle.open, candle.timestamp,
                                               final_price=fm.market_entry(long, candle.open),
                                               commission=self._fm_commission(fm, order.quantity)))
             else:
                 fills.append(self._fill_order(order, candle.open, candle.timestamp))
+            if order.order_type == OrderType.MARKET and order.target_rr is not None:
+                self._anchor_target(self.positions[symbol], order)
             pos = self.positions.get(symbol)
             if pos is not None and pos.is_open and pos.entry_bar is None:
                 pos.entry_bar = candle.timestamp
+            if order.setup_key and order.status == OrderStatus.FILLED:
+                # One position at a time: the first entry to fill cancels the other pending entries.
+                for other in [o for o in self.pending.values() if o.symbol == symbol and o.setup_key]:
+                    self.cancel(other.id, "another setup filled first (one position at a time)", candle.timestamp)
+                break
 
         pos = self.positions.get(symbol)
         if pos is not None and pos.is_open:
@@ -225,6 +249,30 @@ class PaperBroker:
         log_event(logger, "paper.bar", symbol=symbol, ts=candle.timestamp, close=candle.close,
                   equity=self.account_state().equity, fills=len(fills))
         return fills
+
+    def _gapped_past_stop(self, order: PaperOrder, candle: Candle) -> bool:
+        """An entry bar that opens at or beyond the protective stop has no valid entry (audit fix C2).
+
+        Filling it would open a position that is already past its invalidation level; the
+        backtester cancels such setups, so the paper broker must too."""
+        if order.stop_loss is None:
+            return False
+        long = order.side == Side.BUY
+        if (candle.open <= order.stop_loss) if long else (candle.open >= order.stop_loss):
+            self.cancel(order.id, "bar opened beyond the stop (gap); no valid entry", candle.timestamp)
+            return True
+        return False
+
+    def _anchor_target(self, pos: PaperPosition, order: PaperOrder) -> None:
+        """Market entry: target = reward:risk measured from the actual fill (audit fix H5)."""
+        if pos.stop_loss is None or not pos.is_open:
+            return
+        sign = 1 if pos.side == PositionSide.LONG else -1
+        target = pos.avg_price + sign * order.target_rr * abs(pos.avg_price - pos.stop_loss)
+        if order.target_level is not None and (order.target_level - target) * sign > 0:
+            target = order.target_level
+        pos.take_profit = order.take_profit = target
+        self._persist(order=order, position=pos)
 
     @staticmethod
     def _fm_commission(fm: FillModel | None, qty: float) -> float | None:
@@ -373,7 +421,7 @@ class PaperBroker:
                    * p.quantity * p.point_value for p in open_pos if p.stop_loss is not None)
         return AccountState(
             peak_equity=max(self.peak_equity, self.cash + unreal),
-            daily_pnl=realized_today + unreal,
+            daily_pnl=realized_today + unreal - sum(p.entry_commission for p in open_pos),
             open_exposure=exposure,
             open_risk=risk,
             starting_balance=self.starting_balance,

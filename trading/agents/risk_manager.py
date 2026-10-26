@@ -108,7 +108,9 @@ class RiskManager:
         open_pos = {s: p for s, p in positions.items() if p.is_open}
         open_risk = sum(abs(p.avg_price - p.stop_loss) * p.quantity * p.point_value
                         for p in open_pos.values() if p.stop_loss is not None)
-        max_total = account.starting_balance * lim.max_risk_per_trade_pct / 100 * max(lim.max_open_positions, 1)
+        # Same basis as the per-trade budget (current equity). Using the starting balance here
+        # rejected every correctly sized trade once the account was in profit (audit fix C1).
+        max_total = budget * max(lim.max_open_positions, 1)
         exposure_ok = len(open_pos) < lim.max_open_positions and open_risk + money_at_risk <= max_total + 1e-9
         checks.append(Check(name="current_exposure", passed=exposure_ok,
                             detail=f"{len(open_pos)} open (max {lim.max_open_positions}); open risk "
@@ -117,7 +119,8 @@ class RiskManager:
         day = pd.Timestamp(now).tz_convert("America/New_York").date()
         realized_today = sum(t.net_pnl for t in closed_trades
                              if pd.Timestamp(t.exit_time).tz_convert("America/New_York").date() == day)
-        unrealized = sum(p.unrealized_pnl for p in open_pos.values())
+        # Entry commissions of open positions are already paid (audit fix M2).
+        unrealized = sum(p.unrealized_pnl - p.entry_commission for p in open_pos.values())
         loss_limit = account.starting_balance * lim.max_daily_loss_pct / 100
         day_pnl = realized_today + unrealized
         checks.append(Check(name="daily_loss_limit", passed=day_pnl > -loss_limit,
@@ -127,10 +130,15 @@ class RiskManager:
         same_market = [s for s in open_pos if exposure_key(s) == key]
         checks.append(Check(name="no_existing_position", passed=not same_market,
                             detail=f"open position in {same_market}" if same_market else "none"))
-        dup = [o.id for o in pending if exposure_key(o.symbol) == key or
+        # Pending entries on the SAME symbol for other setups are allowed: the strategy keeps every
+        # valid no-wick pending and takes whichever is tapped first, and the broker cancels the
+        # others when one fills (one position at a time). Rejecting them here made the paper
+        # engine trade a different set of setups than the strategy (audit fix H7).
+        dup = [o.id for o in pending if (exposure_key(o.symbol) == key and o.symbol != signal.symbol) or
                (signal.setup_key and o.setup_key == signal.setup_key)]
         checks.append(Check(name="no_duplicate_exposure", passed=not dup,
-                            detail=f"pending order(s) {dup} on the same market/setup" if dup else "none"))
+                            detail=f"pending order(s) {dup} on a related market or the same setup" if dup
+                            else "none"))
 
         age = data_age(md, now)
         limit = stale_limit(md, self.settings.validation.stale_after_bars)

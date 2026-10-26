@@ -188,6 +188,7 @@ Fixed 1:1 risk-to-reward [E] 1:21:41, V2 2:58.
 | Code: not implemented; may be partly covered by video 2 | | |
 | Claimed results: 85% win rate; his live backtest went 8 wins, 2 losses | | 0:12, 2:24:00 |
 | System safeguard, not his rule: no-wicks on bars flagged by the data validator (possible roll, missing data, ...) are not used | | |
+| System safeguard, not his rule (audit H2): a setup is rejected when a flagged price discontinuity (possible roll, large gap, suspicious move, bar after missing data) lies between the protective swing and the no-wick, because the stop distance would come from a contract-roll artifact. `skip_structure_across_flagged_bars` | | |
 
 ---
 

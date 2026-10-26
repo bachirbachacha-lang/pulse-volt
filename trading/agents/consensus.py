@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from trading.core.log import get_logger, log_event
 from trading.core.schemas import AgentDecision, ConsensusResult, RiskDecision, Verdict
+from trading.core.seal import seal
 
 logger = get_logger("agents.consensus")
 
@@ -39,8 +40,8 @@ class ConsensusEngine:
         else:
             approved, reason = True, "unanimous"
 
-        result = ConsensusResult(signal_id=signal_id, approved=approved, decisions=decisions, reason=reason,
-                                 quantity=risk.quantity if (approved and risk) else 0.0)
+        result = seal(ConsensusResult(signal_id=signal_id, approved=approved, decisions=decisions, reason=reason,
+                                      quantity=risk.quantity if (approved and risk) else 0.0))
         log_event(logger, "consensus.decided", signal_id=signal_id, approved=approved, reason=reason,
                   votes={d.agent: d.verdict for d in decisions})
         return result

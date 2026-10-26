@@ -25,7 +25,7 @@ from typing import Any, Callable, Sequence
 
 import pandas as pd
 
-from trading.agents.common import bar_close, data_age, params_hash
+from trading.agents.common import bar_close, code_fingerprint, data_age, params_hash
 from trading.agents.consensus import ConsensusEngine
 from trading.agents.risk_manager import RiskManager
 from trading.agents.signal_analyst import POSITION_REASONS, SignalAnalyst
@@ -107,10 +107,12 @@ class DecisionController:
         self.execution_validator = PaperOrderValidator(settings, strategy.name)
         self.consensus = ConsensusEngine(required_agents=set(REQUIRED_AGENTS))
         self._params_hash = params_hash(strategy.params)
+        self.code_version = code_fingerprint(strategy.params)
         self._last_bar: dict[str, pd.Timestamp] = {}
         self.approved_setup_keys: set[str] = set()
         if db is not None:
             past = db.evaluations()
+            self._check_same_version(past)
             self.approved_setup_keys = {e["agents"]["signal_analyst"]["output"]["setup_key"]
                                         for e in past if e["outcome"] == APPROVED}
             # Restart safety: never let the broker process the same bar twice.
@@ -118,8 +120,38 @@ class DecisionController:
                 if e.get("broker_processed"):
                     self._last_bar[e["symbol"]] = pd.Timestamp(e["bar_time"])
 
+    def _check_same_version(self, past: list[dict]) -> None:
+        """A forward-test record belongs to exactly one version of the code and parameters.
+
+        If this database was written by different code, continuing it would mix two systems
+        in one track record, so we refuse; start a new record (a new database path) instead."""
+        versions = {e.get("strategy_code_version") for e in past if "strategy_params_hash" in e}
+        stale = versions - {self.code_version}
+        if stale:
+            raise StrategyModifiedError(
+                f"this paper record was produced by code/parameter version(s) {sorted(map(str, stale))}, "
+                f"but the running version is {self.code_version}. A changed strategy is a NEW experimental "
+                f"version: start a new paper record (point [database] path at a new file) instead of "
+                f"continuing the old one.")
+
     # ----------------------------------------------------------------- main entry
     def step(self, md: MarketData, now: pd.Timestamp | None = None, news_events: Sequence = ()) -> dict[str, Any]:
+        """Evaluate one bar. With a database, everything the bar changes (orders, fills,
+        positions, account snapshot, audit record) is committed in ONE transaction; if
+        anything fails, the database and the in-memory state go back to the previous bar."""
+        if self.db is None:
+            return self._step(md, now, news_events)
+        last_bar, keys = dict(self._last_bar), set(self.approved_setup_keys)
+        try:
+            with self.db.transaction():
+                return self._step(md, now, news_events)
+        except BaseException:
+            self._last_bar, self.approved_setup_keys = last_bar, keys
+            if self.broker.db is self.db:
+                self.broker.restore()
+            raise
+
+    def _step(self, md: MarketData, now: pd.Timestamp | None, news_events: Sequence) -> dict[str, Any]:
         if params_hash(self.strategy.params) != self._params_hash:
             raise StrategyModifiedError("strategy parameters changed while the decision system was running")
         if now is None:
@@ -132,13 +164,16 @@ class DecisionController:
             "id": eid, "created_at": utcnow().isoformat(), "now": str(now), "symbol": md.symbol,
             "interval": md.interval, "strategy": self.strategy.name,
             "strategy_version": self.strategy.definition.version, "strategy_params_hash": self._params_hash,
+            "strategy_code_version": self.code_version,
             "bar_time": str(md.frame.index[-1]) if len(md.frame) else str(now),
             "maintenance": [], "broker_events": [], "stage": "signal_analyst",
         }
         record["market_state"] = market_snapshot(md, now) if len(md.frame) else {"rows": 0}
 
         # Agent 1 (also provides the scan used for order maintenance)
-        analysis, signal, scan, state = self.signal_analyst.analyze(md, eid, news_events)
+        fm = self.broker.fill_models.get(md.symbol)
+        analysis, signal, scan, state = self.signal_analyst.analyze(md, eid, news_events,
+                                                                    fill_config=fm.config if fm else None)
         record["strategy_state"] = state
         record["agents"] = {"signal_analyst": {
             "input": {"market_data": f"{md.symbol} {md.interval}, {len(md.frame)} validated bars",
@@ -152,6 +187,7 @@ class DecisionController:
             record["maintenance"].append({"action": "none", "reason": "latest bar missing or incomplete; "
                                           "broker did not process it"})
         elif new_bar:
+            self._zone_cancel(md, record, news_events)
             if scan is not None:
                 self._maintain(md, scan, record)
             c = md.frame.iloc[-1]
@@ -218,6 +254,8 @@ class DecisionController:
             quantity=quantity, order_type=signal.entry_type, limit_price=signal.price if limit else None,
             stop_loss=signal.stop, take_profit=signal.target, signal_id=signal.id, strategy=signal.strategy,
             setup_key=signal.setup_key, expires_after_bars=signal.expires_after_bars,
+            target_rr=None if limit else signal.indicators.get("target_rr"),
+            target_level=None if limit else signal.indicators.get("target_level"),
             created_at=signal.timestamp, reason=signal.reason,
         )
 
@@ -240,16 +278,30 @@ class DecisionController:
             self.broker.cancel(order.id, f"strategy invalidated the setup: {s.reason}")
             record["maintenance"].append({"action": "cancel_order", "order_id": order.id, "reason": s.reason})
 
+    def _blocked(self, ts: pd.Timestamp, md: MarketData, news_events: Sequence) -> bool:
+        p = self.strategy.params
+        at = pd.DatetimeIndex([ts])
+        buffer = p.futures_zone_buffer_minutes if instrument_spec(md.symbol).kind == "futures" else 0
+        return bool(no_trade_mask(at, p, buffer)[0] or news_mask(at, news_events, p.news_blackout_minutes,
+                                                                 interval_delta(md.interval))[0])
+
+    def _zone_cancel(self, md: MarketData, record: dict, news_events: Sequence) -> None:
+        """Pending entries never fill inside the no-trading zone / news window (audit fix H8).
+
+        Mirrors the strategy's own rule; done here directly so it holds even when the strategy
+        scan has no matching pending setup (e.g. one recorded as 'already in a position')."""
+        if not self._blocked(md.frame.index[-1], md, news_events):
+            return
+        for order in [o for o in self.broker.pending.values() if o.symbol == md.symbol and o.setup_key]:
+            reason = "reached the no-trading zone / news window before filling"
+            self.broker.cancel(order.id, reason, md.frame.index[-1].to_pydatetime())
+            record["maintenance"].append({"action": "cancel_order", "order_id": order.id, "reason": reason})
+
     def _zone_exit(self, md: MarketData, record: dict, news_events: Sequence) -> None:
         pos = self.broker.positions.get(md.symbol)
         if pos is None or not pos.is_open:
             return
-        p = self.strategy.params
-        nxt = pd.DatetimeIndex([md.frame.index[-1] + interval_delta(md.interval)])
-        spec = instrument_spec(md.symbol)
-        buffer = p.futures_zone_buffer_minutes if spec.kind == "futures" else 0
-        if no_trade_mask(nxt, p, buffer)[0] or news_mask(nxt, news_events, p.news_blackout_minutes,
-                                                         interval_delta(md.interval))[0]:
+        if self._blocked(md.frame.index[-1] + interval_delta(md.interval), md, news_events):
             fill = self.broker.close_position(md.symbol, float(md.frame["close"].iat[-1]),
                                               md.frame.index[-1].to_pydatetime(), "closed before no-trading zone/news")
             if fill:

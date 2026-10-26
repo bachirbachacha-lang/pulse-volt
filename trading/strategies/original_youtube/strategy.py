@@ -58,6 +58,8 @@ from trading.strategies.original_youtube.structure import Phase, StructureEngine
 
 STRATEGY_NAME = "ORIGINAL_YOUTUBE_STRATEGY"
 logger = get_logger("strategies.original_youtube")
+# Validator flags that mark a price discontinuity (see trading/data/validation.py).
+DISCONTINUITY_FLAGS = ("flag_roll_suspect", "flag_large_gap", "flag_suspicious_move", "flag_after_missing")
 
 
 @dataclass(frozen=True)
@@ -85,6 +87,11 @@ class OriginalParams:
     zone_timezone: str = "America/New_York"
     # System safeguard (not from the video): ignore no-wicks on bars the data validator flagged.
     skip_flagged_bars: bool = True
+    # System safeguard (not from the video, audit fix H2): reject a setup when a price
+    # discontinuity the validator flagged (possible contract roll, large gap, suspicious move,
+    # bar after missing data) lies between the protective swing and the no-wick. Otherwise a
+    # continuous-contract jump would set the stop distance and the 1:1 target.
+    skip_structure_across_flagged_bars: bool = True
     # --- setup grades (video 2); defaults = what the creator says he trades
     trade_a_setups: bool = True
     trade_valid_not_good_with_s: bool = True  # "the S setup can make a valid but not good setup a good setup"
@@ -251,6 +258,9 @@ class OriginalYoutubeScanner:
                                                             interval_delta(interval))
         flagged = (df["flag_any"].to_numpy(bool) if (p.skip_flagged_bars and "flag_any" in df.columns)
                    else np.zeros(n, dtype=bool))
+        jump_cols = [f for f in DISCONTINUITY_FLAGS if f in df.columns]
+        jumps = (np.cumsum(df[jump_cols].any(axis=1).to_numpy(bool))
+                 if (p.skip_structure_across_flagged_bars and jump_cols) else np.zeros(n, dtype=int))
         near = (p.near_miss_pips_forex if spec.kind == "forex" else p.near_miss_ticks_futures) * spec.unit
 
         setups: list[Setup] = []
@@ -368,6 +378,9 @@ class OriginalYoutubeScanner:
                 s.status, s.reason = SetupStatus.REJECTED, "no-wick formed in the no-trading zone / news window"
             elif flagged[j]:
                 s.status, s.reason = SetupStatus.REJECTED, "bar flagged by the data validator"
+            elif s.protective_index >= 0 and jumps[j] > jumps[s.protective_index]:
+                s.status, s.reason = (SetupStatus.REJECTED, "flagged price discontinuity (possible roll / gap) "
+                                      "between the protective swing and the no-wick")
             elif open_pos is not None and p.one_position_at_a_time:
                 s.status, s.reason = SetupStatus.REJECTED, "already in a position (one position at a time)"
             if s.status == SetupStatus.PENDING:
