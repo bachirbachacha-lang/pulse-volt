@@ -1,0 +1,15 @@
+# Runtime artefacts (keep the folders, not the contents)
+data/raw/*
+data/clean/*
+data/cache/*
+!data/raw/.gitkeep
+!data/clean/.gitkeep
+!data/cache/.gitkeep
+reports/*
+!reports/.gitkeep
+logs/*
+!logs/.gitkeep
+database/*.sqlite3*
+__pycache__/
+.pytest_cache/
+.env

@@ -46,3 +46,9 @@ Respects `prefers-reduced-motion`, and falls back to the campaign photos when We
 ## Atlas command center
 
 `atlas/` is a separate local app: a personal command center with projects, an AI assistant, Code Lab, Design Studio, Engineering Lab, Trading Lab (paper trading only), Knowledge Vault, automations and a system monitor. It runs on your own computer (Node.js 22+). Setup, features and what still needs keys are in [`atlas/README.md`](atlas/README.md).
+
+---
+
+## Paper-trading research system
+
+`trading/` is a separate Python project: a yfinance-based strategy-research and **paper-trading** foundation (simulated money only). See [`trading/README.md`](trading/README.md).
