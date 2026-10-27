@@ -19,3 +19,11 @@ Hook in first 2 s; Arabic then English text; label 3D/AI ("3D RENDER", "AI SAMPL
 ## 26 Oct: Pixel & Co. "menu every day?" ad
 - pixelco-ar-menu-whatsapp.mp4 (15 s, silent) + -cover.jpg. Hook «زبائنك يسألونك عن المنيو كل يوم؟» → generic profile (no website, no Instagram UI/logo) → real SUKKAR sample recording (scroll menu, add, order, "send on WhatsApp") → chat screen with the site's real order message → «نموذج مجاني لمشروعك، راسلنا» + @pixelandco.design. Corner label «نموذج تصميم · Design sample» throughout.
 - Source: ads/reels-src (cut=order) + record-sukkar-order.js (frames to frames/sukkar-order). Chat screen is a generic look with no WhatsApp logo; the word "WhatsApp" is only text.
+
+## 27 Oct: Scalp Elixir motion set (owner picks one or more)
+Owner sent a reference (dark room, glowing app screen, kinetic type) + scroll-cinematic prompts (Three.js + GSAP + ScrollTrigger, depth/parallax, lighting/shadows). Built in ads/motion/:
+- scalp-elixir-motion-glow.mp4 (14 s): glowing screen concept (routine checklist, 3D bottle card), kinetic «قطرات. مساج. نوم.», logo reveal. Labelled CONCEPT · 3D RENDER.
+- scalp-elixir-motion-flythrough.mp4 (14 s): camera flies through rosemary + light beams to the bottle, orbit with ingredient tags, drop + ripple, crane up to end card. 3D RENDER.
+- scalp-elixir-motion-wave.mp4 (13 s): glowing wave surface, ingredient words, 50 ml ring, bottle rises. 3D RENDER.
+- Did not copy the reference's Spotify/TikTok branding or its "This took Claude 30 minutes" text.
+- Waiting on: owner's "Timeless Edit" material + extra prompts.
