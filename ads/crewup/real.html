@@ -90,6 +90,22 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 #endc em{font:600 14px Inter;color:#6f9dff;margin-top:14px;font-style:normal}
 #fade{position:absolute;inset:0;background:#000;z-index:90}
 .conf{position:absolute;width:6px;height:10px;border-radius:2px;z-index:50}
+/* frame mode (?frame=1): the screen sits inside a phone seen from outside */
+body.frame{background:#090B10}
+#fbg{position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 66%,rgba(31,107,255,.30),rgba(31,107,255,0) 70%),#090B10}
+#fdots{position:absolute;inset:-100px;background-image:radial-gradient(rgba(91,147,255,.14) 2px,transparent 2.5px);background-size:54px 54px}
+#pmove{position:absolute;left:255px;top:640px;width:570px;height:1197px;transform-origin:50% 40%}
+#pwrap{position:absolute;inset:0;border-radius:84px;background:linear-gradient(145deg,#3a4152,#11141b 40%,#2a303d);padding:16px;box-shadow:0 0 0 2px #4a5265,0 70px 140px rgba(0,0,0,.7),0 0 180px rgba(31,107,255,.35)}
+#pwrap::before{content:'';position:absolute;left:-5px;top:230px;width:5px;height:90px;border-radius:3px 0 0 3px;background:#3a4152;box-shadow:0 120px 0 #3a4152}
+#pwrap::after{content:'';position:absolute;right:-5px;top:300px;width:5px;height:140px;border-radius:0 3px 3px 0;background:#3a4152}
+.frame #dev{left:16px;top:16px;height:844px;transform:scale(1.3795);border-radius:49px}
+#fcorner{position:absolute;left:50px;top:80px;display:flex;align-items:center;gap:14px;z-index:20}
+#fcorner img{width:64px;height:64px;border-radius:16px}
+#fcorner span{font:600 22px Inter;color:#c9d3e8;letter-spacing:.06em;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
+#otexts .tt{position:absolute;left:60px;right:60px;top:auto!important;bottom:1310px;line-height:1.5}
+#otexts .tt span{font:700 46px/1.5 Inter;padding:6px 18px;border-radius:14px}
+.frame #label{display:none}
+body.frame > #fade{position:absolute;inset:0;background:#000;z-index:90}
 </style>
 </head>
 <body>
@@ -112,6 +128,16 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 <script>
 const CUT = new URLSearchParams(location.search).get('cut') || 'day1';
 const $ = s => document.querySelector(s);
+const FRAME = new URLSearchParams(location.search).get('frame') === '1';
+if (FRAME) {
+  document.body.classList.add('frame');
+  const dev = $('#dev'), fade = $('#fade');
+  document.body.insertAdjacentHTML('afterbegin', `<div id="fbg"><div id="fdots"></div></div><div id="fcorner"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div><div id="pmove"><div id="pwrap"></div></div><div id="otexts"></div>`);
+  $('#pwrap').appendChild(dev); document.body.appendChild(fade);
+}
+// sound cues, read by record.js and turned into audio by sfx.py
+const SFX = []; window.SFX = SFX;
+const sfx = (type, t) => SFX.push({ type, t: +t.toFixed(3) });
 const LOGO = 'img/crewup-logo.png';
 const PC = { O: '#6E9BFF', K: '#FFC83D', F: '#FF9A5A', Y: '#d6dbe6' };
 const pfp = (l, s = 34) => `<div class="pfp" style="width:${s}px;height:${s}px;font-size:${s * .42}px;background:${PC[l]}">${l}</div>`;
@@ -135,21 +161,22 @@ let DUR = 12, tcount = 0;
 // TikTok text box: shows from a to b
 function text(html, a, b, top = 118, cls = '') {
   const id = 'tx' + (tcount++); const el = document.createElement('div'); el.className = 'tt ' + cls; el.id = id; el.style.top = top + 'px';
-  el.innerHTML = html.split('\n').map(l => `<span>${l}</span>`).join('<br>'); $('#texts').appendChild(el);
+  el.innerHTML = html.split('\n').map(l => `<span>${l}</span>`).join('<br>'); $(FRAME ? '#otexts' : '#texts').appendChild(el);
   tl.set('#' + id, { opacity: 0 }, 0).set('#' + id, { opacity: 1 }, a).set('#' + id, { opacity: 0 }, b);
 }
 // iOS "show touches" dot: tap at (x,y)
-function tap(t, x, y) { tl.set('#touch', { left: x, top: y, scale: 1, opacity: 0 }, t - .01).to('#touch', { opacity: 1, duration: .06 }, t).to('#touch', { scale: .85, duration: .08 }, t + .06).to('#touch', { opacity: 0, scale: 1, duration: .15 }, t + .22); }
-function drag(t, x, y1, y2, d = .45) { tl.set('#touch', { left: x, top: y1, opacity: 0 }, t - .01).to('#touch', { opacity: 1, duration: .05 }, t).to('#touch', { top: y2, duration: d, ease: 'power1.inOut' }, t).to('#touch', { opacity: 0, duration: .12 }, t + d); }
+function tap(t, x, y) { sfx('tap', t + .05); tl.set('#touch', { left: x, top: y, scale: 1, opacity: 0 }, t - .01).to('#touch', { opacity: 1, duration: .06 }, t).to('#touch', { scale: .85, duration: .08 }, t + .06).to('#touch', { opacity: 0, scale: 1, duration: .15 }, t + .22); }
+function drag(t, x, y1, y2, d = .45) { sfx('swipe', t); tl.set('#touch', { left: x, top: y1, opacity: 0 }, t - .01).to('#touch', { opacity: 1, duration: .05 }, t).to('#touch', { top: y2, duration: d, ease: 'power1.inOut' }, t).to('#touch', { opacity: 0, duration: .12 }, t + d); }
 const show = (id, t) => tl.set(id, { opacity: 1, visibility: 'visible' }, t);
 const hide = (id, t) => tl.set(id, { opacity: 0, visibility: 'hidden' }, t);
-const bannerIn = (id, t, out) => { tl.fromTo(id, { y: -120, opacity: 1 }, { y: 0, duration: .45, ease: 'back.out(1.3)' }, t); if (out) tl.to(id, { y: -120, duration: .35, ease: 'power2.in' }, out); };
-const haptic = (t, id = '#stage') => tl.to(id, { x: 2, duration: .03, yoyo: true, repeat: 5, ease: 'none' }, t).set(id, { x: 0 }, t + .2);
-const endCard = t => tl.fromTo('#endc', { opacity: 0 }, { opacity: 1, duration: .25 }, t).from('#endc img', { scale: .6, duration: .5, ease: 'back.out(2)' }, t);
-const center = (sel) => { const el = $(sel), r = el.getBoundingClientRect(), s = 2.76923; return [r.left / s + r.width / s / 2, r.top / s + r.height / s / 2]; };
+const bannerIn = (id, t, out) => { sfx('ding', t); tl.fromTo(id, { y: -120, opacity: 1 }, { y: 0, duration: .45, ease: 'back.out(1.3)' }, t); if (out) tl.to(id, { y: -120, duration: .35, ease: 'power2.in' }, out); };
+const haptic = (t, id = '#stage') => { sfx('buzz', t); if (FRAME) id = '#pwrap'; tl.to(id, { x: FRAME ? 7 : 2, duration: .03, yoyo: true, repeat: 5, ease: 'none' }, t).set(id, { x: 0 }, t + .2); };
+const endCard = t => (sfx('logo', t), tl).fromTo('#endc', { opacity: 0 }, { opacity: 1, duration: .25 }, t).from('#endc img', { scale: .6, duration: .5, ease: 'back.out(2)' }, t);
+const devPos = sel => { const d = $('#dev').getBoundingClientRect(), s = d.width / 390, r = $(sel).getBoundingClientRect(); return [(r.left - d.left) / s + r.width / s / 2, (r.top - d.top) / s + r.height / s / 2]; };
+const center = devPos;
 let sd = 5; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
 const FX = [];
-function confetti(t0, n = 70) { for (let i = 0; i < n; i++) { const el = document.createElement('div'); el.className = 'conf'; el.style.background = ['#1F6BFF', '#FFC83D', '#fff', '#FF7A2F'][i % 4]; $('#stage').appendChild(el); FX.push({ el, t0: t0 + rnd() * .2, x: 195 + (rnd() - .5) * 60, y: 300, vx: (rnd() - .5) * 500, vy: -300 - rnd() * 350, r: rnd() * 900 }); } }
+function confetti(t0, n = 70) { sfx('win', t0); for (let i = 0; i < n; i++) { const el = document.createElement('div'); el.className = 'conf'; el.style.background = ['#1F6BFF', '#FFC83D', '#fff', '#FF7A2F'][i % 4]; $('#stage').appendChild(el); FX.push({ el, t0: t0 + rnd() * .2, x: 195 + (rnd() - .5) * 60, y: 300, vx: (rnd() - .5) * 500, vy: -300 - rnd() * 350, r: rnd() * 900 }); } }
 
 const CUTS = {
 day1() {
@@ -172,7 +199,7 @@ day1() {
   tl.add(() => {}, 0);
   const [nx, ny] = [337, 352];
   tap(5.9, nx, ny);
-  tl.to('#dim', { opacity: 1, duration: .25 }, 6.05).to('#sheet', { y: 0, duration: .45, ease: 'power3.out' }, 6.05);
+  sfx('swoosh', 6.05); tl.to('#dim', { opacity: 1, duration: .25 }, 6.05).to('#sheet', { y: 0, duration: .45, ease: 'power3.out' }, 6.05);
   text('so you can nudge them ⚡', 6.1, 8.6, 150);
   tap(7.0, 195, 0); // placeholder, repositioned below
   tl.set('#o2', { className: 'opt sel' }, 7.1);
@@ -220,15 +247,15 @@ nudge() {
   tl.to('#n1', { y: 0, duration: .45, ease: 'back.out(1.3)' }, .9);
   tl.to('#n1', { y: 76, duration: .35 }, 2.6).to('#n2', { y: 0, duration: .45, ease: 'back.out(1.3)' }, 2.6);
   tl.to('#n1', { y: 152, duration: .35 }, 3.6).to('#n2', { y: 76, duration: .35 }, 3.6).to('#n3', { y: 0, duration: .45, ease: 'back.out(1.3)' }, 3.6);
-  [.9, 2.6, 3.6].forEach(t => haptic(t, '#lock'));
+  [.9, 2.6, 3.6].forEach(t => { sfx('ding', t); haptic(t, '#lock'); });
   text('"5 more minutes…"', 3.1, 4.9, 205);
   tap(5.0, 195, 278);
   tl.set(N, { clock: '6:24' }, 5.2);
-  show('#cam', 5.2); tl.fromTo('#cam', { scale: .9, opacity: 0 }, { scale: 1, opacity: 1, duration: .3 }, 5.2);
+  show('#cam', 5.2); hide('#lock', 5.2); tl.fromTo('#cam', { scale: .9, opacity: 0 }, { scale: 1, opacity: 1, duration: .3 }, 5.2);
   text('fine. i\'m up 😤', 5.5, 7.6, 470);
-  tap(7.0, 195, 604); tl.to('#flash', { opacity: .9, duration: .05, yoyo: true, repeat: 1 }, 7.1);
+  sfx('shutter', 7.08); tap(7.0, 195, 604); tl.to('#flash', { opacity: .9, duration: .05, yoyo: true, repeat: 1 }, 7.1);
   show('#done', 7.4); tl.fromTo('#done', { opacity: 0 }, { opacity: 1, duration: .2 }, 7.4);
-  tl.to(N, { st: 13, duration: .05 }, 8.0); haptic(8.0);
+  tl.to(N, { st: 13, duration: .05 }, 8.0); haptic(8.0); sfx('win', 8.0);
   text('streak saved 🔥', 7.8, 9.8, 470);
   text('tag the friend who\'d\nnudge you at 6am 👇', 9.8, 11.2, 470);
   endCard(10.9);
@@ -246,7 +273,7 @@ lost() {
   tl.set('#toast', { opacity: 0 }, 0);
   text('pov: you lost the gym challenge 💀', 0, 3.2, 470);
   drag(2.6, 300, 560, 330, .5); tl.to('#sc', { y: -150, duration: .6, ease: 'power2.out' }, 2.6);
-  [0, 1, 2].forEach(i => tl.from('#re' + i, { scale: 0, duration: .3, ease: 'back.out(2.5)' }, 3.6 + i * .35));
+  [0, 1, 2].forEach(i => sfx('pop', 3.6 + i * .35)); [0, 1, 2].forEach(i => tl.from('#re' + i, { scale: 0, duration: .3, ease: 'back.out(2.5)' }, 3.6 + i * .35));
   tl.from('#cmt', { opacity: 0, duration: .3 }, 4.8);
   text('they all ordered the\nbiggest size 😭', 3.4, 6.6, 140);
   text('never skipping again', 6.6, 8.4, 140);
@@ -279,7 +306,7 @@ fake() {
   tap(4.4, 0, 0); tl.to(N, { dc: 1, duration: .02 }, 4.5); haptic(4.5);
   bannerIn('#b1', 5.3, 6.4); tl.to(N, { dc: 2, duration: .02 }, 5.5);
   bannerIn('#b2', 6.5, 7.6); tl.to(N, { dc: 3, duration: .02 }, 6.7);
-  tl.to('#nc', { opacity: 1, duration: .3 }, 7.0).from('#nc div', { scale: 1.4, duration: .35, ease: 'back.out(2)' }, 7.0); haptic(7.0);
+  sfx('fail', 7.0); tl.to('#nc', { opacity: 1, duration: .3 }, 7.0).from('#nc div', { scale: 1.4, duration: .35, ease: 'back.out(2)' }, 7.0); haptic(7.0);
   text('3 doubts = it doesn\'t count 😭', 7.2, 9.4, 470);
   text('tag the friend who\'d try this 👇', 9.4, 11.2, 470);
   endCard(10.9);
@@ -299,7 +326,7 @@ excuses() {
   ex.forEach(([, , r], i) => {
     const t = 2.4 + i * 2.25;
     tl.set('#typ', { display: 'flex' }, t - .9).set('#typ', { display: 'none' }, t);
-    tl.set(`#m${i + 1}`, { display: 'none' }, 0).set(`#m${i + 1}`, { display: 'flex' }, t).from(`#m${i + 1}`, { opacity: 0, y: 14, duration: .25, immediateRender: false }, t);
+    sfx('msg', t); tl.set(`#m${i + 1}`, { display: 'none' }, 0).set(`#m${i + 1}`, { display: 'flex' }, t).from(`#m${i + 1}`, { opacity: 0, y: 14, duration: .25, immediateRender: false }, t);
     text(r, t + .5, t + 2.15, 150);
   });
   tl.set('#typ', { display: 'none' }, 0);
@@ -330,7 +357,7 @@ showcase() {
   N.st = 30; N.va = 31; Object.assign(N, { lp0: 1, lp1: 2, lp2: 3, lp3: 4, pt0: 2840, pt1: 2610, pt2: 2475, pt3: 2390 });
   const sc = ['#s1', '#s2', '#s3', '#s4', '#s5'];
   sc.forEach(id => hide(id, 0)); tl.set('#toast', { opacity: 0 }, 0);
-  const at = [0, 3.3, 5.6, 8.4, 11.2]; sc.forEach((id, i) => { show(id, at[i]); if (i) hide(sc[i - 1], at[i]); });
+  const at = [0, 3.3, 5.6, 8.4, 11.2]; sc.forEach((id, i) => { if (i) sfx('swoosh', at[i]); show(id, at[i]); if (i) hide(sc[i - 1], at[i]); });
   text('gym with your crew,\nnot alone 💙', 0, 1.8, 470);
   text('nudge friends who skip ⚡', 1.8, 3.3, 470);
   tap(2.2, 0, 0); tl.fromTo('#toast', { opacity: 0 }, { opacity: 1, duration: .2 }, 2.4).to('#toast', { opacity: 0, duration: .2 }, 3.2); haptic(2.4);
@@ -338,9 +365,9 @@ showcase() {
   tl.from('#tro', { scale: .3, rotate: -20, duration: .6, ease: 'back.out(2.2)' }, 3.4); confetti(3.5); haptic(3.5);
   text('climb the leaderboard 📈', 5.6, 8.4, 470);
   tl.to(N, { pt3: 2895, duration: .9, ease: 'power2.out' }, 6.1).to('#lb3', { top: 0, duration: .5, ease: 'power3.inOut' }, 6.9).to(['#lb0', '#lb1', '#lb2'], { top: '+=68', duration: .5, ease: 'power3.inOut' }, 6.9)
-    .to(N, { lp3: 1, lp0: 2, lp1: 3, lp2: 4, duration: .01 }, 7.1); haptic(7.2);
+    .to(N, { lp3: 1, lp0: 2, lp1: 3, lp2: 4, duration: .01 }, 7.1); haptic(7.2); sfx('win', 7.2);
   text('flex your player card + ranks 💎', 8.4, 11.2, 560);
-  tl.fromTo('#shine', { x: -400 }, { x: 400, duration: 1.1, ease: 'power2.inOut' }, 8.8).to('#bd3', { opacity: 1, duration: .3 }, 9.9).from('#bd3', { scale: 1.4, duration: .4, ease: 'back.out(2)' }, 9.9); haptic(9.9);
+  tl.fromTo('#shine', { x: -400 }, { x: 400, duration: 1.1, ease: 'power2.inOut' }, 8.8).to('#bd3', { opacity: 1, duration: .3 }, 9.9).from('#bd3', { scale: 1.4, duration: .4, ease: 'back.out(2)' }, 9.9); haptic(9.9); sfx('win', 9.9);
   text('crew vs crew battles ⚔️', 11.2, 13.4, 470);
   tl.to('#vA', { width: '58%', duration: 1, ease: 'power2.inOut' }, 11.7).to(N, { va: 34, duration: 1 }, 11.7);
   text('join the waitlist,\nlink on our instagram 🔗', 13.0, 15, 300, 'dark');
@@ -354,7 +381,7 @@ tl.set('#fade', { opacity: 1 }, 0).to('#fade', { opacity: 0, duration: .2, ease:
 
 // taps that point at real elements: re-aim them now that layout exists
 function aim() {
-  const s = 2.76923, pos = id => { const r = $(id).getBoundingClientRect(); return [r.left / s + r.width / s / 2, r.top / s + r.height / s / 2]; };
+  const pos = devPos;
   const fixes = { day1: [[5.9, '#nb'], [7.0, '#o2'], [7.9, '#send']], lost: [[7.8, '#paid']], fake: [[4.4, '#db']], showcase: [[2.2, '#nb1']] }[CUT] || [];
   // sheet/scroll positions at the moment of the tap
   for (const [t, sel] of fixes) { tl.seek(t + .02, true); const [x, y] = pos(sel); tl.getChildren(false, true, false).filter(c => c.targets && c.targets()[0] === $('#touch') && Math.abs(c.startTime() - (t - .01)) < .001).forEach(c => { c.vars.left = x; c.vars.top = y; c.invalidate(); }); }
@@ -363,6 +390,12 @@ function aim() {
 window.DUR = DUR;
 window.renderAt = t => {
   tl.seek(t, false);
+  if (FRAME) {
+    let bump = 0; for (const e of SFX) if ((e.type === 'buzz' || e.type === 'ding') && t >= e.t) bump += Math.exp(-(t - e.t) * 7) * .035;
+    const push = 1 + .04 * Math.min(1, t / DUR);
+    $('#pmove').style.transform = `perspective(2400px) translateY(${Math.sin(t * 1.1) * 8}px) rotateX(${2 + Math.sin(t * .5) * 1.5}deg) rotateY(${Math.sin(t * .6) * 4}deg) rotate(${Math.sin(t * .7) * .8}deg) scale(${push + bump})`;
+    $('#fdots').style.transform = `translateY(${-(t * 25) % 54}px)`;
+  }
   for (const el of document.querySelectorAll('[data-s]')) el.textContent = N[el.dataset.s] ?? '9:41';
   for (const el of document.querySelectorAll('[data-n]')) el.textContent = Math.round(N[el.dataset.n] ?? 0).toLocaleString('en-US');
   for (const p of FX) { const k = t - p.t0; if (k < 0 || k > 1.6) { p.el.style.opacity = 0; continue; } p.el.style.opacity = 1; p.el.style.transform = `translate(${p.x + p.vx * k}px,${p.y + p.vy * k + 500 * k * k}px) rotate(${p.r * k}deg)`; }
