@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Crew Up Glow</title>
+<style>
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-400-normal.woff2);font-weight:400}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-700-normal.woff2);font-weight:700}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-800-normal.woff2);font-weight:800}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-400-normal.woff2);font-weight:400;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-700-normal.woff2);font-weight:700;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-700-normal.woff2);font-weight:800;unicode-range:U+0000-00FF,U+2000-206F}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--o:#ff6a3d;--y:#ffd23f;--ink:#fff6ef;--mut:#c9b8ae}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#050307;font-family:Taj,sans-serif;color:var(--ink)}
+.abs{position:absolute}
+#wall{inset:0;background:linear-gradient(180deg,rgba(5,3,7,0) 0%,rgba(5,3,7,.2) 50%,#050307 64%),repeating-linear-gradient(90deg,#121015 0 46px,#08060a 46px 58px)}
+#spill{left:-200px;top:200px;width:1480px;height:1300px;background:radial-gradient(50% 45% at 50% 45%,rgba(255,106,61,.32),rgba(255,106,61,0) 70%);mix-blend-mode:screen}
+#floor{left:0;right:0;top:1230px;bottom:0;background:linear-gradient(180deg,#0a0608,#020102)}
+#floorglow{left:90px;top:1240px;width:900px;height:260px;background:radial-gradient(50% 50% at 50% 0%,rgba(255,106,61,.22),rgba(255,106,61,0) 70%)}
+#vign{inset:0;background:radial-gradient(90% 60% at 50% 45%,rgba(0,0,0,0) 40%,rgba(0,0,0,.75) 100%)}
+#cam{left:0;top:0;width:1080px;height:1920px;perspective:1700px;perspective-origin:50% 880px}
+#screen{left:60px;top:600px;width:960px;height:600px;border-radius:26px;background:#0b080c;overflow:hidden;
+  box-shadow:0 0 0 3px #2a1d1a,0 0 140px rgba(255,106,61,.3),0 60px 120px rgba(0,0,0,.8);
+  -webkit-box-reflect:below 30px linear-gradient(transparent 55%,rgba(255,255,255,.16))}
+.sheen{inset:0;background:linear-gradient(115deg,rgba(255,255,255,.07),rgba(255,255,255,0) 35%)}
+.phase{inset:0}
+#ui{padding:32px 40px;direction:rtl}
+.bar{display:flex;align-items:center;justify-content:space-between}
+.wm{display:flex;align-items:center;gap:14px;font:800 40px/1 Taj;direction:ltr}
+.stack{display:flex;direction:ltr}
+.av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 22px/1 Taj;color:#1a0d08;border:3px solid #0b080c;margin-left:-12px;padding-top:3px}
+.tabs{display:flex;gap:14px;margin-top:24px;position:relative}
+.tab{position:relative;z-index:2;font:700 26px/1 Taj;padding:14px 26px;border-radius:999px;color:var(--mut);border:1px solid #2c2124}
+#pillhl{position:absolute;z-index:1;top:0;height:54px;border-radius:999px;background:var(--o);box-shadow:0 0 30px rgba(255,106,61,.7)}
+.cards{display:flex;gap:22px;margin-top:24px}
+.card{background:#140f12;border:1px solid #2c2124;border-radius:22px;padding:22px;position:relative}
+#poll{flex:1.25;height:400px}
+#who{flex:1;height:400px}
+h4{font:800 30px/1.2 Taj}
+h4 small{font:400 21px Taj;color:var(--mut);margin-right:10px}
+.opt{margin-top:20px;position:relative;height:72px;border-radius:16px;background:#1e171a;overflow:hidden}
+.opt i{position:absolute;right:0;top:0;bottom:0;width:0;background:linear-gradient(270deg,rgba(255,106,61,.55),rgba(255,106,61,.25));border-radius:16px}
+.opt.win i{background:linear-gradient(270deg,var(--o),#ff9a5a);box-shadow:0 0 26px rgba(255,106,61,.7)}
+.opt span{position:absolute;right:20px;top:14px;font:700 27px/1.1 Taj}
+.opt span small{font:400 19px Taj;color:#e8d8cf;margin-right:8px}
+.opt b{position:absolute;left:20px;top:20px;font:800 26px/1 Taj}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.p{display:flex;flex-direction:column;align-items:center;gap:8px;font:700 21px/1 Taj;color:var(--mut)}
+.p .av{width:78px;height:78px;margin:0;font-size:32px;position:relative;border:none}
+.p .ok{position:absolute;right:-4px;bottom:-4px;width:30px;height:30px;border-radius:50%;background:var(--y);border:3px solid #140f12;display:flex;align-items:center;justify-content:center;transform:scale(0)}
+.cnt{position:absolute;left:22px;right:22px;bottom:20px;font:800 30px/1 Taj;color:var(--y)}
+.cnt small{font:400 21px Taj;color:var(--mut);margin-right:8px}
+.w{position:absolute;left:0;right:0;top:160px;text-align:center;font:800 150px/1.05 Taj;direction:rtl}
+.w small{display:block;font:400 40px/1.2 Taj;color:var(--mut);margin-top:14px;direction:ltr}
+#line{position:absolute;left:0;right:0;top:200px;text-align:center;font:800 70px/1.3 Taj;direction:rtl}
+#line b{color:var(--o);text-shadow:0 0 30px rgba(255,106,61,.7)}
+#line small{display:block;font:400 32px/1.3 Taj;color:var(--mut);direction:ltr;margin-top:10px}
+#icon{position:absolute;left:390px;top:200px;width:180px;height:180px;border-radius:48px;background:linear-gradient(135deg,#ffb15a,var(--o) 55%,#d93a1c);box-shadow:0 0 80px rgba(255,106,61,.8)}
+#icon svg{position:absolute;inset:30px}
+#wordm{position:absolute;left:0;right:0;top:215px;text-align:center;font:800 140px/1 Taj;direction:ltr;letter-spacing:-.02em;clip-path:inset(0 50% 0 50%)}
+#wordm span{color:var(--o)}
+#tagline{position:absolute;left:0;right:0;top:390px;text-align:center;font:700 40px/1.3 Taj}
+#tagline small{display:block;font:400 28px Taj;color:var(--mut);margin-top:6px}
+#orb{left:820px;top:1380px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffe6c8,#ff9a5a 40%,#e0451f 75%,#6e1c0a)}
+#orbref{left:820px;top:1585px;width:190px;height:60px;border-radius:50%;background:radial-gradient(50% 50%,rgba(255,106,61,.45),rgba(255,106,61,0));filter:blur(8px)}
+.ov{left:0;right:0;text-align:center}
+#hook .a{font:800 104px/1.15 Taj;direction:rtl;text-shadow:0 6px 40px rgba(0,0,0,.8)}
+#hook .a b{color:var(--o);text-shadow:0 0 40px rgba(255,106,61,.6)}
+#hook .e{font:400 40px/1.3 Taj;color:var(--mut);margin-top:18px}
+#end .a{font:800 64px/1.2 Taj;direction:rtl}
+#end .e{font:400 34px/1.3 Taj;color:var(--mut);margin-top:8px}
+#label{left:56px;top:84px;font:700 24px/1 Taj;letter-spacing:.06em;color:#ffd9c9;border:2px solid rgba(255,217,201,.35);padding:12px 18px;border-radius:10px;background:rgba(0,0,0,.35);direction:rtl}
+#fade{inset:0;background:#000}
+</style>
+</head>
+<body>
+<div id="wall" class="abs"></div><div id="spill" class="abs"></div><div id="floor" class="abs"></div><div id="floorglow" class="abs"></div>
+<div id="cam" class="abs"><div id="screen" class="abs">
+  <div id="ui" class="abs phase">
+    <div class="bar"><div class="wm"><span id="mini"></span>Crew Up</div><div class="stack" id="stack"></div></div>
+    <div class="tabs"><div id="pillhl"></div><div class="tab" id="tb1">شلّتي</div><div class="tab" id="tb2">الخطط</div><div class="tab" id="tb3">الأماكن</div></div>
+    <div class="cards">
+      <div class="card" id="poll"><h4>طلعة الخميس<small>Thursday plan</small></h4><div id="opts"></div></div>
+      <div class="card" id="who"><h4>مين جاي؟<small>Who's in?</small></h4><div class="grid" id="ppl"></div>
+        <div class="cnt"><span id="cntn">٠</span> من ٦<small>are in</small></div></div>
+    </div>
+  </div>
+  <div id="kin" class="abs phase">
+    <div class="w" id="w1">اجمع شلّتك.<small>Gather your crew.</small></div>
+    <div class="w" id="w2">صوّتوا.<small>Vote.</small></div>
+    <div class="w" id="w3">واطلعوا.<small>Go.</small></div>
+    <div id="line">خطة الويكند<br><b>بدون ١٠٠ رسالة</b><small>Weekend plans, without 100 messages.</small></div>
+  </div>
+  <div id="logo" class="abs phase">
+    <div id="icon"><svg viewBox="0 0 100 100" fill="#fff6ef"><circle cx="30" cy="62" r="11"/><circle cx="70" cy="62" r="11"/><circle cx="50" cy="46" r="13"/><path d="M50 8l14 16H55v8H45v-8h-9z"/><path d="M14 92c2-10 9-16 16-16s14 6 16 16zM54 92c2-10 9-16 16-16s14 6 16 16z" opacity=".85"/></svg></div>
+    <div id="wordm">Crew <span>Up</span></div>
+    <div id="tagline">خططوا طلعاتكم سوا<small>Plan hangouts together</small></div>
+  </div>
+  <div class="abs sheen"></div>
+</div></div>
+<div id="orbref" class="abs"></div><div id="orb" class="abs"></div><div id="vign" class="abs"></div>
+<div id="hook" class="abs ov" style="top:240px"><div class="a">كل ويكند نفس السالفة:<br><b>وين نروح؟</b></div><div class="e">Every weekend, same question: where to?</div></div>
+<div id="end" class="abs ov" style="top:1330px"><div class="a">قريبًا</div><div class="e">Coming soon</div></div>
+<div id="label" class="abs">فكرة تطبيق · APP CONCEPT</div>
+<div id="fade" class="abs"></div>
+
+<script src="lib/gsap.min.js"></script>
+<script>
+const C = ['#ffb15a', '#ffd23f', '#ff8a6a', '#f6c6a8', '#ffa07a', '#ffe08a'];
+const people = ['ف', 'س', 'ع', 'ن', 'م', 'ر'];
+const names = ['فهد', 'سارة', 'عبدالله', 'نورة', 'مشعل', 'ريم'];
+const $ = s => document.querySelector(s);
+$('#stack').innerHTML = people.slice(0, 4).map((p, i) => `<div class="av" style="background:${C[i]}">${p}</div>`).join('');
+const opts = [['كوفي', 'Coffee', 2], ['بولينج', 'Bowling', 4], ['شاليه', 'Chalet', 1]];
+$('#opts').innerHTML = opts.map(([a, e], i) => `<div class="opt${i == 1 ? ' win' : ''}" id="o${i}"><i></i><span>${a}<small>${e}</small></span><b id="ov${i}">٠</b></div>`).join('');
+$('#ppl').innerHTML = names.map((n, i) => `<div class="p" id="p${i}"><div class="av" style="background:${C[i]}">${people[i]}<span class="ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a0d08" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></div>${n}</div>`).join('');
+const AD = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+const DUR = 14;
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+const vote = { a: 0, b: 0, c: 0, n: 0 };
+tl.set('#fade', { opacity: 1 }).to('#fade', { opacity: 0, duration: .45, ease: 'none' }, 0)
+  .fromTo('#hook', { opacity: 0, y: 30, scale: .96 }, { opacity: 1, y: 0, scale: 1, duration: .4 }, 0)
+  .to('#hook', { opacity: 0, y: -40, duration: .4, ease: 'power2.in' }, 2.15)
+  .fromTo('#screen', { rotateY: -24, rotateX: 6, z: -520, filter: 'brightness(.35)' }, { rotateY: 0, rotateX: 0, z: 0, filter: 'brightness(1)', duration: 2.6, ease: 'power2.inOut' }, .6)
+  .fromTo('#spill', { opacity: .15 }, { opacity: 1, duration: 2.4, ease: 'power2.inOut' }, .6)
+  .fromTo('#orb', { scale: .2, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.6)' }, .3)
+  .fromTo('#orbref', { opacity: 0 }, { opacity: 1, duration: 1.2 }, .3)
+  .set('#pillhl', { left: $('#tb1').offsetLeft, width: $('#tb1').offsetWidth }, 0)
+  .set('#tb1', { color: '#1a0d08' }, 0)
+  .to('#pillhl', { left: $('#tb2').offsetLeft, width: $('#tb2').offsetWidth, duration: .45, ease: 'power2.inOut' }, 2.6)
+  .to('#tb1', { color: '#c9b8ae', duration: .2 }, 2.65).to('#tb2', { color: '#1a0d08', duration: .2 }, 2.85)
+  .from('.card', { y: 40, opacity: 0, stagger: .12, duration: .6 }, 1.0)
+  // votes come in, the winner bar glows; friends tick in
+  .to(vote, { a: 2, b: 4, c: 1, duration: 1.8, ease: 'power2.inOut' }, 3.0)
+  .to(vote, { n: 5, duration: 1.6, ease: 'none' }, 3.4)
+  .to('#screen', { scale: 1.06, duration: 3, ease: 'sine.inOut' }, 3)
+  .to('#ui', { opacity: 0, scale: .96, filter: 'blur(6px)', duration: .45, ease: 'power2.in' }, 5.5);
+[0, 1, 2, 3, 4].forEach(i => tl.to(`#p${i} .ok`, { scale: 1, duration: .3, ease: 'back.out(2.4)' }, 3.5 + i * .32));
+tl.set('#kin .w, #line', { opacity: 0 }, 0);
+['#w1', '#w2', '#w3'].forEach((id, i) => {
+  const t = 5.85 + i * .85;
+  tl.fromTo(id, { opacity: 0, y: 60, scale: 1.25, filter: 'blur(10px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: .35 }, t)
+    .to(id, { opacity: 0, y: -50, filter: 'blur(8px)', duration: .25, ease: 'power2.in' }, t + .62);
+});
+tl.fromTo('#line', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .5 }, 8.45)
+  .to('#line', { opacity: 0, y: -30, duration: .35, ease: 'power2.in' }, 9.55)
+  .to('#screen', { scale: 1.0, rotateY: 5, duration: 4, ease: 'sine.inOut' }, 9.5)
+  .set('#icon, #tagline', { opacity: 0 }, 0)
+  .fromTo('#icon', { opacity: 0, scale: .2, rotate: -20 }, { opacity: 1, scale: 1, rotate: 0, duration: .55, ease: 'back.out(2)' }, 9.85)
+  .to('#icon', { scale: .55, top: 60, duration: .6, ease: 'power3.inOut' }, 10.55)
+  .to('#wordm', { clipPath: 'inset(0 0% 0 0%)', duration: .8, ease: 'power3.inOut' }, 10.7)
+  .fromTo('#tagline', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .5 }, 11.3)
+  .fromTo('#end', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5 }, 11.7)
+  .to('#fade', { opacity: 1, duration: .45, ease: 'none' }, DUR - .45);
+
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  [vote.a, vote.b, vote.c].forEach((v, i) => { $(`#o${i} i`).style.width = (v / 6 * 100) + '%'; $(`#ov${i}`).textContent = AD(Math.round(v)); });
+  $('#cntn').textContent = AD(Math.round(vote.n));
+  const pulse = .5 + .5 * Math.sin(t * 2.2);
+  $('#orb').style.boxShadow = `0 0 ${100 + 50 * pulse}px rgba(255,106,61,.75),0 0 ${260 + 90 * pulse}px rgba(255,106,61,.35)`;
+};
+document.fonts.ready.then(() => { renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

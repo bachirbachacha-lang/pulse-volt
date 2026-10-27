@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Crew Up Depth</title>
+<style>
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-400-normal.woff2);font-weight:400}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-700-normal.woff2);font-weight:700}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-800-normal.woff2);font-weight:800}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-400-normal.woff2);font-weight:400;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-700-normal.woff2);font-weight:700;unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Taj;src:url(fonts/tajawal-latin-700-normal.woff2);font-weight:800;unicode-range:U+0000-00FF,U+2000-206F}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--o:#ff6a3d;--y:#ffd23f;--ink:#fff6ef;--mut:#c9b8ae;--card:#16101a}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#07050c;font-family:Taj,sans-serif;color:var(--ink)}
+.abs{position:absolute}
+#bg{inset:0;background:radial-gradient(80% 50% at 50% 55%,#2a1220 0%,#0d0812 55%,#05040a 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(80px)}
+#dots{inset:-300px;background-image:radial-gradient(rgba(255,214,190,.18) 2px,transparent 2.5px);background-size:60px 60px}
+#stage{left:0;top:0;width:1080px;height:1920px;perspective:1500px;perspective-origin:50% 1050px}
+#world{position:absolute;left:540px;top:1060px;width:0;height:0;transform-style:preserve-3d}
+.o{position:absolute;transform-style:preserve-3d}
+/* phone */
+#phone{width:470px;height:960px;margin:-480px 0 0 -235px;border-radius:64px;background:#000;padding:14px;box-shadow:0 0 0 3px #3a2a30,0 60px 140px rgba(0,0,0,.7),0 0 160px rgba(255,106,61,.25)}
+#scr{width:100%;height:100%;border-radius:52px;background:linear-gradient(180deg,#1b1219,#120c12);overflow:hidden;direction:rtl;padding:70px 26px 0}
+.st{font:800 38px/1.2 Taj}
+.st small{display:block;font:400 22px Taj;color:var(--mut)}
+.row{display:flex;gap:-10px;margin-top:18px;direction:ltr;justify-content:flex-end}
+.av{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 28px/1 Taj;color:#1a0d08;padding-top:4px;flex:none}
+.row .av{margin-left:-14px;border:3px solid #1b1219}
+.pc{margin-top:22px;background:#21171f;border:1px solid #33252c;border-radius:24px;padding:20px}
+.pc b{display:block;font:800 28px/1.2 Taj}
+.pc span{font:400 21px Taj;color:var(--mut)}
+.btn{margin-top:16px;background:var(--o);color:#1a0d08;border-radius:16px;text-align:center;font:800 26px/1 Taj;padding:18px 0 14px}
+/* floating cards */
+.fc{background:rgba(26,18,26,.92);border:1px solid #3a2a30;border-radius:28px;padding:24px 28px;direction:rtl;box-shadow:0 40px 80px rgba(0,0,0,.55);white-space:nowrap}
+.fc .t{font:800 36px/1.2 Taj}
+.fc .e{font:400 22px/1.3 Taj;color:var(--mut);direction:ltr;text-align:right}
+.fc .i{width:58px;height:58px;border-radius:18px;background:var(--o);display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-left:16px}
+.bars{margin-top:14px;width:330px}
+.bars div{height:42px;border-radius:12px;background:#2a1f26;margin-top:10px;position:relative;overflow:hidden;font:700 22px/42px Taj;padding-right:14px}
+.bars i{position:absolute;right:0;top:0;bottom:0;background:rgba(255,106,61,.45);border-radius:12px}
+.bars div.win i{background:var(--o);box-shadow:0 0 20px rgba(255,106,61,.7)}
+.bars span{position:relative}
+.bub{width:120px;height:120px;margin:-60px 0 0 -60px;font-size:52px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.06)}
+/* overlays */
+.ov{left:0;right:0;text-align:center}
+#hook .a{font:800 112px/1.12 Taj;direction:rtl;text-shadow:0 6px 40px rgba(0,0,0,.8)}
+#hook .a b{color:var(--o);text-shadow:0 0 40px rgba(255,106,61,.55)}
+#hook .e{font:400 42px/1.3 Taj;color:var(--mut);margin-top:16px}
+.cap{top:200px}
+.cap .n{display:inline-flex;width:84px;height:84px;border-radius:50%;background:var(--o);color:#1a0d08;font:800 48px/1 Taj;align-items:center;justify-content:center;padding-top:6px}
+.cap .a{font:800 76px/1.2 Taj;direction:rtl;margin-top:18px}
+.cap .e{font:400 36px/1.3 Taj;color:var(--mut);margin-top:6px}
+#end{top:260px}
+#end .ic{width:200px;height:200px;margin:0 auto;border-radius:54px;background:linear-gradient(135deg,#ffb15a,var(--o) 55%,#d93a1c);box-shadow:0 0 90px rgba(255,106,61,.75);position:relative}
+#end .ic svg{position:absolute;inset:34px}
+#end .wm{font:800 150px/1 Taj;letter-spacing:-.02em;margin-top:40px;direction:ltr}
+#end .wm span{color:var(--o)}
+#end .a{font:700 50px/1.3 Taj;margin-top:24px;direction:rtl}
+#end .e{font:400 32px/1.3 Taj;color:var(--mut)}
+#end .pill{display:inline-block;margin-top:44px;padding:22px 46px;border-radius:999px;background:var(--o);color:#1a0d08;font:800 44px/1 Taj;direction:rtl}
+#label{left:56px;top:84px;font:700 24px/1 Taj;letter-spacing:.06em;color:#ffd9c9;border:2px solid rgba(255,217,201,.35);padding:12px 18px;border-radius:10px;background:rgba(0,0,0,.35);direction:rtl;z-index:9}
+#fade{inset:0;background:#000}
+</style>
+</head>
+<body>
+<div id="bg" class="abs"></div>
+<div id="dots" class="abs"></div>
+<div class="blob" id="b1" style="left:-200px;top:500px;width:700px;height:700px;background:rgba(255,106,61,.35)"></div>
+<div class="blob" id="b2" style="left:600px;top:1100px;width:600px;height:600px;background:rgba(255,210,63,.18)"></div>
+
+<div id="stage" class="abs"><div id="world">
+  <div class="o" id="phone"><div id="scr">
+    <div class="st">شلّة الويكند<small>Weekend crew · ٦</small></div>
+    <div class="row" id="row"></div>
+    <div class="pc"><b>الخميس · ٨:٠٠ م</b><span>بولينج · ٤ أصوات</span></div>
+    <div class="pc"><b>مين جاي؟</b><span>٥ من ٦ أكدوا</span></div>
+    <div class="btn">أنا جاي · I'm in</div>
+  </div></div>
+  <div id="avs"></div>
+  <div class="o fc" id="cPoll"><div class="t">وين نروح؟</div><div class="e">Where to?</div>
+    <div class="bars"><div><i style="width:34%"></i><span>كوفي</span></div><div class="win"><i style="width:67%"></i><span>بولينج</span></div><div><i style="width:17%"></i><span>شاليه</span></div></div></div>
+  <div class="o fc" id="cTime"><span class="i"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1a0d08" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="t">الخميس · ٨:٠٠ م</span><div class="e">Thursday · 8:00 pm</div></div>
+  <div class="o fc" id="cPlace"><span class="i" style="background:var(--y)"><svg width="30" height="30" viewBox="0 0 24 24" fill="#1a0d08"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><span class="t">بولينج · الرياض</span><div class="e">Bowling · Riyadh</div></div>
+  <div class="o fc" id="cRem"><span class="i"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1a0d08" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></span><span class="t">تذكير: بعد ساعة</span><div class="e">Reminder: in 1 hour</div></div>
+</div></div>
+
+<div id="hook" class="abs ov" style="top:230px"><div class="a">شلّتك كلها…<br><b>بمكان واحد</b></div><div class="e">Your whole crew, in one place.</div></div>
+<div id="caps"></div>
+<div id="end" class="abs ov">
+  <div class="ic"><svg viewBox="0 0 100 100" fill="#fff6ef"><circle cx="30" cy="62" r="11"/><circle cx="70" cy="62" r="11"/><circle cx="50" cy="46" r="13"/><path d="M50 8l14 16H55v8H45v-8h-9z"/><path d="M14 92c2-10 9-16 16-16s14 6 16 16zM54 92c2-10 9-16 16-16s14 6 16 16z" opacity=".85"/></svg></div>
+  <div class="wm">Crew <span>Up</span></div>
+  <div class="a">خططوا طلعاتكم سوا</div><div class="e">Plan hangouts together</div>
+  <div class="pill">قريبًا · Coming soon</div>
+</div>
+<div id="label" class="abs">فكرة تطبيق · APP CONCEPT</div>
+<div id="fade" class="abs"></div>
+
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const C = ['#ffb15a', '#ffd23f', '#ff8a6a', '#f6c6a8', '#ffa07a', '#ffe08a'];
+const L = ['ف', 'س', 'ع', 'ن', 'م', 'ر'];
+$('#row').innerHTML = L.map((l, i) => `<div class="av" style="background:${C[i]}">${l}</div>`).join('');
+// avatar bubbles orbiting the phone at different depths (parallax)
+const AV = [[-360, -520, 260], [380, -380, -260], [-420, 120, -420], [400, 260, 340], [-300, 560, 160], [330, -760, 120]];
+$('#avs').innerHTML = AV.map(([x, y, z], i) => `<div class="o av bub" id="a${i}" style="background:${C[i]}">${L[i]}</div>`).join('');
+const caps = [['١', 'سوّ شلّتك', 'Make your crew'], ['٢', 'اقترحوا وصوّتوا', 'Suggest & vote'], ['٣', 'الموعد والمكان', 'Time & place, sorted'], ['٤', 'تذكير قبل الطلعة', 'A reminder before you go']];
+$('#caps').innerHTML = caps.map(([n, a, e], i) => `<div class="abs ov cap" id="k${i}"><div class="n">${n}</div><div class="a">${a}</div><div class="e">${e}</div></div>`).join('');
+
+// card resting positions in 3D (x, y, z, rotY)
+const POS = { cPoll: [-250, -260, 300, 18], cTime: [230, 120, 220, -16], cPlace: [-230, 330, 380, 14], cRem: [230, -470, 260, -12] };
+const cam = { rx: 8, ry: -40, z: -1600, x: 0, y: 0 };
+const DUR = 14;
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+
+tl.set('#fade', { opacity: 1 }).to('#fade', { opacity: 0, duration: .4, ease: 'none' }, 0)
+  .fromTo('#hook', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: .4 }, 0)
+  .to('#hook', { opacity: 0, y: -40, duration: .35, ease: 'power2.in' }, 2.0)
+  // camera: dolly in through the scene, then swing to each feature
+  .to(cam, { z: -300, ry: -14, rx: 6, duration: 2.4, ease: 'power3.inOut' }, 0)
+  .to(cam, { ry: 12, rx: 10, z: -200, x: 80, y: 120, duration: 2, ease: 'power2.inOut' }, 2.2)
+  .to(cam, { ry: -16, rx: -6, z: -120, x: -60, y: -40, duration: 2, ease: 'power2.inOut' }, 4.2)
+  .to(cam, { ry: 18, rx: 4, z: -160, x: 40, y: -260, duration: 2, ease: 'power2.inOut' }, 6.2)
+  .to(cam, { ry: -10, rx: -10, z: -140, x: -20, y: 420, duration: 2, ease: 'power2.inOut' }, 8.2)
+  .to(cam, { ry: 0, rx: 0, z: -2600, x: 0, y: 0, duration: 1.6, ease: 'power3.in' }, 10.2)
+  .to('#stage', { opacity: 0, duration: .5 }, 11.3)
+  .fromTo('#end', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .6 }, 11.5)
+  .from('#end .ic', { scale: .3, rotate: -25, duration: .6, ease: 'back.out(2)' }, 11.5)
+  .to('#fade', { opacity: 1, duration: .45, ease: 'none' }, DUR - .45);
+// avatars pop in for step 1
+AV.forEach((_, i) => tl.fromTo(`#a${i}`, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: .45, ease: 'back.out(2.2)' }, 2.3 + i * .15));
+// cards fly in for steps 2-4
+[['#cPoll', 4.2], ['#cTime', 6.2], ['#cPlace', 6.45], ['#cRem', 8.2]].forEach(([id, t]) => tl.fromTo(id, { opacity: 0, '--k': 0 }, { opacity: 1, '--k': 1, duration: .6 }, t));
+caps.forEach((_, i) => tl.fromTo(`#k${i}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .4 }, 2.2 + i * 2).to(`#k${i}`, { opacity: 0, y: -30, duration: .3, ease: 'power2.in' }, 3.95 + i * 2));
+
+const place = (el, x, y, z, ry = 0, extra = '') => el.style.transform = `translate3d(${x}px,${y}px,${z}px) translate(-50%,-50%) rotateY(${ry}deg) ${extra}`;
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  $('#world').style.transform = `translateZ(${cam.z}px) rotateX(${cam.rx}deg) rotateY(${cam.ry}deg) translate3d(${-cam.x}px,${-cam.y}px,0)`;
+  $('#phone').style.transform = `translateY(${Math.sin(t * 1.3) * 8}px) rotateY(${Math.sin(t * .6) * 3}deg)`;
+  AV.forEach(([x, y, z], i) => { const el = $(`#a${i}`); el.style.transform = `translate3d(${x + Math.sin(t + i) * 14}px,${y + Math.cos(t * 1.2 + i) * 14}px,${z}px) scale(${gsap.getProperty(el, 'scale')})`; });
+  for (const [id, [x, y, z, ry]] of Object.entries(POS)) {
+    const el = document.getElementById(id), k = +getComputedStyle(el).getPropertyValue('--k') || 0;
+    place(el, x * (0.4 + .6 * k), y + Math.sin(t * 1.1 + x) * 10, z + (1 - k) * 900, ry);
+  }
+  // background layers move slower than the scene: parallax
+  $('#dots').style.transform = `translate(${cam.ry * -3}px,${cam.rx * 4}px)`;
+  $('#b1').style.transform = `translate(${cam.ry * -6 + Math.sin(t * .5) * 40}px,${Math.cos(t * .4) * 40}px)`;
+  $('#b2').style.transform = `translate(${cam.ry * 4}px,${Math.sin(t * .6) * 50}px)`;
+};
+document.fonts.ready.then(() => { renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

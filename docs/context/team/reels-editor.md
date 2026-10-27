@@ -27,3 +27,10 @@ Owner sent a reference (dark room, glowing app screen, kinetic type) + scroll-ci
 - scalp-elixir-motion-wave.mp4 (13 s): glowing wave surface, ingredient words, 50 ml ring, bottle rises. 3D RENDER.
 - Did not copy the reference's Spotify/TikTok branding or its "This took Claude 30 minutes" text.
 - Waiting on: owner's "Timeless Edit" material + extra prompts.
+
+## 27 Oct: Crew Up app concept ads (owner: "make ads for the app Crew Up", no brief yet)
+No notes existed on Crew Up, so I invented a placeholder concept: social app to plan hangouts with your crew (suggest places, vote, see who's in, reminders). Orange #ff6a3d on near-black, logo = 3 people + up arrow. Every video labelled «فكرة تطبيق · APP CONCEPT», ends «قريبًا · Coming soon», no fake downloads/ratings/reviews, no app-store logos. Names in UI are made up.
+- crewup-glow.mp4 (14 s): reference style, glowing screen with crew poll + who's-in, kinetic «اجمع شلّتك. صوّتوا. واطلعوا.», logo reveal.
+- crewup-depth.mp4 (14 s): CSS 3D layered depth: phone + floating cards/avatars, camera swings to 4 features, parallax background.
+- crewup-type.mp4 (13 s): kinetic type: «مين فاضي الخميس؟», group-chat pile-up blown away, crew network draws itself, logo.
+- Source: ads/motion/crewup-*.html. Waiting on the real Crew Up brief (what it does, name/logo/colours) to redo properly.
