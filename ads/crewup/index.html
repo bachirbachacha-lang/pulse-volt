@@ -29,7 +29,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:
 #corner{left:50px;top:80px;display:flex;align-items:center;gap:14px;z-index:20}
 #corner span{font:700 22px/1 Sora;color:#c9d3e8;letter-spacing:.08em;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
 .logo{width:64px;height:64px;border-radius:18px;background:var(--b);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(31,107,255,.5);flex:none}
-.logo svg{width:62%;height:62%}
+.logo{overflow:hidden}.logo img{width:108%;height:108%;object-fit:cover;display:block}
 /* phone */
 .phone{left:250px;top:620px;width:580px;height:1180px;border-radius:72px;background:#000;padding:16px;box-shadow:0 0 0 3px #2a3142,0 60px 140px rgba(0,0,0,.7),0 0 160px rgba(31,107,255,.3)}
 .scr{position:relative;width:100%;height:100%;border-radius:58px;overflow:hidden;background:#0d1017;padding:64px 28px 0}
@@ -127,7 +127,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:
 <script>
 const CUT = new URLSearchParams(location.search).get('cut') || 'day1';
 const $ = s => document.querySelector(s);
-const LOGO = `<svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"><path d="M74 30A32 32 0 1 0 74 70"/><path d="M58 58V22M44 34l14-14 14 14" stroke-width="11"/></svg>`;
+const LOGO = `<img src="img/crewup-logo.png" alt="">`;
 $('#cl').innerHTML = LOGO;
 const AVC = { O: '#5B93FF', K: '#FFC83D', F: '#FF7A2F', Y: '#c9d3e8', S: '#7ee0b0' };
 const av = (l, s = 52) => `<div class="av" style="width:${s}px;height:${s}px;font-size:${s * .45}px;background:${AVC[l] || '#9aa3b5'}">${l}</div>`;

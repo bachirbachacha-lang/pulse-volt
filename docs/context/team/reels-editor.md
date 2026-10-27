@@ -42,3 +42,4 @@ crewup-01-day1 (15 s), crewup-02-nudge (13 s), crewup-03-lost (13 s), crewup-04-
 - The orange crewup-glow/depth/type.mp4 from earlier are OFF-BRAND now (wrong colours/app idea). Don't post them.
 - Couldn't open the "New game project" chat / crewup repo from this chat (access blocked). Ask owner to share designs or allow the repo.
 - Next: swap mockups for owner's real screen recordings; live-action skit versions need the owner to film.
+- 27 Oct: owner sent the real logo (blue rounded square, white angular C + arrow) -> ads/crewup/img/crewup-logo.png. All 6 videos re-rendered with it.
