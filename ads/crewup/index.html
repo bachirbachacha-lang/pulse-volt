@@ -116,6 +116,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:
 .end .tag{font:700 44px/1.3 Sora;color:#cfd8ea;margin-top:20px}
 .end .cta{display:inline-block;margin-top:50px;background:var(--b);font:800 44px/1.2 Sora;padding:28px 44px;border-radius:30px;box-shadow:0 0 60px rgba(31,107,255,.6)}
 .end .h{font:700 36px Sora;color:var(--b2);margin-top:30px}
+/* English-only by default; add &ar=1 to the URL to show the Arabic lines again */
+body:not(.ar-on) .ar{display:none}
 </style>
 </head>
 <body>
@@ -126,6 +128,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:
 <script src="lib/gsap.min.js"></script>
 <script>
 const CUT = new URLSearchParams(location.search).get('cut') || 'day1';
+if (new URLSearchParams(location.search).get('ar') === '1') document.body.classList.add('ar-on');
 const $ = s => document.querySelector(s);
 const LOGO = `<img src="img/crewup-logo.png" alt="">`;
 $('#cl').innerHTML = LOGO;
