@@ -34,3 +34,11 @@ No notes existed on Crew Up, so I invented a placeholder concept: social app to 
 - crewup-depth.mp4 (14 s): CSS 3D layered depth: phone + floating cards/avatars, camera swings to 4 features, parallax background.
 - crewup-type.mp4 (13 s): kinetic type: «مين فاضي الخميس؟», group-chat pile-up blown away, crew network draws itself, logo.
 - Source: ads/motion/crewup-*.html. Waiting on the real Crew Up brief (what it does, name/logo/colours) to redo properly.
+
+## 27 Oct: CrewUp brief received (real brief replaces my 27 Oct orange "Crew Up" guess)
+CrewUp = fitness app (coming soon), friends do gym challenges; @getcrewup; blue #1F6BFF on #090B10. Rules: no launch date, no real-money betting, no fake user numbers/reviews; CTA "Join the waitlist, link on our Instagram" or "Would you use this?".
+Made the 6 brief ideas (ads/crewup/index.html, cuts below), all silent, EN + Saudi AR text, labelled "APP PREVIEW · CONCEPT" (mockup screens, not real app footage):
+crewup-01-day1 (15 s), crewup-02-nudge (13 s), crewup-03-lost (13 s), crewup-04-fake (13 s), crewup-05-excuses (17 s), crewup-06-showcase (16 s).
+- The orange crewup-glow/depth/type.mp4 from earlier are OFF-BRAND now (wrong colours/app idea). Don't post them.
+- Couldn't open the "New game project" chat / crewup repo from this chat (access blocked). Ask owner to share designs or allow the repo.
+- Next: swap mockups for owner's real screen recordings; live-action skit versions need the owner to film.
