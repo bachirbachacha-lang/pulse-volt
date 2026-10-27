@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Depth</title>
+<style>
+@font-face{font-family:Sora;src:url(fonts/sora-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#7aa6ff;--o:#FF7A2F;--g:#FFC83D;--mut:#9aa6bd;--card:#121826}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#05070d;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff}
+.abs{position:absolute}
+#bg{inset:0;background:radial-gradient(80% 50% at 50% 56%,#0f2a6b 0%,#080e1f 55%,#04060b 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(80px)}
+#dots{inset:-300px;background-image:radial-gradient(rgba(122,166,255,.16) 2px,transparent 2.5px);background-size:60px 60px}
+#stage{left:0;top:0;width:1080px;height:1920px;perspective:1500px;perspective-origin:50% 1050px}
+#world{position:absolute;left:540px;top:1080px;width:0;height:0;transform-style:preserve-3d}
+.o{position:absolute;transform-style:preserve-3d}
+#phone{width:470px;height:960px;margin:-480px 0 0 -235px;border-radius:66px;background:linear-gradient(145deg,#3a4152,#11141b 40%,#2a303d);padding:13px;box-shadow:0 0 0 2px #4a5265,0 60px 140px rgba(0,0,0,.7),0 0 160px rgba(31,107,255,.35)}
+#scr{width:100%;height:100%;border-radius:54px;background:#090B10;overflow:hidden;padding:64px 22px 0;position:relative}
+#scr .isl{position:absolute;left:50%;top:14px;width:120px;height:34px;margin-left:-60px;border-radius:18px;background:#000}
+.hd{display:flex;justify-content:space-between;align-items:center}
+.hd b{font:800 32px Inter;letter-spacing:-.5px}
+.pf{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 22px Inter;color:#0a0f1c;flex:none}
+.pc{margin-top:18px;background:var(--card);border-radius:22px;padding:18px}
+.cap{font:600 15px Inter;color:var(--mut);letter-spacing:.04em}
+.row{display:flex;align-items:center;gap:10px}
+.wk{display:flex;gap:5px}.wk i{width:22px;height:22px;border-radius:7px;background:#232a3a}.wk i.on{background:var(--b)}
+.fc{background:rgba(18,24,38,.94);border:1px solid #2a3449;border-radius:30px;padding:24px 28px;box-shadow:0 40px 80px rgba(0,0,0,.55);white-space:nowrap}
+.fc .t{font:800 36px/1.2 Inter}
+.fc .e{font:600 24px/1.3 Inter;color:var(--mut);margin-top:4px}
+.fc .i{width:62px;height:62px;border-radius:18px;background:var(--b);display:inline-flex;align-items:center;justify-content:center;font-size:34px;vertical-align:middle;margin-right:16px}
+.bub{width:124px;height:124px;margin:-62px 0 0 -62px;font-size:52px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.06)}
+.ov{left:0;right:0;text-align:center}
+#hook .a{font:800 120px/1.04 Sora;letter-spacing:-.05em;text-shadow:0 6px 40px rgba(0,0,0,.8)}
+#hook .a b{color:var(--b2);text-shadow:0 0 50px rgba(31,107,255,.8)}
+#hook .e{font:600 42px/1.3 Inter;color:#c4cde0;margin-top:20px}
+.cp{top:190px}
+.cp .n{display:inline-flex;width:84px;height:84px;border-radius:50%;background:var(--b);font:800 46px/1 Sora;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(31,107,255,.7)}
+.cp .a{font:800 74px/1.1 Sora;letter-spacing:-.04em;margin-top:18px}
+.cp .e{font:600 34px/1.3 Inter;color:#c4cde0;margin-top:8px}
+#end{top:470px}
+#end img{width:220px;height:220px;border-radius:54px;box-shadow:0 0 100px rgba(31,107,255,.8)}
+#end .wm{font:800 160px/1 Sora;letter-spacing:-.05em;margin-top:44px}
+#end .a{font:700 46px/1.3 Inter;color:#d6ddee;margin-top:22px}
+#end .pill{display:inline-block;margin-top:46px;padding:26px 44px;border-radius:30px;background:var(--b);font:700 42px/1.2 Inter;box-shadow:0 0 60px rgba(31,107,255,.7)}
+#end .h{font:700 36px Inter;color:var(--b2);margin-top:28px}
+#label{left:50px;top:80px;display:flex;align-items:center;gap:14px;z-index:9}
+#label img{width:60px;height:60px;border-radius:15px}
+#label span{font:600 22px Inter;letter-spacing:.06em;color:#c9d3e8;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
+#flash{inset:0;background:#cfe0ff;mix-blend-mode:screen;opacity:0}
+#fade{inset:0;background:#000}
+</style>
+</head>
+<body>
+<div id="bg" class="abs"></div><div id="dots" class="abs"></div>
+<div class="blob" id="b1" style="left:-200px;top:520px;width:700px;height:700px;background:rgba(31,107,255,.35)"></div>
+<div class="blob" id="b2" style="left:600px;top:1150px;width:600px;height:600px;background:rgba(255,200,61,.14)"></div>
+<div id="stage" class="abs"><div id="world">
+  <div class="o" id="phone"><div id="scr"><div class="isl"></div>
+    <div class="hd"><b>Home</b><div class="pf" style="background:#d6dbe6">Y</div></div>
+    <div class="pc"><div class="cap">CURRENT STREAK</div><div class="row" style="margin-top:8px"><span style="font-size:40px">🔥</span><span style="font:800 56px Inter;color:var(--o)">12</span><span style="font:600 20px Inter;color:var(--mut)">days</span></div></div>
+    <div class="pc"><div style="font:700 26px Inter">Gym 4x per week</div><div style="font:500 18px Inter;color:var(--mut);margin-top:4px">Loser buys coffee ☕ · 3 days left</div>
+      ${ROWS}</div>
+    <div style="margin-top:18px;height:70px;border-radius:20px;background:var(--b);display:flex;align-items:center;justify-content:center;font:700 26px Inter">📸 Check in</div>
+  </div></div>
+  <div id="avs"></div>
+  <div class="o fc" id="cStart"><span class="i">🏁</span><span class="t">New challenge</span><div class="e">Gym 4x per week · loser buys coffee ☕</div></div>
+  <div class="o fc" id="cCheck"><span class="i" style="background:#2bd46b">📸</span><span class="t">Live check-in ✅</span><div class="e">Gym · 6:24 AM · 8,412 steps</div></div>
+  <div class="o fc" id="cNudge"><span class="i">⚡</span><span class="t">Omar nudged you</span><div class="e">“The couch is not a workout” 🛋️</div></div>
+  <div class="o fc" id="cWin"><span class="i" style="background:var(--g)">🏆</span><span class="t">Challenge won</span><div class="e">+250 XP · 🥇 Gold → 💎 Diamond</div></div>
+</div></div>
+<div id="hook" class="abs ov" style="top:220px"><div class="a">Gym with your<br>crew, <b>not alone.</b></div><div class="e">the app my friends can’t escape 😭</div></div>
+<div id="caps"></div>
+<div id="end" class="abs ov"><img src="img/crewup-logo.png"><div class="wm">CrewUp</div><div class="a">Gym with your crew, not alone.</div>
+  <div class="pill">Join the waitlist · link on our IG</div><div class="h">@getcrewup</div></div>
+<div id="label" class="abs"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div>
+<div id="flash" class="abs"></div><div id="fade" class="abs"></div>
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const SFX = []; window.SFX = SFX; const sfx = (type, t) => SFX.push({ type, t });
+const C = { O: '#6E9BFF', K: '#FFC83D', F: '#FF9A5A', Y: '#d6dbe6' };
+$('#scr').innerHTML = $('#scr').innerHTML.replace('${ROWS}', [['O', 'Omar', 4], ['K', 'Khalid', 3], ['Y', 'You', 3], ['F', 'Faisal', 0]].map(([l, n, k]) =>
+  `<div class="row" style="margin-top:14px"><div class="pf" style="width:40px;height:40px;font-size:17px;background:${C[l]}">${l}</div><span style="font:600 21px Inter;width:84px">${n}</span><div class="wk">${[0, 1, 2, 3].map(j => `<i class="${j < k ? 'on' : ''}"></i>`).join('')}</div></div>`).join(''));
+const AV = [['O', -380, -560, 260], ['K', 390, -420, -260], ['F', -420, 160, -420], ['Y', 400, 300, 340]];
+$('#avs').innerHTML = AV.map(([l], i) => `<div class="o pf bub" id="a${i}" style="background:${C[l]}">${l}</div>`).join('');
+const caps = [['1', 'Start a challenge', 'pick the punishment for the loser'], ['2', 'Check in. Live.', 'photo at the gym · steps sync · no faking'], ['3', 'Nudge the slackers', 'one tap, straight to their phone'], ['4', 'Win trophies & ranks', 'Bronze → Silver → Gold → Diamond']];
+$('#caps').innerHTML = caps.map(([n, a, e], i) => `<div class="abs ov cp" id="k${i}"><div class="n">${n}</div><div class="a">${a}</div><div class="e">${e}</div></div>`).join('');
+
+const POS = { cStart: [-200, -230, 300, 16], cCheck: [210, 140, 220, -14], cNudge: [-190, -430, 330, 12], cWin: [200, 380, 360, -12] };
+const cam = { rx: 8, ry: -40, z: -1600, x: 0, y: 0 };
+const DUR = 14;
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+tl.set('#fade', { opacity: 1 }).to('#fade', { opacity: 0, duration: .35, ease: 'none' }, 0)
+  .fromTo('#hook', { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: .35 }, 0)
+  .to('#hook', { opacity: 0, y: -40, duration: .3, ease: 'power2.in' }, 2.0)
+  .to(cam, { z: -320, ry: -14, rx: 6, duration: 2.3, ease: 'power3.inOut' }, 0)
+  .to(cam, { ry: 14, rx: 8, z: -170, x: -60, y: -180, duration: 1.8, ease: 'power2.inOut' }, 2.2)
+  .to(cam, { ry: -16, rx: -4, z: -130, x: 60, y: 60, duration: 1.8, ease: 'power2.inOut' }, 4.2)
+  .to(cam, { ry: 16, rx: 6, z: -150, x: -40, y: -300, duration: 1.8, ease: 'power2.inOut' }, 6.2)
+  .to(cam, { ry: -12, rx: -8, z: -150, x: 40, y: 400, duration: 1.8, ease: 'power2.inOut' }, 8.2)
+  .to(cam, { ry: 0, rx: 0, z: -2700, x: 0, y: 0, duration: 1.5, ease: 'power3.in' }, 10.2)
+  .to('#stage', { opacity: 0, duration: .45 }, 11.2)
+  .to('#flash', { opacity: .6, duration: .07, yoyo: true, repeat: 1 }, 11.4)
+  .fromTo('#end', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .55 }, 11.45)
+  .from('#end img', { scale: .3, rotate: -25, duration: .6, ease: 'back.out(2)' }, 11.45)
+  .to('#fade', { opacity: 1, duration: .4, ease: 'none' }, DUR - .4);
+sfx('logo', 11.45);
+AV.forEach((_, i) => { tl.fromTo(`#a${i}`, { opacity: 0, '--s': 0 }, { opacity: 1, '--s': 1, duration: .45, ease: 'back.out(2.2)' }, 1.0 + i * .15); sfx('pop', 1.0 + i * .15); });
+[['#cStart', 2.35, 'ding'], ['#cCheck', 4.35, 'shutter'], ['#cNudge', 6.35, 'ding'], ['#cWin', 8.35, 'win']].forEach(([id, t, s]) => { tl.fromTo(id, { opacity: 0, '--k': 0 }, { opacity: 1, '--k': 1, duration: .6 }, t); sfx(s, t); });
+sfx('buzz', 6.45); tl.to('#phone', { x: 10, duration: .04, yoyo: true, repeat: 9, ease: 'none' }, 6.45).set('#phone', { x: 0 }, 6.85);
+caps.forEach((_, i) => tl.fromTo(`#k${i}`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .4 }, 2.2 + i * 2).to(`#k${i}`, { opacity: 0, y: -30, duration: .3, ease: 'power2.in' }, 3.95 + i * 2));
+
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  $('#world').style.transform = `translateZ(${cam.z}px) rotateX(${cam.rx}deg) rotateY(${cam.ry}deg) translate3d(${-cam.x}px,${-cam.y}px,0)`;
+  $('#phone').style.transform = `translateX(${gsap.getProperty('#phone', 'x')}px) translateY(${Math.sin(t * 1.3) * 8}px) rotateY(${Math.sin(t * .6) * 3}deg)`;
+  AV.forEach(([, x, y, z], i) => { const el = $(`#a${i}`), s = +getComputedStyle(el).getPropertyValue('--s') || 0; el.style.transform = `translate3d(${x + Math.sin(t + i) * 14}px,${y + Math.cos(t * 1.2 + i) * 14}px,${z}px) scale(${s})`; });
+  for (const [id, [x, y, z, ry]] of Object.entries(POS)) {
+    const el = document.getElementById(id), k = +getComputedStyle(el).getPropertyValue('--k') || 0;
+    el.style.transform = `translate3d(${x * (0.4 + .6 * k)}px,${y + Math.sin(t * 1.1 + x) * 10}px,${z + (1 - k) * 900}px) translate(-50%,-50%) rotateY(${ry}deg)`;
+  }
+  $('#dots').style.transform = `translate(${cam.ry * -3}px,${cam.rx * 4}px)`;
+  $('#b1').style.transform = `translate(${cam.ry * -6 + Math.sin(t * .5) * 40}px,${Math.cos(t * .4) * 40}px)`;
+  $('#b2').style.transform = `translate(${cam.ry * 4}px,${Math.sin(t * .6) * 50}px)`;
+};
+document.fonts.ready.then(async () => { await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

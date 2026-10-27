@@ -108,13 +108,16 @@ def fail():      # descending "nope"
     return .22 * place((0, a), (.16, b))
 
 
-def logo():      # soft chord + riser for the end card
-    chord = sum(bell(f, 1.4, 2.6) for f in (523, 659, 784, 1047)) * .3
-    return place((0, swoosh(.5, 11)), (.25, chord))
+def logo():      # soft chord for the end card
+    return sum(bell(f, 1.4, 2.6) for f in (523, 659, 784, 1047)) * .3
 
 
 GEN = {'ding': ding, 'buzz': buzz, 'tap': tap, 'pop': pop, 'msg': msg, 'swoosh': swoosh,
        'swipe': swipe, 'shutter': shutter, 'win': win, 'fail': fail, 'logo': logo}
+
+
+# owner (27 Oct): no whoosh sounds, so these cues stay silent
+MUTED = {'swoosh', 'swipe'}
 
 
 def main(frames_dir, out_wav):
@@ -123,6 +126,8 @@ def main(frames_dir, out_wav):
     mix = np.zeros(int(SR * (dur + 2)))
     cache = {}
     for cue in data['cues']:
+        if cue['type'] in MUTED:
+            continue
         sig = cache.setdefault(cue['type'], GEN[cue['type']]())
         i = int(cue['t'] * SR)
         end = min(len(mix), i + len(sig))

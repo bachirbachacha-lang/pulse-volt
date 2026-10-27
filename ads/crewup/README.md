@@ -11,3 +11,10 @@ Stock photos/video were blocked by the environment network policy (unsplash/pexe
 ## Phone-from-outside + sound effects (crewup-phone-0N-*.mp4)
 `EXTRA='&frame=1' node record.js real.html <cut> <out>` puts the iPhone screen inside a 3D-tilting phone on the blue CrewUp background, text above the phone, phone bumps on every notification/buzz. record.js also saves <out>/sfx.json (cue list).
 `python3 sfx.py <out> <out>.wav` builds the sound track (all sounds synthesized: notification "ba-bum", vibration buzz, taps, swooshes, chat pops, win jingle, fail, logo chord), then mux: `ffmpeg -framerate 30 -i <out>/f%05d.jpg -i <out>.wav -c:v libx264 -crf 18 -pix_fmt yuv420p -c:a aac -shortest ...`.
+
+## Motion-design ads (crewup-motion-0N-*.mp4), same styles as the Scalp Elixir / Pixel & Co. motion sets
+- m-glow.html: dark room + glowing screen (challenge, streak, nudge toast), kinetic "Challenge. Check in. Nudge.", logo reveal.
+- m-3d.html: Three.js fly-through past Bronze/Silver/Gold/Diamond badges to a gold trophy with orbiting dumbbells (logo via img/logo-data.js because file:// blocks image textures).
+- m-type.html: kinetic type: gym group-chat excuses blown away, crew network draws itself, Challenge · Check in · Nudge · Win, logo.
+- m-depth.html: CSS 3D phone with floating cards for the 4 brief steps, parallax background.
+Render: `node record.js m-<x>.html x <out>` then `python3 sfx.py <out> <out>.wav` and mux. No whoosh sounds (owner, 27 Oct): sfx.py mutes swoosh/swipe.

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp 3D</title>
+<style>
+@font-face{font-family:Sora;src:url(fonts/sora-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Mont;src:url(fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#04060c;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff}
+#view{position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 58%,#0b1f4d 0%,#060c1c 45%,#03050a 80%)}
+canvas{position:absolute;inset:0;width:1080px;height:1920px}
+.l{position:absolute;opacity:0}
+.c{left:50px;right:50px;text-align:center}
+.h{font:800 124px/1.04 Sora;letter-spacing:-.045em;text-shadow:0 8px 50px rgba(0,0,0,.7)}
+.h b{color:#7aa6ff;text-shadow:0 0 50px rgba(31,107,255,.9)}
+.s{font:600 42px/1.3 Inter;color:#c9d3e8;margin-top:22px}
+.rank{font:800 190px/1 Mont;letter-spacing:-.02em}
+.rank small{display:block;font:700 40px/1.2 Inter;letter-spacing:.3em;margin-top:18px;color:#c9d3e8}
+#shade{position:absolute;left:0;right:0;top:0;height:720px;background:linear-gradient(180deg,rgba(3,5,10,.75),rgba(3,5,10,0))}
+#shade2{position:absolute;left:0;right:0;bottom:0;height:520px;background:linear-gradient(0deg,rgba(3,5,10,.85),rgba(3,5,10,0))}
+#lab{left:50px;top:80px;display:flex;align-items:center;gap:14px;opacity:1;z-index:5}
+#lab img{width:60px;height:60px;border-radius:15px}
+#lab span{font:600 22px Inter;letter-spacing:.06em;color:#c9d3e8;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
+#end img{width:170px;height:170px;border-radius:42px;box-shadow:0 0 90px rgba(31,107,255,.8)}
+#end .wm{font:800 150px/1 Sora;letter-spacing:-.05em;margin-top:30px}
+#end .cta{display:inline-block;margin-top:40px;background:#1F6BFF;font:700 42px/1.2 Inter;padding:26px 44px;border-radius:28px;box-shadow:0 0 60px rgba(31,107,255,.7)}
+#flash{position:absolute;inset:0;background:#d6e4ff;opacity:0;mix-blend-mode:screen}
+#fade{position:absolute;inset:0;background:#000}
+</style>
+</head>
+<body>
+<div id="view">
+<canvas id="c" width="1080" height="1920"></canvas>
+<div id="shade"></div><div id="shade2"></div>
+<div id="h1" class="l c" style="top:300px"><div class="h">Turn the gym<br>into a <b>game.</b></div><div class="s">with your friends 👀</div></div>
+<div id="r0" class="l c" style="top:330px"><div class="rank" style="color:#e3a26f">Bronze.<small>DAY 1</small></div></div>
+<div id="r1" class="l c" style="top:330px"><div class="rank" style="color:#e6ebf3">Silver.<small>KEEP THE STREAK</small></div></div>
+<div id="r2" class="l c" style="top:330px"><div class="rank" style="color:#ffd35a">Gold.<small>BEAT YOUR CREW</small></div></div>
+<div id="r3" class="l c" style="top:330px"><div class="rank" style="color:#9fdcff;text-shadow:0 0 50px rgba(120,200,255,.8)">Diamond.<small>LEGEND STATUS</small></div></div>
+<div id="h2" class="l c" style="top:300px"><div class="h" style="font-size:104px">Win with<br>your <b>crew.</b></div><div class="s">loser buys everyone coffee ☕</div></div>
+<div id="h3" class="l c" style="top:330px"><div class="h" style="font-size:78px">🔥 Streaks<br>🏆 Trophies<br>⚔️ Crew battles</div></div>
+<div id="end" class="l c" style="top:260px"><img src="img/crewup-logo.png"><div class="wm">CrewUp</div><div class="s" style="margin-top:14px">Gym with your crew, not alone.</div>
+  <div class="cta">Join the waitlist · link on our IG</div><div class="s" style="color:#7aa6ff;margin-top:26px">@getcrewup</div></div>
+<div id="lab" class="l"><img src="img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<div id="flash"></div><div id="fade"></div>
+</div>
+<script src="img/logo-data.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const SFX = []; window.SFX = SFX; const sfx = (type, t) => SFX.push({ type, t });
+const W = 1080, H = 1920, DUR = 14;
+const R = new THREE.WebGLRenderer({ canvas: $('c'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+R.setPixelRatio(1); R.setSize(W, H, false); R.outputEncoding = THREE.sRGBEncoding; R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.05;
+R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene(); scene.fog = new THREE.Fog(0x04060c, 16, 60);
+const cam = new THREE.PerspectiveCamera(34, W / H, .1, 200);
+// studio reflections: blue + warm panels
+(function () {
+  const pm = new THREE.PMREMGenerator(R), env = new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.BoxGeometry(20, 20, 20), new THREE.MeshBasicMaterial({ color: 0x060a14, side: THREE.BackSide })));
+  [[0xffffff, [-6, 6, 5], [6, 2]], [0x4f8bff, [6, 2, -4], [3, 8]], [0xffffff, [0, 9, 0], [10, 1.4]], [0xffd27a, [-7, -1, -4], [2, 6]], [0x4f8bff, [7, -2, 5], [2, 5]]].forEach(([c, p, s]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(s[0], s[1]), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide })); m.position.set(...p); m.lookAt(0, 0, 0); env.add(m);
+  });
+  scene.environment = pm.fromScene(env, .03).texture;
+})();
+scene.add(new THREE.AmbientLight(0x2a3e6e, .5));
+const key = new THREE.DirectionalLight(0xfff1dc, 2.4); key.position.set(-4, 9, 6); key.castShadow = true; key.shadow.mapSize.set(1024, 1024);
+Object.assign(key.shadow.camera, { left: -6, right: 6, top: 7, bottom: -4 }); scene.add(key);
+const rimA = new THREE.PointLight(0x3f7bff, 4, 18); rimA.position.set(3.5, 3, -3); scene.add(rimA);
+const rimB = new THREE.PointLight(0x3f7bff, 3, 18); rimB.position.set(-3.5, 1, -3); scene.add(rimB);
+
+const lathe = (pts, seg = 96) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p[0], p[1])), seg);
+function radTex(stops) { const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d'); const gr = g.createRadialGradient(256, 256, 0, 256, 256, 256); stops.forEach(s => gr.addColorStop(s[0], s[1])); g.fillStyle = gr; g.fillRect(0, 0, 512, 512); return new THREE.CanvasTexture(c); }
+const dotTex = radTex([[0, 'rgba(255,255,255,1)'], [.25, 'rgba(190,215,255,.6)'], [1, 'rgba(0,0,0,0)']]);
+const beamTex = (() => { const c = document.createElement('canvas'); c.width = 4; c.height = 256; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, 'rgba(80,140,255,0)'); gr.addColorStop(1, 'rgba(80,140,255,.28)'); g.fillStyle = gr; g.fillRect(0, 0, 4, 256); return new THREE.CanvasTexture(c); })();
+const beamMat = () => new THREE.MeshBasicMaterial({ map: beamTex, transparent: true, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
+let sd = 9; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+
+// ---------- platform ----------
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.ShadowMaterial({ opacity: .5 })); floor.rotation.x = -Math.PI / 2; floor.position.y = -1.6; floor.receiveShadow = true; scene.add(floor);
+const disc = new THREE.Mesh(new THREE.CircleGeometry(3.6, 96), new THREE.MeshBasicMaterial({ map: radTex([[0, 'rgba(80,140,255,.45)'], [.35, 'rgba(40,90,220,.2)'], [.7, 'rgba(10,30,90,.08)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false }));
+disc.rotation.x = -Math.PI / 2; disc.position.y = -1.595; scene.add(disc);
+const rings = [[1.6, .022, 0x5d92ff], [2.25, .013, 0x5d92ff], [2.95, .009, 0xffc83d]].map(([r, t, c]) => { const m = new THREE.Mesh(new THREE.TorusGeometry(r, t, 8, 160), new THREE.MeshBasicMaterial({ color: c, transparent: true })); m.rotation.x = Math.PI / 2; m.position.y = -1.59; scene.add(m); return m; });
+const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.9, 13, 64, 1, true), beamMat()); beam.position.y = 4.9; scene.add(beam);
+
+// ---------- trophy ----------
+const gold = new THREE.MeshStandardMaterial({ color: 0xffb21a, metalness: 1, roughness: .2, envMapIntensity: .9, emissive: 0x4a2a00, emissiveIntensity: .35 });
+const warm = new THREE.PointLight(0xffc46a, 5, 9); warm.position.set(1.5, 3.2, 3.2); scene.add(warm);
+const trophy = new THREE.Group(); scene.add(trophy);
+const cup = new THREE.Mesh(lathe([[0, 1.15], [.18, 1.18], [.55, 1.45], [.86, 2.0], [1.02, 2.75], [1.06, 3.1], [1.0, 3.12], [.94, 2.78], [.8, 2.05], [.5, 1.55], [0, 1.4]]), gold);
+const stem = new THREE.Mesh(lathe([[0, .55], [.32, .58], [.16, .75], [.12, 1.0], [.24, 1.18], [0, 1.2]]), gold);
+const base = new THREE.Mesh(lathe([[0, 0], [.95, 0], [.95, .28], [.75, .32], [.7, .55], [0, .58]]), new THREE.MeshStandardMaterial({ color: 0x0d1424, metalness: .6, roughness: .35 }));
+const plate = new THREE.Mesh(new THREE.TorusGeometry(.83, .03, 10, 96), gold); plate.rotation.x = Math.PI / 2; plate.position.y = .3;
+[cup, stem, base].forEach(m => { m.castShadow = true; trophy.add(m); }); trophy.add(plate);
+for (const s of [-1, 1]) { const h = new THREE.Mesh(new THREE.TorusGeometry(.42, .07, 16, 48, Math.PI * 1.15), gold); h.position.set(s * 1.0, 2.35, 0); h.rotation.z = s > 0 ? -Math.PI * .57 : Math.PI * .43 + Math.PI; h.castShadow = true; trophy.add(h); }
+// star emblem on the cup
+const star = new THREE.Shape(); for (let i = 0; i < 10; i++) { const r = i % 2 ? .13 : .3, a = i / 10 * Math.PI * 2 - Math.PI / 2; const x = Math.cos(a) * r, y = -Math.sin(a) * r; i ? star.lineTo(x, y) : star.moveTo(x, y); }
+const starM = new THREE.Mesh(new THREE.ExtrudeGeometry(star, { depth: .06, bevelEnabled: false }), new THREE.MeshStandardMaterial({ color: 0x1F6BFF, emissive: 0x1F6BFF, emissiveIntensity: .6, metalness: .3, roughness: .3 }));
+starM.position.set(0, 2.35, .9); trophy.add(starM);
+trophy.position.y = -1.6;
+
+// ---------- dumbbells ----------
+const steel = new THREE.MeshStandardMaterial({ color: 0x9aa3b5, metalness: 1, roughness: .25 });
+const rubber = new THREE.MeshStandardMaterial({ color: 0x10141e, metalness: .2, roughness: .55 });
+const blue = new THREE.MeshStandardMaterial({ color: 0x1F6BFF, metalness: .4, roughness: .3, emissive: 0x0a2a80, emissiveIntensity: .5 });
+function dumbbell() {
+  const g = new THREE.Group();
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, 2.4, 24), steel); bar.rotation.z = Math.PI / 2; g.add(bar);
+  for (const s of [-1, 1]) {
+    const p1 = new THREE.Mesh(new THREE.CylinderGeometry(.42, .42, .26, 6), rubber); p1.rotation.z = Math.PI / 2; p1.position.x = s * .78; g.add(p1);
+    const p2 = new THREE.Mesh(new THREE.CylinderGeometry(.34, .34, .2, 6), rubber); p2.rotation.z = Math.PI / 2; p2.position.x = s * 1.0; g.add(p2);
+    const r = new THREE.Mesh(new THREE.CylinderGeometry(.43, .43, .05, 6), blue); r.rotation.z = Math.PI / 2; r.position.x = s * .63; g.add(r);
+  }
+  g.traverse(m => m.castShadow = true); return g;
+}
+const bells = [dumbbell(), dumbbell()]; bells.forEach(b => scene.add(b));
+
+// ---------- rank badges in a corridor (camera flies past them) ----------
+function letterTex(txt, bg, fg) { const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d'); g.fillStyle = bg; g.fillRect(0, 0, 512, 512); g.fillStyle = fg; g.font = '800 300px Mont'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, 256, 280); const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t; }
+const RANKS = [['B', 0xc98552, '#c98552'], ['S', 0xdfe5ee, '#dfe5ee'], ['G', 0xffc83d, '#ffc83d'], ['D', 0x7fd3ff, '#7fd3ff']];
+const badges = RANKS.map(([l, c, css], i) => {
+  const side = new THREE.MeshStandardMaterial({ color: c, metalness: .55, roughness: .3, emissive: c, emissiveIntensity: .3 });
+  const face = new THREE.MeshStandardMaterial({ color: c, metalness: .55, roughness: .15, emissive: c, emissiveIntensity: .38 });
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, .28, 6), [side, face, face]);
+  m.rotation.x = Math.PI / 2; const g = new THREE.Group(); g.add(m);
+  const gem = new THREE.Mesh(new THREE.OctahedronGeometry(.42, 0), new THREE.MeshStandardMaterial({ color: 0x1F6BFF, metalness: .4, roughness: .15, emissive: 0x1F6BFF, emissiveIntensity: .5 })); gem.position.z = .3; gem.scale.z = .5; g.add(gem);
+  g.scale.setScalar(.62);
+  g.position.set(i % 2 ? 1.0 : -1.0, 2.0, [24.5, 17, 11.5, 8.2][i]); scene.add(g); return g;
+});
+// floating emoji sprites + dumbbell clones for parallax depth
+function emojiTex(e) { const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d'); g.font = '200px "Noto Color Emoji"'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(e, 128, 140); const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t; }
+const emo = ['🔥', '☕', '💪', '⚡', '🏆', '👟'].map(emojiTex);
+const sprites = [];
+for (let i = 0; i < 26; i++) { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: emo[i % emo.length], transparent: true, depthWrite: false }));
+  const side = i % 2 ? 1 : -1; s.position.set(side * (3.2 + rnd() * 4), -1 + rnd() * 6, 8 + rnd() * 40); s.scale.setScalar(.9 + rnd() * .9); s.userData.k = rnd() * 6; scene.add(s); sprites.push(s); }
+const extra = []; for (let i = 0; i < 6; i++) { const d = dumbbell(); d.scale.setScalar(.7); d.position.set((i % 2 ? 1 : -1) * (4 + rnd() * 3), rnd() * 5 - 1, 10 + i * 6.5); d.userData.k = rnd() * 6; scene.add(d); extra.push(d); }
+for (let i = 0; i < 6; i++) { const b = new THREE.Mesh(new THREE.CylinderGeometry(.6, 1.3, 18, 32, 1, true), beamMat()); b.position.set((i % 2 ? 1 : -1) * (3 + rnd() * 3), 6, 10 + i * 7); b.rotation.z = (i % 2 ? -1 : 1) * .18; scene.add(b); }
+// particles
+const NP = 1500, pg = new THREE.BufferGeometry(), P = new Float32Array(NP * 3), seed = [];
+for (let i = 0; i < NP; i++) seed.push([(rnd() - .5) * 18, rnd() * 11 - 2, rnd() * 56 - 8, rnd()]);
+pg.setAttribute('position', new THREE.BufferAttribute(P, 3));
+scene.add(new THREE.Points(pg, new THREE.PointsMaterial({ size: .08, map: dotTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, color: 0xbcd2ff })));
+// logo tile that lands in front of the trophy at the end
+const logoImg = new Image(); logoImg.src = window.LOGO_DATA; const logoTex = new THREE.Texture(logoImg); logoTex.encoding = THREE.sRGBEncoding;
+const logoTile = new THREE.Group();
+const tileBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.6, .18), new THREE.MeshStandardMaterial({ color: 0x1F6BFF, metalness: .3, roughness: .3 }));
+const tileFace = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.6), new THREE.MeshBasicMaterial({ map: logoTex })); tileFace.position.z = .091;
+logoTile.add(tileBody, tileFace); logoTile.visible = false; scene.add(logoTile);
+
+// ---------- timeline ----------
+const rig = { z: 46, y: 2.2, lookZ: 30, lookY: 1.8, a: 0, r: 12, orbit: 0, rise: 0, rot: 0, tile: 0 };
+const tl = gsap.timeline({ paused: true });
+tl.to(rig, { z: 13, lookZ: 0, duration: 6.2, ease: 'power1.inOut' }, 0)
+  .to(rig, { y: 1.4, lookY: .9, duration: 6.2, ease: 'sine.inOut' }, 0)
+  .to(rig, { rise: 1, duration: 1.4, ease: 'back.out(1.3)' }, 5.6)
+  .to(rig, { orbit: 1, duration: 4, ease: 'sine.inOut' }, 6.4)
+  .to(rig, { rot: Math.PI * 2.4, duration: 8, ease: 'power1.inOut' }, 5.6)
+  .fromTo('#h1', { opacity: 0, scale: 1.15 }, { opacity: 1, scale: 1, duration: .35, ease: 'power3.out' }, 0).to('#h1', { opacity: 0, y: -40, duration: .3, ease: 'power2.in' }, 2.1);
+// big rank word when the camera passes each badge
+[2.2, 3.05, 3.9, 4.75].forEach((t, i) => { sfx('pop', t); tl.fromTo('#r' + i, { opacity: 0, scale: 1.5, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .25, ease: 'power3.out' }, t).to('#r' + i, { opacity: 0, scale: .9, duration: .2, ease: 'power2.in' }, t + .72); });
+tl.to('#flash', { opacity: .8, duration: .07, yoyo: true, repeat: 1 }, 5.9); sfx('win', 5.9);
+tl.fromTo('#h2', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .45, ease: 'power3.out' }, 6.4).to('#h2', { opacity: 0, y: -30, duration: .3 }, 8.4)
+  .fromTo('#h3', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .45, ease: 'power3.out' }, 8.7).to('#h3', { opacity: 0, y: -30, duration: .3 }, 10.6)
+  .fromTo('#end', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .55, ease: 'power3.out' }, 11.3)
+  .from('#end img', { scale: .4, rotate: -20, duration: .55, ease: 'back.out(2)' }, 11.3);
+sfx('pop', 8.7); sfx('logo', 11.3);
+
+function apply(t) {
+  // camera: fly down the corridor, then orbit the trophy, then rise for the end card
+  const orbitA = rig.orbit * Math.PI * .9, orbitR = 13 - 3 * rig.orbit;
+  let cx = Math.sin(orbitA) * orbitR * (rig.z < 13.5 ? 1 : 0), cz = rig.z < 13.5 ? Math.cos(orbitA) * orbitR : rig.z;
+  let cy = rig.y + 1.2 * rig.orbit, ly = rig.lookY + .4 * rig.orbit;
+  if (t > 10.4) { const k = Math.min(1, (t - 10.4) / 2.2), e = k * k * (3 - 2 * k); cy += 3.6 * e; cz += 6 * e * Math.sign(cz || 1); ly += 1.4 * e; }
+  cam.position.set(cx + Math.sin(t * .7) * .25, cy, cz); cam.lookAt(0, ly, rig.lookZ);
+  trophy.position.y = -1.6 - 4.2 * (1 - rig.rise); trophy.rotation.y = rig.rot; trophy.visible = rig.rise > .01;
+  bells.forEach((b, i) => { const a = t * .5 + i * Math.PI; b.position.set(Math.cos(a) * 2.9, 1.0 + .6 * Math.sin(t * .9 + i * 2), Math.sin(a) * 2.9); b.rotation.set(.4 + .3 * Math.sin(t + i), a * 1.3, .5 * Math.cos(t * .8 + i)); b.visible = rig.rise > .3; });
+  badges.forEach((g, i) => { g.rotation.y = Math.sin(t * 1.6 + i) * .5; g.position.y = 1.7 + Math.sin(t * 1.2 + i) * .12; g.visible = cz > g.position.z + .5 && t < 5.7; g.children[1].rotation.z = t * 2; });
+  const fadeOut = t > 9.8 ? Math.max(0, 1 - (t - 9.8) / .6) : 1;
+  sprites.forEach(s => s.material.opacity = fadeOut); extra.forEach(d => d.visible = fadeOut > .05);
+  sprites.forEach(s => { s.position.y += 0; s.material.rotation = Math.sin(t + s.userData.k) * .3; });
+  extra.forEach(d => { d.rotation.set(t * .6 + d.userData.k, t * .4, .3); });
+  for (let i = 0; i < NP; i++) { const [x, y, z, k] = seed[i]; P[i * 3] = x + .4 * Math.sin(t * .5 + k * 9); P[i * 3 + 1] = ((y + t * (.15 + .3 * k)) % 11 + 11) % 11 - 2; P[i * 3 + 2] = z; }
+  pg.attributes.position.needsUpdate = true;
+  rings.forEach((r, i) => r.rotation.z = t * (i % 2 ? -.25 : .18));
+  beam.material.opacity = .75 + .25 * Math.sin(t * 3);
+  // logo tile drops in front of the trophy
+  logoTile.visible = rig.tile > 0; logoTile.position.set(0, 3.0 + 4 * (1 - rig.tile), 2.2); logoTile.rotation.set(0, (1 - rig.tile) * Math.PI * 1.5 + Math.sin(t) * .15, 0); logoTile.scale.setScalar(.6 + .4 * rig.tile);
+  $('fade').style.opacity = Math.max(0, 1 - t / .4, (t - DUR + .4) / .4);
+  R.render(scene, cam);
+}
+window.DUR = DUR;
+window.renderAt = t => { tl.seek(t, false); apply(t); };
+document.fonts.ready.then(() => {
+  // redraw badge faces now the font is loaded
+  sprites.forEach((s, i) => { s.material.map = emojiTex(['🔥', '☕', '💪', '⚡', '🏆', '👟'][i % 6]); });
+  logoImg.decode().then(() => { logoTex.needsUpdate = true; renderAt(0); window.ready = true; });
+});
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>
