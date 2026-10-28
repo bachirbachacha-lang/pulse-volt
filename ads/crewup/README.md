@@ -18,3 +18,6 @@ Stock photos/video were blocked by the environment network policy (unsplash/pexe
 - m-type.html: kinetic type: gym group-chat excuses blown away, crew network draws itself, Challenge · Check in · Nudge · Win, logo.
 - m-depth.html: CSS 3D phone with floating cards for the 4 brief steps, parallax background.
 Render: `node record.js m-<x>.html x <out>` then `python3 sfx.py <out> <out>.wav` and mux. No whoosh sounds (owner, 27 Oct): sfx.py mutes swoosh/swipe.
+
+## Keynote-style ads (crewup-keynote-0N-*.mp4), from the owner's 28 Oct reference (clean kinetic type + widgets)
+k.html, `?cut=light|dark|blue`: letter-drop kinetic text, CrewUp widgets (streak, crew gauge, rank, steps, nudge) with blur-morph, check-in mosaic around a question, glass widgets over a parallax sky (day / night / sunset), logo frame, end line. All shapes are CrewUp's own (no Apple watch/health designs). Mosaic tiles use emoji placeholders until the owner sends real gym photos.
