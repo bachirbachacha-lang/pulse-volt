@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Phone Home Screen</title>
+<!-- Rendered once to an image (1170x2460) and used as the 3D phone's screen texture in t.html. -->
+<style>
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1170px;height:2460px;overflow:hidden;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff}
+#h{position:absolute;inset:0;background:radial-gradient(120% 70% at 18% 8%,#4a6cf0 0%,#1d2b74 42%,#0a1030 100%)}
+#h::after{content:'';position:absolute;inset:0;background:radial-gradient(60% 40% at 85% 85%,rgba(123,92,255,.45),rgba(0,0,0,0))}
+.sb{position:absolute;left:96px;right:96px;top:54px;display:flex;justify-content:space-between;font:600 44px Inter;z-index:2}
+.isl{position:absolute;left:50%;top:34px;width:330px;height:96px;margin-left:-165px;border-radius:50px;background:#000;z-index:3}
+.dt{position:absolute;left:0;right:0;top:225px;text-align:center;font:600 56px Inter;color:rgba(255,255,255,.85);z-index:2}
+.tm{position:absolute;left:0;right:0;top:290px;text-align:center;font:700 250px/1 Inter;letter-spacing:-.045em;z-index:2}
+#wd{position:absolute;left:88px;right:88px;top:600px;height:300px;border-radius:70px;background:rgba(255,255,255,.16);backdrop-filter:blur(30px);border:2px solid rgba(255,255,255,.25);padding:44px 52px;z-index:2}
+#wd .t{display:flex;align-items:center;gap:22px;font:700 44px Inter}
+#wd .t img{width:72px;height:72px;border-radius:18px}
+#wd .live{margin-left:auto;font:700 34px Inter;color:#7dffb0;display:flex;align-items:center;gap:12px}
+#wd .live i{width:20px;height:20px;border-radius:50%;background:#2bd46b;box-shadow:0 0 16px #2bd46b}
+#wd .m{font:600 44px Inter;margin-top:30px}
+#wd .s{display:flex;align-items:center;gap:18px;margin-top:18px;font:500 34px Inter;color:rgba(255,255,255,.75)}
+#wd .s b{display:inline-flex;width:58px;height:58px;border-radius:50%;align-items:center;justify-content:center;font:800 26px Inter;color:#0a0f1c;margin-left:-14px;border:4px solid #3a4b8c}
+.ic{position:absolute;width:212px;height:212px;border-radius:52px;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.ic img{width:100%;height:100%;border-radius:52px}
+.lb{position:absolute;width:270px;margin-left:-29px;text-align:center;font:500 37px Inter;color:rgba(255,255,255,.9);z-index:2}
+.dock{position:absolute;left:48px;right:48px;bottom:56px;height:300px;border-radius:100px;background:rgba(255,255,255,.16);backdrop-filter:blur(30px);z-index:1}
+.dots{position:absolute;left:0;right:0;bottom:390px;display:flex;justify-content:center;gap:20px;z-index:2}
+.dots i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.4)}.dots i:first-child{background:#fff}
+</style>
+</head>
+<body>
+<div id="h">
+  <div class="isl"></div>
+  <div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+  <div class="dt">Thursday 30 October</div>
+  <div class="tm">9:41</div>
+  <div id="wd"><div class="t"><img src="img/crewup-logo.png">CrewUp<span class="live"><i></i>LIVE</span></div>
+    <div class="m">Omar is at the gym 💪</div>
+    <div class="s"><span style="display:flex;margin-left:14px"><b style="background:#6E9BFF">O</b><b style="background:#FFC83D">K</b><b style="background:#d6dbe6">Y</b></span>3 of 4 checked in · Faisal 😴</div></div>
+  <div id="grid"></div>
+  <div class="dots"><i></i><i></i><i></i></div>
+  <div class="dock"></div><div id="dock"></div>
+</div>
+<script>
+// own generic icons (no real app logos); CrewUp sits in row 2, column 2
+const GLY = ['<circle cx="12" cy="12" r="7" fill="#fff"/>', '<rect x="5" y="5" width="14" height="14" rx="3" fill="#fff"/>', '<path d="M12 4l8 15H4z" fill="#fff"/>', '<path d="M3 14c3-6 6 6 9 0s6 6 9 0" stroke="#fff" stroke-width="2.5" fill="none"/>', '<path d="M6 4h12v16l-6-4-6 4z" fill="#fff"/>', '<circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="2.5" fill="none"/><circle cx="12" cy="12" r="2" fill="#fff"/>'];
+const ICC = ['#ff8a5b', '#7b5cff', '#2bd4a0', '#ffc83d', '#ff5d8f', '#5ab0ff', '#9aa3b5', '#38c172'];
+const NAMES = ['Notes', 'Photos', 'Music', 'Maps', 'Weather', 'CrewUp', 'Camera', 'Clock', 'Wallet', 'Calendar', 'Files', 'Books'];
+let g = '';
+const icon = (x, y, k, lab) => k === 5
+  ? `<div class="ic" style="left:${x}px;top:${y}px;box-shadow:0 0 50px rgba(31,107,255,.7)"><img src="img/crewup-logo.png"></div>` + (lab ? `<div class="lb" style="left:${x}px;top:${y + 226}px">CrewUp</div>` : '')
+  : `<div class="ic" style="left:${x}px;top:${y}px;background:linear-gradient(160deg,${ICC[k % 8]},${ICC[(k + 3) % 8]})"><svg width="110" height="110" viewBox="0 0 24 24">${GLY[k % 6]}</svg></div>` + (lab ? `<div class="lb" style="left:${x}px;top:${y + 226}px">${NAMES[k]}</div>` : '');
+for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) g += icon(88 + c * 270, 1000 + r * 300, r * 4 + c, true);
+document.getElementById('grid').innerHTML = g;
+document.getElementById('dock').innerHTML = [0, 1, 2, 3].map(c => icon(88 + c * 270, 2104 - 2, [7, 2, 4, 0][c], false)).join('');
+window.ICON = { u: (88 + 270 + 106) / 1170, v: (1300 + 106) / 2460 };
+window.WIDGET = { u: .5, v: 750 / 2460 };
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+# Central configuration for the paper-trading research system.
+#
+# SIMULATED MONEY ONLY. `mode` is locked to "paper": the loader rejects any
+# other value and there is no live-broker code anywhere in this project.
+#
+# Override any value without editing this file:
+#   - point TRADING_CONFIG at another TOML file, or
+#   - set env vars named TRADING__<SECTION>__<KEY>, e.g.
+#       TRADING__ACCOUNT__STARTING_BALANCE=50000
+# Secrets (the Discord webhook URL) are read from the environment only.
+
+mode = "paper"
+
+[market_data]
+source = "yfinance"
+symbols = ["ES=F", "SPY"]
+default_interval = "1h"
+default_period = "60d"          # used when start/end are not given
+timezone = "America/New_York"   # all clean data is converted to this tz
+auto_adjust = false             # keep raw prices; adjustments are a research decision
+prepost = false                 # include pre/post-market bars for equities
+cache_enabled = true
+# How long a cached download that reaches "now" stays fresh, in multiples of
+# the bar interval. Downloads with an end date in the past never expire.
+cache_ttl_bars = 1
+
+[validation]
+# Bars whose |return| exceeds this many robust (IQR-based) standard deviations
+# of the previous `gap_lookback` returns are flagged as suspicious.
+gap_mad_threshold = 12.0
+gap_lookback = 100
+# A bar is "stale" if the newest candle is older than this many intervals
+# while the session is expected to be open.
+stale_after_bars = 3
+# Max fraction of expected in-session candles that may be missing before the
+# dataset is marked DATA QUALITY WARNING.
+max_missing_fraction = 0.02
+# Futures: an open-vs-prior-close gap larger than this (as a fraction of
+# price) is a "large gap" that needs explaining (roll, session break, news).
+futures_gap_threshold = 0.004
+# Days either side of an estimated roll date that count as the roll window.
+roll_window_days = 3
+# Drop bars outside the configured session when cleaning (they are still
+# reported). When false they are kept and only flagged.
+drop_out_of_session = false
+
+[sessions]
+# Session used when a symbol has no explicit entry in [sessions.symbols].
+# Times are local to the session timezone. `days` lists the weekdays on which
+# a session OPENS (0 = Mon .. 6 = Sun). An overnight session that opens on
+# Sunday evening closes on Monday.
+[sessions.equity]
+timezone = "America/New_York"
+open = "09:30"
+close = "16:00"
+days = [0, 1, 2, 3, 4]          # Mon..Fri
+
+[sessions.futures]
+# CME Globex equity-index futures: Sun 18:00 -> Fri 17:00 ET, daily break 17:00-18:00.
+timezone = "America/New_York"
+open = "18:00"
+close = "17:00"
+days = [6, 0, 1, 2, 3]
+overnight = true
+
+[sessions.crypto]
+# open == close means a 24-hour session.
+timezone = "UTC"
+open = "00:00"
+close = "00:00"
+days = [0, 1, 2, 3, 4, 5, 6]
+overnight = true
+
+[sessions.forex]
+timezone = "America/New_York"
+open = "17:00"
+close = "17:00"
+days = [6, 0, 1, 2, 3]
+overnight = true
+
+[sessions.symbols]
+# Optional per-symbol overrides, e.g. "CL=F" = "futures"
+
+[account]
+# PAPER / SIMULATION: virtual money only.
+starting_balance = 1000.0
+currency = "USD"
+
+[costs]
+# Simulated costs applied by the paper-trading engine.
+commission_per_unit = 0.0       # per share / contract
+commission_per_order = 1.0      # flat per order
+slippage_bps = 1.0              # adverse slippage in basis points of fill price
+slippage_ticks = 0              # extra adverse slippage in ticks (futures)
+tick_size = 0.01
+
+[contracts]
+# Point value per symbol (futures multiplier). Unlisted symbols use 1.0.
+"ES=F" = 50.0
+"MES=F" = 5.0
+"NQ=F" = 20.0
+"MNQ=F" = 2.0
+"YM=F" = 5.0
+"RTY=F" = 50.0
+"CL=F" = 1000.0
+"GC=F" = 100.0
+
+[strategy]
+# No strategy is selected at this stage.
+active = ""
+params = {}
+
+[risk]
+# Placeholders consumed by the risk agent once one is implemented.
+max_risk_per_trade_pct = 0.5
+max_open_positions = 1
+max_daily_loss_pct = 2.0
+require_stop = true
+
+[discord]
+# Notifications only. Discord never holds or changes trading-system state.
+# The webhook URL is a secret: set it ONLY in the environment variable named
+# below (e.g. in your shell or the cloud environment's secrets), never here.
+enabled = false
+webhook_env_var = "DISCORD_WEBHOOK_URL"
+username = "Paper Trader (SIMULATION)"
+dry_run = true                  # log messages instead of sending them
+timeout_seconds = 5.0
+max_attempts = 3                # per message, with exponential backoff
+backoff_seconds = 1.0
+queue_size = 200                # messages beyond this are dropped (and logged)
+notify_signals = true           # PAPER SIGNAL DETECTED
+notify_decisions = true         # agent votes + consensus, for bars that had a signal
+notify_trades = true            # PAPER TRADE OPENED / CLOSED
+
+[database]
+path = "database/paper_trading.sqlite3"
+
+[logging]
+level = "INFO"
+directory = "logs"
+json_file = "trading.jsonl"
+console = true
+
+[paths]
+# Relative paths resolve against the trading/ directory.
+raw_dir = "data/raw"
+clean_dir = "data/clean"
+cache_dir = "data/cache"
+reports_dir = "reports"
+
+[backtest]
+# Chronological split of the first dataset a split is created for. The split
+# boundaries are then frozen in `splits_dir` so the untouched test period never
+# moves; data after the test end becomes "post_test" (forward) data.
+dev_fraction = 0.50
+val_fraction = 0.25            # test = the remaining 25%
+splits_dir = "backtests/splits"
+test_ledger = "backtests/test_ledger.jsonl"   # every look at test results is recorded here
+results_dir = "reports/backtests"
+
+# Simulated execution costs. "ticks" = ticks for futures, pips for forex.
+# These are ASSUMPTIONS, not measured from a broker. Adjust to your broker/prop firm.
+# commission_per_unit_side: account currency per contract (futures) or per lot (forex) per side.
+[backtest.costs.futures_default]
+spread_ticks = 0.0             # futures bars are trade prices; spread cost is covered by slippage
+slippage_ticks = 1.0           # on stop and market fills
+limit_through_ticks = 1.0      # a limit fills only if price trades 1 tick through it
+commission_per_unit_side = 2.25
+quantity = 1.0
+
+[backtest.costs.forex_default]
+spread_ticks = 1.2             # Yahoo FX bars ~ mid/bid quotes; typical retail spread in pips
+slippage_ticks = 0.2
+limit_through_ticks = 0.0
+commission_per_unit_side = 0.0 # spread-only account assumed
+quantity = 1.0
+lot_size = 100000
+
+[backtest.costs.symbols]
+"MES=F" = { commission_per_unit_side = 0.62 }
+"MNQ=F" = { commission_per_unit_side = 0.62 }
+"USDJPY=X" = { spread_ticks = 1.0 }
+"AUDUSD=X" = { spread_ticks = 1.0 }
+"EURUSD=X" = { spread_ticks = 0.8 }
+"CADJPY=X" = { spread_ticks = 2.0 }
+"AUDCAD=X" = { spread_ticks = 2.0 }

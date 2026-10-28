@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/*
+ * Atlas design tokens: holographic lab HUD (glass panels, cyan light, amber accents).
+ * Rajdhani for HUD labels, IBM Plex Sans for reading, JetBrains Mono for data. Components use these tokens.
+ */
+@theme {
+  /* Holographic lab: deep blue-black, glass panels, glowing cyan light, warm amber accents. */
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: "Rajdhani", "IBM Plex Sans", ui-sans-serif, sans-serif;
+
+  --color-bg: #01040a;
+  --color-surface: rgb(6 18 32 / 0.72);
+  --color-card: rgb(7 22 38 / 0.62);
+  --color-raised: rgb(14 40 64 / 0.6);
+  --color-hover: rgb(56 200 255 / 0.1);
+  --color-line: rgb(80 200 255 / 0.16);
+  --color-line-strong: rgb(80 200 255 / 0.34);
+
+  --color-fg: #e4f6ff;
+  --color-fg-2: #b4d4e6;
+  --color-muted: #7fa3ba;
+
+  --color-accent: #3fe0ff;
+  --color-accent-strong: #8ff0ff;
+  --color-accent-ink: #001018;
+  --color-accent-soft: rgb(63 224 255 / 0.12);
+
+  --color-gold: #ffb74a;
+  --color-ok: #3ff0b0;
+  --color-warn: #ffc44d;
+  --color-danger: #ff6b6b;
+  --color-danger-strong: #ef4444;
+  --color-info: #6cb8ff;
+
+  --color-series-1: #0891b2;
+  --color-series-2: #d97706;
+
+  --radius-card: 6px;
+  --shadow-glow: 0 0 0 1px rgb(63 224 255 / 0.3), 0 0 28px -6px rgb(63 224 255 / 0.55);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: radial-gradient(1200px 700px at 70% -10%, rgb(20 90 140 / 0.35), transparent 60%), radial-gradient(900px 600px at -10% 110%, rgb(10 70 110 / 0.3), transparent 60%), var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    background: rgb(34 211 238 / 0.3);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button,
+  [role="button"],
+  a,
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+  /* HUD panel: glass with glowing edge and corner brackets. */
+  .hud {
+    position: relative;
+    background: linear-gradient(180deg, rgb(12 40 66 / 0.55), rgb(4 16 30 / 0.62));
+    border: 1px solid var(--color-line);
+    box-shadow: inset 0 1px 0 rgb(140 230 255 / 0.08), 0 0 30px -14px rgb(63 224 255 / 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .hud::before,
+  .hud::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    border-color: rgb(63 224 255 / 0.75);
+    border-style: solid;
+    filter: drop-shadow(0 0 4px rgb(63 224 255 / 0.8));
+  }
+  .hud::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .hud::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+  .hud-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .glow-text { text-shadow: 0 0 12px rgb(63 224 255 / 0.65); }
+  .scanlines {
+    background-image: repeating-linear-gradient(0deg, rgb(120 220 255 / 0.035) 0 1px, transparent 1px 3px);
+  }
+  .kbd {
+    @apply inline-flex min-w-5 items-center justify-center rounded border border-line-strong bg-raised px-1 font-mono text-[11px] leading-5 text-fg-2;
+  }
+  .prose-atlas {
+    @apply text-[15px] leading-relaxed text-fg;
+  }
+  .prose-atlas h1 { @apply mt-4 mb-2 text-xl font-semibold; }
+  .prose-atlas h2 { @apply mt-4 mb-2 text-lg font-semibold; }
+  .prose-atlas h3 { @apply mt-3 mb-1 font-semibold; }
+  .prose-atlas p { @apply my-2; }
+  .prose-atlas ul { @apply my-2 list-disc pl-5; }
+  .prose-atlas ol { @apply my-2 list-decimal pl-5; }
+  .prose-atlas li { @apply my-0.5; }
+  .prose-atlas a { @apply text-accent underline underline-offset-2; }
+  .prose-atlas code { @apply rounded bg-raised px-1 py-0.5 text-[13px] text-accent-strong; }
+  .prose-atlas pre { @apply my-3 overflow-x-auto rounded-lg border border-line bg-bg p-3 text-[13px] leading-snug; }
+  .prose-atlas pre code { @apply bg-transparent p-0 text-fg; }
+  .prose-atlas blockquote { @apply my-2 border-l-2 border-line-strong pl-3 text-fg-2; }
+  .prose-atlas table { @apply my-3 w-full border-collapse text-sm; }
+  .prose-atlas th, .prose-atlas td { @apply border border-line px-2 py-1 text-left; }
+  .prose-atlas hr { @apply my-4 border-line; }
+  .grid-bg {
+    background-image: radial-gradient(rgb(148 163 184 / 0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+}
+
+@keyframes holo-spin { to { transform: rotate(360deg); } }
+@keyframes holo-spin-rev { to { transform: rotate(-360deg); } }
+@keyframes holo-pulse { 50% { opacity: 0.45; } }
+.spin-slow { animation: holo-spin 24s linear infinite; transform-origin: center; transform-box: fill-box; }
+.spin-rev { animation: holo-spin-rev 16s linear infinite; transform-origin: center; transform-box: fill-box; }
+.pulse-soft { animation: holo-pulse 3s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

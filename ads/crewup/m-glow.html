@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Glow</title>
+<style>
+@font-face{font-family:Sora;src:url(fonts/sora-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#6E9BFF;--o:#FF7A2F;--g:#FFC83D;--ink:#fff;--mut:#9aa6bd}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#030509;font-family:Inter,"Noto Color Emoji",sans-serif;color:var(--ink)}
+.abs{position:absolute}
+#wall{inset:0;background:linear-gradient(180deg,rgba(3,5,9,0) 0%,rgba(3,5,9,.2) 50%,#030509 64%),repeating-linear-gradient(90deg,#0d1119 0 46px,#06080d 46px 58px)}
+#spill{left:-200px;top:200px;width:1480px;height:1300px;background:radial-gradient(50% 45% at 50% 45%,rgba(31,107,255,.38),rgba(31,107,255,0) 70%);mix-blend-mode:screen}
+#floor{left:0;right:0;top:1230px;bottom:0;background:linear-gradient(180deg,#05080f,#010203)}
+#floorglow{left:90px;top:1240px;width:900px;height:260px;background:radial-gradient(50% 50% at 50% 0%,rgba(31,107,255,.28),rgba(31,107,255,0) 70%)}
+#vign{inset:0;background:radial-gradient(90% 60% at 50% 45%,rgba(0,0,0,0) 40%,rgba(0,0,0,.75) 100%)}
+#cam{left:0;top:0;width:1080px;height:1920px;perspective:1700px;perspective-origin:50% 880px}
+#screen{left:60px;top:600px;width:960px;height:600px;border-radius:26px;background:#070a12;overflow:hidden;
+  box-shadow:0 0 0 3px #1b2436,0 0 160px rgba(31,107,255,.4),0 60px 120px rgba(0,0,0,.8);-webkit-box-reflect:below 30px linear-gradient(transparent 55%,rgba(255,255,255,.16))}
+.sheen{inset:0;background:linear-gradient(115deg,rgba(255,255,255,.07),rgba(255,255,255,0) 35%)}
+.phase{inset:0}
+#ui{padding:30px 38px}
+.bar{display:flex;align-items:center;justify-content:space-between}
+.wm{display:flex;align-items:center;gap:14px;font:800 38px/1 Sora;letter-spacing:-.02em}
+.wm img{width:52px;height:52px;border-radius:14px}
+.stack{display:flex}
+.av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 20px Inter;color:#08101f;border:3px solid #070a12;margin-left:-12px;flex:none}
+.tabs{display:flex;gap:14px;margin-top:22px;position:relative}
+.tab{position:relative;z-index:2;font:700 24px/1 Inter;padding:14px 24px;border-radius:999px;color:var(--mut);border:1px solid #1f2738}
+#pillhl{position:absolute;z-index:1;top:0;height:52px;border-radius:999px;background:var(--b);box-shadow:0 0 30px rgba(31,107,255,.8)}
+.cards{display:flex;gap:20px;margin-top:22px}
+.card{background:#0e131e;border:1px solid #1f2738;border-radius:22px;padding:20px 22px;position:relative}
+#chal{flex:1.35;height:410px}
+#side{flex:1;height:410px;display:flex;flex-direction:column;gap:20px}
+h4{font:800 28px/1.2 Inter}
+.sub{font:600 19px/1.3 Inter;color:var(--mut);margin-top:4px}
+.fr{display:flex;align-items:center;gap:14px;margin-top:18px}
+.fr .n{font:700 23px Inter;width:96px}
+.dots{display:flex;gap:8px;flex:1}
+.dots i{width:32px;height:32px;border-radius:9px;background:#1a2131}
+.dots i.on{background:var(--b);box-shadow:0 0 14px rgba(31,107,255,.7)}
+.nb{font:800 18px Inter;background:var(--b);padding:9px 12px;border-radius:12px}
+.cap{font:600 16px/1 Inter;color:var(--mut);letter-spacing:.06em}
+.streak{display:flex;align-items:center;gap:10px;margin-top:10px}
+.streak .f{font-size:54px;filter:drop-shadow(0 0 16px rgba(255,122,47,.8))}
+.streak .n{font:800 70px/1 Sora;color:var(--o);text-shadow:0 0 30px rgba(255,122,47,.6)}
+.streak .d{font:700 20px/1.2 Inter;color:#ffd3b8}
+#toast{position:absolute;left:180px;right:180px;top:24px;background:rgba(28,36,54,.97);border:1px solid #33405a;border-radius:20px;padding:16px 20px;display:flex;gap:14px;align-items:center;box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:5;font:700 24px Inter}
+#toast img{width:46px;height:46px;border-radius:12px}
+.w{position:absolute;left:0;right:0;top:150px;text-align:center;font:800 170px/1 Sora;letter-spacing:-.04em}
+.w small{display:block;font:600 36px/1.2 Inter;color:var(--mut);margin-top:20px;letter-spacing:0}
+#line{position:absolute;left:0;right:0;top:190px;text-align:center;font:800 84px/1.15 Sora;letter-spacing:-.03em}
+#line b{color:var(--b2);text-shadow:0 0 30px rgba(31,107,255,.8)}
+#line small{display:block;font:600 32px/1.3 Inter;color:var(--mut);margin-top:14px;letter-spacing:0}
+#icon{position:absolute;left:390px;top:190px;width:180px;height:180px;border-radius:44px;overflow:hidden;box-shadow:0 0 90px rgba(31,107,255,.9)}
+#icon img{width:100%;height:100%}
+#wordm{position:absolute;left:0;right:0;top:215px;text-align:center;font:800 150px/1 Sora;letter-spacing:-.05em;clip-path:inset(0 50% 0 50%)}
+#tagline{position:absolute;left:0;right:0;top:400px;text-align:center;font:700 40px/1.3 Inter;color:#d7def0}
+#orb{left:820px;top:1380px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#e3ecff,#7aa6ff 40%,#1F6BFF 72%,#0a2a7a)}
+#orbref{left:820px;top:1585px;width:190px;height:60px;border-radius:50%;background:radial-gradient(50% 50%,rgba(31,107,255,.5),rgba(31,107,255,0));filter:blur(8px)}
+.ov{left:0;right:0;text-align:center}
+#hook .a{font:800 112px/1.06 Sora;letter-spacing:-.04em;text-shadow:0 6px 40px rgba(0,0,0,.8)}
+#hook .a b{color:var(--b2);text-shadow:0 0 50px rgba(31,107,255,.8)}
+#hook .e{font:600 44px/1.3 Inter;color:#c7d0e2;margin-top:24px}
+#end .a{font:800 54px/1.2 Sora;letter-spacing:-.02em}
+#end .h{font:700 34px/1 Inter;margin-top:22px;color:var(--b2)}
+#label{left:50px;top:80px;display:flex;align-items:center;gap:14px}
+#label img{width:60px;height:60px;border-radius:15px}
+#label span{font:600 22px Inter;letter-spacing:.06em;color:#c9d3e8;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
+#fade{inset:0;background:#000}
+</style>
+</head>
+<body>
+<div id="wall" class="abs"></div><div id="spill" class="abs"></div><div id="floor" class="abs"></div><div id="floorglow" class="abs"></div>
+<div id="cam" class="abs"><div id="screen" class="abs">
+  <div id="ui" class="abs phase">
+    <div class="bar"><div class="wm"><img src="img/crewup-logo.png">CrewUp</div><div class="stack" id="stack"></div></div>
+    <div class="tabs"><div id="pillhl"></div><div class="tab" id="tb1">Challenges</div><div class="tab" id="tb2">Crew</div><div class="tab" id="tb3">Ranks</div></div>
+    <div class="cards">
+      <div class="card" id="chal"><h4>Gym 4x per week</h4><div class="sub">Loser buys everyone coffee ☕</div><div id="rows"></div></div>
+      <div id="side">
+        <div class="card" style="flex:1"><div class="cap">STREAK</div><div class="streak"><span class="f" id="fire">🔥</span><span class="n" id="stn">0</span><span class="d">days</span></div></div>
+        <div class="card" style="flex:1"><div class="cap">THIS WEEK</div><div style="font:800 30px/1.2 Inter;margin-top:10px">🏆 Gold rank</div><div class="sub">240 XP to Diamond</div></div>
+      </div>
+    </div>
+    <div id="toast"><img src="img/crewup-logo.png">⚡ Faisal got nudged: “The couch is not a workout”</div>
+  </div>
+  <div id="kin" class="abs phase">
+    <div class="w" id="w1">Challenge.<small>pick the bet: loser buys coffee</small></div>
+    <div class="w" id="w2">Check in.<small>live photo at the gym. no faking.</small></div>
+    <div class="w" id="w3">Nudge.<small>one tap. straight to their phone.</small></div>
+    <div id="line">Turn the gym<br>into a <b>game.</b><small>streaks · trophies · ranks · crew battles</small></div>
+  </div>
+  <div id="logo" class="abs phase">
+    <div id="icon"><img src="img/crewup-logo.png"></div>
+    <div id="wordm">CrewUp</div>
+    <div id="tagline">Gym with your crew, not alone.</div>
+  </div>
+  <div class="abs sheen"></div>
+</div></div>
+<div id="orbref" class="abs"></div><div id="orb" class="abs"></div><div id="vign" class="abs"></div>
+<div id="hook" class="abs ov" style="top:230px"><div class="a">Your friends keep<br><b>skipping the gym?</b></div><div class="e">watch this 👀</div></div>
+<div id="end" class="abs ov" style="top:1330px"><div class="a">Join the waitlist</div><div style="font:600 32px Inter;color:#c7d0e2;margin-top:10px">link on our Instagram</div><div class="h">@getcrewup</div></div>
+<div id="label" class="abs"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div>
+<div id="fade" class="abs"></div>
+
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const SFX = []; window.SFX = SFX; const sfx = (type, t) => SFX.push({ type, t });
+const PC = { O: '#6E9BFF', K: '#FFC83D', F: '#FF9A5A', Y: '#d6dbe6' };
+$('#stack').innerHTML = ['O', 'K', 'F', 'Y'].map(l => `<div class="av" style="background:${PC[l]}">${l}</div>`).join('');
+const rows = [['O', 'Omar', 4], ['K', 'Khalid', 3], ['Y', 'You', 3], ['F', 'Faisal', 0]];
+$('#rows').innerHTML = rows.map(([l, n, k], i) => `<div class="fr"><div class="av" style="background:${PC[l]};margin:0">${l}</div><span class="n">${n}</span><div class="dots">${[0, 1, 2, 3].map(j => `<i id="d${i}${j}"></i>`).join('')}</div>${l == 'F' ? '<span class="nb" id="nb">Nudge ⚡</span>' : ''}</div>`).join('');
+
+const DUR = 14, N = { st: 0 };
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+tl.set('#fade', { opacity: 1 }).to('#fade', { opacity: 0, duration: .4, ease: 'none' }, 0)
+  .fromTo('#hook', { opacity: 0, y: 30, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: .35 }, 0)
+  .to('#hook', { opacity: 0, y: -40, duration: .35, ease: 'power2.in' }, 2.1)
+  .fromTo('#screen', { rotateY: 24, rotateX: 6, z: -520, filter: 'brightness(.3)' }, { rotateY: 0, rotateX: 0, z: 0, filter: 'brightness(1)', duration: 2.4, ease: 'power2.inOut' }, .5)
+  .fromTo('#spill', { opacity: .15 }, { opacity: 1, duration: 2.4, ease: 'power2.inOut' }, .5)
+  .fromTo('#orb', { scale: .2, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.6)' }, .3)
+  .fromTo('#orbref', { opacity: 0 }, { opacity: 1, duration: 1.2 }, .3)
+  .set('#pillhl', { left: $('#tb1').offsetLeft, width: $('#tb1').offsetWidth }, 0).set('#tb1', { color: '#fff' }, 0)
+  .from('.card', { y: 40, opacity: 0, stagger: .1, duration: .6 }, 1.0)
+  .set('#toast', { y: -160, opacity: 0 }, 0);
+// check-ins fill in, one dot at a time
+let k = 0;
+rows.forEach(([, , n], i) => { for (let j = 0; j < n; j++) { const t = 2.4 + (k++) * .14; if (k % 2) sfx('pop', t); tl.set(`#d${i}${j}`, { background: '#1F6BFF', boxShadow: '0 0 14px rgba(31,107,255,.7)' }, t).fromTo(`#d${i}${j}`, { scale: .3 }, { scale: 1, duration: .3, ease: 'back.out(3)' }, t); } });
+tl.to(N, { st: 12, duration: 1.4, ease: 'power2.out' }, 2.5).fromTo('#fire', { scale: .5 }, { scale: 1, duration: .7, ease: 'elastic.out(1,.4)' }, 3.7);
+sfx('win', 3.7);
+// nudge Faisal
+tl.to('#nb', { scale: .82, duration: .1, yoyo: true, repeat: 1 }, 4.15); sfx('tap', 4.15);
+tl.to('#toast', { y: 0, opacity: 1, duration: .45, ease: 'back.out(1.5)' }, 4.35).to('#toast', { y: -160, opacity: 0, duration: .3, ease: 'power2.in' }, 5.3);
+sfx('ding', 4.35); sfx('buzz', 4.45);
+tl.to('#pillhl', { left: $('#tb3').offsetLeft, width: $('#tb3').offsetWidth, duration: .4, ease: 'power2.inOut' }, 4.9).to('#tb1', { color: '#9aa6bd', duration: .1 }, 4.95).to('#tb3', { color: '#fff', duration: .1 }, 5.1);
+tl.to('#screen', { scale: 1.06, duration: 3, ease: 'sine.inOut' }, 2.6)
+  .to('#ui', { opacity: 0, scale: .96, filter: 'blur(6px)', duration: .4, ease: 'power2.in' }, 5.55);
+// kinetic words
+tl.set('#kin .w, #line', { opacity: 0 }, 0);
+['#w1', '#w2', '#w3'].forEach((id, i) => {
+  const t = 5.9 + i * .95; sfx('pop', t);
+  tl.fromTo(id, { opacity: 0, y: 60, scale: 1.3, filter: 'blur(12px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: .35 }, t)
+    .to(id, { opacity: 0, y: -50, filter: 'blur(8px)', duration: .25, ease: 'power2.in' }, t + .72);
+});
+tl.fromTo('#line', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .5 }, 8.75).to('#line', { opacity: 0, y: -30, duration: .3, ease: 'power2.in' }, 9.85)
+  .to('#screen', { scale: 1, rotateY: -5, duration: 4, ease: 'sine.inOut' }, 9.7);
+sfx('win', 8.8);
+// logo reveal
+tl.set('#icon, #tagline', { opacity: 0 }, 0)
+  .fromTo('#icon', { opacity: 0, scale: .2, rotate: -20 }, { opacity: 1, scale: 1, rotate: 0, duration: .55, ease: 'back.out(2)' }, 10.1)
+  .to('#icon', { scale: .5, top: 40, duration: .6, ease: 'power3.inOut' }, 10.8)
+  .to('#wordm', { clipPath: 'inset(0 0% 0 0%)', duration: .8, ease: 'power3.inOut' }, 10.9)
+  .fromTo('#tagline', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .5 }, 11.4)
+  .fromTo('#end', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5 }, 11.8)
+  .to('#fade', { opacity: 1, duration: .4, ease: 'none' }, DUR - .4);
+sfx('logo', 10.1);
+
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  $('#stn').textContent = Math.round(N.st);
+  const p = .5 + .5 * Math.sin(t * 2.2);
+  $('#orb').style.boxShadow = `0 0 ${110 + 50 * p}px rgba(31,107,255,.8),0 0 ${280 + 90 * p}px rgba(31,107,255,.4)`;
+};
+document.fonts.ready.then(async () => { await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

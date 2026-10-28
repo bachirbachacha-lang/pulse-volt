@@ -40,3 +40,15 @@ Respects `prefers-reduced-motion`, and falls back to the campaign photos when We
 ## Scalp Elixir Shopify theme
 
 `scalp-elixir-theme/` is a separate, uploadable Shopify theme (English + Arabic) for the Scalp Elixir hair serum. Upload `scalp-elixir-theme.zip` in Shopify admin. Setup steps are in [`scalp-elixir-theme/README.md`](scalp-elixir-theme/README.md).
+
+---
+
+## Atlas command center
+
+`atlas/` is a separate local app: a personal command center with projects, an AI assistant, Code Lab, Design Studio, Engineering Lab, Trading Lab (paper trading only), Knowledge Vault, automations and a system monitor. It runs on your own computer (Node.js 22+). Setup, features and what still needs keys are in [`atlas/README.md`](atlas/README.md).
+
+---
+
+## Paper-trading research system
+
+`trading/` is a separate Python project: a yfinance-based strategy-research and **paper-trading** foundation (simulated money only). See [`trading/README.md`](trading/README.md).

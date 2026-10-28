@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Reels</title>
+<style>
+@font-face{font-family:Sora;src:url(fonts/sora-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Mont;src:url(fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-400-normal.woff2);font-weight:400;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-700-normal.woff2);font-weight:600 700;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Taj;src:url(fonts/tajawal-arabic-800-normal.woff2);font-weight:800;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#090B10;--b:#1F6BFF;--b2:#5B93FF;--o:#FF7A2F;--g:#FFC83D;--w:#fff;--mut:#9AA3B5;--card:#12161F;--line:#232a38;--red:#FF4D5E}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--w);font-family:Sora,Taj,"Noto Color Emoji",sans-serif}
+.abs{position:absolute}
+#bg{inset:0;background:radial-gradient(70% 45% at 50% 62%,rgba(31,107,255,.28),rgba(31,107,255,0) 70%),var(--bg)}
+#dots{inset:-200px;background-image:radial-gradient(rgba(91,147,255,.16) 2px,transparent 2.5px);background-size:54px 54px}
+.ov{left:0;right:0;text-align:center;padding:0 60px}
+.hook{position:relative;z-index:12;font:800 92px/1.08 Sora;letter-spacing:-.03em}
+.hook b{color:var(--b);text-shadow:0 0 40px rgba(31,107,255,.55)}
+.hook .o{color:var(--o)}
+.ar{font-family:Taj,Sora,"Noto Color Emoji";font-weight:800;direction:rtl;font-size:52px;line-height:1.35;color:#dfe6f5;margin-top:22px}
+.cap{font:800 60px/1.1 Sora;letter-spacing:-.02em;z-index:12;text-shadow:0 4px 30px rgba(9,11,16,.9)}
+.cap b{color:var(--b)}
+.cap .ar{font-size:44px;margin-top:12px}
+.pill{display:inline-block;background:var(--b);color:#fff;font:800 40px/1 Mont;padding:18px 34px 16px;border-radius:999px;letter-spacing:.04em;box-shadow:0 0 40px rgba(31,107,255,.6)}
+#corner{left:50px;top:80px;display:flex;align-items:center;gap:14px;z-index:20}
+#corner span{font:700 22px/1 Sora;color:#c9d3e8;letter-spacing:.08em;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
+.logo{width:64px;height:64px;border-radius:18px;background:var(--b);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(31,107,255,.5);flex:none}
+.logo{overflow:hidden}.logo img{width:108%;height:108%;object-fit:cover;display:block}
+/* phone */
+.phone{left:250px;top:620px;width:580px;height:1180px;border-radius:72px;background:#000;padding:16px;box-shadow:0 0 0 3px #2a3142,0 60px 140px rgba(0,0,0,.7),0 0 160px rgba(31,107,255,.3)}
+.scr{position:relative;width:100%;height:100%;border-radius:58px;overflow:hidden;background:#0d1017;padding:64px 28px 0}
+.sb{position:absolute;left:44px;right:44px;top:24px;display:flex;justify-content:space-between;font:700 22px/1 Sora;color:#cfd6e4}
+.apphd{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.apphd .nm{display:flex;align-items:center;gap:12px;font:800 34px/1 Sora}
+.apphd .logo{width:52px;height:52px;border-radius:15px}
+.me{width:56px;height:56px;border-radius:50%;background:#2a3348;display:flex;align-items:center;justify-content:center;font:800 24px Sora}
+.card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:22px 24px;margin-top:20px;position:relative}
+.lbl{font:700 20px/1 Sora;color:var(--mut);letter-spacing:.08em;text-transform:uppercase}
+.streak{display:flex;align-items:center;gap:18px;margin-top:10px}
+.streak .fire{font-size:84px;line-height:1;filter:drop-shadow(0 0 20px rgba(255,122,47,.8))}
+.streak .n{font:800 96px/1 Sora;color:var(--o);text-shadow:0 0 30px rgba(255,122,47,.5)}
+.streak .d{font:700 26px/1.2 Sora;color:#ffd7bf}
+.ch h3{font:800 30px/1.2 Sora}
+.ch .sub{font:600 22px/1.3 Sora;color:var(--mut);margin-top:6px}
+.fr{display:flex;align-items:center;gap:14px;margin-top:16px}
+.av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 24px Sora;color:#08101f;flex:none}
+.fr .name{font:700 26px/1 Sora;width:120px}
+.fr .dots{display:flex;gap:8px;flex:1}
+.fr .dots i{width:34px;height:34px;border-radius:10px;background:#1c2230;border:1px solid var(--line)}
+.fr .dots i.on{background:var(--b);border-color:var(--b);box-shadow:0 0 14px rgba(31,107,255,.6)}
+.fr .st{font:700 22px Sora;color:var(--mut);width:70px;text-align:right}
+.fr .st.bad{color:var(--red)}
+.nbtn{display:inline-flex;align-items:center;gap:6px;background:var(--b);color:#fff;font:800 20px Sora;padding:10px 14px;border-radius:14px}
+.bigbtn{margin-top:20px;background:var(--b);border-radius:24px;text-align:center;font:800 34px/1 Sora;padding:28px 0;box-shadow:0 0 40px rgba(31,107,255,.5)}
+.toast{position:absolute;left:24px;right:24px;top:70px;background:rgba(30,36,52,.96);border:1px solid #33405a;border-radius:26px;padding:20px 22px;display:flex;gap:16px;align-items:center;box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:5}
+.toast .logo{width:60px;height:60px;border-radius:16px}
+.toast .t{font:700 20px/1.2 Sora;color:var(--mut)}
+.toast .m{font:700 26px/1.3 Sora;color:#fff;margin-top:4px}
+.tap{position:absolute;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;background:rgba(255,255,255,.35);border:4px solid #fff;z-index:9}
+/* lock screen */
+.lock{position:absolute;inset:0;background:radial-gradient(90% 60% at 50% 30%,#1b2a55,#0a0e1a 70%);text-align:center;padding-top:150px}
+.lock .tm{font:600 190px/1 Sora;letter-spacing:-.04em}
+.lock .dt{font:600 30px Sora;color:#c9d3e8;margin-top:10px}
+.lock .nt{position:absolute;left:22px;right:22px;background:rgba(235,240,255,.16);backdrop-filter:blur(10px);border-radius:28px;padding:20px 22px;display:flex;gap:16px;text-align:left;align-items:center}
+.lock .nt .logo{width:62px;height:62px;border-radius:16px}
+.lock .nt .t{font:700 20px/1.2 Sora;color:#d5dcec;display:flex;justify-content:space-between}
+.lock .nt .m{font:700 27px/1.3 Sora;color:#fff;margin-top:4px}
+/* results */
+.rk{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.rk .p{font:800 30px Sora;width:44px;color:var(--mut)}
+.rk .name{font:700 30px Sora;flex:1}
+.rk .sc{font:800 28px Sora}
+.rk.loser{background:rgba(255,77,94,.12);border-radius:18px;padding:16px 12px;border:none;margin-top:8px}
+.rk.loser .sc,.rk.loser .p{color:var(--red)}
+.stamp{position:absolute;border:8px solid var(--red);color:var(--red);font:800 66px/1 Mont;padding:20px 30px 14px;border-radius:18px;letter-spacing:.04em;text-align:center;background:rgba(9,11,16,.82);box-shadow:0 0 50px rgba(255,77,94,.4);z-index:6}
+/* check-in post */
+.post .who{display:flex;align-items:center;gap:14px}
+.post .who b{font:800 28px Sora}.post .who span{font:600 20px Sora;color:var(--mut)}
+.photo{margin-top:16px;height:470px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(180deg,#3b2f2a 0%,#5a463c 55%,#2b211d 100%)}
+.photo .em{position:absolute;font-size:150px;line-height:1}
+.photo .live{position:absolute;left:16px;top:16px;font:800 18px Sora;background:rgba(0,0,0,.55);padding:8px 12px;border-radius:10px;letter-spacing:.1em}
+.post .capt{font:700 28px/1.3 Sora;margin-top:16px}
+.post .meta{font:600 21px Sora;color:var(--mut);margin-top:6px}
+.doubt{margin-top:18px;display:flex;align-items:center;justify-content:space-between;background:#1a1f2b;border-radius:20px;padding:16px 20px;font:800 28px Sora}
+.doubt .c{color:var(--g)}
+/* excuses */
+.ex{left:80px;right:80px;top:640px;background:var(--card);border:2px solid var(--line);border-radius:40px;padding:50px 50px 46px}
+.ex .q{font:800 64px/1.15 Sora;letter-spacing:-.02em}
+.ex .ar{font-size:46px;margin-top:16px;text-align:right}
+.ex .score{display:flex;align-items:flex-end;gap:16px;margin-top:40px}
+.ex .score .n{font:800 150px/.9 Mont}
+.ex .score .of{font:800 52px/1 Mont;color:var(--mut);padding-bottom:12px}
+.ex .bar{height:22px;border-radius:11px;background:#1c2230;margin-top:30px;overflow:hidden}
+.ex .bar i{display:block;height:100%;width:0;border-radius:11px}
+.ex .verdict{font:800 40px/1.2 Sora;margin-top:24px}
+/* showcase bits */
+.big{font:800 120px/1 Mont;letter-spacing:-.02em}
+.rank{display:inline-flex;flex-direction:column;align-items:center;gap:14px;width:200px}
+.rank .hex{width:170px;height:190px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:flex;align-items:center;justify-content:center;font:800 64px Mont;color:#0b0f18}
+.rank b{font:800 30px Sora}
+.pcard{left:250px;top:560px;width:580px;height:860px;border-radius:44px;background:linear-gradient(160deg,#1F6BFF 0%,#1446b8 45%,#0c1a3d 100%);border:3px solid #6e9cff;box-shadow:0 0 120px rgba(31,107,255,.6);padding:44px;overflow:hidden}
+.pcard .shine{position:absolute;inset:-50%;background:linear-gradient(115deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.28) 50%,rgba(255,255,255,0) 60%)}
+.vs{display:flex;align-items:center;gap:20px;font:800 34px Sora}
+.vs .bar{flex:1;height:44px;border-radius:22px;background:#1c2230;overflow:hidden;display:flex}
+.cf{position:absolute;width:18px;height:30px;border-radius:4px;z-index:15}
+.emo{position:absolute;font-size:90px;line-height:1;z-index:15}
+#flash{inset:0;background:#cfe0ff;mix-blend-mode:screen;opacity:0;z-index:30}
+#fade{inset:0;background:#000;z-index:31}
+.end{top:640px}
+.end .logo{width:220px;height:220px;border-radius:60px;margin:0 auto;box-shadow:0 0 100px rgba(31,107,255,.7)}
+.end .wm{font:800 140px/1 Sora;letter-spacing:-.04em;margin-top:44px}
+.end .tag{font:700 44px/1.3 Sora;color:#cfd8ea;margin-top:20px}
+.end .cta{display:inline-block;margin-top:50px;background:var(--b);font:800 44px/1.2 Sora;padding:28px 44px;border-radius:30px;box-shadow:0 0 60px rgba(31,107,255,.6)}
+.end .h{font:700 36px Sora;color:var(--b2);margin-top:30px}
+/* English-only by default; add &ar=1 to the URL to show the Arabic lines again */
+body:not(.ar-on) .ar{display:none}
+</style>
+</head>
+<body>
+<div id="bg" class="abs"></div><div id="dots" class="abs"></div>
+<div id="stage" class="abs" style="inset:0"></div>
+<div id="corner" class="abs"><div class="logo" id="cl"></div><span>APP PREVIEW · CONCEPT</span></div>
+<div id="flash" class="abs"></div><div id="fade" class="abs"></div>
+<script src="lib/gsap.min.js"></script>
+<script>
+const CUT = new URLSearchParams(location.search).get('cut') || 'day1';
+if (new URLSearchParams(location.search).get('ar') === '1') document.body.classList.add('ar-on');
+const $ = s => document.querySelector(s);
+const LOGO = `<img src="img/crewup-logo.png" alt="">`;
+$('#cl').innerHTML = LOGO;
+const AVC = { O: '#5B93FF', K: '#FFC83D', F: '#FF7A2F', Y: '#c9d3e8', S: '#7ee0b0' };
+const av = (l, s = 52) => `<div class="av" style="width:${s}px;height:${s}px;font-size:${s * .45}px;background:${AVC[l] || '#9aa3b5'}">${l}</div>`;
+const sb = (t = '9:41') => `<div class="sb"><span>${t}</span><span>●●● ▮</span></div>`;
+const appHead = `<div class="apphd"><div class="nm"><div class="logo">${LOGO}</div>CrewUp</div><div class="me">Y</div></div>`;
+const toast = (id, who, msg, top = 70) => `<div class="toast" id="${id}" style="top:${top}px"><div class="logo">${LOGO}</div><div><div class="t">CrewUp · now</div><div class="m">${msg}</div></div></div>`;
+const endCard = (q, qar) => `<div class="abs ov end" id="end"><div class="logo">${LOGO}</div><div class="wm">CrewUp</div>
+  <div class="tag">Gym with your crew, not alone.</div><div class="ar" style="font-size:44px">تمرّن مع شلتك، مو لحالك</div>
+  <div class="cta">${q}</div>${qar ? `<div class="ar" style="font-size:42px">${qar}</div>` : ''}<div class="h">@getcrewup</div></div>`;
+const N = {};              // numbers animated by GSAP, written in renderAt
+const FX = [];             // time-based particles: {t0, els, kind}
+let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+function burst(kind, t0, n, opts = {}) {
+  const box = document.createElement('div'); box.className = 'abs'; box.style.inset = 0; box.style.pointerEvents = 'none'; $('#stage').appendChild(box);
+  const parts = [];
+  for (let i = 0; i < n; i++) {
+    const el = document.createElement('div');
+    if (kind === 'confetti') { el.className = 'cf'; el.style.background = ['#1F6BFF', '#FFC83D', '#fff', '#FF7A2F', '#5B93FF'][i % 5]; }
+    else { el.className = 'emo'; el.textContent = opts.emoji[i % opts.emoji.length]; }
+    box.appendChild(el);
+    parts.push({ el, x: (opts.x ?? 540) + (rnd() - .5) * (opts.spread ?? 200), vx: (rnd() - .5) * (opts.vx ?? 1400), vy: -(opts.vy ?? 1500) * (.5 + rnd() * .7), r: rnd() * 720 - 360, d: rnd() * .4 });
+  }
+  FX.push({ t0, parts, kind, y: opts.y ?? 1000, life: opts.life ?? 2.6 });
+}
+function fx(t) {
+  for (const f of FX) for (const p of f.parts) {
+    const k = t - f.t0 - p.d;
+    if (k < 0 || k > f.life) { p.el.style.opacity = 0; continue; }
+    const g = f.kind === 'confetti' ? 2600 : 1400;
+    const x = p.x + p.vx * k, y = f.y + p.vy * k + .5 * g * k * k;
+    p.el.style.opacity = Math.min(1, (f.life - k) / .5);
+    p.el.style.transform = `translate(${x}px,${y}px) rotate(${p.r * k}deg)`;
+  }
+}
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+const tapAt = (id, t, x, y) => tl.fromTo(id, { left: x, top: y, opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: .25 }, t).to(id, { scale: .75, duration: .12, yoyo: true, repeat: 1 }, t + .25).to(id, { opacity: 0, duration: .2 }, t + .6);
+const ctr = sel => { const el = $(sel); let x = el.offsetWidth / 2, y = el.offsetHeight / 2, e = el; while (e && !e.classList.contains('scr')) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; } return [x, y]; };
+const pop = (id, t, from = {}) => tl.fromTo(id, { opacity: 0, y: 50, scale: .92, ...from }, { opacity: 1, y: 0, scale: 1, duration: .4 }, t);
+const out = (id, t) => tl.to(id, { opacity: 0, y: -40, duration: .3, ease: 'power2.in' }, t);
+const punch = (id, t, s = 1.12) => tl.fromTo(id, { scale: s }, { scale: 1, duration: .5, ease: 'power3.out' }, t);
+const flash = t => tl.to('#flash', { opacity: .7, duration: .06, yoyo: true, repeat: 1 }, t);
+const shake = (id, t, n = 8, a = 18) => tl.to(id, { x: a, duration: .04, yoyo: true, repeat: n, ease: 'none' }, t).set(id, { x: 0 }, t + .04 * (n + 1));
+let DUR = 12;
+
+const CUTS = {
+/* 1 — Day 1 of building an app so my friends can't skip the gym */
+day1() {
+  DUR = 15;
+  $('#stage').innerHTML = `
+  <div class="abs ov" id="h" style="top:230px"><div class="pill">DAY 1</div>
+    <div class="hook" style="margin-top:34px">building an app so my friends <b>can't skip the gym</b></div>
+    <div class="ar">اليوم ١: أبني تطبيق عشان ربعي ما يهربون من الجيم</div></div>
+  ${['🔥 <b>Streaks</b> nobody wants to break|ستريك محد يبي يكسره', '🏋️ <b>Challenges</b> with your crew|تحديات مع الشلة', '⚡ Slacking? <b>Nudge</b> them|واحد يكسل؟ انكزه'].map((s, i) => { const [e, a] = s.split('|'); return `<div class="abs ov cap" id="c${i}" style="top:260px">${e}<div class="ar">${a}</div></div>`; }).join('')}
+  <div class="abs phone" id="ph"><div class="scr" id="scr">${sb()}${appHead}
+    <div class="card"><div class="lbl">Your streak</div><div class="streak"><span class="fire" id="fire">🔥</span><span class="n" data-n="st">0</span><span class="d">days<br>in a row</span></div></div>
+    <div class="card ch" id="chal"><div class="lbl">This week</div><h3 style="margin-top:10px">Gym 4x per week</h3><div class="sub">Loser buys everyone coffee ☕</div>
+      ${[['O', 'Omar', 4], ['K', 'Khalid', 3], ['Y', 'You', 3], ['F', 'Faisal', 0]].map(([l, n, k], i) => `<div class="fr" id="r${i}">${av(l)}<div class="name">${n}</div><div class="dots">${[0, 1, 2, 3].map(j => `<i id="d${i}${j}" class="${j < k ? 'on' : ''}"></i>`).join('')}</div>${i == 3 ? `<div class="nbtn" id="nb">⚡ Nudge</div>` : `<div class="st">${k}/4</div>`}</div>`).join('')}
+    </div>
+    ${toast('t1', '', '⚡ Nudge sent to Faisal 😴', 700)}
+    <div class="tap" id="tap" style="opacity:0"></div></div></div>
+  ${endCard('Would you use this? 👀', 'بتستخدمه؟ قولوا لي بالكومنتات')}`;
+  pop('#h', 0, { y: 0, scale: 1.15 }); out('#h', 2.3);
+  tl.fromTo('#ph', { y: 900, rotate: 6 }, { y: 0, rotate: 0, duration: .9, ease: 'power4.out' }, 1.2);
+  pop('#c0', 2.5); out('#c0', 5.0);
+  tl.to(N, { st: 12, duration: 1.4, ease: 'power2.out' }, 2.7).fromTo('#fire', { scale: .6 }, { scale: 1, duration: .6, ease: 'elastic.out(1,.4)' }, 3.9);
+  tl.to('#ph', { scale: 1.12, y: 60, duration: 1.2, ease: 'power2.inOut' }, 2.6);
+  pop('#c1', 5.2); out('#c1', 8.3);
+  tl.to('#ph', { y: -150, scale: 1.12, duration: 1.2, ease: 'power3.inOut' }, 5.2);
+  tl.from('#chal .fr', { opacity: 0, x: 60, stagger: .15, duration: .4 }, 5.6);
+  pop('#c2', 8.5); out('#c2', 11.2);
+  tl.to('#ph', { y: -100, scale: 1.18, x: -40, duration: 1, ease: 'power3.inOut' }, 8.5);
+  tapAt('#tap', 9.6, ...ctr('#nb'));
+  tl.to('#nb', { scale: .85, duration: .1, yoyo: true, repeat: 1 }, 9.85);
+  tl.fromTo('#t1', { y: -200, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: 'back.out(1.6)' }, 10.0);
+  flash(9.9);
+  tl.to('#ph', { opacity: 0, scale: .9, duration: .4 }, 11.4);
+  pop('#end', 11.7);
+},
+
+/* 2 — POV: your friend nudges you at 6am */
+nudge() {
+  DUR = 13;
+  const nt = (id, top, msg, ago = 'now') => `<div class="nt" id="${id}" style="top:${top}px"><div class="logo">${LOGO}</div><div style="flex:1"><div class="t"><span>CREWUP</span><span>${ago}</span></div><div class="m">${msg}</div></div></div>`;
+  $('#stage').innerHTML = `
+  <div class="abs ov" id="h" style="top:230px"><div class="hook">POV: your friend nudges you at <b>6am</b></div><div class="ar">لما خويك ينكزك الساعة ٦ الصبح</div></div>
+  <div class="abs ov cap" id="c0" style="top:170px">😴 “5 more minutes…”<div class="ar">خمس دقايق بس…</div></div>
+  <div class="abs ov" id="up" style="top:380px"><div class="big" style="font-size:190px">GOT UP.</div><div class="ar" style="font-size:70px">قمت.</div></div>
+  <div class="emo" id="run" style="left:0;top:880px;font-size:200px;z-index:16">🏃‍♂️💨</div>
+  <div class="abs ov cap" id="c1" style="top:170px">Streak <b>saved.</b> 🔥<div class="ar">الستريك سليم</div></div>
+  <div class="abs phone" id="ph"><div class="scr" style="padding:0">
+    <div class="lock" id="lock">${sb('6:00')}<div class="tm">6:00</div><div class="dt">Thursday</div>
+      ${nt('n1', 470, '⚡ Omar nudged you: Don\'t break the streak! 🔥12')}
+      ${nt('n2', 640, '⚡ Khalid: The couch is not a workout 🛋️')}
+      ${nt('n3', 810, '⚡ Faisal: Your crew is waiting on you 👀')}
+    </div>
+    <div class="abs" id="app" style="inset:0;background:#0d1017;padding:64px 28px 0;opacity:0">${sb('6:24')}${appHead}
+      <div class="card"><div class="lbl">Checked in · 6:24 AM</div><div class="photo" style="height:330px;background:linear-gradient(180deg,#1b2740,#0f1626)"><span class="live">● LIVE PHOTO</span><span class="em" style="left:190px;top:90px">🏋️</span></div></div>
+      <div class="card"><div class="lbl">Your streak</div><div class="streak"><span class="fire" id="fire">🔥</span><span class="n" data-n="st">12</span><span class="d">days<br>in a row</span></div></div>
+    </div></div></div>
+  ${endCard('Tag the friend who’d nudge you at 6am 👇', 'منشن الخوي اللي بينكزك الساعة ٦')}`;
+  N.st = 12;
+  pop('#h', 0, { y: 0, scale: 1.15 }); out('#h', 2.2);
+  tl.fromTo('#ph', { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: .6 }, .2);
+  tl.set('#n1,#n2,#n3', { opacity: 0 }, 0);
+  [['#n1', 1.3], ['#n2', 3.4], ['#n3', 4.4]].forEach(([id, t], i) => { tl.fromTo(id, { opacity: 0, y: -60, scale: .9 }, { opacity: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(1.8)' }, t); shake('#ph', t, 10, 14 + i * 6); });
+  pop('#c0', 2.4); out('#c0', 4.3);
+  tl.to('#ph', { scale: 1.1, duration: 3, ease: 'sine.inOut' }, 2);
+  flash(5.4);
+  tl.to('#ph', { opacity: 0, duration: .1 }, 5.4);
+  tl.fromTo('#up', { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: .3, ease: 'power4.out' }, 5.45);
+  tl.fromTo('#run', { x: -500 }, { x: 1300, duration: 1.4, ease: 'power1.in' }, 5.7);
+  out('#up', 7.2);
+  tl.set('#lock', { opacity: 0 }, 7.3).set('#app', { opacity: 1 }, 7.3).set('#ph', { scale: 1 }, 7.3)
+    .fromTo('#ph', { opacity: 0, y: 200 }, { opacity: 1, y: 0, duration: .5 }, 7.4);
+  pop('#c1', 7.6);
+  tl.to(N, { st: 13, duration: .1 }, 8.6).fromTo('#fire', { scale: .5 }, { scale: 1.2, duration: .7, ease: 'elastic.out(1,.35)' }, 8.6);
+  burst('emoji', 8.6, 14, { emoji: ['🔥'], x: 540, y: 1250, vy: 1300, vx: 900 });
+  out('#c1', 10.3); tl.to('#ph', { opacity: 0, duration: .3 }, 10.3);
+  pop('#end', 10.6);
+},
+
+/* 3 — POV: you lost the gym challenge */
+lost() {
+  DUR = 13;
+  $('#stage').innerHTML = `
+  <div class="abs ov" id="h" style="top:230px"><div class="hook">POV: you <span class="o">lost</span> the gym challenge</div><div class="ar">لما تخسر تحدي الجيم 💀</div></div>
+  <div class="abs ov cap" id="c0" style="top:170px">The crew <b>ordered.</b> You pay. ☕<div class="ar">الشلة طلبت… وأنت تدفع</div></div>
+  <div class="abs ov cap" id="c1" style="top:170px">Never again. 😤<div class="ar">ما راح أخسر مرة ثانية</div></div>
+  <div class="abs phone" id="ph"><div class="scr">${sb()}${appHead}
+    <div class="card" id="res"><div class="lbl">Challenge over</div><h3 style="font:800 32px Sora;margin:10px 0 6px">Gym 4x per week</h3>
+      ${[['O', 'Omar', '4/4 🥇'], ['K', 'Khalid', '4/4'], ['F', 'Faisal', '3/4']].map(([l, n, s], i) => `<div class="rk"><span class="p">${i + 1}</span>${av(l)}<span class="name">${n}</span><span class="sc">${s}</span></div>`).join('')}
+      <div class="rk loser" id="los"><span class="p">4</span>${av('Y')}<span class="name">You</span><span class="sc">1/4</span></div></div>
+    <div class="card" id="ord"><div class="lbl">Loser's punishment</div><div style="font:800 34px/1.3 Sora;margin-top:10px">Buy the crew coffee ☕</div>
+      <div style="display:flex;gap:16px;margin-top:18px;font-size:76px" id="cups">${'<span>☕</span>'.repeat(4)}</div></div>
+    <div class="stamp" id="stp" style="left:60px;top:470px;transform:rotate(-8deg)">LOSER BUYS<br>COFFEE ☕</div>
+  </div></div>
+  ${endCard('What punishment should the loser get? 👇', 'وش العقاب اللي يستاهله الخسران؟')}`;
+  pop('#h', 0, { y: 0, scale: 1.15 }); out('#h', 2.3);
+  tl.fromTo('#ph', { y: 900 }, { y: 0, duration: .9, ease: 'power4.out' }, 1.0);
+  tl.from('#res .rk', { opacity: 0, x: 80, stagger: .25, duration: .4 }, 1.9);
+  tl.to('#ph', { scale: 1.15, y: -120, duration: 1.2, ease: 'power3.inOut' }, 2.6);
+  tl.fromTo('#stp', { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: .25, ease: 'power4.in' }, 3.7);
+  shake('#ph', 3.95, 8, 16); flash(3.95);
+  tl.to('#stp', { opacity: 0, duration: .3 }, 5.4);
+  pop('#c0', 5.0); out('#c0', 8.2);
+  tl.to('#ph', { y: -150, scale: 1.12, duration: 1, ease: 'power3.inOut' }, 5.3);
+  tl.from('#cups span', { y: -400, opacity: 0, stagger: .25, duration: .45, ease: 'bounce.out' }, 6.0);
+  burst('emoji', 7.2, 18, { emoji: ['😂', '👏', '🤣', '☕'], x: 540, y: 1900, vy: 2100, vx: 1200, spread: 800, life: 2.4 });
+  pop('#c1', 8.5); out('#c1', 10.3);
+  tl.to('#ph', { opacity: 0, duration: .3 }, 10.2);
+  pop('#end', 10.5);
+},
+
+/* 4 — When your friend posts a fake gym check-in */
+fake() {
+  DUR = 13;
+  $('#stage').innerHTML = `
+  <div class="abs ov" id="h" style="top:220px"><div class="hook">When your friend posts a <b>fake</b> gym check-in</div><div class="ar">لما خويك يسوي تشيك-إن وهمي 🤨</div></div>
+  <div class="abs ov cap" id="c0" style="top:170px">Bro… that’s a <b>couch.</b> 🛋️<div class="ar">يا شيخ… هذا كنب</div></div>
+  <div class="abs ov cap" id="c1" style="top:170px">3 doubts = <b>doesn’t count.</b><div class="ar">٣ شكوك = ما تنحسب</div></div>
+  <div class="abs phone" id="ph"><div class="scr">${sb('11:42')}${appHead}
+    <div class="card post"><div class="who">${av('K')}<div><b>Khalid</b><br><span>checked in · 11:42 PM</span></div></div>
+      <div class="photo"><span class="live">● LIVE PHOTO</span><span class="em" style="left:40px;top:220px">🛋️</span><span class="em" style="left:290px;top:60px;font-size:120px">📺</span><span class="em" style="left:330px;top:250px;font-size:110px">🍟</span></div>
+      <div class="capt">Leg day done 💪🔥</div><div class="meta">👟 Steps today: 312</div>
+      <div class="doubt" id="db"><span>🤨 Doubt it</span><span class="c"><span data-n="dc">0</span>/3</span></div></div>
+    <div class="stamp" id="stp" style="left:50px;top:420px;transform:rotate(-10deg);font-size:76px">NOT COUNTED ❌</div>
+    <div class="tap" id="tap" style="opacity:0"></div>
+  </div></div>
+  ${endCard('Tag the friend who’d try this 👇', 'منشن الخوي اللي بيسويها')}`;
+  pop('#h', 0, { y: 0, scale: 1.15 }); out('#h', 2.3);
+  tl.fromTo('#ph', { y: 900 }, { y: 0, duration: .9, ease: 'power4.out' }, 1.0);
+  pop('#c0', 2.5); out('#c0', 5.2);
+  tl.to('#ph', { scale: 1.25, y: 120, duration: 1.4, ease: 'power3.inOut' }, 2.4);
+  tl.to('#ph', { scale: 1.14, y: -150, duration: 1, ease: 'power3.inOut' }, 4.5);
+  [5.6, 6.3, 7.0].forEach((t, i) => { tapAt('#tap', t, ...ctr('#db span')); tl.to(N, { dc: i + 1, duration: .05 }, t + .3); burst('emoji', t + .3, 4, { emoji: ['🤨'], x: 500, y: 1500, vy: 1200, vx: 700, life: 1.6 }); });
+  tl.to('#ph', { y: -200, scale: 1.1, duration: .6, ease: 'power3.inOut' }, 7.5);
+  tl.fromTo('#stp', { opacity: 0, scale: 2.6 }, { opacity: 1, scale: 1, duration: .25, ease: 'power4.in' }, 7.9);
+  shake('#ph', 8.15, 10, 18); flash(8.15);
+  pop('#c1', 8.6); out('#c1', 10.5);
+  tl.to('#ph', { opacity: 0, duration: .3 }, 10.4);
+  pop('#end', 10.7);
+},
+
+/* 5 — Rating my friends' gym excuses */
+excuses() {
+  DUR = 17;
+  const ex = [['“It’s leg day… I’ll skip.”', 'يوم رجل؟ بسحب', 1, 'Omar'], ['“My pre-workout didn’t hit.”', 'البري وورك أوت ما ضبط', 3, 'Faisal'], ['“Too full from kabsa.”', 'شبعان كبسة', 8, 'Khalid'], ['“It’s too hot outside.”', 'الجو حر', 0, 'Omar'], ['“I’ll start on Sunday.”', 'من الأحد أبدأ', 2, 'Faisal']];
+  const col = s => s >= 7 ? '#FFC83D' : s >= 3 ? '#FF7A2F' : '#FF4D5E';
+  const verdict = ['💀 weak', '😐 nah', '😂 respect', '🥶 the gym has AC bro', '🤡 every week'];
+  $('#stage').innerHTML = `
+  <div class="abs ov" id="h" style="top:560px"><div class="hook" style="font-size:110px">Rating my friends’ <b>gym excuses</b></div><div class="ar" style="font-size:60px">أقيّم أعذار ربعي عن الجيم</div></div>
+  <div class="abs ov" id="ttl" style="top:250px;font:800 40px Sora;color:var(--mut);letter-spacing:.1em">GYM EXCUSE RATINGS</div>
+  ${ex.map(([q, a, s, who], i) => `<div class="abs ex" id="e${i}"><div class="lbl" style="font-size:26px">${who} · excuse #${i + 1}</div><div class="q" style="margin-top:20px">${q}</div><div class="ar">${a}</div>
+    <div class="score"><span class="n" style="color:${col(s)}" data-n="s${i}">0</span><span class="of">/10</span></div><div class="bar"><i id="b${i}" style="background:${col(s)}"></i></div><div class="verdict">${verdict[i]}</div></div>`).join('')}
+  <div class="abs ov" id="why" style="top:640px"><div class="hook" style="font-size:96px">That’s why I’m building <b>CrewUp</b></div><div class="ar" style="font-size:56px">عشان كذا أبني CrewUp</div></div>
+  ${endCard('What’s your friend’s worst excuse? 👇', 'وش أسوأ عذر سمعته من خويك؟')}`;
+  tl.fromTo('#h', { opacity: 0, scale: 1.2 }, { opacity: 1, scale: 1, duration: .35 }, 0); out('#h', 2.0);
+  pop('#ttl', 2.2); out('#ttl', 13.2);
+  ex.forEach(([, , s], i) => {
+    const t = 2.3 + i * 2.15;
+    tl.fromTo(`#e${i}`, { opacity: 0, x: 900, rotate: 6 }, { opacity: 1, x: 0, rotate: 0, duration: .4, ease: 'power4.out' }, t)
+      .to(N, { ['s' + i]: s, duration: .6, ease: 'power2.out' }, t + .5)
+      .to(`#b${i}`, { width: s * 10 + '%', duration: .6, ease: 'power2.out' }, t + .5)
+      .from(`#e${i} .verdict`, { opacity: 0, scale: .6, duration: .3, ease: 'back.out(2)' }, t + 1.1)
+      .to(`#e${i}`, { opacity: 0, x: -900, rotate: -6, duration: .35, ease: 'power3.in' }, t + 1.85);
+    if (s === 0) shake(`#e${i}`, t + 1.1, 6, 14);
+  });
+  tl.fromTo('#why', { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: .35 }, 13.2); flash(13.2); out('#why', 14.6);
+  pop('#end', 14.8);
+},
+
+/* 6 — App showcase: fast cuts */
+showcase() {
+  DUR = 16;
+  $('#stage').innerHTML = `
+  <div class="abs ov" id="h" style="top:560px"><div class="hook" style="font-size:118px">Gym with your crew, <b>not alone.</b></div><div class="ar" style="font-size:62px">تمرّن مع شلتك، مو لحالك</div></div>
+  <!-- nudge -->
+  <div class="abs" id="s1" style="inset:0"><div class="abs ov cap" style="top:300px">⚡ <b>Nudge</b> the slackers<div class="ar">انكز اللي يكسل</div></div>
+    <div class="abs" id="nbig" style="left:240px;top:820px;width:600px;height:220px;border-radius:60px;background:var(--b);display:flex;align-items:center;justify-content:center;font:800 90px Sora;box-shadow:0 0 120px rgba(31,107,255,.8)">⚡ NUDGE</div>
+    <div class="abs" style="left:110px;right:110px;top:1140px">${toast('t2', '', 'Your crew is waiting on you 👀', 0).replace('class="toast"', 'class="toast" style="position:relative;left:0;right:0;top:0"')}</div></div>
+  <!-- streak -->
+  <div class="abs" id="s2" style="inset:0"><div class="abs ov cap" style="top:300px">🔥 Keep the <b style="color:var(--o)">streak</b><div class="ar">لا تكسر الستريك</div></div>
+    <div class="abs ov" style="top:700px"><div style="font-size:300px;line-height:1;filter:drop-shadow(0 0 60px rgba(255,122,47,.9))" id="bigfire">🔥</div><div class="big" style="font-size:240px;color:var(--o);text-shadow:0 0 60px rgba(255,122,47,.6)" data-n="st2">0</div><div style="font:800 50px Sora;color:#ffd7bf">DAYS IN A ROW</div></div></div>
+  <!-- trophy -->
+  <div class="abs" id="s3" style="inset:0"><div class="abs ov cap" style="top:300px">🏆 Win <b style="color:var(--g)">trophies</b><div class="ar">اكسب الكؤوس</div></div>
+    <div class="abs ov" style="top:720px"><div id="tro" style="font-size:380px;line-height:1;filter:drop-shadow(0 0 80px rgba(255,200,61,.8))">🏆</div><div style="font:800 64px Sora;color:var(--g);margin-top:20px">CHALLENGE WON</div></div></div>
+  <!-- leaderboard -->
+  <div class="abs" id="s4" style="inset:0"><div class="abs ov cap" style="top:300px">📈 Climb the <b>leaderboard</b><div class="ar">اطلع فوق بالترتيب</div></div>
+    <div class="abs" style="left:110px;right:110px;top:700px;height:720px">${[['O', 'Omar', 2840], ['K', 'Khalid', 2610], ['F', 'Faisal', 2475], ['Y', 'You', 2390]].map(([l, n, p], i) => `<div class="card rk" id="lb${i}" style="position:absolute;left:0;right:0;top:${i * 170}px;margin:0;border:1px solid var(--line);padding:26px 28px${l == 'Y' ? ';border-color:var(--b);box-shadow:0 0 40px rgba(31,107,255,.5)' : ''}"><span class="p" data-n="lp${i}">${i + 1}</span>${av(l, 64)}<span class="name" style="font-size:38px">${n}</span><span class="sc" style="font-size:34px">${l == 'Y' ? '<span data-n="pts">2390</span>' : p} pts</span></div>`).join('')}</div></div>
+  <!-- ranks -->
+  <div class="abs" id="s5" style="inset:0"><div class="abs ov cap" style="top:300px">💎 Rank up<div class="ar">ارفع رانكك</div></div>
+    <div class="abs" style="left:60px;right:60px;top:820px;display:flex;justify-content:space-between">${[['Bronze', 'linear-gradient(160deg,#e3a26f,#8a5126)'], ['Silver', 'linear-gradient(160deg,#f1f4f8,#8e99a8)'], ['Gold', 'linear-gradient(160deg,#ffe48a,#d39a12)'], ['Diamond', 'linear-gradient(160deg,#b9f0ff,#1F6BFF)']].map(([n, g], i) => `<div class="rank" id="rk${i}"><div class="hex" style="background:${g}">${n[0]}</div><b>${n}</b></div>`).join('')}</div></div>
+  <!-- player card -->
+  <div class="abs" id="s6" style="inset:0"><div class="abs ov cap" style="top:300px">🃏 Flex your <b>player card</b><div class="ar">استعرض كرتك</div></div>
+    <div class="abs pcard" id="pc"><div class="shine abs" id="shine"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;position:relative"><div style="font:800 40px Mont;color:var(--g)">GOLD</div><div class="logo" style="width:70px;height:70px;background:#fff2"> ${LOGO}</div></div>
+      <div style="width:220px;height:220px;border-radius:50%;background:#0b1a3e;margin:40px auto 0;display:flex;align-items:center;justify-content:center;font:800 110px Sora;border:6px solid var(--g);position:relative">Y</div>
+      <div style="text-align:center;font:800 60px Sora;margin-top:24px;position:relative">YOU</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:40px;text-align:center;position:relative">${[['🔥', '30', 'streak'], ['📸', '48', 'check-ins'], ['🏆', '6', 'wins']].map(([e, n, l]) => `<div><div style="font-size:50px">${e}</div><div style="font:800 54px Mont">${n}</div><div style="font:700 22px Sora;color:#c9d6ff">${l}</div></div>`).join('')}</div></div></div>
+  <!-- crew vs crew -->
+  <div class="abs" id="s7" style="inset:0"><div class="abs ov cap" style="top:300px">⚔️ Crew <b>vs</b> crew<div class="ar">شلة ضد شلة</div></div>
+    <div class="abs" style="left:90px;right:90px;top:760px">
+      <div class="vs" style="justify-content:space-between"><span style="color:var(--b2)">Your crew</span><span style="color:var(--o)">Gym Rats</span></div>
+      <div class="vs" style="margin-top:24px"><div class="bar" style="height:80px;border-radius:40px"><i id="vA" style="display:block;height:100%;width:50%;background:var(--b);box-shadow:0 0 30px var(--b)"></i><i id="vB" style="display:block;height:100%;flex:1;background:var(--o)"></i></div></div>
+      <div style="text-align:center;font:800 160px Mont;margin-top:70px;text-shadow:0 0 60px rgba(31,107,255,.6)">VS</div>
+      <div style="text-align:center;font:700 36px Sora;color:var(--mut)">Season 1 · week 3</div></div></div>
+  ${endCard('Join the waitlist · link on our Instagram', 'سجّل بقائمة الانتظار · الرابط في انستقرامنا')}`;
+  tl.fromTo('#h', { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: .3 }, 0); out('#h', 1.7);
+  const sc = ['#s1', '#s2', '#s3', '#s4', '#s5', '#s6', '#s7'];
+  tl.set(sc.join(','), { opacity: 0 }, 0);
+  sc.forEach((id, i) => { const t = 1.9 + i * 1.65; tl.set(id, { opacity: 1 }, t).set(id, { opacity: 0 }, t + 1.65); punch(id, t, 1.18); flash(t); });
+  // per-scene motion
+  tl.fromTo('#nbig', { scale: 1 }, { scale: .86, duration: .12, yoyo: true, repeat: 1 }, 2.3).fromTo('#t2', { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: .3, ease: 'back.out(2)' }, 2.5);
+  tl.to(N, { st2: 30, duration: 1.1, ease: 'power2.out' }, 3.6).fromTo('#bigfire', { scale: .6 }, { scale: 1, duration: .8, ease: 'elastic.out(1,.4)' }, 3.6);
+  tl.fromTo('#tro', { scale: .3, rotate: -20 }, { scale: 1, rotate: 0, duration: .6, ease: 'back.out(2)' }, 5.2);
+  burst('confetti', 5.3, 90, { x: 540, y: 1000, vy: 1800, vx: 1600, spread: 300, life: 1.5 });
+  tl.to(N, { pts: 2895, duration: .9, ease: 'power2.out' }, 7.0).to('#lb3', { top: 0, duration: .6, ease: 'power3.inOut' }, 7.3).to(['#lb0', '#lb1', '#lb2'], { top: '+=170', duration: .6, ease: 'power3.inOut' }, 7.3)
+    .to(N, { lp3: 1, lp0: 2, lp1: 3, lp2: 4, duration: .01 }, 7.6);
+  Object.assign(N, { lp0: 1, lp1: 2, lp2: 3, lp3: 4, pts: 2390 });
+  [0, 1, 2, 3].forEach(i => tl.fromTo(`#rk${i}`, { opacity: 0, y: 80, rotateY: 90 }, { opacity: 1, y: 0, rotateY: 0, duration: .35, ease: 'back.out(1.8)' }, 8.85 + i * .25));
+  tl.fromTo('#pc', { rotateY: -40, scale: .85 }, { rotateY: 0, scale: 1, duration: .7, ease: 'power3.out' }, 10.15).fromTo('#shine', { x: -700 }, { x: 700, duration: 1, ease: 'power2.inOut' }, 10.5);
+  tl.to('#vA', { width: '64%', duration: 1.1, ease: 'power2.inOut' }, 12.0);
+  pop('#end', 13.6);
+},
+};
+CUTS[CUT]();
+tl.set('#end', { opacity: 0 }, 0);
+tl.set('#fade', { opacity: 1 }, 0).to('#fade', { opacity: 0, duration: .25, ease: 'none' }, 0).to('#fade', { opacity: 1, duration: .4, ease: 'none' }, DUR - .4);
+
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  for (const el of document.querySelectorAll('[data-n]')) el.textContent = Math.round(N[el.dataset.n] ?? 0);
+  fx(t);
+  $('#dots').style.transform = `translateY(${-(t * 30) % 54}px)`;
+};
+document.fonts.ready.then(() => { renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

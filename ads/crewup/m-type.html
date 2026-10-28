@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Type</title>
+<style>
+@font-face{font-family:Sora;src:url(fonts/sora-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#7aa6ff;--o:#FF7A2F;--g:#FFC83D;--mut:#9aa6bd}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#05070d;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff}
+.abs{position:absolute}
+#grid{inset:-120px;background-image:linear-gradient(rgba(31,107,255,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(31,107,255,.11) 1px,transparent 1px);background-size:120px 120px}
+#glow{left:40px;top:560px;width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,rgba(31,107,255,.38),rgba(31,107,255,0) 65%)}
+.ov{left:0;right:0;text-align:center}
+.big{font:800 150px/1.02 Sora;letter-spacing:-.05em}
+.big b{color:var(--b2);text-shadow:0 0 60px rgba(31,107,255,.8)}
+.en{font:600 44px/1.3 Inter;color:#c4cde0;margin-top:26px}
+.bub{position:absolute;background:#1a2030;border-radius:34px 34px 34px 10px;padding:22px 32px;font:600 42px/1 Inter;box-shadow:0 20px 50px rgba(0,0,0,.5);white-space:nowrap}
+.bub.me{background:var(--b);border-radius:34px 34px 10px 34px}
+.bub small{display:block;font:600 22px Inter;color:#8e98ad;margin-bottom:8px}
+#web{left:0;top:0;width:1080px;height:1920px}
+.node{position:absolute;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 62px/1 Inter;color:#08101f;box-shadow:0 0 0 8px rgba(255,255,255,.05),0 20px 60px rgba(0,0,0,.5)}
+.node .tag{position:absolute;top:150px;font:700 26px Inter;color:#c4cde0;white-space:nowrap}
+#core{position:absolute;left:465px;top:905px;width:150px;height:150px;border-radius:38px;overflow:hidden;box-shadow:0 0 80px rgba(31,107,255,.9)}
+#core img{width:100%;height:100%}
+#verbs{top:1470px;display:flex;justify-content:center;gap:30px}
+.v{font:800 54px/1 Sora;letter-spacing:-.03em;position:relative;color:#3a4458}
+.v i{position:absolute;left:0;right:0;top:68px;height:8px;border-radius:4px;background:var(--b);box-shadow:0 0 20px var(--b);transform:scaleX(0)}
+#end{top:520px}
+#end img{width:230px;height:230px;border-radius:56px;box-shadow:0 0 110px rgba(31,107,255,.85)}
+#end .wm{font:800 170px/1 Sora;letter-spacing:-.05em;margin-top:50px}
+#end .a{font:700 46px/1.3 Inter;color:#d6ddee;margin-top:24px}
+#end .pill{display:inline-block;margin-top:50px;padding:26px 46px;border-radius:30px;background:var(--b);font:700 42px/1.2 Inter;box-shadow:0 0 60px rgba(31,107,255,.7)}
+#end .h{font:700 36px Inter;color:var(--b2);margin-top:28px}
+#label{left:50px;top:80px;display:flex;align-items:center;gap:14px;z-index:9}
+#label img{width:60px;height:60px;border-radius:15px}
+#label span{font:600 22px Inter;letter-spacing:.06em;color:#c9d3e8;border:2px solid rgba(201,211,232,.3);padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.35)}
+#flash{inset:0;background:#cfe0ff;mix-blend-mode:screen;opacity:0}
+#fade{inset:0;background:#000}
+</style>
+</head>
+<body>
+<div id="grid" class="abs"></div><div id="glow" class="abs"></div>
+<div id="hook" class="abs ov" style="top:640px"><div class="big">who's actually<br><b>going today?</b></div><div class="en">the gym group chat:</div></div>
+<div id="chat" class="abs" style="inset:0"></div>
+<div id="easy" class="abs ov" style="top:700px"><div class="big" style="font-size:136px">make it a<br><b>competition.</b></div></div>
+<svg id="web" class="abs" viewBox="0 0 1080 1920"></svg>
+<div id="nodes"></div>
+<div id="core"><img src="img/crewup-logo.png"></div>
+<div id="crewlbl" class="abs ov" style="top:250px"><div class="big" style="font-size:112px">this is your <b>crew.</b></div><div class="en" style="margin-top:14px">loser buys coffee ☕</div></div>
+<div id="verbs" class="abs ov"></div>
+<div id="end" class="abs ov"><img src="img/crewup-logo.png"><div class="wm">CrewUp</div><div class="a">Gym with your crew, not alone.</div>
+  <div class="pill">Would you use this? 👀</div><div class="h">@getcrewup</div></div>
+<div id="label" class="abs"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div>
+<div id="flash" class="abs"></div><div id="fade" class="abs"></div>
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const SFX = []; window.SFX = SFX; const sfx = (type, t) => SFX.push({ type, t });
+const msgs = [['me', 'gym at 8? 💪', 640, 260], ['Omar', 'leg day tmrw so no', 80, 400], ['Khalid', 'just ate kabsa 😮‍💨', 380, 540], ['Faisal', 'too tired bro', 120, 690], ['Omar', 'its too hot', 560, 820], ['Khalid', 'tomorrow fr', 90, 950], ['Faisal', 'pre-workout didnt hit', 300, 1080], ['Omar', 'i’ll start sunday', 110, 1220], ['Khalid', '😴', 760, 1240], ['Faisal', 'seen ✓✓', 520, 1370], ['me', 'guys?? 😭', 600, 1500]];
+$('#chat').innerHTML = msgs.map(([w, m, x, y], i) => `<div class="bub${w == 'me' ? ' me' : ''}" id="m${i}" style="left:${x}px;top:${y}px">${w == 'me' ? '' : `<small>${w}</small>`}${m}</div>`).join('');
+const C = { O: '#6E9BFF', K: '#FFC83D', F: '#FF9A5A', Y: '#d6dbe6' };
+const NODES = [['O', 'Omar', 540, 640, '🔥 12'], ['K', 'Khalid', 830, 980, '🥇 Gold'], ['F', 'Faisal', 540, 1320, '😴 0/4'], ['Y', 'You', 250, 980, '📸 3/4']];
+$('#nodes').innerHTML = NODES.map(([l, n, x, y, tg], i) => `<div class="node abs" id="n${i}" style="left:${x}px;top:${y}px;background:${C[l]}">${l}<span class="tag">${tg}</span></div>`).join('');
+const edges = [[0, 1], [1, 2], [2, 3], [3, 0]];
+$('#web').innerHTML = edges.map(([a, b], k) => { const [, , x1, y1] = NODES[a], [, , x2, y2] = NODES[b], len = Math.hypot(x2 - x1, y2 - y1);
+  return `<line id="e${k}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1F6BFF" stroke-width="5" stroke-linecap="round" stroke-dasharray="${len}" stroke-dashoffset="${len}" style="filter:drop-shadow(0 0 10px #1F6BFF)"/>`; }).join('') +
+  NODES.map(([, , x, y], k) => `<line id="s${k}" x1="${x}" y1="${y}" x2="540" y2="980" stroke="rgba(122,166,255,.5)" stroke-width="3" stroke-dasharray="10 10" opacity="0"/>`).join('');
+$('#verbs').innerHTML = ['Challenge', 'Check in', 'Nudge', 'Win'].map((v, i) => `<div class="v" id="v${i}">${v}<i></i></div>`).join('');
+
+const DUR = 14;
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+tl.set('#easy, #crewlbl, #verbs, #end, #core', { opacity: 0 }, 0)
+  .set('#fade', { opacity: 1 }).to('#fade', { opacity: 0, duration: .3, ease: 'none' }, 0)
+  .fromTo('#hook', { opacity: 0, scale: 1.3, filter: 'blur(16px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .35 }, 0)
+  .to('#hook', { opacity: 0, scale: .92, duration: .3, ease: 'power2.in' }, 1.85);
+msgs.forEach((_, i) => { const t = 2.0 + i * .14; if (i % 2 == 0) sfx('msg', t); tl.fromTo(`#m${i}`, { opacity: 0, scale: .4, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: .22, ease: 'back.out(2.4)' }, t); });
+tl.to('#chat .bub', { x: () => gsap.utils.random(-1400, 1400, 1), y: () => gsap.utils.random(-700, 700, 1), rotate: () => gsap.utils.random(-60, 60, 1), opacity: 0, duration: .55, ease: 'power3.in', stagger: .012 }, 4.0)
+  .to('#flash', { opacity: .6, duration: .07, yoyo: true, repeat: 1 }, 4.5)
+  .fromTo('#easy', { opacity: 0, scale: 1.35 }, { opacity: 1, scale: 1, duration: .35 }, 4.55)
+  .to('#easy', { opacity: 0, y: -60, duration: .3, ease: 'power2.in' }, 5.8)
+  .fromTo('#crewlbl', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .4 }, 6.0);
+sfx('buzz', 4.5); sfx('pop', 4.6);
+tl.fromTo('#core', { opacity: 0, scale: .2, rotate: -30 }, { opacity: 1, scale: 1, rotate: 0, duration: .5, ease: 'back.out(2)' }, 6.0); sfx('ding', 6.0);
+NODES.forEach((_, i) => { tl.fromTo(`#n${i}`, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: .4, ease: 'back.out(2.2)' }, 6.3 + i * .15).to(`#s${i}`, { opacity: 1, duration: .3 }, 6.4 + i * .15); sfx('pop', 6.3 + i * .15); });
+edges.forEach((_, k) => tl.to(`#e${k}`, { attr: { 'stroke-dashoffset': 0 }, duration: .45, ease: 'power2.inOut' }, 6.9 + k * .1));
+tl.fromTo('#verbs', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .35 }, 7.6);
+[0, 1, 2, 3].forEach(i => { const t = 7.9 + i * .55; sfx(i == 3 ? 'win' : 'tap', t); tl.to(`#v${i}`, { color: '#fff', duration: .15 }, t).to(`#v${i} i`, { scaleX: 1, duration: .3 }, t); });
+// Faisal gets nudged: node shakes
+tl.to('#n2', { x: 12, duration: .04, yoyo: true, repeat: 9, ease: 'none' }, 9.0).set('#n2', { x: 0 }, 9.4); sfx('buzz', 9.0);
+tl.to(['#crewlbl', '#verbs'], { opacity: 0, duration: .3 }, 10.4)
+  .to('.node', { left: 540, top: 980, scale: .2, opacity: 0, duration: .5, ease: 'power3.in' }, 10.5)
+  .to(['#web', '#core'], { opacity: 0, duration: .4 }, 10.5)
+  .to('#flash', { opacity: .7, duration: .07, yoyo: true, repeat: 1 }, 11.0)
+  .fromTo('#end', { opacity: 0 }, { opacity: 1, duration: .2 }, 11.05)
+  .fromTo('#end img', { scale: .2, rotate: -30 }, { scale: 1, rotate: 0, duration: .6, ease: 'back.out(2)' }, 11.05)
+  .fromTo('#end .wm', { opacity: 0, letterSpacing: '.3em' }, { opacity: 1, letterSpacing: '-.05em', duration: .7 }, 11.3)
+  .fromTo(['#end .a', '#end .pill', '#end .h'], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .45, stagger: .12 }, 11.6)
+  .to('#fade', { opacity: 1, duration: .4, ease: 'none' }, DUR - .4);
+sfx('logo', 11.05);
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  $('#grid').style.transform = `perspective(900px) rotateX(${12 + Math.sin(t * .5) * 3}deg) translateY(${-(t * 40) % 120}px)`;
+  $('#glow').style.transform = `scale(${1 + .08 * Math.sin(t * 1.8)})`;
+};
+document.fonts.ready.then(async () => { await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

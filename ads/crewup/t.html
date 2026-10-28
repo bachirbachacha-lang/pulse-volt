@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Trailer</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#7aa6ff;--o:#FF7A2F;--g:#FFC83D;--mut:#7f889c}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#04050a;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.abs{position:absolute}
+#world{position:absolute;inset:0;transform-origin:50% 50%}
+#glow{left:-300px;top:200px;width:1680px;height:1680px;border-radius:50%;filter:blur(60px)}
+#glow2{left:200px;top:900px;width:900px;height:900px;border-radius:50%;filter:blur(80px);opacity:.6}
+#grain{inset:0;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");z-index:50;pointer-events:none}
+#vig{inset:0;background:radial-gradient(85% 60% at 50% 50%,rgba(0,0,0,0) 45%,rgba(0,0,0,.8) 100%);z-index:49}
+/* kinetic lines */
+.line{position:absolute;left:40px;right:40px;text-align:center;font:600 92px/1.1 Inter;letter-spacing:-.045em;z-index:20}
+.line .w{display:inline-block;margin:0 .14em;will-change:transform,opacity,filter}
+.line .hl{color:var(--b2);text-shadow:0 0 50px rgba(31,107,255,.9)}
+.line .or{color:var(--o);text-shadow:0 0 50px rgba(255,122,47,.8)}
+.line .gd{color:var(--g);text-shadow:0 0 50px rgba(255,200,61,.8)}
+.small{font:500 40px/1.3 Inter;letter-spacing:-.01em;color:#b9c2d6}
+/* 3D phone */
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:2200px;perspective-origin:50% 1150px;z-index:10}
+#phone{position:absolute;left:260px;top:700px;width:560px;height:1000px;transform-style:preserve-3d}
+.ly{position:absolute;inset:0;border-radius:88px}
+#back{background:linear-gradient(140deg,#2a3142,#0b0d13);transform:translateZ(-22px)}
+#mid{background:linear-gradient(140deg,#4c5568,#151923 50%,#3a4254);transform:translateZ(-11px)}
+#front{background:linear-gradient(145deg,#6b7488,#1a1e28 35%,#0d1017 60%,#565f73);padding:15px;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+#screen{width:100%;height:100%;border-radius:74px;overflow:hidden;background:#090B10;position:relative}
+#screen img{width:100%;height:100%;object-fit:cover;display:block}
+#sheen{position:absolute;inset:0;border-radius:74px;background:linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.16) 45%,rgba(255,255,255,0) 60%);mix-blend-mode:screen;background-size:300% 100%}
+#shadow{position:absolute;left:280px;top:1730px;width:520px;height:80px;border-radius:50%;background:radial-gradient(50% 50%,rgba(0,0,0,.6),rgba(0,0,0,0));filter:blur(10px);z-index:9}
+/* mosaic */
+#mosaic{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:1800px;z-index:12}
+#plane{position:absolute;left:-200px;top:300px;width:1480px;height:1500px;transform-style:preserve-3d}
+.mt{position:absolute;width:300px;height:560px;border-radius:40px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);background:#090B10}
+.mt img{width:100%;height:100%;object-fit:cover}
+/* stamp */
+#stamp{left:170px;top:980px;width:740px;text-align:center;border:10px solid #FF453A;color:#FF453A;font:800 96px/1 Sora;padding:30px 0 22px;border-radius:30px;transform:rotate(-9deg);background:rgba(4,5,10,.6);z-index:30;box-shadow:0 0 80px rgba(255,69,58,.5)}
+.rank{position:absolute;top:1450px;width:220px;text-align:center;font:800 40px Inter;z-index:30}
+.rank i{display:block;width:150px;height:170px;margin:0 auto 14px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+/* logo build */
+#dot{left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 40px #fff;z-index:30}
+#ring{left:390px;top:810px;width:300px;height:300px;border-radius:50%;border:3px solid rgba(255,255,255,.8);z-index:30}
+#logo{left:380px;top:800px;width:320px;height:320px;border-radius:80px;z-index:31;box-shadow:0 0 140px rgba(31,107,255,.9)}
+#wm{left:0;right:0;top:1170px;text-align:center;font:800 150px/1 Sora;letter-spacing:-.06em;z-index:31}
+#cs{left:0;right:0;top:1350px;text-align:center;font:600 40px Inter;color:#b9c2d6;z-index:31}
+#cta{left:150px;right:150px;top:1450px;text-align:center;background:var(--b);border-radius:30px;padding:26px 0;font:700 40px Inter;box-shadow:0 0 70px rgba(31,107,255,.7);z-index:31}
+#handle{left:0;right:0;top:1580px;text-align:center;font:700 36px Inter;color:var(--b2);z-index:31}
+#tag{left:50px;top:80px;display:flex;align-items:center;gap:12px;z-index:60}
+#tag img{width:52px;height:52px;border-radius:13px}
+#tag span{font:600 20px Inter;letter-spacing:.06em;color:#9aa6bd;border:1.5px solid rgba(154,166,189,.3);padding:9px 12px;border-radius:10px;background:rgba(0,0,0,.3)}
+#flash{inset:0;background:#dfe9ff;mix-blend-mode:screen;opacity:0;z-index:70}
+#fade{inset:0;background:#000;z-index:80}
+/* inside the app: full-screen recording + shade for the text */
+#full{position:absolute;inset:0;z-index:14;overflow:hidden;transform-origin:50% 50%;box-shadow:0 60px 140px rgba(0,0,0,.7),0 0 0 3px rgba(255,255,255,.08)}
+#full img{width:100%;height:100%;object-fit:cover;display:block}
+#fshade{position:absolute;left:0;right:0;top:0;height:720px;background:linear-gradient(180deg,rgba(4,5,10,.92) 0%,rgba(4,5,10,.75) 45%,rgba(4,5,10,0) 100%);z-index:15}
+#bshade{position:absolute;left:0;right:0;bottom:0;height:640px;background:linear-gradient(0deg,rgba(4,5,10,.92),rgba(4,5,10,0));z-index:15}
+/* ending extras */
+#rays{left:40px;top:460px;width:1000px;height:1000px;border-radius:50%;background:conic-gradient(from 0deg,rgba(31,107,255,0),rgba(31,107,255,.35),rgba(122,166,255,0) 12%,rgba(31,107,255,0) 25%,rgba(122,166,255,.3) 37%,rgba(31,107,255,0) 50%,rgba(31,107,255,.35) 62%,rgba(31,107,255,0) 75%,rgba(122,166,255,.3) 87%,rgba(31,107,255,0));-webkit-mask:radial-gradient(circle,#000 20%,transparent 70%);mask:radial-gradient(circle,#000 20%,transparent 70%);z-index:29}
+.burst{left:390px;top:810px;width:300px;height:300px;border-radius:80px;border:4px solid rgba(122,166,255,.9);z-index:30}
+#logoWrap{left:380px;top:800px;width:320px;height:320px;border-radius:80px;overflow:hidden;z-index:31}
+#logoWrap img{width:100%;height:100%}
+#logoShine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 65%)}
+#wm span{display:inline-block}
+#cta{overflow:hidden}
+#ctaShine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.45) 50%,rgba(255,255,255,0) 65%)}
+
+/* phone home screen (own generic icons, no real app logos) */
+#home{position:absolute;inset:0;border-radius:74px;overflow:hidden;background:radial-gradient(120% 70% at 20% 10%,#3b5bd6 0%,#1a2560 45%,#0a0f26 100%)}
+#home .clk{position:absolute;left:0;right:0;top:110px;text-align:center;font:600 30px Inter;color:rgba(255,255,255,.8)}
+#home .big{position:absolute;left:0;right:0;top:140px;text-align:center;font:700 120px/1 Inter;letter-spacing:-.04em}
+#home .ic{position:absolute;width:96px;height:96px;border-radius:24px;display:flex;align-items:center;justify-content:center}
+#home .lb{position:absolute;width:122px;margin-left:-13px;text-align:center;font:500 17px Inter;color:rgba(255,255,255,.85)}
+#home .dock{position:absolute;left:22px;right:22px;bottom:26px;height:130px;border-radius:44px;background:rgba(255,255,255,.14)}
+#hIcon{overflow:hidden;box-shadow:0 0 30px rgba(31,107,255,.8)}
+#hIcon img{width:100%;height:100%}
+#hTap{position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.45);border:3px solid #fff}
+#hdepth{position:absolute;inset:0;border-radius:74px;background:rgba(5,8,20,.45);backdrop-filter:blur(4px);-webkit-mask:radial-gradient(circle at 39% 67%,transparent 13%,#000 34%);mask:radial-gradient(circle at 39% 67%,transparent 13%,#000 34%)}
+#launch{position:absolute;z-index:13;background:#090B10;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#launch img{width:326px;height:326px}
+/* big floating app UI */
+.uscene{position:absolute;inset:0;z-index:14;transform-origin:50% 50%}
+.uc{position:absolute;left:70px;right:70px;background:#111723;border:1.5px solid #222b3d;border-radius:46px;box-shadow:0 40px 100px rgba(0,0,0,.55)}
+.utabs{position:absolute;left:70px;top:520px;display:flex;gap:18px}
+.utab{position:relative;z-index:2;font:700 34px Inter;padding:22px 34px;border-radius:999px;color:#8e98ad;border:1.5px solid #283247}
+#uPill{position:absolute;z-index:1;top:0;height:84px;border-radius:999px;background:#1F6BFF;box-shadow:0 0 40px rgba(31,107,255,.8)}
+.uh{font:800 54px/1.1 Inter;letter-spacing:-.03em}
+.us{font:500 30px/1.3 Inter;color:#8e98ad;margin-top:8px}
+.ur{display:flex;align-items:center;gap:22px;margin-top:30px}
+.uav{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 32px Inter;color:#0a0f1c;flex:none}
+.un{font:700 36px Inter;width:170px}
+.udots{display:flex;gap:12px;flex:1}
+.udots i{width:56px;height:56px;border-radius:16px;background:#1d2534}
+.ust{font:700 30px Inter;color:#8e98ad}
+.urow{position:absolute;left:70px;right:70px;background:#111723;border:1.5px solid #222b3d;border-radius:40px;padding:30px 36px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+#uBtn{position:relative;margin-top:28px;height:120px;border-radius:34px;background:#1F6BFF;display:flex;align-items:center;justify-content:center;font:800 40px Inter;box-shadow:0 0 60px rgba(31,107,255,.7)}
+#uRing{position:absolute;inset:-6px;border-radius:40px;border:5px solid #7aa6ff;opacity:0}
+#uNote{position:absolute;left:60px;right:60px;top:420px;z-index:16;background:rgba(32,38,54,.96);border:1.5px solid #3a465f;border-radius:40px;padding:26px 30px;display:flex;gap:22px;align-items:center;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#uNote img{width:84px;height:84px;border-radius:22px}
+#phone,#shadow{display:none!important}
+#gl{position:absolute;inset:0;width:1080px;height:1920px}
+#dof{position:absolute;inset:0;z-index:11;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);-webkit-mask:radial-gradient(circle at 50% 50%,transparent 17%,#000 42%);mask:radial-gradient(circle at 50% 50%,transparent 17%,#000 42%);opacity:0;pointer-events:none}
+#tap2{position:absolute;left:480px;top:900px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.4);border:4px solid #fff;z-index:12;opacity:0}
+</style>
+</head>
+<body>
+<div id="world">
+  <div id="glow" class="abs"></div><div id="glow2" class="abs"></div>
+  <div id="shadow"></div>
+  <div id="dof"></div><div id="tap2"></div><div id="stage"><canvas id="gl" width="1080" height="1920"></canvas><div id="phone"><div class="ly" id="back"></div><div class="ly" id="mid"></div>
+    <div class="ly" id="front"><div id="screen"><img id="scr"><div id="home"><div class="clk">Thursday 30 October</div><div class="big">9:41</div>%%ICONS%%<div class="dock"></div><div id="hdepth"></div><div id="hTap" style="left:195px;top:610px"></div></div><div id="sheen"></div></div></div></div></div>
+  <div id="mosaic"><div id="plane"></div></div>
+  <div id="full"><img id="fimg"></div>
+  <div id="launch"><img src="img/crewup-logo.png"></div>
+  <div class="uscene" id="u1"><div class="utabs"><div id="uPill"></div><div class="utab" style="color:#fff">Challenges</div><div class="utab">Crew</div><div class="utab">Ranks</div></div>
+    <div class="uc" style="top:680px;padding:44px 44px 48px"><div class="uh">Gym 4x per week</div><div class="us">Loser buys everyone coffee ☕ · 3 days left</div>%%ROWS%%</div></div>
+  <div class="uscene" id="u2"><div id="u2h" style="position:absolute;left:80px;top:480px;font:800 54px Inter;letter-spacing:-.03em">Your crew</div>%%CREW%%</div>
+  <div class="uscene" id="u3"><div class="uc" style="top:470px;padding:36px 40px 40px">
+    <div class="ur" style="margin:0"><div class="uav" style="background:#FFC83D">K</div><div><div style="font:700 38px Inter">Khalid checked in</div><div class="us" style="margin-top:2px">11:42 PM · 👟 312 steps today</div></div></div>
+    <div id="uPhoto" style="position:relative;margin-top:28px;height:640px;border-radius:30px;overflow:hidden;background:linear-gradient(180deg,#2a211c 0%,#4a3a30 55%,#1d1612 100%)">
+      <div style="position:absolute;left:-60px;top:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,120,.45),rgba(255,196,120,0) 70%)"></div>
+      <div style="position:absolute;left:50px;right:50px;bottom:80px;height:200px;border-radius:44px;background:linear-gradient(180deg,#6b5a4c,#43372e)"></div>
+      <div style="position:absolute;left:24px;right:24px;bottom:150px;height:150px;border-radius:50px;background:linear-gradient(180deg,#7a6757,#54463a)"></div>
+      <div style="position:absolute;left:120px;bottom:230px;width:190px;height:90px;border-radius:24px;background:#8f7b68;transform:rotate(-6deg)"></div>
+      <div style="position:absolute;right:60px;top:80px;width:250px;height:150px;border-radius:12px;background:#0e1014;box-shadow:0 0 50px rgba(120,160,255,.35)"><div style="position:absolute;inset:12px;background:linear-gradient(135deg,#2e4c8a,#122040);border-radius:6px"></div></div>
+      <div style="position:absolute;left:20px;top:20px;font:700 22px Inter;background:rgba(0,0,0,.5);padding:8px 14px;border-radius:12px">● LIVE PHOTO</div></div>
+    <div style="font:700 38px Inter;margin-top:24px">leg day done 💪🔥</div>
+    <div class="ur" style="margin-top:24px;justify-content:space-between"><div style="font:700 34px Inter;background:#1d2534;padding:18px 26px;border-radius:24px">🤨 Doubt it · <span id="uDc">0</span>/3</div>
+      <div style="display:flex">%%DOUBT%%</div></div></div></div>
+  <div id="uNote"><img src="img/crewup-logo.png"><div><div style="font:700 34px Inter">Faisal got nudged ⚡</div><div style="font:500 30px Inter;color:#b9c2d6;margin-top:4px">“The couch is not a workout” 🛋️</div></div></div>
+  <div id="fshade"></div><div id="bshade"></div>
+  <div id="lines" style="position:absolute;inset:0;z-index:20"></div>
+  <div id="stamp" class="abs">NOT COUNTED</div>
+  <div id="ranks" style="position:absolute;inset:0;z-index:21"></div>
+  <div id="rays" class="abs"></div>
+  <div id="dot" class="abs"></div><div id="ring" class="abs"></div>
+  <div class="burst abs" id="bu1"></div><div class="burst abs" id="bu2"></div>
+  <div id="logoWrap" class="abs"><img src="img/crewup-logo.png"><div id="logoShine"></div></div>
+  <div id="wm" class="abs"></div>
+  <div id="cs" class="abs">Gym with your crew, not alone.</div>
+  <div id="cta" class="abs"><span style="position:relative">Join the waitlist · link in bio</span><div id="ctaShine"></div></div>
+  <div id="handle" class="abs">@getcrewup · coming soon</div>
+</div>
+<div id="vig" class="abs"></div><div id="grain" class="abs"></div>
+<div id="tag" class="abs"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div>
+<div id="flash" class="abs"></div><div id="fade" class="abs"></div>
+<script src="img/home-data.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="phone3d.js"></script>
+<script src="img/trailer-beat.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const BT = window.BEAT.beats, EN = window.BEAT.energy;
+const B = i => BT[Math.min(i, BT.length - 1)];
+const DUR = 24.5;
+const F = 'frames-trailer/';
+
+let lc = 0;
+function line(words, top, cls = '', size) {
+  const id = 'l' + (lc++); const el = document.createElement('div'); el.className = 'line ' + cls; el.id = id; el.style.top = top + 'px'; if (size) el.style.fontSize = size + 'px';
+  el.innerHTML = words.map(([w, c], i) => `<span class="w ${c || ''}" id="${id}w${i}">${w}</span>`).join(' ');
+  $('#lines').appendChild(el); return id;
+}
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+const wordsIn = (id, times) => times.forEach((t, i) => tl.fromTo(`#${id}w${i}`, { opacity: 0, y: 40, filter: 'blur(14px)', scale: 1.15 }, { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: .28 }, t));
+const out = (id, t, d = .22) => tl.to('#' + id, { opacity: 0, y: -40, filter: 'blur(12px)', duration: d, ease: 'power2.in' }, t);
+const flash = (t, o = .45) => tl.to('#flash', { opacity: o, duration: .05, yoyo: true, repeat: 1 }, t);
+const glowAt = [[0, '#1F6BFF'], [B(16), '#1F6BFF'], [B(28), '#2bd4c0'], [B(32), '#FFC83D'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
+
+
+const PCOL = { O: '#6E9BFF', K: '#FFC83D', F: '#FF9A5A', Y: '#d6dbe6' };
+const GLY = ['<circle cx="12" cy="12" r="7" fill="#fff"/>', '<rect x="5" y="5" width="14" height="14" rx="3" fill="#fff"/>', '<path d="M12 4l8 15H4z" fill="#fff"/>', '<path d="M3 14c3-6 6 6 9 0s6 6 9 0" stroke="#fff" stroke-width="2.5" fill="none"/>', '<path d="M6 4h12v16l-6-4-6 4z" fill="#fff"/>', '<circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="2.5" fill="none"/><circle cx="12" cy="12" r="2" fill="#fff"/>'];
+const ICC = ['#ff8a5b', '#7b5cff', '#2bd4a0', '#ffc83d', '#ff5d8f', '#5ab0ff', '#9aa3b5', '#38c172'];
+const NAMES = ['Notes', 'Photos', 'Music', 'Maps', 'Weather', 'Mail', 'Camera', 'Clock', 'Wallet', 'Calendar', 'Files', 'Books', 'News', 'Home', 'Health', 'Stocks'];
+let icons = '';
+for (let r = 0; r < 4; r++) for (let cI = 0; cI < 4; cI++) { const x = 40 + cI * 122, y = 330 + r * 140, k = r * 4 + cI;
+  if (r == 2 && cI == 1) { icons += `<div class="ic" id="hIcon" style="left:${x}px;top:${y}px"><img src="img/crewup-logo.png"></div><div class="lb" style="left:${x}px;top:${y + 102}px">CrewUp</div>`; continue; }
+  icons += `<div class="ic" style="left:${x}px;top:${y}px;background:linear-gradient(160deg,${ICC[k % 8]},${ICC[(k + 3) % 8]})"><svg width="50" height="50" viewBox="0 0 24 24">${GLY[k % 6]}</svg></div><div class="lb" style="left:${x}px;top:${y + 102}px">${NAMES[k]}</div>`; }
+$('#home').innerHTML = $('#home').innerHTML.replace('%%ICONS%%', icons);
+$('#u1').innerHTML = $('#u1').innerHTML.replace('%%ROWS%%', [['O', 'Omar', '4/4'], ['K', 'Khalid', '3/4'], ['Y', 'You', '3/4'], ['F', 'Faisal', '0/4 😴']].map(([l, n, st], r) => `<div class="ur"><div class="uav" style="background:${PCOL[l]}">${l}</div><div class="un">${n}</div><div class="udots">${[0, 1, 2, 3].map(j => `<i id="ud${r}${j}"></i>`).join('')}</div><div class="ust">${st}</div></div>`).join(''));
+$('#u2').innerHTML = $('#u2').innerHTML.replace('%%CREW%%', `<div class="urow" id="uO" style="top:580px"><div class="ur" style="margin:0"><div class="uav" style="background:#6E9BFF">O</div><div style="flex:1"><div style="font:700 38px Inter">Omar</div><div class="us" style="margin-top:2px">4/4 this week · 🔥 21</div></div><div style="font:800 34px Inter;color:#2bd46b">✓</div></div></div>
+  <div class="urow" id="uK" style="top:760px"><div class="ur" style="margin:0"><div class="uav" style="background:#FFC83D">K</div><div style="flex:1"><div style="font:700 38px Inter">Khalid</div><div class="us" style="margin-top:2px">3/4 this week · 🔥 12</div></div><div style="font:800 34px Inter;color:#8e98ad">⌄</div></div></div>
+  <div class="urow" id="uF" style="top:940px;height:150px"><div class="ur" style="margin:0"><div class="uav" style="background:#FF9A5A">F</div><div style="flex:1"><div style="font:700 38px Inter">Faisal</div><div class="us" style="margin-top:2px">0/4 this week · 😴</div></div><div style="font:800 34px Inter;color:#8e98ad">⌃</div></div>
+    <div id="uFx"><div class="us" style="margin-top:34px">Last check-in: Monday. The crew is waiting.</div><div id="uBtn"><span id="uBtnT">Nudge Faisal ⚡</span><div id="uRing"></div></div></div></div>`);
+$('#u3').innerHTML = $('#u3').innerHTML.replace('%%DOUBT%%', ['O', 'F', 'Y'].map((l, i) => `<div class="uav" id="uDv${i}" style="width:64px;height:64px;font-size:26px;margin-left:${i ? -14 : 0}px;border:4px solid #111723;background:${PCOL[l]}">${l}</div>`).join(''));
+
+// 1) intro words, one per beat
+const a = line([['Gym'], ['with'], ['your'], ['crew,', 'hl']], 820);
+const a2 = line([['not'], ['alone.']], 940, '', 130);
+wordsIn(a, [B(0), B(1), B(2), B(3)]); wordsIn(a2, [B(4), B(5)]);
+tl.to(['#' + a, '#' + a2], { y: -560, scale: .62, duration: .45, ease: 'power3.inOut' }, B(7) - .2);
+out(a, B(10) - .1); out(a2, B(10) - .1);
+
+// 2) phone rises tilted, goes flat on its home screen, camera pushes onto the CrewUp icon, tap, the app opens
+const P3 = window.Phone3D, R3 = P3.rig, IC = P3.ICON, WG = P3.WIDGET;
+R3.fl = 1;
+tl.set(R3, { on: 0 }, 0).set(R3, { on: 1 }, B(8) - .05)
+  // rises from below spinning from its back to its front, top tilted away
+  .fromTo(R3, { py: -3.4, ry: Math.PI * 1.15, rx: -.6, rz: .18 }, { py: -.1, ry: .32, rx: -.34, rz: 0, duration: B(10) - B(8), ease: 'power3.out' }, B(8))
+  // settles flat facing the camera
+  .to(R3, { py: 0, ry: 0, rx: 0, duration: B(12) - B(10), ease: 'power2.inOut' }, B(10))
+  .to(R3, { fl: 0, duration: .5 }, B(12) - .3)
+  // camera glides over the live widget at an angle, reading it
+  .to(R3, { cx: WG[0] + .42, cy: WG[1] - .12, cz: 2.0, lx: WG[0] + .05, ly: WG[1], lz: 0, duration: B(13) - B(12) + .2, ease: 'power3.inOut' }, B(12) - .1)
+  // then onto the CrewUp icon, straight on, close
+  .to(R3, { cx: IC[0], cy: IC[1], cz: IC[2] + 1.356, lx: IC[0], ly: IC[1], lz: IC[2], duration: B(14) - B(13) + .05, ease: 'power3.inOut' }, B(13) + .1)
+  // tap: tiny push in
+  .to(R3, { cz: IC[2] + 1.30, duration: .1, yoyo: true, repeat: 1 }, B(14) + .15)
+  .set(R3, { on: 0 }, B(15) + .45);
+tl.to('#dof', { opacity: 1, duration: .45 }, B(12) + .1).to('#dof', { opacity: 0, duration: .2 }, B(15) + .3);
+tl.fromTo('#tap2', { opacity: 0, scale: .3 }, { opacity: 1, scale: 1.3, duration: .22 }, B(14) + .15).to('#tap2', { opacity: 0, duration: .2 }, B(14) + .4);
+tl.set('#launch', { autoAlpha: 0 }, 0)
+  .fromTo('#launch', { autoAlpha: 1, left: 377, top: 797, width: 326, height: 326, borderRadius: 76 }, { left: 0, top: 0, width: 1080, height: 1920, borderRadius: 0, duration: .45, ease: 'power3.in' }, B(15))
+  .to('#launch img', { autoAlpha: 0, scale: .6, duration: .3 }, B(15) + .1)
+  .set('#phone', { autoAlpha: 0 }, B(15) + .45)
+  .to('#launch', { autoAlpha: 0, duration: .3 }, B(16) - .05);
+
+// inside the app: big floating UI, the camera reads across it
+const whipIn = (id, t) => tl.fromTo(id, { autoAlpha: 1, y: 1400, scaleY: 1.25, filter: 'blur(18px)' }, { y: 0, scaleY: 1, filter: 'blur(0px)', duration: .32, ease: 'power3.out' }, t);
+const whipOut = (id, t) => tl.to(id, { y: -1400, scaleY: 1.25, filter: 'blur(18px)', duration: .28, ease: 'power3.in' }, t).set(id, { autoAlpha: 0 }, t + .3);
+tl.set(['#u1', '#u2', '#u3', '#fshade', '#bshade'], { autoAlpha: 0 }, 0);
+// U1: tabs + challenge card, focus pull and slow drift, check-ins fill on the beat
+tl.fromTo('#u1', { autoAlpha: 0, y: 160, scale: 1.14, filter: 'blur(16px)' }, { autoAlpha: 1, y: 0, scale: 1.0, filter: 'blur(0px)', duration: .6, ease: 'power3.out' }, B(16) - .05)
+  .to('#u1', { y: -70, duration: B(20) - B(16), ease: 'none' }, B(16) + .55);
+tl.to('#uPill', { left: 0, width: 260, duration: .01 }, 0);
+const c = line([['Start'], ['a'], ['challenge.', 'hl']], 250);
+const c2 = line([['loser'], ['buys'], ['coffee'], ['☕']], 370, 'small');
+wordsIn(c, [B(16) + .1, B(16) + .25, B(17)]); wordsIn(c2, [B(18), B(18) + .1, B(18) + .2, B(19)]);
+out(c, B(20) - .2); out(c2, B(20) - .2);
+['#ud0', '#ud1', '#ud2'].forEach((rid, r) => [0, 1, 2, 3].slice(0, [4, 3, 3][r]).forEach(j => { const t = B(17) + (r * 4 + j) * (B(18) - B(17)) / 4; tl.set(`${rid}${j}`, { background: '#1F6BFF', boxShadow: '0 0 22px rgba(31,107,255,.8)' }, t).fromTo(`${rid}${j}`, { scale: .4 }, { scale: 1, duration: .25, ease: 'back.out(3)' }, t); }));
+whipOut('#u1', B(20) - .15);
+// U2: the crew list, Faisal's row opens, camera pushes onto the nudge button, tap, notification
+whipIn('#u2', B(20) + .05);
+tl.to('#u2', { y: -40, duration: B(24) - B(20), ease: 'none' }, B(20) + .4);
+tl.to('#uF', { height: 470, duration: .4, ease: 'power3.inOut' }, B(21)).fromTo('#uFx', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: .3 }, B(21) + .2);
+tl.to('#u2', { scale: 1.32, x: 0, transformOrigin: '50% 72%', duration: .6, ease: 'power3.inOut' }, B(22) - .1)
+  .to(['#uO', '#uK', '#u2h'], { filter: 'blur(8px)', opacity: .5, duration: .4 }, B(22) - .1);
+tl.to('#uBtn', { scale: .92, duration: .1, yoyo: true, repeat: 1 }, B(23) - .12)
+  .fromTo('#uRing', { autoAlpha: .9, scale: 1 }, { autoAlpha: 0, scale: 1.5, duration: .5 }, B(23) - .05)
+  .to('#uBtn', { background: '#2bd46b', duration: .15 }, B(23)).set('#uBtnT', { innerHTML: 'Nudge sent ✓' }, B(23));
+tl.set('#uNote', { autoAlpha: 0 }, 0).fromTo('#uNote', { autoAlpha: 1, y: -260 }, { y: 0, duration: .45, ease: 'back.out(1.4)' }, B(23) + .1);
+const e = line([['Nudge'], ['with'], ['one'], ['tap.', 'hl'], ['⚡']], 250);
+wordsIn(e, [B(20) + .3, B(20) + .42, B(21) + .2, B(21) + .45, B(21) + .55]);
+out(e, B(23));
+tl.to('#uNote', { autoAlpha: 0, duration: .2 }, B(24) - .3);
+whipOut('#u2', B(24) - .15);
+// U3: Khalid's check-in, three doubts on the beat, then the stamp
+whipIn('#u3', B(24) + .05);
+tl.to('#u3', { y: -60, duration: B(28) - B(24), ease: 'none' }, B(24) + .4);
+const f = line([['Fake'], ['check-in?'], ['🤨']], 250);
+wordsIn(f, [B(24) + .2, B(24) + .35, B(25)]);
+const N3 = { dc: 0 };
+[0, 1, 2].forEach(i => { const t = B(25) + i * (B(26) - B(25)) / 2.2; tl.to(N3, { dc: i + 1, duration: .02 }, t).fromTo('#uDv' + i, { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .25, ease: 'back.out(3)' }, t); });
+tl.set('#stamp', { autoAlpha: 0 }, 0).fromTo('#stamp', { autoAlpha: 0, scale: 1.8 }, { autoAlpha: 1, scale: 1, duration: .16, ease: 'power3.in' }, B(26) - .16)
+  .to('#uPhoto', { filter: 'grayscale(1) brightness(.6)', duration: .3 }, B(26));
+tl.to('#stamp', { autoAlpha: 0, duration: .2 }, B(28) - .25); out(f, B(28) - .2);
+window.__dc = N3;
+// pull out of the app into a wall of screens
+tl.to('#u3', { autoAlpha: 0, scale: .35, filter: 'blur(10px)', duration: .4, ease: 'power3.in' }, B(28) - .2);
+const MOS = [['NT_showcase', 70], ['NT_nudge', 120], ['NT_lost', 140], ['NT_fake', 230], ['NT_excuses', 400], ['NT_showcase', 230], ['NT_day1', 200], ['NT_showcase', 300], ['NT_nudge', 270], ['NT_lost', 60], ['NT_excuses', 200], ['NT_showcase', 400]];
+$('#plane').innerHTML = MOS.map(([dd, fr], i) => `<div class="mt" id="mt${i}" style="left:${(i % 4) * 360 + 10}px;top:${Math.floor(i / 4) * 620 - 200 + (i % 2) * 90}px"><img src="${F}${dd}/${String(fr).padStart(5, '0')}.jpg"></div>`).join('');
+tl.set('#mosaic', { autoAlpha: 0 }, 0).set('#mosaic', { autoAlpha: 1 }, B(28))
+  .fromTo('#plane', { rotateX: 30, rotateZ: -10, z: 200, y: 0 }, { rotateX: 40, rotateZ: -14, z: -350, y: -80, duration: B(32) - B(28), ease: 'power1.out' }, B(28));
+MOS.forEach((_, i) => tl.fromTo('#mt' + i, { autoAlpha: 0, scale: .7 }, { autoAlpha: 1, scale: 1, duration: .3 }, B(28) + (i % 6) * .08));
+const g0 = line([['Every'], ['check-in'], ['counts.', 'hl']], 860);
+wordsIn(g0, [B(29), B(30), B(31)]);
+out(g0, B(32) - .15);
+// dive back in: trophy, then the leaderboard
+tl.to('#mosaic', { autoAlpha: 0, scale: 1.5, duration: .3, ease: 'power2.in' }, B(32) - .25)
+  .set('#full', { y: 0, borderRadius: 70 }, B(32) - .1).fromTo('#full', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: .8, duration: .35, ease: 'power3.out' }, B(32) - .1)
+  .to(['#fshade', '#bshade'], { autoAlpha: 1, duration: .3 }, B(32));
+const g = line([['Climb'], ['with'], ['your'], ['crew.', 'gd']], 250);
+wordsIn(g, [B(32), B(32) + .15, B(33), B(33) + .2]);
+const RK = [['Bronze', 'linear-gradient(160deg,#e3a26f,#8a5126)'], ['Silver', 'linear-gradient(160deg,#f1f4f8,#8e99a8)'], ['Gold', 'linear-gradient(160deg,#ffe48a,#d39a12)'], ['Diamond', 'linear-gradient(160deg,#b9f0ff,#1F6BFF)']];
+$('#ranks').innerHTML = RK.map(([n, gr], i) => `<div class="rank" id="rk${i}" style="left:${20 + i * 260}px;top:1500px"><i style="background:${gr}"></i>${n}</div>`).join('');
+RK.forEach((_, i) => tl.set('#rk' + i, { autoAlpha: 0 }, 0).fromTo('#rk' + i, { autoAlpha: 0, y: 80, scale: .5 }, { autoAlpha: 1, y: 0, scale: 1, duration: .3, ease: 'back.out(2)' }, B(36 + i)));
+tl.to(['#ranks', '#full', '#fshade', '#bshade'], { autoAlpha: 0, duration: .25 }, B(40) - .25); out(g, B(40) - .25);
+
+// 3) Free. No excuses. No skipping.
+const h1 = line([['Free.']], 760, '', 104), h2 = line([['No'], ['excuses.']], 880, '', 104), h3 = line([['No'], ['skipping.', 'hl']], 1000, '', 104);
+wordsIn(h1, [B(40)]); wordsIn(h2, [B(41), B(41) + .12]); wordsIn(h3, [B(42), B(42) + .12]);
+tl.to(['#' + h1, '#' + h2], { color: '#4a5266', duration: .2 }, B(42));
+[h1, h2, h3].forEach(id => out(id, B(44) - .15));
+
+// 4) ending: dot, ring, logo with burst + rays + shine, letters, CTA with shine
+$('#wm').innerHTML = [...'CrewUp'].map(ch => `<span>${ch}</span>`).join('');
+tl.set(['#dot', '#ring', '#logoWrap', '#cs', '#cta', '#handle', '#rays', '#bu1', '#bu2'], { autoAlpha: 0 }, 0).set('#wm span', { autoAlpha: 0 }, 0)
+  .fromTo('#dot', { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .2 }, B(44))
+  .fromTo('#ring', { autoAlpha: 0, scale: .1 }, { autoAlpha: 1, scale: 1, duration: .35 }, B(45)).to('#dot', { autoAlpha: 0, duration: .1 }, B(45) + .2)
+  .to('#ring', { borderRadius: '80px', scale: 1.07, duration: .3, ease: 'power3.inOut' }, B(46) - .3)
+  .fromTo('#logoWrap', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, B(46)).to('#ring', { autoAlpha: 0, duration: .15 }, B(46))
+  .fromTo('#bu1', { autoAlpha: .9, scale: 1 }, { autoAlpha: 0, scale: 2.4, duration: .8, ease: 'power2.out' }, B(46))
+  .fromTo('#bu2', { autoAlpha: .7, scale: 1 }, { autoAlpha: 0, scale: 3.4, duration: 1.1, ease: 'power2.out' }, B(46) + .12)
+  .fromTo('#rays', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: 1, duration: .8 }, B(46))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut' }, B(46) + .35);
+flash(B(46), .6);
+tl.to(['#logoWrap', '#bu1', '#bu2', '#rays'], { y: -140, scale: .8, duration: .4, ease: 'power3.inOut' }, B(47) - .2)
+  .fromTo('#wm span', { autoAlpha: 0, y: 60, rotateX: -80, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, rotateX: 0, filter: 'blur(0px)', duration: .4, stagger: .05, ease: 'back.out(1.8)' }, B(47))
+  .fromTo('#cs', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .35 }, B(48))
+  .fromTo('#cta', { autoAlpha: 0, y: 30, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)' }, B(49))
+  .fromTo('#ctaShine', { x: -900 }, { x: 900, duration: .8, ease: 'power2.inOut' }, B(49) + .4)
+  .fromTo('#handle', { autoAlpha: 0 }, { autoAlpha: 1, duration: .3 }, B(50))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut', immediateRender: false }, B(51));
+tl.set('#fade', { opacity: 1 }, 0).to('#fade', { opacity: 0, duration: .25 }, 0).to('#fade', { opacity: 1, duration: .5 }, DUR - .5);
+
+// what the phone / full screen shows (scene start, recording, second inside that recording)
+const PHONE = [[B(8), 'NT_day1', .3]];
+const FULL = [[B(32) - .1, 'hd_NT_showcase', 3.2]];
+const LIM = { NT_day1: 420, NT_showcase: 450, hd_NT_showcase: 450, hd_NT_day1: 420, hd_NT_nudge: 360, hd_NT_fake: 360 };
+const pick = (list, t) => { let cur = list[0]; for (const s of list) if (t >= s[0]) cur = s; const [at, dir, from] = cur; const fr = Math.min(LIM[dir] - 1, Math.max(0, Math.round((from + Math.max(0, t - at)) * 30))); return `${F}${dir}/${String(fr).padStart(5, '0')}.jpg`; };
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function glowColor(t) { let i = 0; while (i + 1 < glowAt.length && t >= glowAt[i + 1][0]) i++; const [, c0] = glowAt[i]; const nx = glowAt[i + 1]; if (!nx) return hex(c0); const k = Math.min(1, Math.max(0, (t - (nx[0] - .3)) / .3)); const p = hex(c0), q = hex(nx[1]); return p.map((v, j) => Math.round(v + (q[j] - v) * k)); }
+async function setSrc(img, src) { if (!img.src.endsWith(src)) { img.src = src; await img.decode().catch(() => {}); } }
+
+
+// ---------- extra motion (v5) ----------
+gsap.set(['#u1', '#u2', '#u3', '#full', '#mosaic'], { transformPerspective: 1700 });
+// camera orbits the phone while it rises and settles, then a blur whip from the widget to the icon
+tl.fromTo(R3, { cx: -.9, cy: -.35 }, { cx: .55, cy: .2, duration: B(12) - .1 - B(8), ease: 'sine.inOut' }, B(8));
+tl.to('#gl', { filter: 'blur(7px)', duration: .12, yoyo: true, repeat: 1, ease: 'power2.inOut' }, B(13) + .22);
+// inside the app every scene swings in 3D while the camera reads it
+tl.fromTo('#u1', { rotationX: 20, rotationY: -16 }, { rotationX: -6, rotationY: 9, duration: B(20) - B(16), ease: 'sine.inOut' }, B(16) - .05);
+tl.fromTo('#u2', { rotationX: 10, rotationY: 18 }, { rotationX: -4, rotationY: -8, duration: B(24) - B(20), ease: 'sine.inOut' }, B(20) + .05);
+tl.fromTo('#u3', { rotationX: 12, rotationY: -16, rotationZ: 2 }, { rotationX: -4, rotationY: 10, rotationZ: -1, duration: B(28) - B(24), ease: 'sine.inOut' }, B(24) + .05);
+// rows and cards drift at different speeds (parallax)
+tl.fromTo(['#uO', '#uK'], { x: -40 }, { x: 30, duration: B(24) - B(20), ease: 'sine.inOut', stagger: .1 }, B(20));
+tl.fromTo('#uNote', { rotationX: 30, transformPerspective: 1200 }, { rotationX: 0, duration: .5, ease: 'power3.out' }, B(23) + .1);
+// the wall of screens turns while you look at it
+tl.fromTo('#mosaic', { rotationY: -10 }, { rotationY: 12, duration: B(32) - B(28), ease: 'sine.inOut' }, B(28));
+// trophy + leaderboard screen swings in 3D
+tl.fromTo('#full', { rotationY: -20, rotationX: 12 }, { rotationY: 14, rotationX: -6, duration: B(40) - B(32), ease: 'sine.inOut' }, B(32) - .1);
+tl.fromTo('#ranks', { y: 60 }, { y: -20, duration: B(40) - B(36), ease: 'sine.inOut' }, B(36));
+
+window.DUR = DUR;
+window.renderAt = async t => {
+  tl.seek(t, false);
+  const en = EN[Math.min(EN.length - 1, Math.round(t * 30))] || 0;
+  const [r, g2, bl] = glowColor(t);
+  $('#glow').style.background = `radial-gradient(circle,rgba(${r},${g2},${bl},${.35 + .35 * en}),rgba(${r},${g2},${bl},0) 62%)`;
+  $('#glow').style.transform = `scale(${.92 + .14 * en}) translate(${Math.sin(t * .4) * 60}px,${Math.cos(t * .3) * 80}px)`;
+  $('#glow2').style.background = `radial-gradient(circle,rgba(${bl},${r},${g2},.4),rgba(0,0,0,0) 65%)`;
+  $('#glow2').style.transform = `translate(${Math.cos(t * .5) * 200}px,${Math.sin(t * .35) * 150}px)`;
+  $('#rays').style.rotate = (t * 18) + 'deg';
+  window.Phone3D.render(t);
+  $('#uDc').textContent = Math.round(window.__dc.dc);
+  const rx = gsap.getProperty('#phone', 'rotateX') || 0;
+  $('#sheen').style.backgroundPosition = `${50 + rx * 2}% 0`;
+  $('#shadow').style.opacity = gsap.getProperty('#phone', 'opacity') * .8 * (1 - Math.min(1, Math.max(0, (gsap.getProperty('#phone', 'scale') - 1) * 2)));
+  await Promise.all([setSrc($('#scr'), pick(PHONE, t)), setSrc($('#fimg'), pick(FULL, t))]);
+};
+document.fonts.ready.then(async () => { await window.Phone3D.ready(); await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); await renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

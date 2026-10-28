@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Keynote</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fff;--ink:#0d0f14;--mut:#7d8597;--acc:#1F6BFF;--acc2:#6ea0ff;--card:#0c0f16;--cardInk:#fff;--cardMut:#8e97aa;--line:#e3e7ef;--bloom:rgba(31,107,255,.28)}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:Inter,"Noto Color Emoji",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.abs{position:absolute}
+.scene{position:absolute;inset:0}
+#bg{inset:0;background:var(--bg)}
+#mesh{inset:-20%;opacity:0}
+.blob{position:absolute;border-radius:50%;filter:blur(90px)}
+#bloom{left:240px;top:660px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--bloom),rgba(0,0,0,0) 65%);filter:blur(20px)}
+/* kinetic text */
+.kt{position:absolute;left:60px;right:60px;text-align:center;font:600 76px/1.15 Inter;letter-spacing:-.035em;white-space:nowrap}
+.kt .ch{display:inline-block;will-change:transform,opacity,filter}
+.kt .hl{color:var(--acc);text-shadow:0 0 40px var(--bloom)}
+.kt .sp{display:inline-block;width:.28em}
+#rule{position:absolute;left:0;top:820px;height:3px;width:0;background:var(--line)}
+/* widgets */
+.wd{position:absolute;border-radius:64px;background:var(--card);color:var(--cardInk);overflow:hidden;box-shadow:0 30px 70px rgba(10,20,40,.22)}
+.wlab{position:absolute;top:-52px;left:10px;font:600 26px Inter;color:var(--ink);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.wlab i{width:16px;height:16px;border-radius:50%;background:#2bd46b;box-shadow:0 0 12px #2bd46b}
+.wrap{position:absolute;will-change:transform,filter,opacity}
+.tm{position:absolute;right:30px;top:26px;font:600 22px Inter;color:var(--cardMut)}
+.glass .wd{background:rgba(255,255,255,.2);backdrop-filter:blur(22px) saturate(1.4);border:1.5px solid rgba(255,255,255,.55);color:#fff;box-shadow:0 30px 70px rgba(10,40,120,.25)}
+.glass .wlab{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.25)}
+/* mosaic */
+.tile{position:absolute;border-radius:22px;overflow:hidden;box-shadow:0 14px 40px rgba(10,20,40,.18)}
+.tile .em{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);font-size:70px}
+.tile .tl{position:absolute;left:14px;bottom:12px;font:700 18px Inter;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.tile .ok{position:absolute;right:12px;top:12px;width:30px;height:30px;border-radius:50%;background:#2bd46b;display:flex;align-items:center;justify-content:center;font:800 16px Inter;color:#fff}
+#mq{position:absolute;left:290px;top:880px;width:500px;height:170px;border-radius:30px;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;text-align:center;font:600 42px/1.25 Inter;letter-spacing:-.02em;color:#0d0f14;box-shadow:0 20px 50px rgba(0,0,0,.12)}
+#mq b{color:var(--acc)}
+/* glass world */
+#sky{inset:0;background:linear-gradient(180deg,#2f6dff 0%,#77a5ff 38%,#cfe0ff 62%,#eef4ff 100%)}
+.mtn{position:absolute;left:-60px;right:-60px}
+#sun{left:640px;top:330px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#fff,rgba(255,255,255,.4) 40%,rgba(255,255,255,0) 70%)}
+/* logo frame */
+#lf{inset:0;background:radial-gradient(90% 60% at 50% 40%,#6ea0ff 0%,#1F6BFF 45%,#0d3db8 100%)}
+#lf img{position:absolute;left:400px;top:820px;width:280px;height:280px;border-radius:70px;box-shadow:0 40px 90px rgba(0,20,80,.45),0 0 0 6px rgba(255,255,255,.25)}
+#endsub{position:absolute;left:0;right:0;top:1060px;text-align:center;font:600 34px Inter;color:var(--mut)}
+#endsub b{color:var(--acc)}
+#tag{position:absolute;left:50px;top:80px;display:flex;align-items:center;gap:12px;z-index:30}
+#tag img{width:52px;height:52px;border-radius:13px}
+#tag span{font:600 20px Inter;letter-spacing:.06em;color:var(--mut);border:1.5px solid var(--line);padding:9px 12px;border-radius:10px}
+#fade{inset:0;background:var(--bg);z-index:40}
+</style>
+</head>
+<body>
+<div id="bg" class="abs"></div>
+<div id="mesh" class="abs"><div class="blob" style="left:-10%;top:5%;width:70%;height:50%;background:#1F6BFF"></div><div class="blob" style="left:40%;top:35%;width:70%;height:55%;background:#6ea0ff"></div><div class="blob" style="left:5%;top:60%;width:60%;height:45%;background:#7b5cff"></div></div>
+<div id="bloom" class="abs"></div>
+
+<div id="s1" class="scene"></div>
+<div id="s2" class="scene"></div>
+<div id="s3" class="scene"></div>
+<div id="s4" class="scene"></div>
+<div id="s5" class="scene"></div>
+<div id="tag" class="abs"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div>
+<div id="fade" class="abs"></div>
+
+<script src="lib/gsap.min.js"></script>
+<script>
+const Q = new URLSearchParams(location.search);
+const V = Q.get('cut') || 'light';
+const $ = s => document.querySelector(s);
+const SFX = []; window.SFX = SFX; const sfx = (type, t) => SFX.push({ type, t });
+
+// three looks, same choreography
+const LOOKS = {
+  light: { sky: ['#2f6dff', '#77a5ff', '#cfe0ff', '#eef4ff'], mt: ['#a9c3ff', '#5d8ff2', '#2453c9'], sun: 'sun', vars: {}, intro: ['Your crew is', 'waiting.'], story: ['Every check-in', 'tells a story.'], ask: 'Who’s actually<br><b>showing up?</b>', end: 'Gym with your [crew.]', sub: 'CrewUp · <b>@getcrewup</b>', mesh: 0 },
+  dark: { sky: ['#03061a', '#0c1838', '#1d2f66', '#2c3f7a'], mt: ['#1d2c58', '#14204a', '#0a1230'], sun: 'moon', vars: { '--bg': '#07090f', '--ink': '#f5f7fb', '--mut': '#8a93a6', '--card': '#141a26', '--line': '#232a38', '--bloom': 'rgba(255,122,47,.32)', '--acc': '#FF7A2F' },
+          intro: ['It’s 6am.', 'Your crew is up.'], story: ['Every streak', 'starts with a nudge.'], ask: 'Can you keep up<br>with <b>your crew?</b>', end: 'Don’t break the [streak.]', sub: 'CrewUp · <b>@getcrewup</b>', mesh: 0 },
+  blue: { sky: ['#1b2a8a', '#5b3fd6', '#c86bff', '#ffb15a'], mt: ['#7b5cff', '#4a2fc2', '#22126b'], sun: 'sun', vars: { '--bg': '#0b2a8a', '--ink': '#ffffff', '--mut': '#c9d8ff', '--card': 'rgba(255,255,255,.16)', '--line': 'rgba(255,255,255,.3)', '--bloom': 'rgba(255,255,255,.35)', '--acc': '#FFC83D' },
+          intro: ['Your gym just', 'became a game.'], story: ['Every rep', 'counts for your crew.'], ask: 'Who’s climbing<br>the <b>leaderboard?</b>', end: 'Win with your [crew.]', sub: 'CrewUp · <b>@getcrewup</b>', mesh: 1 },
+};
+const L = LOOKS[V];
+for (const [k, v] of Object.entries(L.vars)) document.documentElement.style.setProperty(k, v);
+if (V === 'blue') document.body.classList.add('glassy');
+
+// ---------- builders ----------
+// split text into letters; [word] marks the highlighted word
+function kt(id, text, top, size = 76) {
+  const el = document.createElement('div'); el.className = 'kt'; el.id = id; el.style.top = top + 'px'; el.style.fontSize = size + 'px';
+  let html = '', hl = false, i = 0;
+  for (const c of text) {
+    if (c === '[') { hl = true; continue; } if (c === ']') { hl = false; continue; }
+    html += c === ' ' ? '<span class="sp"></span>' : `<span class="ch${hl ? ' hl' : ''}" data-i="${i++}">${c}</span>`;
+  }
+  el.innerHTML = html; return el;
+}
+const W = {
+  streak: (lab = 'Streak') => `<div class="wlab"><i></i>${lab}</div><div class="wd" style="inset:0"><span class="tm">6:24</span>
+    <div style="position:absolute;left:0;right:0;top:46px;text-align:center;font-size:120px;filter:drop-shadow(0 0 30px rgba(255,122,47,.9))">🔥</div>
+    <div style="position:absolute;left:34px;bottom:34px"><div style="font:600 22px Inter;opacity:.6">Current</div><div style="font:800 64px/1 Inter;letter-spacing:-.03em"><span data-n="st">12</span><span style="font:700 26px Inter;color:#FF7A2F"> DAYS</span></div></div></div>`,
+  crew: () => `<div class="wlab"><i></i>This week</div><div class="wd" style="inset:0"><span class="tm">6:24</span>
+    <svg viewBox="0 0 200 200" style="position:absolute;left:40px;top:40px;width:260px;height:260px"><circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="22"/>
+      <circle id="arc" cx="100" cy="100" r="80" fill="none" stroke="#1F6BFF" stroke-width="22" stroke-linecap="round" stroke-dasharray="502.6" stroke-dashoffset="502.6" transform="rotate(-90 100 100)" style="filter:drop-shadow(0 0 10px #1F6BFF)"/></svg>
+    <div style="position:absolute;left:0;right:0;top:128px;text-align:center;font:800 70px/1 Inter;letter-spacing:-.03em"><span data-n="ck">0</span>/4</div>
+    <div style="position:absolute;left:0;right:0;top:206px;text-align:center;font:600 22px Inter;opacity:.6">gym days</div>
+    <div style="position:absolute;left:0;right:0;bottom:30px;display:flex;justify-content:center;gap:-8px">${['#6E9BFF', '#FFC83D', '#FF9A5A', '#d6dbe6'].map((c, i) => `<span style="width:46px;height:46px;border-radius:50%;background:${c};border:3px solid #0c0f16;margin-left:${i ? -12 : 0}px;display:flex;align-items:center;justify-content:center;font:800 18px Inter;color:#0a0f1c">${'OKFY'[i]}</span>`).join('')}</div></div>`,
+  rank: () => `<div class="wlab"><i></i>Rank</div><div class="wd" style="inset:0;background:linear-gradient(160deg,#1F6BFF,#0d3db8)"><span class="tm" style="color:#cfe0ff">S1</span>
+    <div style="position:absolute;left:50%;top:58px;width:120px;height:136px;margin-left:-60px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(160deg,#ffe48a,#d39a12);display:flex;align-items:center;justify-content:center;font:800 56px Inter;color:#3a2600">G</div>
+    <div style="position:absolute;left:34px;bottom:34px"><div style="font:800 40px/1 Inter">Gold II</div><div style="font:600 20px Inter;color:#cfe0ff;margin-top:6px">240 XP to Diamond</div></div></div>`,
+  steps: () => `<div class="wlab"><i></i>Steps</div><div class="wd" style="inset:0"><span class="tm">6:24</span>
+    <div style="position:absolute;left:34px;top:60px;font:800 64px/1 Inter;letter-spacing:-.03em"><span data-n="sp">0</span></div><div style="position:absolute;left:34px;top:132px;font:600 22px Inter;opacity:.6">steps today</div>
+    <div style="position:absolute;left:34px;right:34px;bottom:34px;height:90px;display:flex;align-items:flex-end;gap:10px">${[40, 62, 35, 80, 55, 90, 70].map((h, i) => `<i class="bar" style="flex:1;height:${h}%;border-radius:8px;background:${i == 5 ? '#1F6BFF' : 'rgba(255,255,255,.18)'}"></i>`).join('')}</div></div>`,
+  nudge: () => `<div class="wd" style="inset:0;border-radius:40px;display:flex;align-items:center;gap:20px;padding:0 28px"><img src="img/crewup-logo.png" style="width:78px;height:78px;border-radius:20px">
+    <div><div style="font:700 28px Inter">Omar nudged you ⚡</div><div style="font:500 24px Inter;opacity:.7;margin-top:4px">The couch is not a workout 🛋️</div></div></div>`,
+};
+function widget(id, kind, x, y, w, h, scene, lab) { const d = document.createElement('div'); d.className = 'wrap'; d.id = id; Object.assign(d.style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px' }); d.innerHTML = W[kind](lab); $(scene).appendChild(d); return d; }
+
+// scene 1: kinetic intro + widgets row
+$('#s1').append(kt('t1', L.intro[0], 740, 92), kt('t2', L.intro[1], 860, 120));
+widget('w1', 'streak', 370, 700, 340, 340, '#s1');
+widget('w2', 'crew', 365, 760, 350, 350, '#s1');
+widget('w3', 'rank', 370, 760, 340, 340, '#s1');
+// scene 2: "every check-in tells a story" + rule + widget row below
+$('#s2').append(kt('t3', L.story[0], 600), kt('t4', L.story[1], 1300));
+const rule = document.createElement('div'); rule.id = 'rule'; $('#s2').appendChild(rule);
+widget('w4', 'streak', 40, 860, 300, 300, '#s2'); widget('w5', 'crew', 365, 830, 350, 350, '#s2'); widget('w6', 'steps', 740, 860, 300, 300, '#s2');
+// scene 3: mosaic of check-ins around a question
+const tiles = [], TC = [['#1F6BFF', '#0d3db8', '🏋️', '6:24 AM'], ['#FF7A2F', '#c94a12', '🏃', '7:02 AM'], ['#2bd46b', '#11853f', '🚴', '5:48 PM'], ['#7b5cff', '#4a2fc2', '💪', '8:15 PM'], ['#FFC83D', '#c99414', '🥇', 'Gold II'], ['#0c0f16', '#232a38', '🔥', '12 days'], ['#6ea0ff', '#2f6dff', '👟', '8,412'], ['#ff5d8f', '#c22e5f', '🤸', '9:40 AM'], ['#1b2a4a', '#0c0f16', '☕', 'loser pays']];
+const ring = []; for (let r = 0; r < 26; r++) { const a = r / 26 * Math.PI * 2, rx = 330 + (r % 3) * 30, ry = 540 + (r % 2) * 50; ring.push([540 + Math.cos(a) * rx, 965 + Math.sin(a) * ry, 140 + (r * 37) % 60]); }
+ring.forEach(([x, y, s], i) => { const [c1, c2, e, l] = TC[i % TC.length]; const d = document.createElement('div'); d.className = 'tile'; d.id = 'tl' + i;
+  Object.assign(d.style, { left: (x - s / 2) + 'px', top: (y - s / 2) + 'px', width: s + 'px', height: s * 1.15 + 'px', background: `linear-gradient(160deg,${c1},${c2})` });
+  d.innerHTML = `<span class="em" style="font-size:${s * .4}px">${e}</span><span class="tl">${l}</span>${i % 3 == 0 ? '<span class="ok">✓</span>' : ''}`; $('#s3').appendChild(d); tiles.push(d); });
+const mq = document.createElement('div'); mq.id = 'mq'; mq.innerHTML = `<div>${L.ask}</div>`; $('#s3').appendChild(mq);
+// scene 4: glass widgets over a sky with mountains
+$('#s4').innerHTML = `<div id="sky" class="abs" style="background:linear-gradient(180deg,${L.sky[0]} 0%,${L.sky[1]} 38%,${L.sky[2]} 62%,${L.sky[3]} 100%)"></div>${L.sun == 'moon' ? Array.from({length: 70}, (_, i) => `<i class="abs" style="left:${(i * 137) % 1080}px;top:${(i * 89) % 900}px;width:${2 + i % 3}px;height:${2 + i % 3}px;border-radius:50%;background:#fff;opacity:${.3 + (i % 5) / 8}"></i>`).join('') : ''}<div id="sun" class="abs" style="${L.sun == 'moon' ? 'width:140px;height:140px;left:760px;top:300px;background:radial-gradient(circle,#fff 40%,rgba(200,220,255,.4) 55%,rgba(255,255,255,0) 70%)' : ''}"></div>
+  <svg class="mtn" id="m1" viewBox="0 0 1200 600" style="top:900px;height:700px" preserveAspectRatio="none"><path d="M0 600 L0 300 L160 140 L300 260 L460 60 L620 240 L760 120 L930 280 L1060 160 L1200 260 L1200 600Z" fill="${L.mt[0]}"/><path d="M460 60 L520 120 L490 130 L540 170 L460 60Z M760 120 L800 170 L770 168 Z" fill="#fff" opacity=".85"/></svg>
+  <svg class="mtn" id="m2" viewBox="0 0 1200 600" style="top:1180px;height:600px" preserveAspectRatio="none"><path d="M0 600 L0 260 L200 120 L360 230 L560 90 L740 250 L900 140 L1200 300 L1200 600Z" fill="${L.mt[1]}"/></svg>
+  <svg class="mtn" id="m3" viewBox="0 0 1200 600" style="top:1420px;height:560px" preserveAspectRatio="none"><path d="M0 600 L0 200 C200 120 380 260 600 170 C820 80 1000 220 1200 150 L1200 600Z" fill="${L.mt[2]}"/></svg>
+  <div class="glass" id="gl"></div>`;
+widget('g1', 'streak', 60, 470, 320, 320, '#gl'); widget('g2', 'rank', 700, 560, 320, 320, '#gl'); widget('g3', 'steps', 720, 1150, 320, 320, '#gl');
+widget('g4', 'nudge', 140, 1450, 800, 170, '#gl');
+const lt = document.createElement('img'); lt.src = 'img/crewup-logo.png'; lt.id = 'gLogo'; Object.assign(lt.style, { position: 'absolute', left: '360px', top: '860px', width: '320px', height: '320px', borderRadius: '76px', boxShadow: '0 40px 90px rgba(0,30,120,.45),0 0 0 8px rgba(255,255,255,.35)' }); $('#gl').appendChild(lt);
+// scene 5: logo frame then end line
+$('#s5').innerHTML = `<div id="lf" class="abs"><img src="img/crewup-logo.png"></div>`;
+$('#s5').append(kt('t5', L.end, 880, 92));
+const sub = document.createElement('div'); sub.id = 'endsub'; sub.innerHTML = `${L.sub}<br><span style="font-size:28px">join the waitlist · link on our Instagram</span>`; $('#s5').appendChild(sub);
+
+// ---------- timeline ----------
+const N = { st: 12, ck: 0, sp: 0 };
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+const letters = (id, t, from = 'drop') => { const ch = document.querySelectorAll(`#${id} .ch`);
+  ch.forEach((c, i) => { const dir = i % 3 == 0 ? -1 : 1, dy = from == 'drop' ? (i % 2 ? 50 : -50) * dir : 40;
+    tl.fromTo(c, { opacity: 0, y: dy, rotate: (i % 5 - 2) * 8, filter: 'blur(10px)' }, { opacity: 1, y: 0, rotate: 0, filter: 'blur(0px)', duration: .45, ease: 'back.out(1.6)' }, t + i * .028); }); };
+const lettersOut = (id, t) => tl.to(`#${id} .ch`, { opacity: 0, y: -30, filter: 'blur(8px)', duration: .25, stagger: .01, ease: 'power2.in' }, t);
+['#s2', '#s3', '#s4', '#s5'].forEach(s => tl.set(s, { autoAlpha: 0 }, 0));
+tl.set('#mesh', { opacity: L.mesh }, 0).set(['#w1', '#w2', '#w3'], { autoAlpha: 0 }, 0).set('#fade', { opacity: 1 }, 0).to('#fade', { opacity: 0, duration: .3 }, 0);
+// 1) intro line + highlight word
+letters('t1', .05); letters('t2', .55); sfx('pop', .55);
+tl.fromTo('#bloom', { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2 }, .2)
+  .to(['#t1', '#t2'], { y: -470, scale: .72, duration: .7, ease: 'power3.inOut' }, 1.75);
+// widgets: streak pops from blur, then the row spreads
+tl.fromTo('#w1', { autoAlpha: 0, scale: .55, filter: 'blur(30px)' }, { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: .6 }, 1.95); sfx('pop', 1.95);
+tl.to('#w1', { left: 30, top: 820, scale: .86, duration: .6, ease: 'power3.inOut' }, 2.9)
+  .fromTo('#w2', { autoAlpha: 0, scale: .6, filter: 'blur(30px)' }, { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: .55 }, 3.0)
+  .fromTo('#w3', { autoAlpha: 0, left: 1100, filter: 'blur(20px)' }, { autoAlpha: 1, left: 710, top: 820, scale: .86, filter: 'blur(0px)', duration: .6, ease: 'power3.inOut' }, 3.05)
+  .to('#arc', { attr: { 'stroke-dashoffset': 502.6 * .25 }, duration: 1.1, ease: 'power2.out' }, 3.2).to(N, { ck: 3, duration: 1.1, ease: 'power2.out' }, 3.2);
+sfx('pop', 3.0); sfx('pop', 3.1); sfx('win', 4.2);
+// blur-morph out
+tl.to(['#w1', '#w2', '#w3'], { scale: .7, filter: 'blur(26px)', autoAlpha: 0, duration: .45, ease: 'power2.in', stagger: .05 }, 4.55)
+  .to(['#t1', '#t2'], { autoAlpha: 0, filter: 'blur(14px)', duration: .4 }, 4.55)
+  .to('#bloom', { opacity: 0, duration: .4 }, 4.6);
+// 2) story line: word, rule draws, widgets slide under it
+tl.set('#s2', { autoAlpha: 1 }, 4.95).set(['#w4', '#w5', '#w6'], { autoAlpha: 0 }, 0);
+letters('t3', 5.0);
+tl.to('#rule', { width: 1080, duration: .6, ease: 'power3.inOut' }, 5.3);
+[['#w4', 5.55], ['#w5', 5.7], ['#w6', 5.85]].forEach(([id, t]) => { tl.fromTo(id, { autoAlpha: 0, y: 120, filter: 'blur(20px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: .55 }, t); sfx('pop', t); });
+tl.to(N, { sp: 8412, duration: 1, ease: 'power2.out' }, 5.9).fromTo('#s2 .bar', { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: .5, stagger: .05 }, 5.95);
+letters('t4', 6.3);
+tl.to('#s2', { autoAlpha: 0, scale: 1.1, filter: 'blur(18px)', duration: .45, ease: 'power2.in' }, 7.45);
+// 3) mosaic flies in around the question, camera pushes in
+tl.set('#s3', { autoAlpha: 1 }, 7.75);
+tiles.forEach((d, i) => { const a = i / tiles.length * Math.PI * 2; tl.fromTo(d, { x: Math.cos(a) * 900, y: Math.sin(a) * 1200, rotate: (i % 2 ? 1 : -1) * 25, autoAlpha: 0 }, { x: 0, y: 0, rotate: (i % 5 - 2) * 3, autoAlpha: 1, duration: .7, ease: 'power3.out' }, 7.8 + i * .02); });
+sfx('pop', 8.0); sfx('pop', 8.25);
+tl.fromTo('#mq', { autoAlpha: 0, scale: .8 }, { autoAlpha: 1, scale: 1, duration: .45, ease: 'back.out(1.8)' }, 8.35)
+  .fromTo('#s3', { scale: 1 }, { scale: 1.12, duration: 2.0, ease: 'sine.inOut' }, 7.8)
+  .to('#s3', { autoAlpha: 0, filter: 'blur(24px)', scale: 1.3, duration: .5, ease: 'power2.in' }, 9.75);
+// 4) glass world
+tl.set('#s4', { autoAlpha: 1 }, 10.05).fromTo('#s4', { scale: 1.15 }, { scale: 1, duration: 2.4, ease: 'power2.out' }, 10.05).fromTo('#s4', { filter: 'blur(20px)' }, { filter: 'blur(0px)', duration: .5 }, 10.05);
+[['#g1', 10.3], ['#g2', 10.45], ['#gLogo', 10.6], ['#g3', 10.75], ['#g4', 11.05]].forEach(([id, t], i) => { tl.fromTo(id, { autoAlpha: 0, y: 80, scale: .85, rotateX: 20 }, { autoAlpha: 1, y: 0, scale: 1, rotateX: 0, duration: .6 }, t); sfx(id == '#g4' ? 'ding' : 'pop', t); });
+sfx('buzz', 11.1);
+tl.to('#s4', { autoAlpha: 0, scale: 1.08, filter: 'blur(16px)', duration: .45, ease: 'power2.in' }, 12.35);
+// 5) logo frame, then the end line on the page colour
+tl.set('#s5', { autoAlpha: 1 }, 12.6).fromTo('#lf', { autoAlpha: 0 }, { autoAlpha: 1, duration: .3 }, 12.6)
+  .fromTo('#lf img', { scale: .3, rotate: -18 }, { scale: 1, rotate: 0, duration: .65, ease: 'back.out(2)' }, 12.65);
+sfx('logo', 12.65);
+tl.to('#lf', { autoAlpha: 0, duration: .4 }, 13.75).set('#t5', { autoAlpha: 1 }, 0);
+letters('t5', 13.9);
+tl.fromTo('#endsub', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: .5 }, 14.6)
+  .fromTo('#bloom', { opacity: 0, top: 560 }, { opacity: 1, top: 560, duration: .8 }, 14.0)
+  .to('#fade', { opacity: 1, duration: .4 }, 15.6);
+const DUR = 16;
+
+window.DUR = DUR;
+window.renderAt = t => {
+  tl.seek(t, false);
+  for (const el of document.querySelectorAll('[data-n]')) el.textContent = Math.round(N[el.dataset.n]).toLocaleString('en-US');
+  // gentle float in the glass world + parallax mountains
+  ['#g1', '#g2', '#g3', '#g4', '#gLogo'].forEach((id, i) => { const el = $(id); el.style.translate = `0 ${Math.sin(t * 1.3 + i * 1.7) * 12}px`; });
+  $('#m1').style.transform = `translateX(${Math.sin(t * .3) * 20}px)`; $('#m2').style.transform = `translateX(${Math.sin(t * .3) * 40}px)`; $('#m3').style.transform = `translateX(${Math.sin(t * .3) * 70}px)`;
+  $('#mesh').style.transform = `rotate(${t * 4}deg) scale(1.1)`;
+  $('#bloom').style.transform += '';
+};
+document.fonts.ready.then(async () => { await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

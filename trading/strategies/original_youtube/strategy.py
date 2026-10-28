@@ -1,0 +1,532 @@
+"""ORIGINAL_YOUTUBE_STRATEGY: the No Wick strategy as taught by omarnowick.
+
+Source: "No Wick Strategy (85% Win Rate Trading System + Live Backtest)",
+youtu.be/DD9A9hHYqvc. See ``SPEC.md`` next to this file for every rule, its
+timestamp, and whether it is explicit, inferred, discretionary or unknown.
+
+This module is the reference ("original") implementation. Experimental
+variants must live elsewhere and must not change these defaults.
+
+Rules (video timestamps):
+* Trade with the trend only: uptrend + bullish no-wick = buy; downtrend +
+  bearish no-wick = sell (1:18:28, 1:34:14).
+* Entry: limit at the no-wick candle's open, filled when price comes back and
+  taps it (1:20:44, 1:26:46 "set a buy limit").
+* Price must come back within max 10 candles; the 11th is not allowed (1:22:25).
+* Stop: behind the most recent higher low (buys) / lower high (sells) plus
+  breathing room (1:21:29, 1:35:11).
+* Target: fixed 1:1 (1:21:41).
+* Forex: no trade if the stop is under 5 pips before breathing room (1:35:26).
+* Forex "Omar entry": if the stop is over 10 pips, enter 2 pips earlier (1:36:23).
+* Not valid: price comes close (2 pips forex / a couple of ticks futures) and
+  then hits TP without filling (1:38:11); price creates new structure before
+  tapping (1:39:00); anything in the no-trading zone, and open trades are
+  closed before it (1:40:16); trend reversals before the 3-step confirmation
+  (1:48:08), except the A setup below.
+
+Setup grades from "How to Actually Achieve an 85% Win Rate Trading No Wick
+Strategy" (youtu.be/VafqLoSOve8). The creator trades only Grandma, A and S
+setups (32:03):
+* GRANDMA: with-trend no-wick right after the BOS, in the trend's last leg (20:27).
+* A: reversal no-wick after a CHoCH that had internal structure before it,
+  even without the 3-step BOS (10:52).
+* S: the no-wick's opposite wick is bigger than its body; entered straight
+  after the candle closes; upgrades a "valid but not good" setup (16:22, 29:18).
+* Not traded: C (CHoCH with no structure, 4:13), B (trading the internal trend
+  against the external trend, 8:01; never generated, as setups must follow the
+  external trend), VALID_NOT_GOOD (no-wick in a retracement, 25:02).
+"""
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+from datetime import time
+from enum import StrEnum
+from typing import Sequence
+
+import numpy as np
+import pandas as pd
+
+from trading.core.log import get_logger, log_event
+from trading.core.schemas import DataQualityStatus, MarketData, Signal, SignalAction, StrategyDefinition
+from trading.data.instruments import interval_delta
+from trading.execution.fills import FillConfig, FillModel
+from trading.strategies.base import Strategy, register
+from trading.strategies.original_youtube.instruments import InstrumentSpec, instrument_spec
+from trading.strategies.original_youtube.nowick import nowick_flags
+from trading.strategies.original_youtube.structure import Phase, StructureEngine, StructureResult
+
+STRATEGY_NAME = "ORIGINAL_YOUTUBE_STRATEGY"
+logger = get_logger("strategies.original_youtube")
+# Validator flags that mark a price discontinuity (see trading/data/validation.py).
+DISCONTINUITY_FLAGS = ("flag_roll_suspect", "flag_large_gap", "flag_suspicious_move", "flag_after_missing")
+
+
+@dataclass(frozen=True)
+class OriginalParams:
+    # --- explicit in the video
+    max_return_candles: int = 10
+    reward_risk: float = 1.0
+    min_stop_pips_forex: float = 5.0  # before breathing room
+    omar_entry_min_stop_pips: float = 10.0  # Omar entry only if stop is above this (forex)
+    omar_entry_offset_pips: float = 2.0
+    near_miss_pips_forex: float = 2.0  # "I would say two pips"
+    news_blackout_minutes: int = 15  # close 15 min before, resume 15 min after red-folder news
+    futures_zone_buffer_minutes: int = 60  # backtest 2:18:04: no trades 1h before/after the zone (futures)
+    # --- inferred / interpretation (see SPEC.md); defaults are NOT optimised
+    near_miss_ticks_futures: float = 2.0  # "a couple of ticks"
+    min_stop_ticks_futures: float = 0.0  # video: "on futures I don't mind it as much"
+    breathing_room_pct: float = 0.10  # DISCRETIONARY; creator mentions he "used to say 10%"
+    swing_atr_mult: float = 1.0  # DISCRETIONARY "proper pullback" size
+    atr_length: int = 14
+    one_position_at_a_time: bool = True
+    # No-trading zone: ASSUMPTION until confirmed from the creator's indicator.
+    # Default = the CME / FX daily break 17:00-18:00 New York time.
+    zone_start: str = "17:00"
+    zone_end: str = "18:00"
+    zone_timezone: str = "America/New_York"
+    # System safeguard (not from the video): ignore no-wicks on bars the data validator flagged.
+    skip_flagged_bars: bool = True
+    # System safeguard (not from the video, audit fix H2): reject a setup when a price
+    # discontinuity the validator flagged (possible contract roll, large gap, suspicious move,
+    # bar after missing data) lies between the protective swing and the no-wick. Otherwise a
+    # continuous-contract jump would set the stop distance and the 1:1 target.
+    skip_structure_across_flagged_bars: bool = True
+    # --- setup grades (video 2); defaults = what the creator says he trades
+    trade_a_setups: bool = True
+    trade_valid_not_good_with_s: bool = True  # "the S setup can make a valid but not good setup a good setup"
+    s_setup_market_entry: bool = True  # "I like to enter directly after the candle closes"
+    s_setup_target: str = "1:1"  # or "wick_fill" (creator: 1:1 for higher win rate, wick fill for higher R)
+
+
+class SetupCategory(StrEnum):
+    GRANDMA = "grandma"
+    A = "A"
+    VALID_NOT_GOOD = "valid_not_good"
+    C = "C"
+
+
+class SetupStatus(StrEnum):
+    PENDING = "pending"
+    REJECTED = "rejected"  # never became a valid order
+    CANCELLED = "cancelled"  # valid order that was invalidated before filling
+    OPEN = "open"
+    WON = "won"
+    LOST = "lost"
+    CLOSED = "closed"  # closed early (no-trading zone / news) or still open at the end of data
+
+
+@dataclass
+class Setup:
+    direction: str  # "long" | "short"
+    nowick_index: int
+    nowick_time: pd.Timestamp
+    nowick_open: float
+    entry: float
+    stop: float
+    target: float
+    raw_risk: float  # entry-to-structure distance before breathing room (price units)
+    raw_risk_units: float  # same in pips / ticks
+    protective_level: float
+    protective_index: int
+    omar_entry: bool = False
+    category: SetupCategory = SetupCategory.GRANDMA
+    s_setup: bool = False
+    entry_mode: str = "limit"  # "limit" at the no-wick open, or "market" at the next open (S setups)
+    clean_trend: bool = False  # >= 2 BOS in this trend (interpretation of "super clean", report only)
+    nowick_high: float = float("nan")
+    nowick_low: float = float("nan")
+    status: SetupStatus = SetupStatus.PENDING
+    reason: str = ""
+    came_close: bool = False
+    fill_index: int | None = None
+    fill_time: pd.Timestamp | None = None
+    fill_price: float | None = None
+    exit_index: int | None = None
+    exit_time: pd.Timestamp | None = None
+    exit_price: float | None = None
+    exit_reason: str | None = None
+
+    @property
+    def r_multiple(self) -> float | None:
+        if self.fill_price is None or self.exit_price is None:
+            return None
+        risk = abs(self.fill_price - self.stop)
+        if risk == 0:
+            return 0.0
+        sign = 1 if self.direction == "long" else -1
+        return sign * (self.exit_price - self.fill_price) / risk
+
+
+@dataclass
+class ScanResult:
+    setups: list[Setup]
+    structure: StructureResult
+    flags: pd.DataFrame
+    warnings: list[str] = field(default_factory=list)
+
+    def by_status(self, *statuses: SetupStatus) -> list[Setup]:
+        return [s for s in self.setups if s.status in statuses]
+
+    def summary(self) -> dict[str, float | int]:
+        won = len(self.by_status(SetupStatus.WON))
+        lost = len(self.by_status(SetupStatus.LOST))
+        closed = [s for s in self.by_status(SetupStatus.CLOSED) if s.r_multiple is not None]
+        decided = won + lost
+        return {
+            "setups_detected": len(self.setups),
+            "rejected": len(self.by_status(SetupStatus.REJECTED)),
+            "cancelled": len(self.by_status(SetupStatus.CANCELLED)),
+            "filled": won + lost + len(closed) + len(self.by_status(SetupStatus.OPEN)),
+            "won": won,
+            "lost": lost,
+            "closed_early": len(closed),
+            "win_rate": won / decided if decided else float("nan"),
+            "total_r": float(sum(s.r_multiple or 0.0 for s in self.setups if s.r_multiple is not None)),
+        }
+
+
+def _parse_hhmm(v: str) -> time:
+    hh, mm = v.split(":")
+    return time(int(hh), int(mm))
+
+
+def no_trade_mask(index: pd.DatetimeIndex, params: OriginalParams, buffer_minutes: int) -> np.ndarray:
+    """True where a bar starts inside the no-trading zone (plus buffer on both sides)."""
+    if len(index) == 0:
+        return np.zeros(0, dtype=bool)
+    local = index.tz_convert(params.zone_timezone)
+    minutes = local.hour * 60 + local.minute
+    s = _parse_hhmm(params.zone_start)
+    e = _parse_hhmm(params.zone_end)
+    start = (s.hour * 60 + s.minute - buffer_minutes) % 1440
+    end = (e.hour * 60 + e.minute + buffer_minutes) % 1440
+    m = np.asarray(minutes)
+    if start == end:
+        return np.ones(len(index), dtype=bool) if buffer_minutes > 0 else np.zeros(len(index), dtype=bool)
+    if start < end:
+        return (m >= start) & (m < end)
+    return (m >= start) | (m < end)
+
+
+def news_mask(index: pd.DatetimeIndex, events: Sequence[pd.Timestamp], minutes: int,
+              bar: pd.Timedelta) -> np.ndarray:
+    """True where a bar overlaps [event - minutes, event + minutes]."""
+    out = np.zeros(len(index), dtype=bool)
+    if not events:
+        return out
+    w = pd.Timedelta(minutes=minutes)
+    for ev in events:
+        ev = pd.Timestamp(ev)
+        ev = ev.tz_localize("UTC") if ev.tzinfo is None else ev
+        out |= (index + bar > ev - w) & (index < ev + w)
+    return out
+
+
+class OriginalYoutubeScanner:
+    """Walks the clean OHLCV bar by bar (causal) and records every setup's life cycle.
+
+    Fills and exits are priced by a :class:`FillModel`. The default (zero costs,
+    touch = fill) is used for verification charts; the backtester passes a
+    realistic :class:`FillConfig`. The fill model never changes strategy rules.
+    """
+
+    def __init__(self, params: OriginalParams | None = None) -> None:
+        self.params = params or OriginalParams()
+
+    def scan(self, df: pd.DataFrame, symbol: str, interval: str,
+             news_events: Sequence[pd.Timestamp] = (), fill_config: FillConfig | None = None) -> ScanResult:
+        p = self.params
+        spec = instrument_spec(symbol)
+        fm = FillModel(spec.unit, fill_config or FillConfig())  # costs in pips (forex) / ticks (futures)
+        warnings = self._timeframe_warnings(spec, interval)
+        structure = StructureEngine(p.swing_atr_mult, p.atr_length).run(df)
+        flags = nowick_flags(df, spec.precision)
+
+        o, h, lo, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
+        idx = df.index
+        n = len(df)
+        trend = structure.trend.to_numpy(object)
+        tradeable = structure.tradeable.to_numpy(object)
+        phase = structure.phase.to_numpy(object)
+        bos_run = self._bos_run(structure, n)
+        prot_lvl = structure.protective_level.to_numpy(float)
+        prot_idx = structure.protective_index.to_numpy(int)
+        prot_set = structure.protective_set_at.to_numpy(int)
+        buffer = p.futures_zone_buffer_minutes if spec.kind == "futures" else 0
+        blocked = no_trade_mask(idx, p, buffer) | news_mask(idx, news_events, p.news_blackout_minutes,
+                                                            interval_delta(interval))
+        flagged = (df["flag_any"].to_numpy(bool) if (p.skip_flagged_bars and "flag_any" in df.columns)
+                   else np.zeros(n, dtype=bool))
+        jump_cols = [f for f in DISCONTINUITY_FLAGS if f in df.columns]
+        jumps = (np.cumsum(df[jump_cols].any(axis=1).to_numpy(bool))
+                 if (p.skip_structure_across_flagged_bars and jump_cols) else np.zeros(n, dtype=int))
+        near = (p.near_miss_pips_forex if spec.kind == "forex" else p.near_miss_ticks_futures) * spec.unit
+
+        setups: list[Setup] = []
+        pending: list[Setup] = []
+        open_pos: Setup | None = None
+
+        def close(s: Setup, j: int, price: float, reason: str, status: SetupStatus) -> None:
+            s.exit_index, s.exit_time, s.exit_price, s.exit_reason, s.status = j, idx[j], price, reason, status
+
+        def cancel(s: Setup, reason: str) -> None:
+            s.status, s.reason = SetupStatus.CANCELLED, reason
+
+        for j in range(n):
+            # 1) open position: forced close before the no-trading zone / news
+            if open_pos is not None and blocked[j] and j > 0:
+                close(open_pos, j - 1, fm.forced_exit(open_pos.direction == "long", c[j - 1]),
+                      "closed before no-trading zone/news", SetupStatus.CLOSED)
+                open_pos = None
+            # 2) open position: stop / target on this bar (stop first if both)
+            if open_pos is not None:
+                self._manage(open_pos, j, o[j], h[j], lo[j], close, fm)
+                if open_pos.status != SetupStatus.OPEN:
+                    open_pos = None
+
+            # 3) pending orders
+            for s in list(pending):
+                age = j - s.nowick_index
+                long = s.direction == "long"
+                if blocked[j]:
+                    cancel(s, "reached the no-trading zone / news window before filling")
+                elif age > p.max_return_candles:
+                    cancel(s, f"price did not return within {p.max_return_candles} candles")
+                elif tradeable[j - 1] != s.direction:
+                    cancel(s, f"trend changed before the tap ({trend[j - 1]})")
+                elif prot_set[j - 1] > s.nowick_index:
+                    cancel(s, "price created new structure before tapping")
+                if s.status != SetupStatus.PENDING:
+                    pending.remove(s)
+                    continue
+
+                if s.entry_mode == "market":  # S setup: enter at the open after the no-wick closed
+                    limit_fill = None
+                    touched = True
+                else:
+                    limit_fill = fm.limit_entry(long, s.entry, o[j], h[j], lo[j])
+                    touched = limit_fill is not None
+                if touched and (open_pos is None or not p.one_position_at_a_time):
+                    gapped_past_stop = o[j] <= s.stop if long else o[j] >= s.stop
+                    if gapped_past_stop:
+                        cancel(s, "bar opened beyond the stop (gap); no valid entry")
+                        pending.remove(s)
+                        continue
+                    if s.entry_mode == "market":
+                        fill = fm.market_entry(long, o[j])
+                        s.entry = fill
+                        s.target = self._target(s, fill)
+                    else:
+                        fill = limit_fill
+                    s.status, s.fill_index, s.fill_time, s.fill_price = SetupStatus.OPEN, j, idx[j], fill
+                    pending.remove(s)
+                    if fm.stop_triggered(long, s.stop, h[j], lo[j]):
+                        # Entry and stop inside the same bar: the order is unknown, assume the loss.
+                        close(s, j, fm.stop_exit(long, s.stop, o[j], same_bar_as_entry=True),
+                              "stop (same bar as entry)", SetupStatus.LOST)
+                    elif s.entry_mode == "market" and (tp := fm.target_exit(long, s.target, o[j], h[j], lo[j])):
+                        # Entered at the open, stop untouched: the target is reachable after the entry.
+                        close(s, j, tp, "target (same bar as entry)", SetupStatus.WON)
+                    else:
+                        # A limit entry filled mid-bar: whether the target traded after the fill is
+                        # unknowable, so the target is never credited on the entry bar.
+                        open_pos = s
+                    if p.one_position_at_a_time:
+                        for other in pending:
+                            cancel(other, "another setup filled first (one position at a time)")
+                        pending.clear()
+                    log_event(logger, "strategy.setup_filled", symbol=symbol, direction=s.direction,
+                              ts=idx[j], entry=fill, stop=s.stop, target=s.target)
+                    break
+                if not touched:
+                    close_now = lo[j] <= s.entry + near if long else h[j] >= s.entry - near
+                    s.came_close = s.came_close or close_now
+                    reached_tp = h[j] >= s.target if long else lo[j] <= s.target
+                    if s.came_close and reached_tp:
+                        cancel(s, "price came close to the entry, then reached TP without filling")
+                        pending.remove(s)
+
+            # 4) new no-wick setups on this bar's close
+            bull, bear = flags["nowick_bull"].iat[j], flags["nowick_bear"].iat[j]
+            direction = "long" if bull else "short" if bear else None
+            if direction is None:
+                continue
+            ph = phase[j]
+            if ph == Phase.REVERSAL_C.value:
+                choch_dir = "short" if trend[j] == "neutral_after_bearish_choch" else "long"
+                if direction == choch_dir:  # record C setups so they are visible, never traded
+                    s = self._build(direction, j, idx[j], o[j], h[j], lo[j], c[j], np.nan, -1, spec)
+                    s.category, s.status = SetupCategory.C, SetupStatus.REJECTED
+                    s.reason = "C setup: CHoCH without structure before it (not traded)"
+                    setups.append(s)
+                continue
+            if tradeable[j] != direction:
+                continue  # counter-trend no-wick: ignored (1:27:50)
+            s = self._build(direction, j, idx[j], o[j], h[j], lo[j], c[j], prot_lvl[j], prot_idx[j], spec)
+            s.category = {Phase.IMPULSE.value: SetupCategory.GRANDMA, Phase.RETRACEMENT.value:
+                          SetupCategory.VALID_NOT_GOOD, Phase.REVERSAL_A.value: SetupCategory.A}[ph]
+            s.clean_trend = bos_run[j] >= 2
+            setups.append(s)
+            if s.status != SetupStatus.PENDING:
+                pass
+            elif s.category == SetupCategory.A and not p.trade_a_setups:
+                s.status, s.reason = SetupStatus.REJECTED, "A setups disabled"
+            elif s.category == SetupCategory.VALID_NOT_GOOD and not (s.s_setup and p.trade_valid_not_good_with_s):
+                s.status, s.reason = SetupStatus.REJECTED, "valid but not good: no-wick formed in a retracement"
+            elif blocked[j]:
+                s.status, s.reason = SetupStatus.REJECTED, "no-wick formed in the no-trading zone / news window"
+            elif flagged[j]:
+                s.status, s.reason = SetupStatus.REJECTED, "bar flagged by the data validator"
+            elif s.protective_index >= 0 and jumps[j] > jumps[s.protective_index]:
+                s.status, s.reason = (SetupStatus.REJECTED, "flagged price discontinuity (possible roll / gap) "
+                                      "between the protective swing and the no-wick")
+            elif open_pos is not None and p.one_position_at_a_time:
+                s.status, s.reason = SetupStatus.REJECTED, "already in a position (one position at a time)"
+            if s.status == SetupStatus.PENDING:
+                pending.append(s)
+                log_event(logger, "strategy.setup_detected", symbol=symbol, direction=direction, ts=idx[j],
+                          category=s.category, s_setup=s.s_setup, entry_mode=s.entry_mode, entry=s.entry,
+                          stop=s.stop, target=s.target, omar_entry=s.omar_entry)
+
+        for s in pending:
+            s.reason = "still pending at the end of the data"
+        if open_pos is not None:
+            open_pos.reason = "still open at the end of the data"
+        return ScanResult(setups=setups, structure=structure, flags=flags, warnings=warnings)
+
+    # ------------------------------------------------------------------ helpers
+    def _build(self, direction: str, j: int, ts: pd.Timestamp, nowick_open: float, high: float, low: float,
+               close: float, prot: float, prot_i: int, spec: InstrumentSpec) -> Setup:
+        p = self.params
+        long = direction == "long"
+        wick = (high - close) if long else (close - low)
+        body = abs(close - nowick_open)
+        is_s = wick > body
+        market = is_s and p.s_setup_market_entry
+        ref = close if market else nowick_open
+        raw = (ref - prot) if long else (prot - ref)
+        s = Setup(direction=direction, nowick_index=j, nowick_time=ts, nowick_open=nowick_open,
+                  entry=ref, stop=prot, target=ref, raw_risk=raw,
+                  raw_risk_units=spec.units(raw) if not np.isnan(raw) else float("nan"),
+                  protective_level=prot, protective_index=int(prot_i), s_setup=is_s,
+                  entry_mode="market" if market else "limit", nowick_high=high, nowick_low=low)
+        if np.isnan(raw) or raw <= 0:
+            s.status, s.reason = SetupStatus.REJECTED, "stop level is not beyond the entry"
+            return s
+        min_units = p.min_stop_pips_forex if spec.kind == "forex" else p.min_stop_ticks_futures
+        if s.raw_risk_units < min_units:
+            s.status = SetupStatus.REJECTED
+            s.reason = f"stop {s.raw_risk_units:.1f} {'pips' if spec.kind == 'forex' else 'ticks'} is below the minimum"
+            return s
+        sign = 1 if long else -1
+        breathing = raw * p.breathing_room_pct
+        s.stop = prot - sign * breathing
+        if not market and spec.kind == "forex" and s.raw_risk_units > p.omar_entry_min_stop_pips:
+            s.entry = nowick_open + sign * p.omar_entry_offset_pips * spec.unit
+            s.omar_entry = True
+        s.target = self._target(s, s.entry)
+        return s
+
+    def _target(self, s: Setup, entry: float) -> float:
+        sign = 1 if s.direction == "long" else -1
+        one_to_one = entry + sign * self.params.reward_risk * abs(entry - s.stop)
+        if s.s_setup and self.params.s_setup_target == "wick_fill":
+            fill = s.nowick_high if s.direction == "long" else s.nowick_low
+            if (fill - one_to_one) * sign > 0:  # only when the wick fill is beyond 1:1
+                return fill
+        return one_to_one
+
+    @staticmethod
+    def _bos_run(structure: StructureResult, n: int) -> np.ndarray:
+        """Number of with-trend BOS events since the trend began, after each bar."""
+        out = np.zeros(n, dtype=int)
+        count, last = 0, 0
+        for e in sorted(structure.events, key=lambda e: e.index):
+            out[last:e.index] = count
+            if e.kind == "BOS":
+                count = 1 if ("reversal confirmed" in e.note or "resumed" in e.note) else count + 1
+            else:
+                count = 0
+            last = e.index
+        out[last:] = count
+        return out
+
+    @staticmethod
+    def _manage(s: Setup, j: int, o: float, h: float, lo: float, close, fm: FillModel) -> None:
+        long = s.direction == "long"
+        if fm.stop_triggered(long, s.stop, h, lo):  # checked first: stop wins any same-bar tie
+            close(s, j, fm.stop_exit(long, s.stop, o), "stop", SetupStatus.LOST)
+            return
+        tp = fm.target_exit(long, s.target, o, h, lo)
+        if tp is not None:
+            close(s, j, tp, "target", SetupStatus.WON)
+
+    @staticmethod
+    def _timeframe_warnings(spec: InstrumentSpec, interval: str) -> list[str]:
+        mins = interval_delta(interval).total_seconds() / 60
+        if spec.kind == "forex" and mins < 15:
+            return [f"video: forex should be traded on 15m or higher, not {interval}"]
+        if spec.kind == "futures" and mins not in (5, 15):
+            return [f"video: futures are traded on the 5m or 15m, not {interval}"]
+        if spec.kind == "other":
+            return [f"{spec.symbol} is not one of the markets named in the video"]
+        return []
+
+
+def default_definition(symbols: list[str] | None = None, interval: str = "5m",
+                       params: OriginalParams | None = None) -> StrategyDefinition:
+    return StrategyDefinition(
+        name=STRATEGY_NAME,
+        version="1.0.0",
+        symbols=symbols or ["ES=F"],
+        interval=interval,
+        params=asdict(params or OriginalParams()),
+        warmup_bars=100,
+        description="No Wick strategy as taught in youtu.be/DD9A9hHYqvc (original, unoptimised).",
+    )
+
+
+@register(STRATEGY_NAME)
+class OriginalYoutubeStrategy(Strategy):
+    """Standard-interface wrapper: emits a limit-entry signal when the last bar is a valid no-wick setup."""
+
+    def __init__(self, definition: StrategyDefinition) -> None:
+        super().__init__(definition)
+        self.params = OriginalParams(**definition.params) if definition.params else OriginalParams()
+        self.scanner = OriginalYoutubeScanner(self.params)
+
+    def scan(self, md: MarketData, news_events: Sequence[pd.Timestamp] = (),
+             fill_config: FillConfig | None = None) -> ScanResult:
+        return self.scanner.scan(md.frame, md.symbol, md.interval, news_events, fill_config)
+
+    def evaluate(self, md: MarketData) -> list[Signal]:
+        if len(md.frame) < 2:
+            return []
+        result = self.scan(md)
+        last = len(md.frame) - 1
+        quality = md.quality or DataQualityStatus.WARNING
+        out: list[Signal] = []
+        for s in result.setups:
+            if s.nowick_index != last or s.status != SetupStatus.PENDING:
+                continue
+            out.append(Signal(
+                strategy=self.name,
+                symbol=md.symbol,
+                interval=md.interval,
+                timestamp=md.frame.index[last].to_pydatetime(),
+                action=SignalAction.ENTER_LONG if s.direction == "long" else SignalAction.ENTER_SHORT,
+                price=s.entry,
+                stop=s.stop,
+                target=s.target,
+                reason=(f"{s.category.value}{' + S' if s.s_setup else ''} setup: "
+                        f"{'bullish' if s.direction == 'long' else 'bearish'} no-wick; "
+                        + ("MARKET entry at the next open" if s.entry_mode == "market" else
+                           f"LIMIT entry{' (Omar entry)' if s.omar_entry else ''}, valid for "
+                           f"{self.params.max_return_candles} candles")),
+                indicators={"raw_risk_units": s.raw_risk_units, "protective_level": s.protective_level,
+                            "s_setup": float(s.s_setup), "market_entry": float(s.entry_mode == "market"),
+                            "expires_after_bars": float(self.params.max_return_candles)},
+                data_quality=quality if isinstance(quality, DataQualityStatus) else DataQualityStatus.WARNING,
+            ))
+        return out

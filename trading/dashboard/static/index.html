@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper Desk · PAPER / SIMULATION</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="sim-banner" role="status">
+  <span class="sim-icon" aria-hidden="true">!</span>
+  <strong>PAPER / SIMULATION</strong>
+  <span>Virtual money only. No brokerage connection. Every figure below is simulated.</span>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div>
+      <div class="brand-name">Paper Desk</div>
+      <div class="brand-sub" id="strategy-name">ORIGINAL_YOUTUBE_STRATEGY</div>
+    </div>
+  </div>
+  <nav class="symbol-tabs" id="symbol-tabs" aria-label="Symbol"></nav>
+  <div class="status">
+    <span class="live-dot" id="live-dot" aria-hidden="true"></span>
+    <span id="status-text">connecting…</span>
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle light / dark theme" title="Light / dark"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+
+<main class="grid">
+  <!-- ACCOUNT OVERVIEW -->
+  <section class="card account" aria-labelledby="h-account">
+    <div class="card-head">
+      <h2 id="h-account">Account overview</h2>
+      <span class="sim-tag">SIMULATED</span>
+      <span class="muted small" id="as-of"></span>
+    </div>
+    <div class="account-body">
+      <div class="hero">
+        <div class="label">Equity</div>
+        <div class="hero-value" id="equity">—</div>
+        <div class="hero-delta" id="equity-delta"></div>
+      </div>
+      <div class="tiles" id="tiles"></div>
+    </div>
+  </section>
+
+  <!-- LIVE MARKET -->
+  <section class="card market" aria-labelledby="h-market">
+    <div class="card-head">
+      <h2 id="h-market">Live market</h2>
+      <span class="chip" id="market-symbol">—</span>
+      <span class="chip quality" id="market-quality">—</span>
+      <span class="muted small" id="market-last"></span>
+    </div>
+    <div class="legend" id="market-legend">
+      <span><i class="lg-candle"></i>Validated yfinance bars</span>
+      <span><i class="lg-line prot"></i>Stop level (HL / LH)</span>
+      <span><i class="lg-mark setup"></i>Strategy setup</span>
+      <span><i class="lg-mark signal"></i>SIGNAL (agent-approved)</span>
+      <span><i class="lg-mark entry"></i>FILLED paper entry</span>
+      <span><i class="lg-mark exit"></i>Paper exit</span>
+      <span><i class="lg-line stop"></i>Stop</span>
+      <span><i class="lg-line target"></i>Target</span>
+    </div>
+    <div class="chart-wrap market-chart">
+      <canvas id="market-canvas" aria-label="Candlestick chart with strategy and paper-trade markers"></canvas>
+      <div class="tooltip" id="market-tip" hidden></div>
+      <div class="empty" id="market-empty" hidden>No validated market data cached yet. Run <code>python -m trading paper-step</code>.</div>
+    </div>
+  </section>
+
+  <!-- AGENT PANEL -->
+  <section class="card agents" aria-labelledby="h-agents">
+    <div class="card-head">
+      <h2 id="h-agents">Decision agents</h2>
+      <span class="muted small" id="agent-bar"></span>
+    </div>
+    <div id="agent-panel" class="agent-panel"></div>
+    <h3 class="sub">Recent decisions</h3>
+    <ol class="feed" id="decision-feed"></ol>
+  </section>
+
+  <!-- POSITIONS -->
+  <section class="card positions" aria-labelledby="h-positions">
+    <div class="card-head"><h2 id="h-positions">Open paper positions</h2><span class="count" id="pos-count">0</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Side</th><th class="num">Entry</th><th class="num">Current</th>
+          <th class="num">Stop</th><th class="num">Target</th><th class="num">Unrealized</th><th class="num">Open</th></tr></thead>
+        <tbody id="positions-body"></tbody>
+      </table>
+    </div>
+    <div class="pending" id="pending"></div>
+  </section>
+
+  <!-- TRADE HISTORY -->
+  <section class="card history" aria-labelledby="h-history">
+    <div class="card-head"><h2 id="h-history">Trade history</h2><span class="count" id="trade-count">0</span>
+      <span class="muted small">Select a trade to inspect it</span></div>
+    <div class="table-wrap tall">
+      <table class="selectable">
+        <thead><tr><th>Closed</th><th>Symbol</th><th>Strategy / setup</th><th>Side</th><th class="num">Entry</th>
+          <th class="num">Exit</th><th>Result</th><th class="num">P&amp;L</th><th class="num">R</th><th>Exit reason</th></tr></thead>
+        <tbody id="trades-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section class="card analytics-equity" aria-labelledby="h-equity">
+    <div class="card-head"><h2 id="h-equity">Equity curve</h2><span class="muted small">simulated equity after each processed bar</span></div>
+    <div class="chart-wrap line"><canvas id="equity-canvas"></canvas><div class="tooltip" id="equity-tip" hidden></div></div>
+    <div class="card-head minor"><h3 id="h-dd">Drawdown from peak</h3></div>
+    <div class="chart-wrap line short"><canvas id="dd-canvas"></canvas><div class="tooltip" id="dd-tip" hidden></div></div>
+  </section>
+
+  <section class="card analytics-mix" aria-labelledby="h-mix">
+    <div class="card-head"><h2 id="h-mix">Wins / losses</h2></div>
+    <div id="winloss"></div>
+    <div class="card-head minor"><h3>Strategy performance by setup</h3></div>
+    <div class="table-wrap"><table><thead><tr><th>Setup</th><th class="num">Trades</th><th class="num">Win rate</th>
+      <th class="num">PF</th><th class="num">Net P&amp;L</th></tr></thead><tbody id="setup-body"></tbody></table></div>
+    <div class="card-head minor"><h3>By direction</h3></div>
+    <div class="table-wrap"><table><tbody id="dir-body"></tbody></table></div>
+  </section>
+
+  <section class="card analytics-recent" aria-labelledby="h-recent">
+    <div class="card-head"><h2 id="h-recent">Recent performance</h2><span class="muted small">last 20 paper trades, net R</span></div>
+    <div class="chart-wrap bars"><canvas id="recent-canvas"></canvas><div class="tooltip" id="recent-tip" hidden></div></div>
+    <div class="recent-stats" id="recent-stats"></div>
+  </section>
+</main>
+
+<!-- TRADE INSPECTOR -->
+<aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawer-title">
+  <div class="drawer-head">
+    <div>
+      <div class="sim-tag">PAPER / SIMULATION</div>
+      <h2 id="drawer-title">Trade</h2>
+      <div class="muted small" id="drawer-sub"></div>
+    </div>
+    <button class="icon-btn" id="drawer-close" type="button" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body">
+    <div class="chart-wrap drawer-chart"><canvas id="trade-canvas"></canvas><div class="tooltip" id="trade-tip" hidden></div></div>
+    <div id="drawer-sections"></div>
+  </div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+
+<footer class="foot">PAPER / SIMULATION · reads the local paper-trading database (read-only) · refreshes every <span id="refresh-s">5</span>s</footer>
+<script src="/static/app.js"></script>
+</body>
+</html>
