@@ -21,3 +21,8 @@ Render: `node record.js m-<x>.html x <out>` then `python3 sfx.py <out> <out>.wav
 
 ## Keynote-style ads (crewup-keynote-0N-*.mp4), from the owner's 28 Oct reference (clean kinetic type + widgets)
 k.html, `?cut=light|dark|blue`: letter-drop kinetic text, CrewUp widgets (streak, crew gauge, rank, steps, nudge) with blur-morph, check-in mosaic around a question, glass widgets over a parallax sky (day / night / sunset), logo frame, end line. All shapes are CrewUp's own (no Apple watch/health designs). Mosaic tiles use emoji placeholders until the owner sends real gym photos.
+
+## Adding the owner's song
+`python3 music.py <video.mp4> <song> <out.mp4> [--cues <render>/sfx.json] [--hit 12.65] [--start 30] [--no-sfx]`
+Picks the loudest stretch of the song as long as the video, shifts it so a real beat lands on the logo moment (or --hit), fades in/out, ducks the song under the reel's sound effects. Tested with a 128 BPM test track: beat landed within ~15 ms.
+Silent copies for editing in CapCut/TikTok: ads/video/music-ready/*-silent.mp4.
