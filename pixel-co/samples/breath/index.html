@@ -1,0 +1,302 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>BREATH Coffee</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Marcellus&family=Readex+Pro:wght@400;500;600&display=swap">
+<style>
+/* Layout: a calm matcha café page. Full-height hero with a slowly "breathing" matcha circle and the
+   name, a 24-hour strip, a signature drink that pours itself, the menu with an options sheet, pickup and
+   WhatsApp checkout. One look: deep forest green, oat cream, matcha. */
+:root{
+  --forest:#1F2E24; --forest-2:#2C3F31; --cream:#F3EEE3; --paper:#FBF8F1; --oat:#E6DCC8; --ink:#1E2A21; --muted:#6F7A6E;
+  --matcha:#8BB65A; --matcha-d:#5E8A3A; --line:#DCD2BE; --wa:#1FA855; --gold:#B99A62;
+  --display:'Marcellus','Readex Pro',serif; --serif:'Cormorant Garamond',Georgia,serif; --body:'Readex Pro',system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65}
+body.locked{overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--forest)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;font-weight:400}
+.sample{background:#0F1812;color:#C9D6C4;font-size:12px;text-align:center;padding-block:6px}
+
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(31,46,36,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--cream)}
+.head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.logo{display:flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none;color:var(--cream)}
+.logo b{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.32em;margin-inline-end:-.32em}
+.logo small{font-size:13px;letter-spacing:.3em;opacity:.8;margin-top:3px}
+.tools{display:flex;gap:8px;align-items:center}
+.lang{border:1px solid rgba(243,238,227,.5);background:transparent;border-radius:999px;padding:3px 13px;font-size:13px;color:var(--cream)}
+.cart{position:relative;border:0;background:var(--cream);color:var(--forest);width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
+.cart svg{width:19px;height:19px}
+.badge{position:absolute;top:-3px;inset-inline-end:-3px;min-width:19px;height:19px;border-radius:999px;background:var(--matcha);color:var(--forest);font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 4px}
+.badge[hidden]{display:none}
+
+/* hero */
+.hero{background:var(--forest);color:var(--cream);position:relative;overflow:hidden}
+.hero .wrap{min-height:min(88vh,760px);display:grid;place-items:center;text-align:center;padding-block:40px 70px;position:relative}
+.orb{position:absolute;left:50%;top:46%;width:min(78vw,520px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#B6D88B 0%,#8BB65A 38%,#4F7A33 72%,rgba(31,46,36,0) 73%);animation:breathe 8s ease-in-out infinite;opacity:.9}
+.orb::after{content:"";position:absolute;inset:-14%;border-radius:50%;border:1px solid rgba(182,216,139,.35);animation:ring 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(.86)}50%{transform:translate(-50%,-50%) scale(1)}}
+@keyframes ring{0%,100%{transform:scale(.9);opacity:.2}50%{transform:scale(1.08);opacity:.7}}
+.hero .copy{position:relative;z-index:1}
+.hero .kick{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#CFE1BD}
+.hero h1{font-family:var(--display);font-size:clamp(56px,15vw,150px);letter-spacing:.18em;margin:14px 0 6px;margin-inline-end:-.18em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.25)}
+.hero .ar{font-size:clamp(22px,4vw,30px);letter-spacing:.4em;opacity:.9}
+.hero p{max-width:34ch;margin:22px auto 26px;color:#DCE6D3;font-size:17px}
+.breathe-txt{font-family:var(--serif);font-size:20px;color:#CFE1BD;height:28px;margin-top:-6px}
+.cta{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;background:var(--cream);color:var(--forest);padding:14px 28px;font-weight:500;text-decoration:none}
+.open24{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;font-size:13.5px;color:#DCE6D3;white-space:nowrap}
+.open24 i{width:8px;height:8px;border-radius:50%;background:#7CE38A;box-shadow:0 0 0 0 rgba(124,227,138,.6);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 10px rgba(124,227,138,0)}100%{box-shadow:0 0 0 0 rgba(124,227,138,0)}}
+
+/* signature */
+section{padding-block:70px}
+.sig{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,5vw,60px);align-items:center}
+@media (max-width:820px){.sig{grid-template-columns:1fr}}
+.sig .stage{background:var(--paper);border:1px solid var(--line);border-radius:30px;display:grid;place-items:center;aspect-ratio:1/1;position:relative;overflow:hidden}
+.sig .stage svg{width:62%;height:auto}
+.label{font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--matcha-d);margin-bottom:10px}
+.sig h2{font-family:var(--display);font-size:clamp(34px,6vw,58px);line-height:1.1;margin:0 0 12px}
+.sig .ar2{font-size:22px;color:var(--muted);margin-bottom:12px}
+.sig p{color:var(--muted);max-width:40ch;margin:0 0 20px}
+.layers{display:grid;gap:8px;margin:0 0 22px;padding:0;list-style:none}
+.layers li{display:flex;align-items:center;gap:10px;font-size:15px}
+.layers i{width:14px;height:14px;border-radius:50%;flex:none}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;background:var(--forest);color:var(--cream);padding:13px 24px;font-weight:500}
+
+/* menu */
+.mh{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.mh h2{font-family:var(--display);font-size:clamp(34px,6vw,54px);margin:0;line-height:1.1}
+.note{font-size:13px;color:var(--muted)}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;position:sticky;top:64px;z-index:5;padding-block:8px;background:linear-gradient(var(--cream) 80%,rgba(243,238,227,0))}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 16px;font-size:14px}
+.tab[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--cream)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+.item{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:12px;text-align:start;display:flex;flex-direction:column;gap:6px;min-width:0;transition:transform .2s,box-shadow .2s}
+.item:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(31,46,36,.5)}
+.item .art{background:var(--oat);border-radius:16px;aspect-ratio:4/3;display:grid;place-items:center}
+.item .art svg{height:84%;width:auto}
+.item h3{font-size:16px;font-weight:500;margin:4px 0 0;line-height:1.35}
+.item p{margin:0;font-size:13px;color:var(--muted);line-height:1.45;flex:1}
+.item .row{display:flex;justify-content:space-between;align-items:center}
+.item .row b{font-weight:500;font-variant-numeric:tabular-nums}
+.plus{width:32px;height:32px;border-radius:50%;background:var(--forest);color:var(--cream);display:grid;place-items:center;font-size:19px}
+.star{display:inline-block;font-size:11px;background:var(--matcha);color:var(--forest);border-radius:999px;padding:1px 8px;margin-inline-start:6px;vertical-align:2px}
+
+.visit{background:var(--forest);color:var(--cream)}
+.visit .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.visit .wrap{grid-template-columns:1fr}}
+.visit div.c{border:1px solid rgba(243,238,227,.2);border-radius:22px;padding:20px}
+.visit b{display:block;font-family:var(--display);font-size:22px;margin-bottom:4px}
+.visit span{color:#C9D6C4;font-size:14.5px}
+footer{background:#0F1812;color:#9FB09A;font-size:13px;padding-block:22px 100px}
+footer .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* sheet + drawer */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(15,24,18,.5);opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:41;left:0;right:0;bottom:0;max-height:92dvh;overflow:auto;background:var(--paper);border-radius:26px 26px 0 0;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);padding:16px max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+.sheet.open{transform:none}
+@media (min-width:720px){.sheet{left:50%;right:auto;width:540px;top:50%;bottom:auto;border-radius:26px;transform:translate(-50%,-44%);opacity:0;pointer-events:none;transition:transform .3s,opacity .25s}.sheet.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}}
+.x{position:absolute;top:12px;inset-inline-end:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--paper);font-size:18px}
+.st{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;align-items:center}
+.st .art{background:var(--oat);border-radius:18px;aspect-ratio:1;display:grid;place-items:center}
+.st .art svg{height:86%}
+.sheet h3{font-family:var(--display);font-size:24px;margin:0;padding-inline-end:40px;line-height:1.2}
+.sheet .d{color:var(--muted);font-size:14px;margin:4px 0 0}
+.opt{margin-top:16px}
+.opt .ol{font-size:13.5px;font-weight:500;margin-bottom:8px;display:flex;justify-content:space-between}
+.opt .ol small{color:var(--muted);font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:7px 13px;font-size:14px}
+.chip small{color:var(--muted);margin-inline-start:4px}
+.chip[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--cream)}
+.chip[aria-pressed="true"] small{color:#C9D6C4}
+.foot{display:flex;gap:10px;align-items:center;margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px}
+.qty button{width:38px;height:42px;border:0;background:transparent;font-size:18px}
+.qty output{min-width:22px;text-align:center}
+.add{flex:1;display:flex;justify-content:space-between;align-items:center;border:0;border-radius:12px;background:var(--forest);color:var(--cream);height:46px;padding:0 18px}
+.drawer{position:fixed;z-index:42;top:0;bottom:0;inset-inline-end:0;width:min(420px,100%);background:var(--paper);transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.9,.3,1);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html[dir=rtl] .drawer{transform:translateX(-105%)}
+.drawer.open{transform:none!important}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dh h3{font-family:var(--display);font-size:22px;margin:0}
+.dh .x{position:static}
+.db{flex:1;overflow:auto;padding:10px 18px}
+.line{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding-block:10px;border-bottom:1px solid var(--line)}
+.line .th{background:var(--oat);border-radius:12px;aspect-ratio:1;display:grid;place-items:center}
+.line .th svg{height:80%}
+.line .op{font-size:12.5px;color:var(--muted)}
+.line .rm{border:0;background:none;padding:0;color:var(--muted);text-decoration:underline;font-size:12px}
+.df{border-top:1px solid var(--line);padding:14px 18px;display:grid;gap:10px}
+.times{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.times button{border:1px solid var(--line);background:var(--cream);border-radius:10px;padding:6px 2px;font-size:13px}
+.times button[aria-pressed="true"]{background:var(--forest);color:var(--cream);border-color:var(--forest)}
+.df input{border:1px solid var(--line);background:var(--cream);border-radius:10px;padding:9px 11px;width:100%}
+.tot{display:flex;justify-content:space-between;font-size:17px;font-variant-numeric:tabular-nums}
+.wa{display:flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:12px;background:var(--wa);color:#fff;height:48px;font-weight:500}
+.preview{background:#ECE5DD;border-radius:12px;padding:10px;font-size:12.5px}
+.preview .bub{background:#DCF8C6;border-radius:10px;padding:8px 10px;white-space:pre-wrap;line-height:1.5;font-family:system-ui,-apple-system,sans-serif}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(120%);transition:transform .3s}
+.bar.show{transform:none}
+.bar button{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;border-radius:999px;background:var(--forest);color:var(--cream);height:50px;padding:0 20px;box-shadow:0 12px 30px -10px rgba(15,24,18,.6)}
+@media (min-width:900px){.bar{display:none}}
+.pour .f{transform-box:fill-box;transform-origin:center bottom;animation:pour 1s cubic-bezier(.3,.8,.3,1) both}
+.pour .f:nth-child(2){animation-delay:.18s}.pour .f:nth-child(3){animation-delay:.36s}.pour .f:nth-child(4){animation-delay:.54s}
+@keyframes pour{from{transform:scaleY(0)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<div class="sample"><div class="wrap" data-t="sample"></div></div>
+<header class="head" id="head"><div class="wrap">
+  <div class="tools"><button class="lang" id="lang" type="button">EN</button></div>
+  <a class="logo" href="#top" aria-label="BREATH"><b>BREATH</b><small>بـريـث</small></a>
+  <div class="tools"><button class="cart" id="cartBtn" type="button" aria-label="Order"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1.2 11.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="badge" id="badge" hidden>0</span></button></div>
+</div></header>
+
+<main id="top">
+  <section class="hero" style="padding:0"><div class="wrap">
+    <div class="orb" aria-hidden="true"></div>
+    <div class="copy"><div class="kick" data-t="kick"></div><h1>BREATH</h1><div class="ar">بـريـث</div>
+      <p data-t="heroP"></p><div class="breathe-txt" id="breathe" aria-hidden="true"></div>
+      <a class="cta" href="#menu" data-t="cta" style="margin-top:16px"></a></div>
+    <div class="open24"><i></i><span data-t="open"></span></div>
+  </div></section>
+
+  <section><div class="wrap sig">
+    <div class="stage" id="sigStage"></div>
+    <div><div class="label" data-t="sigLabel"></div><h2>Helado Matcha</h2><div class="ar2">هيلادو ماتشا</div><p data-t="sigP"></p>
+      <ul class="layers" id="layers"></ul><button class="btn" type="button" data-open="helado" data-t="sigBtn"></button></div>
+  </div></section>
+
+  <section id="menu" style="padding-top:20px"><div class="wrap">
+    <div class="mh"><h2 data-t="menu"></h2><span class="note" data-t="menuNote"></span></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="cats"></div>
+  </div></section>
+
+  <section class="visit"><div class="wrap">
+    <div class="c"><b data-t="v1T"></b><span data-t="v1"></span></div>
+    <div class="c"><b data-t="v2T"></b><span data-t="v2"></span></div>
+    <div class="c"><b>Instagram</b><span>@breathcoffeesa</span></div>
+  </div></section>
+</main>
+<footer><div class="wrap"><span data-t="f1"></span><span data-t="f2"></span></div></footer>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle"><div id="sheetIn"></div></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"><div class="dh"><h3 id="dTitle" data-t="order"></h3><button class="x" type="button" id="closeD" aria-label="Close">×</button></div><div class="db" id="db"></div><div class="df" id="df"></div></aside>
+<div class="bar" id="bar"><button type="button" id="barBtn"><span id="barC"></span><span id="barT"></span></button></div>
+
+<script>
+const T={
+  sample:{ar:'تصميم تجريبي من Pixel & Co. — ليس الموقع الرسمي لـ BREATH · الأصناف والأسعار أمثلة',en:'Sample design by Pixel & Co. — not BREATH’s official site · items and prices are examples'},
+  kick:{ar:'ماتشا وقهوة مختصة · الرياض',en:'Matcha & speciality coffee · Riyadh'},
+  heroP:{ar:'خذ نفس، واطلب كوبك قبل ما توصل. جاهز على وقتك.',en:'Take a breath, and order your cup before you arrive. Ready on your time.'},
+  breathe:{ar:['شهيق…','زفير…'],en:['breathe in…','breathe out…']},
+  cta:{ar:'اطلب الحين',en:'Order now'},open:{ar:'مفتوح ٢٤ ساعة',en:'Open 24 hours'},
+  sigLabel:{ar:'مشروبنا المميز',en:'Signature'},sigP:{ar:'ماتشا بطبقات ناعمة وفوم كريمي على الوجه. حرّك الكوب وشوف الطبقات تنصب.',en:'Matcha in soft layers with a cream foam on top. Watch the layers pour in.'},
+  sigBtn:{ar:'أضفه لطلبك',en:'Add to your order'},
+  layers:{ar:['حليب بارد','ماتشا ياباني','فوم كريمي','رشة ماتشا'],en:['Cold milk','Japanese matcha','Cream foam','Matcha dust']},
+  menu:{ar:'المنيو',en:'Menu'},menuNote:{ar:'أمثلة للتجربة، تُستبدل بمنيو BREATH الحقيقي',en:'Example items, replaced with BREATH’s real menu'},
+  v1T:{ar:'موقعنا',en:'Find us'},v1:{ar:'الرياض · رابط الخريطة يضاف من صاحب المحل',en:'Riyadh · map link added by the owner'},
+  v2T:{ar:'أوقات العمل',en:'Hours'},v2:{ar:'مفتوح ٢٤ ساعة، كل يوم',en:'Open 24 hours, every day'},
+  f1:{ar:'BREATH · بريث',en:'BREATH · بريث'},f2:{ar:'تصميم تجريبي من Pixel & Co.',en:'Sample by Pixel & Co.'},
+  order:{ar:'طلبك',en:'Your order'},empty:{ar:'ما فيه شي بالطلب. خذ نفس واختر كوبك 🍵',en:'Nothing yet. Take a breath and pick a cup 🍵'},
+  size:{ar:'الحجم',en:'Size'},milk:{ar:'الحليب',en:'Milk'},extra:{ar:'إضافات',en:'Extras'},optional:{ar:'اختياري',en:'Optional'},
+  add:{ar:'أضف',en:'Add'},pickup:{ar:'وقت الاستلام',en:'Pickup'},inMin:{ar:'{m} د',en:'{m} min'},name:{ar:'اسمك',en:'Your name'},
+  total:{ar:'المجموع',en:'Total'},wa:{ar:'أرسل الطلب على الواتساب',en:'Send order on WhatsApp'},shop:{ar:'هذا اللي يوصل للمحل:',en:'What the café receives:'},
+  remove:{ar:'إزالة',en:'Remove'},view:{ar:'عرض الطلب',en:'View order'},sar:{ar:'{n} ر.س',en:'SAR {n}'},sig:{ar:'المميز',en:'Signature'},
+  msgHead:{ar:'طلب جديد من موقع BREATH 🍵',en:'New BREATH website order 🍵'}
+};
+const OPTS={size:[{id:'r',ar:'عادي',en:'Regular',p:0},{id:'l',ar:'كبير',en:'Large',p:4}],
+  milk:[{id:'f',ar:'كامل',en:'Whole',p:0},{id:'o',ar:'شوفان',en:'Oat',p:3},{id:'a',ar:'لوز',en:'Almond',p:3}],
+  extra:[{id:'shot',ar:'شوت ماتشا',en:'Extra matcha',p:4},{id:'foam',ar:'فوم كريمي',en:'Cream foam',p:3}]};
+const M='#8BB65A',MD='#5E8A3A',MILK='#F6F1E6';
+const cats=[{id:'matcha',ar:'ماتشا',en:'Matcha'},{id:'coffee',ar:'قهوة',en:'Coffee'},{id:'bake',ar:'مخبوزات',en:'Bakes'}];
+const menu=[
+ {id:'helado',cat:'matcha',k:'iced',ar:'هيلادو ماتشا',en:'Helado Matcha',dar:'ماتشا بطبقات وفوم كريمي',den:'Layered matcha with cream foam',p:27,L:[MILK,MILK,M,M],foam:1,sig:1,o:['size','milk']},
+ {id:'iml',cat:'matcha',k:'iced',ar:'آيس ماتشا لاتيه',en:'Iced Matcha Latte',dar:'ماتشا فوق حليب بارد',den:'Matcha over cold milk',p:22,L:[MILK,MILK,M],o:['size','milk','extra']},
+ {id:'straw',cat:'matcha',k:'iced',ar:'ماتشا فراولة',en:'Strawberry Matcha',dar:'هريس فراولة وحليب وماتشا',den:'Strawberry purée, milk, matcha',p:25,L:['#E5899A',MILK,M],o:['size','milk','extra']},
+ {id:'hml',cat:'matcha',k:'hot',ar:'ماتشا لاتيه حار',en:'Hot Matcha Latte',dar:'ماتشا مخفوقة مع حليب مبخر',den:'Whisked matcha with steamed milk',p:21,c:M,o:['size','milk']},
+ {id:'span',cat:'coffee',k:'iced',ar:'سبانش لاتيه',en:'Spanish Latte',dar:'إسبريسو وحليب محلى',den:'Espresso and sweetened milk',p:22,L:['#E9D6B4',MILK,'#7A4B2C'],o:['size','milk']},
+ {id:'v60',cat:'coffee',k:'hot',ar:'V60',en:'V60',dar:'قهوة مقطرة من محصول اليوم',den:'Pour-over of the day’s beans',p:20,c:'#4A2C1E',o:['size']},
+ {id:'cort',cat:'coffee',k:'hot',ar:'كورتادو',en:'Cortado',dar:'إسبريسو مع حليب قليل',den:'Espresso cut with a little milk',p:16,c:'#B3865C',o:['milk']},
+ {id:'croi',cat:'bake',k:'bake',ar:'كرواسون زبدة',en:'Butter Croissant',dar:'طازج كل صباح',den:'Baked fresh every morning',p:14,o:[]},
+ {id:'mcook',cat:'bake',k:'cookie',ar:'كوكيز ماتشا',en:'Matcha Cookie',dar:'مع شوكولاتة بيضاء',den:'With white chocolate',p:12,o:[]}];
+const byId=Object.fromEntries(menu.map(m=>[m.id,m]));
+let lang='ar',cart=[],pick=15,name='',sheet=null,active='matcha';
+try{const s=JSON.parse(localStorage.getItem('breath1')||'{}');if(s.lang)lang=s.lang;if(Array.isArray(s.cart))cart=s.cart.filter(l=>byId[l.id])}catch(e){}
+if(!cart.length)cart=[{id:'helado',o:{size:'l',milk:'o',extra:[]},q:1},{id:'croi',o:{size:'r',milk:'f',extra:[]},q:1}];
+const $=id=>document.getElementById(id),tx=(k,v={})=>{let s=(T[k]||{})[lang]??k;for(const x in v)s=s.replace('{'+x+'}',v[x]);return s};
+const L=o=>lang==='ar'?o.ar:o.en,sar=n=>tx('sar',{n}),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const f=(g,id)=>OPTS[g].find(o=>o.id===id),def=()=>({size:'r',milk:'f',extra:[]});
+const unit=(it,o)=>it.p+(it.o.includes('size')?f('size',o.size).p:0)+(it.o.includes('milk')?f('milk',o.milk).p:0)+(it.o.includes('extra')?o.extra.reduce((s,e)=>s+f('extra',e).p,0):0);
+const ot=(it,o)=>[it.o.includes('size')&&o.size!=='r'?L(f('size',o.size)):'',it.o.includes('milk')&&o.milk!=='f'?L(f('milk',o.milk)):'',...(it.o.includes('extra')?o.extra.map(e=>'+ '+L(f('extra',e))):[])].filter(Boolean).join(' · ');
+function save(){try{localStorage.setItem('breath1',JSON.stringify({lang,cart}))}catch(e){}}
+let u=0;
+function art(it,o,pour){o=o||def();const k='b'+(u++),P=pour?'pour':'';
+  if(it.k==='iced'){const milkC=o.milk==='o'?'#EADBC0':o.milk==='a'?'#F0E4D2':MILK,ls=it.L.map(c=>c===MILK?milkC:c),top=it.foam||o.extra.includes('foam')?44:34,bot=124,h=(bot-top)/ls.length;
+    return `<svg viewBox="0 0 100 130" aria-hidden="true"><defs><clipPath id="${k}"><path d="M15 20H85L77.5 124H22.5Z"/></clipPath></defs><path d="M60 2L54 62" stroke="#1F2E24" stroke-width="6" stroke-linecap="round"/><path d="M15 20H85L77.5 124H22.5Z" fill="rgba(255,255,255,.55)"/>
+      <g clip-path="url(#${k})" class="${P}">${ls.map((c,i)=>`<rect class="f" x="0" y="${(bot-(i+1)*h).toFixed(1)}" width="100" height="${(h+.6).toFixed(1)}" fill="${c}"/>`).join('')}${top>34?`<rect class="f" x="0" y="${top-12}" width="100" height="14" fill="#FFFBF2"/>`:''}${[[30,52,-12],[52,68,10]].map(([x,y,r])=>`<rect x="${x}" y="${y}" width="15" height="15" rx="3" fill="#fff" opacity=".45" transform="rotate(${r} ${x+7} ${y+7})"/>`).join('')}</g>
+      ${it.foam?[34,46,58,68].map(x=>`<circle cx="${x}" cy="${top-6}" r="1.6" fill="${MD}"/>`).join(''):''}<path d="M15 20H85L77.5 124H22.5Z" fill="none" stroke="#1F2E24" stroke-width="2.2"/><rect x="10" y="14" width="80" height="8" rx="4" fill="#1F2E24"/><text x="50" y="96" text-anchor="middle" font-family="Marcellus,serif" font-size="9" letter-spacing="2" fill="#1F2E24" opacity=".75">BREATH</text></svg>`}
+  if(it.k==='hot')return `<svg viewBox="0 0 100 130" aria-hidden="true"><g fill="none" stroke="#A9B5A4" stroke-width="3" stroke-linecap="round"><path d="M40 30q-6-8 0-16"/><path d="M56 30q-6-8 0-16"/></g><path d="M22 42h56l-6 74H28z" fill="#FBF8F1" stroke="#1F2E24" stroke-width="2.2"/><g class="${P}"><path class="f" d="M25 60h50l-4.4 52H29.4z" fill="${it.c}"/></g><rect x="18" y="36" width="64" height="9" rx="4" fill="#1F2E24"/><text x="50" y="92" text-anchor="middle" font-family="Marcellus,serif" font-size="9" letter-spacing="2" fill="#FBF8F1">BREATH</text></svg>`;
+  const plate='<ellipse cx="50" cy="104" rx="42" ry="9" fill="#FBF8F1" stroke="#DCD2BE" stroke-width="2"/>';
+  if(it.k==='bake')return `<svg viewBox="0 0 100 130" aria-hidden="true">${plate}<path d="M14 92q4-30 36-34 32 4 36 34-8 6-16 0-6-18-20-20-14 2-20 20-8 6-16 0z" fill="#D9A15B"/><path d="M32 80q18-12 36 0" stroke="#B57A36" stroke-width="3" fill="none"/></svg>`;
+  return `<svg viewBox="0 0 100 130" aria-hidden="true">${plate}<circle cx="50" cy="78" r="30" fill="#A8C27A"/><rect x="36" y="68" width="8" height="6" rx="2" fill="#FFFBF2"/><rect x="56" y="62" width="7" height="6" rx="2" fill="#FFFBF2"/><rect x="52" y="86" width="8" height="6" rx="2" fill="#FFFBF2"/></svg>`;
+}
+function render(){
+  const de=document.documentElement;de.lang=lang;de.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=tx(e.dataset.t));$('lang').textContent=lang==='ar'?'EN':'عربي';
+  $('sigStage').innerHTML=art(byId.helado,{size:'l',milk:'f',extra:[]},true);
+  $('layers').innerHTML=T.layers[lang].map((n,i)=>`<li><i style="background:${['#F6F1E6',M,'#FFFBF2',MD][i]};border:1px solid var(--line)"></i>${n}</li>`).join('');
+  $('tabs').innerHTML=cats.map(c=>`<button class="tab" type="button" data-cat="${c.id}" aria-pressed="${c.id===active}">${L(c)}</button>`).join('');
+  $('cats').innerHTML=cats.map(c=>`<div id="cat-${c.id}" style="margin-bottom:22px"><div class="grid">${menu.filter(m=>m.cat===c.id).map(m=>`<button class="item" type="button" data-open="${m.id}"><span class="art">${art(m)}</span><h3>${L(m)}${m.sig?`<span class="star">${tx('sig')}</span>`:''}</h3><p>${L({ar:m.dar,en:m.den})}</p><span class="row"><b>${sar(m.p)}</b><span class="plus" aria-hidden="true">+</span></span></button>`).join('')}</div></div>`).join('');
+  bag();
+}
+function msg(){return [tx('msgHead'),`${tx('name')}: ${name.trim()||'—'}`,`${tx('pickup')}: ${tx('inMin',{m:pick})}`,'',...cart.map(l=>{const it=byId[l.id],o=ot(it,l.o);return `• ${l.q}× ${L(it)} — ${sar(unit(it,l.o)*l.q)}${o?'\n   '+o:''}`}),'',`${tx('total')}: ${sar(total())}`].join('\n')}
+const total=()=>cart.reduce((s,l)=>s+unit(byId[l.id],l.o)*l.q,0);
+function bag(){const n=cart.reduce((s,l)=>s+l.q,0),b=$('badge');b.hidden=!n;b.textContent=n;$('barC').textContent=tx('view')+' · '+n;$('barT').textContent=sar(total());barVis();
+  $('db').innerHTML=cart.length?cart.map((l,i)=>{const it=byId[l.id],o=ot(it,l.o);return `<div class="line"><span class="th">${art(it,l.o)}</span><div style="min-width:0"><div>${L(it)} ×${l.q}</div>${o?`<div class="op">${esc(o)}</div>`:''}<button class="rm" type="button" data-rm="${i}">${tx('remove')}</button></div><span>${sar(unit(it,l.o)*l.q)}</span></div>`}).join(''):`<div class="empty">${tx('empty')}</div>`;
+  $('df').innerHTML=cart.length?`<div style="font-size:13.5px">${tx('pickup')}</div><div class="times">${[10,15,30,45].map(m=>`<button type="button" data-m="${m}" aria-pressed="${m===pick}">${tx('inMin',{m})}</button>`).join('')}</div>
+    <input id="nm" placeholder="${tx('name')}" value="${esc(name)}" maxlength="40"><div class="tot"><span>${tx('total')}</span><span>${sar(total())}</span></div>
+    <button class="wa" type="button" id="wa">${tx('wa')}</button><div class="preview"><div style="color:#555;margin-bottom:6px">${tx('shop')}</div><div class="bub" id="bub">${esc(msg())}</div></div>`:''}
+function barVis(){$('bar').classList.toggle('show',cart.length>0&&scrollY>innerHeight*.6&&!document.body.classList.contains('locked'))}
+function open(id){const it=byId[id];sheet={id,o:def(),q:1};drawSheet(true);$('scrim').classList.add('open');$('sheet').classList.add('open');document.body.classList.add('locked')}
+function drawSheet(p){const it=byId[sheet.id];$('sheetIn').innerHTML=`<button class="x" type="button" data-close aria-label="Close">×</button><div class="st"><span class="art">${art(it,sheet.o,p)}</span><div><h3 id="sTitle">${L(it)}</h3><p class="d">${L({ar:it.dar,en:it.den})}</p></div></div>
+  ${it.o.map(g=>`<div class="opt"><div class="ol">${tx(g)}${g==='extra'?`<small>${tx('optional')}</small>`:''}</div><div class="chips">${OPTS[g].map(o=>`<button class="chip" type="button" data-g="${g}" data-v="${o.id}" aria-pressed="${g==='extra'?sheet.o.extra.includes(o.id):sheet.o[g]===o.id}">${L(o)}${o.p?`<small>+${o.p}</small>`:''}</button>`).join('')}</div></div>`).join('')}
+  <div class="foot"><div class="qty"><button type="button" data-q="-1">−</button><output>${sheet.q}</output><button type="button" data-q="1">+</button></div><button class="add" type="button" id="addB"><span>${tx('add')}</span><span>${sar(unit(it,sheet.o)*sheet.q)}</span></button></div>`}
+function closeAll(){sheet=null;['scrim','sheet','drawer'].forEach(i=>$(i).classList.remove('open'));document.body.classList.remove('locked');barVis()}
+function openBag(){bag();$('scrim').classList.add('open');$('drawer').classList.add('open');document.body.classList.add('locked');barVis()}
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]');if(o&&!e.target.closest('#sheet'))return open(o.dataset.open);
+  if(e.target.closest('[data-close]')||e.target.id==='scrim'||e.target.id==='closeD')return closeAll();
+  const t=e.target.closest('[data-cat]');if(t){active=t.dataset.cat;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b===t));const el=$('cat-'+active);scrollTo({top:el.getBoundingClientRect().top+scrollY-130,behavior:'smooth'});return}
+  if(sheet){const g=e.target.closest('[data-g]');if(g){const k=g.dataset.g,v=g.dataset.v;if(k==='extra'){const a=sheet.o.extra,i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)}else sheet.o[k]=v;return drawSheet(true)}
+    const q=e.target.closest('[data-q]');if(q){sheet.q=Math.max(1,Math.min(9,sheet.q+ +q.dataset.q));return drawSheet(false)}
+    if(e.target.closest('#addB')){cart.push({id:sheet.id,o:sheet.o,q:sheet.q});save();closeAll();bag();setTimeout(openBag,250);return}}
+  const r=e.target.closest('[data-rm]');if(r){cart.splice(+r.dataset.rm,1);save();return bag()}
+  const m=e.target.closest('[data-m]');if(m){pick=+m.dataset.m;return bag()}
+  if(e.target.closest('#wa')){const a=document.createElement('a');a.href='https://wa.me/?text='+encodeURIComponent(msg());a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+});
+document.addEventListener('input',e=>{if(e.target.id==='nm'){name=e.target.value;const b=$('bub');if(b)b.textContent=msg()}});
+$('cartBtn').addEventListener('click',openBag);$('barBtn').addEventListener('click',openBag);
+$('lang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';save();render()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+addEventListener('scroll',barVis,{passive:true});
+let bi=0;setInterval(()=>{$('breathe').textContent=T.breathe[lang][bi++%2]},4000);$('breathe').textContent=T.breathe[lang][0];
+// replay the signature pour when it scrolls into view
+new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting)$('sigStage').innerHTML=art(byId.helado,{size:'l',milk:'f',extra:[]},true)}),{threshold:.5}).observe($('sigStage'));
+render();
+</script>
