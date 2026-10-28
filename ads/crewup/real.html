@@ -129,6 +129,7 @@ body.frame > #fade{position:absolute;inset:0;background:#000;z-index:90}
 const CUT = new URLSearchParams(location.search).get('cut') || 'day1';
 const $ = s => document.querySelector(s);
 const FRAME = new URLSearchParams(location.search).get('frame') === '1';
+if (new URLSearchParams(location.search).get('notext') === '1') document.head.insertAdjacentHTML('beforeend', '<style>#texts,#otexts,#label{display:none!important}</style>');
 if (FRAME) {
   document.body.classList.add('frame');
   const dev = $('#dev'), fade = $('#fade');

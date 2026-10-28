@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp Trailer</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/inter-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Sora;src:url(fonts/sora-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#7aa6ff;--o:#FF7A2F;--g:#FFC83D;--mut:#7f889c}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#04050a;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.abs{position:absolute}
+#world{position:absolute;inset:0;transform-origin:50% 50%}
+#glow{left:-300px;top:200px;width:1680px;height:1680px;border-radius:50%;filter:blur(60px)}
+#glow2{left:200px;top:900px;width:900px;height:900px;border-radius:50%;filter:blur(80px);opacity:.6}
+#grain{inset:0;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");z-index:50;pointer-events:none}
+#vig{inset:0;background:radial-gradient(85% 60% at 50% 50%,rgba(0,0,0,0) 45%,rgba(0,0,0,.8) 100%);z-index:49}
+/* kinetic lines */
+.line{position:absolute;left:40px;right:40px;text-align:center;font:600 92px/1.1 Inter;letter-spacing:-.045em;z-index:20}
+.line .w{display:inline-block;margin:0 .14em;will-change:transform,opacity,filter}
+.line .hl{color:var(--b2);text-shadow:0 0 50px rgba(31,107,255,.9)}
+.line .or{color:var(--o);text-shadow:0 0 50px rgba(255,122,47,.8)}
+.line .gd{color:var(--g);text-shadow:0 0 50px rgba(255,200,61,.8)}
+.small{font:500 40px/1.3 Inter;letter-spacing:-.01em;color:#b9c2d6}
+/* 3D phone */
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:2200px;perspective-origin:50% 1150px;z-index:10}
+#phone{position:absolute;left:260px;top:700px;width:560px;height:1000px;transform-style:preserve-3d}
+.ly{position:absolute;inset:0;border-radius:88px}
+#back{background:linear-gradient(140deg,#2a3142,#0b0d13);transform:translateZ(-22px)}
+#mid{background:linear-gradient(140deg,#4c5568,#151923 50%,#3a4254);transform:translateZ(-11px)}
+#front{background:linear-gradient(145deg,#6b7488,#1a1e28 35%,#0d1017 60%,#565f73);padding:15px;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+#screen{width:100%;height:100%;border-radius:74px;overflow:hidden;background:#090B10;position:relative}
+#screen img{width:100%;height:100%;object-fit:cover;display:block}
+#sheen{position:absolute;inset:0;border-radius:74px;background:linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.16) 45%,rgba(255,255,255,0) 60%);mix-blend-mode:screen;background-size:300% 100%}
+#shadow{position:absolute;left:280px;top:1730px;width:520px;height:80px;border-radius:50%;background:radial-gradient(50% 50%,rgba(0,0,0,.6),rgba(0,0,0,0));filter:blur(10px);z-index:9}
+/* mosaic */
+#mosaic{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:1800px;z-index:12}
+#plane{position:absolute;left:-200px;top:300px;width:1480px;height:1500px;transform-style:preserve-3d}
+.mt{position:absolute;width:300px;height:560px;border-radius:40px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);background:#090B10}
+.mt img{width:100%;height:100%;object-fit:cover}
+/* stamp */
+#stamp{left:170px;top:980px;width:740px;text-align:center;border:10px solid #FF453A;color:#FF453A;font:800 96px/1 Sora;padding:30px 0 22px;border-radius:30px;transform:rotate(-9deg);background:rgba(4,5,10,.6);z-index:30;box-shadow:0 0 80px rgba(255,69,58,.5)}
+.rank{position:absolute;top:1450px;width:220px;text-align:center;font:800 40px Inter;z-index:30}
+.rank i{display:block;width:150px;height:170px;margin:0 auto 14px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+/* logo build */
+#dot{left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 40px #fff;z-index:30}
+#ring{left:390px;top:810px;width:300px;height:300px;border-radius:50%;border:3px solid rgba(255,255,255,.8);z-index:30}
+#logo{left:380px;top:800px;width:320px;height:320px;border-radius:80px;z-index:31;box-shadow:0 0 140px rgba(31,107,255,.9)}
+#wm{left:0;right:0;top:1170px;text-align:center;font:800 150px/1 Sora;letter-spacing:-.06em;z-index:31}
+#cs{left:0;right:0;top:1350px;text-align:center;font:600 40px Inter;color:#b9c2d6;z-index:31}
+#cta{left:150px;right:150px;top:1450px;text-align:center;background:var(--b);border-radius:30px;padding:26px 0;font:700 40px Inter;box-shadow:0 0 70px rgba(31,107,255,.7);z-index:31}
+#handle{left:0;right:0;top:1580px;text-align:center;font:700 36px Inter;color:var(--b2);z-index:31}
+#tag{left:50px;top:80px;display:flex;align-items:center;gap:12px;z-index:60}
+#tag img{width:52px;height:52px;border-radius:13px}
+#tag span{font:600 20px Inter;letter-spacing:.06em;color:#9aa6bd;border:1.5px solid rgba(154,166,189,.3);padding:9px 12px;border-radius:10px;background:rgba(0,0,0,.3)}
+#flash{inset:0;background:#dfe9ff;mix-blend-mode:screen;opacity:0;z-index:70}
+#fade{inset:0;background:#000;z-index:80}
+</style>
+</head>
+<body>
+<div id="world">
+  <div id="glow" class="abs"></div><div id="glow2" class="abs"></div>
+  <div id="lines"></div>
+  <div id="shadow"></div>
+  <div id="stage"><div id="phone"><div class="ly" id="back"></div><div class="ly" id="mid"></div>
+    <div class="ly" id="front"><div id="screen"><img id="scr"><div id="sheen"></div></div></div></div></div>
+  <div id="mosaic"><div id="plane"></div></div>
+  <div id="stamp" class="abs">NOT COUNTED</div>
+  <div id="ranks"></div>
+  <div id="dot" class="abs"></div><div id="ring" class="abs"></div>
+  <img id="logo" class="abs" src="img/crewup-logo.png">
+  <div id="wm" class="abs">CrewUp</div>
+  <div id="cs" class="abs">Gym with your crew, not alone.</div>
+  <div id="cta" class="abs">Join the waitlist · link in bio</div>
+  <div id="handle" class="abs">@getcrewup · coming soon</div>
+</div>
+<div id="vig" class="abs"></div><div id="grain" class="abs"></div>
+<div id="tag" class="abs"><img src="img/crewup-logo.png"><span>APP PREVIEW · CONCEPT</span></div>
+<div id="flash" class="abs"></div><div id="fade" class="abs"></div>
+<script src="img/trailer-beat.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const BT = window.BEAT.beats, EN = window.BEAT.energy;
+const B = i => BT[Math.min(i, BT.length - 1)];
+const DUR = 24.5;
+const F = 'frames-trailer/';
+
+// ---------- kinetic lines: words come in one per beat ----------
+let lc = 0;
+function line(words, top, cls = '') {
+  const id = 'l' + (lc++); const el = document.createElement('div'); el.className = 'line ' + cls; el.id = id; el.style.top = top + 'px';
+  el.innerHTML = words.map(([w, c], i) => `<span class="w ${c || ''}" id="${id}w${i}">${w}</span>`).join(' ');
+  $('#lines').appendChild(el); return id;
+}
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+const wordsIn = (id, times) => times.forEach((t, i) => tl.fromTo(`#${id}w${i}`, { opacity: 0, y: 40, filter: 'blur(14px)', scale: 1.15 }, { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: .28 }, t));
+const out = (id, t, d = .22) => tl.to('#' + id, { opacity: 0, y: -40, filter: 'blur(12px)', duration: d, ease: 'power2.in' }, t);
+const flash = (t, o = .55) => tl.to('#flash', { opacity: o, duration: .05, yoyo: true, repeat: 1 }, t);
+
+// glow colour per section
+const glowAt = [[0, '#1F6BFF'], [B(16), '#2bd4c0'], [B(20), '#1F6BFF'], [B(28), '#FF453A'], [B(32), '#FFC83D'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
+
+// 1) intro: Gym with your crew, not alone.
+const a = line([['Gym'], ['with'], ['your'], ['crew,', 'hl']], 820);
+const b2 = line([['not'], ['alone.']], 940, '');
+$('#' + b2).style.fontSize = '130px';
+wordsIn(a, [B(0), B(1), B(2), B(3)]); wordsIn(b2, [B(4), B(5)]);
+tl.to(['#' + a, '#' + b2], { y: -560, scale: .62, duration: .45, ease: 'power3.inOut' }, B(7) - .2);
+out(a, B(10) - .1); out(b2, B(10) - .1);
+// 2) phone flies in, home screen
+tl.set('#phone', { autoAlpha: 0 }, 0).fromTo('#phone', { autoAlpha: 0, y: 1300, rotateY: -50, rotateX: 25, rotateZ: 8 }, { autoAlpha: 1, y: 0, rotateY: -14, rotateX: 6, rotateZ: 0, duration: .9, ease: 'power4.out' }, B(8));
+flash(B(8));
+const c = line([['Start'], ['a'], ['challenge.', 'hl']], 250);
+const c2 = line([['loser'], ['buys'], ['coffee'], ['☕']], 370, 'small');
+wordsIn(c, [B(10), B(10) + .15, B(11)]); wordsIn(c2, [B(12), B(12) + .1, B(13), B(13) + .1]);
+tl.to('#phone', { rotateY: 16, rotateX: 4, duration: .9, ease: 'power3.inOut' }, B(12));
+out(c, B(15)); out(c2, B(15));
+// 3) mosaic of screens on a tilted plane
+tl.to('#phone', { autoAlpha: 0, y: -300, scale: .8, duration: .3, ease: 'power2.in' }, B(16) - .25);
+const MOS = [['NT_showcase', 70], ['NT_nudge', 120], ['NT_lost', 140], ['NT_fake', 230], ['NT_excuses', 400], ['NT_showcase', 230], ['NT_day1', 200], ['NT_showcase', 300], ['NT_nudge', 270], ['NT_lost', 60], ['NT_excuses', 200], ['NT_showcase', 400]];
+$('#plane').innerHTML = MOS.map(([d, f], i) => `<div class="mt" id="mt${i}" style="left:${(i % 4) * 360 + 10}px;top:${Math.floor(i / 4) * 620 - 200 + (i % 2) * 90}px"><img src="${F}${d}/${String(f).padStart(5, '0')}.jpg"></div>`).join('');
+tl.set('#mosaic', { autoAlpha: 0 }, 0).set('#mosaic', { autoAlpha: 1 }, B(16) - .05)
+  .fromTo('#plane', { rotateX: 48, rotateZ: -18, z: -900, y: 300 }, { rotateX: 38, rotateZ: -12, z: -300, y: -100, duration: B(20) - B(16), ease: 'none' }, B(16));
+MOS.forEach((_, i) => tl.fromTo('#mt' + i, { autoAlpha: 0, z: 400, scale: .6 }, { autoAlpha: 1, z: 0, scale: 1, duration: .3 }, B(16) + (i % 8) * (B(17) - B(16)) / 2));
+const d = line([['Every'], ['check-in'], ['counts.', 'hl']], 860);
+wordsIn(d, [B(17), B(18), B(19)]);
+tl.to('#mosaic', { autoAlpha: 0, scale: 1.4, filter: 'blur(20px)', duration: .3, ease: 'power2.in' }, B(20) - .2); out(d, B(20) - .15);
+// 4) nudge: phone close, lock screen banners
+tl.set('#phone', { y: 0, scale: 1.08, rotateY: -22, rotateX: 8 }, B(20) - .05).set('#phone', { autoAlpha: 1 }, B(20)); flash(B(20));
+tl.to('#phone', { rotateY: 10, scale: 1.0, duration: B(28) - B(20), ease: 'sine.inOut' }, B(20));
+const e = line([['Nudge'], ['with'], ['one'], ['tap.', 'hl'], ['⚡']], 250);
+wordsIn(e, [B(21), B(21) + .12, B(22), B(23), B(23) + .1]);
+const e2 = line([['“the'], ['couch'], ['is'], ['not'], ['a'], ['workout”']], 370, 'small');
+wordsIn(e2, [B(25), B(25) + .08, B(25) + .16, B(26), B(26) + .08, B(27)]);
+out(e, B(28) - .1); out(e2, B(28) - .1);
+// 5) fake check-in: stamp hits on the beat
+const f = line([['Fake'], ['check-in?'], ['🤨']], 250);
+wordsIn(f, [B(28), B(28) + .15, B(29)]);
+tl.set('#stamp', { autoAlpha: 0 }, 0).fromTo('#stamp', { autoAlpha: 0, scale: 2.6 }, { autoAlpha: 1, scale: 1, duration: .14, ease: 'power4.in' }, B(30) - .14);
+tl.to('#world', { x: 18, duration: .04, yoyo: true, repeat: 7, ease: 'none' }, B(30)).set('#world', { x: 0 }, B(30) + .33); flash(B(30), .4);
+tl.to('#stamp', { autoAlpha: 0, scale: .9, duration: .2 }, B(32) - .2); out(f, B(32) - .2);
+// 6) win + ranks
+const g = line([['Climb'], ['with'], ['your'], ['crew.', 'gd']], 250);
+wordsIn(g, [B(32), B(32) + .15, B(33), B(33) + .2]);
+tl.to('#phone', { rotateY: -18, rotateX: 5, scale: .92, y: -60, duration: B(36) - B(32), ease: 'sine.inOut' }, B(32));
+const RK = [['Bronze', 'linear-gradient(160deg,#e3a26f,#8a5126)'], ['Silver', 'linear-gradient(160deg,#f1f4f8,#8e99a8)'], ['Gold', 'linear-gradient(160deg,#ffe48a,#d39a12)'], ['Diamond', 'linear-gradient(160deg,#b9f0ff,#1F6BFF)']];
+$('#ranks').innerHTML = RK.map(([n, gr], i) => `<div class="rank" id="rk${i}" style="left:${20 + i * 260}px"><i style="background:${gr}"></i>${n}</div>`).join('');
+RK.forEach((_, i) => tl.set('#rk' + i, { autoAlpha: 0 }, 0).fromTo('#rk' + i, { autoAlpha: 0, y: 80, scale: .5 }, { autoAlpha: 1, y: 0, scale: 1, duration: .3, ease: 'back.out(2)' }, B(36 + i)));
+tl.to('#phone', { y: -260, scale: .8, duration: .5, ease: 'power3.inOut' }, B(36) - .3);
+tl.to(['#ranks'], { autoAlpha: 0, duration: .2 }, B(40) - .2).to('#phone', { autoAlpha: 0, y: 900, rotateX: 30, duration: .4, ease: 'power3.in' }, B(40) - .4); out(g, B(40) - .25);
+// 7) Free. No excuses. No skipping.
+const h1 = line([['Free.']], 760); const h2 = line([['No'], ['excuses.']], 880); const h3 = line([['No'], ['skipping.', 'hl']], 1000);
+[h1, h2, h3].forEach(id => $('#' + id).style.fontSize = '104px');
+wordsIn(h1, [B(40)]); wordsIn(h2, [B(41), B(41) + .12]); wordsIn(h3, [B(42), B(42) + .12]);
+tl.to(['#' + h1, '#' + h2], { color: '#4a5266', duration: .2 }, B(42));
+[h1, h2, h3].forEach(id => out(id, B(44) - .15));
+// 8) logo build: dot -> ring -> logo -> wordmark
+tl.set(['#dot', '#ring', '#logo', '#wm', '#cs', '#cta', '#handle'], { autoAlpha: 0 }, 0)
+  .fromTo('#dot', { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .2 }, B(44))
+  .fromTo('#ring', { autoAlpha: 0, scale: .1 }, { autoAlpha: 1, scale: 1, duration: .35 }, B(45)).to('#dot', { autoAlpha: 0, duration: .1 }, B(45) + .2)
+  .to('#ring', { borderRadius: '80px', scale: 1.07, duration: .3, ease: 'power3.inOut' }, B(46) - .3)
+  .fromTo('#logo', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, B(46)).to('#ring', { autoAlpha: 0, scale: 1.6, duration: .4 }, B(46));
+flash(B(46), .7);
+tl.to('#logo', { y: -140, scale: .8, duration: .4, ease: 'power3.inOut' }, B(47) - .2)
+  .fromTo('#wm', { autoAlpha: 0, letterSpacing: '.35em', filter: 'blur(14px)' }, { autoAlpha: 1, letterSpacing: '-.06em', filter: 'blur(0px)', duration: .5 }, B(47))
+  .fromTo('#cs', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .35 }, B(48))
+  .fromTo('#cta', { autoAlpha: 0, y: 30, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)' }, B(49))
+  .fromTo('#handle', { autoAlpha: 0 }, { autoAlpha: 1, duration: .3 }, B(50));
+tl.set('#fade', { opacity: 1 }, 0).to('#fade', { opacity: 0, duration: .25 }, 0).to('#fade', { opacity: 1, duration: .5 }, DUR - .5);
+
+// phone screen: which recording plays when (dir, start second inside that recording, scene start)
+const SCREENS = [[B(8), 'NT_showcase', .2], [B(12), 'NT_day1', 3.0], [B(20), 'NT_nudge', .4], [B(28), 'NT_fake', 5.2], [B(32), 'NT_showcase', 3.3]];
+const LIM = { NT_showcase: 450, NT_day1: 420, NT_nudge: 360, NT_lost: 360, NT_fake: 360, NT_excuses: 480 };
+const scr = $('#scr');
+function screenSrc(t) {
+  let cur = SCREENS[0]; for (const s of SCREENS) if (t >= s[0]) cur = s;
+  const [at, dir, from] = cur; const fr = Math.min(LIM[dir] - 1, Math.max(0, Math.round((from + (t - at)) * 30)));
+  return `${F}${dir}/${String(fr).padStart(5, '0')}.jpg`;
+}
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+function glowColor(t) { let i = 0; while (i + 1 < glowAt.length && t >= glowAt[i + 1][0]) i++; const [t0, c0] = glowAt[i]; const nx = glowAt[i + 1]; if (!nx) return hex(c0); const k = Math.min(1, Math.max(0, (t - (nx[0] - .3)) / .3)); const a = hex(c0), b = hex(nx[1]); return a.map((v, j) => Math.round(v + (b[j] - v) * k)); }
+
+window.DUR = DUR;
+window.renderAt = async t => {
+  tl.seek(t, false);
+  const en = EN[Math.min(EN.length - 1, Math.round(t * 30))] || 0;
+  // everything breathes with the kick
+  const [r, g2, bl] = glowColor(t);
+  $('#glow').style.background = `radial-gradient(circle,rgba(${r},${g2},${bl},${.35 + .35 * en}),rgba(${r},${g2},${bl},0) 62%)`;
+  $('#glow').style.transform = `scale(${.9 + .18 * en}) translate(${Math.sin(t * .4) * 60}px,${Math.cos(t * .3) * 80}px)`;
+  $('#glow2').style.background = `radial-gradient(circle,rgba(${bl},${r},${g2},.4),rgba(0,0,0,0) 65%)`;
+  $('#glow2').style.transform = `translate(${Math.cos(t * .5) * 200}px,${Math.sin(t * .35) * 150}px)`;
+  $('#world').style.scale = String(1 + .018 * en);
+  const ry = gsap.getProperty('#phone', 'rotateY') || 0;
+  $('#sheen').style.backgroundPosition = `${50 + ry * 3}% 0`;
+  $('#shadow').style.opacity = gsap.getProperty('#phone', 'opacity') * .8;
+  const src = screenSrc(t); if (!scr.src.endsWith(src)) { scr.src = src; await scr.decode().catch(() => {}); }
+};
+document.fonts.ready.then(async () => { await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); await renderAt(0); window.ready = true; });
+if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

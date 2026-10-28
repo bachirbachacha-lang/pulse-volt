@@ -26,3 +26,7 @@ k.html, `?cut=light|dark|blue`: letter-drop kinetic text, CrewUp widgets (streak
 `python3 music.py <video.mp4> <song> <out.mp4> [--cues <render>/sfx.json] [--hit 12.65] [--start 30] [--no-sfx]`
 Picks the loudest stretch of the song as long as the video, shifts it so a real beat lands on the logo moment (or --hit), fades in/out, ducks the song under the reel's sound effects. Tested with a 128 BPM test track: beat landed within ~15 ms.
 Silent copies for editing in CapCut/TikTok: ads/video/music-ready/*-silent.mp4.
+
+## Beat-synced trailer (crewup-trailer-beat.mp4), from the owner's 28 Oct references (inDrive/Spotify/Liner-style concept edits)
+t.html: dark glow background that pulses with the song's onsets, CSS-3D phone playing clean app recordings (real.html with &notext=1, copied to frames-trailer/ at 540x960, not committed), word-per-beat kinetic lines, 3D mosaic of screens, NOT COUNTED stamp on the beat, rank chips, "Free. No excuses. No skipping.", dot -> ring -> logo build.
+img/trailer-beat.js = beat grid + per-frame onset energy from the owner's song (the audio of their 4th reference video, ~129 BPM). Every scene starts on a beat index B(n).
