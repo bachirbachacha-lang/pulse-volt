@@ -58,23 +58,41 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#04050a;font-fam
 #tag span{font:600 20px Inter;letter-spacing:.06em;color:#9aa6bd;border:1.5px solid rgba(154,166,189,.3);padding:9px 12px;border-radius:10px;background:rgba(0,0,0,.3)}
 #flash{inset:0;background:#dfe9ff;mix-blend-mode:screen;opacity:0;z-index:70}
 #fade{inset:0;background:#000;z-index:80}
+/* inside the app: full-screen recording + shade for the text */
+#full{position:absolute;inset:0;z-index:14;overflow:hidden;transform-origin:50% 50%}
+#full img{width:100%;height:100%;object-fit:cover;display:block}
+#fshade{position:absolute;left:0;right:0;top:0;height:720px;background:linear-gradient(180deg,rgba(4,5,10,.92) 0%,rgba(4,5,10,.75) 45%,rgba(4,5,10,0) 100%);z-index:15}
+#bshade{position:absolute;left:0;right:0;bottom:0;height:640px;background:linear-gradient(0deg,rgba(4,5,10,.92),rgba(4,5,10,0));z-index:15}
+/* ending extras */
+#rays{left:40px;top:460px;width:1000px;height:1000px;border-radius:50%;background:conic-gradient(from 0deg,rgba(31,107,255,0),rgba(31,107,255,.35),rgba(122,166,255,0) 12%,rgba(31,107,255,0) 25%,rgba(122,166,255,.3) 37%,rgba(31,107,255,0) 50%,rgba(31,107,255,.35) 62%,rgba(31,107,255,0) 75%,rgba(122,166,255,.3) 87%,rgba(31,107,255,0));-webkit-mask:radial-gradient(circle,#000 20%,transparent 70%);mask:radial-gradient(circle,#000 20%,transparent 70%);z-index:29}
+.burst{left:390px;top:810px;width:300px;height:300px;border-radius:80px;border:4px solid rgba(122,166,255,.9);z-index:30}
+#logoWrap{left:380px;top:800px;width:320px;height:320px;border-radius:80px;overflow:hidden;z-index:31}
+#logoWrap img{width:100%;height:100%}
+#logoShine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 65%)}
+#wm span{display:inline-block}
+#cta{overflow:hidden}
+#ctaShine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.45) 50%,rgba(255,255,255,0) 65%)}
 </style>
 </head>
 <body>
 <div id="world">
   <div id="glow" class="abs"></div><div id="glow2" class="abs"></div>
-  <div id="lines"></div>
   <div id="shadow"></div>
   <div id="stage"><div id="phone"><div class="ly" id="back"></div><div class="ly" id="mid"></div>
     <div class="ly" id="front"><div id="screen"><img id="scr"><div id="sheen"></div></div></div></div></div>
   <div id="mosaic"><div id="plane"></div></div>
+  <div id="full"><img id="fimg"></div>
+  <div id="fshade"></div><div id="bshade"></div>
+  <div id="lines" style="position:absolute;inset:0;z-index:20"></div>
   <div id="stamp" class="abs">NOT COUNTED</div>
-  <div id="ranks"></div>
+  <div id="ranks" style="position:absolute;inset:0;z-index:21"></div>
+  <div id="rays" class="abs"></div>
   <div id="dot" class="abs"></div><div id="ring" class="abs"></div>
-  <img id="logo" class="abs" src="img/crewup-logo.png">
-  <div id="wm" class="abs">CrewUp</div>
+  <div class="burst abs" id="bu1"></div><div class="burst abs" id="bu2"></div>
+  <div id="logoWrap" class="abs"><img src="img/crewup-logo.png"><div id="logoShine"></div></div>
+  <div id="wm" class="abs"></div>
   <div id="cs" class="abs">Gym with your crew, not alone.</div>
-  <div id="cta" class="abs">Join the waitlist · link in bio</div>
+  <div id="cta" class="abs"><span style="position:relative">Join the waitlist · link in bio</span><div id="ctaShine"></div></div>
   <div id="handle" class="abs">@getcrewup · coming soon</div>
 </div>
 <div id="vig" class="abs"></div><div id="grain" class="abs"></div>
@@ -89,116 +107,123 @@ const B = i => BT[Math.min(i, BT.length - 1)];
 const DUR = 24.5;
 const F = 'frames-trailer/';
 
-// ---------- kinetic lines: words come in one per beat ----------
 let lc = 0;
-function line(words, top, cls = '') {
-  const id = 'l' + (lc++); const el = document.createElement('div'); el.className = 'line ' + cls; el.id = id; el.style.top = top + 'px';
+function line(words, top, cls = '', size) {
+  const id = 'l' + (lc++); const el = document.createElement('div'); el.className = 'line ' + cls; el.id = id; el.style.top = top + 'px'; if (size) el.style.fontSize = size + 'px';
   el.innerHTML = words.map(([w, c], i) => `<span class="w ${c || ''}" id="${id}w${i}">${w}</span>`).join(' ');
   $('#lines').appendChild(el); return id;
 }
 const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
 const wordsIn = (id, times) => times.forEach((t, i) => tl.fromTo(`#${id}w${i}`, { opacity: 0, y: 40, filter: 'blur(14px)', scale: 1.15 }, { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: .28 }, t));
 const out = (id, t, d = .22) => tl.to('#' + id, { opacity: 0, y: -40, filter: 'blur(12px)', duration: d, ease: 'power2.in' }, t);
-const flash = (t, o = .55) => tl.to('#flash', { opacity: o, duration: .05, yoyo: true, repeat: 1 }, t);
+const flash = (t, o = .45) => tl.to('#flash', { opacity: o, duration: .05, yoyo: true, repeat: 1 }, t);
+const glowAt = [[0, '#1F6BFF'], [B(16), '#1F6BFF'], [B(28), '#2bd4c0'], [B(32), '#FFC83D'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
 
-// glow colour per section
-const glowAt = [[0, '#1F6BFF'], [B(16), '#2bd4c0'], [B(20), '#1F6BFF'], [B(28), '#FF453A'], [B(32), '#FFC83D'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
-
-// 1) intro: Gym with your crew, not alone.
+// 1) intro words, one per beat
 const a = line([['Gym'], ['with'], ['your'], ['crew,', 'hl']], 820);
-const b2 = line([['not'], ['alone.']], 940, '');
-$('#' + b2).style.fontSize = '130px';
-wordsIn(a, [B(0), B(1), B(2), B(3)]); wordsIn(b2, [B(4), B(5)]);
-tl.to(['#' + a, '#' + b2], { y: -560, scale: .62, duration: .45, ease: 'power3.inOut' }, B(7) - .2);
-out(a, B(10) - .1); out(b2, B(10) - .1);
-// 2) phone flies in, home screen
-tl.set('#phone', { autoAlpha: 0 }, 0).fromTo('#phone', { autoAlpha: 0, y: 1300, rotateY: -50, rotateX: 25, rotateZ: 8 }, { autoAlpha: 1, y: 0, rotateY: -14, rotateX: 6, rotateZ: 0, duration: .9, ease: 'power4.out' }, B(8));
-flash(B(8));
+const a2 = line([['not'], ['alone.']], 940, '', 130);
+wordsIn(a, [B(0), B(1), B(2), B(3)]); wordsIn(a2, [B(4), B(5)]);
+tl.to(['#' + a, '#' + a2], { y: -560, scale: .62, duration: .45, ease: 'power3.inOut' }, B(7) - .2);
+out(a, B(10) - .1); out(a2, B(10) - .1);
+
+// 2) phone rises straight up (tilted back), settles flat, then the camera dives into the screen
+tl.set('#phone', { autoAlpha: 0 }, 0)
+  .fromTo('#phone', { autoAlpha: 1, y: 1250, rotateX: 38, rotateY: 0, scale: .9 }, { y: 120, rotateX: 26, scale: .9, duration: B(10) - B(8), ease: 'power3.out' }, B(8))
+  .to('#phone', { y: 40, rotateX: 0, scale: 1, duration: B(12) - B(10), ease: 'power2.inOut' }, B(10));
 const c = line([['Start'], ['a'], ['challenge.', 'hl']], 250);
 const c2 = line([['loser'], ['buys'], ['coffee'], ['☕']], 370, 'small');
 wordsIn(c, [B(10), B(10) + .15, B(11)]); wordsIn(c2, [B(12), B(12) + .1, B(13), B(13) + .1]);
-tl.to('#phone', { rotateY: 16, rotateX: 4, duration: .9, ease: 'power3.inOut' }, B(12));
-out(c, B(15)); out(c2, B(15));
-// 3) mosaic of screens on a tilted plane
-tl.to('#phone', { autoAlpha: 0, y: -300, scale: .8, duration: .3, ease: 'power2.in' }, B(16) - .25);
-const MOS = [['NT_showcase', 70], ['NT_nudge', 120], ['NT_lost', 140], ['NT_fake', 230], ['NT_excuses', 400], ['NT_showcase', 230], ['NT_day1', 200], ['NT_showcase', 300], ['NT_nudge', 270], ['NT_lost', 60], ['NT_excuses', 200], ['NT_showcase', 400]];
-$('#plane').innerHTML = MOS.map(([d, f], i) => `<div class="mt" id="mt${i}" style="left:${(i % 4) * 360 + 10}px;top:${Math.floor(i / 4) * 620 - 200 + (i % 2) * 90}px"><img src="${F}${d}/${String(f).padStart(5, '0')}.jpg"></div>`).join('');
-tl.set('#mosaic', { autoAlpha: 0 }, 0).set('#mosaic', { autoAlpha: 1 }, B(16) - .05)
-  .fromTo('#plane', { rotateX: 48, rotateZ: -18, z: -900, y: 300 }, { rotateX: 38, rotateZ: -12, z: -300, y: -100, duration: B(20) - B(16), ease: 'none' }, B(16));
-MOS.forEach((_, i) => tl.fromTo('#mt' + i, { autoAlpha: 0, z: 400, scale: .6 }, { autoAlpha: 1, z: 0, scale: 1, duration: .3 }, B(16) + (i % 8) * (B(17) - B(16)) / 2));
-const d = line([['Every'], ['check-in'], ['counts.', 'hl']], 860);
-wordsIn(d, [B(17), B(18), B(19)]);
-tl.to('#mosaic', { autoAlpha: 0, scale: 1.4, filter: 'blur(20px)', duration: .3, ease: 'power2.in' }, B(20) - .2); out(d, B(20) - .15);
-// 4) nudge: phone close, lock screen banners
-tl.set('#phone', { y: 0, scale: 1.08, rotateY: -22, rotateX: 8 }, B(20) - .05).set('#phone', { autoAlpha: 1 }, B(20)); flash(B(20));
-tl.to('#phone', { rotateY: 10, scale: 1.0, duration: B(28) - B(20), ease: 'sine.inOut' }, B(20));
-const e = line([['Nudge'], ['with'], ['one'], ['tap.', 'hl'], ['⚡']], 250);
+out(c, B(14)); out(c2, B(14));
+tl.to('#phone', { y: -240, scale: 2.14, duration: B(16) - B(14), ease: 'power3.in' }, B(14));
+// inside the app
+tl.set('#full', { autoAlpha: 0 }, 0).to('#full', { autoAlpha: 1, duration: .12 }, B(16) - .12).set('#phone', { autoAlpha: 0 }, B(16));
+tl.fromTo('#full', { scale: 1.06 }, { scale: 1, duration: .6, ease: 'power2.out' }, B(16));
+tl.set(['#fshade', '#bshade'], { autoAlpha: 0 }, 0).to('#fshade', { autoAlpha: 1, duration: .3 }, B(16));
+const d = line([['Your'], ['crew,'], ['live.', 'hl']], 250);
+const d2 = line([['streaks'], ['·'], ['check-ins'], ['·'], ['challenges']], 370, 'small');
+wordsIn(d, [B(17), B(17) + .15, B(18)]); wordsIn(d2, [B(18) + .2, B(19), B(19) + .1, B(19) + .2, B(19) + .3]);
+out(d, B(20) - .15); out(d2, B(20) - .15);
+const e = line([['Nudge'], ['with'], ['one'], ['tap.', 'hl'], ['⚡']], 1520);
+tl.to('#fshade', { autoAlpha: 0, duration: .2 }, B(20) - .1).to('#bshade', { autoAlpha: 1, duration: .2 }, B(20) - .1).to('#bshade', { autoAlpha: 0, duration: .2 }, B(24) - .15).to('#fshade', { autoAlpha: 1, duration: .2 }, B(24) - .15);
 wordsIn(e, [B(21), B(21) + .12, B(22), B(23), B(23) + .1]);
-const e2 = line([['“the'], ['couch'], ['is'], ['not'], ['a'], ['workout”']], 370, 'small');
-wordsIn(e2, [B(25), B(25) + .08, B(25) + .16, B(26), B(26) + .08, B(27)]);
-out(e, B(28) - .1); out(e2, B(28) - .1);
-// 5) fake check-in: stamp hits on the beat
+out(e, B(24) - .15);
 const f = line([['Fake'], ['check-in?'], ['🤨']], 250);
-wordsIn(f, [B(28), B(28) + .15, B(29)]);
-tl.set('#stamp', { autoAlpha: 0 }, 0).fromTo('#stamp', { autoAlpha: 0, scale: 2.6 }, { autoAlpha: 1, scale: 1, duration: .14, ease: 'power4.in' }, B(30) - .14);
-tl.to('#world', { x: 18, duration: .04, yoyo: true, repeat: 7, ease: 'none' }, B(30)).set('#world', { x: 0 }, B(30) + .33); flash(B(30), .4);
-tl.to('#stamp', { autoAlpha: 0, scale: .9, duration: .2 }, B(32) - .2); out(f, B(32) - .2);
-// 6) win + ranks
+wordsIn(f, [B(24), B(24) + .15, B(25)]);
+tl.set('#stamp', { autoAlpha: 0 }, 0).fromTo('#stamp', { autoAlpha: 0, scale: 1.8 }, { autoAlpha: 1, scale: 1, duration: .16, ease: 'power3.in' }, B(26) - .16);
+tl.to('#stamp', { autoAlpha: 0, duration: .2 }, B(28) - .25); out(f, B(28) - .2);
+// pull out of the app into a wall of screens
+tl.to('#fshade', { autoAlpha: 0, duration: .2 }, B(28) - .2)
+  .to('#full', { scale: .26, y: -40, borderRadius: '60px', duration: .45, ease: 'power3.inOut' }, B(28) - .15)
+  .to('#full', { autoAlpha: 0, duration: .2 }, B(28) + .3);
+const MOS = [['NT_showcase', 70], ['NT_nudge', 120], ['NT_lost', 140], ['NT_fake', 230], ['NT_excuses', 400], ['NT_showcase', 230], ['NT_day1', 200], ['NT_showcase', 300], ['NT_nudge', 270], ['NT_lost', 60], ['NT_excuses', 200], ['NT_showcase', 400]];
+$('#plane').innerHTML = MOS.map(([dd, fr], i) => `<div class="mt" id="mt${i}" style="left:${(i % 4) * 360 + 10}px;top:${Math.floor(i / 4) * 620 - 200 + (i % 2) * 90}px"><img src="${F}${dd}/${String(fr).padStart(5, '0')}.jpg"></div>`).join('');
+tl.set('#mosaic', { autoAlpha: 0 }, 0).set('#mosaic', { autoAlpha: 1 }, B(28))
+  .fromTo('#plane', { rotateX: 30, rotateZ: -10, z: 200, y: 0 }, { rotateX: 40, rotateZ: -14, z: -350, y: -80, duration: B(32) - B(28), ease: 'power1.out' }, B(28));
+MOS.forEach((_, i) => tl.fromTo('#mt' + i, { autoAlpha: 0, scale: .7 }, { autoAlpha: 1, scale: 1, duration: .3 }, B(28) + (i % 6) * .08));
+const g0 = line([['Every'], ['check-in'], ['counts.', 'hl']], 860);
+wordsIn(g0, [B(29), B(30), B(31)]);
+out(g0, B(32) - .15);
+// dive back in: trophy, then the leaderboard
+tl.to('#mosaic', { autoAlpha: 0, scale: 1.5, duration: .3, ease: 'power2.in' }, B(32) - .25)
+  .set('#full', { y: 0, borderRadius: 0 }, B(32) - .1).fromTo('#full', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: 1, duration: .35, ease: 'power3.out' }, B(32) - .1)
+  .to(['#fshade', '#bshade'], { autoAlpha: 1, duration: .3 }, B(32));
 const g = line([['Climb'], ['with'], ['your'], ['crew.', 'gd']], 250);
 wordsIn(g, [B(32), B(32) + .15, B(33), B(33) + .2]);
-tl.to('#phone', { rotateY: -18, rotateX: 5, scale: .92, y: -60, duration: B(36) - B(32), ease: 'sine.inOut' }, B(32));
 const RK = [['Bronze', 'linear-gradient(160deg,#e3a26f,#8a5126)'], ['Silver', 'linear-gradient(160deg,#f1f4f8,#8e99a8)'], ['Gold', 'linear-gradient(160deg,#ffe48a,#d39a12)'], ['Diamond', 'linear-gradient(160deg,#b9f0ff,#1F6BFF)']];
-$('#ranks').innerHTML = RK.map(([n, gr], i) => `<div class="rank" id="rk${i}" style="left:${20 + i * 260}px"><i style="background:${gr}"></i>${n}</div>`).join('');
+$('#ranks').innerHTML = RK.map(([n, gr], i) => `<div class="rank" id="rk${i}" style="left:${20 + i * 260}px;top:1500px"><i style="background:${gr}"></i>${n}</div>`).join('');
 RK.forEach((_, i) => tl.set('#rk' + i, { autoAlpha: 0 }, 0).fromTo('#rk' + i, { autoAlpha: 0, y: 80, scale: .5 }, { autoAlpha: 1, y: 0, scale: 1, duration: .3, ease: 'back.out(2)' }, B(36 + i)));
-tl.to('#phone', { y: -260, scale: .8, duration: .5, ease: 'power3.inOut' }, B(36) - .3);
-tl.to(['#ranks'], { autoAlpha: 0, duration: .2 }, B(40) - .2).to('#phone', { autoAlpha: 0, y: 900, rotateX: 30, duration: .4, ease: 'power3.in' }, B(40) - .4); out(g, B(40) - .25);
-// 7) Free. No excuses. No skipping.
-const h1 = line([['Free.']], 760); const h2 = line([['No'], ['excuses.']], 880); const h3 = line([['No'], ['skipping.', 'hl']], 1000);
-[h1, h2, h3].forEach(id => $('#' + id).style.fontSize = '104px');
+tl.to(['#ranks', '#full', '#fshade', '#bshade'], { autoAlpha: 0, duration: .25 }, B(40) - .25); out(g, B(40) - .25);
+
+// 3) Free. No excuses. No skipping.
+const h1 = line([['Free.']], 760, '', 104), h2 = line([['No'], ['excuses.']], 880, '', 104), h3 = line([['No'], ['skipping.', 'hl']], 1000, '', 104);
 wordsIn(h1, [B(40)]); wordsIn(h2, [B(41), B(41) + .12]); wordsIn(h3, [B(42), B(42) + .12]);
 tl.to(['#' + h1, '#' + h2], { color: '#4a5266', duration: .2 }, B(42));
 [h1, h2, h3].forEach(id => out(id, B(44) - .15));
-// 8) logo build: dot -> ring -> logo -> wordmark
-tl.set(['#dot', '#ring', '#logo', '#wm', '#cs', '#cta', '#handle'], { autoAlpha: 0 }, 0)
+
+// 4) ending: dot, ring, logo with burst + rays + shine, letters, CTA with shine
+$('#wm').innerHTML = [...'CrewUp'].map(ch => `<span>${ch}</span>`).join('');
+tl.set(['#dot', '#ring', '#logoWrap', '#cs', '#cta', '#handle', '#rays', '#bu1', '#bu2'], { autoAlpha: 0 }, 0).set('#wm span', { autoAlpha: 0 }, 0)
   .fromTo('#dot', { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .2 }, B(44))
   .fromTo('#ring', { autoAlpha: 0, scale: .1 }, { autoAlpha: 1, scale: 1, duration: .35 }, B(45)).to('#dot', { autoAlpha: 0, duration: .1 }, B(45) + .2)
   .to('#ring', { borderRadius: '80px', scale: 1.07, duration: .3, ease: 'power3.inOut' }, B(46) - .3)
-  .fromTo('#logo', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, B(46)).to('#ring', { autoAlpha: 0, scale: 1.6, duration: .4 }, B(46));
-flash(B(46), .7);
-tl.to('#logo', { y: -140, scale: .8, duration: .4, ease: 'power3.inOut' }, B(47) - .2)
-  .fromTo('#wm', { autoAlpha: 0, letterSpacing: '.35em', filter: 'blur(14px)' }, { autoAlpha: 1, letterSpacing: '-.06em', filter: 'blur(0px)', duration: .5 }, B(47))
+  .fromTo('#logoWrap', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, B(46)).to('#ring', { autoAlpha: 0, duration: .15 }, B(46))
+  .fromTo('#bu1', { autoAlpha: .9, scale: 1 }, { autoAlpha: 0, scale: 2.4, duration: .8, ease: 'power2.out' }, B(46))
+  .fromTo('#bu2', { autoAlpha: .7, scale: 1 }, { autoAlpha: 0, scale: 3.4, duration: 1.1, ease: 'power2.out' }, B(46) + .12)
+  .fromTo('#rays', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: 1, duration: .8 }, B(46))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut' }, B(46) + .35);
+flash(B(46), .6);
+tl.to(['#logoWrap', '#bu1', '#bu2', '#rays'], { y: -140, scale: .8, duration: .4, ease: 'power3.inOut' }, B(47) - .2)
+  .fromTo('#wm span', { autoAlpha: 0, y: 60, rotateX: -80, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, rotateX: 0, filter: 'blur(0px)', duration: .4, stagger: .05, ease: 'back.out(1.8)' }, B(47))
   .fromTo('#cs', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .35 }, B(48))
   .fromTo('#cta', { autoAlpha: 0, y: 30, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)' }, B(49))
-  .fromTo('#handle', { autoAlpha: 0 }, { autoAlpha: 1, duration: .3 }, B(50));
+  .fromTo('#ctaShine', { x: -900 }, { x: 900, duration: .8, ease: 'power2.inOut' }, B(49) + .4)
+  .fromTo('#handle', { autoAlpha: 0 }, { autoAlpha: 1, duration: .3 }, B(50))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut', immediateRender: false }, B(51));
 tl.set('#fade', { opacity: 1 }, 0).to('#fade', { opacity: 0, duration: .25 }, 0).to('#fade', { opacity: 1, duration: .5 }, DUR - .5);
 
-// phone screen: which recording plays when (dir, start second inside that recording, scene start)
-const SCREENS = [[B(8), 'NT_showcase', .2], [B(12), 'NT_day1', 3.0], [B(20), 'NT_nudge', .4], [B(28), 'NT_fake', 5.2], [B(32), 'NT_showcase', 3.3]];
-const LIM = { NT_showcase: 450, NT_day1: 420, NT_nudge: 360, NT_lost: 360, NT_fake: 360, NT_excuses: 480 };
-const scr = $('#scr');
-function screenSrc(t) {
-  let cur = SCREENS[0]; for (const s of SCREENS) if (t >= s[0]) cur = s;
-  const [at, dir, from] = cur; const fr = Math.min(LIM[dir] - 1, Math.max(0, Math.round((from + (t - at)) * 30)));
-  return `${F}${dir}/${String(fr).padStart(5, '0')}.jpg`;
-}
+// what the phone / full screen shows (scene start, recording, second inside that recording)
+const PHONE = [[B(8), 'NT_day1', .3]];
+const FULL = [[B(16) - .2, 'hd_NT_day1', 3.4], [B(20), 'hd_NT_nudge', .5], [B(24), 'hd_NT_fake', 5.0], [B(32) - .1, 'hd_NT_showcase', 3.2]];
+const LIM = { NT_day1: 420, NT_showcase: 450, hd_NT_showcase: 450, hd_NT_day1: 420, hd_NT_nudge: 360, hd_NT_fake: 360 };
+const pick = (list, t) => { let cur = list[0]; for (const s of list) if (t >= s[0]) cur = s; const [at, dir, from] = cur; const fr = Math.min(LIM[dir] - 1, Math.max(0, Math.round((from + Math.max(0, t - at)) * 30))); return `${F}${dir}/${String(fr).padStart(5, '0')}.jpg`; };
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
-function glowColor(t) { let i = 0; while (i + 1 < glowAt.length && t >= glowAt[i + 1][0]) i++; const [t0, c0] = glowAt[i]; const nx = glowAt[i + 1]; if (!nx) return hex(c0); const k = Math.min(1, Math.max(0, (t - (nx[0] - .3)) / .3)); const a = hex(c0), b = hex(nx[1]); return a.map((v, j) => Math.round(v + (b[j] - v) * k)); }
+function glowColor(t) { let i = 0; while (i + 1 < glowAt.length && t >= glowAt[i + 1][0]) i++; const [, c0] = glowAt[i]; const nx = glowAt[i + 1]; if (!nx) return hex(c0); const k = Math.min(1, Math.max(0, (t - (nx[0] - .3)) / .3)); const p = hex(c0), q = hex(nx[1]); return p.map((v, j) => Math.round(v + (q[j] - v) * k)); }
+async function setSrc(img, src) { if (!img.src.endsWith(src)) { img.src = src; await img.decode().catch(() => {}); } }
 
 window.DUR = DUR;
 window.renderAt = async t => {
   tl.seek(t, false);
   const en = EN[Math.min(EN.length - 1, Math.round(t * 30))] || 0;
-  // everything breathes with the kick
   const [r, g2, bl] = glowColor(t);
   $('#glow').style.background = `radial-gradient(circle,rgba(${r},${g2},${bl},${.35 + .35 * en}),rgba(${r},${g2},${bl},0) 62%)`;
-  $('#glow').style.transform = `scale(${.9 + .18 * en}) translate(${Math.sin(t * .4) * 60}px,${Math.cos(t * .3) * 80}px)`;
+  $('#glow').style.transform = `scale(${.92 + .14 * en}) translate(${Math.sin(t * .4) * 60}px,${Math.cos(t * .3) * 80}px)`;
   $('#glow2').style.background = `radial-gradient(circle,rgba(${bl},${r},${g2},.4),rgba(0,0,0,0) 65%)`;
   $('#glow2').style.transform = `translate(${Math.cos(t * .5) * 200}px,${Math.sin(t * .35) * 150}px)`;
-  $('#world').style.scale = String(1 + .018 * en);
-  const ry = gsap.getProperty('#phone', 'rotateY') || 0;
-  $('#sheen').style.backgroundPosition = `${50 + ry * 3}% 0`;
-  $('#shadow').style.opacity = gsap.getProperty('#phone', 'opacity') * .8;
-  const src = screenSrc(t); if (!scr.src.endsWith(src)) { scr.src = src; await scr.decode().catch(() => {}); }
+  $('#rays').style.rotate = (t * 18) + 'deg';
+  const rx = gsap.getProperty('#phone', 'rotateX') || 0;
+  $('#sheen').style.backgroundPosition = `${50 + rx * 2}% 0`;
+  $('#shadow').style.opacity = gsap.getProperty('#phone', 'opacity') * .8 * (1 - Math.min(1, Math.max(0, (gsap.getProperty('#phone', 'scale') - 1) * 2)));
+  await Promise.all([setSrc($('#scr'), pick(PHONE, t)), setSrc($('#fimg'), pick(FULL, t))]);
 };
 document.fonts.ready.then(async () => { await Promise.all([...document.images].map(i => i.decode().catch(() => {}))); await renderAt(0); window.ready = true; });
 if (!/record/.test(location.search)) { const s = performance.now(); (function loop() { renderAt(((performance.now() - s) / 1000) % DUR); requestAnimationFrame(loop); })(); }
