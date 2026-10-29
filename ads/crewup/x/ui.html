@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp X UI kit</title>
+<!-- Every [data-snap] element is exported by snap.js at 3x as x/tex/<name>.png (screens are 390x820 pt). -->
+<style>
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Sora;src:url(../fonts/sora-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Mont;src:url(../fonts/montserrat-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#7aa6ff;--o:#FF7A2F;--g:#FFC83D;--grn:#30D158;--red:#FF453A;--bg:#090B10;--card:#141822;--card2:#1b2030;--mut:#8E95A6}
+body{background:#777;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff;-webkit-font-smoothing:antialiased;padding:20px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;width:4000px}
+.scr{position:relative;width:390px;height:820px;overflow:hidden;background:var(--bg)}
+.sb{position:absolute;left:0;right:0;top:0;height:50px;display:flex;justify-content:space-between;align-items:center;padding:8px 30px 0 40px;font:600 15px Inter;z-index:5}
+.sb .r{display:flex;gap:6px;align-items:center}
+.hi{position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:rgba(255,255,255,.85);z-index:5}
+/* lock screen */
+.lock .wp{position:absolute;inset:0}
+.lock .blob{position:absolute;border-radius:50%;filter:blur(40px)}
+.lock .dt{position:absolute;left:0;right:0;top:78px;text-align:center;font:600 19px Inter;color:rgba(255,255,255,.9)}
+.lock .tm{position:absolute;left:0;right:0;top:98px;text-align:center;font:700 100px/1 Inter;letter-spacing:-4px;color:rgba(255,255,255,.96)}
+.lock .bot{position:absolute;left:46px;right:46px;bottom:44px;display:flex;justify-content:space-between}
+.lock .bot i{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:20px}
+/* banner */
+.ban{width:370px;border-radius:24px;background:rgba(40,46,60,.92);padding:13px 14px;display:flex;gap:11px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.ban img{width:40px;height:40px;border-radius:10px;flex:none}
+.ban .t1{display:flex;justify-content:space-between;font:600 14.5px/1.2 Inter}
+.ban .t1 span{font:400 13px Inter;color:#b7bdc9}
+.ban .bd{font:400 14.5px/1.3 Inter;color:#eef1f6;margin-top:2px}
+/* app */
+.app{padding:56px 16px 0}
+.hd{display:flex;justify-content:space-between;align-items:center;height:44px}
+.hd h1{font:800 30px/1 Inter;letter-spacing:-.6px}
+.pfp{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 14px Inter;color:#0a0f1c;flex:none}
+.chip{margin-top:10px;display:inline-flex;gap:8px;align-items:center;background:#16264a;border:1px solid #2a4a8f;border-radius:999px;padding:8px 12px;font:600 13px Inter;color:#cfe0ff}
+.card{background:var(--card);border-radius:18px;padding:14px;margin-top:12px}
+.row{display:flex;align-items:center;gap:11px}
+.sp{flex:1}
+.nm{font:600 16px Inter}.sub{font:500 12.5px Inter;color:var(--mut);margin-top:2px}
+.ok{font:700 13px Inter;color:var(--grn)}
+.btn{height:52px;border-radius:15px;background:var(--b);display:flex;align-items:center;justify-content:center;font:700 17px Inter;box-shadow:0 0 30px rgba(31,107,255,.45)}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:82px;background:rgba(14,17,24,.96);border-top:1px solid #1d2230;display:flex;justify-content:space-around;padding-top:9px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font:600 10px Inter;color:#6b7386;width:70px}
+.tab.on{color:var(--b)}
+.tab i{width:22px;height:22px;border-radius:7px;background:currentColor;opacity:.9}
+/* tags */
+.tag{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;background:rgba(14,18,28,.82);border:1.5px solid rgba(255,255,255,.14);font:700 22px Inter;white-space:nowrap}
+.tag .pfp{width:38px;height:38px;font-size:17px}
+.tag em{font-style:normal;font:600 15px Inter;color:#9aa6bd}
+/* player cards */
+.pc{position:relative;width:300px;height:430px;border-radius:26px;overflow:hidden;padding:22px}
+.pc .tier{font:800 16px Mont;letter-spacing:.12em}
+.pc .hex{position:absolute;right:20px;top:18px;width:52px;height:58px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.pc .av{width:150px;height:150px;border-radius:50%;margin:34px auto 0;display:flex;align-items:center;justify-content:center;font:800 70px Inter;color:#0b1222;border:5px solid rgba(255,255,255,.85);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.pc .name{text-align:center;font:800 34px Sora;letter-spacing:-1px;margin-top:16px}
+.pc .stats{position:absolute;left:18px;right:18px;bottom:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
+.pc .stats div{background:rgba(0,0,0,.22);border-radius:14px;padding:8px 2px}
+.pc .stats b{display:block;font:800 26px Inter}
+.pc .stats span{font:600 11px Inter;letter-spacing:.06em;opacity:.8}
+.pc .lg{position:absolute;left:20px;top:18px;width:30px;height:30px;border-radius:8px}
+.pc .tier{position:absolute;left:58px;top:24px}
+</style>
+</head>
+<body>
+
+<!-- lock screens -->
+<div class="scr lock" data-snap="lock_omar"><div class="wp" style="background:linear-gradient(170deg,#2449c9 0%,#14246b 50%,#070b22 100%)"><div class="blob" style="left:-60px;top:380px;width:260px;height:260px;background:#3f7bff;opacity:.5"></div><div class="blob" style="left:200px;top:600px;width:240px;height:240px;background:#7b5cff;opacity:.45"></div></div>%%LOCK%%</div>
+<div class="scr lock" data-snap="lock_khalid"><div class="wp" style="background:linear-gradient(170deg,#0f6b5c 0%,#0b3a3c 50%,#05121a 100%)"><div class="blob" style="left:180px;top:360px;width:260px;height:260px;background:#2bd4a0;opacity:.45"></div><div class="blob" style="left:-40px;top:620px;width:240px;height:240px;background:#1F6BFF;opacity:.35"></div></div>%%LOCK%%</div>
+<div class="scr lock" data-snap="lock_you"><div class="wp" style="background:linear-gradient(170deg,#3b5bd6 0%,#1d2b74 45%,#0a1030 100%)"><div class="blob" style="left:150px;top:520px;width:280px;height:280px;background:#7b5cff;opacity:.5"></div><div class="blob" style="left:-80px;top:260px;width:240px;height:240px;background:#4f8bff;opacity:.4"></div></div>%%LOCK%%</div>
+<div class="scr lock" data-snap="lock_faisal"><div class="wp" style="background:linear-gradient(170deg,#6a3fc9 0%,#2a1666 50%,#0b0720 100%)"><div class="blob" style="left:-40px;top:420px;width:280px;height:280px;background:#ff5d8f;opacity:.35"></div><div class="blob" style="left:190px;top:640px;width:240px;height:240px;background:#7b5cff;opacity:.5"></div></div>%%LOCK%%</div>
+
+<!-- banners -->
+<div class="ban" data-snap="ban_check_omar"><img src="../img/crewup-logo.png"><div style="flex:1"><div class="t1">Checked in at the gym ✅<span>now</span></div><div class="bd">6:02 AM · streak 12 days 🔥</div></div></div>
+<div class="ban" data-snap="ban_check_khalid"><img src="../img/crewup-logo.png"><div style="flex:1"><div class="t1">Checked in at the gym ✅<span>now</span></div><div class="bd">6:03 AM · streak 9 days 🔥</div></div></div>
+<div class="ban" data-snap="ban_check_you"><img src="../img/crewup-logo.png"><div style="flex:1"><div class="t1">Checked in at the gym ✅<span>now</span></div><div class="bd">6:04 AM · streak 12 days 🔥</div></div></div>
+<div class="ban" data-snap="ban_nudge"><img src="../img/crewup-logo.png"><div style="flex:1"><div class="t1">⚡ Your crew nudged you<span>now</span></div><div class="bd">3 of 4 are already at the gym. The couch is not a workout 🛋️</div></div></div>
+<div class="ban" data-snap="ban_msg_omar"><div class="pfp" style="background:#6E9BFF;width:40px;height:40px;font-size:17px">O</div><div style="flex:1"><div class="t1">Omar · The Crew<span>now</span></div><div class="bd">we're all here 👀</div></div></div>
+<div class="ban" data-snap="ban_msg_khalid"><div class="pfp" style="background:#FFC83D;width:40px;height:40px;font-size:17px">K</div><div style="flex:1"><div class="t1">Khalid · The Crew<span>now</span></div><div class="bd">last one there buys coffee ☕</div></div></div>
+<div class="ban" data-snap="ban_check_faisal"><img src="../img/crewup-logo.png"><div style="flex:1"><div class="t1">Checked in at the gym ✅<span>now</span></div><div class="bd">6:24 AM · streak saved: 13 days 🔥</div></div></div>
+
+<!-- your phone: the crew screen -->
+<div class="scr" data-snap="app_you">%%APP%%</div>
+<div class="scr" data-snap="app_you_sent">%%APP_SENT%%</div>
+
+<!-- Faisal: camera check-in, done -->
+<div class="scr" data-snap="cam_faisal"><div class="sb"><span>6:23</span><span class="r">●●● ▮</span></div>
+  <div style="position:absolute;left:0;right:0;top:58px;text-align:center;font:600 16px Inter">Check in</div>
+  <div style="position:absolute;left:0;right:0;top:96px;height:560px;overflow:hidden;background:#14161b">
+    <div style="position:absolute;inset:-30px;filter:blur(14px)">
+      <div style="position:absolute;left:10px;top:40px;width:130px;height:130px;border-radius:50%;background:rgba(255,236,200,.6)"></div>
+      <div style="position:absolute;left:240px;top:10px;width:160px;height:160px;border-radius:50%;background:rgba(255,246,225,.5)"></div>
+      <div style="position:absolute;left:150px;top:120px;width:90px;height:90px;border-radius:50%;background:rgba(122,166,255,.45)"></div>
+      <div style="position:absolute;left:40px;top:260px;width:360px;height:70px;background:rgba(90,96,110,.9)"></div>
+      <div style="position:absolute;left:150px;top:230px;width:60px;height:280px;background:rgba(30,32,38,.95)"></div>
+      <div style="position:absolute;left:240px;top:230px;width:60px;height:280px;background:rgba(30,32,38,.95)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(180deg,rgba(60,64,72,.9),rgba(25,27,32,1))"></div></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent 33%,rgba(255,255,255,.14) 33.2%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.14) 66.6%,transparent 67%),linear-gradient(180deg,transparent 33%,rgba(255,255,255,.14) 33.2%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.14) 66.6%,transparent 67%)"></div>
+    <div style="position:absolute;left:12px;top:12px;font:700 12px Inter;background:rgba(0,0,0,.55);padding:6px 9px;border-radius:9px">● LIVE</div>
+    <div style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font:600 13px Inter;color:rgba(255,255,255,.9)">📍 Gym detected · live photo only</div></div>
+  <div style="position:absolute;left:50%;bottom:58px;width:78px;height:78px;margin-left:-39px;border-radius:50%;border:4px solid #fff;padding:5px"><div style="width:100%;height:100%;border-radius:50%;background:#fff"></div></div>
+  <div class="hi"></div></div>
+<div class="scr" data-snap="done_faisal"><div class="sb"><span>6:24</span><span class="r">●●● ▮</span></div>
+  <div style="position:absolute;left:0;right:0;top:150px;text-align:center"><div style="width:120px;height:120px;border-radius:50%;background:var(--grn);margin:0 auto;display:flex;align-items:center;justify-content:center;font:800 64px Inter;box-shadow:0 0 50px rgba(48,209,88,.6)">✓</div>
+    <div style="font:800 32px Inter;margin-top:26px;letter-spacing:-.5px">Checked in</div><div style="font:500 16px Inter;color:var(--mut);margin-top:6px">6:24 AM · Gym · live photo ✓</div></div>
+  <div class="card" style="position:absolute;left:16px;right:16px;top:440px"><div style="font:600 12px Inter;color:var(--mut);letter-spacing:.06em">STREAK SAVED</div><div class="row" style="margin-top:8px"><span style="font-size:34px">🔥</span><span style="font:800 44px Inter;color:var(--o)">13</span><span class="sub" style="margin-top:12px">days</span></div></div>
+  <div class="card" style="position:absolute;left:16px;right:16px;top:560px"><div style="font:600 12px Inter;color:var(--mut);letter-spacing:.06em">THE CREW · TODAY</div><div class="row" style="margin-top:10px">%%AV4%%<span class="sp"></span><span class="ok">4/4 ✓</span></div></div>
+  <div class="hi"></div></div>
+<div class="scr" data-snap="crew_final"><div class="sb"><span>6:25</span><span class="r">●●● ▮</span></div>
+  <div style="position:absolute;left:0;right:0;top:120px;text-align:center"><div style="font:600 15px Inter;color:var(--b2);letter-spacing:.12em">THE CREW · THIS WEEK</div>
+    <div style="font:800 120px/1 Sora;letter-spacing:-6px;margin-top:22px">4/4</div><div style="font:600 18px Inter;color:#c7cedd;margin-top:10px">everyone showed up 💪</div></div>
+  <div class="card" style="position:absolute;left:16px;right:16px;top:430px;text-align:center;padding:22px"><div style="font-size:52px">🔥</div><div style="font:800 34px Inter;color:var(--o);margin-top:6px">13 day streak</div><div class="sub" style="margin-top:4px">crew record</div></div>
+  <div style="position:absolute;left:0;right:0;top:640px;display:flex;justify-content:center;gap:10px">%%AV4BIG%%</div>
+  <div class="hi"></div></div>
+
+<!-- STREAK: day 1 done -->
+<div class="scr" data-snap="done_day1"><div class="sb"><span>6:01</span><span class="r">●●● ▮</span></div>
+  <div style="position:absolute;left:0;right:0;top:150px;text-align:center"><div style="width:120px;height:120px;border-radius:50%;background:var(--grn);margin:0 auto;display:flex;align-items:center;justify-content:center;font:800 64px Inter;box-shadow:0 0 50px rgba(48,209,88,.6)">✓</div>
+    <div style="font:800 32px Inter;margin-top:26px;letter-spacing:-.5px">Checked in</div><div style="font:500 16px Inter;color:var(--mut);margin-top:6px">6:01 AM · Gym · live photo ✓</div></div>
+  <div class="card" style="position:absolute;left:16px;right:16px;top:440px"><div style="font:600 12px Inter;color:var(--mut);letter-spacing:.06em">YOUR STREAK</div><div class="row" style="margin-top:8px"><span style="font-size:34px">🔥</span><span style="font:800 44px Inter;color:var(--o)">1</span><span class="sub" style="margin-top:12px">day · don’t break the chain</span></div></div>
+  <div class="hi"></div></div>
+
+<!-- name tags -->
+<div class="tag" data-snap="tag_omar"><div class="pfp" style="background:#6E9BFF">O</div>Omar</div>
+<div class="tag" data-snap="tag_khalid"><div class="pfp" style="background:#FFC83D">K</div>Khalid</div>
+<div class="tag" data-snap="tag_you"><div class="pfp" style="background:#d6dbe6">Y</div>You</div>
+<div class="tag" data-snap="tag_faisal"><div class="pfp" style="background:#FF9A5A">F</div>Faisal <em>asleep 😴</em></div>
+<div class="tag" data-snap="tag_faisal_coffee"><div class="pfp" style="background:#FF9A5A">F</div>Faisal <em>buys the coffee ☕</em></div>
+<div class="tag" data-snap="tag_faisal_ok"><div class="pfp" style="background:#FF9A5A">F</div>Faisal <em style="color:#5df28f">at the gym ✓</em></div>
+
+<!-- player cards (season reel) -->
+%%CARDS%%
+
+<script>
+const $ = s => document.querySelector(s);
+const PC = { O: '#6E9BFF', K: '#FFC83D', F: '#FF9A5A', Y: '#d6dbe6' };
+const sb = t => `<div class="sb"><span>${t}</span><span class="r">●●● ▮</span></div>`;
+const LOCK = `${sb('6:00')}<div class="dt">Thursday 30 October</div><div class="tm">6:00</div><div class="bot"><i>🔦</i><i>📷</i></div><div class="hi"></div>`;
+document.querySelectorAll('.lock').forEach(el => el.innerHTML = el.innerHTML.replace('%%LOCK%%', LOCK));
+const row = (l, n, sub, right) => `<div class="row" style="margin-top:14px"><div class="pfp" style="background:${PC[l]}">${l}</div><div><div class="nm">${n}</div><div class="sub">${sub}</div></div><span class="sp"></span>${right}</div>`;
+const app = sent => `${sb('6:05')}<div class="app"><div class="hd"><h1>The Crew</h1><div class="pfp" style="background:#d6dbe6">Y</div></div>
+  <div class="chip">🏋️ Gym 4x per week · loser buys coffee ☕</div>
+  <div class="card" style="margin-top:16px"><div style="font:600 12px Inter;color:var(--mut);letter-spacing:.06em">TODAY · 6:00 AM SESSION</div>
+    ${row('O', 'Omar', 'checked in 6:02 · 🔥 12', '<span class="ok">✓</span>')}
+    ${row('K', 'Khalid', 'checked in 6:03 · 🔥 9', '<span class="ok">✓</span>')}
+    ${row('Y', 'You', 'checked in 6:04 · 🔥 12', '<span class="ok">✓</span>')}
+    ${row('F', 'Faisal', 'not yet · last check-in Monday', '<span style="font-size:20px">😴</span>')}
+    <div class="btn" style="margin-top:18px;${sent ? 'background:#30D158;box-shadow:0 0 30px rgba(48,209,88,.5)' : ''}">${sent ? 'Nudge sent ✓' : 'Nudge Faisal ⚡'}</div></div>
+  <div class="card"><div class="row"><span style="font-size:26px">🔥</span><div><div class="nm">Crew streak: 12 days</div><div class="sub">everyone needs to check in to keep it</div></div></div></div></div>
+  <div class="tabbar"><div class="tab"><i></i>Home</div><div class="tab"><i></i>Challenges</div><div class="tab on"><i></i>Crew</div><div class="tab"><i></i>Profile</div></div><div class="hi"></div>`;
+$('[data-snap="app_you"]').innerHTML = app(false);
+$('[data-snap="app_you_sent"]').innerHTML = app(true);
+const av = (l, s) => `<div class="pfp" style="width:${s}px;height:${s}px;font-size:${s * .42}px;background:${PC[l]};position:relative">${l}<span style="position:absolute;right:-3px;bottom:-3px;width:${s * .42}px;height:${s * .42}px;border-radius:50%;background:#30D158;border:2px solid #090B10;font-size:${s * .24}px;display:flex;align-items:center;justify-content:center;color:#fff">✓</span></div>`;
+document.body.innerHTML = document.body.innerHTML.replace('%%AV4%%', ['O', 'K', 'Y', 'F'].map(l => av(l, 34)).join('<span style="width:6px"></span>')).replace('%%AV4BIG%%', ['O', 'K', 'Y', 'F'].map(l => av(l, 64)).join(''));
+// player cards: same layout, tier colours
+const TIERS = { bronze: ['linear-gradient(160deg,#c98552,#6e3b1c)', 'linear-gradient(160deg,#e3a26f,#8a5126)', 'BRONZE'], silver: ['linear-gradient(160deg,#c9d0da,#5d6675)', 'linear-gradient(160deg,#f1f4f8,#8e99a8)', 'SILVER'], gold: ['linear-gradient(160deg,#ffd35a,#9a6b06)', 'linear-gradient(160deg,#ffe48a,#d39a12)', 'GOLD'], diamond: ['linear-gradient(160deg,#5ab0ff,#1F6BFF 50%,#5b2fd6)', 'linear-gradient(160deg,#b9f0ff,#1F6BFF)', 'DIAMOND'] };
+const card = (id, l, name, tier, s) => { const [bg, hx, tn] = TIERS[tier]; return `<div class="pc" data-snap="card_${id}" style="background:${bg}"><img class="lg" src="../img/crewup-logo.png"><div class="tier">${tn}</div><div class="hex" style="background:${hx}"></div>
+  <div class="av" style="background:${PC[l]}">${l}</div><div class="name">${name}</div>
+  <div class="stats"><div><b>${s[0]}</b><span>STREAK</span></div><div><b>${s[1]}</b><span>CHECK-INS</span></div><div><b>${s[2]}</b><span>WINS</span></div></div></div>`; };
+document.body.innerHTML = document.body.innerHTML.replace('%%CARDS%%',
+  card('faisal', 'F', 'Faisal', 'bronze', ['3', '11', '0']) + card('khalid', 'K', 'Khalid', 'silver', ['9', '27', '2']) + card('omar', 'O', 'Omar', 'gold', ['12', '38', '4']) + card('you', 'Y', 'You', 'diamond', ['30', '48', '6']) +
+  card('you_bronze', 'Y', 'You', 'bronze', ['4', '12', '0']) + card('you_silver', 'Y', 'You', 'silver', ['9', '28', '1']) + card('you_gold', 'Y', 'You', 'gold', ['14', '36', '3']) +
+  `<div class="pc" data-snap="card_back" style="background:radial-gradient(120% 80% at 30% 20%,#2f6dff,#0d3db8 55%,#071a52);display:flex;align-items:center;justify-content:center"><img src="../img/crewup-logo.png" style="width:150px;height:150px;border-radius:38px;box-shadow:0 0 60px rgba(122,166,255,.7)"></div>`);
+// STREAK: your own camera check-in (same screen, your time)
+const camY = document.querySelector('[data-snap="cam_faisal"]').cloneNode(true);
+camY.dataset.snap = 'cam_you'; camY.querySelector('.sb span').textContent = '6:01';
+document.querySelector('[data-snap="cam_faisal"]').after(camY);
+</script>
+</body>
+</html>

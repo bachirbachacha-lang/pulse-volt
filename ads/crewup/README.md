@@ -30,3 +30,16 @@ Silent copies for editing in CapCut/TikTok: ads/video/music-ready/*-silent.mp4.
 ## Beat-synced trailer (crewup-trailer-beat.mp4), from the owner's 28 Oct references (inDrive/Spotify/Liner-style concept edits)
 t.html: dark glow background that pulses with the song's onsets, CSS-3D phone playing clean app recordings (real.html with &notext=1, copied to frames-trailer/ at 540x960, not committed), word-per-beat kinetic lines, 3D mosaic of screens, NOT COUNTED stamp on the beat, rank chips, "Free. No excuses. No skipping.", dot -> ring -> logo build.
 img/trailer-beat.js = beat grid + per-frame onset energy from the owner's song (the audio of their 4th reference video, ~129 BPM). Every scene starts on a beat index B(n).
+
+## X reels (crewup-x-*.mp4): full 3D renders on the owner's song (29 Oct, "extreme advanced")
+Folder `x/`. Shared engine `x/common.js` (three.js r128 + GSAP, everything seeked frame by frame):
+- HDR pipeline: half-float render target with a 24-bit depth buffer -> HDR bloom -> optional depth-of-field gather -> grade pass (soft-shoulder tone curve that keeps UI colours exact, saturation/contrast, vignette, grain, lens fringing that kicks on the beat, real camera motion blur from the camera's own movement) -> FXAA.
+- Realistic phones (bevelled metal frame, black glass with reflection-only coating, island, camera bump), mirror floor, studio soft-box reflections, glow points (sparks/trails), floor outlines, volumetric cones, dust, camera rig with chase mode and shake, favourite ending (`X.ending(40)`).
+- UI textures: `x/ui.html` -> `BASE=http://127.0.0.1:8765/ node x/snap.js` -> `x/tex/*.png` (3x, real fonts, transparent corners).
+Reels (all 24.5 s, beat grid from img/trailer-beat.js, label "3D RENDER · APP CONCEPT"):
+- `x/nudge.html`: four crew phones on black glass, three check in on the drop, Faisal sleeps, you tap Nudge, a light comet crosses the table (chase cam), his phone wakes, live photo check-in, 4/4 top view with light beams.
+- `x/streak.html`: every check-in lights a numbered day tile, a burning fuse runs tile to tile, day 22 goes cold (excuses, counter hits 0), the crew's three nudge comets save it, the 30 days turn out to draw the CrewUp logo.
+- `x/season.html`: 3D crew leaderboard (you climb #4 -> #1), holographic player card levelling Bronze -> Silver -> Gold -> Diamond on the beats, podium, spotlights, trophy, confetti, Faisal (last) buys the coffee.
+Render: serve the folder (`cd ads/crewup && python3 -m http.server 8765 --bind 127.0.0.1`), then `BASE=http://127.0.0.1:8765/ node record.js x/<reel>.html x <outDir>` (~2.5-4 s/frame with SwiftShader), then mux the song:
+`ffmpeg -framerate 30 -i <outDir>/f%05d.jpg -i song4.wav -filter_complex "[1:a]atrim=0:24.5,asetpts=PTS-STARTPTS,afade=t=out:st=23.6:d=0.9[a]" -map 0:v -map "[a]" -c:v libx264 -crf 18 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart -shortest out.mp4`
+(song4.wav = audio of the owner's 4th reference video; not committed.)

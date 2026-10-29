@@ -29,3 +29,23 @@ what's the worst excuse your friend ever gave you? 👇
 gym with your crew, not alone 💙 nudges, streaks, challenges, leaderboards, player cards and crew vs crew battles
 join the waitlist, link on our instagram 🔗 would you use this? 👀
 #crewup #fitnessapp #gymtok #gymmotivation #gymfriends #workoutapp
+
+# X reels (29 Oct): 3D renders on the owner's song, same ending as the trailer
+
+## X1 Nudge (crewup-x-nudge.mp4)
+6:00am. 3 of 4 already checked in. faisal… 😴
+one tap and the whole crew nudges you off the couch ⚡
+would you use this? join the waitlist, link on our instagram 🔗
+#crewup #gymtok #gymfriends #gymmotivation #accountability #fitnessapp #comingsoon
+
+## X2 Streak (crewup-x-streak.mp4)
+day 1 is easy. day 22 is where streaks die 🥶
+unless your crew won't let you quit 🔥 every check-in lights a day… now look what 30 days draw 👀
+join the waitlist, link on our instagram 🔗
+#crewup #gymstreak #dontbreakthechain #gymtok #gymmotivation #fitnessapp #comingsoon
+
+## X3 Season (crewup-x-season.mp4)
+who's #1 in your crew? 👑 every check-in levels up your card: bronze → silver → gold → diamond 💎
+last place buys the coffee ☕ (sorry faisal)
+would you use this? join the waitlist, link on our instagram 🔗
+#crewup #gymleaderboard #levelup #gymtok #gymfriends #gymmotivation #fitnessapp

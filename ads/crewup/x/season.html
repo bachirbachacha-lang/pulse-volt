@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp X Season</title>
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="lines"></div><div id="endWrap"></div><div id="vig"></div>
+<div id="tag"><img src="../img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script src="../img/trailer-beat.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script><script src="lib/RoundedBoxGeometry.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+// SEASON: the crew leaderboard in 3D. You start #4, overtake on the drop, your holographic player card levels up
+// Bronze -> Silver -> Gold -> Diamond, you take #1, the podium rises, trophy + confetti. Favourite ending from B(40).
+const { B, tl } = X;
+X.DUR = 24.5;
+X.glowAt = [[0, '#1F6BFF'], [B(18), '#FFC83D'], [B(23), '#7b5cff'], [B(28), '#1F6BFF'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
+const ctx = X.three({ fov: 38, bloom: .75, radius: .6 });
+X.studioEnv(ctx); X.lights(ctx);
+X.mirrorFloor(ctx, 60, 0x2a2d35); X.floorFade(ctx, 4.5, 14);
+ctx.glow.amt = .45;
+const TIER = { bronze: ['#d99a66', 'BRONZE'], silver: ['#c9d0da', 'SILVER'], gold: ['#FFC83D', 'GOLD'], diamond: ['#7aa6ff', 'DIAMOND'] };
+const TC = { bronze: new THREE.Color(1, .55, .28), silver: new THREE.Color(.8, .86, 1), gold: new THREE.Color(1, .75, .2), diamond: new THREE.Color(.45, .6, 1.4) };
+const CARD = new THREE.Vector3(9, 1.75, 0);
+const kick = (t, v = .014) => tl.fromTo(ctx.grade.uniforms.fringe, { value: v }, { value: .0025, duration: .4, ease: 'power2.out', immediateRender: false }, t);
+const whip = (t, to, d = .32) => tl.to(X.rig, { ...to, duration: d, ease: 'expo.inOut' }, t - d);
+
+async function build() {
+  await Promise.all(['800 100px Sora', '700 72px Inter', '600 40px Inter', '800 80px Inter'].map(f => document.fonts.load(f)));
+  const TX = X.T;
+  const PT = X.glowPoints(1000); ctx.scene.add(PT.pts);
+  const backGlow = X.glowSprite(0x2b6bff, 7, .22); backGlow.position.set(0, 1.8, -2.5); ctx.scene.add(backGlow);
+
+  // =================== leaderboard rows ===================
+  const SLOT = [2.65, 2.05, 1.45, .85];
+  const ROWS = [
+    { id: 'omar', name: 'Omar', l: 'O', col: '#6E9BFF', slot: 0, pts: X.sched([[0, 38]]), tier: X.sched([[0, 'gold']]) },
+    { id: 'khalid', name: 'Khalid', l: 'K', col: '#FFC83D', slot: 1, pts: X.sched([[0, 27]]), tier: X.sched([[0, 'silver']]) },
+    { id: 'faisal', name: 'Faisal', l: 'F', col: '#FF9A5A', slot: 2, pts: X.sched([[0, 11]]), tier: X.sched([[0, 'bronze']]) },
+    { id: 'you', name: 'You', l: 'Y', col: '#d6dbe6', slot: 3, pts: X.sched([[0, 9], [B(10), 12], [B(11), 28], [B(12), 36], [B(24), 48]]), tier: X.sched([[0, 'bronze'], [B(16), 'silver'], [B(18), 'gold'], [B(23), 'diamond']]) },
+  ];
+  const rank = { omar: X.sched([[0, 1], [B(24), 2]]), khalid: X.sched([[0, 2], [B(11), 3]]), faisal: X.sched([[0, 3], [B(10), 4]]), you: X.sched([[0, 4], [B(10), 3], [B(11), 2], [B(24), 1]]) };
+  const rowBox = new THREE.RoundedBoxGeometry(1.84, .52, .07, 3, .05);
+  const rr = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+  ROWS.forEach(R => {
+    const g = new THREE.Group(); ctx.scene.add(g);
+    const body = new THREE.Mesh(rowBox, new THREE.MeshPhysicalMaterial({ color: 0x0f1218, roughness: .25, metalness: .3, clearcoat: 1, clearcoatRoughness: .15, envMapIntensity: .7 })); g.add(body);
+    const cv = document.createElement('canvas'); cv.width = 1080; cv.height = 300;
+    const tex = new THREE.CanvasTexture(cv); tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 8;
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(1.8, .5), new THREE.MeshBasicMaterial({ map: tex, transparent: true })); face.position.z = .037; g.add(face);
+    const edge = X.glowSprite(0x2b6bff, 1, 1); edge.scale.set(2.6, .95, 1); edge.position.z = -.08; g.add(edge);
+    R.g = g; R.cv = cv; R.tex = tex; R.edge = edge; R.key = '';
+    R.st = { slot: R.slot, z: 0, x: 3.2, ry: -.9, op: 0, glow: R.id === 'you' ? .25 : 0, bump: 0 };
+    R.draw = (rk, pts, tier) => {
+      const c = cv.getContext('2d'), you = R.id === 'you';
+      c.clearRect(0, 0, 1080, 300);
+      rr(c, 6, 6, 1068, 288, 56); c.fillStyle = you ? 'rgba(18,28,52,.96)' : 'rgba(20,24,34,.94)'; c.fill();
+      c.lineWidth = you ? 7 : 3; c.strokeStyle = you ? '#2f78ff' : 'rgba(255,255,255,.09)'; c.stroke();
+      c.textBaseline = 'middle'; c.textAlign = 'center';
+      c.font = '800 104px Sora'; c.fillStyle = ['#FFC83D', '#d5dbe6', '#d99a66', '#5d6578'][rk - 1]; c.fillText('#' + rk, 128, 156);
+      c.beginPath(); c.arc(318, 150, 82, 0, 7); c.fillStyle = R.col; c.fill();
+      c.font = '800 84px Inter'; c.fillStyle = '#0b1222'; c.fillText(R.l, 318, 156);
+      if (rk === 1) { c.font = '78px "Noto Color Emoji"'; c.fillText('👑', 368, 62); }
+      c.textAlign = 'left'; c.font = '700 74px Inter'; c.fillStyle = '#fff'; c.fillText(R.name, 432, 116);
+      c.font = '700 38px Inter'; c.fillStyle = TIER[tier][0]; c.fillText(TIER[tier][1], 434, 196);
+      c.textAlign = 'right'; c.font = '800 100px Sora'; c.fillStyle = you ? '#9cc0ff' : '#fff'; c.fillText(String(pts), 1030, 128);
+      c.font = '600 34px Inter'; c.fillStyle = '#8a93a8'; c.fillText('check-ins', 1030, 210);
+      tex.needsUpdate = true;
+    };
+  });
+  const RY = ROWS[3];
+  // rows fly in on the build beats (Omar #1 first, You last)
+  ROWS.forEach((R, i) => tl.to(R.st, { x: 0, ry: 0, op: 1, duration: .55, ease: 'power3.out' }, B(2 + i)));
+  // overtakes on the drop
+  const swap = (a, b, t, d = .34) => { tl.to(a.st, { slot: b.slot, duration: d, ease: 'power3.inOut' }, t - .06).to(b.st, { slot: a.slot, duration: d, ease: 'power3.inOut' }, t - .06)
+    .to(a.st, { keyframes: [{ z: .45, duration: d / 2, ease: 'power2.out' }, { z: 0, duration: d / 2, ease: 'power2.in' }] }, t - .06); const s0 = a.slot; a.slot = b.slot; b.slot = s0; };
+  swap(RY, ROWS[2], B(10)); swap(RY, ROWS[1], B(11));
+  tl.to(RY.st, { keyframes: [{ bump: 1, duration: .14, ease: 'power3.out' }, { bump: 0, duration: .5, ease: 'elastic.out(1, .35)' }] }, B(12));
+  tl.fromTo(ROWS[0].st, { glow: 1.4 }, { glow: .35, duration: .7, immediateRender: false }, B(12) + .1);
+  swap(RY, ROWS[0], B(24), .4);
+  tl.fromTo(RY.st, { glow: 2.4 }, { glow: .6, duration: .8, immediateRender: false }, B(24));
+  tl.to(RY.st, { glow: 1, duration: .2, yoyo: true, repeat: 3 }, B(8));
+  // rows leave for the podium
+  ROWS.forEach((R, i) => tl.to(R.st, { op: 0, x: i % 2 ? 3 : -3, ry: i % 2 ? -.8 : .8, duration: .45, ease: 'power3.in' }, B(25.6) + i * .05));
+
+  // =================== holographic player card ===================
+  const HOLO = {
+    uniforms: { map: { value: null }, holo: { value: .6 }, sweep: { value: -1 }, time: { value: 0 }, bright: { value: 1 } },
+    vertexShader: 'varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vUv = uv; vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+    fragmentShader: `uniform sampler2D map; uniform float holo, sweep, time, bright; varying vec2 vUv; varying vec3 vN; varying vec3 vV;
+      vec3 rainbow(float x){ return 0.5 + 0.5 * cos(6.2831 * (x + vec3(0.0, 0.33, 0.67))); }
+      void main(){
+        vec4 c = texture2D(map, vUv); if (c.a < 0.5) discard;
+        float ndv = abs(dot(normalize(vN), normalize(vV)));
+        vec3 ir = rainbow(ndv * 1.8 + vUv.x * 0.9 - vUv.y * 0.7 + time * 0.08);
+        float band = exp(-pow((vUv.x * 0.8 + vUv.y * 0.5 - sweep) * 6.0, 2.0));
+        float lum = dot(c.rgb, vec3(0.3, 0.5, 0.2));
+        vec3 col = pow(c.rgb, vec3(2.2)) * bright + holo * ir * 0.2 * (0.4 + lum) + band * vec3(1.3, 1.4, 1.6);
+        gl_FragColor = vec4(col, 1.0);
+      }`,
+  };
+  const cardBody = new THREE.ExtrudeGeometry(X.rrect(1.49, 2.14, .13), { depth: .022, bevelEnabled: false, curveSegments: 12 }); cardBody.translate(0, 0, -.011);
+  const makeCard = (front, scale = 1) => {
+    const g = new THREE.Group(), u = THREE.UniformsUtils.clone(HOLO.uniforms); u.map.value = front;
+    const fm = new THREE.ShaderMaterial({ uniforms: u, vertexShader: HOLO.vertexShader, fragmentShader: HOLO.fragmentShader });
+    const f = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 2.15), fm); f.position.z = .0125; f.renderOrder = 1; g.add(f);
+    const b = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 2.15), new THREE.MeshBasicMaterial({ map: TX.card_back, alphaTest: .5 })); b.rotation.y = Math.PI; b.position.z = -.0125; b.renderOrder = 1; g.add(b);
+    g.add(new THREE.Mesh(cardBody, new THREE.MeshPhysicalMaterial({ color: 0x0b0d12, roughness: .3, metalness: .6, envMapIntensity: .8 })));
+    g.scale.setScalar(scale); g.userData.u = u; return g;
+  };
+  const card = makeCard(TX.card_you_bronze); card.position.copy(CARD); ctx.scene.add(card);
+  const cardHalo = X.glowSprite(0x7b5cff, 3.4, .3); cardHalo.position.set(CARD.x, CARD.y, CARD.z - .6); ctx.scene.add(cardHalo);
+  const CS = { ry: Math.PI, s: 1, holo: .5, sweep: -1, halo: .3, haloCol: new THREE.Color(0x2b6bff) };
+  const FL = [B(14), B(16), B(18), B(23)], TIERS = ['bronze', 'silver', 'gold', 'diamond'];
+  const cardTex = X.sched([[0, TX.card_you_bronze], [FL[1] - .25, TX.card_you_silver], [FL[2] - .25, TX.card_you_gold], [FL[3] - .25, TX.card_you]]);
+  const haloTier = X.sched([[0, 'bronze'], [FL[1] - .25, 'silver'], [FL[2] - .25, 'gold'], [FL[3] - .25, 'diamond']]);
+  tl.fromTo(CS, { s: .2 }, { s: 1, duration: .6, ease: 'back.out(1.6)', immediateRender: false }, B(13) - .1);
+  FL.forEach((t, i) => {
+    const big = i === 3;
+    tl.to(CS, { ry: Math.PI * (2 + 2 * i), duration: i === 0 ? .42 : .5, ease: 'power3.inOut' }, t - (i === 0 ? .42 : .5))
+      .fromTo(CS, { sweep: -.6 }, { sweep: 1.8, duration: .6, ease: 'power2.inOut', immediateRender: false }, t)
+      .fromTo(CS, { halo: big ? 1.0 : .8 }, { halo: .35, duration: .8, immediateRender: false }, t);
+    if (big) tl.fromTo(CS, { s: 1.14 }, { s: 1, duration: .6, ease: 'elastic.out(1, .5)', immediateRender: false }, t);
+    kick(t, big ? .024 : .014);
+  });
+  X.flash(FL[3], .3);
+
+  // =================== podium ===================
+  const POD = [{ x: 0, h: .78, n: 1, c: '#FFC83D' }, { x: -1.0, h: .52, n: 2, c: '#d5dbe6' }, { x: 1.0, h: .36, n: 3, c: '#d99a66' }];
+  const podBox = h => new THREE.RoundedBoxGeometry(.92, h, .92, 3, .06);
+  POD.forEach((p, i) => {
+    const g = new THREE.Group(); g.position.set(p.x, -p.h / 2 - .02, 0); ctx.scene.add(g);
+    g.add(new THREE.Mesh(podBox(p.h), new THREE.MeshPhysicalMaterial({ color: 0x14171e, roughness: .3, metalness: .4, clearcoat: .8, envMapIntensity: .8 })));
+    const nt = X.canvasTex(256, 256, (c, w, h) => { c.font = '800 190px Sora'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = p.c; c.fillText(String(p.n), w / 2, h / 2 + 10); });
+    const num = new THREE.Mesh(new THREE.PlaneGeometry(.42, .42), new THREE.MeshBasicMaterial({ map: nt, transparent: true, depthWrite: false })); num.position.set(0, 0, .462); g.add(num);
+    const rim = X.floorRect(.92 + .12, .92 + .12, .12, .02); rim.position.set(p.x, .004, 0); rim.material.color.setRGB(0, 0, 0); ctx.scene.add(rim);
+    p.g = g; p.rim = rim; p.st = { up: 0 };
+    tl.to(p.st, { up: 1, duration: .6, ease: 'back.out(1.4)' }, B(26) + [0, .25, .5][i]);
+  });
+  // cards land on the podium
+  const pc = [makeCard(TX.card_you, .5), makeCard(TX.card_omar, .5), makeCard(TX.card_khalid, .5)];
+  const PCS = pc.map((c, i) => { ctx.scene.add(c); c.visible = false; return { drop: 0 }; });
+  [B(28), B(28.5), B(29)].forEach((t, i) => tl.fromTo(PCS[i], { drop: 0 }, { drop: 1, duration: .38, ease: 'bounce.out', immediateRender: false }, t - .2));
+  // Faisal: fourth place, lying on the floor, buying the coffee
+  const fc = makeCard(TX.card_faisal, .42); fc.rotation.set(-Math.PI / 2, 0, .35); ctx.scene.add(fc);
+  const FCS = { y: 3 };
+  tl.to(FCS, { y: .02, duration: .45, ease: 'bounce.out' }, B(30) - .2);
+  const ftag = X.noReflect(new THREE.Sprite(new THREE.SpriteMaterial({ map: TX.tag_faisal_coffee, transparent: true, depthWrite: false, opacity: 0 })));
+  ftag.position.set(1.1, .48, 1.62); const fi = TX.tag_faisal_coffee.image; ftag.scale.set(.16 * fi.width / fi.height, .16, 1); ctx.scene.add(ftag);
+  tl.to(ftag.material, { opacity: 1, duration: .25 }, B(30) + .2);
+  // spotlights
+  const cones = POD.map(p => { const c = X.cone(0xbcd2ff, 4.6, .05, .62, 0); c.position.x = p.x; c.position.z = -.05; ctx.scene.add(c); return c; });
+  const pools = POD.map(p => { const m = X.pool(0xbcd2ff, 1.9, 1); m.position.set(p.x, 0, .25); m.material.color.setRGB(0, 0, 0); ctx.scene.add(m); return m; });
+  const SPOT = { k: 0 };
+  tl.to(SPOT, { k: 1, duration: .08 }, B(29)).fromTo(SPOT, { k: 1.8 }, { k: 1, duration: .5, immediateRender: false }, B(33));
+  const sweepers = [-1, 1].map(sd => { const piv = new THREE.Group(); piv.position.set(sd * 2.8, 5.2, -1.4); const c = X.cone(sd < 0 ? 0x5b8cff : 0xffb36b, 6.5, .05, .9, 0); c.position.y = -3.25; piv.add(c); ctx.scene.add(piv); return { piv, c, sd }; });
+  const SW = { k: 0 };
+  tl.to(SW, { k: .55, duration: .3 }, B(33));
+  // trophy
+  const trophy = new THREE.Group();
+  const prof = [[0, 0], [.3, 0], [.3, .06], [.2, .09], [.1, .15], [.065, .3], [.06, .44], [.11, .52], [.24, .58], [.34, .7], [.38, .86], [.39, 1.0], [.36, 1.02], [.33, .98], [.32, .9], [0, .9]].map(([r, y]) => new THREE.Vector2(r, y));
+  const gold = new THREE.MeshPhysicalMaterial({ color: 0xffbf3a, metalness: 1, roughness: .2, envMapIntensity: 1.6, clearcoat: .6, clearcoatRoughness: .1 });
+  trophy.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 64), gold));
+  [-1, 1].forEach(sd => { const h = new THREE.Mesh(new THREE.TorusGeometry(.16, .03, 14, 32, Math.PI * 1.1), gold); h.position.set(sd * .38, .78, 0); h.rotation.z = sd > 0 ? -Math.PI / 2 - .2 : Math.PI / 2 + .2; trophy.add(h); });
+  const tb = new THREE.Mesh(new THREE.CylinderGeometry(.34, .38, .12, 48), new THREE.MeshPhysicalMaterial({ color: 0x1a1d24, metalness: .6, roughness: .3, clearcoat: 1 })); tb.position.y = -.06; trophy.add(tb);
+  trophy.scale.setScalar(.62); ctx.scene.add(trophy);
+  const TR = { y: 6, spin: 0 };
+  tl.to(TR, { y: 0, duration: .55, ease: 'power3.out' }, B(31) - .2).to(TR, { spin: 6.3, duration: B(39.5) - B(31), ease: 'none' }, B(31));
+  const trophyHalo = X.glowSprite(0xffc83d, 1.6, 0); ctx.scene.add(trophyHalo);
+  // confetti
+  const NCF = 460, conf = new THREE.InstancedMesh(new THREE.PlaneGeometry(.075, .042), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }), NCF);
+  const CFC = [0x1F6BFF, 0xFF7A2F, 0xFFC83D, 0xffffff, 0x7aa6ff].map(c => new THREE.Color(c).multiplyScalar(1.05));
+  for (let i = 0; i < NCF; i++) conf.setColorAt(i, CFC[i % 5]);
+  conf.frustumCulled = false; ctx.scene.add(conf);
+  const CF0 = B(33), m4 = new THREE.Matrix4(), q4 = new THREE.Quaternion(), e4 = new THREE.Euler(), v4 = new THREE.Vector3(), s4 = new THREE.Vector3();
+
+  const dust = X.dust(700, [8, 3.5, 6], 0xbcd2ff, .011, 1); ctx.scene.add(dust);
+
+  // =================== per frame ===================
+  X.onFrame(t => {
+    dust.userData.update(t);
+    const en = X.energy(t);
+    backGlow.material.color.setRGB(.17, .42, 1).multiplyScalar(.2 + .12 * en);
+    // rows
+    ROWS.forEach(R => {
+      const st = R.st, rk = rank[R.id](t), pts = R.pts(t), tier = R.tier(t), key = rk + '|' + pts + '|' + tier;
+      if (key !== R.key) { R.draw(rk, pts, tier); R.key = key; }
+      const sl = st.slot, y = X.lerp(SLOT[Math.floor(sl)], SLOT[Math.min(3, Math.floor(sl) + 1)], sl - Math.floor(sl)) + st.bump * .32;
+      R.g.position.set(st.x + (R.id === 'omar' ? Math.sin(t * 60) * .012 * X.clamp(st.glow - .35) : 0), y + Math.sin(t * 1.2 + SLOT.indexOf(SLOT[R.slot]) * 1.3) * .012, st.z);
+      R.g.rotation.y = st.ry; R.g.visible = st.op > .01;
+      R.g.children[1].material.opacity = st.op;
+      const ec = R.id === 'you' ? (tier === 'diamond' ? TC.diamond : new THREE.Color(.15, .42, 1)) : R.id === 'omar' ? TC.gold : new THREE.Color(.15, .42, 1);
+      R.edge.material.color.copy(ec).multiplyScalar(st.glow * .55 * st.op * (.85 + .3 * en));
+    });
+    // card
+    card.visible = t > B(12.5) && t < B(25);
+    card.rotation.y = CS.ry; card.rotation.z = Math.sin(t * .9) * .04; card.rotation.x = Math.sin(t * .7) * .05;
+    card.position.y = CARD.y + Math.sin(t * 1.3) * .05; card.scale.setScalar(CS.s);
+    const u = card.userData.u; u.map.value = cardTex(t); u.sweep.value = CS.sweep; u.time.value = t; u.holo.value = .5 + .3 * en;
+    cardHalo.material.color.copy(TC[haloTier(t)]).multiplyScalar(CS.halo * .35 * (card.visible ? 1 : 0));
+    // podium
+    POD.forEach((p, i) => {
+      p.g.position.y = X.lerp(-p.h / 2 - .02, p.h / 2, p.st.up);
+      p.rim.material.color.setRGB(.15, .42, 1).multiplyScalar(p.st.up * (1.2 + .5 * en) * (i === 0 ? 1.4 : 1));
+      const c = pc[i], d = PCS[i].drop; c.visible = d > 0;
+      c.position.set(p.x, X.lerp(4.5, p.h + .55, d), 0); c.rotation.set(0, Math.sin(t * .8 + i) * .12, 0);
+      c.userData.u.time.value = t; c.userData.u.holo.value = .45 + .25 * en;
+      cones[i].material.uniforms.k.value = SPOT.k * (i === 0 ? .55 : .38) * (.85 + .3 * en);
+      pools[i].material.color.setRGB(.6, .7, 1).multiplyScalar(SPOT.k * (i === 0 ? .35 : .22));
+    });
+    fc.position.set(1.12, FCS.y + .02, 1.42); fc.visible = t > B(29.6);
+    sweepers.forEach(s => { s.piv.rotation.z = s.sd * (.35 + .3 * Math.sin(t * 1.6 + s.sd)); s.piv.rotation.x = .25 * Math.sin(t * 1.1); s.c.material.uniforms.k.value = SW.k * (.8 + .4 * en); });
+    trophy.position.set(0, POD[0].h + 1.25 + TR.y + Math.sin(t * 1.5) * .03, .1); trophy.rotation.y = TR.spin; trophy.visible = t > B(30.5);
+    trophyHalo.position.copy(trophy.position).add(new THREE.Vector3(0, .32, -.2)); trophyHalo.material.color.setRGB(1, .72, .2).multiplyScalar(trophy.visible ? .32 * (1 - X.clamp(TR.y / 3)) * (.8 + .4 * en) : 0);
+    // confetti
+    for (let i = 0; i < NCF; i++) {
+      const dt = t - CF0 - X.hash(i * 3 + 1) * .25;
+      if (dt < 0) { m4.makeScale(0, 0, 0); conf.setMatrixAt(i, m4); continue; }
+      const th = X.hash(i * 3 + 2) * 6.283, sp = 1.4 + 2.6 * X.hash(i * 7 + 3), up = 2.2 + 2.4 * X.hash(i * 11 + 4), k = 1.6, ex = (1 - Math.exp(-k * dt)) / k;
+      v4.set(Math.cos(th) * sp * ex + Math.sin(t * 2.3 + i) * .08, 2.8 + up * ex - .55 * dt * dt - .5 * dt, Math.sin(th) * sp * .55 * ex + Math.cos(t * 1.9 + i) * .06);
+      if (v4.y < .02) v4.y = .02;
+      e4.set(t * (3 + 4 * X.hash(i + 5)) + i, t * (2 + 3 * X.hash(i + 9)), t * 1.3 + i * .7); q4.setFromEuler(e4); s4.setScalar(v4.y <= .02 ? .8 : 1);
+      m4.compose(v4, q4, s4); conf.setMatrixAt(i, m4);
+    }
+    conf.instanceMatrix.needsUpdate = true;
+    // particles
+    let q = 0;
+    const put = (x, y, z, sz, r, g, b) => { if (q < PT.n) PT.set(q++, x, y, z, sz, r, g, b); };
+    const zero = () => put(0, -9, 0, 0, 0, 0, 0);
+    const burst = (t0, o, n, life, spd, col, size, seed) => { const dt = t - t0; for (let j = 0; j < n; j++) { if (dt < 0 || dt > life) { zero(); continue; }
+      const r1 = X.hash(seed + j * 4 + 1), r2 = X.hash(seed + j * 4 + 2), r3 = X.hash(seed + j * 4 + 3), a = Math.pow(1 - dt / life, 1.5), ee = 1 - Math.exp(-dt * 4.5), th = r1 * 6.283, ph = (r3 - .5) * 3;
+      put(o.x + Math.cos(th) * Math.cos(ph) * spd * (.3 + .7 * r2) * ee, o.y + Math.sin(ph) * spd * (.3 + .7 * r2) * ee - .3 * dt * dt, o.z + Math.sin(th) * Math.cos(ph) * spd * (.3 + .7 * r2) * ee * .6, size, col.r * a, col.g * a, col.b * a); } };
+    FL.forEach((t0, i) => burst(t0, CARD, i === 3 ? 160 : 70, i === 3 ? 1.3 : 1, i === 3 ? 2.4 : 1.5, TC[TIERS[i]].clone().multiplyScalar(i === 3 ? 2 : 1.6), .02, i * 500));
+    [B(10), B(11), B(24)].forEach((t0, i) => burst(t0, new THREE.Vector3(0, SLOT[[2, 1, 0][i]], .4), 40, .7, 1.4, new THREE.Color(.5, .8, 2), .016, 3000 + i * 300));
+    [B(28), B(28.5), B(29)].forEach((t0, i) => burst(t0 + .18, new THREE.Vector3(POD[i].x, POD[i].h + .05, .3), 30, .8, .9, new THREE.Color(1.2, 1.2, 1.6), .014, 5000 + i * 200));
+    burst(B(31) + .35, new THREE.Vector3(0, POD[0].h + 1.5, .1), 50, 1.2, 1.2, new THREE.Color(2, 1.5, .5), .016, 7000);
+    while (q < PT.n) zero();
+    PT.commit();
+  });
+
+  // =================== camera ===================
+  Object.assign(X.rig, { px: 1.7, py: 2.5, pz: 8.4, tx: 0, ty: 1.75, tz: 0, fov: 38 });
+  tl.to(X.rig, { px: .55, py: 1.9, pz: 5.9, duration: B(9.7), ease: 'sine.inOut' }, 0);
+  // drop: punch toward your row on each overtake
+  whip(B(10), { px: .3, py: 1.65, pz: 5.2, ty: 1.55 }, .25);
+  whip(B(11), { px: -.25, py: 2.0, pz: 4.9, ty: 2.0 }, .25);
+  whip(B(12), { px: .2, py: 2.3, pz: 4.7, ty: 2.35 }, .22);
+  tl.fromTo(X.rig, { shake: .6 }, { shake: 0, duration: .4, immediateRender: false }, B(12));
+  // whip to the player card
+  whip(B(13), { px: CARD.x + .5, py: 2.05, pz: 4.8, tx: CARD.x, ty: 1.97, tz: 0, fov: 38 }, .36);
+  tl.to(X.rig, { keyframes: [
+    { px: CARD.x - 1.4, pz: 4.5, py: 1.75, duration: B(16) - B(13), ease: 'sine.inOut' },
+    { px: CARD.x + 1.3, pz: 4.4, py: 2.3, duration: B(18) - B(16), ease: 'sine.inOut' },
+    { px: CARD.x - .75, pz: 4.3, py: 1.7, duration: B(22.4) - B(18), ease: 'sine.inOut' },
+    { px: CARD.x, pz: 3.85, py: 1.98, duration: B(23) - B(22.4), ease: 'power3.in' },
+    { pz: 4.3, duration: B(24) - .4 - B(23), ease: 'sine.out' }] }, B(13));
+    // back to the board: you take #1
+  whip(B(24), { px: .25, py: 2.45, pz: 4.6, tx: 0, ty: 2.45, tz: 0, fov: 38 }, .36);
+  // the podium rises
+  tl.to(X.rig, { px: 0, py: 1.85, pz: 6.9, tx: 0, ty: 1.45, tz: 0, fov: 40, duration: B(28) - B(25.4), ease: 'power2.inOut' }, B(25.4))
+    .to(X.rig, { pz: 6.3, py: 1.75, ty: 1.55, duration: B(32.8) - B(28), ease: 'sine.inOut' }, B(28));
+  // champion: orbit under the confetti
+  tl.to(X.rig, { keyframes: [{ px: 2.1, pz: 5.8, py: 2.0, ty: 1.6, duration: B(36) - B(32.8), ease: 'sine.inOut' }, { px: 2.9, pz: 5.3, py: 2.35, duration: B(39.5) - B(36), ease: 'sine.inOut' }] }, B(32.8));
+  [0, 2, 10, 11, 12, 24, 29, 33, 34].forEach(i => kick(B(i), i === 24 || i === 33 ? .022 : .012));
+  X.flash(B(24), .35); X.flash(B(33), .4);
+  tl.to('#gl', { opacity: 0, filter: 'blur(14px)', duration: .55, ease: 'power2.in' }, B(39.4));
+
+  // =================== words ===================
+  const l1 = X.line([['Who’s'], ['#1', 'gd']], 210, '', 104), l2 = X.line([['in'], ['your'], ['crew?']], 330, '', 104);
+  X.wordsIn(l1, [B(0), B(.5)]); X.wordsIn(l2, [B(1), B(1.5), B(2)]); X.out(l1, B(5.6)); X.out(l2, B(5.6));
+  const l3 = X.line([['You’re'], ['#4.', 'or']], 250); X.wordsIn(l3, [B(6), B(6.5)]); X.out(l3, B(7.85));
+  const l4 = X.line([['For'], ['now.', 'hl']], 250); X.wordsIn(l4, [B(8), B(8.5)]); X.out(l4, B(9.75));
+  const l5 = X.line([['Almost.', 'gd']], 250); X.wordsIn(l5, [B(12)]); X.out(l5, B(12.8));
+  const l6 = X.line([['Level'], ['up.', 'hl']], 230); X.wordsIn(l6, [B(14), B(14.5)]); X.out(l6, B(18.6));
+  const l7 = X.line([['Every'], ['check-in'], ['counts.', 'gd']], 240, '', 80); X.wordsIn(l7, [B(19), B(19.5), B(20)]); X.out(l7, B(22.5));
+  const l8 = X.line([['#1.', 'gd']], 200, 'big', 210); X.wordsIn(l8, [B(24)]); X.out(l8, B(25.8));
+  const l9 = X.line([['Season'], ['champ.', 'gd']], 195, '', 110); X.wordsIn(l9, [B(33), B(33.5)]); X.out(l9, B(39.3));
+  const l10 = X.line([['Make'], ['the'], ['gym'], ['a'], ['game.', 'hl']], 345, '', 70); X.wordsIn(l10, [B(35), B(35.5), B(36), B(36.5), B(37)]); X.out(l10, B(39.3));
+  X.ending(40);
+}
+X.start(X.loadTex(['card_you', 'card_you_bronze', 'card_you_silver', 'card_you_gold', 'card_omar', 'card_khalid', 'card_faisal', 'card_back', 'tag_faisal_coffee']).then(build));
+</script>
+</body>
+</html>

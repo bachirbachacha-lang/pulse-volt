@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp X Nudge</title>
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="lines"></div><div id="endWrap"></div><div id="vig"></div>
+<div id="tag"><img src="../img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script src="../img/trailer-beat.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+// NUDGE: 6:00 AM, four crew phones on a black glass table. Three check in on the drop, Faisal sleeps,
+// you tap Nudge, a comet of light crosses the table (chase cam) and wakes his phone, he checks in, 4/4.
+// Every hit sits on the owner's song beats (B(i)); the favourite ending runs from B(40).
+const { B, tl } = X;
+X.DUR = 24.5;
+X.glowAt = [[0, '#1F6BFF'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
+const ctx = X.three({ fov: 40, bloom: .7, radius: .6 });
+X.studioEnv(ctx); X.lights(ctx);
+X.mirrorFloor(ctx, 40, 0x2a2d35); X.floorFade(ctx, 3.4, 11);
+ctx.glow.amt = .4;
+
+const NAMES = ['you', 'omar', 'khalid', 'faisal'];
+const FIN = { you: 'blue', omar: 'natural', khalid: 'black', faisal: 'white' };
+const POS = { you: [-.55, 1.9, .05], omar: [.6, .7, -.08], khalid: [-.6, -.5, .1], faisal: [.55, -1.7, -.06] };
+const BLUE = new THREE.Color(0x2b6bff), RED = new THREE.Color(0xff3b30);
+const TEX = ['lock_you', 'lock_omar', 'lock_khalid', 'lock_faisal', 'app_you', 'app_you_sent', 'cam_faisal', 'done_faisal', 'crew_final',
+  'ban_check_omar', 'ban_check_khalid', 'ban_check_you', 'ban_nudge', 'ban_msg_omar', 'ban_msg_khalid', 'tag_omar', 'tag_khalid', 'tag_you', 'tag_faisal', 'tag_faisal_ok'];
+const P = {}, S = {}, F = {};
+const kick = (t, v = .014) => tl.fromTo(ctx.grade.uniforms.fringe, { value: v }, { value: .0025, duration: .4, ease: 'power2.out', immediateRender: false }, t);
+const whip = (t, to, d = .3) => tl.to(X.rig, { ...to, duration: d, ease: 'expo.inOut' }, t - d);
+
+function build() {
+  const T = X.T;
+  // ---------- the four crew stations ----------
+  NAMES.forEach(n => {
+    const [x, z, yaw] = POS[n];
+    const spot = new THREE.Group(); spot.position.set(x, 0, z); spot.rotation.y = yaw; ctx.scene.add(spot);
+    const p = P[n] = X.makePhone({ finish: FIN[n], tex: T['lock_' + n] });
+    p.g.position.y = X.PHONE.PD / 2 + .028; p.g.rotation.x = -Math.PI / 2 + .02; spot.add(p.g);
+    p.g.updateMatrixWorld(true);
+    const ol = X.floorRect(X.PHONE.PW + .17, X.PHONE.PH + .17, .2, .016); spot.add(ol);
+    const pool = X.pool(0x6f9bff, 2.6, 1); spot.add(pool);
+    const sh1 = X.floorRing(.5, 0xffffff, 1), sh2 = X.floorRing(.5, 0xffffff, 1); sh1.material.opacity = sh2.material.opacity = 0; spot.add(sh1, sh2);
+    const tag = new THREE.Sprite(new THREE.SpriteMaterial({ map: T['tag_' + n], transparent: true, depthWrite: false, opacity: 0 }));
+    tag.userData.h = .15; tag.position.set(0, .24, 1.0); spot.add(X.noReflect(tag));
+    S[n] = { wake: 0, glow: 0, red: 0, buzz: 0, flare: 0, pool: 0, hot: 1, tag: 0 };
+    F[n] = { spot, ol, pool, sh1, sh2, tag };
+  });
+  ctx.scene.updateMatrixWorld(true);
+  // screens over time
+  const scr = {
+    you: X.sched([[0, T.lock_you], [B(14.5), T.app_you], [B(17) + .08, T.app_you_sent], [B(32.6), T.crew_final]]),
+    omar: X.sched([[0, T.lock_omar], [B(32.6), T.crew_final]]),
+    khalid: X.sched([[0, T.lock_khalid], [B(32.6), T.crew_final]]),
+    faisal: X.sched([[0, T.lock_faisal], [B(27), T.cam_faisal], [B(30), T.done_faisal], [B(32.6), T.crew_final]]),
+  };
+  const tagTex = X.sched([[0, T.tag_faisal], [B(30), T.tag_faisal_ok]]);
+  // banners on the lock screens (iOS style stack)
+  const ban = (n, tex, y, t0, t1) => {
+    const m = P[n].overlay(tex, 195, y, 370), y0 = m.position.y;
+    tl.fromTo(m.material, { opacity: 0 }, { opacity: 1, duration: .18, immediateRender: false }, t0)
+      .fromTo(m.position, { y: y0 + .06 }, { y: y0, duration: .4, ease: 'back.out(1.7)', immediateRender: false }, t0)
+      .fromTo(m.scale, { x: .9, y: .9 }, { x: 1, y: 1, duration: .4, ease: 'back.out(1.7)', immediateRender: false }, t0)
+      .to(m.material, { opacity: 0, duration: .12 }, t1);
+  };
+  ban('omar', T.ban_check_omar, 470, B(10), B(32.4));
+  ban('khalid', T.ban_check_khalid, 470, B(11), B(32.4));
+  ban('you', T.ban_check_you, 470, B(12), B(14.5));
+  ban('faisal', T.ban_nudge, 470, B(23) + .12, B(27));
+  ban('faisal', T.ban_msg_omar, 556, B(25), B(27));
+  ban('faisal', T.ban_msg_khalid, 632, B(26), B(27));
+
+  // ---------- comet (the nudge) ----------
+  const W0 = P.you.world(195, 437), W1 = P.faisal.world(195, 410);
+  const curve = new THREE.CatmullRomCurve3([W0, new THREE.Vector3(-.5, .5, 1.45), new THREE.Vector3(-.16, .38, .78), new THREE.Vector3(.04, .2, .06),
+    new THREE.Vector3(.26, .3, -.74), new THREE.Vector3(.5, .44, -1.32), W1], false, 'centripetal');
+  const c0 = B(17) + .02, c1 = B(23);
+  const cometU = t => { const x = X.clamp((t - c0) / (c1 - c0)); return X.clamp(x + .7 * Math.sin(2 * Math.PI * x) / (2 * Math.PI)); };
+  const comet = new THREE.Group(); ctx.scene.add(comet);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(.01, 24, 16), new THREE.MeshBasicMaterial({ color: new THREE.Color(3.2, 3.8, 5.5) })); comet.add(core);
+  const halo = X.glowSprite(0x4f8bff, .08, 1.2); comet.add(halo);
+  const cpool = X.pool(0x5b8cff, 1.6, 1); ctx.scene.add(cpool);
+  const clight = new THREE.PointLight(0x8fb4ff, 0, 2.4, 2); ctx.scene.add(clight);
+  const PT = X.glowPoints(900); ctx.scene.add(PT.pts);
+  // particle bursts: {t0, o, n, life, spd, up, col, size, seed}
+  const bursts = [];
+  const burst = (t0, o, n, opt) => bursts.push({ t0, o, n, life: 1, spd: 1, up: .6, col: [.6, .8, 1.6], size: .016, seed: bursts.length * 97, ...opt });
+  const stationTop = n => F[n].spot.localToWorld(new THREE.Vector3(0, .11, 0));
+  burst(B(10), stationTop('omar'), 40, { life: .9 }); burst(B(11), stationTop('khalid'), 40, { life: .9 }); burst(B(12), stationTop('you'), 40, { life: .9 });
+  burst(B(23), W1, 150, { life: 1.15, spd: 2.1, up: .9, size: .022, col: [.9, 1.1, 2.2] });
+  burst(B(30), stationTop('faisal'), 50, { life: 1, col: [.5, .9, .7] });
+  NAMES.forEach((n, i) => burst(B(33) + i * .05, stationTop(n), 30, { life: 1.1, spd: .8 }));
+
+  // ---------- light beams that link the crew at 4/4 ----------
+  const beams = [];
+  const link = (a, b, t0) => {
+    const A = F[a].spot.position, Bp = F[b].spot.position, L = A.distanceTo(Bp);
+    const g = new THREE.PlaneGeometry(1, .03); g.translate(.5, 0, 0);
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: BLUE.clone().multiplyScalar(3), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    m.rotation.set(-Math.PI / 2, 0, 0); m.rotation.order = 'YXZ'; m.rotation.y = -Math.atan2(Bp.z - A.z, Bp.x - A.x); m.position.set(A.x, .006, A.z); m.scale.x = .0001;
+    ctx.scene.add(m); tl.to(m.scale, { x: L, duration: .45, ease: 'power3.out' }, t0);
+    beams.push({ A, Bp, t0 });
+  };
+  link('you', 'omar', B(33)); link('omar', 'khalid', B(33) + .1); link('khalid', 'faisal', B(33) + .2);
+
+  const dust = X.dust(900, [5, 2.2, 6], 0xbcd2ff, .01, 1.1); ctx.scene.add(dust);
+
+  // ---------- per frame ----------
+  X.onFrame(t => {
+    dust.userData.update(t);
+    const en = X.energy(t);
+    // comet
+    const u = cometU(t), live = t > c0 && t < c1;
+    comet.visible = live;
+    const cp = curve.getPointAt(u);
+    comet.position.copy(cp); halo.scale.setScalar(.07 + .04 * en);
+    cpool.position.set(cp.x, .003, cp.z); cpool.material.color.setRGB(.36, .55, 1).multiplyScalar(live ? .55 * Math.exp(-cp.y * 2.2) : 0);
+    clight.position.copy(cp); clight.intensity = live ? 1.3 : 0;
+    // stations
+    NAMES.forEach(n => {
+      const s = S[n], f = F[n], p = P[n];
+      p.show(scr[n](t));
+      p.dim.material.opacity = 1 - s.wake;
+      p.screenMat.color.setScalar(s.hot);
+      const flare = live ? Math.exp(-(cp.distanceTo(f.spot.position) ** 2) / .12) : 0;
+      let g = s.glow * (.85 + .3 * en) + flare * 1.4;
+      if (s.red > 0) g = Math.max(g, s.red * (.45 + .25 * Math.sin(t * 7)));
+      f.ol.material.color.copy(BLUE).lerp(RED, s.red).multiplyScalar(g * 2.4);
+      f.pool.material.color.setRGB(.36, .52, 1).multiplyScalar(s.wake * .22 + g * .12);
+      // vibration on the table (decays fast, never the camera)
+      const bz = s.buzz;
+      p.g.position.x = bz * .006 * Math.sin(t * 190); p.g.rotation.z = bz * .02 * Math.sin(t * 150 + 1);
+      f.tag.material.opacity = s.tag; f.tag.scale.set(f.tag.userData.h * f.tag.material.map.image.width / f.tag.material.map.image.height * (.85 + .15 * s.tag), f.tag.userData.h * (.85 + .15 * s.tag), 1);
+    });
+    F.faisal.tag.material.map = tagTex(t);
+    // particles: comet trail + sparks + bursts
+    let k = 0;
+    const put = (x, y, z, sz, r, g, b) => { if (k < PT.n) PT.set(k++, x, y, z, sz, r, g, b); };
+    for (let i = 0; i < 90; i++) {
+      const ui = u - i * .0032, f = 1 - i / 90;
+      if (!live || ui < 0) { put(0, -9, 0, 0, 0, 0, 0); continue; }
+      const q = curve.getPointAt(ui); put(q.x, q.y, q.z, .026 * Math.pow(f, 1.2), .5 * f * f, .75 * f * f, 1.7 * f * f);
+    }
+    for (let j = 0; j < 70; j++) {
+      const ts = c0 + j * (c1 - c0) / 70, dt = t - ts, life = .55;
+      if (dt < 0 || dt > life) { put(0, -9, 0, 0, 0, 0, 0); continue; }
+      const o = curve.getPointAt(cometU(ts)), h1 = X.hash(j * 3 + 1) - .5, h2 = X.hash(j * 3 + 2), h3 = X.hash(j * 3 + 3) - .5, a = 1 - dt / life;
+      put(o.x + h1 * .7 * dt, Math.max(.01, o.y + (h2 * .5 + .1) * dt - 1.3 * dt * dt), o.z + h3 * .7 * dt, .014 * a, .7 * a, .85 * a, 1.6 * a);
+    }
+    for (const b of bursts) {
+      const dt = t - b.t0;
+      for (let i = 0; i < b.n; i++) {
+        if (dt < 0 || dt > b.life) { put(0, -9, 0, 0, 0, 0, 0); continue; }
+        const r1 = X.hash(b.seed + i * 4 + 1), r2 = X.hash(b.seed + i * 4 + 2), r3 = X.hash(b.seed + i * 4 + 3), r4 = X.hash(b.seed + i * 4 + 4);
+        const th = r1 * Math.PI * 2, sp = b.spd * (.35 + .65 * r2), vy = b.up * (.4 + r3), a = Math.pow(1 - dt / b.life, 1.6), ease = 1 - Math.exp(-dt * 4);
+        put(b.o.x + Math.cos(th) * sp * ease * .45, Math.max(.01, b.o.y + vy * ease * .5 - .35 * dt * dt), b.o.z + Math.sin(th) * sp * ease * .45, b.size * (.5 + r4), b.col[0] * a, b.col[1] * a, b.col[2] * a);
+      }
+    }
+    // light pulses running along the 4/4 beams
+    for (const bm of beams) for (let i = 0; i < 3; i++) {
+      const ph = ((t - bm.t0) * .9 + i / 3) % 1;
+      if (t < bm.t0 + .3) { put(0, -9, 0, 0, 0, 0, 0); continue; }
+      put(X.lerp(bm.A.x, bm.Bp.x, ph), .02, X.lerp(bm.A.z, bm.Bp.z, ph), .07, .5, .8, 2);
+    }
+    while (k < PT.n) put(0, -9, 0, 0, 0, 0, 0);
+    PT.commit();
+  });
+
+  // =================== timeline ===================
+  const st = S;
+  // shockwave + glow + buzz when someone checks in
+  const checkIn = (n, t, big = 1) => {
+    const f = F[n];
+    tl.to(st[n], { wake: 1, duration: .14, ease: 'power2.out' }, t)
+      .fromTo(st[n], { hot: 1.6 }, { hot: 1, duration: .5, ease: 'power2.out', immediateRender: false }, t)
+      .to(st[n], { glow: 1, duration: .25 }, t)
+      .fromTo(st[n], { buzz: 1 }, { buzz: 0, duration: .45, ease: 'power2.in', immediateRender: false }, t)
+      .fromTo(f.sh1.scale, { x: .5, y: .5, z: .5 }, { x: 3.2 * big, y: 3.2 * big, z: 3.2 * big, duration: .8, ease: 'power2.out', immediateRender: false }, t)
+      .fromTo(f.sh1.material, { opacity: 1 }, { opacity: 0, duration: .8, ease: 'power1.in', immediateRender: false }, t)
+      .fromTo(f.sh2.scale, { x: .5, y: .5, z: .5 }, { x: 4.4 * big, y: 4.4 * big, z: 4.4 * big, duration: 1.1, ease: 'power2.out', immediateRender: false }, t + .1)
+      .fromTo(f.sh2.material, { opacity: .6 }, { opacity: 0, duration: 1.1, ease: 'power1.in', immediateRender: false }, t + .1);
+    f.sh1.material.color.setRGB(.4, .6, 1.6); f.sh2.material.color.setRGB(.3, .5, 1.4);
+  };
+  const tagIn = (n, t, t1) => tl.to(st[n], { tag: 1, duration: .25, ease: 'back.out(2)' }, t).to(st[n], { tag: 0, duration: .2 }, t1);
+
+  // 0) 6:00, your phone wakes in the dark (hook)
+  tl.to(st.you, { wake: 1, duration: .22, ease: 'power2.out' }, B(0)).fromTo(st.you, { hot: 1.8 }, { hot: 1, duration: .6, immediateRender: false }, B(0));
+  kick(B(0), .01);
+  // camera A: macro on the clock, slow push
+  Object.assign(X.rig, { px: -.5, py: 1.25, pz: 2.75, tx: -.55, ty: .1, tz: 1.55, fov: 30 });
+  Object.assign(X.dof, { amt: .011, w: .09, cx: .5, cy: .52, nx: 0, ny: 1 });
+  tl.to(X.rig, { px: -.6, py: 1.02, pz: 2.5, tz: 1.5, duration: B(3), ease: 'sine.inOut' }, 0);
+  // camera B: crane up and orbit into the wide reveal (Omar, Khalid, Faisal still dark)
+  tl.to(X.rig, { px: 1.25, py: 6.3, pz: 3.7, tx: 0, ty: 0, tz: .1, fov: 42, duration: B(8.7) - B(3), ease: 'power2.inOut' }, B(3))
+    .to(X.dof, { amt: 0, duration: 1.1, ease: 'power1.in' }, B(3))
+    .to(X.rig, { px: 1.0, py: 5.9, pz: 3.5, duration: B(9.7) - B(8.7), ease: 'none' }, B(8.7));
+  // 1) the drop: Omar, Khalid, You check in on four heavy beats, camera whips to each
+  whip(B(10), { px: 1.62, py: 1.78, pz: 2.12, tx: .66, ty: .07, tz: .5, fov: 36 });
+  tl.to(X.rig, { px: 1.55, py: 1.7, pz: 2.04, duration: .14, ease: 'sine.out' }, B(10));
+  whip(B(11), { px: -1.62, py: 1.72, pz: .88, tx: -.52, ty: .07, tz: -.68, fov: 36 });
+  tl.to(X.rig, { px: -1.55, py: 1.64, pz: .8, duration: .14, ease: 'sine.out' }, B(11));
+  whip(B(12), { px: .42, py: 1.75, pz: 3.32, tx: -.45, ty: .07, tz: 1.72, fov: 36 });
+  tl.to(X.rig, { px: .36, py: 1.67, pz: 3.24, duration: .14, ease: 'sine.out' }, B(12));
+  checkIn('omar', B(10)); checkIn('khalid', B(11)); checkIn('you', B(12));
+  tagIn('omar', B(10) + .05, B(12.8)); tagIn('khalid', B(11) + .05, B(12.8)); tagIn('you', B(12) + .05, B(12.8));
+  [10, 11, 12].forEach(i => kick(B(i)));
+  // 2) Faisal sleeps: low angle across the glass, red light breathing, focus pull
+  whip(B(13), { px: -.62, py: 3.3, pz: .32, tx: .5, ty: .07, tz: -1.75, fov: 34 }, .32);
+  tl.set(st.faisal, { red: 1 }, B(13)).set(X.dof, { amt: .006, w: .16, cx: .5, cy: .5, nx: 0, ny: 0 }, B(13));
+  tagIn('faisal', B(13) + .1, B(15.6));
+  tl.to(X.rig, { px: -.3, py: 2.6, pz: -.02, duration: B(15.6) - B(13), ease: 'sine.inOut' }, B(13));
+  kick(B(13), .01);
+  // 3) you open the crew and push onto "Nudge Faisal"
+  const BT = P.you.world(195, 437);
+  tl.set(X.dof, { amt: 0 }, B(15.6));
+  whip(B(16), { px: BT.x, py: BT.y + 1.25, pz: BT.z + .95, tx: BT.x, ty: BT.y, tz: BT.z, fov: 30 }, .4);
+  tl.to(X.rig, { py: BT.y + .74, pz: BT.z + .58, duration: B(17) - B(16), ease: 'power2.in' }, B(16))
+    .set(X.dof, { amt: .009, w: .12, cx: .5, cy: .5, nx: 0, ny: 1 }, B(16));
+  // tap
+  const [tx, ty] = P.you.pt(195, 437); P.you.tap.position.x = tx; P.you.tap.position.y = ty;
+  tl.fromTo(P.you.tap.material, { opacity: .9 }, { opacity: 0, duration: .45, immediateRender: false }, B(17) - .04)
+    .fromTo(P.you.tap.scale, { x: .5, y: .5 }, { x: 2.6, y: 2.6, duration: .45, ease: 'power2.out', immediateRender: false }, B(17) - .04);
+  kick(B(17), .016); X.flash(B(17), .22);
+  // 4) chase cam rides the comet low over the glass
+  X.camFn = t => {
+    const u = cometU(t), a = Math.max(0, u - .14), b = Math.min(1, u + .05);
+    const P0 = curve.getPointAt(a), P1 = curve.getPointAt(b), Tg = curve.getTangentAt(Math.min(.999, Math.max(.001, u)));
+    const side = new THREE.Vector3(-Tg.z, 0, Tg.x).normalize();
+    const head = v => { const q = curve.getTangentAt(X.clamp(v, .001, .999)); return Math.atan2(q.x, -q.z); };
+    return { p: [P0.x + side.x * .3, P0.y + .3, P0.z + side.z * .3], q: P1.toArray(), fov: 50, roll: X.clamp((head(u + .05) - head(u - .05)) * 1.1, -.35, .35) };
+  };
+  tl.to(X.dof, { amt: 0, duration: .3 }, B(17) + .1)
+    .to(X.rig, { chase: 1, duration: .55, ease: 'power2.inOut' }, B(17) + .1)
+    .set(X.rig, { px: 1.2, py: .95, pz: -.45, tx: .55, ty: .1, tz: -1.65, fov: 36, roll: 0 }, B(20))
+    .to(X.rig, { chase: 0, duration: .5, ease: 'power2.inOut' }, B(22.35));
+  // 5) impact: Faisal's phone wakes up hard
+  checkIn('faisal', B(23), 1.5);
+  tl.set(st.faisal, { glow: 0 }, B(23) + .26).to(st.faisal, { buzz: .7, duration: .01 }, B(25)).to(st.faisal, { buzz: 0, duration: .35 }, B(25) + .01)
+    .to(st.faisal, { buzz: .7, duration: .01 }, B(26)).to(st.faisal, { buzz: 0, duration: .35 }, B(26) + .01)
+    .fromTo(X.rig, { shake: 1 }, { shake: 0, duration: .5, ease: 'power2.out', immediateRender: false }, B(23));
+  kick(B(23), .022); X.flash(B(23), .5);
+  tl.to(X.rig, { px: .82, py: 1.5, pz: -.5, tx: .55, ty: .1, tz: -1.52, duration: B(26.9) - B(23), ease: 'sine.inOut' }, B(23) + .05);
+  // 6) live photo check-in, shutter, done
+  whip(B(27), { px: .6, py: 2.05, pz: -.55, tx: .55, ty: .1, tz: -1.68, fov: 34 }, .32);
+  tl.to(X.rig, { py: 1.9, pz: -.66, duration: B(31.5) - B(27), ease: 'sine.inOut' }, B(27));
+  const [sx, sy] = P.faisal.pt(195, 723);
+  tl.set(P.faisal.tap.position, { x: sx, y: sy }, B(28))
+    .fromTo(P.faisal.tap.material, { opacity: .9 }, { opacity: 0, duration: .4, immediateRender: false }, B(29) - .04)
+    .fromTo(P.faisal.tap.scale, { x: .8, y: .8 }, { x: 2.4, y: 2.4, duration: .4, ease: 'power2.out', immediateRender: false }, B(29) - .04)
+    .fromTo(st.faisal, { hot: 4 }, { hot: 1, duration: .35, ease: 'power2.out', immediateRender: false }, B(29));
+  X.flash(B(29), .4); kick(B(29), .012);
+  tl.set(st.faisal, { red: 0 }, B(30)); checkIn('faisal', B(30)); kick(B(30));
+  tagIn('faisal', B(30) + .05, B(32.2));
+  // 7) crane up into the hero top view: 4/4, beams link the crew
+  tl.to(X.rig, { px: 0, py: 9.2, pz: .05, tx: 0, ty: 0, tz: -.95, fov: 42, duration: B(33) - B(31.6), ease: 'power3.inOut' }, B(31.6))
+    .to(X.rig, { keyframes: [{ roll: .32, duration: (B(33) - B(31.6)) / 2, ease: 'sine.in' }, { roll: 0, duration: (B(33) - B(31.6)) / 2, ease: 'sine.out' }] }, B(31.6));
+  NAMES.forEach(n => { tl.to(st[n], { glow: 1.25, duration: .2 }, B(33)); checkIn(n, B(33) + (n === 'you' ? 0 : n === 'omar' ? .05 : n === 'khalid' ? .1 : .15)); });
+  kick(B(33), .02); X.flash(B(33), .3); kick(B(34), .012);
+  [36, 37].forEach(i => NAMES.forEach(n => tl.fromTo(st[n], { glow: 2 }, { glow: 1.1, duration: .4, immediateRender: false }, B(i))));
+  tl.to(X.rig, { py: 10.2, pz: .1, roll: -.1, duration: B(39.5) - B(33), ease: 'sine.inOut' }, B(33));
+  // 3D world fades out under the favourite ending
+  tl.to('#gl', { opacity: 0, filter: 'blur(14px)', duration: .55, ease: 'power2.in' }, B(39.4));
+
+  // =================== words ===================
+  const l1 = X.line([['What'], ['if'], ['your'], ['crew']], 250); X.wordsIn(l1, [B(0), B(.5), B(1), B(1.5)]); X.out(l1, B(5.6));
+  const l2 = X.line([['could'], ['see'], ['you'], ['skip?', 'or']], 360); X.wordsIn(l2, [B(2), B(2.5), B(3), B(3.5)]); X.out(l2, B(5.6));
+  const l3 = X.line([['Who’s'], ['actually'], ['going?', 'hl']], 320); X.wordsIn(l3, [B(6), B(6.5), B(7)]); X.out(l3, B(9.6));
+  const l4 = X.line([['Faisal?', 'or']], 300, 'big', 150); X.wordsIn(l4, [B(13)]); X.out(l4, B(14.55));
+  const l5 = X.line([['Not'], ['today.', 'hl']], 310); X.wordsIn(l5, [B(14.6), B(15)]); X.out(l5, B(16.3));
+  const l6 = X.line([['One'], ['tap.', 'hl']], 300); X.wordsIn(l6, [B(18), B(18.5)]); X.out(l6, B(19.9));
+  const l7 = X.line([['Instant'], ['nudge.', 'hl']], 300); X.wordsIn(l7, [B(20), B(20.5)]); X.out(l7, B(22.3));
+  const l8 = X.line([['Live'], ['photo'], ['check-in.', 'hl']], 300); X.wordsIn(l8, [B(27), B(27.5), B(28)]); X.out(l8, B(29.4));
+  const l9 = X.line([['Streak'], ['saved.', 'or']], 300); X.wordsIn(l9, [B(30), B(30.5)]); X.out(l9, B(32.2));
+  const l10 = X.line([['4/4']], 170, 'big', 200); X.wordsIn(l10, [B(33)]); X.out(l10, B(39.3));
+  const l11 = X.line([['Nobody'], ['gets'], ['left'], ['behind.', 'hl']], 390, '', 70); X.wordsIn(l11, [B(34), B(34.5), B(35), B(35.5)]); X.out(l11, B(39.3));
+  // the owner's favourite ending
+  X.ending(40);
+}
+X.start(X.loadTex(TEX).then(build));
+</script>
+</body>
+</html>

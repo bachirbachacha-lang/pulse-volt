@@ -1,0 +1,45 @@
+/* CrewUp X reels: shared look (dark studio, blue glow, kinetic type, the owner's favourite ending) */
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Inter;src:url(../fonts/inter-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:Sora;src:url(../fonts/sora-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:Sora;src:url(../fonts/sora-latin-800-normal.woff2);font-weight:800}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--b:#1F6BFF;--b2:#7aa6ff;--o:#FF7A2F;--g:#FFC83D;--grn:#2bd46b;--mut:#8a93a8}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#020308;font-family:Inter,"Noto Color Emoji",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.abs{position:absolute}
+#bgdom{position:absolute;inset:0;background:#030409}
+#glow{position:absolute;left:-300px;top:200px;width:1680px;height:1680px;border-radius:50%;filter:blur(60px)}
+#glow2{position:absolute;left:200px;top:900px;width:900px;height:900px;border-radius:50%;filter:blur(80px);opacity:.6}
+#gl{position:absolute;inset:0;width:1080px;height:1920px;z-index:5}
+#lines{position:absolute;inset:0;z-index:20;pointer-events:none}
+.line{position:absolute;left:40px;right:40px;text-align:center;font:600 92px/1.1 Inter;letter-spacing:-.045em;text-shadow:0 4px 40px rgba(0,0,0,.6)}
+.line .w{display:inline-block;margin:0 .14em;will-change:transform,opacity,filter}
+.line .hl{color:var(--b2);text-shadow:0 0 50px rgba(31,107,255,.9)}
+.line .or{color:var(--o);text-shadow:0 0 50px rgba(255,122,47,.85)}
+.line .gd{color:var(--g);text-shadow:0 0 50px rgba(255,200,61,.85)}
+.line .gn{color:#5df28f;text-shadow:0 0 50px rgba(43,212,107,.85)}
+.small{font:500 40px/1.3 Inter;letter-spacing:-.01em;color:#c3cbdc}
+.big{font:800 170px/1 Sora;letter-spacing:-.06em}
+#vig{position:absolute;inset:0;background:radial-gradient(85% 60% at 50% 50%,rgba(0,0,0,0) 50%,rgba(0,0,0,.65) 100%);z-index:40;pointer-events:none}
+#tag{position:absolute;left:50px;top:80px;display:flex;align-items:center;gap:12px;z-index:60}
+#tag img{width:52px;height:52px;border-radius:13px}
+#tag span{font:600 20px Inter;letter-spacing:.06em;color:#9aa6bd;border:1.5px solid rgba(154,166,189,.3);padding:9px 12px;border-radius:10px;background:rgba(0,0,0,.3)}
+#flash{position:absolute;inset:0;background:#dfe9ff;mix-blend-mode:screen;opacity:0;z-index:70;pointer-events:none}
+#fade{position:absolute;inset:0;background:#000;z-index:80;pointer-events:none}
+/* favourite ending */
+#endWrap{position:absolute;inset:0;z-index:30}
+#rays{left:40px;top:460px;width:1000px;height:1000px;border-radius:50%;background:conic-gradient(from 0deg,rgba(31,107,255,0),rgba(31,107,255,.35),rgba(122,166,255,0) 12%,rgba(31,107,255,0) 25%,rgba(122,166,255,.3) 37%,rgba(31,107,255,0) 50%,rgba(31,107,255,.35) 62%,rgba(31,107,255,0) 75%,rgba(122,166,255,.3) 87%,rgba(31,107,255,0));-webkit-mask:radial-gradient(circle,#000 20%,transparent 70%);mask:radial-gradient(circle,#000 20%,transparent 70%)}
+#dot{left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 40px #fff}
+#ring{left:390px;top:810px;width:300px;height:300px;border-radius:50%;border:3px solid rgba(255,255,255,.8)}
+.burst{left:390px;top:810px;width:300px;height:300px;border-radius:80px;border:4px solid rgba(122,166,255,.9)}
+#logoWrap{left:380px;top:800px;width:320px;height:320px;border-radius:80px;overflow:hidden;box-shadow:0 0 140px rgba(31,107,255,.9)}
+#logoWrap img{width:100%;height:100%}
+#logoShine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.6) 50%,rgba(255,255,255,0) 65%)}
+#wm{left:0;right:0;top:1170px;text-align:center;font:800 150px/1 Sora;letter-spacing:-.06em}
+#wm span{display:inline-block}
+#cs{left:0;right:0;top:1350px;text-align:center;font:600 40px Inter;color:#b9c2d6}
+#cta{left:150px;right:150px;top:1450px;text-align:center;background:var(--b);border-radius:30px;padding:26px 0;font:700 40px Inter;box-shadow:0 0 70px rgba(31,107,255,.7);overflow:hidden}
+#ctaShine{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.45) 50%,rgba(255,255,255,0) 65%)}
+#handle{left:0;right:0;top:1580px;text-align:center;font:700 36px Inter;color:var(--b2)}
