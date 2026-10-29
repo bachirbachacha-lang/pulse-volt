@@ -169,6 +169,15 @@ document.body.innerHTML = document.body.innerHTML.replace('%%CARDS%%',
 const camY = document.querySelector('[data-snap="cam_faisal"]').cloneNode(true);
 camY.dataset.snap = 'cam_you'; camY.querySelector('.sb span').textContent = '6:01';
 document.querySelector('[data-snap="cam_faisal"]').after(camY);
+// 16:9 versions (home-button phones like the owner's real phone): 390 x 693 pt, no home bar
+['lock_faisal', 'cam_faisal', 'done_faisal', 'app_you', 'app_you_sent', 'lock_you'].forEach(n => {
+  const src = document.querySelector(`[data-snap="${n}"]`), c = src.cloneNode(true);
+  c.dataset.snap = n + '_169'; c.style.height = '693px';
+  c.querySelectorAll('.hi').forEach(h => h.remove());
+  if (n === 'cam_faisal') { const v = c.children[2]; v.style.height = '440px'; c.children[3].style.bottom = '40px'; }
+  if (n.startsWith('app_you')) c.querySelector('.tabbar').style.height = '62px';
+  src.after(c);
+});
 </script>
 </body>
 </html>
