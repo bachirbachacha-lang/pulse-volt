@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stocks Concept Rebuild Vertical</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* Rebuild of the owner's reference ad (dnyxstudios' "Stocks" app concept, 16:9), made at the owner's request
+   ("the same exact one"; the creator gave them permission): same shots, text and cut times as the original,
+   played over the original soundtrack (music + AI voice). Ends on the creator's "dnyxstudios" card; TikTok's
+   watermark and end screen were added by TikTok, so they are left out. Vertical 1080x1920 cut of x/exact.html
+   (same timeline and content, shots laid out for portrait like x/simple.html). */
+#bg{position:absolute;inset:0;background-color:#fff}
+#bgdom{opacity:0}
+#gl{opacity:0}
+#stage{position:absolute;inset:0;z-index:10;perspective:2200px}
+.shot{position:absolute;inset:0;visibility:hidden;transform-style:preserve-3d}
+.ink{color:#111114}
+.tx{position:absolute;left:0;right:0;top:878px;text-align:center;font:600 66px/1.1 Inter;letter-spacing:-.03em}
+.tx .w{display:inline-block;margin:0 .03em}
+.mut{color:#8e8e93}
+.up{color:#34C759}.dn{color:#FF3B30}
+/* portfolio widget */
+.wid{position:absolute;background:rgba(240,240,244,.94);border-radius:42px;box-shadow:0 30px 80px rgba(40,50,80,.16),0 2px 0 rgba(255,255,255,.9) inset;color:#1c1c1e}
+.pill{display:inline-flex;align-items:center;justify-content:center;height:94px;border-radius:47px;background:#fafafc;font:500 35px Inter;color:#1c1c1e;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+/* finance wall */
+#wall{position:absolute;left:-260px;top:-180px;width:1600px;height:2300px;display:grid;grid-template-columns:repeat(4,1fr);gap:30px;transform-style:preserve-3d}
+.cc{background:#232326;border-radius:30px;padding:26px 28px;color:#f2f2f7;font:500 24px/1.3 Inter;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
+.src{font:600 18px Inter;color:#9a9aa1;margin-bottom:8px}
+.hd{font:700 28px/1.22 Inter;color:#fff}
+.phb{border-radius:16px;margin-top:16px;height:120px}
+.tt{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:6px 14px;font:600 26px Inter;margin-bottom:18px}
+.tt .v{text-align:right;font-weight:500}
+/* search + list */
+#sbar{position:absolute;left:90px;right:90px;top:820px;height:104px;border-radius:52px;background:#2c2c2e;display:flex;align-items:center;padding:0 38px;gap:22px;font:500 38px Inter;color:#fff}
+#sbar .ph{color:#8e8e93}
+.row{position:absolute;left:80px;width:920px;height:150px;display:flex;align-items:center;gap:0}
+.row .nm{font:600 36px Inter;color:#fff}.row .sb{font:500 26px Inter;color:#8e8e93;margin-top:6px}
+.row .val{font:500 36px Inter;color:#fff;text-align:right}.row .dl{font:500 28px Inter;text-align:right;margin-top:6px}
+/* stats grid */
+.ring{position:absolute;width:360px;height:360px;background:#232326;border-radius:44px;border:1px solid rgba(255,255,255,.06);color:#fff}
+.ring svg{position:absolute;left:84px;top:40px}
+.ring b{position:absolute;left:0;right:0;top:101px;text-align:center;font:600 58px Inter;letter-spacing:-.02em}
+.ring span{position:absolute;left:0;right:0;top:262px;text-align:center;font:500 34px Inter}
+#grad{position:absolute;left:470px;top:330px;width:530px;height:750px;border-radius:52px;overflow:hidden;color:#fff;text-align:center;
+  background:linear-gradient(180deg,rgba(255,255,255,0) 52%,#f4f4f6 82%),linear-gradient(120deg,#ff3b55 0%,#f0287a 45%,#d81fa8 100%)}
+#grad b{display:block;font:700 150px/1 Inter;letter-spacing:-.05em;margin-top:96px}
+#grad div{font:500 32px/1.4 Inter;margin-top:20px}
+#recap{position:absolute;left:80px;top:1110px;width:920px;height:400px;border-radius:40px;overflow:hidden;color:#fff;text-align:center}
+#recap .wv,#lap .wv{position:absolute;inset:0}
+#lap{position:absolute;left:420px;top:780px;width:640px;height:300px;perspective:1100px}
+/* widget + detail + filters */
+#w9{position:absolute;left:259px;top:680px;width:562px;height:560px;border-radius:82px;background:#1c1c1e;color:#fff;padding:44px 46px;box-shadow:0 50px 110px rgba(0,0,0,.3);backface-visibility:hidden}
+#w9 .r{display:flex;justify-content:space-between;padding:22px 0}
+#w9 .r+.r{border-top:1px solid rgba(255,255,255,.12)}
+#w9 .r b{font:600 44px Inter}#w9 .r small{display:block;font:500 36px Inter;color:#8e8e93;margin-top:6px}
+#w9 .r .v{text-align:right}#w9 .r .v b{font-weight:500}#w9 .r .v small{color:#34C759}
+#det{position:absolute;left:60px;top:880px;width:960px;height:470px;border-radius:52px;background:#1c1c1e;color:#fff;padding:40px 46px;box-shadow:0 50px 110px rgba(0,0,0,.35);backface-visibility:hidden}
+#flt{position:absolute;left:615px;top:560px;width:405px;height:566px;border-radius:44px;background:rgba(108,108,114,.84);backdrop-filter:blur(20px);color:#fff;padding:36px 34px;box-shadow:0 40px 100px rgba(0,0,0,.35)}
+#flt .it{display:flex;gap:20px;align-items:center;font:500 27px Inter;margin:30px 0}
+/* closing lines + title cards */
+.ln{position:absolute;left:0;right:0;top:920px;text-align:center;font:600 72px/1.1 Inter;letter-spacing:-.03em;color:#111114;white-space:nowrap}
+.ln .w{display:inline-block;margin:0 .12em}
+#stk,#dnyx{position:absolute;left:0;right:0;top:914px;text-align:center;color:#fff;white-space:nowrap}
+#stk{font:600 66px Inter;letter-spacing:-.02em}
+#dnyx{font:600 88px Inter;letter-spacing:-.02em;text-shadow:0 0 18px rgba(255,255,255,.75),0 0 60px rgba(255,255,255,.35)}
+#halo{position:absolute;left:40px;top:610px;width:1000px;height:700px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.34),rgba(255,255,255,.1) 50%,rgba(255,255,255,0))}
+#noise{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:60;opacity:0;pointer-events:none;image-rendering:pixelated}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="mbA" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbAb" stdDeviation="0 0"/></filter>
+  <filter id="mbB" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbBb" stdDeviation="0 0"/></filter>
+</svg>
+<div id="bg"></div>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="stage">
+  <div class="shot" id="s1"><div class="tx ink" id="t1"></div></div>
+  <div class="shot" id="s2">
+    <div class="wid" id="w2" style="left:165px;top:735px;width:750px;height:452px;padding:46px 54px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 43px Inter;letter-spacing:-.01em">Your Portfolio</span><span class="mut" style="font:500 24px Inter">Account &amp; Routing&nbsp;&nbsp;›</span></div>
+      <div id="cash" style="font:700 108px/1 Inter;letter-spacing:-.03em;margin-top:38px;height:108px"></div>
+      <div style="display:flex;gap:32px;margin-top:54px"><span class="pill" style="width:294px">Add Cash</span><span class="pill" style="width:294px">Cash Out</span></div>
+    </div>
+  </div>
+  <div class="shot" id="s3"><div class="tx ink" id="t3"></div></div>
+  <div class="shot" id="s4" style="perspective:1600px"><div id="wall"></div></div>
+  <div class="shot" id="s6">
+    <div id="sbar"><svg width="40" height="40" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#8e8e93" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="#8e8e93" stroke-width="2.4" stroke-linecap="round"/></svg><span id="q"></span><span style="flex:1"></span><svg width="34" height="40" viewBox="0 0 20 24"><rect x="6" y="2" width="8" height="13" rx="4" fill="#8e8e93"/><path d="M3 11a7 7 0 0 0 14 0M10 18v4" stroke="#8e8e93" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+    <div id="list"></div>
+  </div>
+  <div class="shot" id="s8">
+    <div class="ring" style="left:80px;top:330px"><svg width="192" height="192" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#3a3a3c" stroke-width="3"/><circle id="rc1" cx="50" cy="50" r="44" fill="none" stroke="#f2f2f7" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5" transform="rotate(-90 50 50)"/></svg><b id="rv1">0%</b><span>ROI</span></div>
+    <div class="ring" style="left:80px;top:720px"><svg width="192" height="192" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#3a3a3c" stroke-width="3"/><circle id="rc2" cx="50" cy="50" r="44" fill="none" stroke="#f2f2f7" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5" transform="rotate(-90 50 50)"/></svg><b id="rv2">0%</b><span>ROE</span></div>
+    <div id="grad"><b id="gv">0k</b><div>Profit in the past<br>calendar year.</div></div>
+    <div id="recap"><div class="wv" id="wv1"></div>
+      <div style="position:relative;margin-top:104px;font:500 27px Inter;color:rgba(255,255,255,.72)">By Apple Stocks</div>
+      <div style="position:relative;margin-top:10px;font:600 56px Inter;letter-spacing:-.02em">View your annual report</div>
+      <div style="position:relative;margin-top:8px;font:500 27px Inter;color:rgba(255,255,255,.72)">Click here</div></div>
+    <div id="lap">
+      <div id="lscr" style="position:absolute;left:250px;top:0;width:390px;height:262px;border-radius:20px;background:#0b0b0d;padding:12px;transform-origin:0 100%;transform:rotateY(-30deg) rotateX(6deg);box-shadow:0 30px 70px rgba(0,0,0,.45)"><div style="position:absolute;inset:12px;border-radius:10px;overflow:hidden"><div class="wv" id="wv2"></div></div></div>
+      <div style="position:absolute;left:0;top:280px;width:640px;height:14px;border-radius:3px 3px 14px 14px;background:linear-gradient(#e6e7ea,#a9abb1 70%,#7d8086);transform:skewX(-8deg);box-shadow:0 12px 30px rgba(0,0,0,.35)"></div>
+    </div>
+  </div>
+  <div class="shot" id="s9">
+    <div id="w9"></div>
+    <div id="det" style="visibility:hidden"></div>
+    <div id="flt" style="visibility:hidden"></div>
+  </div>
+  <div class="shot" id="s10">
+    <div class="ln" id="L1"><span class="w" id="L1a">No</span><span class="w" id="L1b">clutter.</span></div>
+    <div class="ln" id="L2"><span class="w" id="L2a">No</span><span class="w" id="L2b">chaos.</span></div>
+    <div class="ln" id="L3"><span class="w" id="L3a">Just</span><span class="w" id="L3b" style="color:#3a8ee6">simplicity.</span></div>
+  </div>
+  <div class="shot" id="s11">
+    <div id="stk"><svg id="apl" width="54" height="64" viewBox="0 0 24 28" style="vertical-align:-6px;margin-right:16px"><path fill="#fff" d="M16.1 14.9c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2.1-.9-3.4-.9-1.8 0-3.4 1-4.3 2.6-1.8 3.2-.5 7.9 1.3 10.5.9 1.3 1.9 2.7 3.3 2.6 1.3-.1 1.8-.9 3.4-.9 1.6 0 2 .9 3.4.8 1.4 0 2.3-1.3 3.2-2.6 1-1.5 1.4-2.9 1.4-3-.1 0-2.8-1.1-2.9-4.1zM13.5 7.1c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3.1 1.6-.7.8-1.3 2-1.1 3.2 1.2.1 2.4-.6 3.1-1.5z"/></svg>Stocks</div>
+    <div id="halo"></div>
+    <div id="dnyx">dnyxstudios</div>
+  </div>
+</div>
+<canvas id="noise" width="270" height="480"></canvas>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script src="../img/simple-beat.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+const { tl, $ } = X;
+X.DUR = 23.0;
+const show = (id, a, b) => tl.set('#' + id, { visibility: 'visible' }, a).set('#' + id, { visibility: 'hidden' }, b);
+const words = (el, list) => { $(el).innerHTML = list.map(([w, c], i) => `<span class="w" id="${el.slice(1)}w${i}" style="${c || ''}">${w}</span>`).join(' '); };
+const wIn = (id, i, t, d = .3) => tl.fromTo(`#${id}w${i}`, { opacity: 0, y: 26, filter: 'blur(16px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: d, ease: 'power3.out' }, t);
+const mb = (f, t, amt, d = .16) => tl.fromTo('#' + f, { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: amt }, duration: d, ease: 'power2.in', immediateRender: false }, t);
+const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+// price line with a soft area under it (green up, red down), same shape every frame
+const chart = (seed, up, w, h, area = true) => {
+  let y = up ? h * .72 : h * .28; const p = [];
+  for (let i = 0; i <= 40; i++) { y += (X.hash(seed * 17 + i) - (up ? .58 : .42)) * h * .14; y = Math.max(4, Math.min(h - 4, y)); p.push(`${(i * w / 40).toFixed(1)},${y.toFixed(1)}`); }
+  const c = up ? '#34C759' : '#FF3B30';
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="display:block">${area ? `<polygon points="0,${h} ${p.join(' ')} ${w},${h}" fill="${c}" opacity=".18"/>` : ''}<polyline points="${p.join(' ')}" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round"/></svg>`;
+};
+// layered wave wallpaper (purple / magenta / pink / blue), used on the report card and the laptop screen
+const waves = (id, w, h) => `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs>
+  <linearGradient id="${id}0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1678"/><stop offset="1" stop-color="#150c46"/></linearGradient>
+  <linearGradient id="${id}1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5b2bd8"/><stop offset=".6" stop-color="#b52fd6"/><stop offset="1" stop-color="#ff4fa0"/></linearGradient>
+  <linearGradient id="${id}2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff3d6e"/><stop offset=".5" stop-color="#ff5fb8"/><stop offset="1" stop-color="#8f3cff"/></linearGradient>
+  <linearGradient id="${id}3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f5cff"/><stop offset=".55" stop-color="#7b3cff"/><stop offset="1" stop-color="#ff3d8b"/></linearGradient>
+  <linearGradient id="${id}4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a59"/><stop offset="1" stop-color="#e0218a"/></linearGradient></defs>
+  <rect width="${w}" height="${h}" fill="url(#${id}0)"/>
+  <path d="M0 ${h * .38} C ${w * .22} ${h * .08}, ${w * .48} ${h * .62}, ${w * .72} ${h * .3} S ${w * .95} ${h * .05}, ${w} ${h * .12} L ${w} ${h} L 0 ${h} Z" fill="url(#${id}1)" opacity=".9"/>
+  <path d="M0 ${h * .62} C ${w * .2} ${h * .35}, ${w * .45} ${h * .9}, ${w * .7} ${h * .55} S ${w * .92} ${h * .3}, ${w} ${h * .42} L ${w} ${h} L 0 ${h} Z" fill="url(#${id}2)" opacity=".85"/>
+  <path d="M0 ${h * .82} C ${w * .25} ${h * .6}, ${w * .5} ${h * 1.05}, ${w * .75} ${h * .74} S ${w * .95} ${h * .6}, ${w} ${h * .66} L ${w} ${h} L 0 ${h} Z" fill="url(#${id}3)" opacity=".9"/>
+  <path d="M${w * .35} ${h} C ${w * .5} ${h * .82}, ${w * .65} ${h * .95}, ${w * .85} ${h * .78} S ${w} ${h * .85}, ${w} ${h * .9} L ${w} ${h} Z" fill="url(#${id}4)" opacity=".7"/></svg>`;
+
+// ---------- backgrounds ----------
+const solid = c => ({ backgroundImage: 'none', backgroundColor: c });
+tl.set('#bg', { backgroundImage: 'radial-gradient(120% 80% at 50% 45%,#ffffff 0%,#eef4ff 55%,#e2ecfb 100%)', backgroundColor: '#ffffff' }, 0)
+  .set('#bg', { backgroundImage: 'radial-gradient(90% 80% at 50% 50%,#1d1311 0%,#0c0807 100%)', backgroundColor: '#0c0807' }, 3.58)
+  .set('#bg', solid('#ffffff'), 5.76)
+  .set('#bg', solid('#1c1c1e'), 7.72)
+  .set('#bg', solid('#8d8e93'), 12.97).to('#bg', { backgroundColor: '#e5e5ea', duration: .6, ease: 'power2.out' }, 13.05)
+  .set('#bg', { backgroundImage: 'radial-gradient(100% 70% at 50% 45%,#ebeaf0,#dedde4)', backgroundColor: '#e5e4ea' }, 17.72)
+  .set('#bg', { backgroundImage: 'radial-gradient(90% 80% at 50% 50%,#22221d,#161613)', backgroundColor: '#1c1c18' }, 20.95);
+
+// ---------- S1 "We've all been there..." ----------
+words('#t1', [['We’ve'], ['all'], ['been'], ['there...']]);
+show('s1', 0, 1.33);
+[.08, .2, .32, .44].forEach((t, i) => wIn('t1', i, t));
+tl.set('#s1', { filter: 'url(#mbA)' }, 1.1).to('#t1', { x: -220, opacity: 0, duration: .22, ease: 'power2.in' }, 1.11);
+mb('mbAb', 1.1, '60 0', .2);
+tl.set('#mbAb', { attr: { stdDeviation: '0 0' } }, 1.34).set('#s1', { filter: 'none' }, 1.34);
+
+// ---------- S2 "Your Portfolio" widget, the balance types in ----------
+show('s2', 1.34, 2.88);
+tl.fromTo('#w2', { scale: .78, opacity: 0, filter: 'blur(22px)' }, { scale: 1, opacity: 1, filter: 'blur(0px)', duration: .38, ease: 'power3.out' }, 1.36)
+  .to('#w2', { scale: 1.05, duration: .8, ease: 'none' }, 1.74)
+  .to('#w2', { scale: 1.32, opacity: 0, filter: 'blur(26px)', duration: .3, ease: 'power2.in' }, 2.56);
+
+// ---------- S3 "but instead..." ----------
+words('#t3', [['but'], ['instead...']]);
+show('s3', 2.88, 3.58);
+wIn('t3', 0, 2.9, .22); wIn('t3', 1, 3.03, .26);
+tl.fromTo('#t3', { scale: 1.28 }, { scale: 1.45, duration: .52, ease: 'none' }, 2.9)
+  .to('#t3', { opacity: 0, filter: 'blur(14px)', scale: 1.58, duration: .16, ease: 'power2.in' }, 3.42);
+
+// ---------- S4 the noise: a wall of tickers, charts and market headlines ----------
+const tick = (s, v, up) => `<span><span class="${up ? 'up' : 'dn'}" style="font-size:.8em;margin-right:4px">${up ? '▲' : '▼'}</span>${s}</span>`;
+const tbl = `<div class="tt">${tick('AAPL', 0, 1)}<span class="v">229.00</span>${tick('NVDA', 0, 0)}<span class="v">119.37</span>${tick('MSFT', 0, 1)}<span class="v">417.14</span>${tick('QCOM', 0, 0)}<span class="v">175.30</span>${tick('TSLA', 0, 1)}<span class="v">213.97</span>${tick('T', 0, 0)}<span class="v">19.90</span></div>`;
+const photo = g => `<div class="phb" style="background:${g}"></div>`;
+const CARDS = [
+  `<div class="src">MarketWatch</div><div class="hd">Tesla recalls some Model Y EVs, stock jumps toward 7-day win streak</div>${photo('linear-gradient(135deg,#a7b0ba,#46505c 55%,#cfd4da)')}`,
+  `${tbl}<div class="src">Seeking Alpha</div><div class="hd">Apple reportedly acquired AR start-up Mira as it pushes new headset...</div>`,
+  `<div style="font:600 30px Inter">${tick('AAPL', 0, 1)}</div><div class="mut">Apple Inc.</div><div style="display:grid;grid-template-columns:auto auto;gap:6px 30px;margin:16px 0;font:500 22px Inter"><span class="mut">Open</span><span>226.18</span><span class="mut">High</span><span>230.40</span><span class="mut">Low</span><span>225.72</span></div><div style="font:500 52px Inter">229.00</div>`,
+  `<div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="font:500 40px Inter">229.00<div class="up" style="font-size:24px">+2.82</div></div></div><div style="margin-top:20px">${chart(3, 1, 360, 150)}</div>`,
+  `<div style="display:flex;justify-content:space-between"><div><div style="font:600 28px Inter">${tick('AAPL', 0, 1)}</div><div class="mut">Apple Inc.</div></div><div style="text-align:right;font:500 28px Inter">229.00<div class="up" style="font-size:22px">+2.82</div></div></div><div style="margin:12px 0">${chart(5, 1, 360, 70, false)}</div><div class="src">CNBC</div><div class="hd">Apple to open first store in Malaysia as Asia expansion continues</div>`,
+  `<div style="font:500 34px Inter">175.30</div><div class="dn">−0.21</div>${chart(8, 0, 300, 80, false)}<div style="font:500 34px Inter;margin-top:14px">19.90</div><div class="dn">−0.60</div>${chart(9, 0, 300, 80, false)}`,
+  `<div class="hd">Microsoft Delays Windows AI Tool After Outcry</div>${photo('linear-gradient(160deg,#3b6fd4,#1c2c55 60%,#7aa0e8)')}`,
+  `<div style="margin:0 auto;width:150px;height:300px;border-radius:26px;background:#0b0b0c;border:4px solid #3a3a3e;padding:16px 10px"><div style="font:600 14px Inter">Stocks</div>${chart(11, 1, 122, 70)}<div style="height:8px;border-radius:4px;background:#2c2c2e;margin:10px 0"></div><div style="height:8px;border-radius:4px;background:#2c2c2e;width:70%"></div></div>`,
+  `<div class="hd">Buy-now, pay-later stocks draw fresh interest</div>${photo('linear-gradient(150deg,#d8c6a8,#6b5a46 60%,#b9a58a)')}`,
+  `<div style="display:flex;justify-content:space-between"><div><div style="font:600 28px Inter">${tick('MSFT', 0, 1)}</div><div class="mut">Microsoft Corporation</div></div><div style="text-align:right;font:500 28px Inter">417.14<div class="up" style="font-size:22px">+0.86</div></div></div><div style="margin-top:14px">${chart(13, 1, 360, 90)}</div>`,
+  `<div style="display:flex;justify-content:space-between"><div><div style="font:600 28px Inter">${tick('NVDA', 0, 0)}</div><div class="mut">NVIDIA Corporation</div></div><div style="text-align:right;font:500 28px Inter">119.37<div class="dn" style="font-size:22px">−4.43</div></div></div><div style="margin-top:14px">${chart(17, 0, 360, 90)}</div>`,
+  `<div class="mut" style="font-size:20px">Apple Inc. · AAPL</div><div style="font:500 64px Inter;margin-top:10px">229.00</div><div class="up">+2.82 (+1.25%)</div><div style="margin-top:14px">${chart(19, 1, 360, 110)}</div>`,
+];
+$('#wall').innerHTML = Array.from({ length: 30 }, (_, i) => `<div class="cc" style="height:${[440, 360, 300, 480, 400, 330, 380][i % 7]}px">${CARDS[(i * 7) % CARDS.length]}</div>`).join('');
+show('s4', 3.6, 5.8);
+tl.fromTo('#wall', { rotateY: -16, rotateX: 10, z: 300, x: 60, y: 80 }, { rotateY: -6, rotateX: 4, z: 190, x: -40, y: -60, duration: 2.0, ease: 'sine.inOut' }, 3.6)
+  .fromTo('#wall', { filter: 'blur(10px)' }, { filter: 'blur(0px)', duration: .35, ease: 'power2.out' }, 3.64)
+  .to('#wall', { filter: 'blur(4px)', duration: .3, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 4.55)
+  .to('#wall', { z: 900, opacity: 0, filter: 'blur(18px)', duration: .26, ease: 'power2.in' }, 5.54);
+// TV static into the wall
+const nz = $('#noise').getContext('2d');
+const noiseFrame = s => { const id = nz.createImageData(270, 480); let v = s * 99991; for (let i = 0; i < id.data.length; i += 4) { v = (v * 1103515245 + 12345) % 2147483648; const c = v % 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = c; id.data[i + 3] = 255; } nz.putImageData(id, 0, 0); };
+tl.set('#noise', { opacity: .9 }, 3.58).to('#noise', { opacity: 0, duration: .14, ease: 'none' }, 3.62);
+
+// ---------- S5 3D phone in silver, pink and blue ribbons (three.js) ----------
+const ctx = X.three({ fov: 30, bloom: .3, radius: .5, threshold: 1.4 });
+X.ctx = null;  // rendered by hand only while this shot is on screen
+const G = ctx.grade.uniforms; G.vignette.value = .1; G.grain.value = .012; G.lift.value.set(0, 0, 0); G.knee.value = .9; G.fringe.value = .001;
+const S5 = { grey: 0 };
+ctx.drawBg = t => { const g = ctx.bg.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 192); const k = S5.grey;
+  const mix = (a, b) => { const A = hex(a), Bc = hex(b); return `rgb(${A.map((v, i) => Math.round(v + (Bc[i] - v) * k)).join(',')})`; };
+  gr.addColorStop(0, mix('#ffffff', '#9a9da3')); gr.addColorStop(1, mix('#e8eef6', '#7f8288')); g.fillStyle = gr; g.fillRect(0, 0, 108, 192); ctx.bgTex.needsUpdate = true; };
+X.studioEnv(ctx, [[0xffffff, [-5, 4, 6], [8, 5], 1.6], [0xffffff, [6, 2, 4], [3, 9], 1.8], [0xffffff, [0, 9, 0], [14, 4], 1.4], [0xdfe8ff, [-6, -3, -4], [6, 6], 1.2], [0xffffff, [5, -4, -5], [6, 5], 1.0]]);
+X.lights(ctx);
+X.glassMat.envMapIntensity = .3;
+const ribbons = new THREE.Group(); ctx.scene.add(ribbons);
+const phoneRoot = new THREE.Group(); ctx.scene.add(phoneRoot);
+// a flat band along a path; it stands upright (width runs up the screen) and twists a little along its length
+const ribbonGeo = (fn, w, tw, n = 240) => {
+  const pos = new Float32Array((n + 1) * 2 * 3), nor = new Float32Array((n + 1) * 2 * 3), uv = new Float32Array((n + 1) * 2 * 2), idx = [];
+  const up = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i <= n; i++) {
+    const s = i / n, p = fn(s), p2 = fn(Math.min(1, s + .002)), p1 = fn(Math.max(0, s - .002));
+    const T = p2.clone().sub(p1).normalize();
+    const Bn = new THREE.Vector3().crossVectors(T, up).normalize().applyAxisAngle(T, Math.PI / 2 + tw * Math.sin(s * 5.5 + w * 9));
+    const N = new THREE.Vector3().crossVectors(Bn, T).normalize();
+    const a = p.clone().addScaledVector(Bn, w / 2), b = p.clone().addScaledVector(Bn, -w / 2);
+    pos.set([a.x, a.y, a.z, b.x, b.y, b.z], i * 6); nor.set([N.x, N.y, N.z, N.x, N.y, N.z], i * 6); uv.set([s, 0, s, 1], i * 4);
+    if (i < n) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); g.setIndex(idx); return g;
+};
+// [colour, width, radius, start angle (x pi; the camera looks from +z, so 0..1 is in front), turns, height, wobble phase, look, twist]
+const RIB = [[0xf4f5f7, .4, 1.0, 1.25, .75, .62, .2, 'white', .5], [0x3aa4e4, .34, 1.05, .95, .5, -.38, .45, 'blue', .45], [0xbd76ad, .3, .9, 1.0, .3, .25, 0, 'pink', .5], [0x8e9198, .26, 1.0, 1.55, .25, .78, .7, 'silver', .35], [0xf2f3f5, .32, 1.1, 1.6, .65, -.66, .3, 'white', .7]].map(([c, w, R, a0, turns, y0, ph, look, tw]) => {
+  const fn = s => { const a = Math.PI * a0 + s * turns * 6.283; return new THREE.Vector3(Math.cos(a) * R, y0 + .12 * Math.sin(s * 7 + ph) + (s - .5) * .2, Math.sin(a) * R * .8); };
+  const mat = {
+    white: { color: c, emissive: 0x1c1d20, roughness: .45, metalness: 0, clearcoat: .3, envMapIntensity: .6 },
+    blue: { color: c, emissive: 0x0b3352, roughness: .25, metalness: .3, clearcoat: .8, envMapIntensity: 1 },
+    pink: { color: c, emissive: 0x3a1232, roughness: .3, metalness: .2, clearcoat: .7, envMapIntensity: .9 },
+    silver: { color: c, emissive: 0x0d0e10, roughness: .25, metalness: .9, clearcoat: .5, envMapIntensity: 1.2 },
+  }[look];
+  const m = new THREE.Mesh(ribbonGeo(fn, w, tw), new THREE.MeshPhysicalMaterial({ ...mat, clearcoatRoughness: .25, side: THREE.DoubleSide }));
+  m.geometry.setDrawRange(0, 0); ribbons.add(m); return m;
+});
+const R5 = { rise: 0, spin: 0, rib: 0, flat: 0, push: 0 };
+tl.fromTo(R5, { rise: 0 }, { rise: 1, duration: .55, ease: 'power3.out', immediateRender: false }, 5.8)
+  .fromTo(R5, { rib: 0 }, { rib: 1, duration: .75, ease: 'power2.out', immediateRender: false }, 5.98)
+  .fromTo(R5, { spin: 0 }, { spin: 1, duration: 1.9, ease: 'none', immediateRender: false }, 5.8)
+  .fromTo(R5, { flat: 0 }, { flat: 1, duration: .38, ease: 'power3.inOut', immediateRender: false }, 7.2)
+  .fromTo(R5, { push: 0 }, { push: 1, duration: .3, ease: 'power2.in', immediateRender: false }, 7.42)
+  .fromTo(S5, { grey: 0 }, { grey: 1, duration: .14, immediateRender: false }, 7.56);
+// the phone's screen: "Investment. All screens." grid of app screens, "Thanks. For watching."
+const drawScreen = (g, w, h) => {
+  const bgG = g.createLinearGradient(0, 0, 0, h); bgG.addColorStop(0, '#0c0b12'); bgG.addColorStop(.75, '#15112a'); bgG.addColorStop(1, '#2b1747');
+  g.fillStyle = bgG; g.fillRect(0, 0, w, h);
+  const tg = g.createLinearGradient(330, 0, 840, 0); tg.addColorStop(0, '#9b6bff'); tg.addColorStop(1, '#5fa2ff');
+  g.textAlign = 'center';
+  g.fillStyle = tg; g.font = '700 86px Inter'; g.fillText('Investment.', w / 2, 300);
+  g.fillStyle = '#fff'; g.font = '600 58px Inter'; g.fillText('All screens.', w / 2, 378);
+  const rr = (x, y, ww, hh, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + ww, y, x + ww, y + hh, r); g.arcTo(x + ww, y + hh, x, y + hh, r); g.arcTo(x, y + hh, x, y, r); g.arcTo(x, y, x + ww, y, r); g.closePath(); };
+  const cw = 292, chh = 540, gx = 56, x0 = (w - 3 * cw - 2 * gx) / 2, y0 = 470;
+  const acc = ['#8b5cf6', '#ec4899', '#6366f1', '#a855f7', '#f43f5e', '#3b82f6', '#d946ef', '#8b5cf6', '#0ea5e9'];
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+    const i = r * 3 + c, x = x0 + c * (cw + gx), y = y0 + r * (chh + 48);
+    g.fillStyle = '#f3f3f6'; rr(x, y, cw, chh, 34); g.fill();
+    g.fillStyle = acc[i]; rr(x + 24, y + 40, 120, 22, 11); g.fill();
+    g.fillStyle = '#1c1c1e'; g.font = '700 34px Inter'; g.textAlign = 'left'; g.fillText(['$1,025', '12%', 'AAPL', '55%', '100k', 'MSFT', 'Report', 'TSLA', 'Filters'][i], x + 24, y + 118);
+    if (i % 3 === 1) { g.strokeStyle = acc[i]; g.lineWidth = 16; g.beginPath(); g.arc(x + cw / 2, y + 270, 78, -Math.PI / 2, Math.PI * (.3 + i * .1)); g.stroke(); g.strokeStyle = '#dcdce2'; g.beginPath(); g.arc(x + cw / 2, y + 270, 78, Math.PI * (.3 + i * .1), Math.PI * 1.5); g.stroke(); }
+    else { g.strokeStyle = acc[i]; g.lineWidth = 7; g.beginPath(); let yy = y + 300; for (let k = 0; k <= 20; k++) { yy += (X.hash(i * 31 + k) - .55) * 34; yy = Math.max(y + 190, Math.min(y + 360, yy)); k ? g.lineTo(x + 24 + k * (cw - 48) / 20, yy) : g.moveTo(x + 24, yy); } g.stroke(); }
+    for (let k = 0; k < 3; k++) { g.fillStyle = '#dedee4'; rr(x + 24, y + 410 + k * 38, cw - 48 - k * 40, 18, 9); g.fill(); }
+  }
+  g.textAlign = 'center'; g.fillStyle = tg; g.font = '700 66px Inter'; g.fillText('Thanks.', w / 2, 2290);
+  g.fillStyle = '#fff'; g.font = '600 50px Inter'; g.fillText('For watching.', w / 2, 2356);
+};
+
+// ---------- S6/S7 search "Apple Inc." -> stock list, zoom on the red numbers ----------
+const ROWS = [['AAPL', 'Apple Inc.', '229.00', '+2.82', 1], ['MSFT', 'Microsoft Corporation', '417.14', '+0.86', 1], ['TSLA', 'Tesla, Inc.', '213.97', '+6.45', 1], ['NVDA', 'NVIDIA Corporation', '119.37', '−4.43', 0], ['QCOM', 'QUALCOMM Incorporated', '175.30', '−0.21', 0], ['T', 'AT&amp;T Inc.', '19.90', '−0.60', 0]];
+$('#list').innerHTML = ROWS.map(([s, n, v, d, up], i) => `<div class="row" style="top:${1000 + i * 150}px"><div style="width:400px"><div class="nm"><span class="${up ? 'up' : 'dn'}" style="font-size:26px;vertical-align:4px">${up ? '▲' : '▼'}</span>${s}</div><div class="sb">${n}</div></div><div style="width:220px"><div class="val">${v}</div><div class="dl ${up ? 'up' : 'dn'}">${d}</div></div><div style="margin-left:40px">${chart(i * 5 + 2, up, 240, 74)}</div></div>`).join('');
+show('s6', 7.72, 11.32);
+tl.fromTo('#sbar', { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .25 }, 7.76)
+  .fromTo('.row', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .3, stagger: .06, ease: 'power3.out' }, 9.0)
+  .to('#sbar', { y: -390, duration: .3, ease: 'power3.inOut' }, 9.18)
+  .to('#list', { y: -390, duration: .3, ease: 'power3.inOut' }, 9.18)
+  .to('#list', { y: -520, duration: .8, ease: 'sine.inOut' }, 9.5)
+  .to('#s6', { scale: 2, x: -524, y: -524, duration: .85, ease: 'power2.inOut' }, 9.7)
+  .to('#list', { y: -540, duration: .6, ease: 'sine.inOut' }, 10.5)
+  .set('#s6', { filter: 'url(#mbB)' }, 11.06).to('#s6', { x: -2300, duration: .24, ease: 'power2.in' }, 11.08);
+mb('mbBb', 11.06, '70 0', .22);
+tl.set('#mbBb', { attr: { stdDeviation: '0 0' } }, 11.33).set('#s6', { filter: 'none' }, 11.33);
+
+// ---------- S8 ROI / ROE / 100k / annual report / laptop ----------
+$('#wv1').innerHTML = waves('wa', 920, 400); $('#wv2').innerHTML = waves('wb', 366, 238);
+show('s8', 11.32, 12.98);
+tl.set('#s8', { filter: 'url(#mbA)' }, 11.32).fromTo('#s8', { x: 1100, scale: .93 }, { x: 0, scale: .95, duration: .32, ease: 'power3.out' }, 11.32);
+tl.fromTo('#mbAb', { attr: { stdDeviation: '60 0' } }, { attr: { stdDeviation: '0 0' }, duration: .32, ease: 'power2.out', immediateRender: false }, 11.32).set('#s8', { filter: 'none' }, 11.66);
+tl.fromTo('#grad', { y: 40 }, { y: 0, duration: .5 }, 11.4).fromTo('#recap', { y: 60 }, { y: 0, duration: .5 }, 11.45).fromTo('#lap', { y: 80, x: 60 }, { y: 0, x: 0, duration: .6 }, 11.42)
+  .to('#s8', { scale: 1, duration: 1.1, ease: 'sine.inOut' }, 11.66)
+  .to('#s8', { scale: .82, opacity: 0, filter: 'blur(16px)', duration: .22, ease: 'power2.in' }, 12.76);
+
+// ---------- S9/S10 AAPL widget -> detail chart + Filters ----------
+$('#w9').innerHTML = [['AAPL', 'Apple Inc.', '229.00', '+2.82'], ['MSFT', 'Microsoft Cor', '417.14', '+0.86'], ['TSLA', 'Tesla, Inc.', '213.97', '+6.45']].map(([s, n, v, d]) => `<div class="r"><div><b><span class="up" style="font-size:30px;vertical-align:5px">▲</span>${s}</b><small>${n}</small></div><div class="v"><b>${v}</b><small>${d}</small></div></div>`).join('');
+const dPts = (() => { const p = []; let y = 150; for (let i = 0; i <= 70; i++) { const x = i * 6.4; if (i === 2) y = 24; else if (i < 6) y = 120 + i * 6; else { y += (X.hash(i * 13 + 7) - .5) * 22; y = Math.max(95, Math.min(165, y)); } p.push(`${x.toFixed(1)},${y.toFixed(1)}`); } return p.join(' '); })();
+$('#det').innerHTML = `<div style="font:600 39px Inter"><span class="up" style="font-size:28px;vertical-align:5px">▲</span>AAPL</div><div class="mut" style="font:500 33px Inter;margin-top:4px">Apple Inc.</div>
+  <div style="display:grid;grid-template-columns:150px 120px;gap:12px 0;margin-top:30px;font:500 30px Inter"><span class="mut">Open</span><span style="text-align:right">226.18</span><span class="mut">High</span><span style="text-align:right">230.40</span><span class="mut">Low</span><span style="text-align:right">225.72</span></div>
+  <div style="position:absolute;left:46px;bottom:38px;font:500 56px Inter">229.00</div>
+  <svg style="position:absolute;left:450px;top:110px" width="460" height="300" viewBox="0 0 450 270"><defs><linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34C759" stop-opacity=".5"/><stop offset="1" stop-color="#34C759" stop-opacity="0"/></linearGradient></defs>
+    ${[60, 190, 320].map(x => `<line x1="${x}" y1="0" x2="${x}" y2="230" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>`).join('')}<line x1="0" y1="140" x2="450" y2="140" stroke="rgba(52,199,89,.6)" stroke-width="2" stroke-dasharray="6 6"/>
+    <polygon id="carea" points="0,230 ${dPts} 448,230" fill="url(#cf)" opacity="0"/><polyline id="cline" points="${dPts}" fill="none" stroke="#34C759" stroke-width="4" stroke-dasharray="1200" stroke-dashoffset="1200"/>
+    ${[['10 AM', 60], ['12 PM', 190], ['2 PM', 320]].map(([l, x]) => `<text x="${x + 8}" y="262" fill="#8e8e93" font-family="Inter" font-size="20">${l}</text>`).join('')}</svg>`;
+const ico = {
+  clock: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l-3 2" stroke-linecap="round"/></svg>',
+  folder: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 7.5V18a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 18V9a1.5 1.5 0 0 0-1.5-1.5H11L9 5H4.5A1.5 1.5 0 0 0 3 6.5z" stroke-linejoin="round"/></svg>',
+  cal: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><text x="12" y="17.6" text-anchor="middle" fill="#fff" stroke="none" font-family="Inter" font-size="7.5" font-weight="700">15</text></svg>',
+  list: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  user: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.5 18c1.2-2.3 3.2-3.4 5.5-3.4s4.3 1.1 5.5 3.4"/></svg>',
+};
+$('#flt').innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><b style="font:700 42px Inter">Filters</b><span style="width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font:700 24px Inter;letter-spacing:1px">···</span></div><div style="font:500 25px Inter;color:rgba(255,255,255,.65);margin-top:4px">All Stocks</div>` +
+  [['clock', 'Your Investments'], ['folder', 'Companies'], ['cal', 'Date'], ['list', 'Recommendations'], ['user', 'Profile']].map(([i, l]) => `<div class="it">${ico[i]}${l}</div>`).join('');
+show('s9', 12.98, 17.72);
+tl.fromTo('#w9', { rotateX: 55, rotateY: -38, rotateZ: -12, scale: .55, opacity: 0 }, { rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, opacity: 1, duration: .5, ease: 'power3.out' }, 13.0)
+  .to('#w9', { scale: 1.12, duration: 1.0, ease: 'sine.inOut' }, 13.5)
+  .to('#w9', { rotateY: 90, rotateX: 18, duration: .16, ease: 'power2.in' }, 14.52)
+  .set('#det', { visibility: 'visible' }, 14.68).set('#w9', { visibility: 'hidden' }, 14.68)
+  .fromTo('#det', { rotateY: -90, rotateX: 18, rotateZ: -10, scale: .9 }, { rotateY: -14, rotateX: 10, rotateZ: -4, scale: 1, duration: .32, ease: 'power3.out' }, 14.68)
+  .to('#cline', { strokeDashoffset: 0, duration: .7, ease: 'power2.out' }, 14.85).to('#carea', { opacity: 1, duration: .5 }, 15.2)
+  .set('#flt', { visibility: 'visible' }, 15.2).fromTo('#flt', { x: 380, z: 160, opacity: 0, filter: 'blur(14px)', rotateY: -20 }, { x: 0, z: 160, opacity: 1, filter: 'blur(0px)', rotateY: -10, duration: .38, ease: 'power3.out' }, 15.2)
+  .to(['#det', '#flt'], { rotateY: 10, rotateX: -6, rotateZ: 2, duration: 2.2, ease: 'sine.inOut' }, 15.4)
+  .to('#s9', { scale: 1.08, x: -40, y: 110, duration: 2.2, ease: 'sine.inOut' }, 15.4)
+  .to('#s9', { x: -500, y: 300, opacity: 0, filter: 'blur(18px)', duration: .26, ease: 'power2.in' }, 17.46);
+
+// ---------- S11 "No clutter." -> "No chaos." -> "Just simplicity." (words roll, each line slowly zooms) ----------
+show('s10', 17.72, 20.95);
+const rollIn = (id, t, d = .3) => tl.fromTo('#' + id, { opacity: 0, y: -80, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: d, ease: 'power3.out' }, t);
+const rollOut = (id, t, d = .22) => tl.to('#' + id, { opacity: 0, y: 80, filter: 'blur(14px)', duration: d, ease: 'power2.in' }, t);
+const swap = (id, t) => tl.to('#' + id, { opacity: 0, duration: .12 }, t);
+tl.set(['#L2', '#L3'], { opacity: 0 }, 0);
+rollIn('L1a', 17.8); rollIn('L1b', 17.9);
+tl.fromTo('#L1', { scale: 1.06 }, { scale: 1.12, duration: .95, ease: 'none' }, 17.8);
+// "clutter." rolls out, "chaos." rolls in, the line jumps bigger
+tl.set('#L2', { opacity: 1 }, 18.74).set('#L2b', { opacity: 0 }, 0);
+swap('L1a', 18.74); rollOut('L1b', 18.7); rollIn('L2b', 18.74, .28);
+tl.fromTo('#L2', { scale: 1.62 }, { scale: 1.7, duration: .9, ease: 'none' }, 18.74);
+// both words roll to "Just simplicity.", back to the smaller size
+tl.set('#L3', { opacity: 1 }, 19.58).set(['#L3a', '#L3b'], { opacity: 0 }, 0);
+rollOut('L2a', 19.5); rollOut('L2b', 19.53); rollIn('L3a', 19.58, .26); rollIn('L3b', 19.63, .3);
+tl.fromTo('#L3', { scale: 1 }, { scale: 1.28, duration: 1.15, ease: 'power2.in' }, 19.6)
+  .set('#s10', { filter: 'url(#mbA)' }, 20.72).to('#L3', { x: -420, opacity: 0, duration: .22, ease: 'power2.in' }, 20.73);
+mb('mbAb', 20.72, '70 0', .22);
+tl.set('#mbAb', { attr: { stdDeviation: '0 0' } }, 20.96).set('#s10', { filter: 'none' }, 20.96);
+
+// ---------- S12  Stocks, then dnyxstudios (the creator's card) ----------
+show('s11', 20.95, 23.1);
+tl.fromTo('#stk', { opacity: 0, scale: 1.04, filter: 'blur(8px)' }, { opacity: 1, scale: 1.14, filter: 'blur(0px)', duration: .3, ease: 'power2.out' }, 20.98)
+  .to('#stk', { scale: 1.42, duration: .5, ease: 'none' }, 21.28)
+  .to('#stk', { opacity: 0, scale: 1.5, filter: 'blur(14px)', duration: .14, ease: 'power2.in' }, 21.74)
+  .fromTo('#dnyx', { opacity: 0, scale: .92, filter: 'blur(12px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .25, ease: 'power2.out' }, 21.82)
+  .fromTo('#halo', { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .5, ease: 'power2.out' }, 21.82)
+  .to('#dnyx', { scale: 1.38, duration: 1.0, ease: 'none' }, 22.07)
+  .to('#halo', { scale: 1.3, duration: 1.0, ease: 'none' }, 22.07)
+  .to('#fade', { opacity: 1, duration: .12, ease: 'none' }, 22.88);
+
+// ---------- per frame: the typed balance, typing, rings, counters, static, 3D shot ----------
+const gl = $('#gl');
+X.onFrame(t => {
+  const k = (a, b) => X.clamp((t - a) / (b - a));
+  const eo = x => 1 - Math.pow(1 - x, 3);
+  const cash = '$1,025.67'; $('#cash').textContent = cash.slice(0, Math.ceil(cash.length * k(1.48, 2.06)));
+  const q = 'Apple Inc.', n = Math.floor(q.length * k(8.3, 8.9));
+  $('#q').innerHTML = n ? q.slice(0, n) + (t < 9 && Math.floor(t * 4) % 2 ? '|' : '') : '<span class="ph">Search</span>';
+  $('#rc1').setAttribute('stroke-dashoffset', 276.5 * (1 - .78 * eo(k(11.45, 12.1)))); $('#rv1').textContent = Math.round(12 * eo(k(11.45, 12.0))) + '%';
+  $('#rc2').setAttribute('stroke-dashoffset', 276.5 * (1 - .78 * eo(k(11.5, 12.15)))); $('#rv2').textContent = Math.round(55 * eo(k(11.5, 12.05))) + '%';
+  $('#gv').textContent = Math.round(100 * eo(k(11.45, 11.95))) + 'k';
+  if (t >= 3.58 && t < 3.76) noiseFrame(Math.floor(t * 30));
+  // 3D phone in ribbons
+  const on = t >= 5.76 && t < 7.74;
+  gl.style.opacity = on ? 1 : 0;
+  if (!on) return;
+  phoneRoot.position.set(0, -2.6 * (1 - R5.rise) + .04 * Math.sin(t * 1.6), 0);
+  phoneRoot.rotation.set(-.2 + .15 * R5.flat, -.35 + .5 * R5.spin, -.6 + 1.02 * R5.rise + 1.15 * R5.flat);
+  ribbons.rotation.y = .3 * (t - 5.8); ribbons.rotation.z = .1 * R5.rise - .25 * R5.flat;
+  ribbons.position.y = phoneRoot.position.y * .9;
+  RIB.forEach((m, i) => { const cnt = m.geometry.index.count, d = Math.floor(cnt * X.clamp(R5.rib * 1.25 - i * .07)); m.geometry.setDrawRange(0, d - (d % 6)); });
+  ctx.cam.position.set(Math.sin(-.25 + .5 * R5.spin) * (7.2 - 3.6 * R5.push), .25 - .3 * R5.flat, Math.cos(-.25 + .5 * R5.spin) * (7.2 - 3.6 * R5.push));  // further back than 16:9 so the ribbons fit the narrow frame
+  ctx.cam.lookAt(0, 0, 0); ctx.cam.updateMatrixWorld();
+  ctx.render(t);
+});
+// the canvas screen needs the real font before it is drawn
+X.start(document.fonts.ready.then(() => Promise.all(['700 86px Inter', '600 58px Inter'].map(f => document.fonts.load(f)))).then(() => {
+  const P = X.makePhone({ finish: 'black', tex: X.canvasTex(1170, 2460, drawScreen) }); phoneRoot.add(P.g);
+}));
+</script>
+</body>
+</html>

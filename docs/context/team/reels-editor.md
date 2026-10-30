@@ -77,4 +77,4 @@ crewup-01-day1 (15 s), crewup-02-nudge (13 s), crewup-03-lost (13 s), crewup-04-
 - I was wrong earlier that the original had no narrator: speech recognition picks up "We've all been there..." and "No clutter. No chaos. Just simplicity." So crewup-x-simple(-wide).mp4, which use that soundtrack, have the voice saying the Stocks lines over CrewUp text: post those silent with the owner's own voiceover.
 - It's Apple's brand (logo, "Stocks") and the creator's design: post it only with credit to @thednyx, never as a CrewUp ad.
 - Known glitch, not fixed yet: vertical crewup-x-simple.mp4 at ~15-17 s, the Filters panel gets cut diagonally (3D overlap; the wide version is fine). Re-render if the owner wants to use the vertical CrewUp one.
-
+- 30 Oct: owner asked for it vertical too: ads/video/stocks-concept-rebuild-vertical.mp4 (+ -cover.jpg), 1080x1920, same shots, text, timing and original voice, shots laid out for portrait (x/exact-v.html).
