@@ -49,3 +49,10 @@ who's #1 in your crew? 👑 every check-in levels up your card: bronze → silve
 last place buys the coffee ☕ (sorry faisal)
 would you use this? join the waitlist, link on our instagram 🔗
 #crewup #gymleaderboard #levelup #gymtok #gymfriends #gymmotivation #fitnessapp
+
+## X4 Simple (crewup-x-simple.mp4): remake of the owner's reference concept ad (creator gave permission), CrewUp version
+we've all been there… paying for the gym and never going 💸😬
+but instead: group chats full of excuses, snoozed alarms, 7 workout plans. crewup puts your crew, your streaks and your check-ins in one clean app 💙
+free. no excuses. no skipping. join the waitlist, link in bio 🔗
+(optional credit: edit style inspired by @thednyx)
+#crewup #gymtok #gymmotivation #fitnessapp #gymfriends #appconcept #comingsoon
