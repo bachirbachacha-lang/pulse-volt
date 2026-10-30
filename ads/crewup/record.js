@@ -12,7 +12,8 @@ const fs = require('fs');
   const browser = await chromium.launch({
     args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
   });
-  const p = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
+  // W/H env vars render other sizes (landscape: W=1920 H=1080)
+  const p = await browser.newPage({ viewport: { width: +process.env.W || 1080, height: +process.env.H || 1920 }, deviceScaleFactor: 1 });
   p.on('pageerror', e => console.error('page error:', e.message));
   // BASE (e.g. http://127.0.0.1:8765/) serves pages over http so textures load without file:// limits
   const url = (process.env.BASE ? process.env.BASE + page : 'file://' + path.resolve(__dirname, page)) + `?cut=${cut}&record=1${process.env.EXTRA || ''}`;

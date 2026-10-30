@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp X Simple Wide</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* CrewUp version of the owner's reference concept ad (light keynote UI, chaos wall, 3D phone + ribbons,
+   search, crew list, stats, widget, detail + filters, kinetic text), vertical, then the favourite ending */
+html,body{width:1920px;height:1080px}
+#gl{width:1920px;height:1080px}
+#tag{left:44px;top:40px}
+#bg{position:absolute;inset:0;background-color:#fff}
+#bgdom{opacity:0}
+#gl{opacity:0}
+#stage{position:absolute;inset:0;z-index:10;perspective:2200px}
+.shot{position:absolute;inset:0;visibility:hidden;transform-style:preserve-3d}
+.ink{color:#0f1115}
+.tx{position:absolute;left:0;right:0;top:500px;text-align:center;font:600 64px/1.1 Inter;letter-spacing:-.035em}
+.tx .w{display:inline-block;margin:0 .12em}
+/* light glass widget */
+.wid{position:absolute;background:rgba(255,255,255,.86);border-radius:38px;box-shadow:0 30px 80px rgba(40,60,110,.18),0 2px 0 rgba(255,255,255,.9) inset;padding:34px 38px;color:#0f1115}
+.pill{display:inline-flex;align-items:center;justify-content:center;height:54px;padding:0 30px;border-radius:27px;background:#eef1f6;font:600 23px Inter;color:#0f1115}
+/* dark cards */
+.dk{position:absolute;background:#17181c;border-radius:40px;color:#fff;box-shadow:0 40px 90px rgba(0,0,0,.35)}
+.mut{color:#8d93a1}
+.up{color:#30D158}.dn{color:#FF453A}
+/* chaos wall */
+#wall{position:absolute;left:-420px;top:-360px;width:2760px;height:1900px;display:grid;grid-template-columns:repeat(6,1fr);gap:30px;transform-style:preserve-3d}
+.cc{background:#121317;border-radius:34px;padding:28px;color:#e8eaf0;font:500 24px/1.35 Inter;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.cc h4{font:700 26px Inter;margin-bottom:14px}
+.bub{display:inline-block;background:#2a2c33;border-radius:22px;padding:10px 18px;margin:6px 0;font:500 24px Inter}
+.bub.me{background:#1F6BFF;float:right;clear:both}
+/* search + list */
+#sbar{position:absolute;left:560px;right:560px;top:470px;height:92px;border-radius:46px;background:#2a2b30;display:flex;align-items:center;padding:0 34px;gap:20px;font:500 34px Inter;color:#fff}
+#sbar .ph{color:#8d93a1}
+.row{position:absolute;left:420px;right:420px;height:118px;display:flex;align-items:center;gap:26px;border-bottom:1px solid rgba(255,255,255,.08)}
+.row .nm{font:700 34px Inter}.row .sb{font:500 22px Inter;color:#8d93a1;margin-top:4px}
+.row .val{font:700 36px Inter;text-align:right}.row .dl{font:600 24px Inter;text-align:right;margin-top:2px}
+/* stats */
+.ring{position:absolute;width:280px;height:280px;background:#17181c;border-radius:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+.ring b{font:800 54px Inter;letter-spacing:-.02em}.ring span{font:700 22px Inter;letter-spacing:.08em;color:#8d93a1;margin-top:8px}
+#grad{position:absolute;left:845px;top:120px;width:520px;height:690px;border-radius:52px;overflow:hidden;background:linear-gradient(160deg,#ff9a3c 0%,#ff4d6d 55%,#d83fd8 100%);box-shadow:0 40px 90px rgba(255,77,109,.35);color:#fff;padding:46px}
+#grad b{display:block;font:800 220px/1 Sora;letter-spacing:-.06em}
+#recap{position:absolute;left:225px;top:430px;width:590px;height:380px;border-radius:52px;overflow:hidden;color:#fff;padding:50px;
+  background:radial-gradient(60% 90% at 15% 85%,#ff4fd8 0%,rgba(255,79,216,0) 60%),radial-gradient(70% 80% at 85% 15%,#1F6BFF 0%,rgba(31,107,255,0) 60%),radial-gradient(50% 70% at 70% 90%,#ff7a2f 0%,rgba(255,122,47,0) 60%),linear-gradient(120deg,#3b1d8f,#1b2f9e 50%,#7b2fd6)}
+#recap svg{position:absolute;inset:0;opacity:.55;mix-blend-mode:screen}
+/* widget + detail + filters */
+#w9{position:absolute;left:730px;top:310px;width:460px;height:460px;border-radius:70px;background:#141519;color:#fff;padding:42px 44px;box-shadow:0 50px 110px rgba(0,0,0,.35);backface-visibility:hidden}
+#w9 .r{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px}
+#w9 .r b{font:700 32px Inter}#w9 .r small{display:block;font:500 20px Inter;color:#8d93a1;margin-top:3px}
+#det{position:absolute;left:330px;top:250px;width:1000px;height:580px;border-radius:64px;background:#141519;color:#fff;padding:52px;box-shadow:0 50px 110px rgba(0,0,0,.35);backface-visibility:hidden}
+#flt{position:absolute;left:1170px;top:190px;width:400px;height:650px;border-radius:52px;background:rgba(92,94,102,.82);backdrop-filter:blur(20px);color:#fff;padding:44px 40px;box-shadow:0 40px 100px rgba(0,0,0,.4)}
+#flt .it{display:flex;gap:18px;align-items:center;font:500 28px Inter;margin:26px 0}
+#flt .it i{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.75)}
+/* ending tweaks for this cut */
+#rays{left:460px;top:-20px}#dot{left:950px;top:470px}#ring,.burst{left:810px;top:330px}#logoWrap{left:800px;top:320px}
+#wm{top:470px;font-size:132px}#cs{top:628px;font-size:36px}#cta{left:670px;right:670px;top:700px;padding:22px 0;font-size:34px}
+#handle.pillh{left:780px;right:780px;top:820px;height:72px;border-radius:36px;background:#fff;color:#0d0f14;display:flex;align-items:center;gap:16px;padding:0 30px;font:700 34px Inter;box-shadow:0 0 0 4px #1F6BFF,0 0 50px rgba(31,107,255,.6)}
+#soon{position:absolute;left:0;right:0;top:910px;text-align:center;font:600 30px Inter;color:#8d97ad;z-index:31}
+#noise{position:absolute;left:0;top:0;width:1920px;height:1080px;z-index:60;opacity:0;pointer-events:none;image-rendering:pixelated}
+#tag{z-index:65}
+#tag span{color:#e9edf5;background:rgba(10,12,18,.55);border-color:rgba(255,255,255,.18)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="mbA" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbAb" stdDeviation="0 0"/></filter>
+  <filter id="mbB" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbBb" stdDeviation="0 0"/></filter>
+</svg>
+<div id="bg"></div>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="stage">
+  <div class="shot" id="s1"><div class="tx ink" id="t1"></div></div>
+  <div class="shot" id="s2">
+    <div class="wid" id="w2" style="left:640px;top:320px;width:640px;height:420px">
+      <div style="display:flex;justify-content:space-between;font:600 26px Inter"><span>Gym membership</span><span class="mut" style="font-weight:500">renews monthly</span></div>
+      <div style="font:800 108px/1 Inter;letter-spacing:-.04em;margin-top:26px" id="cash">$0.00</div>
+      <div class="mut" style="font:600 26px Inter;margin-top:12px" id="lastv">Last visit: 23 days ago 😬</div>
+      <div style="display:flex;gap:16px;margin-top:30px"><span class="pill">Renew</span><span class="pill">Cancel</span></div>
+    </div>
+  </div>
+  <div class="shot" id="s3"><div class="tx ink" id="t3"></div></div>
+  <div class="shot" id="s4" style="perspective:1600px"><div id="wall"></div></div>
+  <div class="shot" id="s6">
+    <div id="sbar"><svg width="40" height="40" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#8d93a1" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="#8d93a1" stroke-width="2.4" stroke-linecap="round"/></svg><span id="q"></span><span style="flex:1"></span><svg width="34" height="40" viewBox="0 0 20 24"><rect x="6" y="2" width="8" height="13" rx="4" fill="#8d93a1"/><path d="M3 11a7 7 0 0 0 14 0M10 18v4" stroke="#8d93a1" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+    <div id="list"></div>
+  </div>
+  <div class="shot" id="s8">
+    <div class="ring" id="rg1" style="left:225px;top:120px"><svg width="170" height="170" viewBox="0 0 100 100" style="position:absolute;top:30px"><circle cx="50" cy="50" r="42" fill="none" stroke="#2a2c33" stroke-width="7"/><circle id="rc1" cx="50" cy="50" r="42" fill="none" stroke="#30D158" stroke-width="7" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 50 50)"/></svg><b id="rv1" style="margin-top:-14px">0%</b><span style="position:absolute;bottom:34px">SHOW-UP</span></div>
+    <div class="ring" id="rg2" style="left:535px;top:120px"><svg width="170" height="170" viewBox="0 0 100 100" style="position:absolute;top:30px"><circle cx="50" cy="50" r="42" fill="none" stroke="#2a2c33" stroke-width="7"/><circle id="rc2" cx="50" cy="50" r="42" fill="none" stroke="#1F6BFF" stroke-width="7" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 50 50)"/></svg><b id="rv2" style="margin-top:-14px">0/4</b><span style="position:absolute;bottom:34px">THIS WEEK</span></div>
+    <div id="grad"><b id="gv">0</b><div style="font:700 44px Inter;margin-top:8px">day streak 🔥</div><div style="font:600 30px Inter;opacity:.85;margin-top:8px">crew record</div></div>
+    <div id="recap"><svg viewBox="0 0 920 420" preserveAspectRatio="none" style="width:100%;height:100%"><path d="M-20 300 C 200 120, 380 420, 560 220 S 860 60, 960 160" stroke="#fff" stroke-width="3" fill="none"/><path d="M-20 340 C 220 170, 400 460, 580 260 S 860 110, 960 210" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/><path d="M-20 380 C 240 220, 420 500, 600 300 S 860 160, 960 260" stroke="#fff" stroke-width="1.5" fill="none" opacity=".5"/></svg>
+      <div style="position:relative;font:600 28px Inter;opacity:.85">By CrewUp</div><div style="position:relative;font:800 58px/1.05 Inter;letter-spacing:-.03em;margin-top:12px">View your<br>monthly recap</div><div style="position:relative;font:600 26px Inter;opacity:.8;margin-top:16px">Tap here</div></div>
+    <div id="phn" style="position:absolute;left:1395px;top:150px;width:300px;height:631px;border-radius:52px;border:10px solid #15171c;box-shadow:0 0 0 3px #3a3d46,0 40px 90px rgba(0,0,0,.45);overflow:hidden;background:#090B10"><img src="tex/crew_final.png" style="width:100%;height:100%;display:block"></div>
+  </div>
+  <div class="shot" id="s9">
+    <div id="w9"><div style="font:700 30px Inter;color:#8d93a1;margin-bottom:40px">THE CREW</div></div>
+    <div id="det" style="visibility:hidden"></div>
+    <div id="flt" style="visibility:hidden"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font:700 40px Inter">Filters</b><span style="width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font:600 26px Inter">–</span></div><div style="font:500 26px Inter;color:rgba(255,255,255,.7);margin-top:6px">All crews</div></div>
+  </div>
+  <div class="shot" id="s11"><div id="t11" style="position:absolute;left:0;right:0;top:330px;text-align:center"></div></div>
+</div>
+<div id="lines"></div><div id="endWrap"></div><div id="soon">coming soon</div>
+<div id="tag"><img src="../img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<canvas id="noise" width="480" height="270"></canvas>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script>window.X_SIZE = [1920, 1080];</script>
+<script src="../img/simple-beat.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+const { tl, $ } = X;
+X.DUR = 27.1;
+X.glowAt = [[0, '#1F6BFF']];
+const show = (id, a, b) => tl.set('#' + id, { visibility: 'visible' }, a).set('#' + id, { visibility: 'hidden' }, b);
+const words = (el, list) => { $(el).innerHTML = list.map(([w, c], i) => `<span class="w" id="${el.slice(1)}w${i}" style="${c || ''}">${w}</span>`).join(' '); };
+const wIn = (id, i, t, d = .3) => tl.fromTo(`#${id}w${i}`, { opacity: 0, y: 26, filter: 'blur(16px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: d, ease: 'power3.out' }, t);
+const mb = (f, t, amt, d = .16) => tl.fromTo('#' + f, { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: amt }, duration: d, ease: 'power2.in', immediateRender: false }, t);
+const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+
+// ---------- backgrounds ----------
+const BG = { light: 'radial-gradient(120% 80% at 50% 45%,#ffffff 0%,#eef4ff 55%,#dfeaff 100%)' };
+const solid = c => ({ backgroundImage: 'none', backgroundColor: c });
+tl.set('#bg', { backgroundImage: BG.light, backgroundColor: '#ffffff' }, 0)
+  .set('#bg', solid('#0b0c0f'), 3.58)
+  .set('#bg', solid('#ffffff'), 5.76)
+  .set('#bg', solid('#1c1d21'), 7.72)
+  .set('#bg', solid('#8d9096'), 12.97).to('#bg', { backgroundColor: '#e7e8ec', duration: .6, ease: 'power2.out' }, 13.05)
+  .set('#bg', { backgroundImage: 'radial-gradient(100% 70% at 50% 45%,#f1f2f5,#dcdee3)', backgroundColor: '#e9eaee' }, 17.72)
+  .set('#bg', solid('#06070b'), 20.92);
+
+// ---------- S1 "We've all been there..." ----------
+words('#t1', [['We’ve'], ['all'], ['been'], ['there...']]);
+show('s1', 0, 1.33);
+[.08, .2, .32, .44].forEach((t, i) => wIn('t1', i, t));
+tl.set('#s1', { filter: 'url(#mbA)' }, 1.1).to('#t1', { x: -220, opacity: 0, duration: .22, ease: 'power2.in' }, 1.11);
+mb('mbAb', 1.1, '60 0', .2);
+tl.set('#mbAb', { attr: { stdDeviation: '0 0' } }, 1.34).set('#s1', { filter: 'none' }, 1.34);
+
+// ---------- S2 widget: paying for the gym, not going ----------
+show('s2', 1.34, 2.88);
+tl.fromTo('#w2', { scale: .78, opacity: 0, filter: 'blur(22px)' }, { scale: 1, opacity: 1, filter: 'blur(0px)', duration: .38, ease: 'power3.out' }, 1.36)
+  .fromTo('#lastv', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .3 }, 2.02)
+  .to('#w2', { scale: 1.32, opacity: 0, filter: 'blur(26px)', duration: .3, ease: 'power2.in' }, 2.56);
+
+// ---------- S3 "but instead..." ----------
+words('#t3', [['but'], ['instead...']]);
+show('s3', 2.88, 3.58);
+wIn('t3', 0, 2.9, .22); wIn('t3', 1, 3.03, .26);
+tl.to('#t3', { opacity: 0, filter: 'blur(14px)', scale: 1.06, duration: .16, ease: 'power2.in' }, 3.4);
+
+// ---------- S4 the chaos: excuses, snoozes, group chats ----------
+const CHAOS = [
+  `<h4>The Gym Crew 💪</h4><div class="bub">gym tmrw?</div><div class="bub">maybe</div><div class="bub">can’t, busy 😩</div><div class="bub me">who’s actually going??</div><div class="mut" style="clear:both;font-size:20px;margin-top:10px">Seen by 5</div>`,
+  `<h4>Alarm</h4><div style="font:700 92px Inter;letter-spacing:-.04em">6:00</div><div class="mut">Gym</div><div style="margin-top:22px;display:flex;gap:12px"><span class="bub" style="background:#FF9F0A;color:#111">Snooze</span><span class="bub">x4</span></div>`,
+  `<h4>🔔 Reminder</h4><div>You haven’t worked out in <b style="color:#FF453A">9 days</b>.</div><div class="mut" style="margin-top:12px">Tap to see your plan</div>`,
+  `<h4>Workout plan v7 (final)</h4>${['Mon · Chest 4x12', 'Tue · Rest', 'Wed · Legs 5x5', 'Thu · Rest', 'Fri · Back 4x10', 'Sat · ???'].map(r => `<div style="display:flex;justify-content:space-between;border-bottom:1px solid #26282e;padding:7px 0"><span>${r}</span><span class="dn">✗</span></div>`).join('')}`,
+  `<h4>Calories</h4><div style="font:800 64px Inter">2,431</div><div class="mut">kcal · goal 1,900</div><svg width="100%" height="90" viewBox="0 0 200 60"><polyline points="0,40 20,30 40,44 60,20 80,36 100,12 120,30 140,16 160,40 180,22 200,34" fill="none" stroke="#FF453A" stroke-width="3"/></svg>`,
+  `<h4>Steps</h4><div style="font:800 64px Inter">3,204</div><div class="mut">32% of goal</div><div style="height:16px;border-radius:8px;background:#26282e;margin-top:18px"><div style="width:32%;height:100%;border-radius:8px;background:#FF9F0A"></div></div>`,
+  `<h4>Omar</h4><div class="bub">bro you coming?</div><div class="bub">we’re here</div><div class="bub me">next week fr</div><div class="bub">🙃</div>`,
+  `<h4>Leg day</h4><div style="font:800 80px Inter" class="dn">✗ ✗ ✗</div><div class="mut">skipped 3 weeks in a row</div>`,
+  `<h4>Voice note</h4><div style="display:flex;align-items:center;gap:14px;margin-top:14px"><span style="width:56px;height:56px;border-radius:50%;background:#1F6BFF;display:flex;align-items:center;justify-content:center">▶</span><svg width="220" height="50" viewBox="0 0 220 50">${Array.from({ length: 30 }, (_, i) => `<rect x="${i * 7}" y="${25 - (5 + 18 * Math.abs(Math.sin(i * 1.7)))}" width="4" height="${10 + 36 * Math.abs(Math.sin(i * 1.7))}" rx="2" fill="#8d93a1"/>`).join('')}</svg></div><div class="mut" style="margin-top:12px">0:47 · “why I can’t go today”</div>`,
+  `<h4>Khalid</h4><div class="bub">monday for sure</div><div class="bub">i swear</div><div class="mut" style="font-size:20px">Monday · Seen</div>`,
+  `<h4>Gym app</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${['Sets', 'Reps', 'Rest', 'RPE', 'Macros', 'BMI'].map(x => `<div style="background:#1e2026;border-radius:14px;padding:12px">${x}<div class="mut" style="font-size:20px">--</div></div>`).join('')}</div>`,
+  `<h4>Calendar</h4>${['6:00 Gym', '6:00 Gym', '6:00 Gym'].map(r => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #26282e"><span style="text-decoration:line-through;opacity:.6">${r}</span><span class="dn">missed</span></div>`).join('')}`,
+];
+$('#wall').innerHTML = Array.from({ length: 30 }, (_, i) => `<div class="cc" style="height:${[440, 360, 300, 480, 400, 330, 380][i % 7]}px">${CHAOS[(i * 7) % CHAOS.length]}</div>`).join('');
+show('s4', 3.6, 5.8);
+tl.fromTo('#wall', { rotateY: -16, rotateX: 10, z: 260, x: 60, y: 80 }, { rotateY: -6, rotateX: 4, z: 120, x: -40, y: -60, duration: 2.0, ease: 'sine.inOut' }, 3.6)
+  .fromTo('#wall', { filter: 'blur(10px)' }, { filter: 'blur(0px)', duration: .35, ease: 'power2.out' }, 3.64)
+  .to('#wall', { filter: 'blur(4px)', duration: .3, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 4.55)
+  .to('#wall', { z: 900, opacity: 0, filter: 'blur(18px)', duration: .26, ease: 'power2.in' }, 5.54);
+// TV static into the chaos
+const nz = $('#noise').getContext('2d');
+const noiseFrame = s => { const id = nz.createImageData(480, 270); let v = s * 99991; for (let i = 0; i < id.data.length; i += 4) { v = (v * 1103515245 + 12345) % 2147483648; const c = v % 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = c; id.data[i + 3] = 255; } nz.putImageData(id, 0, 0); };
+tl.set('#noise', { opacity: .9 }, 3.58).to('#noise', { opacity: 0, duration: .14, ease: 'none' }, 3.62);
+
+// ---------- S5 3D phone in ribbons (three.js) ----------
+const ctx = X.three({ fov: 24, bloom: .35, radius: .5, threshold: 1.4 });
+X.ctx = null;  // rendered by hand only while this shot is on screen
+const G = ctx.grade.uniforms; G.vignette.value = .1; G.grain.value = .012; G.lift.value.set(0, 0, 0); G.knee.value = .9; G.fringe.value = .001;
+const S5 = { grey: 0 };
+ctx.drawBg = t => { const g = ctx.bg.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 192); const k = S5.grey;
+  const mix = (a, b) => { const A = hex(a), Bc = hex(b); return `rgb(${A.map((v, i) => Math.round(v + (Bc[i] - v) * k)).join(',')})`; };
+  gr.addColorStop(0, mix('#ffffff', '#9a9da3')); gr.addColorStop(1, mix('#e7ecf4', '#7f8288')); g.fillStyle = gr; g.fillRect(0, 0, 108, 192); ctx.bgTex.needsUpdate = true; };  // (stretched to 16:9, it's a soft gradient)
+X.studioEnv(ctx, [[0xffffff, [-5, 4, 6], [8, 5], 1.6], [0xffffff, [6, 2, 4], [3, 9], 1.8], [0xffffff, [0, 9, 0], [14, 4], 1.4], [0xdfe8ff, [-6, -3, -4], [6, 6], 1.2], [0xffffff, [5, -4, -5], [6, 5], 1.0]]);
+X.lights(ctx);
+X.glassMat.envMapIntensity = .3;  // bright white studio: keep the screen glare soft
+const ribbons = new THREE.Group(); ctx.scene.add(ribbons);
+const phoneRoot = new THREE.Group(); ctx.scene.add(phoneRoot);
+const ribbonGeo = (fn, w, n = 220, twist = 3.2) => {
+  const pos = new Float32Array((n + 1) * 2 * 3), nor = new Float32Array((n + 1) * 2 * 3), uv = new Float32Array((n + 1) * 2 * 2), idx = [];
+  const up = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i <= n; i++) {
+    const s = i / n, p = fn(s), p2 = fn(Math.min(1, s + .002)), p1 = fn(Math.max(0, s - .002));
+    const T = p2.clone().sub(p1).normalize();
+    const Bn = new THREE.Vector3().crossVectors(T, up).normalize().applyAxisAngle(T, Math.sin(s * twist) * 1.1 + s * twist * .5);
+    const N = new THREE.Vector3().crossVectors(Bn, T).normalize();
+    const a = p.clone().addScaledVector(Bn, w / 2), b = p.clone().addScaledVector(Bn, -w / 2);
+    pos.set([a.x, a.y, a.z, b.x, b.y, b.z], i * 6); nor.set([N.x, N.y, N.z, N.x, N.y, N.z], i * 6); uv.set([s, 0, s, 1], i * 4);
+    if (i < n) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); g.setIndex(idx); return g;
+};
+const RIB = [[0x8cc3ff, .17, .62, 0, 1.3, .1, .2], [0xff7a2f, .15, .7, 2.1, 1.1, -.2, .45], [0xeceff4, .19, .56, 4.0, 1.45, .3, .0], [0x2f6bff, .13, .78, 1.0, .9, -.4, .7]].map(([c, w, R, a0, turns, y0, ph]) => {
+  const fn = s => new THREE.Vector3(Math.cos(a0 + s * turns * 6.283) * (R + .12 * Math.sin(s * 9 + ph)), -1.25 + y0 + s * 2.6 + .14 * Math.sin(s * 5 + a0), Math.sin(a0 + s * turns * 6.283) * (R * .85 + .1 * Math.cos(s * 7 + ph)));
+  const white = c === 0xeceff4, glow = { 0x8cc3ff: 0x10243f, 0xff7a2f: 0x5a1e00, 0xeceff4: 0x1a1c20, 0x2f6bff: 0x061640 }[c];
+  const m = new THREE.Mesh(ribbonGeo(fn, w), new THREE.MeshPhysicalMaterial({ color: c, emissive: glow, roughness: white ? .42 : .34, metalness: 0, clearcoat: white ? .3 : .6, clearcoatRoughness: .25, side: THREE.DoubleSide, envMapIntensity: white ? .65 : .9 }));
+  m.geometry.setDrawRange(0, 0); ribbons.add(m); return m;
+});
+const R5 = { rise: 0, spin: 0, rib: 0, flat: 0, push: 0 };
+tl.fromTo(R5, { rise: 0 }, { rise: 1, duration: .55, ease: 'power3.out', immediateRender: false }, 5.8)
+  .fromTo(R5, { rib: 0 }, { rib: 1, duration: .75, ease: 'power2.out', immediateRender: false }, 5.98)
+  .fromTo(R5, { spin: 0 }, { spin: 1, duration: 1.9, ease: 'none', immediateRender: false }, 5.8)
+  .fromTo(R5, { flat: 0 }, { flat: 1, duration: .38, ease: 'power3.inOut', immediateRender: false }, 7.2)
+  .fromTo(R5, { push: 0 }, { push: 1, duration: .3, ease: 'power2.in', immediateRender: false }, 7.42)
+  .fromTo(S5, { grey: 0 }, { grey: 1, duration: .14, immediateRender: false }, 7.56);
+
+// ---------- S6/S7 search "The Crew" -> crew list ----------
+const ROWS = [['Omar', '12-day streak', 18, '+3', 1], ['Khalid', '9-day streak', 15, '+2', 1], ['You', '14-day streak', 20, '+4', 1], ['Faisal', 'last check-in Monday', 6, '−4', 0], ['Saad', 'skipped 2 this week', 8, '−2', 0]];
+const spark = (up, seed) => { let y = up ? 40 : 14, pts = []; for (let i = 0; i <= 26; i++) { y += (X.hash(seed * 31 + i) - (up ? .62 : .38)) * 9; y = Math.max(4, Math.min(52, y)); pts.push(`${i * 8},${y.toFixed(1)}`); } return `<svg width="300" height="60" viewBox="0 0 208 56" preserveAspectRatio="none"><polyline points="${pts.join(' ')}" fill="none" stroke="${up ? '#30D158' : '#FF453A'}" stroke-width="3.2" stroke-linejoin="round"/></svg>`; };
+$('#list').innerHTML = ROWS.map(([n, sb, v, d, up], i) => `<div class="row" id="row${i}" style="top:${600 + i * 118}px"><div style="width:340px"><div class="nm">${up ? '<span class="up" style="font-size:28px">▲</span>' : '<span class="dn" style="font-size:28px">▼</span>'} ${n}</div><div class="sb">${sb}</div></div><div style="flex:1;display:flex;justify-content:center">${spark(up, i + 3)}</div><div style="width:170px"><div class="val">${v}</div><div class="dl ${up ? 'up' : 'dn'}">${d}</div></div></div>`).join('');
+show('s6', 7.72, 11.32);
+tl.fromTo('#sbar', { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .25 }, 7.76)
+  .fromTo('.row', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .3, stagger: .06, ease: 'power3.out' }, 9.0)
+  .to('#sbar', { y: -320, duration: .3, ease: 'power3.inOut' }, 9.18)
+  .to('#list', { y: -330, duration: .9, ease: 'power2.inOut' }, 9.35)
+  .to('#s6', { scale: 2.3, x: -970, y: -560, duration: .5, ease: 'power3.inOut' }, 10.25)
+  .to('#list', { y: -360, duration: .7, ease: 'sine.inOut' }, 10.4)
+  .set('#s6', { filter: 'url(#mbB)' }, 11.06).to('#s6', { x: -2300, duration: .24, ease: 'power2.in' }, 11.08);
+mb('mbBb', 11.06, '70 0', .22);
+tl.set('#mbBb', { attr: { stdDeviation: '0 0' } }, 11.33).set('#s6', { filter: 'none' }, 11.33);
+
+// ---------- S8 stats ----------
+show('s8', 11.32, 12.98);
+tl.set('#s8', { filter: 'url(#mbA)' }, 11.32).fromTo('#s8', { x: 1400 }, { x: 0, duration: .32, ease: 'power3.out' }, 11.32);
+tl.fromTo('#mbAb', { attr: { stdDeviation: '60 0' } }, { attr: { stdDeviation: '0 0' }, duration: .32, ease: 'power2.out', immediateRender: false }, 11.32).set('#s8', { filter: 'none' }, 11.66);
+tl.fromTo('#grad', { y: 40 }, { y: 0, duration: .5 }, 11.4).fromTo('#recap', { y: 60 }, { y: 0, duration: .5 }, 11.45).fromTo('#phn', { y: 80, rotateY: -24 }, { y: 0, rotateY: -12, duration: .6 }, 11.42)
+  .to('#s8', { scale: .82, opacity: 0, filter: 'blur(16px)', duration: .22, ease: 'power2.in' }, 12.76);
+
+// ---------- S9/S10 widget -> detail + filters ----------
+$('#w9').innerHTML += [['Omar', '🔥 12', '+1'], ['Khalid', '🔥 9', '+1'], ['You', '🔥 14', '+1']].map(([n, s, d]) => `<div class="r"><div><b><span class="up" style="font-size:26px">▲</span> ${n}</b><small>The Crew</small></div><div style="text-align:right"><b>${s}</b><small class="up">${d}</small></div></div>`).join('');
+const chartPts = (() => { let y = 230, p = []; for (let i = 0; i <= 60; i++) { y += (X.hash(i * 13 + 7) - .58) * 26; y = Math.max(40, Math.min(250, y)); p.push(`${i * 9.5},${y.toFixed(1)}`); } return p.join(' '); })();
+$('#det').innerHTML = `<div style="display:flex;justify-content:space-between"><div><b style="font:700 44px Inter"><span class="up" style="font-size:30px">▲</span> You</b><div class="mut" style="font:500 26px Inter;margin-top:6px">The Crew · check-ins</div></div><div style="text-align:right"><b class="up" style="font:700 34px Inter">+4</b><div class="up" style="font:600 24px Inter">+25%</div></div></div>
+  <div style="display:flex;gap:40px;margin-top:40px"><div style="font:500 26px/1.9 Inter" class="mut">This week<br>Best<br>Average</div><div style="font:600 26px/1.9 Inter">4<br>30<br>3.6/wk</div>
+  <svg width="600" height="260" viewBox="0 0 570 270" preserveAspectRatio="none" style="margin-left:auto"><defs><linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#30D158" stop-opacity=".45"/><stop offset="1" stop-color="#30D158" stop-opacity="0"/></linearGradient></defs><polygon id="carea" points="0,270 ${chartPts} 570,270" fill="url(#cf)" opacity="0"/><polyline id="cline" points="${chartPts}" fill="none" stroke="#30D158" stroke-width="4" stroke-dasharray="1400" stroke-dashoffset="1400"/></svg></div>
+  <div style="position:absolute;left:52px;bottom:40px;font:800 90px/1 Inter;letter-spacing:-.04em">14 <span style="font:600 36px Inter" class="mut">day streak</span></div>`;
+$('#flt').innerHTML += ['Your challenges', 'The Crew', 'This week', 'Season', 'Recaps', 'Profile'].map(x => `<div class="it"><i></i>${x}</div>`).join('');
+show('s9', 12.98, 17.72);
+tl.fromTo('#w9', { rotateX: 55, rotateY: -38, rotateZ: -12, scale: .55, opacity: 0 }, { rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, opacity: 1, duration: .5, ease: 'power3.out' }, 13.0)
+  .to('#w9', { scale: 1.12, duration: 1.0, ease: 'sine.inOut' }, 13.5)
+  .to('#w9', { rotateY: 90, rotateX: 18, duration: .16, ease: 'power2.in' }, 14.52)
+  .set('#det', { visibility: 'visible' }, 14.68)
+  .fromTo('#det', { rotateY: -90, rotateX: 18, rotateZ: -10, scale: .9 }, { rotateY: -14, rotateX: 10, rotateZ: -6, scale: 1, duration: .32, ease: 'power3.out' }, 14.68)
+  .to('#cline', { strokeDashoffset: 0, duration: .7, ease: 'power2.out' }, 14.85).to('#carea', { opacity: 1, duration: .5 }, 15.2)
+  .set('#flt', { visibility: 'visible' }, 15.2).fromTo('#flt', { x: 380, z: 160, opacity: 0, filter: 'blur(14px)', rotateY: -20 }, { x: 0, z: 160, opacity: 1, filter: 'blur(0px)', rotateY: -10, duration: .38, ease: 'power3.out' }, 15.2)
+  .to(['#det', '#flt'], { rotateY: 12, rotateX: -6, rotateZ: 2, duration: 2.2, ease: 'sine.inOut' }, 15.4)
+  .to('#s9', { scale: 1.1, duration: 2.2, ease: 'sine.inOut' }, 15.4)
+  .to('#s9', { x: -500, y: 300, opacity: 0, filter: 'blur(18px)', duration: .26, ease: 'power2.in' }, 17.46);
+
+// ---------- S11 "Free. / No excuses. / No skipping." (the owner's favourite, keynote style) ----------
+$('#t11').innerHTML = [['Free.', ''], ['No excuses.', ''], ['No <span style="color:#1F6BFF">skipping.</span>', '']].map(([h], i) => `<div id="f${i}" style="font:600 96px/1.25 Inter;letter-spacing:-.04em;color:#0f1115">${h}</div>`).join('');
+show('s11', 17.72, 20.92);
+[17.85, 18.6, 19.55].forEach((t, i) => tl.fromTo('#f' + i, { opacity: 0, y: 30, filter: 'blur(16px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .32, ease: 'power3.out' }, t));
+tl.to('#f0', { color: '#b3b8c3', duration: .25 }, 18.6).to('#f1', { color: '#b3b8c3', duration: .25 }, 19.55)
+  .fromTo('#t11', { scale: 1 }, { scale: 1.16, duration: 1.0, ease: 'sine.inOut' }, 19.72)
+  .set('#s11', { filter: 'url(#mbA)' }, 20.7).to('#t11', { x: -400, opacity: 0, duration: .2, ease: 'power2.in' }, 20.71);
+mb('mbAb', 20.7, '70 0', .2);
+tl.set('#mbAb', { attr: { stdDeviation: '0 0' } }, 20.93).set('#s11', { filter: 'none' }, 20.93);
+
+// ---------- S12/S13 favourite logo build + end card (same build as every CrewUp trailer) ----------
+$('#endWrap').innerHTML = `<div id="rays" class="abs"></div><div id="dot" class="abs"></div><div id="ring" class="abs"></div>
+  <div class="burst abs" id="bu1"></div><div class="burst abs" id="bu2"></div>
+  <div id="logoWrap" class="abs"><img src="../img/crewup-logo.png"><div id="logoShine" class="abs" style="inset:0"></div></div>
+  <div id="wm" class="abs"></div><div id="cs" class="abs">Gym with your crew, not alone.</div>
+  <div id="cta" class="abs"><span style="position:relative">Join the waitlist · link in bio</span><div id="ctaShine" class="abs" style="inset:0"></div></div>
+  <div id="handle" class="abs pillh"><svg width="34" height="34" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#0d0f14" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="#0d0f14" stroke-width="2.6" stroke-linecap="round"/></svg><span id="hq"></span></div>`;
+$('#wm').innerHTML = [...'CrewUp'].map(ch => `<span>${ch}</span>`).join('');
+tl.set(['#dot', '#ring', '#logoWrap', '#cs', '#cta', '#handle', '#rays', '#bu1', '#bu2', '#soon'], { autoAlpha: 0 }, 0).set('#wm span', { autoAlpha: 0 }, 0)
+  .to('#bgdom', { opacity: 1, duration: .3 }, 20.92)
+  .fromTo('#dot', { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .2 }, 21.0)
+  .fromTo('#ring', { autoAlpha: 0, scale: .1 }, { autoAlpha: 1, scale: 1, duration: .32 }, 21.3).to('#dot', { autoAlpha: 0, duration: .1 }, 21.5)
+  .to('#ring', { borderRadius: '80px', scale: 1.07, duration: .24, ease: 'power3.inOut' }, 21.5)
+  .fromTo('#logoWrap', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, 21.73).to('#ring', { autoAlpha: 0, duration: .15 }, 21.73)
+  .fromTo('#bu1', { autoAlpha: .9, scale: 1 }, { autoAlpha: 0, scale: 2.4, duration: .8, ease: 'power2.out' }, 21.73)
+  .fromTo('#bu2', { autoAlpha: .7, scale: 1 }, { autoAlpha: 0, scale: 3.4, duration: 1.1, ease: 'power2.out' }, 21.85)
+  .fromTo('#rays', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: 1, duration: .8 }, 21.73)
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut' }, 22.08);
+X.flash(21.73, .6);
+tl.to(['#logoWrap', '#bu1', '#bu2', '#rays'], { y: -160, scale: .7, duration: .4, ease: 'power3.inOut' }, 22.0)
+  .fromTo('#wm span', { autoAlpha: 0, y: 60, rotateX: -80, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, rotateX: 0, filter: 'blur(0px)', duration: .4, stagger: .05, ease: 'back.out(1.8)' }, 22.18)
+  .fromTo('#cs', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .35 }, 22.6)
+  .fromTo('#cta', { autoAlpha: 0, y: 30, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)' }, 23.03)
+  .fromTo('#ctaShine', { x: -700 }, { x: 700, duration: .8, ease: 'power2.inOut' }, 23.4)
+  .fromTo('#handle', { autoAlpha: 0, scale: .8 }, { autoAlpha: 1, scale: 1, duration: .3, ease: 'back.out(2)' }, 23.5)
+  .fromTo('#soon', { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 24.6)
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut', immediateRender: false }, 25.4);
+
+// ---------- per frame: counters, typing, rings, 3D shot ----------
+const gl = $('#gl');
+X.onFrame(t => {
+  const k = (a, b) => X.clamp((t - a) / (b - a));
+  const eo = x => 1 - Math.pow(1 - x, 3);
+  $('#cash').textContent = '$' + (49.99 * eo(k(1.45, 2.15))).toFixed(2);
+  const q = 'The Crew', n = Math.floor(q.length * k(8.12, 8.85));
+  $('#q').innerHTML = n ? q.slice(0, n) + (t < 9 && Math.floor(t * 4) % 2 ? '|' : '') : '<span class="ph">Search</span>';
+  $('#rc1').setAttribute('stroke-dashoffset', 264 * (1 - .92 * eo(k(11.5, 12.1)))); $('#rv1').textContent = Math.round(92 * eo(k(11.5, 12.1))) + '%';
+  $('#rc2').setAttribute('stroke-dashoffset', 264 * (1 - eo(k(11.55, 12.15)))); $('#rv2').textContent = Math.round(4 * eo(k(11.55, 12.15))) + '/4';
+  $('#gv').textContent = Math.round(30 * eo(k(11.55, 12.25)));
+  const h = '@getcrewup', m = Math.floor(h.length * k(23.6, 24.3)); $('#hq').textContent = h.slice(0, m) + (t > 23.5 && t < 24.6 && Math.floor(t * 4) % 2 ? '|' : '');
+  if (t >= 3.58 && t < 3.76) noiseFrame(Math.floor(t * 30));
+  // 3D phone in ribbons
+  const on = t >= 5.76 && t < 7.74;
+  gl.style.opacity = on ? 1 : 0;
+  if (!on) return;
+  phoneRoot.position.set(0, -2.6 * (1 - R5.rise) + .04 * Math.sin(t * 1.6), 0);
+  phoneRoot.rotation.set(-.25 + .15 * R5.flat, -.5 + 1.3 * R5.spin, -.5 - 1.05 * R5.flat);
+  ribbons.rotation.y = t * .9; ribbons.rotation.z = -.25 + .3 * R5.flat;
+  ribbons.position.y = phoneRoot.position.y * .9;
+  RIB.forEach((m, i) => { const cnt = m.geometry.index.count; m.geometry.setDrawRange(0, Math.floor(cnt * X.clamp(R5.rib * 1.25 - i * .08)) - (Math.floor(cnt * X.clamp(R5.rib * 1.25 - i * .08)) % 6)); });
+  ctx.cam.position.set(Math.sin(-.25 + .5 * R5.spin) * (5.4 - 2.6 * R5.push), .25 - .3 * R5.flat, Math.cos(-.25 + .5 * R5.spin) * (5.4 - 2.6 * R5.push));
+  ctx.cam.lookAt(0, 0, 0); ctx.cam.updateMatrixWorld();
+  ctx.render(t);
+});
+X.start(X.loadTex(['app_you']).then(() => { const P = X.makePhone({ finish: 'black', tex: X.T.app_you }); phoneRoot.add(P.g); }));
+</script>
+</body>
+</html>

@@ -4,7 +4,8 @@
 // DOM kinetic type and the owner's favourite ending ("Free. No excuses. No skipping." + logo build).
 (function () {
   const X = window.X = {};
-  const W = X.W = 1080, H = X.H = 1920;
+  const SIZE = window.X_SIZE || [1080, 1920];   // pages can ask for another size (landscape: [1920, 1080])
+  const W = X.W = SIZE[0], H = X.H = SIZE[1];
   const $ = X.$ = s => document.querySelector(s);
 
   // ---------- beat clock (song: owner's reference, ~129 BPM) ----------
@@ -109,7 +110,7 @@
         c = toSRGB(c);
         c = (c - 0.5) * contrast + 0.5 + lift;
         c *= mix(1.0, smoothstep(0.95, 0.25, length(d * vec2(1.0, 0.62))), vignette);
-        c += (fract(sin(dot(vUv * vec2(1080.0, 1920.0) + time * 61.7, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * grain;
+        c += (fract(sin(dot(gl_FragCoord.xy + time * 61.7, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * grain;
         gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
       }`,
   };
