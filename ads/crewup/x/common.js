@@ -368,7 +368,7 @@
       const ctx = X.ctx;
       let prev = null;
       if (ctx && X.mb > 0 && t > sh) { tl.seek(t - sh, false); prev = camState(t - sh); }
-      tl.seek(t, false);
+      tl.seek(t + 1e-4, false);  // a hair past t so sets placed at 0 also apply on the very first frame
       X.domGlow(t);
       if (ctx) {
         const cur = camState(t); setCam(ctx.cam, cur);

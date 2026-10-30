@@ -56,3 +56,13 @@ but instead: group chats full of excuses, snoozed alarms, 7 workout plans. crewu
 free. no excuses. no skipping. join the waitlist, link in bio 🔗
 (optional credit: edit style inspired by @thednyx)
 #crewup #gymtok #gymmotivation #fitnessapp #gymfriends #appconcept #comingsoon
+
+## X5 How it works (crewup-x-how.mp4)
+me, every gym day: snooze. snooze. snooze. 😴
+unless your crew is waiting 👀 here's how crewup works:
+1️⃣ start a challenge (loser buys the coffee ☕)
+2️⃣ check in live at the gym 📸
+3️⃣ skip? your crew nudges you ⚡
+4️⃣ win trophies & ranks: bronze → diamond 💎
+would you use this? join the waitlist, link on our instagram 🔗
+#crewup #gymtok #gymfriends #gymmotivation #accountability #fitnessapp #comingsoon

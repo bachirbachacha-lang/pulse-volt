@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp X How</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* "How CrewUp works": the clean keynote look of x/simple.html on the owner's song (song4 beat grid).
+   Snooze hook -> the brief's 4 steps (start a challenge, check in live, nudge the slackers, win trophies & ranks)
+   -> the favourite ending. */
+#bg{position:absolute;inset:0;background-color:#fff}
+#bgdom{opacity:0}
+#gl{opacity:0}
+#stage{position:absolute;inset:0;z-index:10;perspective:2200px}
+.shot{position:absolute;inset:0;visibility:hidden;transform-style:preserve-3d}
+.ink{color:#0f1115}
+.mut{color:#8d93a1}
+.tx{position:absolute;left:0;right:0;text-align:center;font:600 76px/1.15 Inter;letter-spacing:-.035em}
+.tx .w{display:inline-block;margin:0 .12em}
+.wid{position:absolute;background:rgba(255,255,255,.86);border-radius:44px;box-shadow:0 30px 80px rgba(40,60,110,.18),0 2px 0 rgba(255,255,255,.9) inset;padding:40px 44px;color:#0f1115}
+.pill{position:relative;display:inline-flex;align-items:center;justify-content:center;height:76px;padding:0 40px;border-radius:38px;background:#eef1f6;font:600 32px Inter;color:#0f1115}
+.rip{position:absolute;left:50%;top:50%;width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:50%;background:rgba(255,255,255,.55);opacity:0;pointer-events:none}
+/* step header: blue number badge, title, the line from the owner's brief */
+.sh{position:absolute;left:40px;right:40px;top:200px;text-align:center}
+.sh .n{display:inline-flex;align-items:center;justify-content:center;width:116px;height:116px;border-radius:34px;background:linear-gradient(160deg,#3d82ff,#1F6BFF 60%,#1553d6);color:#fff;font:800 70px/1 Sora;box-shadow:0 18px 50px rgba(31,107,255,.45)}
+.sh .t{font:700 80px/1.08 Inter;letter-spacing:-.04em;margin-top:30px;color:#fff}
+.sh .t .w{display:inline-block;margin:0 .1em}
+.sh.lt .t{color:#0f1115}
+.sh .s{font:500 34px Inter;color:#8d93a1;margin-top:16px}
+.sh.lt .s{color:#6b7280}
+/* dark app cards */
+.dk{position:absolute;background:#17181c;border-radius:52px;color:#fff;box-shadow:0 50px 110px rgba(0,0,0,.45)}
+.lbl{font:700 24px Inter;letter-spacing:.14em;color:#6f7686;margin:40px 0 20px}
+.av{width:116px;height:116px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 50px Sora;color:#0f1115;flex:none}
+.opt{display:inline-flex;align-items:center;height:78px;padding:0 34px;border-radius:39px;background:#24262c;font:600 30px Inter;color:#e8eaf0}
+.btn{position:relative;margin-top:46px;height:112px;border-radius:32px;background:#2a2c33;display:flex;align-items:center;justify-content:center;font:700 38px Inter;color:#8d93a1;overflow:hidden}
+.btn span{position:absolute}
+/* chips around the 3D phone */
+.chip{position:absolute;display:flex;align-items:center;gap:14px;height:96px;padding:0 38px;border-radius:48px;background:rgba(255,255,255,.94);box-shadow:0 24px 60px rgba(40,60,110,.22);font:700 36px Inter;color:#0f1115;white-space:nowrap}
+/* crew list */
+.lr{display:flex;align-items:center;gap:26px;height:126px;padding:0 18px;border-radius:26px}
+.lr+.lr{border-top:1px solid rgba(255,255,255,.07)}
+.lr .av{width:84px;height:84px;font-size:36px}
+.lr .nm{font:700 36px Inter}.lr .sb{font:500 26px Inter;color:#8d93a1;margin-top:6px}
+.lr .ok{margin-left:auto;width:54px;height:54px;border-radius:50%;background:#30D158;display:flex;align-items:center;justify-content:center;font:800 28px Inter;color:#04210f}
+.lr .zz{margin-left:auto;font-size:46px}
+/* player cards */
+.card{position:absolute}
+.card img{position:absolute;left:0;top:0;width:100%;display:block}
+.rk{position:absolute;height:64px;padding:0 26px;border-radius:32px;background:#0f1115;color:#fff;font:800 32px Sora;display:flex;align-items:center;gap:8px;box-shadow:0 14px 34px rgba(0,0,0,.25)}
+#tier{position:absolute;left:0;right:0;top:1262px;text-align:center;font:800 40px Sora;letter-spacing:.26em}
+/* ending: the whole end block sits higher so the CTA and handle stay inside the Instagram safe area */
+#endWrap{transform:translateY(-120px)}
+#handle.pillh{left:270px;right:270px;top:1580px;height:84px;border-radius:42px;background:#fff;color:#0d0f14;display:flex;align-items:center;gap:16px;padding:0 30px;font:700 34px Inter;box-shadow:0 0 0 4px #1F6BFF,0 0 50px rgba(31,107,255,.6)}
+#soon{position:absolute;left:0;right:0;top:1585px;text-align:center;font:600 30px Inter;color:#8d97ad;z-index:31}
+#tag{z-index:65}
+#tag span{color:#e9edf5;background:rgba(10,12,18,.55);border-color:rgba(255,255,255,.18)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="mbA" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbAb" stdDeviation="0 0"/></filter>
+  <filter id="mbB" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbBb" stdDeviation="0 0"/></filter>
+</svg>
+<div id="bg"></div>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="stage">
+  <!-- S1 hook: snoozing the gym alarm -->
+  <div class="shot" id="s1">
+    <div class="tx ink" id="t1" style="top:520px"></div>
+    <div class="wid" id="alarm" style="left:140px;top:730px;width:800px">
+      <div style="display:flex;justify-content:space-between;font:600 30px Inter"><span>⏰ Alarm</span><span class="mut" style="font-weight:500">Gym 🏋️</span></div>
+      <div id="atime" style="font:800 180px/1 Inter;letter-spacing:-.05em;margin-top:26px">6:00</div>
+      <div class="mut" id="asn" style="font:600 32px Inter;margin-top:14px">Today · leg day</div>
+      <div style="display:flex;gap:18px;margin-top:38px"><span class="pill" id="snz" style="background:#FF9F0A;width:300px;overflow:hidden">Snooze<i class="rip" id="rip1" style="background:rgba(0,0,0,.2)"></i></span><span class="pill" style="width:200px">Stop</span></div>
+    </div>
+  </div>
+  <!-- S2 "Unless your crew is waiting." -->
+  <div class="shot" id="s2">
+    <div class="tx ink" id="t2" style="top:760px"></div>
+    <div id="brand" style="position:absolute;left:0;right:0;top:1060px;display:flex;justify-content:center;align-items:center;gap:24px">
+      <img src="../img/crewup-logo.png" style="width:112px;height:112px;border-radius:28px;box-shadow:0 18px 50px rgba(31,107,255,.45)">
+      <span style="font:800 80px Sora;letter-spacing:-.05em;color:#0f1115">CrewUp</span>
+    </div>
+  </div>
+  <!-- S3 step 1: start a challenge -->
+  <div class="shot" id="s3">
+    <div class="dk" id="ch" style="left:90px;top:560px;width:900px;padding:48px 54px 54px"></div>
+  </div>
+  <!-- S4 step 2: check in live (the 3D phone renders on the canvas underneath) -->
+  <div class="shot" id="s4">
+    <div class="chip" id="c1" style="left:60px;top:760px">📍 At the gym</div>
+    <div class="chip" id="c2" style="left:700px;top:1120px">👟 Steps sync</div>
+    <div class="chip" id="c3" style="left:80px;top:1330px">🚫 No faking</div>
+  </div>
+  <!-- S5 step 3: nudge the slackers (flat so the banners always sit in front of the tilted phone) -->
+  <div class="shot" id="s5" style="perspective:1600px;transform-style:flat">
+    <div class="dk" id="lst" style="left:90px;top:560px;width:900px;padding:24px 34px 36px"></div>
+    <div id="lk" style="position:absolute;left:330px;top:570px;width:420px;height:857px;border-radius:66px;background:#050506;padding:12px;box-shadow:0 0 0 3px #3a3d46,0 50px 120px rgba(0,0,0,.6);visibility:hidden">
+      <img src="tex/lock_faisal.png" style="width:396px;height:833px;border-radius:54px;display:block">
+      <img id="lk2" src="tex/done_faisal.png" style="position:absolute;left:12px;top:12px;width:396px;height:833px;border-radius:54px;opacity:0">
+    </div>
+    <img id="bn1" src="tex/ban_nudge.png" style="position:absolute;left:80px;top:640px;width:920px;filter:drop-shadow(0 30px 50px rgba(0,0,0,.55));visibility:hidden">
+    <img id="bn2" src="tex/ban_check_faisal.png" style="position:absolute;left:80px;top:872px;width:920px;filter:drop-shadow(0 30px 50px rgba(0,0,0,.55));visibility:hidden">
+    <div class="chip" id="four" style="left:300px;top:1330px;background:#30D158;color:#04210f;visibility:hidden">✓ 4/4 showed up</div>
+  </div>
+  <!-- S6 step 4: win trophies & ranks (flat: stacking follows the page order) -->
+  <div class="shot" id="s6" style="perspective:1500px;transform-style:flat">
+    <div class="card" id="cO" style="left:60px;top:700px;width:340px;height:486px"><img src="tex/card_omar.png"></div>
+    <div class="card" id="cK" style="left:680px;top:700px;width:340px;height:486px"><img src="tex/card_khalid.png"></div>
+    <div id="glo" style="position:absolute;left:140px;top:420px;width:800px;height:990px;border-radius:50%;background:radial-gradient(closest-side,rgba(31,107,255,.5),rgba(31,107,255,0));opacity:0"></div>
+    <div class="card" id="pc" style="left:320px;top:600px;width:440px;height:629px">
+      <img id="pc0" src="tex/card_back.png"><img id="pc1" src="tex/card_you_bronze.png" style="visibility:hidden"><img id="pc2" src="tex/card_you_silver.png" style="visibility:hidden"><img id="pc3" src="tex/card_you_gold.png" style="visibility:hidden"><img id="pc4" src="tex/card_you.png" style="visibility:hidden">
+    </div>
+    <div id="tier"></div>
+    <div class="rk" id="rk1" style="left:458px;top:552px;background:#FFC83D;color:#111">👑 #1</div>
+    <div class="rk" id="rk2" style="left:150px;top:648px">#2</div>
+    <div class="rk" id="rk3" style="left:836px;top:648px">#3</div>
+    <img id="cof" src="tex/tag_faisal_coffee.png" style="position:absolute;left:230px;top:1290px;width:620px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.3))">
+  </div>
+  <!-- S11 the favourite lines -->
+  <div class="shot" id="s11"><div id="t11" style="position:absolute;left:0;right:0;top:760px;text-align:center"></div></div>
+</div>
+<div id="lines"></div><div id="endWrap"></div><div id="soon">coming soon</div>
+<div id="tag"><img src="../img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script src="../img/trailer-beat.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+const { tl, $, B } = X;
+X.DUR = 24.5;
+X.glowAt = [[0, '#1F6BFF']];
+const show = (id, a, b) => tl.set('#' + id, { visibility: 'visible' }, a).set('#' + id, { visibility: 'hidden' }, b);
+const words = (el, list) => { $(el).innerHTML = list.map(([w, c], i) => w === '\n' ? '<br>' : `<span class="w" id="${el.slice(1)}w${i}" style="${c || ''}">${w}</span>`).join(' '); };
+const wIn = (id, i, t, d = .3) => tl.fromTo(`#${id}w${i}`, { opacity: 0, y: 26, filter: 'blur(16px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: d, ease: 'power3.out' }, t);
+const blurTo = (f, t, a, b, d) => tl.fromTo('#' + f, { attr: { stdDeviation: a } }, { attr: { stdDeviation: b }, duration: d, ease: a === '0 0' ? 'power2.in' : 'power2.out', immediateRender: false }, t);
+// whip a shot out to the left with directional blur, ending on the cut
+const whipOut = (shot, cut, f = 'mbA', d = .22) => {
+  tl.set('#' + shot, { filter: `url(#${f})` }, cut - d).to('#' + shot, { x: -300, opacity: 0, duration: d, ease: 'power2.in' }, cut - d);
+  blurTo(f + 'b', cut - d, '0 0', '70 0', d);
+  tl.set('#' + f + 'b', { attr: { stdDeviation: '0 0' } }, cut + .01).set('#' + shot, { filter: 'none' }, cut + .01);
+};
+// whip the next shot in from the right
+const whipIn = (shot, t, f = 'mbB', d = .32) => {
+  tl.set('#' + shot, { filter: `url(#${f})` }, t).fromTo('#' + shot, { x: 800 }, { x: 0, duration: d, ease: 'power3.out', immediateRender: false }, t);
+  blurTo(f + 'b', t, '60 0', '0 0', d);
+  tl.set('#' + shot, { filter: 'none' }, t + d + .01);
+};
+// step header: number badge slams in, title word by word, then the line from the brief
+const head = (shot, n, title, sub, light) => {
+  const el = document.createElement('div'); el.className = 'sh' + (light ? ' lt' : ''); el.id = 'h' + n;
+  const ws = title.split(' ');
+  el.innerHTML = `<div class="n" id="h${n}n">${n}</div><div class="t">${ws.map((w, i) => `<span class="w" id="h${n}w${i}">${w}</span>`).join(' ')}</div><div class="s" id="h${n}s">${sub}</div>`;
+  $('#' + shot).appendChild(el);
+  return t => {
+    tl.fromTo(`#h${n}n`, { opacity: 0, scale: 1.9, rotate: -12, filter: 'blur(16px)' }, { opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)', duration: .36, ease: 'back.out(1.7)' }, t);
+    ws.forEach((w, i) => tl.fromTo(`#h${n}w${i}`, { opacity: 0, y: 34, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .3, ease: 'power3.out' }, t + .08 + i * .07));
+    tl.fromTo(`#h${n}s`, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .3 }, t + .3);
+  };
+};
+const tap = (btn, rip, t) => tl.fromTo('#' + btn, { scale: 1 }, { scale: .94, duration: .06, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, t - .03)
+  .fromTo('#' + rip, { scale: .2, opacity: .7 }, { scale: 5, opacity: 0, duration: .45, ease: 'power2.out', immediateRender: false }, t - .02);
+const AVC = { O: '#8fb0ff', K: '#ffc83d', Y: '#e9ecf2', F: '#ff9a5c' };
+const av = L => `<div class="av" style="background:${AVC[L]}">${L}</div>`;
+
+// ---------- backgrounds ----------
+const solid = c => ({ backgroundImage: 'none', backgroundColor: c });
+tl.set('#bg', { backgroundImage: 'radial-gradient(120% 80% at 50% 45%,#ffffff 0%,#eef4ff 55%,#dfeaff 100%)', backgroundColor: '#fff' }, 0)
+  .set('#bg', solid('#0b0c0f'), B(8) - .02)
+  .set('#bg', solid('#ffffff'), B(15.5))
+  .set('#bg', solid('#121317'), B(22))
+  .set('#bg', { backgroundImage: 'radial-gradient(100% 70% at 50% 45%,#f4f5f8,#dfe2e8)', backgroundColor: '#eceef2' }, B(30))
+  .set('#bg', { backgroundImage: 'radial-gradient(100% 70% at 50% 45%,#f1f2f5,#dcdee3)', backgroundColor: '#e9eaee' }, B(40) - .02);
+
+// ---------- S1 hook: "Me, every gym day:" + alarm snoozed on 3 beats ----------
+words('#t1', [['Me,'], ['every'], ['gym'], ['day:']]);
+show('s1', 0, B(4.5));
+[.04, .14, .24, .34].forEach((t, i) => wIn('t1', i, t));
+tl.fromTo('#alarm', { scale: .96 }, { scale: 1, duration: .5, ease: 'power3.out' }, 0);
+[B(1), B(2), B(3)].forEach(t => {
+  tap('snz', 'rip1', t);
+  tl.fromTo('#alarm', { x: 0, rotate: 0 }, { x: 9, rotate: .6, duration: .045, yoyo: true, repeat: 3, ease: 'none', immediateRender: false }, t);
+});
+whipOut('s1', B(4.5));
+
+// ---------- S2 "Unless your crew is waiting." + CrewUp ----------
+words('#t2', [['Unless'], ['your'], ['crew', 'color:#1F6BFF'], ['\n'], ['is'], ['waiting.']]);
+show('s2', B(4.5), B(8) - .02);
+[0, 1, 2, 4, 5].forEach((i, j) => wIn('t2', i, B(4.5) + .03 + j * .1));
+tl.fromTo('#brand', { opacity: 0, scale: .7, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .4, ease: 'back.out(1.8)' }, B(6.5))
+  .to('#s2', { scale: 1.25, opacity: 0, filter: 'blur(18px)', duration: .22, ease: 'power2.in' }, B(8) - .24);
+
+// ---------- S3 step 1: start a challenge (on the drop) ----------
+const h1 = head('s3', 1, 'Start a challenge.', 'pick the punishment for the loser');
+$('#ch').innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><b style="font:700 46px Inter">New challenge</b><span style="font:600 28px Inter;color:#8d93a1">The Crew</span></div>
+  <div class="lbl">CREW</div>
+  <div style="display:flex;justify-content:space-between;padding:0 20px">${[['O', 'Omar'], ['K', 'Khalid'], ['Y', 'You'], ['F', 'Faisal']].map(([L, n], i) => `<div id="ca${i}" style="display:flex;flex-direction:column;align-items:center;gap:12px">${av(L)}<span style="font:600 26px Inter;color:#c3c8d4">${n}</span></div>`).join('')}</div>
+  <div class="lbl">GOAL</div>
+  <div style="display:flex;gap:18px"><span class="opt" id="o1">🏋️ 4× a week</span><span class="opt" id="o2">📅 30 days</span></div>
+  <div class="lbl">LOSER</div>
+  <div style="display:flex;gap:18px"><span class="opt" id="o3">☕ buys the coffee</span><span class="opt">🎤 sings karaoke</span></div>
+  <div class="btn" id="go"><span id="go1">Start challenge</span><span id="go2" style="opacity:0">Challenge on 🔥</span><i class="rip" id="rip2"></i></div>`;
+show('s3', B(8) - .02, B(15.5));
+h1(B(8));
+X.flash(B(8), .35);
+tl.fromTo('#ch', { y: 170, opacity: 0, rotateX: 22, filter: 'blur(20px)' }, { y: 0, opacity: 1, rotateX: 0, filter: 'blur(0px)', duration: .5, ease: 'power3.out' }, B(8.4));
+[B(9), B(9.5), B(10), B(10.5)].forEach((t, i) => tl.fromTo('#ca' + i, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .32, ease: 'back.out(2.4)' }, t));
+const pick = (id, t, c) => tl.to('#' + id, { backgroundColor: c, color: '#fff', duration: .12 }, t).fromTo('#' + id, { scale: 1 }, { scale: 1.1, duration: .08, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, t);
+pick('o1', B(11), '#1F6BFF'); pick('o2', B(11.5), '#1F6BFF'); pick('o3', B(12), '#FF7A2F');
+tl.to('#go', { backgroundColor: '#1F6BFF', color: '#fff', boxShadow: '0 0 60px rgba(31,107,255,.65)', duration: .2 }, B(13));
+tap('go', 'rip2', B(14));
+tl.to('#go', { backgroundColor: '#30D158', boxShadow: '0 0 60px rgba(48,209,88,.6)', duration: .15 }, B(14))
+  .to('#go1', { opacity: 0, duration: .1 }, B(14)).fromTo('#go2', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .2 }, B(14) + .04)
+  .to('#s3', { scale: 1.45, opacity: 0, filter: 'blur(22px)', duration: .3, ease: 'power2.in' }, B(15.5) - .3);
+X.flash(B(14), .18);
+
+// ---------- S4 step 2: check in live (3D phone: viewfinder -> shutter on the big hit -> checked in) ----------
+const h2 = head('s4', 2, 'Check in. Live.', 'photo at the gym · steps sync · no faking', true);
+show('s4', B(15.5), B(22));
+h2(B(15.5) + .02);
+[['c1', B(18)], ['c2', B(19)], ['c3', B(20)]].forEach(([id, t]) => tl.fromTo('#' + id, { opacity: 0, scale: .55, filter: 'blur(12px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .34, ease: 'back.out(2)' }, t));
+tl.to(['#c1', '#c3'], { x: -260, opacity: 0, duration: .3, ease: 'power2.in' }, B(21.2)).to('#c2', { x: 260, opacity: 0, duration: .3, ease: 'power2.in' }, B(21.2))
+  .to('#h2', { y: -80, opacity: 0, filter: 'blur(14px)', duration: .3, ease: 'power2.in' }, B(21.4));
+const ctx = X.three({ fov: 30, bloom: .3, radius: .5, threshold: 1.4 });
+X.ctx = null;  // rendered by hand only while step 2 is on screen
+const G = ctx.grade.uniforms; G.vignette.value = .08; G.grain.value = .012; G.lift.value.set(0, 0, 0); G.knee.value = .9; G.fringe.value = .001;
+ctx.drawBg = () => { const g = ctx.bg.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 192); gr.addColorStop(0, '#ffffff'); gr.addColorStop(1, '#e9eef6'); g.fillStyle = gr; g.fillRect(0, 0, 108, 192); ctx.bgTex.needsUpdate = true; };
+X.studioEnv(ctx, [[0xffffff, [-5, 4, 6], [8, 5], 1.6], [0xffffff, [6, 2, 4], [3, 9], 1.8], [0xffffff, [0, 9, 0], [14, 4], 1.4], [0xdfe8ff, [-6, -3, -4], [6, 6], 1.2], [0xffffff, [5, -4, -5], [6, 5], 1.0]]);
+X.lights(ctx);
+X.glassMat.envMapIntensity = .3;  // bright white studio: keep the screen glare soft
+const phoneRoot = new THREE.Group(); ctx.scene.add(phoneRoot);
+let P = null, shutterFlash = null;
+const R4 = { rise: 0, punch: 0, out: 0 };
+tl.fromTo(R4, { rise: 0 }, { rise: 1, duration: .75, ease: 'power3.out', immediateRender: false }, B(15.5))
+  .fromTo(R4, { punch: 0 }, { punch: 1, duration: .06, ease: 'power2.out', immediateRender: false }, B(17) - .02)
+  .fromTo(R4, { punch: 1 }, { punch: 0, duration: .4, ease: 'power2.inOut', immediateRender: false }, B(17) + .06)
+  .fromTo(R4, { out: 0 }, { out: 1, duration: .55, ease: 'power2.in', immediateRender: false }, B(22) - .55);
+
+// ---------- S5 step 3: nudge the slackers ----------
+const h3 = head('s5', 3, 'Nudge the slackers.', 'one tap, straight to their phone');
+$('#lst').innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;padding:18px 18px 16px"><b style="font:700 44px Inter">The Crew</b><span style="font:600 26px Inter;color:#8d93a1">Today · 6:00 AM</span></div>` +
+  [['O', 'Omar', 'checked in 6:02 · 🔥 12', 1], ['K', 'Khalid', 'checked in 6:03 · 🔥 9', 1], ['Y', 'You', 'checked in 6:04 · 🔥 12', 1], ['F', 'Faisal', 'not yet · last check-in Monday', 0]]
+    .map(([L, n, s, ok], i) => `<div class="lr" id="lr${i}">${av(L)}<div><div class="nm">${n}</div><div class="sb" id="lrs${i}">${s}</div></div>${ok ? '<div class="ok">✓</div>' : '<div class="zz" id="zz">😴</div>'}</div>`).join('') +
+  `<div class="btn" id="nb" style="background:#1F6BFF;color:#fff"><span id="nb1">Nudge Faisal ⚡</span><span id="nb2" style="opacity:0">Nudge sent ✓</span><i class="rip" id="rip3"></i></div>`;
+show('s5', B(22), B(30));
+whipIn('s5', B(22));
+h3(B(22) + .05);
+tl.fromTo('#lst', { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration: .45, ease: 'power3.out' }, B(22.3))
+  .fromTo('#lst .lr', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: .3, stagger: .06, ease: 'power3.out' }, B(22.4))
+  .fromTo('#nb', { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .3, ease: 'back.out(2)' }, B(23))
+  .to('#lr3', { backgroundColor: 'rgba(255,69,58,.16)', duration: .15 }, B(23)).to('#lrs3', { color: '#FF453A', duration: .15 }, B(23))
+  .fromTo('#zz', { rotate: 0 }, { rotate: 14, duration: .08, yoyo: true, repeat: 3, immediateRender: false }, B(23));
+X.flash(B(23), .15);
+tap('nb', 'rip3', B(24));
+tl.to('#nb', { backgroundColor: '#30D158', duration: .15 }, B(24)).to('#nb1', { opacity: 0, duration: .1 }, B(24)).fromTo('#nb2', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .2 }, B(24) + .04)
+  // the list whips away, Faisal's phone slides in and the nudge lands on it
+  .set('#lst', { filter: 'url(#mbA)' }, B(25) - .22).to('#lst', { x: -1100, duration: .24, ease: 'power2.in' }, B(25) - .22);
+blurTo('mbAb', B(25) - .22, '0 0', '60 0', .22);
+tl.set('#mbAb', { attr: { stdDeviation: '0 0' } }, B(25) + .02).set('#lst', { visibility: 'hidden', filter: 'none' }, B(25) + .02)
+  .set('#lk', { visibility: 'visible' }, B(25) - .05).fromTo('#lk', { x: 800, rotateY: -25 }, { x: 0, rotateY: -8, duration: .3, ease: 'power3.out', immediateRender: false }, B(25) - .05)
+  .set('#bn1', { visibility: 'visible' }, B(25.5)).fromTo('#bn1', { y: -160, scale: .45, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .38, ease: 'back.out(1.6)' }, B(25.5));
+[B(25.5), B(26)].forEach(t => tl.fromTo('#lk', { x: 0 }, { x: 10, duration: .035, yoyo: true, repeat: 5, ease: 'none', immediateRender: false }, t + .05));
+tl.to('#lk2', { opacity: 1, duration: .25 }, B(28)).set('#bn2', { visibility: 'visible' }, B(28))
+  .fromTo('#bn2', { y: 60, scale: .85, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .35, ease: 'back.out(1.8)' }, B(28))
+  .set('#four', { visibility: 'visible' }, B(29)).fromTo('#four', { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: .32, ease: 'back.out(2.4)' }, B(29));
+X.flash(B(29), .2);
+whipOut('s5', B(30));
+
+// ---------- S6 step 4: win trophies & ranks (card climbs Bronze -> Diamond on 4 beats, then the crew ranks) ----------
+const h4 = head('s6', 4, 'Win trophies & ranks.', 'Bronze → Silver → Gold → Diamond', true);
+show('s6', B(30), B(40) - .02);
+whipIn('s6', B(30));
+h4(B(30) + .05);
+tl.set(['#cO', '#cK', '#rk1', '#rk2', '#rk3', '#cof'], { opacity: 0 }, 0)
+  .fromTo('#pc', { y: 260, rotateY: -70, rotateZ: -8, scale: .7, opacity: 0 }, { y: 0, rotateY: 0, rotateZ: 0, scale: 1, opacity: 1, duration: .5, ease: 'power3.out' }, B(30.4));
+[B(31), B(32), B(33), B(34)].forEach((t, i) => {
+  tl.fromTo('#pc', { rotateY: 0 }, { rotateY: 90, duration: .1, ease: 'power2.in', immediateRender: false }, t - .1)
+    .set('#pc' + i, { visibility: 'hidden' }, t).set('#pc' + (i + 1), { visibility: 'visible' }, t)
+    .fromTo('#pc', { rotateY: -90 }, { rotateY: 0, duration: .3, ease: 'back.out(1.5)', immediateRender: false }, t)
+    .fromTo('#tier', { scale: 1.35, opacity: 0 }, { scale: 1, opacity: 1, duration: .25, immediateRender: false }, t);
+});
+tl.fromTo('#glo', { opacity: 0, scale: .6 }, { opacity: 1, scale: 1.1, duration: .35, ease: 'power2.out' }, B(34)).to('#glo', { opacity: .45, duration: .8 }, B(34) + .35)
+  .fromTo('#pc', { scale: 1 }, { scale: 1.08, duration: .1, yoyo: true, repeat: 1, ease: 'power2.out', immediateRender: false }, B(34) + .2)
+  .to('#pc', { y: -30, scale: .94, duration: .4, ease: 'power3.inOut' }, B(35) - .1)
+  .to('#tier', { opacity: 0, duration: .2 }, B(35) - .1)
+  .fromTo('#cO', { x: 300, rotate: 0, opacity: 0 }, { x: 0, rotate: -10, opacity: 1, duration: .45, ease: 'power3.out' }, B(35))
+  .fromTo('#cK', { x: -300, rotate: 0, opacity: 0 }, { x: 0, rotate: 10, opacity: 1, duration: .45, ease: 'power3.out' }, B(35) + .08)
+  .fromTo(['#rk1', '#rk2', '#rk3'], { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: .3, stagger: .07, ease: 'back.out(2.2)' }, B(35.5))
+  .fromTo('#cof', { y: 120, scale: .7, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .4, ease: 'back.out(1.8)' }, B(36))
+  .to('#s6', { scale: 1.05, duration: 2.4, ease: 'sine.inOut' }, B(36));
+whipOut('s6', B(40) - .02);
+
+// ---------- S11 "Free. / No excuses. / No skipping." (the owner's favourite, keynote style) ----------
+const E = B(43.85);  // cut to the dark logo build
+$('#t11').innerHTML = ['Free.', 'No excuses.', 'No <span style="color:#1F6BFF">skipping.</span>'].map((h, i) => `<div id="f${i}" style="font:600 104px/1.25 Inter;letter-spacing:-.04em;color:#0f1115">${h}</div>`).join('');
+show('s11', B(40) - .02, E);
+[B(40), B(41), B(42)].forEach((t, i) => tl.fromTo('#f' + i, { opacity: 0, y: 30, filter: 'blur(16px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .32, ease: 'power3.out' }, t));
+tl.to('#f0', { color: '#b3b8c3', duration: .25 }, B(41)).to('#f1', { color: '#b3b8c3', duration: .25 }, B(42))
+  .fromTo('#t11', { scale: 1 }, { scale: 1.14, duration: 1.4, ease: 'sine.inOut' }, B(42) + .1);
+whipOut('s11', E);
+tl.set('#bg', solid('#06070b'), E);
+
+// ---------- favourite logo build + end card (same build as every CrewUp trailer) ----------
+$('#endWrap').innerHTML = `<div id="rays" class="abs"></div><div id="dot" class="abs"></div><div id="ring" class="abs"></div>
+  <div class="burst abs" id="bu1"></div><div class="burst abs" id="bu2"></div>
+  <div id="logoWrap" class="abs"><img src="../img/crewup-logo.png"><div id="logoShine" class="abs" style="inset:0"></div></div>
+  <div id="wm" class="abs"></div><div id="cs" class="abs">Gym with your crew, not alone.</div>
+  <div id="cta" class="abs"><span style="position:relative">Join the waitlist · link in bio</span><div id="ctaShine" class="abs" style="inset:0"></div></div>
+  <div id="handle" class="abs pillh"><svg width="34" height="34" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#0d0f14" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="#0d0f14" stroke-width="2.6" stroke-linecap="round"/></svg><span id="hq"></span></div>`;
+$('#wm').innerHTML = [...'CrewUp'].map(ch => `<span>${ch}</span>`).join('');
+tl.set(['#dot', '#ring', '#logoWrap', '#cs', '#cta', '#handle', '#rays', '#bu1', '#bu2', '#soon'], { autoAlpha: 0 }, 0).set('#wm span', { autoAlpha: 0 }, 0)
+  .to('#bgdom', { opacity: 1, duration: .3 }, E)
+  .fromTo('#dot', { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .2 }, B(44))
+  .fromTo('#ring', { autoAlpha: 0, scale: .1 }, { autoAlpha: 1, scale: 1, duration: .32 }, B(45)).to('#dot', { autoAlpha: 0, duration: .1 }, B(45) + .2)
+  .to('#ring', { borderRadius: '80px', scale: 1.07, duration: .24, ease: 'power3.inOut' }, B(46) - .26)
+  .fromTo('#logoWrap', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, B(46)).to('#ring', { autoAlpha: 0, duration: .15 }, B(46))
+  .fromTo('#bu1', { autoAlpha: .9, scale: 1 }, { autoAlpha: 0, scale: 2.4, duration: .8, ease: 'power2.out' }, B(46))
+  .fromTo('#bu2', { autoAlpha: .7, scale: 1 }, { autoAlpha: 0, scale: 3.4, duration: 1.1, ease: 'power2.out' }, B(46) + .12)
+  .fromTo('#rays', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: 1, duration: .8 }, B(46))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut' }, B(46) + .35);
+X.flash(B(46), .6);
+tl.to(['#logoWrap', '#bu1', '#bu2', '#rays'], { y: -140, scale: .8, duration: .4, ease: 'power3.inOut' }, B(47) - .2)
+  .fromTo('#wm span', { autoAlpha: 0, y: 60, rotateX: -80, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, rotateX: 0, filter: 'blur(0px)', duration: .4, stagger: .05, ease: 'back.out(1.8)' }, B(47))
+  .fromTo('#cs', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .35 }, B(48))
+  .fromTo('#cta', { autoAlpha: 0, y: 30, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)' }, B(49))
+  .fromTo('#ctaShine', { x: -900 }, { x: 900, duration: .8, ease: 'power2.inOut' }, B(49) + .4)
+  .fromTo('#handle', { autoAlpha: 0, scale: .8 }, { autoAlpha: 1, scale: 1, duration: .3, ease: 'back.out(2)' }, B(50))
+  .fromTo('#soon', { autoAlpha: 0 }, { autoAlpha: 1, duration: .35 }, B(51));
+
+// ---------- per frame: alarm, tier label, handle typing, the 3D phone ----------
+const gl = $('#gl');
+const TIERS = [['BRONZE', '#b0703f'], ['SILVER', '#8b95a7'], ['GOLD', '#c9971a'], ['DIAMOND', '#1F6BFF']];
+X.onFrame(t => {
+  const k = (a, b) => X.clamp((t - a) / (b - a));
+  const n = [B(1), B(2), B(3)].filter(x => t >= x).length;
+  $('#atime').textContent = ['6:00', '6:09', '6:18', '6:27'][n];
+  $('#asn').textContent = n ? `Snoozed ${n}×` + (n === 3 ? ' 😴' : '') : 'Today · leg day';
+  const ti = [B(31), B(32), B(33), B(34)].filter(x => t >= x).length, tr = $('#tier');
+  tr.textContent = ti ? TIERS[ti - 1][0] : ''; tr.style.color = ti ? TIERS[ti - 1][1] : '';
+  const h = '@getcrewup', m = Math.floor(h.length * k(B(50) + .1, B(50) + .7)); $('#hq').textContent = h.slice(0, m) + (t > B(50) && t < B(51) && Math.floor(t * 4) % 2 ? '|' : '');
+  // 3D phone for step 2
+  const on = t >= B(15.5) - .01 && t < B(22) + .01;
+  gl.style.opacity = on ? 1 : 0;
+  if (!on || !P) return;
+  const u = t - B(15.5);
+  P.show(t < B(17) + .03 ? X.T.cam_you : X.T.done_day1);
+  shutterFlash.material.opacity = t >= B(17) ? .9 * Math.max(0, 1 - (t - B(17)) / .25) : 0;
+  const tk = (t - (B(17) - .08)) / .32;
+  P.tap.material.opacity = tk > 0 && tk < 1 ? .8 * (1 - tk) : 0; P.tap.scale.setScalar(.6 + .9 * X.clamp(tk));
+  phoneRoot.position.set(-3.4 * R4.out * R4.out, -2.3 * (1 - R4.rise) + .03 * Math.sin(t * 1.7), 0);
+  phoneRoot.rotation.set(.38 * (1 - R4.rise) - .05 + .025 * Math.sin(t * .9), -.95 * (1 - R4.rise) - .2 + .06 * u + 1.6 * R4.out, .1 * (1 - R4.rise) - .03);
+  ctx.cam.position.set(.3 * Math.sin(u * .35), .4 + .04 * Math.sin(u * .6), 6.0 - .4 * R4.punch);
+  ctx.cam.lookAt(0, .3, 0); ctx.cam.updateMatrixWorld();
+  G.blurDir.value.set(-.07 * R4.out * R4.out, 0);
+  ctx.render(t);
+});
+X.start(X.loadTex(['cam_you', 'done_day1']).then(() => {
+  P = X.makePhone({ finish: 'blue', tex: X.T.cam_you }); phoneRoot.add(P.g);
+  const [sx, sy] = P.pt(195, 722); P.tap.position.x = sx; P.tap.position.y = sy;  // shutter button
+  shutterFlash = new THREE.Mesh(X.flat(X.PHONE.SW, X.PHONE.SH, .092, 32), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xffffff).multiplyScalar(2), transparent: true, opacity: 0, depthWrite: false }));
+  shutterFlash.position.z = .0008; shutterFlash.renderOrder = 45; P.ovRoot.add(shutterFlash);
+}));
+</script>
+</body>
+</html>
