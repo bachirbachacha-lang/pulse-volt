@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>One Text CrewUp</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* CrewUp in the letter-particle style of the Claude ad (1080x1920, 24 s, silent; cuts every 0.5 s).
+   Hook: "Every streak starts with one text." A group-chat message to the crew bursts into blue letters that build a
+   dumbbell, a flame, four friends, a trophy and a habit calendar, spell "It starts with one text.", then the owner's
+   favourite ending (Free. / No excuses. / No skipping. -> dot -> ring -> logo burst -> CrewUp -> waitlist). No launch date,
+   no numbers, no betting (the stake is a coffee, as in the other reels). */
+html,body{background:#090B10}
+#stage{position:absolute;inset:0;z-index:10;pointer-events:none}
+.ab{position:absolute}
+.hk{position:absolute;left:0;right:0;text-align:center;font:800 118px/1 Inter;color:#fff;letter-spacing:-.045em;white-space:nowrap}
+.hk.or{color:#FF7A2F;text-shadow:0 0 50px rgba(255,122,47,.6)}
+#hook{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:540px 380px}
+#pbox{position:absolute;left:70px;top:720px;width:940px;height:440px;border-radius:44px;border:1.5px solid rgba(255,255,255,.1);background:#10131b;opacity:0}
+#bub{position:absolute;left:150px;top:868px;width:780px;height:196px;border-radius:44px 44px 12px 44px;background:#1F6BFF;box-shadow:0 20px 60px rgba(31,107,255,.45);opacity:0}
+#crew{position:absolute;left:110px;top:752px;display:flex;align-items:center;gap:18px;font:700 34px Inter;color:#fff;opacity:0}
+#crew .av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 24px Inter;color:#fff;margin-right:-30px;border:3px solid #10131b}
+#crew b{margin-left:42px}
+#pt{position:absolute;left:0;top:886px;width:1080px;text-align:center;font:600 56px/74px Inter;color:#fbf6f1;white-space:pre}
+#pt .c{display:inline-block;width:4px;height:58px;background:#ff7a3d;vertical-align:-10px;margin-left:3px;box-shadow:0 0 14px rgba(255,122,61,.95)}
+#send{position:absolute;left:916px;top:1082px;width:66px;height:66px;border-radius:50%;background:#FF7A2F;display:flex;align-items:center;justify-content:center;opacity:0}
+#plab{position:absolute;left:150px;top:1094px;font:600 26px Inter;color:#8d97ad;opacity:0}
+.cap{position:absolute;left:0;right:0;top:1580px;text-align:center;font:800 124px/1 Sora;color:#fff;letter-spacing:-.05em;opacity:0;text-shadow:0 0 50px rgba(31,107,255,.55)}
+.cap i{font-style:normal;color:#FF7A2F}
+#wb{font:700 84px Inter;letter-spacing:-.04em;top:1600px}
+/* the favourite ending (same build as every CrewUp trailer), lifted so the CTA stays in the Instagram safe area */
+#bgdom{opacity:0}
+#endWrap{transform:translateY(-120px)}
+#handle.pillh{left:270px;right:270px;top:1580px;height:84px;border-radius:42px;background:#fff;color:#0d0f14;display:flex;align-items:center;gap:16px;padding:0 30px;font:700 34px Inter;box-shadow:0 0 0 4px #1F6BFF,0 0 50px rgba(31,107,255,.6)}
+#soon{position:absolute;left:0;right:0;top:1585px;text-align:center;font:600 30px Inter;color:#8d97ad;z-index:31}
+#t11{position:absolute;left:0;right:0;top:760px;text-align:center;z-index:12}
+#tag{z-index:65}
+#tag span{color:#e9edf5;background:rgba(10,12,18,.55);border-color:rgba(255,255,255,.18)}
+</style>
+</head>
+<body>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="stage">
+  <div id="hook"><div class="hk" id="h1" style="top:718px">Every streak</div><div class="hk" id="h2" style="top:858px">starts with</div><div class="hk or" id="h3" style="top:998px">one text.</div></div>
+  <div id="pbox"></div><div id="crew"><span class="av" style="background:#1F6BFF">F</span><span class="av" style="background:#FF7A2F">O</span><span class="av" style="background:#30a46c">K</span><span class="av" style="background:#8e5cff">Y</span><b>The Crew 💪</b></div><div id="bub"></div><div id="plab">Delivered to 4 friends</div>
+  <div id="pt"></div>
+  <div id="send"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="cap" id="wb">One text becomes</div>
+  <div class="cap" id="c1">reps<i>.</i></div><div class="cap" id="c2">streaks<i>.</i></div><div class="cap" id="c3">a crew<i>.</i></div><div class="cap" id="c4">wins<i>.</i></div><div class="cap" id="c5">habits<i>.</i></div>
+  <div id="t11"></div>
+</div>
+<div id="lines"></div><div id="endWrap"></div><div id="soon">coming soon</div>
+<div id="tag"><img src="../img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script>window.BEAT = { beats: [0, .5], energy: [0] };</script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+const { tl, $, B } = X;
+X.DUR = 24.0;
+X.glowAt = [[0, '#1F6BFF']];
+const N = 70000;
+const k01 = (t, a, b) => X.clamp((t - a) / (b - a));
+const ctx = X.three({ fov: 50, bloom: .5, radius: .45, threshold: .9, ss: 1.5 });
+const G = ctx.grade.uniforms; G.vignette.value = .36; G.grain.value = .02; G.lift.value.set(0, 0, 0); G.knee.value = .9; G.fringe.value = .0018; G.contrast.value = 1.03; G.sat.value = 1.06;
+const GLOWB = { a: 0 };
+ctx.drawBg = () => { const g = ctx.bg.getContext('2d'); g.fillStyle = '#05060a'; g.fillRect(0, 0, 108, 192);
+  const gr = g.createRadialGradient(54, 100, 0, 54, 100, 115); gr.addColorStop(0, `rgba(20,62,170,${GLOWB.a})`); gr.addColorStop(.55, `rgba(10,30,90,${GLOWB.a * .5})`); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 108, 192); ctx.bgTex.needsUpdate = true; };
+// camera on an orbit: radius, azimuth, elevation around a target
+const CAM = { r: 10, az: 0, el: 0, tx: 0, ty: 0, tz: 0, fov: 50, roll: 0 };
+X.camFn = () => { const a = CAM.az * Math.PI / 180, e = CAM.el * Math.PI / 180;
+  return { p: [CAM.tx + Math.sin(a) * Math.cos(e) * CAM.r, CAM.ty + Math.sin(e) * CAM.r, CAM.tz + Math.cos(a) * Math.cos(e) * CAM.r], q: [CAM.tx, CAM.ty, CAM.tz], fov: CAM.fov, roll: CAM.roll * Math.PI / 180 }; };
+X.rig.chase = 1; X.mb = .7;
+
+// ---------------------------------------------------------------- shapes (every one is N points)
+let sd = 20251031; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+const gauss = () => { let u = 0; while (!u) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2831853 * rnd()); };
+const fill = fn => { const a = new Float32Array(N * 3); for (let i = 0; i < N; i++) { const p = fn(i); a[i * 3] = p[0]; a[i * 3 + 1] = p[1]; a[i * 3 + 2] = p[2]; } return a; };
+const pick = (L, jit = 0) => fill(() => { const p = L[Math.floor(rnd() * L.length)]; return [p[0] + (rnd() - .5) * jit, p[1] + (rnd() - .5) * jit, p[2] + (rnd() - .5) * jit]; });
+const canvas = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const PXU = 1920 / (2 * 10 * Math.tan(25 * Math.PI / 180));   // px per world unit on z = 0, seen from z = 10 at fov 50
+// lit pixels of a drawing -> points; (cx, cy) is the drawing's centre, s = world units per pixel
+const pixels = (w, h, draw, step, s, cx = w / 2, cy = h / 2, z = 0) => { const c = canvas(w, h), g = c.getContext('2d'); draw(g, w, h);
+  const d = g.getImageData(0, 0, w, h).data, L = []; for (let y = 0; y < h; y += step) for (let x = 0; x < w; x += step) if (d[(y * w + x) * 4 + 3] > 130) L.push([(x - cx) * s, (cy - y) * s, z]); return L; };
+const textAt = (lines, font, lh, step) => pixels(1080, 1920, g => { g.fillStyle = '#fff'; g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; const y0 = 960 - (lines.length - 1) * lh / 2; lines.forEach((l, i) => g.fillText(l, 540, y0 + i * lh)); }, step, 1 / PXU, 540, 960);
+const tilt = (a, ax, ay) => { const cx = Math.cos(ax), sx = Math.sin(ax), cy = Math.cos(ay), sy = Math.sin(ay); for (let i = 0; i < N; i++) { let x = a[i * 3], y = a[i * 3 + 1], z = a[i * 3 + 2]; let y2 = y * cx - z * sx, z2 = y * sx + z * cx; let x3 = x * cy + z2 * sy, z3 = -x * sy + z2 * cy; a[i * 3] = x3; a[i * 3 + 1] = y2; a[i * 3 + 2] = z3; } return a; };
+const SH = {};
+const buildShapes = () => {
+  SH.prompt = pick(textAt(['gym 6am?', 'last one there buys coffee ☕'], '600 56px Inter', 74, 2), .006);
+  SH.galaxy = tilt(fill(i => { const arm = i % 3, u = Math.pow(rnd(), .62), r = .35 + 8.6 * u, th = arm * 2.0944 + r * .62 + gauss() * .2 * (1.25 - u); return [Math.cos(th) * r, gauss() * .26 * (1 - u * .7), Math.sin(th) * r]; }), 1.05, 0);
+  // a dumbbell: bar, two plates a side
+  SH.dumbbell = tilt(fill(() => { const r = rnd();
+    if (r < .14) { const x = (rnd() - .5) * 2.7, a = rnd() * 6.2832; return [x, Math.cos(a) * .09, Math.sin(a) * .09]; }
+    const side = rnd() < .5 ? -1 : 1, small = rnd() < .38, R0 = small ? .56 : .84, x0 = side * (small ? 1.06 : 1.3), th = small ? .12 : .16;
+    if (rnd() < .62) { const a = rnd() * 6.2832, rr = R0 * Math.sqrt(.03 + .97 * rnd()); return [x0 + (rnd() < .5 ? -th : th), Math.cos(a) * rr, Math.sin(a) * rr]; }
+    const a = rnd() * 6.2832; return [x0 + (rnd() - .5) * 2 * th, Math.cos(a) * R0, Math.sin(a) * R0]; }), .25, .5);
+  // a flame (the streak), an inner core in front
+  SH.flame = fill(() => { const inner = rnd() < .3, u = rnd(), prof = Math.sin(Math.PI * Math.pow(u, .62)) * (inner ? .62 : 1.22), a = rnd() * 6.2832;
+    const wob = 1 + .1 * Math.sin(a * 3 + u * 8) * u, bend = .35 * Math.sin(u * 3.2) * u;
+    return [Math.cos(a) * prof * wob + bend, (inner ? u * 2.5 - 1.95 : u * 4.1 - 2.05), Math.sin(a) * prof * wob * .8 + (inner ? .15 : 0)]; });
+  // four friends side by side
+  const PPL = [[-1.62, -.1, -.3, .9], [-.54, 0, .12, 1.0], [.56, -.04, .12, 1.03], [1.64, -.12, -.3, .93]];
+  SH.crew = fill(() => { const [px, py, pz, k] = PPL[Math.floor(rnd() * 4)];
+    if (rnd() < .3) { const v = [gauss(), gauss(), gauss()], l = Math.hypot(...v); return [px + v[0] / l * .3 * k, py + 1.05 * k + v[1] / l * .33 * k, pz + v[2] / l * .3 * k]; }
+    const a = rnd() * 6.2832, h = rnd(), w = (.6 - .08 * h) * (h < .14 ? Math.sqrt(h / .14) : 1);
+    return [px + Math.cos(a) * w * k, py + (.6 - h * 2.2) * k, pz + Math.sin(a) * w * .55 * k]; });
+  // a trophy: base, stem, cup, two handles
+  SH.trophy = fill(() => {
+    if (rnd() < .12) { const sg = rnd() < .5 ? -1 : 1, a = (rnd() - .5) * Math.PI, b = rnd() * 6.2832, Rr = .36, tb = .05; return [sg * (.95 + (Rr + tb * Math.cos(b)) * Math.cos(a)), 1.05 + (Rr + tb * Math.cos(b)) * Math.sin(a), tb * Math.sin(b)]; }
+    const u = rnd(); let y, rad;
+    if (u < .14) { y = -2.0 + u / .14 * .28; rad = .9; } else if (u < .24) { y = -1.72; rad = .9 * Math.sqrt((u - .14) / .1); }
+    else if (u < .42) { const k = (u - .24) / .18; y = -1.72 + k * 1.05; rad = .15 + .12 * Math.pow(1 - k, 2); }
+    else { const k = (u - .42) / .58; y = -.67 + k * 2.45; rad = .24 + 1.0 * Math.sin(Math.min(1, k * 1.25) * Math.PI / 2); }
+    const a = rnd() * 6.2832; return [Math.cos(a) * rad, y, Math.sin(a) * rad]; });
+  // a month of check-ins
+  SH.calendar = tilt(pick(pixels(860, 900, g => {
+    g.strokeStyle = '#fff'; g.fillStyle = '#fff'; g.lineCap = 'round'; g.lineJoin = 'round';
+    const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+    g.lineWidth = 10; rr(10, 10, 840, 880, 60); g.stroke(); g.fillRect(10, 150, 840, 8); g.fillRect(110, 64, 180, 26); g.fillRect(560, 64, 190, 26);
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 6; c++) { const x = 60 + c * 128, y = 200 + r * 134, n = r * 6 + c; g.lineWidth = 6; rr(x, y, 100, 100, 22); g.stroke();
+      if (n < 24 && n !== 9 && n !== 17) { g.lineWidth = 13; g.beginPath(); g.moveTo(x + 24, y + 52); g.lineTo(x + 44, y + 74); g.lineTo(x + 78, y + 30); g.stroke(); } }
+  }, 3, 3.85 / 860), .006), -.28, .24);
+  SH.reveal = pick(textAt(['It starts', 'with', 'one text.'], '800 150px Sora', 168, 3), .006);
+  SH.stars = fill(() => { const v = [gauss(), gauss(), gauss()], l = Math.hypot(...v), r = 13 + rnd() * 22; return v.map(c => c / l * r); });
+};
+
+// ---------------------------------------------------------------- the letter particles
+const geo = new THREE.BufferGeometry();
+const A = new Float32Array(N * 3), Bp = new Float32Array(N * 3), seed = new Float32Array(N), glyph = new Float32Array(N), hue = new Float32Array(N);
+for (let i = 0; i < N; i++) { seed[i] = rnd(); glyph[i] = Math.floor(rnd() * 88); hue[i] = rnd() < .22 ? 1 : rnd() * .25; }
+geo.setAttribute('position', new THREE.BufferAttribute(A, 3)); geo.setAttribute('pA', new THREE.BufferAttribute(A, 3)); geo.setAttribute('pB', new THREE.BufferAttribute(Bp, 3));
+geo.setAttribute('seed', new THREE.BufferAttribute(seed, 1)); geo.setAttribute('glyph', new THREE.BufferAttribute(glyph, 1)); geo.setAttribute('hue', new THREE.BufferAttribute(hue, 1));
+const U = { atlas: { value: null }, morph: { value: 0 }, time: { value: 0 }, swirl: { value: 1 }, size: { value: .052 }, scale: { value: 1000 }, bright: { value: .5 }, vis: { value: 0 }, orange: { value: 0 }, warm: { value: 0 } };
+const pmat = new THREE.ShaderMaterial({
+  uniforms: U, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  vertexShader: `attribute vec3 pA; attribute vec3 pB; attribute float seed; attribute float glyph; attribute float hue;
+    uniform float morph, time, swirl, size, scale;
+    varying float vG; varying float vH; varying float vA;
+    void main(){
+      float k = clamp((morph - seed * 0.42) / 0.58, 0.0, 1.0); k = k * k * (3.0 - 2.0 * k);
+      float s = sin(k * 3.14159);
+      vec3 p = mix(pA, pB, k);
+      vec3 off = vec3(sin(seed * 91.7 + time * 1.3 + p.y), cos(seed * 57.3 + time * 1.1 + p.x), sin(seed * 33.1 - time * 0.9 + p.z));
+      p += off * s * swirl;
+      p += 0.012 * vec3(sin(time * 1.7 + seed * 40.0), cos(time * 1.3 + seed * 70.0), sin(time * 1.1 + seed * 20.0));
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_Position = projectionMatrix * mv;
+      gl_PointSize = min(90.0, size * scale / max(0.05, -mv.z) * (0.75 + 0.5 * fract(seed * 13.7)) * (1.0 + 0.6 * s));
+      vG = mod(glyph + floor(time * 14.0 + seed * 50.0) * step(0.02, s), 88.0);
+      vH = hue; vA = smoothstep(0.25, 1.6, -mv.z) * (1.0 - 0.35 * s);
+    }`,
+  fragmentShader: `uniform sampler2D atlas; uniform float bright, vis, orange, warm; varying float vG; varying float vH; varying float vA;
+    void main(){
+      vec2 cell = vec2(mod(vG, 16.0), floor(vG / 16.0));
+      vec2 uv = vec2((cell.x + gl_PointCoord.x) / 16.0, 1.0 - (cell.y + gl_PointCoord.y) / 8.0);
+      float a = texture2D(atlas, uv).a;
+      vec3 cool = vec3(0.5, 0.66, 1.0), hot = vec3(1.0, 0.2, 0.03), gold = vec3(1.0, 0.5, 0.06);
+      vec3 col = mix(cool, hot, clamp(vH + orange, 0.0, 1.0));
+      col = mix(col, mix(gold, hot, vH * 0.7), warm);
+      gl_FragColor = vec4(col * a * vA * bright * vis, 1.0);
+    }`,
+});
+const pts = new THREE.Points(geo, pmat); pts.frustumCulled = false; ctx.scene.add(pts);
+
+// ---------------------------------------------------------------- the story: [morph start, length, from, to, swirl, brightness]
+// [morph start, length, from, to, swirl, brightness, letter size, warmth]
+const ST = [[2.28, .95, 'prompt', 'galaxy', 2.4, .32, .07, 0], [5.3, .55, 'galaxy', 'dumbbell', 1.2, .2, .052, 0], [6.9, .55, 'dumbbell', 'flame', 1.0, .2, .05, 1],
+  [8.5, .55, 'flame', 'crew', 1.0, .19, .05, 0], [10.1, .55, 'crew', 'trophy', 1.0, .19, .05, .85], [11.7, .55, 'trophy', 'calendar', 1.0, .15, .046, 0],
+  [13.3, .85, 'calendar', 'reveal', 1.5, .085, .04, 0], [15.85, 1.1, 'reveal', 'stars', 2.6, .22, .055, 0]];
+let bound = -1;
+const bind = i => { if (bound === i) return; bound = i; const [, , a, b] = ST[i]; A.set(SH[a]); Bp.set(SH[b]); geo.attributes.pA.needsUpdate = true; geo.attributes.pB.needsUpdate = true; geo.attributes.position.needsUpdate = true; };
+const BR = { v: .1, sz: .06 };
+
+// ---------------------------------------------------------------- camera moves
+tl.set(CAM, { r: 10, az: 0, el: 0, tx: 0, ty: 0, tz: 0, fov: 50, roll: 0 }, 0)
+  .to(CAM, { r: 13.5, az: 22, el: 18, duration: 1.0, ease: 'power2.out' }, 2.3)
+  .to(CAM, { r: 5.2, az: 80, el: 7, roll: -6, duration: 2.0, ease: 'sine.inOut' }, 3.3)
+  .to(CAM, { r: 9.4, az: 338, el: 9, roll: 0, duration: .55, ease: 'power3.inOut' }, 5.3)
+  .to(CAM, { az: 384, duration: 1.05, ease: 'none' }, 5.85)
+  .to(CAM, { r: 10.2, az: 410, el: 3, duration: .55, ease: 'power3.inOut' }, 6.9)
+  .to(CAM, { az: 436, el: 6, duration: 1.05, ease: 'none' }, 7.45)
+  .to(CAM, { r: 10.4, az: 360, el: 7, duration: .55, ease: 'power3.inOut' }, 8.5)
+  .to(CAM, { az: 346, el: 9, duration: 1.05, ease: 'none' }, 9.05)
+  .to(CAM, { r: 9.8, az: 330, el: 8, duration: .55, ease: 'power3.inOut' }, 10.1)
+  .to(CAM, { az: 296, el: 12, duration: 1.05, ease: 'none' }, 10.65)
+  .to(CAM, { r: 9.6, az: 360, el: -5, duration: .55, ease: 'power3.inOut' }, 11.7)
+  .to(CAM, { r: 8.9, duration: 1.05, ease: 'none' }, 12.25)
+  .to(CAM, { r: 10, az: 360, el: 0, duration: .85, ease: 'power3.inOut' }, 13.3)
+  .to(CAM, { r: 9.6, duration: 1.7, ease: 'none' }, 14.15)
+  .to(CAM, { r: 15, az: 378, el: 5, duration: 5.6, ease: 'sine.inOut' }, 15.85);
+tl.set(X.dof, { amt: 0 }, 0).to(X.dof, { amt: .006, duration: .6 }, 3.4).to(X.dof, { amt: 0, duration: .4 }, 4.9);
+tl.set(GLOWB, { a: 0 }, 0).to(GLOWB, { a: .55, duration: .6 }, 2.3).to(GLOWB, { a: .45, duration: .5 }, 5.3).to(GLOWB, { a: .6, duration: .8 }, 13.3).to(GLOWB, { a: .3, duration: 1.2 }, 15.85);
+tl.set(U.vis, { value: 0 }, 0).set(U.vis, { value: 1 }, 2.25).to(U.orange, { value: .55, duration: .3, yoyo: true, repeat: 1 }, 2.25);
+tl.set(BR, { v: .065, sz: .045 }, 0); ST.forEach(([t0, , , , , br, sz, w]) => tl.to(BR, { v: br, sz, duration: t0 < 3 ? .7 : .4 }, t0 + (t0 < 3 ? .1 : 0)).to(U.warm, { value: w, duration: .45 }, t0));
+
+// ---------------------------------------------------------------- the hook (words on screen)
+const hin = (id, t) => tl.fromTo(id, { opacity: 0, y: 40, filter: 'blur(16px)', scale: 1.06 }, { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: .24, ease: 'power3.out', immediateRender: false }, t);
+tl.set(['#h1', '#h2', '#h3'], { opacity: 0 }, 0); hin('#h1', .02); hin('#h2', .27); hin('#h3', .52);
+tl.to('#hook', { scale: .42, y: -370, duration: .32, ease: 'power3.inOut' }, 1.08).to(['#h1', '#h2'], { color: '#a99b8f', duration: .3 }, 1.08);
+tl.fromTo(['#pbox', '#crew', '#bub', '#send'], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .25, ease: 'power3.out', immediateRender: false }, 1.16);
+tl.fromTo('#plab', { opacity: 0 }, { opacity: 1, duration: .12, immediateRender: false }, 2.16);
+tl.to('#send', { scale: .82, duration: .06, ease: 'power2.in' }, 2.12).to('#send', { scale: 1.12, boxShadow: '0 0 50px rgba(255,120,60,1)', duration: .1 }, 2.18);
+tl.to(['#pbox', '#crew', '#bub', '#plab', '#send'], { opacity: 0, duration: .05, ease: 'none' }, 2.24).to('#hook', { opacity: 0, filter: 'blur(14px)', scale: '+=.04', duration: .32, ease: 'power2.in' }, 2.26);
+tl.set('#pt', { opacity: 1 }, 0).set('#pt', { opacity: 0 }, 2.27);
+tl.set('#flash', { background: '#bcd2ff', opacity: 0 }, 0).to('#flash', { opacity: .18, duration: .04, yoyo: true, repeat: 1 }, 2.25);
+const PROMPT = 'gym 6am?\nlast one there buys coffee ☕';
+// captions
+const cin = (id, a, b, big = true) => tl.fromTo(id, { opacity: 0, y: 30, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .22, ease: 'power3.out', immediateRender: false }, a)
+  .to(id, { opacity: 0, y: -24, filter: 'blur(12px)', duration: .18, ease: 'power2.in' }, b);
+cin('#wb', 3.45, 5.15); cin('#c1', 5.72, 6.85); cin('#c2', 7.32, 8.45); cin('#c3', 8.92, 10.05); cin('#c4', 10.52, 11.65); cin('#c5', 12.12, 13.25);
+tl.set(U.vis, { value: 1 }, 2.25).to(U.vis, { value: 0, duration: .7, ease: 'power2.in' }, 17.7);
+
+// ---------------------------------------------------------------- the owner's favourite ending (same build as every CrewUp trailer)
+const F0 = 16.5, E = F0 + 1.925;   // the three lines on the beat, then cut to the dark logo build (0.5 s beats)
+$('#t11').innerHTML = ['Free.', 'No excuses.', 'No <span style="color:#1F6BFF;text-shadow:0 0 50px rgba(31,107,255,.9)">skipping.</span>'].map((h, i) => `<div id="f${i}" style="font:600 104px/1.25 Inter;letter-spacing:-.04em;color:#fff">${h}</div>`).join('');
+tl.set('#t11', { opacity: 0 }, 0).set('#t11', { opacity: 1 }, F0 - .02);
+[F0, F0 + .5, F0 + 1].forEach((t, i) => tl.fromTo('#f' + i, { opacity: 0, y: 30, filter: 'blur(16px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .32, ease: 'power3.out', immediateRender: false }, t));
+tl.to('#f0', { color: '#5d6578', duration: .25 }, F0 + .5).to('#f1', { color: '#5d6578', duration: .25 }, F0 + 1)
+  .fromTo('#t11', { scale: 1 }, { scale: 1.12, duration: 1.4, ease: 'sine.inOut', immediateRender: false }, F0 + 1.05)
+  .to('#t11', { opacity: 0, filter: 'blur(14px)', y: -30, duration: .2, ease: 'power2.in' }, E - .2);
+const T0 = E + .075;   // dot on the next beat; the build below keeps the trailer's beat spacing
+$('#endWrap').innerHTML = `<div id="rays" class="abs"></div><div id="dot" class="abs"></div><div id="ring" class="abs"></div>
+  <div class="burst abs" id="bu1"></div><div class="burst abs" id="bu2"></div>
+  <div id="logoWrap" class="abs"><img src="../img/crewup-logo.png"><div id="logoShine" class="abs" style="inset:0"></div></div>
+  <div id="wm" class="abs"></div><div id="cs" class="abs">Gym with your crew, not alone.</div>
+  <div id="cta" class="abs"><span style="position:relative">Join the waitlist · link in bio</span><div id="ctaShine" class="abs" style="inset:0"></div></div>
+  <div id="handle" class="abs pillh"><svg width="34" height="34" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#0d0f14" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="#0d0f14" stroke-width="2.6" stroke-linecap="round"/></svg><span id="hq"></span></div>`;
+$('#wm').innerHTML = [...'CrewUp'].map(ch => `<span>${ch}</span>`).join('');
+const b = i => T0 + i * .5;
+tl.set(['#dot', '#ring', '#logoWrap', '#cs', '#cta', '#handle', '#rays', '#bu1', '#bu2', '#soon'], { autoAlpha: 0 }, 0).set('#wm span', { autoAlpha: 0 }, 0)
+  .to('#bgdom', { opacity: 1, duration: .3 }, E)
+  .fromTo('#dot', { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: .2 }, b(0))
+  .fromTo('#ring', { autoAlpha: 0, scale: .1 }, { autoAlpha: 1, scale: 1, duration: .32 }, b(1)).to('#dot', { autoAlpha: 0, duration: .1 }, b(1) + .2)
+  .to('#ring', { borderRadius: '80px', scale: 1.07, duration: .24, ease: 'power3.inOut' }, b(2) - .26)
+  .fromTo('#logoWrap', { autoAlpha: 0, scale: .5, rotate: -25 }, { autoAlpha: 1, scale: 1, rotate: 0, duration: .45, ease: 'back.out(2)' }, b(2)).to('#ring', { autoAlpha: 0, duration: .15 }, b(2))
+  .fromTo('#bu1', { autoAlpha: .9, scale: 1 }, { autoAlpha: 0, scale: 2.4, duration: .8, ease: 'power2.out' }, b(2))
+  .fromTo('#bu2', { autoAlpha: .7, scale: 1 }, { autoAlpha: 0, scale: 3.4, duration: 1.1, ease: 'power2.out' }, b(2) + .12)
+  .fromTo('#rays', { autoAlpha: 0, scale: .6 }, { autoAlpha: 1, scale: 1, duration: .8 }, b(2))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut' }, b(2) + .35);
+X.flash(b(2), .6);
+tl.to(['#logoWrap', '#bu1', '#bu2', '#rays'], { y: -140, scale: .8, duration: .4, ease: 'power3.inOut' }, b(3) - .2)
+  .fromTo('#wm span', { autoAlpha: 0, y: 60, rotateX: -80, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, rotateX: 0, filter: 'blur(0px)', duration: .4, stagger: .05, ease: 'back.out(1.8)' }, b(3))
+  .fromTo('#cs', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .35 }, b(4))
+  .fromTo('#cta', { autoAlpha: 0, y: 30, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)' }, b(5))
+  .fromTo('#ctaShine', { x: -900 }, { x: 900, duration: .8, ease: 'power2.inOut' }, b(5) + .4)
+  .fromTo('#handle', { autoAlpha: 0, scale: .8 }, { autoAlpha: 1, scale: 1, duration: .3, ease: 'back.out(2)' }, b(6))
+  .fromTo('#soon', { autoAlpha: 0 }, { autoAlpha: 1, duration: .35 }, b(7))
+  .fromTo('#logoShine', { x: -360 }, { x: 360, duration: .7, ease: 'power2.inOut', immediateRender: false }, b(8));
+
+X.onFrame(t => {
+  // which morph we are in
+  let i = 0; while (i + 1 < ST.length && t >= ST[i + 1][0]) i++;
+  bind(i);
+  const [t0, d, , , sw] = ST[i];
+  U.morph.value = X.clamp((t - t0) / d); U.swirl.value = sw; U.time.value = t; U.bright.value = BR.v; U.size.value = BR.sz;
+  U.scale.value = (X.H * X.SS) / 2 / Math.tan(THREE.MathUtils.degToRad(ctx.cam.fov / 2));
+  // typing in the prompt box
+  if (t < 2.3) { const n = Math.max(0, Math.floor(k01(t, 1.3, 2.08) * PROMPT.length)); $('#pt').innerHTML = PROMPT.slice(0, n).replace(/&/g, '&amp;') + (t > 1.18 ? '<span class="c"></span>' : ''); }
+  const h = '@getcrewup', m = Math.floor(h.length * k01(t, b(6) + .1, b(6) + .7)); $('#hq').textContent = h.slice(0, m) + (t > b(6) && t < b(7) && Math.floor(t * 4) % 2 ? '|' : '');
+  $('#gl').style.opacity = t < E + .05 ? 1 : 0;
+});
+X.start(document.fonts.ready.then(() => Promise.all(['600 56px Inter', '800 150px Sora', '800 118px Inter', '700 34px Inter', '600 104px Inter'].map(f => document.fonts.load(f)))).then(() => {
+  U.atlas.value = X.canvasTex(1024, 512, g => { g.fillStyle = '#fff'; g.font = '600 46px "JetBrains Mono"'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}()<>[];:=+-*/.,!?#&%$@'].forEach((c, i) => g.fillText(c, (i % 16) * 64 + 32, Math.floor(i / 16) * 64 + 34)); });
+  buildShapes(); bound = -1;
+}));
+</script>
+</body>
+</html>
