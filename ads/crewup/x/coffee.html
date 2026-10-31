@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claude Concept Rebuild</title>
+<script>window.V = /[?&]v=1/.test(location.search); if (window.V) document.documentElement.className = 'v';  // ?v=1: the 1080x1920 cut</script>
+<link rel="stylesheet" href="common.css">
+<style>
+/* Rebuild of @olaf.motion's "Claude Opus 5.5" concept video (16:9), made at the owner's request ("the same exact
+   one"; the owner says the creator OK'd it): same shots, words and cut times. Everything that was not the creator's
+   to give is our own: the tweet is a "John Doe" placeholder, every picture/clip on the wall and the runner are drawn
+   here, the spark is a plain asterisk (not Claude's logo), the pixel mascot is our own coffee cup, and the song is
+   left out (the file is silent: add the sound in the app with "Use this sound"). The creator's memoji at the end is
+   swapped for a credit to @olaf.motion. TikTok's watermark, "AI-generated" label and end screen are left out. */
+@font-face{font-family:Outfit;src:url(../fonts/outfit-latin-variable.woff2);font-weight:100 900}
+@font-face{font-family:News;src:url(../fonts/newsreader-latin-400.woff2);font-weight:400}
+html,body{width:1920px;height:1080px;background:#141210}
+#gl{width:1920px;height:1080px;opacity:0}
+#bg{position:absolute;inset:0;background:#141210}
+#stage{position:absolute;inset:0;z-index:10}
+.shot{position:absolute;inset:0;visibility:hidden;overflow:hidden}
+.abs{position:absolute}
+@font-face{font-family:SoraR;src:url(../fonts/sora-latin-400-normal.woff2);font-weight:400}
+/* chat box (S3, S6) */
+.cam{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+.hd{position:absolute;left:470px;top:338px;height:92px;display:flex;align-items:center;font:400 80px/1 News;color:#eee8e2;letter-spacing:-.012em;white-space:nowrap}
+.hd .sp{margin-right:34px;flex:none}
+.box{position:absolute;left:263px;top:509px;width:1337px;height:217px;border-radius:24px;background:rgba(255,255,255,.035);border:1.6px dashed rgba(255,255,255,.18)}
+.ty{position:absolute;left:27px;top:27px;height:40px;font:500 31px/40px Inter;color:#f3eee9;white-space:nowrap}
+.caret{display:inline-block;width:3px;height:36px;background:#ff6a2b;vertical-align:-8px;margin-left:2px;box-shadow:0 0 12px rgba(255,106,43,.9)}
+.mdl{position:absolute;right:154px;bottom:34px;font:500 26px Inter;color:#d9d3ce;white-space:nowrap}
+.mdl i{font-style:normal;color:#8d8781;margin-left:16px}
+.send{position:absolute;right:16px;bottom:24px;width:58px;height:54px;border-radius:11px;background:#e2683c;display:flex;align-items:center;justify-content:center}
+.cur{position:absolute;left:0;top:0;width:0;height:0}
+.cur svg{position:absolute;left:-3px;top:-2px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+.cur span{position:absolute;left:16px;top:30px;background:#f5f4f1;color:#1d1c1b;font:500 22px Inter;padding:8px 15px;white-space:nowrap;box-shadow:0 8px 22px rgba(0,0,0,.4);border:1.5px solid #cfccc6}
+#s3{background:radial-gradient(55% 75% at 96% 112%,#e0500f 0%,rgba(205,66,12,.8) 28%,rgba(120,36,10,.32) 56%,rgba(26,23,21,0) 78%),radial-gradient(45% 38% at 45% 112%,rgba(205,66,12,.55),rgba(0,0,0,0) 70%),#1a1817}
+.sp{position:absolute;left:0;top:0}
+/* terrain overlays (S4, S5) */
+#s4{background:transparent}
+#lglow{position:absolute;left:-200px;top:-100px;width:700px;height:1280px;background:radial-gradient(closest-side,rgba(255,80,20,.85),rgba(230,60,15,.35) 45%,rgba(0,0,0,0));opacity:.9}
+.bub{position:absolute;left:0;top:0;background:#262423;color:#ebe6e1;border-radius:20px;font:400 30px/1.32 SoraR;padding:22px 30px;white-space:nowrap;box-shadow:0 18px 40px rgba(0,0,0,.35);transform-origin:50% 50%}
+.spin{position:absolute;left:0;top:0;display:flex;align-items:center;gap:34px;font:300 48px/1 Outfit;color:#ddd6cf;white-space:nowrap;transform-origin:0 50%}
+#tilewrap{position:absolute;left:0;top:0;width:1920px;height:1080px;perspective:1500px}
+#tile{position:absolute;left:-290px;top:-290px;width:580px;height:580px;border-radius:30px;background:linear-gradient(160deg,#fbfaf8,#ecebe7);box-shadow:0 16px 0 -3px #b9b3ab,0 50px 90px rgba(0,0,0,.55);transform-style:preserve-3d}
+#tdim{position:absolute;inset:0;border-radius:30px;background:#c4572e;opacity:0;mix-blend-mode:multiply}
+#isl{position:absolute;left:50%;top:50%;width:230px;height:64px;margin:-32px 0 0 -115px;border-radius:32px;background:#050505;overflow:hidden;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+#isl .st{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0}
+.alb{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,#ff5f6d,#ffb36b 55%,#c86dd7)}
+#flashS{position:absolute;inset:0;background:#e07a5f;opacity:0;z-index:5}
+/* chat box 2 (S6) */
+#s6{background:#1a1310}
+#dots6{position:absolute;left:0;top:0}
+/* S7 split: the word wheel + edits on the picture */
+#s7{background:#141414}
+#lp7{position:absolute;left:0;top:0;width:948px;height:1080px;overflow:hidden;background:radial-gradient(75% 95% at 96% 72%,#ff5d16 0%,#ec4a0e 22%,#a8330b 46%,#3a1a10 72%,#1b1513 100%)}
+#lp7g{position:absolute;inset:-20%;opacity:0;background:radial-gradient(42% 40% at 62% 52%,#ffe08a,#ff8a1f 38%,rgba(255,90,20,0) 72%)}
+.li{position:absolute;left:0;top:0;display:flex;align-items:center;height:100px;font:300 88px/100px Outfit;color:rgba(236,226,219,.62);white-space:nowrap;transform-origin:0 50%}
+.li svg{position:absolute;left:-104px;top:27px}
+.cd{position:absolute;width:15px;height:15px;background:#e9e9e9}
+#ph7{position:absolute;left:1152px;top:227px;width:566px;height:594px;overflow:hidden;background:#3a3c40}
+#fig{position:absolute;left:0;top:0;width:566px;height:594px}
+#veil7{position:absolute;inset:0;background:linear-gradient(90deg,#ff8a3a,#ff5a12 55%,#ffb37a)}
+#wash7{position:absolute;inset:0;opacity:0;background:linear-gradient(180deg,#fff8ee 0%,#ffe6b0 34%,#ffb35c 66%,#ff6a1f 100%)}
+#glit7{position:absolute;left:0;top:0;width:566px;height:594px;opacity:0;image-rendering:pixelated}
+.sel{position:absolute;left:0;top:0;border:2px dashed rgba(255,255,255,.92);opacity:0}
+.chip{position:absolute;left:0;top:0;display:flex;align-items:center;gap:44px;background:#fff;color:#2b2b2b;border-radius:19px;font:500 17px Inter;padding:7px 7px 7px 17px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.28);opacity:0}
+.chip i{width:23px;height:23px;border-radius:50%;background:#e2683c;display:block}
+#mas7{position:absolute;left:1540px;top:118px;transform-origin:50% 100%}
+/* S8-S13 */
+#s8{background:transparent}
+.blob{position:absolute;left:0;top:0;border-radius:46% 54% 60% 40%/50% 42% 58% 50%;background:radial-gradient(circle at 40% 40%,#ff8a5c,#e8552a 60%,rgba(232,85,42,0) 75%);filter:blur(5px)}
+#s9{background:transparent}
+.w9{position:absolute;left:0;top:540px;font:400 82px/1 Outfit;color:#fff;white-space:nowrap;transform:translateY(-50%)}
+.d9{position:absolute;left:0;top:546px;width:17px;height:17px;margin:-8px 0 0 -8px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8)}
+#s10{background:transparent}
+#ev10{position:absolute;left:0;right:0;top:512px;text-align:center;font:400 64px/1 Outfit;color:#fff;transform:translateY(-50%);text-shadow:0 0 22px rgba(255,170,90,.55)}
+#s11{background:radial-gradient(70% 85% at 38% -18%,#d9470e 0%,rgba(190,58,12,.62) 34%,rgba(60,20,8,.2) 62%,rgba(0,0,0,0) 80%),#121010}
+#t11{position:absolute;left:0;right:0;top:540px;text-align:center;font:400 68px/1 Inter;letter-spacing:-.02em;color:#f2ece6;transform:translateY(-50%);white-space:nowrap}
+#t11 .caret{height:70px;width:4px;vertical-align:-12px}
+#s12{background:#0d0b0a}
+#bg12{position:absolute;inset:0;background:radial-gradient(60% 70% at 55% -10%,#d4460e,rgba(180,55,12,.5) 40%,rgba(0,0,0,0) 75%),#120f0d}
+#hands{position:absolute;left:0;top:0}
+#card12{position:absolute;left:668px;top:362px;width:590px;height:800px;background:linear-gradient(180deg,#9fd8f2 0%,#cdeaf6 45%,#f4f6f6 85%);color:#24596a;font:500 70px Inter;text-align:center;padding-top:118px}
+#xr12{position:absolute;left:840px;top:330px;width:290px;height:310px;background:#f7f7f7;opacity:0;overflow:hidden}
+#cxh{position:absolute;left:0;right:0;top:540px;text-align:center;font:600 112px/1 Inter;letter-spacing:-.03em;color:#fff;transform:translateY(-50%);opacity:0;white-space:nowrap}
+#sq12{position:absolute;left:1260px;top:150px;width:48px;height:48px;background:#fff;box-shadow:0 0 40px 18px rgba(255,255,255,.55);opacity:0}
+#osq12{position:absolute;left:1400px;top:64px;width:390px;height:400px;opacity:0;background:linear-gradient(135deg,#ff9a3a,#ff6a14);overflow:hidden}
+#s13{background:#000}
+#end13{position:absolute;left:0;top:0}
+#cred{position:absolute;left:0;right:0;top:540px;text-align:center;color:#fff;transform:translateY(-50%);opacity:0}
+#cred small{display:block;font:500 22px Inter;letter-spacing:.08em;color:rgba(255,255,255,.7);margin-bottom:10px}
+#cred b{font:600 44px Inter;letter-spacing:-.01em}
+/* vertical cut (?v=1) */
+.v,.v body{width:1080px;height:1920px}
+.v #gl{width:1080px;height:1920px}
+.v #lglow{height:2200px}
+.v #tilewrap{width:1080px;height:1920px}
+.v #lp7{width:1080px;height:860px;background:radial-gradient(85% 95% at 88% 98%,#ff5d16 0%,#ec4a0e 22%,#a8330b 46%,#3a1a10 72%,#1b1513 100%)}
+.v .li{font-size:80px}
+.v #ph7{left:190px;top:1020px;width:700px;height:735px}
+.v #fig,.v #glit7{width:700px;height:735px}
+.v #mas7{left:700px;top:912px}
+.v #cd1{left:120px;top:940px}.v #cd2{left:945px;top:940px}.v #cd3{left:120px;top:1830px}.v #cd4{left:945px;top:1830px}
+.v .w9{left:0;right:0;text-align:center;transform:none;margin-top:-41px}
+.v #w9a{top:520px}.v #w9b{top:1045px}.v #w9c{top:1610px}
+.v .d9{left:540px;top:0;margin:-8px 0 0 -8px}
+.v #ev10{top:950px}
+.v #t11{top:960px;font-size:52px}
+.v #t11 .caret{height:56px;vertical-align:-10px}
+.v #hands{left:-420px;top:420px}
+.v #card12{left:245px;top:700px;height:1300px}
+.v #xr12{left:395px;top:760px}
+.v #cxh{top:960px;font-size:96px}
+.v #sq12{left:690px;top:560px}
+.v #osq12{left:640px;top:250px;width:380px}
+.v #cred{top:960px}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="bgdom" style="display:none"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1920" height="1080"></canvas>
+<div id="stage">
+  <div class="shot" id="s3"><div class="cam" id="cam3">
+    <div id="sp3w" class="abs" style="left:0;top:0"><svg class="sp" id="sp3" viewBox="0 0 100 100" width="60" height="60"><g stroke="#e8704f" stroke-width="9" stroke-linecap="round"><path d="M50 8V92M8 50H92M20.3 20.3L79.7 79.7M79.7 20.3L20.3 79.7"/></g></svg></div>
+    <div class="hd" id="hd3"><svg class="sp" id="hsp3" style="position:relative" viewBox="0 0 100 100" width="44" height="44"><g stroke="#e8704f" stroke-width="9" stroke-linecap="round"><path d="M50 8V92M8 50H92M20.3 20.3L79.7 79.7M79.7 20.3L20.3 79.7"/></g></svg><span id="hd3t"></span></div>
+    <div class="box" id="box3"><div class="ty" id="ty3"></div><div class="mdl"><b style="font-weight:500">Opus 5.5</b><i>Medium</i></div><div class="send" id="send3"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="cur" id="cur3"><svg width="30" height="38" viewBox="0 0 30 38"><path d="M3 2L3 30L10 23.5L15 35L20 32.8L15.2 21.6L25 21.6Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg><span>John doe</span></div>
+  </div></div>
+  <div class="shot" id="s4">
+    <div id="lglow"></div>
+    <div class="bub" id="bub1">Make a motion design video for my business,<br>cinematic, make no mistake</div>
+    <div class="spin" id="spin"><svg class="sp" id="spk4" style="position:relative" viewBox="0 0 100 100" width="50" height="50"><g stroke="#e8704f" stroke-width="9" stroke-linecap="round"><path d="M50 8V92M8 50H92M20.3 20.3L79.7 79.7M79.7 20.3L20.3 79.7"/></g></svg><span id="spw">Cogitating</span></div>
+    <div id="tilewrap"><div id="tile"><div id="tdim"></div>
+      <div id="isl">
+        <div class="st" id="i0" style="font:500 24px Inter;letter-spacing:.01em">Generate</div>
+        <div class="st" id="i1"><svg width="34" height="34" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="4"/><path id="i1a" d="M20 6a14 14 0 0 1 14 14" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg></div>
+        <div class="st" id="i2"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="st" id="i3" style="justify-content:space-between;padding:0 14px"><div class="alb" style="width:36px;height:36px;border-radius:9px"></div><svg width="44" height="22" viewBox="0 0 44 22"><g fill="#d8d8d8"><rect x="0" y="8.0" width="3" height="6" rx="1.5"/><rect x="5" y="5.0" width="3" height="12" rx="1.5"/><rect x="10" y="2.0" width="3" height="18" rx="1.5"/><rect x="15" y="6.5" width="3" height="9" rx="1.5"/><rect x="20" y="3.5" width="3" height="15" rx="1.5"/><rect x="25" y="1.0" width="3" height="20" rx="1.5"/><rect x="30" y="7.0" width="3" height="8" rx="1.5"/><rect x="35" y="4.5" width="3" height="13" rx="1.5"/><rect x="40" y="8.5" width="3" height="5" rx="1.5"/></g></svg></div>
+        <div class="st" id="i4" style="display:block;padding:26px 30px"><div style="display:flex;gap:20px;align-items:center"><div class="alb" style="width:84px;height:84px;border-radius:18px"></div><div><div style="font:600 26px Inter">Motion video.mp4</div><div style="font:500 21px Inter;color:#9a9a9a;margin-top:6px">Rendered · 0:24</div></div></div>
+          <div style="height:6px;border-radius:3px;background:#333;margin:26px 0 18px"><div style="width:38%;height:100%;border-radius:3px;background:#fff"></div></div>
+          <div style="display:flex;justify-content:center;gap:56px;font:600 26px Inter;color:#eee"><span>⏮</span><span>▶</span><span>⏭</span></div></div>
+      </div>
+      <svg id="tcur" width="20" height="26" viewBox="0 0 30 38" style="position:absolute;left:330px;top:318px"><path d="M3 2L3 30L10 23.5L15 35L20 32.8L15.2 21.6L25 21.6Z" fill="#111" stroke="#fff" stroke-width="1.5"/></svg>
+    </div></div>
+    <div class="bub" id="bub2" style="font-size:32px;padding:20px 30px">Make it better</div>
+    <div class="spin" id="spin2" style="font:400 32px SoraR;gap:26px"><svg class="sp" style="position:relative" viewBox="0 0 100 100" width="40" height="40"><g stroke="#e8704f" stroke-width="9" stroke-linecap="round"><path d="M50 8V92M8 50H92M20.3 20.3L79.7 79.7M79.7 20.3L20.3 79.7"/></g></svg><div class="bub" style="position:relative;font-size:32px;padding:20px 30px">What? lol</div></div>
+    <div class="cur" id="cur4"><svg width="30" height="38" viewBox="0 0 30 38"><path d="M3 2L3 30L10 23.5L15 35L20 32.8L15.2 21.6L25 21.6Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg><span>Motion designer</span></div>
+    <div id="flashS"></div>
+  </div>
+  <div class="shot" id="s6"><canvas id="dots6" width="1920" height="1080"></canvas>
+    <div id="glow6" class="abs" style="inset:0;background:radial-gradient(48% 52% at 52% 82%,rgba(214,70,14,.9),rgba(150,45,10,.45) 45%,rgba(0,0,0,0) 75%)"></div>
+    <div class="cam" id="cam6">
+      <div class="hd" id="hd6"><svg class="sp" style="position:relative" viewBox="0 0 100 100" width="44" height="44"><g stroke="#e8704f" stroke-width="9" stroke-linecap="round"><path d="M50 8V92M8 50H92M20.3 20.3L79.7 79.7M79.7 20.3L20.3 79.7"/></g></svg><span>Coffee and Claude time?</span></div>
+      <div class="box" id="box6" style="background:rgba(20,16,14,.88)"><div class="ty" id="ty6"></div><div class="mdl"><b style="font-weight:500">Opus 5.5</b><i>Medium</i></div><div class="send"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <div class="cur" id="cur6"><svg width="30" height="38" viewBox="0 0 30 38"><path d="M3 2L3 30L10 23.5L15 35L20 32.8L15.2 21.6L25 21.6Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg><span>Motion designer</span></div>
+    </div>
+  </div>
+  <div class="shot" id="s7">
+    <div id="lp7"><div id="lp7g"></div><div id="list7"></div></div>
+    <div class="cd" id="cd1" style="left:1075px;top:119px"></div><div class="cd" id="cd2" style="left:1786px;top:119px"></div><div class="cd" id="cd3" style="left:1075px;top:918px"></div><div class="cd" id="cd4" style="left:1786px;top:886px"></div>
+    <div id="ph7"><canvas id="fig" width="1132" height="1188"></canvas><canvas id="glit7" width="94" height="99"></canvas><div id="wash7"></div><div id="veil7"></div></div>
+    <svg id="mas7" width="170" height="110" viewBox="0 0 170 110"><rect x="40" y="0" width="10.4" height="10.4" fill="rgba(255,255,255,.5)"/><rect x="80" y="0" width="10.4" height="10.4" fill="rgba(255,255,255,.5)"/><rect x="120" y="0" width="10.4" height="10.4" fill="rgba(255,255,255,.5)"/><rect x="30" y="10" width="10.4" height="10.4" fill="rgba(255,255,255,.5)"/><rect x="70" y="10" width="10.4" height="10.4" fill="rgba(255,255,255,.5)"/><rect x="110" y="10" width="10.4" height="10.4" fill="rgba(255,255,255,.5)"/><rect x="10" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="20" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="40" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="50" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="70" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="80" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="90" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="110" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="120" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="130" y="30" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="10" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="20" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="40" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="50" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="70" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="80" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="90" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="110" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="120" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="130" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="140" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="150" y="40" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="10" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="20" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="50" width="10.4" height="10.4" fill="#2a1c17"/><rect x="40" y="50" width="10.4" height="10.4" fill="#2a1c17"/><rect x="50" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="70" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="80" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="90" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="50" width="10.4" height="10.4" fill="#2a1c17"/><rect x="110" y="50" width="10.4" height="10.4" fill="#2a1c17"/><rect x="120" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="130" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="160" y="50" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="10" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="20" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="60" width="10.4" height="10.4" fill="#2a1c17"/><rect x="40" y="60" width="10.4" height="10.4" fill="#2a1c17"/><rect x="50" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="70" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="80" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="90" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="60" width="10.4" height="10.4" fill="#2a1c17"/><rect x="110" y="60" width="10.4" height="10.4" fill="#2a1c17"/><rect x="120" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="130" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="160" y="60" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="10" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="20" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="40" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="50" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="70" width="10.4" height="10.4" fill="#b9583c"/><rect x="70" y="70" width="10.4" height="10.4" fill="#b9583c"/><rect x="80" y="70" width="10.4" height="10.4" fill="#b9583c"/><rect x="90" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="110" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="120" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="130" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="140" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="150" y="70" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="10" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="20" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="30" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="40" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="50" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="60" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="70" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="80" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="90" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="100" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="110" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="120" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="130" y="80" width="10.4" height="10.4" fill="#e8704f"/><rect x="20" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="40" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="50" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="70" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="80" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="90" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="110" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="120" y="90" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="30" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="40" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="50" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="60" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="70" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="80" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="90" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="100" y="100" width="10.4" height="10.4" fill="#f1e6d8"/><rect x="110" y="100" width="10.4" height="10.4" fill="#f1e6d8"/></svg>
+    <div class="sel" id="sel1"></div><div class="sel" id="sel2"></div>
+    <div class="chip" id="ch1">Remove<i></i></div><div class="chip" id="ch2">Create glasses<i></i></div><div class="chip" id="ch3">Make them blue<i></i></div>
+    <div class="cur" id="cur7"><svg width="30" height="38" viewBox="0 0 30 38"><path d="M3 2L3 30L10 23.5L15 35L20 32.8L15.2 21.6L25 21.6Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg><span>Motion designer</span></div>
+  </div>
+  <div class="shot" id="s8"><div class="blob" id="bl1" style="width:56px;height:46px"></div><div class="blob" id="bl2" style="width:110px;height:84px"></div></div>
+  <div class="shot" id="s9"><canvas id="rings9" width="1920" height="1080"></canvas>
+    <div class="w9" id="w9a">Together</div><div class="w9" id="w9b">we can</div><div class="w9" id="w9c">make</div>
+    <div class="d9" id="d9a"></div><div class="d9" id="d9b"></div><div class="d9" id="d9c"></div></div>
+  <div class="shot" id="s10"><div id="ev10">Everything</div></div>
+  <div class="shot" id="s11"><div id="t11"></div></div>
+  <div class="shot" id="s12"><div id="bg12"></div><div id="osq12"></div><canvas id="hands" width="1920" height="1080"></canvas>
+    <div id="card12">It is</div><div id="cxh">Claude X Human</div><div id="xr12"><svg width="290" height="310" viewBox="0 0 290 310"><g fill="none" stroke="#8a8a8a" stroke-width="7" stroke-linecap="round"><path d="M145 40 q -60 8 -80 30"/><path d="M145 40 q 60 8 80 30"/><path d="M145 70 q -64 8 -83 30"/><path d="M145 70 q 64 8 83 30"/><path d="M145 100 q -68 8 -86 30"/><path d="M145 100 q 68 8 86 30"/><path d="M145 130 q -72 8 -89 30"/><path d="M145 130 q 72 8 89 30"/><path d="M145 160 q -76 8 -92 30"/><path d="M145 160 q 76 8 92 30"/><path d="M145 190 q -80 8 -95 30"/><path d="M145 190 q 80 8 95 30"/><path d="M145 220 q -84 8 -98 30"/><path d="M145 220 q 84 8 98 30"/></g><g fill="#b5b5b5"><rect x="133" y="30" width="24" height="22" rx="6"/><rect x="133" y="60" width="24" height="22" rx="6"/><rect x="133" y="90" width="24" height="22" rx="6"/><rect x="133" y="120" width="24" height="22" rx="6"/><rect x="133" y="150" width="24" height="22" rx="6"/><rect x="133" y="180" width="24" height="22" rx="6"/><rect x="133" y="210" width="24" height="22" rx="6"/><rect x="133" y="240" width="24" height="22" rx="6"/><rect x="133" y="270" width="24" height="22" rx="6"/></g></svg></div><div id="sq12"></div></div>
+  <div class="shot" id="s13"><canvas id="end13" width="1920" height="1080"></canvas><div id="cred"><small>CONCEPT BY</small><b>@olaf.motion</b></div></div>
+</div>
+<svg width="0" height="0" style="position:absolute"><filter id="mbA" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbAb" stdDeviation="0 0"/></filter><filter id="mbB" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur id="mbBb" stdDeviation="0 0"/></filter></svg>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script>window.X_SIZE = V ? [1080, 1920] : [1920, 1080]; window.BEAT = { beats: [0, .5], energy: [0] };</script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+const { tl, $ } = X;
+X.DUR = 29.3;
+// vertical cut: the same shots re-framed for 1080x1920
+const VW = V ? 1080 : 1920, VH = V ? 1920 : 1080;
+if (V) ['dots6', 'rings9', 'end13'].forEach(id => { const c = $('#' + id); c.width = VW; c.height = VH; });
+const CM = .76;  // chat box shots: the middle of the wide frame, a little smaller
+const cv = o => V ? Object.assign({}, o, { x: CM * (o.x - 960) + 540, y: CM * (o.y - 540) + 960, scale: CM * o.scale }) : o;
+// terrain overlays: squeeze sideways, spread down the tall frame
+const pv = o => V ? Object.assign({}, o, 'x' in o ? { x: 540 + (o.x - 960) * .58 } : {}, 'y' in o ? { y: 960 + (o.y - 540) * 1.6 } : {}) : o;
+const DK = V ? .9 : 1;
+const show = (id, a, b) => tl.set('#' + id, { visibility: 'visible' }, a).set('#' + id, { visibility: 'hidden' }, b);
+const k01 = (t, a, b) => X.clamp((t - a) / (b - a));
+const eo = x => 1 - Math.pow(1 - x, 3);
+const rr = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+const canvas = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const texOf = c => { const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 8; return t; };
+
+// =====================================================================================================
+// WebGL: one renderer, one scene; groups switch on per shot. The camera follows CAM (tweened below).
+// =====================================================================================================
+const ctx = X.three({ fov: 30, bloom: .3, radius: .45, threshold: 1.25 });
+const G = ctx.grade.uniforms; G.vignette.value = .22; G.grain.value = .018; G.lift.value.set(0, 0, 0); G.knee.value = .92; G.fringe.value = .0012; G.contrast.value = 1.02; G.sat.value = 1.0;
+const BG = { c: [236, 236, 238] };
+ctx.drawBg = () => { const g = ctx.bg.getContext('2d'); g.fillStyle = `rgb(${BG.c.map(Math.round).join(',')})`; g.fillRect(0, 0, 108, 192); ctx.bgTex.needsUpdate = true; };
+const CAM = { x: 0, y: 0, z: 0, yaw: 0, pitch: 0, roll: 0, fov: 30 };
+X.camFn = () => {
+  const cy = Math.cos(CAM.pitch * Math.PI / 180), d = [Math.sin(CAM.yaw * Math.PI / 180) * cy, Math.sin(CAM.pitch * Math.PI / 180), -Math.cos(CAM.yaw * Math.PI / 180) * cy];
+  return { p: [CAM.x, CAM.y, CAM.z], q: [CAM.x + d[0], CAM.y + d[1], CAM.z + d[2]], fov: CAM.fov, roll: CAM.roll * Math.PI / 180 };
+};
+X.rig.chase = 1; X.mb = .8;
+const GLON = [[0, 4.06], [6.8, 11.45], [20.93, 22.62], [23.7, 25.42]];   // when the WebGL layer is on screen
+const glOn = t => GLON.some(([a, b]) => t >= a && t < b);
+const baseRender = ctx.render; ctx.render = t => { if (glOn(t)) baseRender(t); };
+const glEl = $('#gl');
+
+// ---------- S1/S2: the tweet, then a curved wall of posts in a dark room of orange dots ----------
+const wall = new THREE.Group(); ctx.scene.add(wall);
+const R = 14;
+const backMat = new THREE.ShaderMaterial({
+  uniforms: { light: { value: 1 }, t: { value: 0 } },
+  vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+  fragmentShader: `uniform float light, t; varying vec3 vP;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+    float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+    void main(){
+      float a = atan(vP.x, -vP.z);
+      vec2 w = vec2(a * 15.2, vP.y);
+      vec2 g = fract(w / 0.088) - 0.5;
+      float d = length(g), dotA = smoothstep(0.44, 0.16, d);
+      float m = n(w * 0.32 + vec2(t * 0.06, 0.0)) * 0.75 + n(w * 1.3 - vec2(0.0, t * 0.1)) * 0.25;
+      vec3 base = vec3(0.0075, 0.0042, 0.0026);
+      vec3 dc = vec3(0.22, 0.075, 0.02) * (0.05 + 1.25 * m * m * m);
+      vec3 c = base + dc * dotA;
+      c *= 0.6 + 0.4 * smoothstep(10.0, 2.0, abs(vP.y));
+      gl_FragColor = vec4(mix(c, vec3(0.83), light), 1.0);
+    }`,
+  side: THREE.BackSide, depthWrite: false,
+});
+const back = new THREE.Mesh(new THREE.CylinderGeometry(R + 1.2, R + 1.2, 44, 160, 1, true), backMat); back.renderOrder = -5; wall.add(back);
+
+// --- the post layouts (all our own content) ---
+const TXT = { l: ['#0f1419', '#536471'], d: ['#e7e9ea', '#71767b'] };
+const ico = {
+  reply(g, x, y, s, c) { g.strokeStyle = c; g.lineWidth = s * .11; g.beginPath(); g.arc(x, y, s * .42, Math.PI * .75, Math.PI * 2.55); g.lineTo(x - s * .4, y + s * .48); g.closePath(); g.stroke(); },
+  rt(g, x, y, s, c) { g.strokeStyle = c; g.lineWidth = s * .11; g.beginPath(); g.moveTo(x - s * .45, y + s * .1); g.lineTo(x - s * .45, y - s * .3); g.lineTo(x + s * .25, y - s * .3); g.moveTo(x + s * .45, y - s * .1); g.lineTo(x + s * .45, y + s * .3); g.lineTo(x - s * .25, y + s * .3); g.stroke(); },
+  heart(g, x, y, s, c) { g.strokeStyle = c; g.lineWidth = s * .11; g.beginPath(); g.moveTo(x, y + s * .42); g.bezierCurveTo(x - s * .9, y - s * .1, x - s * .35, y - s * .7, x, y - s * .2); g.bezierCurveTo(x + s * .35, y - s * .7, x + s * .9, y - s * .1, x, y + s * .42); g.stroke(); },
+  bars(g, x, y, s, c) { g.fillStyle = c; [[-.4, .1], [-.1, -.3], [.2, -.05]].forEach(([dx, dy]) => g.fillRect(x + dx * s, y + dy * s, s * .14, s * .45 - dy * s)); },
+  mark(g, x, y, s, c) { g.strokeStyle = c; g.lineWidth = s * .11; g.beginPath(); g.moveTo(x - s * .3, y + s * .45); g.lineTo(x - s * .3, y - s * .45); g.lineTo(x + s * .3, y - s * .45); g.lineTo(x + s * .3, y + s * .45); g.lineTo(x, y + s * .2); g.closePath(); g.stroke(); },
+  share(g, x, y, s, c) { g.strokeStyle = c; g.lineWidth = s * .11; g.beginPath(); g.moveTo(x, y + s * .15); g.lineTo(x, y - s * .45); g.moveTo(x - s * .25, y - s * .2); g.lineTo(x, y - s * .45); g.lineTo(x + s * .25, y - s * .2); g.moveTo(x - s * .4, y + s * .05); g.lineTo(x - s * .4, y + s * .45); g.lineTo(x + s * .4, y + s * .45); g.lineTo(x + s * .4, y + s * .05); g.stroke(); },
+};
+// avatar: a soft gradient disc with a simple head-and-shoulders shape (no real person)
+const avatar = (g, x, y, r, hue) => {
+  g.save(); g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.clip();
+  const gr = g.createLinearGradient(x, y - r, x, y + r); gr.addColorStop(0, `hsl(${hue},45%,72%)`); gr.addColorStop(1, `hsl(${hue + 30},40%,45%)`); g.fillStyle = gr; g.fillRect(x - r, y - r, 2 * r, 2 * r);
+  g.fillStyle = 'rgba(255,255,255,.85)'; g.beginPath(); g.arc(x, y - r * .18, r * .34, 0, Math.PI * 2); g.fill(); g.beginPath(); g.ellipse(x, y + r * .78, r * .62, r * .5, 0, Math.PI, 0); g.fill();
+  g.restore();
+};
+const badge = (g, x, y, s) => { g.fillStyle = '#1d9bf0'; g.beginPath(); g.arc(x, y, s, 0, Math.PI * 2); g.fill(); g.strokeStyle = '#fff'; g.lineWidth = s * .28; g.beginPath(); g.moveTo(x - s * .45, y); g.lineTo(x - s * .1, y + s * .35); g.lineTo(x + s * .5, y - s * .35); g.stroke(); };
+// a post: header, text lines, media box, stats.  o: {name, handle, lines, mode 'l'|'d', media(g,x,y,w,h), w, h, hue}
+const post = (g, o) => {
+  const [c1, c2] = TXT[o.mode], W = o.w, s = W / 1200;
+  avatar(g, 46 * s, 40 * s, 26 * s, o.hue || 200);
+  g.textBaseline = 'middle'; g.fillStyle = c1; g.font = `700 ${29 * s}px Inter`; g.fillText(o.name, 114 * s, 40 * s);
+  const nw = g.measureText(o.name).width; let hx = 114 * s + nw + 10 * s;
+  if (o.badge !== false) { badge(g, hx + 13 * s, 40 * s, 12 * s); hx += 36 * s; }
+  g.fillStyle = c2; g.font = `500 ${26 * s}px Inter`; g.fillText(o.handle, hx, 40 * s);
+  g.fillStyle = c2; [0, 1, 2].forEach(i => { g.beginPath(); g.arc(W - 40 * s + i * 9 * s - 9 * s, 40 * s, 2.6 * s, 0, Math.PI * 2); g.fill(); });
+  o.lines.forEach(([txt, y, bold]) => {
+    g.fillStyle = c1; g.font = `${bold ? 500 : 500} ${27 * s}px Inter`;
+    if (bold) { g.font = `700 ${27 * s}px Inter`; g.fillText(bold, 114 * s, y * s); const bw = g.measureText(bold).width; g.font = `500 ${27 * s}px Inter`; g.fillText(txt, 114 * s + bw, y * s); }
+    else g.fillText(txt, 114 * s, y * s);
+  });
+  const my = o.my || 305, mh = (o.mh || 612);
+  if (o.media) { g.save(); rr(g, 107 * s, my * s, (W - 112 * s), mh * s, 18 * s); g.clip(); o.media(g, 107 * s, my * s, W - 112 * s, mh * s); g.restore(); }
+  if (o.stats !== false) {
+    const sy = (my + mh + 50) * s, st = o.stats || ['84', '188', '3.1K', '581K'];
+    [['reply', 0], ['rt', 1], ['heart', 2], ['bars', 3]].forEach(([n, i]) => { const x = 130 * s + i * 235 * s; ico[n](g, x, sy, 26 * s, c2); g.fillStyle = c2; g.font = `500 ${25 * s}px Inter`; g.fillText(st[i], x + 32 * s, sy); });
+    ico.mark(g, W - 120 * s, sy, 26 * s, c2); ico.share(g, W - 45 * s, sy, 26 * s, c2);
+  }
+};
+
+// --- media pieces (all drawn here) ---
+// wireframe unicorn, facing right; prog 0..1 draws it in
+const unicorn = (g, cx, cy, s, col, glow, prog = 1, lw = 2) => {
+  g.save(); g.strokeStyle = col; g.lineWidth = lw; g.lineCap = 'round'; g.lineJoin = 'round';
+  if (glow) { g.shadowColor = col; g.shadowBlur = glow; }
+  const parts = [
+    () => g.ellipse(cx, cy, s, s * .42, 0, 0, Math.PI * 2),
+    () => { [-.55, 0, .55].forEach(dx => { g.moveTo(cx + dx * s + s * .1, cy - s * .4); g.ellipse(cx + dx * s, cy, s * .1, s * .4 * Math.sqrt(1 - dx * dx * .8), 0, -Math.PI / 2, Math.PI * 1.5); }); },
+    () => { g.moveTo(cx + s * .62, cy - s * .32); g.quadraticCurveTo(cx + s * .9, cy - s * .7, cx + s * 1.12, cy - s * 1.05); g.moveTo(cx + s * .95, cy - s * .12); g.quadraticCurveTo(cx + s * 1.15, cy - s * .55, cx + s * 1.35, cy - s * .85); },
+    () => { g.moveTo(cx + s * 1.1, cy - s * 1.08); g.ellipse(cx + s * 1.36, cy - s * .98, s * .3, s * .16, -.35, Math.PI, Math.PI * 3); },
+    () => { g.moveTo(cx + s * 1.3, cy - s * 1.14); g.lineTo(cx + s * 1.62, cy - s * 1.62); g.lineTo(cx + s * 1.4, cy - s * 1.1); g.moveTo(cx + s * 1.18, cy - s * 1.12); g.lineTo(cx + s * 1.16, cy - s * 1.32); g.lineTo(cx + s * 1.28, cy - s * 1.16); },
+    () => { [-.72, -.48, .46, .72].forEach((dx, i) => { const x = cx + dx * s, top = cy + s * .3, bot = cy + s * (1.15 + (i % 2) * .05); g.moveTo(x - s * .07, top); g.lineTo(x - s * .07, bot); g.lineTo(x + s * .07, bot); g.lineTo(x + s * .07, top); }); },
+    () => { for (let i = 0; i < 4; i++) { g.moveTo(cx - s * .98, cy - s * .15 + i * s * .05); g.bezierCurveTo(cx - s * 1.4, cy - s * .1, cx - s * 1.2, cy + s * .5, cx - s * (1.5 + i * .06), cy + s * (.65 + i * .04)); } },
+    () => { for (let i = 0; i < 5; i++) { g.moveTo(cx + s * (1.12 - i * .07), cy - s * (1.05 - i * .14)); g.quadraticCurveTo(cx + s * (.95 - i * .08), cy - s * (1.0 - i * .14), cx + s * (.86 - i * .07), cy - s * (.82 - i * .14)); } },
+  ];
+  const n = Math.ceil(parts.length * prog);
+  for (let i = 0; i < n; i++) { g.beginPath(); parts[i](); g.stroke(); }
+  g.restore();
+};
+const gridBg = (g, x, y, w, h, bg, line, step) => { g.fillStyle = bg; g.fillRect(x, y, w, h); g.strokeStyle = line; g.lineWidth = 1; g.beginPath(); for (let i = x; i < x + w; i += step) { g.moveTo(i, y); g.lineTo(i, y + h); } for (let j = y; j < y + h; j += step) { g.moveTo(x, j); g.lineTo(x + w, j); } g.stroke(); };
+// the hero clip: an orange wire unicorn on a dark grid, then a blue sketch on white; words type in
+const heroMedia = (t) => (g, x, y, w, h) => {
+  if (t < 1.3) {
+    gridBg(g, x, y, w, h, '#0b0a0a', 'rgba(255,255,255,.045)', w / 26);
+    const k = k01(t, -.2, .45);
+    unicorn(g, x + w * .3, y + h * .52, w * .13, '#ff8a3d', 10, .35 + .65 * k, w * .0024);
+    g.strokeStyle = 'rgba(255,140,60,.25)'; g.lineWidth = 1; g.beginPath(); g.moveTo(x + w * .3, y); g.lineTo(x + w * .3, y + h); g.moveTo(x, y + h * .52); g.lineTo(x + w, y + h * .52); g.stroke();
+    // tiny timeline UI, bottom left
+    g.fillStyle = 'rgba(255,255,255,.35)'; g.font = `500 ${w * .011}px Inter`; ['Pos', 'Scale', 'Glow', 'Trim'].forEach((s2, i) => g.fillText(s2, x + w * (.06 + i * .05), y + h * .8));
+    g.fillStyle = '#ff7a2f'; g.fillRect(x + w * .06, y + h * .86, w * (.05 + .2 * k), h * .006);
+    g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(x + w * .06, y + h * .89, w * .28, h * .004);
+    // words
+    const a = 'Your ', b = 'prompt', c = 'made me move';
+    const n = Math.floor(k01(t, .35, 1.25) * (a.length + b.length + c.length + 1));
+    g.textBaseline = 'alphabetic'; g.font = `700 ${w * .062}px Inter`;
+    const tx = x + w * .54, ty = y + h * .46;
+    const s1 = (a + b).slice(0, n), s2 = n > a.length + b.length ? c.slice(0, n - a.length - b.length - 1) : '';
+    g.fillStyle = '#fff'; g.fillText(s1.slice(0, a.length), tx, ty);
+    g.fillStyle = '#ff6a1f'; g.fillText(s1.slice(a.length), tx + g.measureText(a).width, ty);
+    g.fillStyle = '#ff6a1f'; g.fillText(s2, tx, ty + w * .07);
+  } else {
+    g.fillStyle = '#f4f6f8'; g.fillRect(x, y, w * .56, h); g.fillStyle = '#0d0d0e'; g.fillRect(x + w * .56, y, w * .44, h);
+    unicorn(g, x + w * .27, y + h * .52, w * .12, '#5aa9e6', 0, 1, w * .003);
+    g.fillStyle = '#5aa9e6'; g.fillRect(x + w * .05, y + h * .86, w * .18, h * .01);
+    g.textBaseline = 'alphabetic'; g.font = `700 ${w * .055}px Inter`;
+    g.fillStyle = '#fff'; g.fillText('Your prompt', x + w * .6, y + h * .38); g.fillText('made me', x + w * .6, y + h * .5);
+    const n = Math.floor(k01(t, 1.35, 2.2) * 5); g.fillStyle = '#ff6a1f'; g.fillText('move!'.slice(0, Math.max(1, n)), x + w * .6, y + h * .62);
+  }
+};
+const M = {
+  uniDark: (label) => (g, x, y, w, h) => { gridBg(g, x, y, w, h, '#0c0b0b', 'rgba(255,255,255,.04)', w / 20); unicorn(g, x + w * .58, y + h * .55, w * .14, '#e9e2da', 0, 1, 2); g.fillStyle = '#ff5a1f'; g.font = `800 ${w * .07}px Inter`; g.textBaseline = 'alphabetic'; g.fillText(label, x + w * .07, y + h * .3); },
+  led: (c1, c2) => (g, x, y, w, h) => { g.fillStyle = '#100d0c'; g.fillRect(x, y, w, h); const n = 16, s = w / n; for (let i = 0; i < n; i++) for (let j = 0; j < Math.ceil(h / s); j++) { g.fillStyle = (i + j) % 2 ? c1 : c2; rr(g, x + i * s + s * .14, y + j * s + s * .14, s * .72, s * .72, s * .22); g.fill(); } },
+  cube: (g, x, y, w, h) => { g.fillStyle = '#121214'; g.fillRect(x, y, w, h); g.strokeStyle = 'rgba(255,255,255,.12)'; g.lineWidth = 2; g.beginPath(); g.arc(x + w / 2, y + h / 2, h * .42, 0, Math.PI * 2); g.stroke(); const cx = x + w / 2, cy = y + h / 2, r = h * .2;
+    const P = a => [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+    [['#f2f2f2', [-Math.PI / 2, -Math.PI / 6, null, -Math.PI * 5 / 6]], ['#b9b9bd', [-Math.PI / 6, Math.PI / 2, null, null]], ['#dcdcdf', [Math.PI / 2, Math.PI * 5 / 6, null, null]]].forEach(() => {});
+    g.fillStyle = '#f4f4f4'; g.beginPath(); g.moveTo(...P(-Math.PI / 2)); g.lineTo(...P(-Math.PI / 6)); g.lineTo(cx, cy); g.lineTo(...P(-Math.PI * 5 / 6)); g.closePath(); g.fill();
+    g.fillStyle = '#aeb0b5'; g.beginPath(); g.moveTo(...P(-Math.PI / 6)); g.lineTo(...P(Math.PI / 6)); g.lineTo(...P(Math.PI / 2)); g.lineTo(cx, cy); g.closePath(); g.fill();
+    g.fillStyle = '#d6d7da'; g.beginPath(); g.moveTo(...P(Math.PI / 2)); g.lineTo(...P(Math.PI * 5 / 6)); g.lineTo(...P(-Math.PI * 5 / 6)); g.lineTo(cx, cy); g.closePath(); g.fill(); },
+  blueSq: (g, x, y, w, h) => { g.fillStyle = '#18181b'; g.fillRect(x, y, w, h); g.strokeStyle = 'rgba(255,255,255,.1)'; g.strokeRect(x + w * .3, y + h * .22, w * .4, h * .56); g.save(); g.translate(x + w / 2, y + h / 2); g.rotate(.12); g.fillStyle = '#3346ff'; rr(g, -h * .2, -h * .2, h * .4, h * .4, h * .07); g.fill(); g.restore(); },
+  star: (g, x, y, w, h) => { const gr = g.createLinearGradient(x, y, x + w, y + h); gr.addColorStop(0, '#2a3be0'); gr.addColorStop(1, '#1a24a8'); g.fillStyle = gr; g.fillRect(x, y, w, h); g.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 0; i < 9; i++) { const a = i / 9 * Math.PI * 2; g.beginPath(); g.arc(x + w / 2 + Math.cos(a) * h * .32, y + h / 2 + Math.sin(a) * h * .32, 3, 0, Math.PI * 2); g.fill(); } g.fillStyle = '#c9c2a7'; g.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? h * .08 : h * .18; g.lineTo(x + w / 2 + Math.cos(a) * rad, y + h / 2 + Math.sin(a) * rad); } g.closePath(); g.fill(); },
+  play: (g, x, y, w, h) => { g.fillStyle = '#1a1a1c'; g.fillRect(x, y, w, h); g.fillStyle = '#f5c518'; g.beginPath(); g.moveTo(x + w * .43, y + h * .32); g.lineTo(x + w * .6, y + h * .5); g.lineTo(x + w * .43, y + h * .68); g.closePath(); g.fill(); },
+  poster: (g, x, y, w, h) => { g.fillStyle = '#0b0b0c'; g.fillRect(x, y, w, h); const px = x + w * .2, pw = w * .6; g.fillStyle = '#f1ead9'; g.fillRect(px, y, pw, h); g.fillStyle = '#5a3df0'; for (let i = 0; i < 6; i++) { g.save(); g.translate(px + pw * (.1 + i * .17), y + h * .12); g.rotate(.6); g.fillRect(-6, -40, 14, 80); g.restore(); } g.fillStyle = '#c9cbe0'; g.beginPath(); g.ellipse(px + pw * .5, y + h * .45, pw * .42, h * .32, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#1b1b2a'; g.textAlign = 'center'; g.font = `800 ${pw * .13}px Inter`; g.fillText('MOTION', px + pw / 2, y + h * .4); g.fillText('NIGHT', px + pw / 2, y + h * .53); g.fillStyle = '#5a3df0'; g.font = `900 ${pw * .3}px Inter`; g.fillText('OCT', px + pw / 2, y + h * .9); g.textAlign = 'left'; },
+  green: (g, x, y, w, h) => { const gr = g.createLinearGradient(x, y, x + w, y + h); gr.addColorStop(0, '#5fd3a6'); gr.addColorStop(.6, '#1f9c78'); gr.addColorStop(1, '#0f6b55'); g.fillStyle = gr; g.fillRect(x, y, w, h); g.fillStyle = 'rgba(255,255,255,.92)'; g.font = `500 ${w * .07}px Inter`; g.textBaseline = 'middle'; g.fillText('Meet your', x + w * .2, y + h * .48); g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineWidth = 3; rr(g, x + w * .56, y + h * .4, w * .26, h * .16, h * .08); g.stroke(); g.font = `500 ${w * .055}px Inter`; g.fillText('studio', x + w * .6, y + h * .48); },
+  face: (g, x, y, w, h) => { const gr = g.createLinearGradient(x, y, x, y + h); gr.addColorStop(0, '#e9e9ea'); gr.addColorStop(1, '#bdbdc0'); g.fillStyle = gr; g.fillRect(x, y, w, h); const cx = x + w * .62, cy = y + h * .52, r = h * .24;
+    g.fillStyle = '#9d9da1'; g.beginPath(); g.ellipse(cx, cy + r * 1.5, r * 1.3, r * .7, 0, Math.PI, 0); g.fill(); const fg = g.createRadialGradient(cx - r * .3, cy - r * .3, r * .2, cx, cy, r * 1.1); fg.addColorStop(0, '#f2f2f2'); fg.addColorStop(1, '#a9a9ad'); g.fillStyle = fg; g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#d7d7da'; for (let i = 0; i < 7; i++) { g.beginPath(); g.arc(cx - r * .8 + i * r * .27, cy - r * .85 + Math.sin(i) * r * .06, r * .26, 0, Math.PI * 2); g.fill(); }
+    g.fillStyle = '#1b1b1d'; rr(g, cx - r * .75, cy - r * .12, r * 1.5, r * .34, r * .15); g.fill(); g.fillStyle = '#fff'; rr(g, x + w * .14, y + h * .44, w * .14, h * .07, h * .035); g.fill(); },
+  white: (g, x, y, w, h) => { g.fillStyle = '#eeeff1'; g.fillRect(x, y, w, h); g.fillStyle = '#4c8dff'; g.fillRect(x + w * .44, y + h * .3, w * .1, h * .05); g.fillStyle = '#c9cbd0'; g.fillRect(x + w * .3, y + h * .45, w * .4, h * .03); g.fillRect(x + w * .3, y + h * .52, w * .28, h * .03); },
+  blue: (g, x, y, w, h) => { const gr = g.createLinearGradient(x, y, x + w, y + h); gr.addColorStop(0, '#2f6bff'); gr.addColorStop(1, '#1546d8'); g.fillStyle = gr; g.fillRect(x, y, w, h); g.fillStyle = 'rgba(255,255,255,.85)'; g.beginPath(); g.ellipse(x + w * .3, y + h * .62, w * .12, h * .2, -.3, 0, Math.PI * 2); g.fill(); },
+};
+// a card in the wall: [kind, angle deg, y, width, opts]
+const cardMesh = (cw, ch, draw) => {
+  const c = canvas(cw, ch), g = c.getContext('2d'); draw(g, cw, ch);
+  const tex = texOf(c), wd = 1, hd = ch / cw;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(wd, hd), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }));
+  m.userData = { c, g, tex }; return m;
+};
+const place = (m, ang, y, w, dz = 0) => { const a = ang * Math.PI / 180, r = R - dz; m.position.set(Math.sin(a) * r, y, -Math.cos(a) * r); m.rotation.y = -a; m.scale.setScalar(w); wall.add(m); return m; };
+const textPost = (name, handle, hue, lines, media, mh, stats) => (g, W, H) => post(g, { name, handle, hue, mode: 'd', w: W, lines: lines.map((l, i) => [l, 110 + i * 48]), media, my: 110 + lines.length * 48 + 10, mh: mh || 0, stats: stats || ['12', '40', '1.2K', '98K'] });
+const bars = (n) => Array.from({ length: n }, (_, i) => ['──────────────────────'.slice(0, 14 + (i * 7) % 9)]);
+// the hero post (redrawn while its clip plays)
+const HERO = { mode: 'l' };
+const hero = cardMesh(1200, 1000, () => {}); place(hero, 0, 0, 3.4, .2);
+const drawHero = t => {
+  const { g, c, tex } = hero.userData; g.clearRect(0, 0, c.width, c.height);
+  post(g, { name: 'John Doe', handle: '@johndoe · Sep 27', hue: 25, mode: HERO.mode, w: 1200, lines: [[' is pretty wild.', 87, 'Opus 5.5'], ['People just dropped some new insane results', 167], ['1. AI solved motion graphic', 256]], media: heroMedia(t) });
+  tex.needsUpdate = true;
+};
+const WALL = [
+  // [angle, y, width, height px, dz, drawer]
+  [-9.5, -.15, 2.5, 760, .1, textPost('Alex', '@alex · 2h', 210, ['this is getting out of hand'], M.face, 430)],
+  [-27, 2.9, 2.7, 640, .3, textPost('Sam', '@sam · 5h', 140, ['that one prompt though'], M.uniDark('made by AI'), 360)],
+  [6, 6.0, 3.3, 600, .35, (g, W, H) => { rr(g, 0, 0, W, H, 18); g.clip(); M.led('#ff4d2e', '#f4f1ec')(g, 0, 0, W, H); }],
+  [21, 1.8, 2.6, 520, .2, textPost('Jordan', '@jordan · 1h', 330, ['I tried it on my brand video.', 'This is INSANE'], null, 0)],
+  [27, -1.4, 2.9, 760, .25, textPost('Mia', '@mia · 3h', 300, ['first try, no edits'], M.cube, 430)],
+  [-14, -3.4, 2.9, 760, .2, textPost('Leo', '@leo · 4h', 50, ['one shot, cinematic'], M.blueSq, 430)],
+  [-33, -4.8, 2.3, 600, .45, (g, W, H) => { rr(g, 0, 0, W, H, 18); g.clip(); M.star(g, 0, 0, W, H); }],
+  [-3, -7.6, 2.6, 520, .3, textPost('Kai', '@kai · 6h', 100, ['it is just motion design now'], M.play, 300)],
+  [40, 2.9, 3.1, 760, .3, textPost('Nora', '@nora · 1h', 260, ['this is INSANE', 'Opus 5.5 did this in 10 minutes'], M.poster, 420)],
+  [57, 2.2, 3.0, 560, .4, (g, W, H) => { rr(g, 0, 0, W, H, 20); g.clip(); M.green(g, 0, 0, W, H); }],
+  [-44, 2.4, 2.5, 520, .3, (g, W, H) => { rr(g, 0, 0, W, H, 18); g.clip(); M.face(g, 0, 0, W, H); }],
+  [16, 9.0, 2.6, 420, .2, textPost('Ivy', '@ivy · 8h', 20, ['the end of keyframes?'], null, 0)],
+  [-20, 7.6, 2.3, 520, .3, (g, W, H) => { rr(g, 0, 0, W, H, 16); g.clip(); M.white(g, 0, 0, W, H); }],
+  [33, 7.5, 2.2, 560, .35, textPost('Ben', '@ben · 2h', 180, ['ok this is wild'], null, 0)],
+  [-40, -1.2, 2.4, 520, .25, textPost('Zoe', '@zoe · 9h', 80, ['the camera moves...', 'how?'], null, 0)],
+  [45, -4.6, 2.6, 640, .3, textPost('Max', '@max · 3h', 230, ['made in one go'], M.uniDark('no edits'), 300)],
+  [12, -5.2, 2.6, 560, .25, textPost('Ana', '@ana · 7h', 340, ['saving this'], M.blue, 260)],
+  [-55, -4.5, 2.8, 560, .3, (g, W, H) => { rr(g, 0, 0, W, H, 18); g.clip(); M.blue(g, 0, 0, W, H); }],
+  [60, -1.5, 2.4, 520, .3, textPost('Eli', '@eli · 1h', 160, ['motion designers rn:'], null, 0)],
+  [-60, 6.0, 2.8, 600, .35, (g, W, H) => { rr(g, 0, 0, W, H, 18); g.clip(); M.led('#3b5bff', '#e9ecf5')(g, 0, 0, W, H); }],
+  [28, -8.4, 3.0, 520, .3, (g, W, H) => { rr(g, 0, 0, W, H, 18); g.clip(); M.blue(g, 0, 0, W, H); }],
+  [-29, -8.2, 2.6, 520, .3, textPost('Ola', '@ola · 5h', 60, ['the prompt was one line'], null, 0)],
+  [10.5, 3.2, 2.4, 520, .25, textPost('Rae', '@rae · 2h', 15, ['how is this one prompt'], null, 0)],
+  [-21, .9, 2.3, 480, .3, textPost('Tom', '@tom · 1h', 120, ['ok I am convinced'], null, 0)],
+  [14, -2.6, 2.4, 640, .2, textPost('Liv', '@liv · 6h', 280, ['the lighting!!'], M.uniDark('wow'), 280)],
+  [-6, 3.9, 2.2, 480, .3, textPost('Dan', '@dan · 3h', 200, ['bookmarking this thread'], null, 0)],
+  [3, -3.9, 2.0, 420, .35, (g, W, H) => { rr(g, 0, 0, W, H, 16); g.clip(); M.cube(g, 0, 0, W, H); }],
+];
+const wallCards = WALL.map(([a, y, w, ph, dz, draw]) => place(cardMesh(1200, ph * 2, (g, W, H) => draw(g, W, H)), a, y, w, dz));
+
+// light page (tweet) -> dark room of dots
+const S12 = { light: 1 };
+tl.fromTo(S12, { light: 1 }, { light: 0, duration: .22, ease: 'power2.inOut', immediateRender: false }, .98);
+tl.set(HERO, { mode: 'l' }, 0).set(HERO, { mode: 'd' }, 1.06);
+// camera: tight on the clip (soft), out to the post, punch in on the header, settle, then pull back into the room
+tl.set(CAM, { x: .75, y: -.45, z: -14 + 4.2 * DK, yaw: 0, pitch: 0, roll: 0, fov: V ? 52 : 30 }, 0)
+  .to(CAM, { x: .2, y: -.05, z: -14 + 7.8 * DK, duration: .04, ease: 'power2.inOut' }, .06)
+  .to(CAM, { x: 0, y: .1, z: -14 + 9.6 * DK, duration: .09, ease: 'power2.out' }, .1)
+  .to(CAM, { x: -.95, y: .78, z: -14 + 3.3 * DK, duration: .04, ease: 'power2.inOut' }, .19)
+  .to(CAM, { x: -.9, y: .74, z: -14 + 3.45 * DK, duration: .1, ease: 'none' }, .23)
+  .to(CAM, { x: 0, y: .12, z: -14 + 8.9 * DK, duration: .04, ease: 'power2.inOut' }, .33)
+  .to(CAM, { z: -14 + 7.5 * DK, duration: .1, ease: 'power2.out' }, .37)
+  .to(CAM, { z: -14 + 7.9 * DK, duration: .5, ease: 'none' }, .47)
+  .to(CAM, { x: 0, y: 0, z: -.5, fov: V ? 72 : 58, duration: .32, ease: 'power3.inOut' }, .97)
+  .to(CAM, { yaw: -13, pitch: 2.5, x: -.4, duration: .75, ease: 'sine.inOut' }, 1.25)
+  .to(CAM, { yaw: -26, pitch: 6, x: -3.2, y: .8, z: -3.6, roll: 1.5, duration: 1.05, ease: 'sine.inOut' }, 2.0)
+  .to(CAM, { yaw: 30, pitch: 1, x: 1.8, y: .2, z: -2.6, roll: -1, duration: .3, ease: 'power3.inOut' }, 3.22)
+  .to(CAM, { yaw: 33, pitch: .5, x: 2.3, duration: .45, ease: 'sine.out' }, 3.52)
+  .to(CAM, { pitch: -24, yaw: 26, duration: .1, ease: 'power2.in' }, 3.96);
+tl.set(X.dof, { amt: .028 }, 0).to(X.dof, { amt: 0, duration: .05 }, .04);
+X.onFrame(t => {
+  const on = glOn(t);
+  glEl.style.opacity = on ? 1 : 0;
+  wall.visible = t < 4.1;
+  if (wall.visible) {
+    backMat.uniforms.light.value = S12.light; backMat.uniforms.t.value = t;
+    const L = S12.light; BG.c = [236 * L + 18 * (1 - L), 236 * L + 12 * (1 - L), 238 * L + 9 * (1 - L)];
+    if (t < 2.3) drawHero(t);
+    wallCards.forEach(m => m.material.opacity = X.clamp(1 - L * 1.4));
+  }
+});
+
+// =====================================================================================================
+// S3 the chat box: the spark spins down, the prompt types, zoom to send, click
+// =====================================================================================================
+const esc = v => v.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const CARET = '<span class="caret"></span>';
+const P1 = 'Make a motion design video for my business, cinematic, make no mistake', H1 = 'Coffee and Claude time?';
+const mb = (f, t, amt, d = .16) => tl.fromTo('#' + f, { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: amt }, duration: d, ease: 'power2.in', immediateRender: false }, t);
+show('s3', 4.04, 6.87);
+tl.set('#cam3', cv({ x: 325, y: 280, scale: .66, filter: 'blur(0px)' }), 4.04)
+  .to('#cam3', cv({ x: 300, y: 236, scale: .7, duration: .7, ease: 'none' }), 4.04)
+  .to('#cam3', cv({ x: 0, y: 0, scale: 1, duration: .22, ease: 'power2.inOut' }), 4.74)
+  .to('#cam3', cv({ x: -24, y: -12, scale: 1.03, duration: .59, ease: 'none' }), 4.96)
+  .to('#cam3', cv({ x: -2258, y: -803, scale: 2.15, duration: .19, ease: 'power3.inOut' }), 5.55)
+  .to('#cam3', { filter: 'blur(7px)', duration: .09, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 5.55)
+  .to('#cam3', cv({ x: -2400, y: -850, scale: 2.22, duration: .82, ease: 'none' }), 5.74)
+  .to('#cam3', cv({ x: -4300, y: -700, scale: 2.22, duration: .3, ease: 'power3.in' }), 6.56)
+  .set('#s3', { filter: 'url(#mbA)' }, 6.56).to('#s3', { opacity: 0, duration: .08, ease: 'none' }, 6.79);
+mb('mbAb', 6.56, '80 0', .24);
+// the spark: huge and spinning, shrinking away as the heading arrives
+tl.set('#sp3', { x: 962, y: 60, scale: 7, rotate: -40, opacity: 1, filter: 'blur(3px)' }, 4.04)
+  .to('#sp3', { x: 960, y: 80, scale: 3.8, rotate: 25, filter: 'blur(0px)', duration: .26, ease: 'power2.out' }, 4.04)
+  .to('#sp3', { x: 958, y: 110, scale: 2.4, rotate: 85, duration: .25, ease: 'none' }, 4.3)
+  .to('#sp3', { x: 955, y: 140, scale: .9, rotate: 130, duration: .17, ease: 'power2.in' }, 4.55)
+  .to('#sp3', { opacity: 0, scale: .4, duration: .06 }, 4.72);
+tl.fromTo('#hsp3', { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: .22, ease: 'back.out(2)' }, 4.76);
+// the cursor flies in, waits, then goes for the send button
+tl.fromTo('#cur3', { x: 1180, y: 905, rotate: -38 }, { x: 1035, y: 818, rotate: 0, duration: .45, ease: 'power3.out' }, 4.04)
+  .to('#cur3', { x: 1027, y: 826, duration: .7, ease: 'sine.inOut' }, 4.5)
+  .to('#cur3', { x: 1300, y: 770, duration: .45, ease: 'power2.inOut' }, 5.6)
+  .to('#cur3', { x: 1552, y: 694, duration: .5, ease: 'power2.inOut' }, 5.95)
+  .to('#cur3', { scale: .88, duration: .05, yoyo: true, repeat: 1 }, 6.38);
+tl.to('#send3', { scale: .84, duration: .06, ease: 'power2.in' }, 6.39)
+  .to('#send3', { scale: 1.08, background: '#ff8a55', boxShadow: '0 0 40px rgba(255,120,60,.9)', duration: .12, ease: 'power2.out' }, 6.45)
+  .to('#send3', { scale: 1, duration: .15 }, 6.57);
+
+// =====================================================================================================
+// S4/S5 orange wire hills: "Cogitating... Contemplating... Pondering", the tile, the island, "Make it better"
+// =====================================================================================================
+const terr = new THREE.Group(); terr.visible = false; ctx.scene.add(terr);
+const vn = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, h = (a, b) => X.hash(a * 157.31 + b * 311.71 + 1.3), sm = v => v * v * (3 - 2 * v), u = sm(xf), v = sm(yf); return X.lerp(X.lerp(h(xi, yi), h(xi + 1, yi), u), X.lerp(h(xi, yi + 1), h(xi + 1, yi + 1), u), v); };
+const fbm = (x, y) => { let a = 0, f = 1, m = .5; for (let o = 0; o < 5; o++) { a += m * vn(x * f, y * f); f *= 2.02; m *= .5; } return a; };
+const tgeo = new THREE.PlaneGeometry(90, 90, 230, 230); tgeo.rotateX(-Math.PI / 2);
+const tp = tgeo.attributes.position;
+for (let i = 0; i < tp.count; i++) { const x = tp.getX(i), z = tp.getZ(i); tp.setY(i, 8.2 * Math.pow(fbm(x * .062 + 11, z * .062 + 4), 2.0) - 1.6 + .5 * Math.sin(x * .21 + z * .07)); }
+tgeo.computeVertexNormals();
+const terrMat = new THREE.ShaderMaterial({
+  extensions: { derivatives: true },
+  vertexShader: 'varying vec3 vW; varying vec3 vN; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * w; }',
+  fragmentShader: `varying vec3 vW; varying vec3 vN;
+    void main(){
+      vec2 q = vW.xz / 0.62;
+      vec2 gq = abs(fract(q - 0.5) - 0.5) / fwidth(q);
+      float line = 1.0 - min(min(gq.x, gq.y), 1.0);
+      float d = distance(vW.xz, cameraPosition.xz);
+      float fog = smoothstep(5.0, 36.0, d);
+      float hh = clamp((vW.y + 1.6) / 6.0, 0.0, 1.0);
+      float lit = clamp(dot(normalize(vN), normalize(vec3(-0.75, 0.55, 0.25))), 0.0, 1.0);
+      vec3 surf = vec3(0.02, 0.0036, 0.0024) * (0.2 + 1.6 * lit) + vec3(0.07, 0.01, 0.0035) * hh * hh * hh;
+      vec3 lc = vec3(0.72, 0.075, 0.02) * (0.12 + 0.95 * hh * hh + 0.45 * lit) * (1.0 - 0.6 * fog);
+      vec3 c = mix(surf, lc, line * 0.85);
+      c = mix(c, vec3(0.012, 0.0028, 0.002), fog * 0.85);
+      gl_FragColor = vec4(c, 1.0);
+    }`,
+});
+terr.add(new THREE.Mesh(tgeo, terrMat));
+tl.set(CAM, { x: 7, y: 5.2, z: 15, yaw: 30, pitch: -17, roll: 0, fov: V ? 70 : 50 }, 6.8)
+  .to(CAM, { x: 2, yaw: 3, duration: .2, ease: 'power3.out' }, 6.84)
+  .to(CAM, { x: 0, y: 5.0, z: 11, yaw: -3, pitch: -19, duration: 1.42, ease: 'sine.inOut' }, 7.04)
+  .to(CAM, { x: -1.5, y: 5.6, z: 8.2, yaw: -6, pitch: -23, duration: 1.95, ease: 'sine.inOut' }, 8.46)
+  .to(CAM, { x: -2.2, y: 6.0, z: 7, yaw: -2, pitch: -18, duration: 1.1, ease: 'sine.inOut' }, 10.41);
+show('s4', 6.84, 11.36);
+tl.fromTo('#s4', { opacity: 1 }, { opacity: 0, duration: .16, ease: 'none', immediateRender: false }, 11.18);
+tl.fromTo('#lglow', { opacity: 0 }, { opacity: .9, duration: .3 }, 6.86);
+// the prompt bubble
+tl.set('#bub1', { xPercent: -50, yPercent: -50 }, 0)
+  .fromTo('#bub1', pv({ x: 1760, y: 250, opacity: 0, scale: .9, rotate: 2, filter: 'blur(10px)' }), pv({ x: 1190, y: 294, opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)', duration: .32, ease: 'power3.out' }), 6.94)
+  .to('#bub1', pv({ x: 1215, y: 288, scale: 1.04, rotate: -1.2, duration: 1.19, ease: 'none' }), 7.26)
+  .to('#bub1', pv({ x: 1180, y: 172, scale: 1.08, rotate: -2, duration: .6, ease: 'sine.inOut' }), 8.45)
+  .to('#bub1', pv({ x: 1185, y: 40, scale: .95, rotate: -1, duration: .55, ease: 'sine.inOut' }), 9.05)
+  .to('#bub1', pv({ x: 1200, y: 52, scale: .94, duration: .7, ease: 'none' }), 9.6)
+  .to('#bub1', pv({ y: -60, opacity: 0, filter: 'blur(8px)', duration: .35, ease: 'power2.in' }), 10.3);
+// thinking words + spark
+tl.set('#spin', { yPercent: -50 }, 0)
+  .fromTo('#spin', pv({ x: 118, y: 518, scale: .48 }), pv({ x: 150, y: 536, scale: 1, duration: 1.0, ease: 'none' }), 6.86)
+  .to('#spin', pv({ x: 190, y: 530, scale: 1.1, duration: .59, ease: 'none' }), 7.86)
+  .to('#spw', { opacity: 0, x: 30, filter: 'blur(8px)', duration: .12, ease: 'power2.in' }, 8.42)
+  .to('#spin', pv({ x: 50, y: 360, scale: .8, duration: .3, ease: 'power3.inOut' }), 8.45)
+  .to('#spin', pv({ x: 150, y: 356, duration: .3, ease: 'sine.out' }), 8.75)
+  .to('#spin', pv({ x: 250, y: 184, scale: .75, duration: .55, ease: 'sine.inOut' }), 9.05)
+  .to('#spin', pv({ x: 258, y: 178, duration: .5, ease: 'none' }), 9.6)
+  .to('#spin', { opacity: 0, duration: .15 }, 10.15);
+// the tile flips up out of the hills, then rides away
+tl.set('#tile', pv({ x: 790, y: 470, rotationX: 89, rotationY: 0, rotationZ: 0, scale: .8, opacity: 0 }), 0)
+  .set('#tile', { opacity: 1 }, 8.44)
+  .to('#tile', pv({ x: 850, y: 520, rotationX: 58, scale: .9, duration: .14, ease: 'power2.out' }), 8.45)
+  .to('#tile', pv({ x: 640, y: 600, rotationX: 18, rotationY: -10, rotationZ: -1, scale: 1.15, duration: .2, ease: 'power2.out' }), 8.59)
+  .to('#tile', pv({ x: 575, y: 598, rotationX: 22, rotationY: -12, scale: 1.08, duration: .3, ease: 'sine.inOut' }), 8.79)
+  .to('#tile', pv({ x: 580, y: 355, rotationX: 42, rotationY: -8, scale: .98, duration: .55, ease: 'sine.inOut' }), 9.09)
+  .to('#tile', pv({ x: 588, y: 345, rotationX: 40, scale: 1.0, duration: .6, ease: 'none' }), 9.64)
+  .to('#tile', pv({ x: 742, y: 92, rotationX: 30, rotationY: 0, scale: .78, filter: 'blur(2px)', duration: .4, ease: 'power2.inOut' }), 10.24)
+  .to('#tdim', { opacity: .85, duration: .3 }, 10.3)
+  .to('#tile', pv({ x: 770, y: -190, duration: .4, ease: 'power2.in' }), 10.68)
+  .set('#tile', { opacity: 0 }, 11.1);
+// the island: Generate -> spinner -> check -> live activity -> player card
+const isl = (t, w, h, r, d = .14, e = 'power3.inOut') => tl.to('#isl', { width: w, height: h, marginLeft: -w / 2, marginTop: -h / 2, borderRadius: r, duration: d, ease: e }, t);
+const st = (id, a, b) => tl.fromTo('#' + id, { opacity: 0 }, { opacity: 1, duration: .06, immediateRender: false }, a).to('#' + id, { opacity: 0, duration: .06 }, b);
+st('i0', 8.5, 8.74); isl(8.76, 80, 80, 40); st('i1', 8.86, 9.12); st('i2', 9.16, 9.34);
+isl(9.36, 210, 60, 30, .1); isl(9.46, 340, 62, 31, .16, 'back.out(1.6)'); st('i3', 9.5, 9.78);
+isl(9.8, 470, 250, 46, .2, 'back.out(1.3)'); tl.fromTo('#i4', { opacity: 0 }, { opacity: 1, duration: .1, immediateRender: false }, 9.9);
+tl.fromTo('#tcur', { opacity: 0 }, { opacity: 1, duration: .1, immediateRender: false }, 8.8).to('#tcur', { x: 24, y: 30, duration: .8, ease: 'sine.inOut' }, 9.1).to('#tcur', { x: 6, y: 10, duration: .6, ease: 'sine.inOut' }, 9.9);
+tl.set('#flashS', { opacity: 1 }, 9.78).set('#flashS', { opacity: 0 }, 9.835);
+// "Make it better", "What? lol" and the motion designer's cursor
+tl.set('#bub2', { xPercent: -50, yPercent: -50 }, 0)
+  .fromTo('#bub2', pv({ x: 1900, y: 720, opacity: 0, filter: 'blur(12px)' }), pv({ x: 1517, y: 675, opacity: 1, filter: 'blur(0px)', duration: .22, ease: 'power3.out' }), 9.28)
+  .to('#bub2', pv({ x: 1536, y: 648, scale: 1.06, duration: .6, ease: 'none' }), 9.5)
+  .to('#bub2', pv({ x: 1440, y: 448, scale: .8, duration: .45, ease: 'power2.inOut' }), 10.22)
+  .to('#bub2', pv({ x: 1452, y: 440, duration: .5, ease: 'none' }), 10.67);
+tl.set('#spin2', { yPercent: -50 }, 0)
+  .fromTo('#spin2', pv({ x: 300, y: 1010, opacity: 0, filter: 'blur(14px)', scale: .8 }), pv({ x: 382, y: 650, opacity: 1, filter: 'blur(0px)', scale: 1, duration: .3, ease: 'power3.out' }), 10.1)
+  .to('#spin2', pv({ x: 392, y: 640, duration: .8, ease: 'none' }), 10.4);
+tl.fromTo('#cur4', pv({ x: 1150, y: 1180, rotate: -42, opacity: 0 }), pv({ x: 826, y: 626, rotate: 0, opacity: 1, duration: .28, ease: 'power3.out' }), 10.24)
+  .to('#cur4', pv({ x: 838, y: 620, duration: .7, ease: 'none' }), 10.52);
+
+// =====================================================================================================
+// S6 back to the chat box over orange dots: "Can you Remove"
+// =====================================================================================================
+show('s6', 10.94, 13.06);
+tl.set('#s6', { backgroundColor: 'rgba(26,19,16,0)' }, 10.94).to('#s6', { backgroundColor: 'rgba(26,19,16,1)', duration: .22, ease: 'none' }, 11.2);
+tl.set(['#dots6', '#glow6', '#cur6'], { opacity: 0 }, 0).to(['#dots6', '#glow6'], { opacity: 1, duration: .22, ease: 'none' }, 11.2);
+tl.fromTo('#box6', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .16, ease: 'power2.out', immediateRender: false }, 11.14);
+tl.set('#cam6', cv({ x: 110, y: 10, scale: .985 }), 10.94)
+  .to('#cam6', cv({ x: 122, y: -22, scale: .962, duration: 1.28, ease: 'none' }), 10.94)
+  .to('#cam6', cv({ rotationY: 16, rotationX: 9, transformPerspective: 1600, x: 240, y: 30, scale: .962, duration: .14, ease: 'power2.in' }), 12.22)
+  .to('#cam6', cv({ x: -321, y: -761, scale: 2.3, rotationY: -4, rotationX: 2, duration: .14, ease: 'power3.out' }), 12.36)
+  .to('#cam6', cv({ x: -350, y: -790, scale: 2.36, rotationY: 0, rotationX: 0, duration: .55, ease: 'sine.out' }), 12.5)
+  .to('#s6', { opacity: 0, duration: .08 }, 12.98);
+tl.set('#s6', { filter: 'url(#mbB)' }, 12.22).set('#s6', { filter: 'none' }, 12.62);
+tl.fromTo('#mbBb', { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: '20 2' }, duration: .14, ease: 'power2.in', immediateRender: false }, 12.26)
+  .to('#mbBb', { attr: { stdDeviation: '0 0' }, duration: .24, ease: 'power2.out' }, 12.37);
+tl.fromTo('#cur6', { x: 470, y: 760, opacity: 0 }, { x: 600, y: 668, opacity: 1, duration: .3, ease: 'power3.out', immediateRender: false }, 11.18)
+  .to('#cur6', { x: 724, y: 744, duration: 1.6, ease: 'sine.inOut' }, 11.48);
+// the dot screen behind it: bigger dots toward the edges, quiet in the middle
+{
+  const g = $('#dots6').getContext('2d');
+  for (let y = 10; y < VH; y += 21) for (let x = 10; x < VW; x += 21) {
+    const dx = (x - VW * .52) / (VW / 2), dy = (y - VH * .59) / (VH * .59), d = Math.sqrt(dx * dx * .9 + dy * dy);
+    const n = vn(x * .006, y * .006), r = X.clamp(.6 + 4.4 * Math.pow(X.clamp(d * .95 - .15), 1.15) * (.65 + .6 * n), 0, 5.4);
+    g.fillStyle = `rgba(236,${86 + 20 * n | 0},30,${X.clamp(.25 + .8 * d)})`; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+}
+
+X.onFrame(t => {
+  if (t >= 4.0 && t < 6.9) {
+    const n = Math.max(0, Math.min(P1.length, Math.floor((t - 4.12) * 39)));
+    $('#ty3').innerHTML = esc(P1.slice(0, n)) + CARET;
+    $('#hd3t').textContent = H1.slice(0, Math.floor(k01(t, 4.78, 5.08) * H1.length));
+  }
+  terr.visible = t >= 6.78 && t < 11.5;
+  if (terr.visible) {
+    BG.c = [16, 5, 4]; G.vignette.value = .38;
+    $('#spw').textContent = t < 7.45 ? 'Cogitating' : t < 7.75 ? 'Contemplating.' : t < 8.05 ? 'Contemplating..' : 'Pondering';
+    $('#spk4').style.transform = `rotate(${t * 150}deg) scale(${1 + .08 * Math.sin(t * 9)})`;
+    $('#i1a').parentNode.style.transform = `rotate(${t * 760}deg)`;
+  }
+  if (t >= 10.9 && t < 13.1) {
+    $('#ty6').innerHTML = esc('Can you Remove'.slice(0, Math.floor(k01(t, 11.28, 11.62) * 14))) + CARET;
+    $('#hd6 span').textContent = H1.slice(0, Math.max(0, Math.floor(k01(t, 10.98, 11.18) * H1.length)));
+  }
+});
+
+// =====================================================================================================
+// S7 the word wheel + edits on the picture (our own 3D runner, rendered by a small ray-marcher)
+// =====================================================================================================
+const WORDS = ['3D', 'Illustrate', 'Resize', 'Carousel', 'Remove', 'Create', 'Enhance', 'Code', 'Add'];
+const SPK = '<svg viewBox="0 0 100 100" width="46" height="46"><g stroke="#ffb59b" stroke-width="8" stroke-linecap="round"><path d="M50 8V92M8 50H92M20.3 20.3L79.7 79.7M79.7 20.3L20.3 79.7"/></g></svg>';
+$('#list7').innerHTML = WORDS.map((w, i) => `<div class="li" id="li${i}">${SPK}<span>${w}</span></div>`).join('');
+const LST = { sel: 4, blur: 0 }, LX = V ? 110 : 190, LY = V ? 430 : 540, LS = V ? 112 : 128;
+const PH = V ? { x: 190, y: 1020, w: 700, h: 735 } : { x: 1152, y: 227, w: 566, h: 594 };  // the picture frame
+show('s7', 12.97, 20.97);
+tl.fromTo('#s7', { opacity: 0 }, { opacity: 1, duration: .07, immediateRender: false }, 12.97);
+tl.set(LST, { sel: 3.3 }, 12.97).to(LST, { sel: 4, duration: .34, ease: 'power3.out' }, 12.97)
+  .to(LST, { sel: 5, duration: .24, ease: 'power3.inOut' }, 16.08)
+  .to(LST, { sel: 6, duration: .24, ease: 'power3.inOut' }, 18.1)
+  .to(LST, { sel: 0, duration: .34, ease: 'power3.inOut' }, 19.42);
+tl.fromTo(LST, { blur: 14 }, { blur: 0, duration: .3, immediateRender: false }, 12.97)
+  .to(LST, { blur: 5, duration: .12, yoyo: true, repeat: 1 }, 16.08).to(LST, { blur: 5, duration: .12, yoyo: true, repeat: 1 }, 18.1)
+  .to(LST, { blur: 11, duration: .17, yoyo: true, repeat: 1 }, 19.42);
+tl.fromTo('#lp7', { x: -140 }, { x: 0, duration: .32, ease: 'power3.out', immediateRender: false }, 12.97);
+tl.fromTo('#lp7g', { opacity: 0 }, { opacity: 1, duration: .25, ease: 'power2.out', immediateRender: false }, 19.5).to('#lp7g', { opacity: .45, x: -120, duration: .9, ease: 'sine.inOut' }, 19.8);
+tl.fromTo('#ph7', { x: 240, opacity: 0, filter: 'blur(16px)' }, { x: 0, opacity: 1, filter: 'blur(0px)', duration: .28, ease: 'power3.out', immediateRender: false }, 12.99);
+tl.fromTo('#veil7', { clipPath: 'inset(0 0 0 0%)' }, { clipPath: 'inset(0 0 0 100%)', duration: .62, ease: 'power2.inOut', immediateRender: false }, 13.18);
+tl.fromTo('#mas7', { scale: 0 }, { scale: 1, duration: .32, ease: 'back.out(2.4)', immediateRender: false }, 13.28);
+tl.fromTo('.cd', { scale: 0 }, { scale: 1, duration: .2, stagger: .04, ease: 'back.out(2)', immediateRender: false }, 13.08);
+
+// ---- the runner: smooth 3D figure (our own), side view, leaning into a sprint start ----
+const FIG = { swing: 0, orbit: 0, shift: 0, band: 1, glass: 0, blue: 0, zoom: 1.12 };
+const FR = new THREE.WebGLRenderer({ canvas: $('#fig'), antialias: false, preserveDrawingBuffer: true });
+FR.setPixelRatio(1); FR.setSize(1132, 1188, false);
+const figU = { uE1: { value: new THREE.Vector3() }, uW1: { value: new THREE.Vector3() }, uE2: { value: new THREE.Vector3() }, uW2: { value: new THREE.Vector3() },
+  uBand: { value: 1 }, uGlass: { value: 0 }, uBlue: { value: 0 }, uOrbit: { value: 0 }, uShift: { value: 0 }, uZoom: { value: 1 }, uAspect: { value: 566 / 594 } };
+const figMat = new THREE.ShaderMaterial({
+  uniforms: figU,
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+  fragmentShader: `precision highp float; varying vec2 vUv;
+    uniform vec3 uE1, uW1, uE2, uW2; uniform float uBand, uGlass, uBlue, uOrbit, uShift, uZoom, uAspect;
+    const vec3 SH1 = vec3(0.38, 1.42, 0.17), SH2 = vec3(0.38, 1.42, -0.17), HEAD = vec3(0.53, 1.625, 0.0);
+    float smin(float a, float b, float k){ float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }
+    float sdEll(vec3 p, vec3 r){ float k0 = length(p / r); float k1 = length(p / (r * r)); return k0 * (k0 - 1.0) / k1; }
+    float sdCap(vec3 p, vec3 a, vec3 b, float ra, float rb){ vec3 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0); return length(pa - ba * h) - mix(ra, rb, h); }
+    float sdBox(vec3 p, vec3 b){ vec3 q = abs(p) - b; return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0); }
+    vec3 rz(vec3 p, float a){ float c = cos(a), s = sin(a); return vec3(c * p.x + s * p.y, -s * p.x + c * p.y, p.z); }
+    float M;
+    float map(vec3 p){
+      float chest = sdEll(rz(p - vec3(0.29, 1.31, 0.0), -0.85), vec3(0.23, 0.155, 0.185));
+      float belly = sdCap(p, vec3(0.24, 1.25, 0.0), vec3(0.02, 0.97, 0.0), 0.155, 0.14);
+      float torso = smin(chest, belly, 0.06);
+      float thigh = sdCap(p, vec3(0.0, 0.9, 0.09), vec3(0.34, 0.6, 0.13), 0.1, 0.075);
+      float neck = sdCap(p, vec3(0.42, 1.46, 0.0), vec3(0.5, 1.575, 0.0), 0.06, 0.05);
+      float sh = min(length(p - SH1) - 0.09, length(p - SH2) - 0.09);
+      float trap = sdCap(p, vec3(0.33, 1.43, 0.0), vec3(0.45, 1.5, 0.0), 0.1, 0.055);
+      vec3 hp = rz(p - HEAD, 0.25);
+      float skull = sdEll(hp, vec3(0.106, 0.122, 0.098));
+      float jaw = sdEll(hp - vec3(0.045, -0.072, 0.0), vec3(0.062, 0.056, 0.07));
+      float nose = sdEll(hp - vec3(0.104, -0.012, 0.0), vec3(0.03, 0.019, 0.017));
+      float brow = sdEll(hp - vec3(0.086, 0.034, 0.0), vec3(0.03, 0.016, 0.062));
+      float lips = sdEll(hp - vec3(0.094, -0.062, 0.0), vec3(0.02, 0.022, 0.03));
+      float ear = sdEll(hp - vec3(-0.01, -0.006, 0.093), vec3(0.025, 0.036, 0.013));
+      float head = smin(smin(smin(skull, jaw, 0.045), smin(nose, brow, 0.012), 0.022), min(lips, ear), 0.014);
+      float ua1 = sdCap(p, SH1, uE1, 0.07, 0.05), fa1 = sdCap(p, uE1, uW1, 0.052, 0.036);
+      float ua2 = sdCap(p, SH2, uE2, 0.068, 0.05), fa2 = sdCap(p, uE2, uW2, 0.05, 0.036);
+      float fist2 = length(p - uW2 - normalize(uW2 - uE2) * 0.035) - 0.046;
+      vec3 hx = normalize(uW1 - uE1), hz = vec3(0.0, 0.0, 1.0), hy = normalize(cross(hz, hx)); hz = cross(hx, hy);
+      vec3 q = p - uW1; q = vec3(dot(q, hx), dot(q, hy), dot(q, hz));
+      float palm = sdEll(q - vec3(0.05, 0.004, 0.0), vec3(0.053, 0.043, 0.021));
+      float fing = 1e5;
+      for (int i = 0; i < 4; i++) { float fi = float(i), a = 0.12 + fi * 0.2; vec3 b = vec3(0.03 + fi * 0.019, 0.032 - abs(fi - 1.5) * 0.005, 0.004 - fi * 0.003); vec3 d = vec3(sin(a), cos(a), 0.0); fing = min(fing, sdCap(q, b, b + d * (fi == 1.0 || fi == 2.0 ? 0.088 : 0.075), 0.0135, 0.0105)); }
+      float thumb = sdCap(q, vec3(0.03, -0.02, 0.018), vec3(0.092, -0.03, 0.03), 0.015, 0.012);
+      float hand = smin(palm, min(fing, thumb), 0.012);
+      float arms = min(smin(ua1, smin(fa1, hand, 0.015), 0.03), smin(ua2, smin(fa2, fist2, 0.02), 0.03));
+      float skin = smin(smin(smin(neck, head, 0.035), smin(sh, trap, 0.05), 0.05), arms, 0.04);
+      float shirt = torso + 0.004;
+      float d = smin(skin, shirt, 0.025);
+      M = shirt < skin ? 2.0 : 1.0;
+      if (M == 1.0 && skull < min(jaw, nose) && hp.y + 0.35 * hp.x > 0.035 && hp.x < 0.075) M = 3.0;
+      if (thigh < d) { d = thigh; M = 7.0; }
+      if (uBand > 0.5) { vec3 bq = p - (uW1 - hx * 0.03); float al = dot(bq, hx); float band = max(length(bq - hx * al) - 0.047, abs(al) - 0.018); if (band < d) { d = band; M = 4.0; } }
+      if (uGlass > 0.0) {
+        vec3 gp = hp - vec3(0.0, 0.014, 0.0);
+        float ang = atan(gp.z, gp.x), rr = length(gp.xz);
+        float lens = max(max(abs(rr - 0.123) - 0.006, abs(gp.y + 0.004) - 0.031 * uGlass), abs(ang) - 1.3);
+        float frame = max(max(abs(rr - 0.126) - 0.008, abs(gp.y - 0.027 * uGlass) - 0.007), abs(ang) - 1.35);
+        float arm = sdBox(gp - vec3(-0.035, 0.022, 0.106), vec3(0.08, 0.007 * uGlass, 0.006));
+        float g2 = min(lens, min(frame, arm));
+        if (g2 < d) { d = g2; M = lens <= min(frame, arm) ? 5.0 : 6.0; }
+      }
+      return d;
+    }
+    vec3 nrm(vec3 p){ const vec2 e = vec2(0.0006, -0.0006); return normalize(e.xyy * map(p + e.xyy) + e.yyx * map(p + e.yyx) + e.yxy * map(p + e.yxy) + e.xxx * map(p + e.xxx)); }
+    float occl(vec3 p, vec3 n){ float o = 0.0, s = 1.0; for (int i = 1; i <= 4; i++) { float h = 0.014 * float(i); o += (h - map(p + n * h)) * s; s *= 0.6; } return clamp(1.0 - 3.2 * o, 0.0, 1.0); }
+    vec3 bg(vec2 uv){
+      uv.x += uShift;
+      float hz = 0.57; vec3 c;
+      if (uv.y > hz) { float k = (uv.y - hz) / (1.0 - hz); c = mix(vec3(0.15, 0.16, 0.18), vec3(0.075, 0.08, 0.095), k); c *= 0.86 + 0.14 * sin(uv.y * 70.0 + sin(uv.x * 6.0)); c += vec3(0.05) * smoothstep(0.03, 0.0, abs(uv.y - hz - 0.04)); }
+      else { float k = (hz - uv.y) / hz; c = mix(vec3(0.44, 0.12, 0.075), vec3(0.6, 0.19, 0.125), k); float ln = sin((uv.y + uv.x * 0.07) * 36.0 / (0.3 + k)); c = mix(c, vec3(0.72, 0.6, 0.56), smoothstep(0.8, 1.0, ln) * 0.45); }
+      return c;
+    }
+    void main(){
+      vec2 pp = (vUv * 2.0 - 1.0) * vec2(uAspect, 1.0);
+      vec3 ta = vec3(0.42, 1.31, 0.0);
+      vec3 ro = ta + vec3(sin(uOrbit), 0.015, cos(uOrbit)) * 2.6;
+      vec3 ww = normalize(ta - ro), uu = normalize(cross(ww, vec3(0.0, 1.0, 0.0))), vv = cross(uu, ww);
+      vec3 rd = normalize(pp.x * uu + pp.y * vv + 3.732 * uZoom * ww);
+      vec3 col = bg(vUv);
+      vec3 bc = vec3(0.34, 1.25, 0.0), oc = ro - bc; float b = dot(oc, rd), c = dot(oc, oc) - 0.82 * 0.82, h = b * b - c;
+      if (h > 0.0) {
+        float t = max(0.0, -b - sqrt(h)), tmax = -b + sqrt(h); bool hit = false;
+        for (int i = 0; i < 120; i++) { float d = map(ro + rd * t); if (d < 0.0004) { hit = true; break; } t += d * 0.92; if (t > tmax) break; }
+        if (hit) {
+          vec3 p = ro + rd * t; map(p); float m = M; vec3 n = nrm(p); float oc2 = occl(p, n);
+          vec3 L1 = normalize(vec3(0.5, 0.7, 0.55)), L2 = normalize(vec3(-0.8, 0.25, 0.2));
+          float dif = clamp(dot(n, L1), 0.0, 1.0), dif2 = clamp(dot(n, L2), 0.0, 1.0);
+          float fre = pow(1.0 - clamp(dot(n, -rd), 0.0, 1.0), 3.0);
+          float spe = pow(clamp(dot(n, normalize(L1 - rd)), 0.0, 1.0), 36.0);
+          vec3 alb = m == 1.0 ? vec3(0.11, 0.044, 0.021) : m == 2.0 ? vec3(0.6, 0.012, 0.018) : m == 3.0 ? vec3(0.007, 0.005, 0.004) : m == 4.0 ? vec3(0.78, 0.02, 0.03) : vec3(0.012, 0.013, 0.02);
+          col = alb * (0.22 * oc2 + 1.4 * dif * (0.55 + 0.45 * oc2) + 0.4 * dif2 * oc2) + vec3(1.0, 0.86, 0.76) * spe * (m == 1.0 ? 0.3 : 0.07) + alb * fre * 0.5 + vec3(0.6, 0.45, 0.4) * fre * 0.06 * oc2;
+          if (m == 5.0) { vec3 r = reflect(rd, n); float k = clamp(r.y * 0.5 + 0.5, 0.0, 1.0); vec3 a = mix(vec3(0.85, 0.06, 0.01), vec3(1.0, 0.55, 0.06), k), bl = mix(vec3(0.02, 0.1, 0.8), vec3(0.25, 0.75, 1.0), k); col = mix(a, bl, uBlue) * (0.22 + 1.1 * fre + 0.9 * smoothstep(0.35, 0.9, k)) + vec3(1.0) * smoothstep(0.82, 0.95, k) * 0.35 + spe * 1.2; }
+          if (m == 6.0) col = vec3(0.012) + spe * 0.5 + fre * 0.04;
+        }
+      }
+      col = col / (1.0 + col * 0.15);
+      gl_FragColor = vec4(pow(col, vec3(1.0 / 2.2)), 1.0);
+    }`,
+});
+const figScene = new THREE.Scene(), figCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+figScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), figMat));
+const rotA = (p, c, a) => { const dx = p[0] - c[0], dy = p[1] - c[1]; return [c[0] + dx * Math.cos(a) - dy * Math.sin(a), c[1] + dx * Math.sin(a) + dy * Math.cos(a), p[2]]; };
+const joints = () => { const a = FIG.swing * .9; return { e1: rotA([.355, 1.13, .24], [.38, 1.42], -a), w1: rotA([.655, 1.29, .28], [.38, 1.42], -a), e2: rotA([.15, 1.31, -.24], [.38, 1.42], a), w2: rotA([-.04, 1.11, -.24], [.38, 1.42], a) }; };
+// where a 3D point lands on screen (same camera as the shader), for the selection boxes and chips
+const figProj = P => {
+  const ta = [.42, 1.31, 0], ro = [ta[0] + Math.sin(FIG.orbit) * 2.6, ta[1] + .015 * 2.6, ta[2] + Math.cos(FIG.orbit) * 2.6];
+  const sub = (a, b) => a.map((v, i) => v - b[i]), dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2], nz = a => { const l = Math.hypot(...a); return a.map(v => v / l); };
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const ww = nz(sub(ta, ro)), uu = nz(cross(ww, [0, 1, 0])), vv = cross(uu, ww), d = sub(P, ro), z = dot(d, ww);
+  const x = dot(d, uu) / z * 3.732 * FIG.zoom / (566 / 594), y = dot(d, vv) / z * 3.732 * FIG.zoom;
+  return [PH.x + (x * .5 + .5) * PH.w, PH.y + (1 - (y * .5 + .5)) * PH.h];
+};
+let figKey = '';
+const drawFig = () => {
+  const j = joints();
+  const key = [FIG.swing, FIG.orbit, FIG.shift, FIG.band, FIG.glass, FIG.blue, FIG.zoom].map(v => (+v).toFixed(4)).join();
+  if (key === figKey) return; figKey = key;
+  figU.uE1.value.set(...j.e1); figU.uW1.value.set(...j.w1); figU.uE2.value.set(...j.e2); figU.uW2.value.set(...j.w2);
+  figU.uBand.value = FIG.band; figU.uGlass.value = FIG.glass; figU.uBlue.value = FIG.blue; figU.uOrbit.value = FIG.orbit; figU.uShift.value = FIG.shift; figU.uZoom.value = FIG.zoom;
+  FR.render(figScene, figCam);
+};
+// red "pixels" while the edit is being thought about
+const glg = $('#glit7').getContext('2d');
+const glitch = (t, P, w, h) => { glg.clearRect(0, 0, 94, 99); const GS = PH.w / 94, cx = (P[0] - PH.x) / GS, cy = (P[1] - PH.y) / GS, f = Math.floor(t * 30); w *= 6 / GS; h *= 6 / GS;
+  for (let i = 0; i < 70; i++) { const r = X.hash(i * 7.1 + f * 13.3); if (r < .45) continue; glg.fillStyle = `rgba(${200 + 55 * X.hash(i + f)},${30 + 40 * X.hash(i * 3 + f)},40,${.35 + .5 * r})`; glg.fillRect(Math.floor(cx - w / 12 + X.hash(i * 1.7 + f) * w / 6), Math.floor(cy - h / 12 + X.hash(i * 2.3 + f * .5) * h / 6), 1 + (r > .8), 1); } };
+// the edits: Remove the wristband -> Create glasses -> Make them blue -> 3D
+const wash = t0 => tl.to('#wash7', { opacity: .95, duration: .12, ease: 'power2.in' }, t0).to('#wash7', { opacity: 0, duration: .24, ease: 'power2.out' }, t0 + .14);
+const pop = (sel, t0, t1) => tl.fromTo(sel, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .16, ease: 'back.out(2)', immediateRender: false }, t0).to(sel, { opacity: 0, duration: .12 }, t1);
+pop('#ch1', 15.42, 16.05); pop('#sel1', 15.55, 16.05); wash(15.98); tl.set(FIG, { band: 0 }, 16.1);
+pop('#ch2', 17.22, 17.95); pop('#sel2', 17.32, 17.95); tl.set('#glit7', { opacity: 1 }, 17.55).set('#glit7', { opacity: 0 }, 17.82); wash(17.8); tl.fromTo(FIG, { glass: 0 }, { glass: 1, duration: .1, immediateRender: false }, 17.92);
+pop('#ch3', 18.38, 19.3); tl.set('#glit7', { opacity: 1 }, 19.18).set('#glit7', { opacity: 0 }, 19.38); wash(19.36); tl.fromTo(FIG, { blue: 0 }, { blue: 1, duration: .1, immediateRender: false }, 19.47);
+// 3D: the picture comes alive
+tl.to(FIG, { orbit: .5, swing: 1.25, shift: .4, duration: 1.2, ease: 'sine.inOut' }, 19.72)
+  .to('#ph7', V ? { x: -30, y: -50, scaleX: 1.06, duration: .9, ease: 'power2.inOut' } : { x: -150, scaleX: 1.08, duration: .9, ease: 'power2.inOut' }, 19.75)
+  .to('#mas7', V ? { x: -60, y: -50, duration: .9, ease: 'power2.inOut' } : { x: -170, duration: .9, ease: 'power2.inOut' }, 19.75)
+  .to('.cd', { x: (i) => (V ? [-60, 60, -60, 60] : [-120, 70, -120, 70])[i], y: (i) => (V ? [-70, -70, 60, 60] : [-40, -40, 50, 50])[i], duration: .9, ease: 'power2.inOut' }, 19.75)
+  .fromTo('#ph7', { filter: 'blur(0px) brightness(1)' }, { filter: 'blur(12px) brightness(2.2)', scale: 2.3, duration: .19, ease: 'power3.in', immediateRender: false }, 20.76);
+// the motion designer's cursor
+tl.set('#cur7', { opacity: 0 }, 0).fromTo('#cur7', { x: V ? 1000 : 1320, y: V ? 820 : 40, rotate: -35, opacity: 0 }, { x: V ? 900 : 1600, y: V ? 1300 : 600, rotate: 0, opacity: 1, duration: .38, ease: 'power3.out', immediateRender: false }, 14.06)
+  .to('#cur7', { x: V ? 890 : 1590, y: V ? 1310 : 610, duration: .9, ease: 'sine.inOut' }, 14.45);
+X.onFrame(t => {
+  if (t < 12.9 || t > 21.0) return;
+  WORDS.forEach((w, i) => {
+    const d = i - LST.sel, ad = Math.abs(d), sv = Math.max(0, 1 - ad), el = $('#li' + i);
+    const x = LX + 150 * sv + 22 * Math.max(0, 1 - Math.abs(ad - 1)) * (1 - sv), y = LY + d * LS - 50;
+    el.style.transform = `translate(${x}px,${y}px) scale(${1 + .1 * sv})`;
+    el.style.color = `rgba(${236 + 19 * sv | 0},${226 + 29 * sv | 0},${219 + 36 * sv | 0},${.62 + .38 * sv})`;
+    el.firstChild.style.opacity = sv;
+    el.style.filter = LST.blur > .05 ? `blur(${LST.blur.toFixed(2)}px)` : 'none';
+  });
+  $('#mas7').style.translate = `0 ${(-3 * Math.abs(Math.sin(t * 3.2))).toFixed(1)}px`;
+  drawFig();
+  // keep the boxes, chips and cursor on the figure
+  const j = joints(), band = figProj(j.w1.map((v, i) => v - [.03, .018, 0][i])), eye = figProj([.63, 1.64, .02]), chest = figProj([.3, 1.45, .2]);
+  tl.set; // (positions below are per frame, not tweened)
+  const put = (id, x, y) => { $(id).style.left = x + 'px'; $(id).style.top = y + 'px'; };
+  put('#sel1', band[0] - 62, band[1] - 50); $('#sel1').style.width = '124px'; $('#sel1').style.height = '100px';
+  put('#ch1', band[0] - 62, band[1] - 98);
+  put('#sel2', eye[0] - 96, eye[1] - 46); $('#sel2').style.width = '184px'; $('#sel2').style.height = '86px';
+  put('#ch2', eye[0] - 80, eye[1] + 64);
+  put('#ch3', chest[0] - 120, chest[1] - 18);
+  $('#ph7').style.transformOrigin = `${eye[0] - PH.x}px ${eye[1] - PH.y}px`;
+  if (t >= 17.5 && t < 17.85) glitch(t, eye, 200, 110); else if (t >= 19.15 && t < 19.4) glitch(t, figProj([.52, 1.66, 0]), 260, 220);
+  if (t > 14.9) {
+    const tgt = t < 16.2 ? [band[0] + 64, band[1] - 52] : t < 17.0 ? [band[0] + 90, band[1] - 20] : t < 18.2 ? [eye[0] + 96, eye[1] - 44] : t < 19.6 ? [chest[0] + 130, chest[1] + 6] : V ? [880 - 60 * k01(t, 19.75, 20.6), 1700] : [1700 - 150 * k01(t, 19.75, 20.6), 760];
+    const c = $('#cur7'), k = .22, ox = +c.dataset.x || tgt[0], oy = +c.dataset.y || tgt[1];
+    const nx = X.lerp(ox, tgt[0], k), ny = X.lerp(oy, tgt[1], k); c.dataset.x = nx; c.dataset.y = ny;
+    c.style.transform = `translate(${nx}px,${ny}px)`;
+  }
+});
+
+// =====================================================================================================
+// S8 the glasses as a product shot on white (our own model)
+// =====================================================================================================
+X.studioEnv(ctx, [[0xffffff, [-5, 4, 6], [8, 5], 1.7], [0xffffff, [6, 2, 4], [3, 9], 1.9], [0xffe2c4, [0, 9, 0], [14, 4], 1.3], [0xffffff, [-6, -3, -4], [6, 6], 1.1], [0xffb070, [5, -4, -5], [6, 5], 1.0]]);
+const gls = new THREE.Group(); gls.visible = false; ctx.scene.add(gls);
+const LW = 1.7, LH = .56, LR = 1.05;
+const bendP = (x, y) => { const a = x / LR; return new THREE.Vector3(Math.sin(a) * LR, y + .03 * Math.cos(x * 1.8), Math.cos(a) * LR - LR - .06 * y); };
+const lensMask = X.canvasTex(1024, 340, (g, w, h) => {
+  const P = (x, y) => [(x / LW + .5) * w, (.5 - y / LH) * h];
+  g.fillStyle = '#000'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.beginPath();
+  g.moveTo(...P(-.84, .2)); g.quadraticCurveTo(...P(0, .26), ...P(.84, .2)); g.quadraticCurveTo(...P(.88, .04), ...P(.8, -.1));
+  g.bezierCurveTo(...P(.7, -.28), ...P(.42, -.3), ...P(.26, -.25)); g.quadraticCurveTo(...P(.14, -.2), ...P(.1, -.1)); g.quadraticCurveTo(...P(0, .02), ...P(-.1, -.1));
+  g.quadraticCurveTo(...P(-.14, -.2), ...P(-.26, -.25)); g.bezierCurveTo(...P(-.42, -.3), ...P(-.7, -.28), ...P(-.8, -.1)); g.quadraticCurveTo(...P(-.88, .04), ...P(-.84, .2)); g.fill();
+});
+lensMask.encoding = THREE.LinearEncoding;
+const lensGeo = new THREE.PlaneGeometry(LW, LH, 72, 14), lpos = lensGeo.attributes.position;
+for (let i = 0; i < lpos.count; i++) { const v = bendP(lpos.getX(i), lpos.getY(i)); lpos.setXYZ(i, v.x, v.y, v.z); }
+lensGeo.computeVertexNormals();
+const lensCol = X.canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, h, 0, 0); gr.addColorStop(0, '#c40d02'); gr.addColorStop(.42, '#ff2a08'); gr.addColorStop(.75, '#ff6a12'); gr.addColorStop(1, '#ffb43a'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+const lensMesh = new THREE.Mesh(lensGeo, new THREE.MeshPhysicalMaterial({ map: lensCol, alphaMap: lensMask, alphaTest: .5, metalness: .25, roughness: .05, clearcoat: 1, clearcoatRoughness: .03, envMapIntensity: .9, emissive: 0xffffff, emissiveMap: lensCol, emissiveIntensity: .55, side: THREE.DoubleSide }));
+gls.add(lensMesh);
+const frameMat = new THREE.MeshPhysicalMaterial({ color: 0x0c0c0d, roughness: .22, metalness: .2, clearcoat: 1, envMapIntensity: 1.2 });
+const topCurve = new THREE.CatmullRomCurve3(Array.from({ length: 25 }, (_, i) => { const x = -.87 + i * 1.74 / 24; return bendP(x, .225 + .045 * (1 - Math.pow(x / .87, 2)) * .5); }));
+gls.add(new THREE.Mesh(new THREE.TubeGeometry(topCurve, 96, .03, 12, false), frameMat));
+[-1, 1].forEach(sg => {
+  const a = bendP(sg * .87, .21), b = new THREE.Vector3(sg * .7, .16, -1.55), len = a.distanceTo(b);
+  const arm = new THREE.Mesh(new THREE.BoxGeometry(.05, .085, len), frameMat); arm.position.copy(a).lerp(b, .5); arm.lookAt(b); gls.add(arm);
+  const strip = new THREE.Mesh(new THREE.BoxGeometry(.012, .03, len * .55), new THREE.MeshPhysicalMaterial({ color: 0xd8203a, roughness: .3, clearcoat: 1, emissive: 0x300008 }));
+  strip.position.copy(a).lerp(b, .62); strip.lookAt(b); strip.translateX(-sg * .03); gls.add(strip);
+  const hinge = new THREE.Mesh(new THREE.BoxGeometry(.09, .12, .12), frameMat); hinge.position.copy(a); hinge.lookAt(b); gls.add(hinge);
+});
+const GL8 = { ry: -2.6, rx: .14, y: 0 };
+show('s8', 20.93, 22.62);
+tl.set(CAM, { x: 0, y: .05, z: V ? 5.7 : 3.7, yaw: 0, pitch: 0, roll: 0, fov: V ? 40 : 30 }, 20.93)
+  .to(CAM, { z: V ? 5.35 : 3.45, duration: 1.4, ease: 'none' }, 20.95);
+tl.set(GL8, { ry: -2.7, rx: .2, y: .05 }, 20.93).to(GL8, { ry: .04, rx: .1, duration: .44, ease: 'power3.out' }, 20.95).to(GL8, { ry: .2, rx: .06, y: -.03, duration: 1.2, ease: 'sine.inOut' }, 21.39);
+tl.fromTo('#bl1', { x: V ? 820 : 1390, y: V ? 640 : 120, rotate: 0 }, { x: V ? 700 : 1180, y: V ? 820 : 300, rotate: 40, duration: 1.3, ease: 'none', immediateRender: false }, 20.95)
+  .fromTo('#bl2', { x: V ? 650 : 1150, y: V ? 1240 : 760, rotate: 10, opacity: 0 }, { x: V ? 500 : 900, y: V ? 1330 : 860, rotate: -30, opacity: 1, duration: 1.2, ease: 'none', immediateRender: false }, 21.2);
+
+// =====================================================================================================
+// S9 "Together • we can • make": glowing ripples from the left
+// =====================================================================================================
+const R9 = { a: -150, b: -150, c: -150 };
+const rg = $('#rings9').getContext('2d');
+const drawRings = () => {
+  rg.clearRect(0, 0, VW, VH);
+  const cx = V ? 540 : -1500, cy = V ? -1500 : 540, c0 = V ? cy : cx, rims = [R9.a, R9.b, R9.c], outer = Math.max(...rims);
+  if (outer - c0 <= 0) return;
+  rg.fillStyle = '#0e0c0b'; rg.beginPath(); rg.arc(cx, cy, outer - c0, 0, Math.PI * 2); rg.fill();
+  rg.globalCompositeOperation = 'lighter';
+  rims.forEach(x => { const r = x - c0; if (r < 40) return; const gr = rg.createRadialGradient(cx, cy, Math.max(0, r - 340), cx, cy, r + 5);
+    gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(.42, 'rgba(90,22,4,.22)'); gr.addColorStop(.78, 'rgba(205,60,12,.72)'); gr.addColorStop(.94, 'rgba(255,118,44,.95)'); gr.addColorStop(.985, 'rgba(255,178,122,1)'); gr.addColorStop(1, 'rgba(255,120,60,0)');
+    rg.fillStyle = gr; rg.beginPath(); rg.arc(cx, cy, r + 5, 0, Math.PI * 2); rg.fill(); });
+  rg.globalCompositeOperation = 'source-over';
+};
+show('s9', 22.02, 23.76);
+tl.fromTo(R9, { a: -150 }, { a: V ? 760 : 884, duration: .3, ease: 'power3.out', immediateRender: false }, 22.03)
+  .fromTo(R9, { b: V ? 480 : 560 }, { b: V ? 1300 : 1459, duration: .3, ease: 'power3.out', immediateRender: false }, 22.17)
+  .fromTo(R9, { c: V ? 760 : 860 }, { c: 1935, duration: .32, ease: 'power3.out', immediateRender: false }, 22.31)
+  .to(R9, { a: V ? 745 : 862, b: V ? 1285 : 1436, c: V ? 1915 : 1912, duration: .6, ease: 'none' }, 22.62)
+  .to(R9, { c: 2600, b: 2300, duration: .3, ease: 'power2.in' }, 23.18)
+  .to(R9, { a: 2500, duration: .16, ease: 'power3.in' }, 23.6);
+tl.set(R9, { b: -150, c: -150 }, 22.02);
+const w9 = (id, t0, x) => tl.fromTo(id, V ? { y: 40, opacity: 0, filter: 'blur(14px)' } : { x: x + 40, opacity: 0, filter: 'blur(14px)' }, V ? { y: 0, opacity: 1, filter: 'blur(0px)', duration: .2, ease: 'power3.out', immediateRender: false } : { x, opacity: 1, filter: 'blur(0px)', duration: .2, ease: 'power3.out', immediateRender: false }, t0);
+w9('#w9a', 22.12, 230); w9('#w9b', 22.3, 1008); w9('#w9c', 22.46, 1565);
+tl.to(['#w9a', '#w9b', '#w9c'], { [V ? 'y' : 'x']: '-=14', duration: .6, ease: 'none' }, 22.62)
+  .to(['#w9b', '#w9c', '#d9b', '#d9c'], { [V ? 'y' : 'x']: '+=260', opacity: 0, filter: 'blur(16px)', duration: .28, ease: 'power2.in' }, 23.18)
+  .to('#w9a', V ? { y: 380, opacity: 0, filter: 'blur(4px)', duration: .14, ease: 'power3.in' } : { x: 600, opacity: 0, filter: 'blur(4px)', duration: .14, ease: 'power3.in' }, 23.61)
+  .set('#s9', { filter: 'url(#mbA)' }, 23.6).set('#s9', { filter: 'none' }, 23.77);
+tl.fromTo('#mbAb', { attr: { stdDeviation: '0 0' } }, { attr: { stdDeviation: V ? '0 60' : '60 0' }, duration: .14, ease: 'power2.in', immediateRender: false }, 23.6);
+tl.set(['#w9a', '#w9b', '#w9c', '#d9a', '#d9b', '#d9c'], { opacity: 0 }, 0);
+['#d9a', '#d9b', '#d9c'].forEach((d, i) => tl.to(d, { opacity: 1, duration: .1 }, [22.22, 22.38, 22.54][i]));
+
+// =====================================================================================================
+// S10 "Everything" inside glowing rings
+// =====================================================================================================
+const rings = new THREE.Group(); rings.visible = false; ctx.scene.add(rings);
+const RING = { dim: 1, wob: 1 };
+const glowMat = (k, wall) => new THREE.ShaderMaterial({
+  uniforms: { t: { value: 0 }, k: { value: k }, dim: { value: 1 }, wob: { value: 1 } },
+  vertexShader: `uniform float t, wob; varying vec3 vN; varying vec3 vV; varying vec2 vUv;
+    void main(){ vUv = uv; vec3 p = position; float a = atan(p.z, p.x);
+      float w = wob * (0.035 * sin(a * 7.0 + t * 3.1) + 0.022 * sin(a * 13.0 - t * 4.3) + 0.012 * sin(a * 29.0 + t * 7.0));
+      p.xz *= 1.0 + w;
+      vec4 mv = modelViewMatrix * vec4(p, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `uniform float k, dim; varying vec3 vN; varying vec3 vV; varying vec2 vUv;
+    void main(){ float f = abs(dot(normalize(vN), normalize(vV)));
+      float h = ${wall ? 'pow(vUv.y, 2.2) * 0.85 + 0.15 * smoothstep(0.0, 0.2, vUv.y)' : 'pow(f, 1.4)'};
+      vec3 c = mix(vec3(1.0, 0.16, 0.015), vec3(1.0, 0.6, 0.2), h) * (0.25 + 1.6 * h) * k * dim;
+      gl_FragColor = vec4(c, 1.0); }`,
+  transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
+});
+const ringMats = [];
+[[1.0, .06, .24, .62], [2.05, .075, .14, .5]].forEach(([r, tube, wallH, k]) => {
+  const tm = glowMat(k, false), wm = glowMat(k * .9, true); ringMats.push(tm, wm);
+  const tor = new THREE.Mesh(new THREE.TorusGeometry(r, tube, 20, 200), tm); tor.rotation.x = Math.PI / 2; tor.position.y = wallH; rings.add(tor);
+  const wall = new THREE.Mesh(new THREE.CylinderGeometry(r, r, wallH, 200, 1, true), wm); wall.position.y = wallH / 2; rings.add(wall);
+  for (let i = 0; i < 4; i++) { const sp = X.glowSprite(0xffffff, .09, 3); const a = i * Math.PI / 2; sp.position.set(Math.cos(a) * (r + .32), .02, Math.sin(a) * (r + .32)); rings.add(sp); }
+});
+const floorGlow = new THREE.Mesh(new THREE.RingGeometry(.2, 3.4, 96), new THREE.MeshBasicMaterial({ map: X.radTex([[0, 'rgba(255,90,20,0)'], [.25, 'rgba(255,90,20,.03)'], [.6, 'rgba(255,80,15,.12)'], [.68, 'rgba(255,90,20,.05)'], [1, 'rgba(255,60,10,0)']]), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+floorGlow.rotation.x = -Math.PI / 2; rings.add(floorGlow);
+show('s10', 23.72, 25.36);
+const camAt = (t0, d, h, z, ease) => tl.to(CAM, { y: h, z, pitch: -Math.atan2(h, z) * 180 / Math.PI, duration: d, ease }, t0);
+tl.set(CAM, { x: 0, y: 5.4, z: 1.2, yaw: 0, pitch: -Math.atan2(5.4, 1.2) * 180 / Math.PI, roll: -14, fov: V ? 66 : 40 }, 23.72);
+camAt(23.74, .32, 4.6, 3.2, 'power2.out'); camAt(24.06, .55, 3.4, 5.7, 'sine.inOut'); camAt(24.61, .5, 3.3, 5.5, 'none'); camAt(25.11, .25, 2.4, 3.6, 'power2.in');
+tl.to(CAM, { roll: 0, duration: .7, ease: 'sine.out' }, 23.74);
+tl.fromTo(RING, { wob: 2.6 }, { wob: .7, duration: .7, ease: 'power2.out', immediateRender: false }, 23.72).to(RING, { dim: .12, duration: .25, ease: 'power2.in' }, 25.1);
+tl.set('#ev10', { opacity: 0 }, 0).fromTo('#ev10', { opacity: 0, scale: 1.3, filter: 'blur(14px)' }, { opacity: 1, scale: 1, filter: 'blur(0px)', duration: .3, ease: 'power3.out', immediateRender: false }, 23.92)
+  .to('#ev10', { opacity: 0, filter: 'blur(10px)', duration: .22, ease: 'power2.in' }, 25.06);
+tl.set('#flash', { background: '#ffb27a', opacity: 0 }, 0).to('#flash', { opacity: .4, duration: .04, yoyo: true, repeat: 1 }, 23.72);
+
+// =====================================================================================================
+// S11 "Its not just Claude Opus 5.5" types, deletes, "It i..."
+// =====================================================================================================
+show('s11', 25.34, 27.56);
+const L11 = 'Its not just Claude Opus 5.5';
+tl.fromTo('#s11', { opacity: 0 }, { opacity: 1, duration: .08, immediateRender: false }, 25.34);
+
+// =====================================================================================================
+// S12 "It is" -> Claude X Human: a robot hand and a human hand reach for each other (both drawn here)
+// =====================================================================================================
+show('s12', 27.55, 28.58);
+const HH = { mode: 0, sep: 1, disp: 0, op: 1 };   // mode 0 photo, 1 x-ray, 2 particles
+const HUMAN = [[[2000, 640, 2], [1690, 690, 0]], [[1690, 690, 55], [1560, 700, 0]], [[1640, 660, 20], [1580, 620, 0], [1530, 618, 0]], [[1560, 685, 17], [1460, 670, 0], [1370, 660, 0]], [[1565, 705, 18], [1490, 718, 0], [1470, 750, 0], [1485, 772, 0]], [[1575, 722, 17], [1510, 742, 0], [1500, 772, 0], [1515, 790, 0]], [[1590, 738, 15], [1540, 762, 0], [1535, 790, 0]]];
+const ROBOT = [[[-80, 330, 2], [300, 470, 0]], [[300, 470, 52], [430, 520, 0]], [[360, 450, 17], [430, 430, 0], [480, 445, 0]], [[430, 505, 15], [520, 540, 0], [590, 590, 0]], [[430, 525, 15], [510, 570, 0], [560, 630, 0]], [[420, 540, 14], [490, 590, 0], [520, 645, 0]], [[405, 555, 12], [455, 600, 0], [470, 645, 0]]];
+const RADS = [[62, 58], [55, 52], [20, 17], [17, 15], [18, 15], [17, 14], [15, 12]];
+const hc = $('#hands').getContext('2d');
+const strokeHand = (g, H, rads, dx, style, isRobot) => {
+  H.forEach((pts, i) => {
+    const r = rads[i][isRobot ? 1 : 0];
+    g.lineCap = 'round'; g.lineJoin = 'round';
+    const path = () => { g.beginPath(); pts.forEach(([x, y], j) => j ? g.lineTo(x + dx, y) : g.moveTo(x + dx, y)); };
+    if (style === 'photo') {
+      if (isRobot) {
+        const gr = g.createLinearGradient(0, pts[0][1] - r, 0, pts[0][1] + r); gr.addColorStop(0, '#f2f4f7'); gr.addColorStop(.5, '#9aa1ab'); gr.addColorStop(1, '#3d424a');
+        g.strokeStyle = gr; g.lineWidth = r * 2; path(); g.stroke();
+        g.strokeStyle = 'rgba(20,22,26,.8)'; g.lineWidth = 2; pts.forEach(([x, y]) => { g.beginPath(); g.arc(x + dx, y, r * .7, 0, Math.PI * 2); g.stroke(); });
+        g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = Math.max(2, r * .25); g.beginPath(); pts.forEach(([x, y], j) => j ? g.lineTo(x + dx, y - r * .45) : g.moveTo(x + dx, y - r * .45)); g.stroke();
+      } else {
+        g.strokeStyle = '#a5684a'; g.lineWidth = r * 2; path(); g.stroke();
+        g.strokeStyle = '#c98d6a'; g.lineWidth = r * 1.3; g.beginPath(); pts.forEach(([x, y], j) => j ? g.lineTo(x + dx, y - r * .25) : g.moveTo(x + dx, y - r * .25)); g.stroke();
+        g.strokeStyle = 'rgba(255,225,200,.45)'; g.lineWidth = r * .35; g.beginPath(); pts.forEach(([x, y], j) => j ? g.lineTo(x + dx, y - r * .55) : g.moveTo(x + dx, y - r * .55)); g.stroke();
+      }
+    } else if (style === 'xray') {
+      g.strokeStyle = 'rgba(255,255,255,.16)'; g.lineWidth = r * 2; path(); g.stroke();
+      g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = r * .32; path(); g.stroke();
+      g.fillStyle = '#fff'; pts.forEach(([x, y]) => { g.beginPath(); g.arc(x + dx, y, r * .3, 0, Math.PI * 2); g.fill(); });
+    } else { g.strokeStyle = '#fff'; g.lineWidth = r * 2; path(); g.stroke(); }
+  });
+};
+// particle version: points sampled inside both hands
+const PTS = [];
+{ const c = canvas(1920, 1080), g = c.getContext('2d'); strokeHand(g, HUMAN, RADS, -350, 'mask', false); strokeHand(g, ROBOT, RADS, 300, 'mask', true);
+  const d = g.getImageData(0, 0, 1920, 1080).data; for (let y = 0; y < 1080; y += 7) for (let x = 0; x < 1920; x += 7) if (d[(y * 1920 + x) * 4 + 3] > 128) PTS.push([x, y, X.hash(x * .37 + y * 1.1)]); }
+const drawHands = t => {
+  hc.clearRect(0, 0, 1920, 1080);
+  const sep = HH.sep;
+  if (HH.mode < 2) { hc.globalAlpha = HH.op; strokeHand(hc, HUMAN, RADS, -350 + 330 * sep, HH.mode ? 'xray' : 'photo', false); strokeHand(hc, ROBOT, RADS, 300 - 330 * sep, HH.mode ? 'xray' : 'photo', true); hc.globalAlpha = 1; }
+  else PTS.forEach(([x, y, h], i) => { const a = h * 6.28, dd = HH.disp * (60 + 260 * X.hash(i * 3.3)); hc.fillStyle = h > .7 ? `rgba(255,235,210,${1 - HH.disp * .9})` : `rgba(255,${120 + 80 * h | 0},40,${1 - HH.disp * .9})`; hc.fillRect(x + Math.cos(a) * dd, y + Math.sin(a) * dd - HH.disp * 40, 3.2, 3.2); });
+};
+tl.set(HH, { mode: 0, sep: 1, disp: 0, op: 1 }, 27.55).to(HH, { sep: .55, duration: .4, ease: 'power2.out' }, 27.55)
+  .set(HH, { mode: 1, sep: 0 }, 27.99).set(HH, { mode: 2 }, 28.18).to(HH, { disp: 1, duration: .32, ease: 'power2.in' }, 28.26);
+tl.fromTo('#card12', { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: .14, ease: 'power3.out', immediateRender: false }, 27.55).set('#card12', { opacity: 0 }, 27.76);
+tl.set('#xr12', { opacity: 1 }, 27.76).set('#xr12', { opacity: 0 }, 27.99);
+tl.fromTo('#cxh', { opacity: 0 }, { opacity: 1, duration: .04, immediateRender: false }, 27.76).to('#cxh', { opacity: 0, filter: 'blur(14px)', scale: 1.08, duration: .2, ease: 'power2.in' }, 28.34);
+tl.set('#bg12', { opacity: 1 }, 27.55).set('#bg12', { opacity: 0 }, 27.99).set('#s12', { background: '#000' }, 27.99)
+  .set('#s12', { background: 'radial-gradient(80% 90% at 50% 50%,#ff7a1f,#e24e0c 55%,#a8340a)' }, 28.18);
+tl.set('#sq12', { opacity: 1 }, 27.99).set('#sq12', { opacity: 0 }, 28.18).set('#osq12', { opacity: 1 }, 28.18).to('#osq12', { opacity: 0, x: 60, duration: .2 }, 28.32);
+
+// =====================================================================================================
+// S13 the light folds into a point, a ring of fire opens, credit to the original creator
+// =====================================================================================================
+show('s13', 28.56, 29.31);
+const E13 = { glow: 1, core: 0, ring: 0, fade: 0 };
+const ec = $('#end13').getContext('2d');
+const drawEnd = t => {
+  const g = ec; g.fillStyle = '#000'; g.fillRect(0, 0, VW, VH);
+  const cx = VW / 2, cy = VH / 2;
+  if (E13.glow > .001) { const R = 60 + 1500 * E13.glow; const gr = g.createRadialGradient(cx, cy, 0, cx, cy, R); gr.addColorStop(0, `rgba(255,150,60,${.9 * Math.min(1, E13.glow * 3)})`); gr.addColorStop(.35, `rgba(226,78,12,${.85 * Math.min(1, E13.glow * 2)})`); gr.addColorStop(1, 'rgba(120,30,5,0)'); g.fillStyle = gr; g.fillRect(0, 0, VW, VH); }
+  if (E13.core > .001) { const R = 220 * E13.core; const gr = g.createRadialGradient(cx, cy, 0, cx, cy, R); gr.addColorStop(0, 'rgba(255,245,200,1)'); gr.addColorStop(.35, 'rgba(255,190,60,.95)'); gr.addColorStop(.7, 'rgba(255,110,20,.6)'); gr.addColorStop(1, 'rgba(255,80,10,0)'); g.fillStyle = gr; g.fillRect(0, 0, VW, VH); }
+  if (E13.ring > .001) {
+    const R = 130 + 260 * E13.ring, a = 1 - E13.fade;
+    g.globalCompositeOperation = 'lighter';
+    [[40, .25, 14], [16, .55, 5], [5, .95, 1]].forEach(([w, al, bl]) => { g.filter = `blur(${bl}px)`; g.strokeStyle = `rgba(255,${100 + 70 * al | 0},30,${al * a})`; g.lineWidth = w; g.beginPath();
+      for (let i = 0; i <= 180; i++) { const th = i / 180 * Math.PI * 2, n = .035 * Math.sin(th * 6 + t * 9) + .022 * Math.sin(th * 11 - t * 13) + .01 * Math.sin(th * 23 + t * 7); const rr = R * (1 + n); i ? g.lineTo(cx + Math.cos(th) * rr, cy + Math.sin(th) * rr) : g.moveTo(cx + Math.cos(th) * rr, cy + Math.sin(th) * rr); }
+      g.closePath(); g.stroke(); });
+    g.filter = 'none'; g.globalCompositeOperation = 'source-over';
+  }
+};
+tl.set(E13, { glow: 1, core: 0, ring: 0, fade: 0 }, 28.56).to(E13, { glow: 0, duration: .16, ease: 'power3.in' }, 28.56)
+  .to(E13, { core: 1, duration: .1, ease: 'power2.out' }, 28.7).to(E13, { ring: 1, duration: .32, ease: 'power2.out' }, 28.78).to(E13, { core: 0, duration: .25, ease: 'power2.in' }, 28.82)
+  .to(E13, { fade: 1, duration: .25, ease: 'power2.in' }, 29.03);
+tl.fromTo('#cred', { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .14, ease: 'power3.out', immediateRender: false }, 28.8).to('#cred', { opacity: 0, duration: .14 }, 29.15);
+
+X.onFrame(t => {
+  gls.visible = t >= 20.9 && t < 22.65;
+  if (gls.visible) { BG.c = [232, 232, 234]; G.vignette.value = .14; G.fringe.value = .0065; gls.rotation.set(GL8.rx, GL8.ry, 0); gls.position.y = GL8.y; }
+  else { G.fringe.value = .0012; }
+  rings.visible = t >= 23.68 && t < 25.45;
+  if (rings.visible) { BG.c = [6, 4, 3]; G.vignette.value = .3; ctx.bloom.strength = .55; ctx.bloom.threshold = .7; ctx.bloom.radius = .35; ringMats.forEach(m => { m.uniforms.t.value = t; m.uniforms.dim.value = RING.dim; m.uniforms.wob.value = RING.wob; }); }
+  else { ctx.bloom.strength = .3; ctx.bloom.threshold = 1.25; ctx.bloom.radius = .45; }
+  if (t >= 22.0 && t < 23.8) { drawRings(); [['#d9a', R9.a], ['#d9b', R9.b], ['#d9c', R9.c]].forEach(([d, x]) => $(d).style[V ? 'top' : 'left'] = (x - 6) + 'px'); }
+  if (t >= 25.3 && t < 27.6) {
+    const n = t < 26.85 ? Math.floor(k01(t, 25.4, 26.42) * L11.length) : t < 27.25 ? Math.floor((1 - k01(t, 26.86, 27.2)) * L11.length) : Math.floor(k01(t, 27.3, 27.5) * 4);
+    $('#t11').innerHTML = esc(t < 27.25 ? L11.slice(0, n) : 'It is'.slice(0, n)) + CARET;
+  }
+  if (t >= 27.5 && t < 28.6) drawHands(t);
+  if (t >= 28.5) drawEnd(t);
+});
+
+X.start(document.fonts.ready.then(() => Promise.all(['700 30px Inter', '500 30px Inter', '800 30px Inter', '300 40px Outfit', '400 40px News', '400 30px SoraR'].map(f => document.fonts.load(f)))).then(() => {
+  // redraw the static cards now that the fonts are in
+  WALL.forEach(([a, y, w, ph, dz, draw], i) => { const { g, c, tex } = wallCards[i].userData; g.clearRect(0, 0, c.width, c.height); g.save(); draw(g, c.width, c.height); g.restore(); tex.needsUpdate = true; });
+}));
+</script>
+</body>
+</html>
