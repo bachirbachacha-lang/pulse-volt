@@ -134,7 +134,8 @@
   X.three = (o = {}) => {
     const canvas = $('#gl');
     const R = new THREE.WebGLRenderer({ canvas, antialias: false, preserveDrawingBuffer: true });
-    R.setPixelRatio(1); R.setSize(W, H, false);
+    const SS = X.SS = o.ss || 1;  // supersampling: render SS times bigger, the browser scales it down (smoother edges)
+    R.setPixelRatio(1); R.setSize(W * SS, H * SS, false);
     R.toneMapping = THREE.NoToneMapping; R.outputEncoding = THREE.LinearEncoding;
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(o.fov || 32, W / H, .03, 300);
@@ -143,14 +144,14 @@
     const bg = document.createElement('canvas'); bg.width = 108; bg.height = 192;
     const bgTex = new THREE.CanvasTexture(bg); bgTex.encoding = THREE.sRGBEncoding; scene.background = bgTex;
     // stencilBuffer gives a 24-bit depth buffer (r128 render targets are 16-bit otherwise, which z-fights on thin layers)
-    const rt = new THREE.WebGLRenderTarget(W, H, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, type: THREE.HalfFloatType, stencilBuffer: true });
+    const rt = new THREE.WebGLRenderTarget(W * SS, H * SS, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, type: THREE.HalfFloatType, stencilBuffer: true });
     const comp = new THREE.EffectComposer(R, rt);
     comp.addPass(new THREE.RenderPass(scene, cam));
-    const bloom = new THREE.UnrealBloomPass(new THREE.Vector2(W, H), o.bloom ?? .9, o.radius ?? .55, o.threshold ?? 1.15);
+    const bloom = new THREE.UnrealBloomPass(new THREE.Vector2(W * SS, H * SS), o.bloom ?? .9, o.radius ?? .55, o.threshold ?? 1.15);
     comp.addPass(bloom);
     const dof = new THREE.ShaderPass(DofShader); comp.addPass(dof);
     const grade = new THREE.ShaderPass(GradeShader); comp.addPass(grade);
-    const fxaa = new THREE.ShaderPass(THREE.FXAAShader); fxaa.uniforms.resolution.value.set(1 / W, 1 / H); comp.addPass(fxaa);
+    const fxaa = new THREE.ShaderPass(THREE.FXAAShader); fxaa.uniforms.resolution.value.set(1 / (W * SS), 1 / (H * SS)); comp.addPass(fxaa);
     const ctx = { R, scene, cam, comp, bloom, dof, grade, bg, bgTex, glow: { color: '#1F6BFF', amt: .5, x: .5, y: .45, c2: '#7b5cff' } };
     ctx.drawBg = t => {
       const g = bg.getContext('2d'), gl = ctx.glow, en = X.energy(t);
