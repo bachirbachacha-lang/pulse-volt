@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CrewUp X Streak</title>
+<link rel="stylesheet" href="common.css">
+<style>
+#ctr{position:absolute;left:0;right:0;top:150px;text-align:center;z-index:25;opacity:0}
+#num{display:inline-block;font:800 230px/1 Sora;letter-spacing:-.06em;background:linear-gradient(180deg,#ffd27a 0%,#FF7A2F 55%,#ff4d1f 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 40px rgba(255,122,47,.75))}
+#num.cold{background:linear-gradient(180deg,#9aa4b8,#4a5266);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 30px rgba(120,140,180,.35))}
+#num.dead{background:linear-gradient(180deg,#ff8a7a,#ff3b30);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 40px rgba(255,59,48,.7))}
+#lab{font:600 40px Inter;letter-spacing:.02em;color:#ffcfae;margin-top:6px}
+#lab.cold{color:#7d869a}
+</style>
+</head>
+<body>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="ctr"><div id="num">1</div><div id="lab">day streak 🔥</div></div>
+<div id="lines"></div><div id="endWrap"></div><div id="vig"></div>
+<div id="tag"><img src="../img/crewup-logo.png"><span>3D RENDER · APP CONCEPT</span></div>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script src="../img/trailer-beat.js"></script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script><script src="lib/RoundedBoxGeometry.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+// STREAK: every check-in lights a day tile. A burning fuse runs tile to tile on the beat, the chain speeds up on the drop,
+// day 22 goes cold (excuses, streak hits 0), the crew's nudges re-light it, and the 30 days turn out to draw the CrewUp logo.
+const { B, tl } = X;
+X.DUR = 24.5;
+X.glowAt = [[0, '#FF7A2F'], [B(30), '#1F6BFF'], [B(40), '#7b5cff'], [B(44), '#1F6BFF']];
+const ctx = X.three({ fov: 42, bloom: .75, radius: .6 });
+X.studioEnv(ctx); X.lights(ctx);
+X.mirrorFloor(ctx, 60, 0x2a2d35); X.floorFade(ctx, 5.5, 16);
+ctx.glow.color = '#FF7A2F'; ctx.glow.c2 = '#1F6BFF'; ctx.glow.amt = .35;
+
+const ORANGE = new THREE.Color(1, .3, .06), COLD = new THREE.Color(.35, .45, .7), BLUEc = new THREE.Color(.25, .5, 1.6);
+const s = .16, G = (gx, gy) => new THREE.Vector3((gx - 27) * s, 0, (gy - 27) * s);   // logo grid -> world
+// centre line of the logo mark: top bar -> left stroke -> bottom bar -> arrow
+const PATH = [G(41, 16), G(19, 16), G(11, 37), G(29, 37), G(41.5, 25.5)];
+const SEG = []; let L = 0;
+for (let i = 0; i < PATH.length - 1; i++) { const l = PATH[i].distanceTo(PATH[i + 1]); SEG.push([L, l]); L += l; }
+const at = d => { d = X.clamp(d, 0, L); for (let i = 0; i < SEG.length; i++) { const [a, l] = SEG[i]; if (d <= a + l || i === SEG.length - 1) return PATH[i].clone().lerp(PATH[i + 1], (d - a) / l); } };
+const dirAt = d => { const a = at(d - .05), b = at(d + .05); return b.sub(a).normalize(); };
+const NT = 28, SP = L / (NT - 1);
+const TPOS = []; for (let i = 0; i < NT; i++) TPOS.push(at(i * SP));
+TPOS.push(G(36, 25.5), G(41.5, 31));                 // arrowhead barbs = days 29 and 30
+// when each day lights (on the beat); day 22 (index 21) fails at B17 and is saved at B23
+const IGN = [];
+for (let i = 0; i < 30; i++) IGN.push(i === 0 ? B(2) : i <= 7 ? B(2 + i) : i <= 20 ? B(10 + (i - 8) * .5) : i === 21 ? B(23) : i <= 27 ? B(24 + (i - 22)) : B(30 + (i - 28)));
+const COLD_T = B(17);
+const front = t => {   // distance of the burning fuse along the path
+  if (t < IGN[0]) return 0;
+  if (t >= COLD_T && t < IGN[21]) return 21 * SP;
+  for (let i = 0; i < 27; i++) { const t0 = i === 20 ? IGN[20] : IGN[i], t1 = i === 20 ? COLD_T : IGN[i + 1]; if (t < t1) return (i + X.smooth((t - t0) / (t1 - t0))) * SP; }
+  return 27 * SP;
+};
+const PHONE_POS = new THREE.Vector3(4.9, 0, -1.76);
+const P = {}, T = {};
+const kick = (t, v = .014) => tl.fromTo(ctx.grade.uniforms.fringe, { value: v }, { value: .0025, duration: .4, ease: 'power2.out', immediateRender: false }, t);
+
+async function build() {
+  await document.fonts.load('800 80px Sora');
+  const TX = X.T;
+  // ---------- the phone where it starts ----------
+  const ph = P.you = X.makePhone({ finish: 'blue', tex: TX.cam_you });
+  ph.g.position.set(PHONE_POS.x, X.PHONE.PD / 2 + .028, PHONE_POS.z); ph.g.rotation.x = -Math.PI / 2 + .02; ctx.scene.add(ph.g);
+  ctx.scene.updateMatrixWorld(true);
+  const phoneScr = X.sched([[0, TX.cam_you], [B(1.6), TX.done_day1]]);
+  const phs = { hot: 1 };
+
+  // ---------- 30 day tiles ----------
+  const boxGeo = new THREE.RoundedBoxGeometry(.38, .32, .38, 3, .05), topGeo = new THREE.PlaneGeometry(.27, .27);
+  const crack = X.canvasTex(256, 256, (g, w, h) => {
+    g.strokeStyle = 'rgba(10,12,18,.95)'; g.lineWidth = 6; g.lineCap = 'round';
+    const br = (x, y, a, len, d) => { if (d > 4 || len < 10) return; const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len; g.beginPath(); g.moveTo(x, y); g.lineTo(x2, y2); g.stroke(); g.lineWidth = Math.max(2, 6 - d); br(x2, y2, a + .5 * (X.hash(d * 7 + x) - .5) * 2, len * .72, d + 1); if (X.hash(y + d) > .45) br(x2, y2, a + 1.1 * (X.hash(x * 3 + d) - .3), len * .6, d + 1); };
+    for (let k = 0; k < 5; k++) br(128, 128, k * 1.3 + .4, 70, 0);
+  });
+  const tiles = [];
+  for (let i = 0; i < 30; i++) {
+    const p = TPOS[i], g = new THREE.Group(); g.position.copy(p); ctx.scene.add(g);
+    const mat = new THREE.MeshPhysicalMaterial({ color: 0x15171c, roughness: .38, metalness: .2, clearcoat: .4, clearcoatRoughness: .3, emissive: 0x000000, envMapIntensity: .45 });
+    const body = new THREE.Mesh(boxGeo, mat); g.add(body);
+    const num = X.canvasTex(128, 128, (c, w, h) => { c.fillStyle = '#fff'; c.fillRect(0, 0, w, h); c.fillStyle = 'rgba(70,24,0,.85)'; c.font = '800 64px Sora'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(String(i + 1), w / 2, h / 2 + 4); });
+    const top = new THREE.Mesh(topGeo, new THREE.MeshBasicMaterial({ map: num, color: 0x000000 })); top.rotation.x = -Math.PI / 2; g.add(top);
+    const ck = new THREE.Mesh(topGeo, new THREE.MeshBasicMaterial({ map: crack, transparent: true, opacity: 0, depthWrite: false })); ck.rotation.x = -Math.PI / 2; g.add(ck);
+    const pool = X.pool(0xffffff, 1.5, 1); pool.position.x = p.x; pool.position.z = p.z; ctx.scene.add(pool);
+    const ring = X.floorRing(.3, 0xffffff, 1); ring.material.opacity = 0; ring.position.x = p.x; ring.position.z = p.z; ctx.scene.add(ring);
+    const halo = X.glowSprite(0xff6a1f, 1.0, 1); halo.position.set(p.x, .25, p.z); X.noReflect(halo); ctx.scene.add(halo);
+    const st = { h: .025, k: 0, cold: 0, flash: 0, shake: 0, crack: 0 };
+    tiles.push({ g, body, mat, top, ck, pool, ring, halo, st, ph: X.hash(i * 13 + 5) });
+  }
+  // fuse links between days
+  const links = [];
+  const link = (a, b) => {
+    const A = TPOS[a], Bp = TPOS[b], geo = new THREE.PlaneGeometry(1, .035); geo.translate(.5, 0, 0);
+    const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    m.rotation.order = 'YXZ'; m.rotation.set(-Math.PI / 2, -Math.atan2(Bp.z - A.z, Bp.x - A.x), 0); m.position.set(A.x, .005, A.z); m.scale.x = .0001; ctx.scene.add(m);
+    links.push({ m, a, b, len: A.distanceTo(Bp) });
+  };
+  for (let i = 0; i < 27; i++) link(i, i + 1);
+  link(27, 28); link(27, 29);
+  // logo emblem on the floor (revealed at the end)
+  const markTex = X.canvasTex(540, 540, (c, w, h) => { c.drawImage(T.logo.image, 0, 0, w, h); const d = c.getImageData(0, 0, w, h), a = d.data; for (let i = 0; i < a.length; i += 4) { const k = Math.max(0, (a[i] - 60) / 195); a[i] = a[i + 1] = a[i + 2] = 255; a[i + 3] = Math.round(255 * Math.min(1, k)); } c.putImageData(d, 0, 0); });
+  const emb = new THREE.Mesh(new THREE.PlaneGeometry(54 * s, 54 * s), new THREE.MeshBasicMaterial({ map: markTex, color: 0x000000, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  emb.rotation.x = -Math.PI / 2; emb.position.y = .003; ctx.scene.add(emb);
+  const embS = { k: 0 };
+  const frame = X.floorRect(54 * s * .8, 54 * s * .8, 1.4, .04); frame.material.color.setRGB(0, 0, 0); ctx.scene.add(frame);
+
+  // ---------- the crew's nudges (3 comets) ----------
+  const TGT = TPOS[21].clone().setY(.2);
+  const crew = [['tag_omar', new THREE.Vector3(-5.5, 1.6, 2.6)], ['tag_khalid', new THREE.Vector3(-1.5, 2.4, -6)], ['tag_faisal_ok', new THREE.Vector3(5.8, 1.4, 4.2)]].map(([tg, from], j) => {
+    const ctl = from.clone().lerp(TGT, .5).add(new THREE.Vector3(0, 1.6, 0));
+    const curve = new THREE.QuadraticBezierCurve3(from, ctl, TGT);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: TX[tg], transparent: true, depthWrite: false, opacity: 0 })); X.noReflect(sp); ctx.scene.add(sp);
+    const halo = X.glowSprite(0x4f8bff, .14, 1.4); ctx.scene.add(halo);
+    return { curve, sp, halo, t0: B(21.2) + j * .1, t1: B(23) };
+  });
+
+  const PT = X.glowPoints(1100); ctx.scene.add(PT.pts);
+  const dust = X.dust(800, [12, 2.5, 10], 0xffd2b0, .012, .9); ctx.scene.add(dust);
+
+  // ---------- per frame ----------
+  const numEl = X.$('#num'), labEl = X.$('#lab');
+  X.onFrame(t => {
+    dust.userData.update(t);
+    const en = X.energy(t), fd = front(t);
+    // phone
+    ph.show(phoneScr(t)); ph.screenMat.color.setScalar(phs.hot);
+    // tiles
+    let lit = 0;
+    tiles.forEach((T0, i) => {
+      const st = T0.st, on = t >= IGN[i];
+      if (on) lit++;
+      T0.g.position.y = -.32 / 2 + st.h + (st.shake ? Math.sin(t * 90 + i) * .006 * st.shake : 0);
+      T0.g.position.x = TPOS[i].x + (st.shake ? Math.sin(t * 73) * .012 * st.shake : 0);
+      T0.top.position.y = .161; T0.ck.position.y = .1615; T0.ck.material.opacity = st.crack;
+      const k = st.k * (.9 + .25 * en) + st.flash;
+      T0.halo.material.color.copy(ORANGE).multiplyScalar((.22 * st.k * (.85 + .3 * en) + .45 * st.flash) * (1 - st.cold));
+      const c = ORANGE.clone().multiplyScalar(st.k * 1.75 * (.9 + .25 * en) + st.flash * 1.4).lerp(COLD.clone().multiplyScalar(.35 + .25 * Math.max(0, Math.sin(t * 31) * Math.sin(t * 7.3))), st.cold);
+      T0.top.material.color.copy(c);
+      T0.mat.emissive.copy(ORANGE).multiplyScalar(.05 * k).lerp(COLD.clone().multiplyScalar(.04), st.cold);
+      T0.pool.material.color.copy(ORANGE).multiplyScalar(.32 * k).lerp(COLD.clone().multiplyScalar(.12), st.cold);
+    });
+    // fuse links grow as the spark passes
+    links.forEach(Lk => {
+      let g;
+      if (Lk.a === 27) { const t0 = Lk.b === 28 ? IGN[27] : IGN[28], t1 = Lk.b === 28 ? IGN[28] : IGN[29]; g = X.clamp((t - t0) / (t1 - t0)); }
+      else if (Lk.a === 20) g = X.clamp((t - IGN[20]) / (COLD_T - IGN[20]));
+      else g = X.clamp((fd - Lk.a * SP) / SP);
+      if (Lk.a === 20 && t >= COLD_T && t < IGN[21]) g = 1;
+      Lk.m.scale.x = Math.max(.0001, g * Lk.len);
+      const cold = Lk.a === 20 && t >= COLD_T && t < IGN[21];
+      Lk.m.material.color.copy(cold ? COLD.clone().multiplyScalar(.3) : ORANGE.clone().multiplyScalar(1.6 + .6 * en));
+    });
+    emb.material.color.setRGB(.16, .36, 1).multiplyScalar(embS.k);
+    frame.material.color.setRGB(.12, .32, 1).multiplyScalar(embS.k * 2.2);
+    // counter
+    let n = lit, cls = '';
+    if (t >= COLD_T && t < IGN[21]) { n = 21; cls = 'cold'; if (t >= B(21) && t < B(22.7)) { n = 0; cls = 'dead'; } }
+    if (numEl.textContent !== String(n)) numEl.textContent = n;
+    if (numEl.className !== cls) { numEl.className = cls; labEl.className = cls ? 'cold' : ''; }
+    // comets of the crew
+    crew.forEach(c => {
+      const live = t > c.t0 && t < c.t1, k = X.clamp((t - c.t0) / (c.t1 - c.t0)), e = k * k * (3 - 2 * k) * .35 + k * .65;
+      const p = c.curve.getPoint(live ? e : 0);
+      c.halo.visible = live; c.halo.position.copy(p);
+      c.sp.position.copy(p).add(new THREE.Vector3(0, .2, 0)); c.sp.material.opacity = live ? Math.min(1, k * 4) * (1 - X.clamp((k - .85) / .15)) : 0;
+      const im = c.sp.material.map.image; c.sp.scale.set(.15 * im.width / im.height, .15, 1);
+      c.live = live; c.e = e;
+    });
+    // particles
+    let q = 0;
+    const put = (x, y, z, sz, r, g, b) => { if (q < PT.n) PT.set(q++, x, y, z, sz, r, g, b); };
+    const zero = () => put(0, -9, 0, 0, 0, 0, 0);
+    // fuse spark
+    const sparkOn = t > IGN[0] && t < IGN[27] && !(t >= COLD_T && t < IGN[21]) && (fd % SP) > .02 && (fd % SP) < SP - .02;
+    const spk = at(fd);
+    if (sparkOn) { put(spk.x, .05, spk.z, .09, 2.4, 1.2, .4); put(spk.x, .05, spk.z, .03, 3, 2.6, 2.2); } else { zero(); zero(); }
+    // embers rising from lit days
+    tiles.forEach((T0, i) => {
+      for (let j = 0; j < 3; j++) {
+        if (t < IGN[i] || (i === 21 && t < IGN[21])) { zero(); continue; }
+        const ph2 = ((t - IGN[i]) * (.45 + .2 * X.hash(i * 9 + j)) + X.hash(i * 5 + j * 3)) % 1, a = Math.sin(Math.PI * ph2) * .9;
+        const p = TPOS[i];
+        put(p.x + Math.sin(t * 1.3 + i + j) * .06 + (X.hash(i + j * 7) - .5) * .2, .2 + ph2 * .9, p.z + Math.cos(t * 1.1 + j) * .06 + (X.hash(i * 3 + j) - .5) * .2, .012, 1.6 * a, .55 * a, .12 * a);
+      }
+    });
+    // ignition bursts
+    tiles.forEach((T0, i) => {
+      const dt = t - IGN[i], life = .8;
+      for (let j = 0; j < 14; j++) {
+        if (dt < 0 || dt > life) { zero(); continue; }
+        const r1 = X.hash(i * 31 + j * 4 + 1), r2 = X.hash(i * 31 + j * 4 + 2), r3 = X.hash(i * 31 + j * 4 + 3), a = Math.pow(1 - dt / life, 1.5), ee = 1 - Math.exp(-dt * 5), th = r1 * 6.283;
+        const p = TPOS[i], big = i === 21 ? 1.8 : 1;
+        put(p.x + Math.cos(th) * (.15 + .5 * r2) * ee * big, .18 + (.3 + .7 * r3) * ee * .6 * big - .4 * dt * dt, p.z + Math.sin(th) * (.15 + .5 * r2) * ee * big, .016, 2 * a, .8 * a, .25 * a);
+      }
+    });
+    // nudge comet trails
+    crew.forEach((c, j) => {
+      for (let i = 0; i < 36; i++) {
+        const e = c.e - i * .012, f = 1 - i / 36;
+        if (!c.live || e < 0) { zero(); continue; }
+        const p = c.curve.getPoint(e); put(p.x, p.y, p.z, .03 * f, .4 * f * f, .7 * f * f, 1.8 * f * f);
+      }
+    });
+    // blue impact sparks at the save
+    { const dt = t - IGN[21], life = 1.1;
+      for (let j = 0; j < 80; j++) {
+        if (dt < 0 || dt > life) { zero(); continue; }
+        const r1 = X.hash(j * 5 + 900), r2 = X.hash(j * 5 + 901), r3 = X.hash(j * 5 + 902), a = Math.pow(1 - dt / life, 1.4), ee = 1 - Math.exp(-dt * 4), th = r1 * 6.283;
+        put(TGT.x + Math.cos(th) * (.3 + 1.2 * r2) * ee, .15 + r3 * ee * .9 - .5 * dt * dt, TGT.z + Math.sin(th) * (.3 + 1.2 * r2) * ee, .02, .7 * a, 1.0 * a, 2.2 * a);
+      } }
+    // cold frost drifting off day 22
+    for (let j = 0; j < 20; j++) {
+      if (!(t >= COLD_T && t < IGN[21])) { zero(); continue; }
+      const ph2 = ((t - COLD_T) * .35 + X.hash(j * 17)) % 1, p = TPOS[21];
+      put(p.x + (X.hash(j * 3) - .5) * .5, .2 + ph2 * .5, p.z + (X.hash(j * 7) - .5) * .5, .01, .5 * Math.sin(Math.PI * ph2), .6 * Math.sin(Math.PI * ph2), .9 * Math.sin(Math.PI * ph2));
+    }
+    while (q < PT.n) zero();
+    PT.commit();
+  });
+
+  // =================== timeline ===================
+  // tiles rise + ignite on their beat
+  tiles.forEach((T0, i) => {
+    const st = T0.st, t = IGN[i], hh = .14 + .07 * T0.ph;
+    if (i === 21) {
+      // day 22: rises but stays cold, flickers, cracks, then the crew saves it
+      tl.to(st, { h: hh * .8, duration: .5, ease: 'back.out(2.2)' }, COLD_T)
+        .to(st, { cold: 1, duration: .15 }, COLD_T)
+        .to(st, { crack: 1, duration: .25, ease: 'power2.out' }, B(21))
+        .fromTo(st, { shake: 1 }, { shake: 0, duration: .6, ease: 'power1.in', immediateRender: false }, B(21))
+        .to(st, { cold: 0, crack: 0, duration: .12 }, t)
+        .to(st, { h: hh * 1.25, duration: .55, ease: 'elastic.out(1, .45)' }, t);
+    } else tl.to(st, { h: hh, duration: .5, ease: 'elastic.out(1, .5)' }, t - .05);
+    tl.to(st, { k: 1, duration: .12 }, t)
+      .fromTo(st, { flash: i === 21 ? 1.6 : 1 }, { flash: 0, duration: .45, ease: 'power2.out', immediateRender: false }, t)
+      .fromTo(T0.ring.scale, { x: .6, y: .6, z: .6 }, { x: i === 21 ? 9 : 3.4, y: i === 21 ? 9 : 3.4, z: i === 21 ? 9 : 3.4, duration: i === 21 ? 1.1 : .7, ease: 'power2.out', immediateRender: false }, t)
+      .fromTo(T0.ring.material, { opacity: 1 }, { opacity: 0, duration: i === 21 ? 1.1 : .7, ease: 'power1.in', immediateRender: false }, t);
+    T0.ring.material.color.copy(i === 21 ? BLUEc : ORANGE.clone().multiplyScalar(2.2));
+  });
+  // counter pops on every new day
+  tl.set('#ctr', { autoAlpha: 0 }, 0).fromTo('#ctr', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: .3 }, IGN[0]);
+  IGN.forEach((t, i) => { if (i !== 21 || true) tl.fromTo('#num', { scale: i === 21 ? 1.35 : 1.14 }, { scale: 1, duration: .3, ease: 'power2.out', immediateRender: false }, t); });
+  tl.fromTo('#num', { x: -14 }, { x: 0, duration: .5, ease: 'elastic.out(1, .3)', immediateRender: false }, B(21));
+  tl.to('#ctr', { y: -20, scale: 1.1, duration: .5, ease: 'power3.out' }, B(33)).to('#ctr', { autoAlpha: 0, duration: .45 }, B(39.3));
+  // phone: check in, shutter, light runs to day 1
+  const [sx, sy] = ph.pt(195, 723);
+  ph.tap.position.x = sx; ph.tap.position.y = sy;
+  tl.fromTo(ph.tap.material, { opacity: .9 }, { opacity: 0, duration: .4, immediateRender: false }, B(1.5))
+    .fromTo(ph.tap.scale, { x: .8, y: .8 }, { x: 2.4, y: 2.4, duration: .4, ease: 'power2.out', immediateRender: false }, B(1.5))
+    .fromTo(phs, { hot: 3 }, { hot: 1, duration: .4, immediateRender: false }, B(1.55));
+  X.flash(B(1.55), .3);
+  const streak = new THREE.Mesh((() => { const g = new THREE.PlaneGeometry(1, .05); g.translate(.5, 0, 0); return g; })(), new THREE.MeshBasicMaterial({ color: ORANGE.clone().multiplyScalar(3), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  const PS = ph.g.position, T1 = TPOS[0];
+  streak.rotation.order = 'YXZ'; streak.rotation.set(-Math.PI / 2, -Math.atan2(T1.z - PS.z, T1.x - PS.x), 0); streak.position.set(PS.x - .4, .006, PS.z); streak.scale.x = .0001; ctx.scene.add(streak);
+  const sLen = Math.hypot(T1.x - PS.x + .4, T1.z - PS.z);
+  tl.to(streak.scale, { x: sLen, duration: B(2) - B(1.65), ease: 'power2.in' }, B(1.65)).to(streak.material, { opacity: .25, duration: .5 }, B(2.2));
+  [0, 2, 10, 11, 12, 13, 17, 23, 33, 34].forEach(i => kick(B(i), i === 23 || i === 33 ? .022 : .013));
+  X.flash(B(23), .5); X.flash(B(33), .3);
+  tl.fromTo(X.rig, { shake: .9 }, { shake: 0, duration: .5, ease: 'power2.out', immediateRender: false }, B(23));
+
+  // =================== camera ===================
+  // hook: macro on the phone's camera check-in
+  Object.assign(X.rig, { px: PS.x + .3, py: 1.95, pz: PS.z + 1.55, tx: PS.x, ty: .1, tz: PS.z + .08, fov: 34 });
+  Object.assign(X.dof, { amt: .004, w: .22, cx: .5, cy: .5, nx: 0, ny: 0 });
+  tl.to(X.rig, { px: PS.x + .18, py: 1.65, pz: PS.z + 1.32, duration: B(1.5), ease: 'sine.inOut' }, 0)
+    .to(X.dof, { amt: 0, duration: .4 }, B(1.6))
+    .to(X.rig, { px: 3.4, py: 1.2, pz: -.55, tx: 1.7, ty: .05, tz: -1.76, fov: 46, duration: B(2.4) - B(1.6), ease: 'power3.inOut' }, B(1.6));
+  // follow cam rides behind the burning fuse
+  X.camFn = t => {
+    const fd = front(t), cd = fd - 1.3, speed = X.clamp((t - B(9.5)) / (B(11) - B(9.5))) * (1 - X.clamp((t - B(16)) / .6));
+    const p = new THREE.Vector3(); for (let k = -3; k <= 3; k++) p.add(at(cd + k * .12)); p.multiplyScalar(1 / 7);
+    const d = dirAt(cd), right = new THREE.Vector3(-d.z, 0, d.x);
+    p.addScaledVector(right, -.8 - .25 * speed).add(new THREE.Vector3(0, 1.5 + .4 * speed, 0));
+    const q = new THREE.Vector3(); for (let k = -2; k <= 2; k++) q.add(at(fd + .35 + k * .12)); q.multiplyScalar(1 / 5);
+    const h = v => { const dd = dirAt(v); return Math.atan2(dd.x, -dd.z); };
+    let dh = h(cd + .5) - h(cd - .5); if (dh > Math.PI) dh -= 2 * Math.PI; if (dh < -Math.PI) dh += 2 * Math.PI;
+    return { p: p.toArray(), q: [q.x, .05, q.z], fov: 46 + 10 * speed, roll: X.clamp(dh * .35, -.3, .3) };
+  };
+  tl.to(X.rig, { chase: 1, duration: .6, ease: 'power2.inOut' }, B(2.2));
+  // day 22 goes cold: hard stop, low and close
+  const C21 = TPOS[21], d21 = dirAt(21 * SP), r21 = new THREE.Vector3(-d21.z, 0, d21.x);
+  tl.set(X.rig, { px: C21.x - d21.x * 2.0 - r21.x * 1.0, py: 1.05, pz: C21.z - d21.z * 2.0 - r21.z * 1.0, tx: C21.x + d21.x * .25, ty: .12, tz: C21.z + d21.z * .25, fov: 38, roll: 0 }, B(14))
+    .to(X.rig, { chase: 0, duration: .45, ease: 'power3.out' }, B(16.75))
+    .set(X.dof, { amt: .008, w: .12, cx: .5, cy: .55, nx: 0, ny: 1 }, B(17))
+    .to(X.rig, { px: C21.x - d21.x * 1.5 - r21.x * .75, py: .85, pz: C21.z - d21.z * 1.5 - r21.z * .75, duration: B(21.8) - B(17), ease: 'sine.inOut' }, B(17));
+  // the crew's nudges arrive: pull back and up to see them converge
+  tl.set(X.dof, { amt: 0 }, B(21.8))
+    .to(X.rig, { px: C21.x - d21.x * 2.4 - r21.x * 1.2, py: 1.9, pz: C21.z - d21.z * 2.4 - r21.z * 1.2, ty: .1, fov: 46, duration: B(22.9) - B(21.8), ease: 'power3.inOut' }, B(21.8));
+  // the arrow climbs: crane alongside it
+  const E = TPOS[27];
+  tl.to(X.rig, { px: E.x - 2.4, py: 2.2, pz: E.z + 3.2, tx: (C21.x + E.x) / 2, ty: .05, tz: (C21.z + E.z) / 2, fov: 42, duration: B(29) - B(23.4), ease: 'sine.inOut' }, B(23.4))
+    .to(X.rig, { px: E.x - 1.2, py: 4.2, pz: E.z + 3.6, tx: .4, ty: 0, tz: .2, duration: B(31.6) - B(29), ease: 'sine.inOut' }, B(29));
+  // reveal: crane to the top view, the 30 days draw the logo
+  tl.to(X.rig, { px: -.16, py: 15, pz: 1.1, tx: -.16, ty: 0, tz: -.4, fov: 45, duration: B(33) - B(31.6), ease: 'power3.inOut' }, B(31.6))
+    .to(X.rig, { keyframes: [{ roll: -.35, duration: (B(33) - B(31.6)) / 2, ease: 'sine.in' }, { roll: 0, duration: (B(33) - B(31.6)) / 2, ease: 'sine.out' }] }, B(31.6))
+    .fromTo(embS, { k: 0 }, { k: 1.3, duration: .12, immediateRender: false }, B(33)).to(embS, { k: .55, duration: .9, ease: 'power2.out' }, B(33) + .12)
+    .to(X.rig, { py: 16.5, pz: 1.2, roll: .06, duration: B(39.4) - B(33), ease: 'sine.inOut' }, B(33));
+  [34, 36, 37].forEach(i => tl.fromTo(embS, { k: .9 }, { k: .5, duration: .4, immediateRender: false }, B(i)));
+  tl.to('#gl', { opacity: 0, filter: 'blur(14px)', duration: .55, ease: 'power2.in' }, B(39.4));
+
+  // =================== words ===================
+  const l1 = X.line([['Day'], ['1'], ['is'], ['easy.', 'or']], 470); X.wordsIn(l1, [B(0), B(.4), B(.8), B(1.2)]); X.out(l1, B(2) - .12);
+  const l2 = X.line([['Can'], ['you'], ['hit'], ['day'], ['30?', 'or']], 1400); X.wordsIn(l2, [B(4), B(4.5), B(5), B(5.5), B(6)]); X.out(l2, B(9.6));
+  const e1 = X.line([['Too'], ['tired.']], 1250, 'small', 64), e2 = X.line([['Too'], ['busy.']], 1340, 'small', 64), e3 = X.line([['Too'], ['cold.']], 1430, 'small', 64);
+  X.wordsIn(e1, [B(18), B(18) + .1]); X.wordsIn(e2, [B(19), B(19) + .1]); X.wordsIn(e3, [B(20), B(20) + .1]); [e1, e2, e3].forEach(id => X.out(id, B(22.5)));
+  const l3 = X.line([['Not'], ['with'], ['this'], ['crew.', 'hl']], 1400); X.wordsIn(l3, [B(24), B(24.5), B(25), B(25.5)]); X.out(l3, B(28.6));
+  const l4 = X.line([['Your'], ['crew'], ['won’t'], ['let'], ['you'], ['quit.', 'or']], 1420, '', 80); X.wordsIn(l4, [B(34), B(34.5), B(35), B(35.5), B(36), B(36.5)]); X.out(l4, B(39.3));
+  X.ending(40);
+}
+const logoReady = new Promise(res => new THREE.TextureLoader().load('../img/crewup-logo.png', t => { t.encoding = THREE.sRGBEncoding; T.logo = t; res(); }));
+X.start(Promise.all([X.loadTex(['cam_you', 'done_day1', 'tag_omar', 'tag_khalid', 'tag_faisal_ok']), logoReady]).then(build));
+</script>
+</body>
+</html>
