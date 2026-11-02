@@ -211,6 +211,15 @@
   const bodyGeo = new THREE.ExtrudeGeometry(rrect(PW - 2 * bev, PH - 2 * bev, PR - bev), { depth: PD - 2 * bev, bevelEnabled: true, bevelThickness: bev, bevelSize: bev, bevelSegments: 8, curveSegments: 32 });
   bodyGeo.translate(0, 0, -(PD - 2 * bev) / 2);
   const frontGeo = flat(PW - .01, PH - .01, PR - .005), screenGeo = flat(SW, SH, PR - .02, 32), islandGeo = flat(.19, .056, .028);
+  // opts.real: a real iPhone screen shape (390 x 844 pt, 55 pt corners, 2.6 mm borders) so true screen recordings fit with no crop
+  const DIMS = { def: { PW, PH, SW, SH, ptH: 820, bodyGeo, frontGeo, screenGeo, islandGeo, islandY: SH / 2 - .046 } };
+  X.phoneDims = k => {
+    if (DIMS[k]) return DIMS[k];
+    const pw = PW, sw = pw - .052, sh = sw * 844 / 390, ph = sh + .052, pr = .12;
+    const bg = new THREE.ExtrudeGeometry(rrect(pw - 2 * bev, ph - 2 * bev, pr - bev), { depth: PD - 2 * bev, bevelEnabled: true, bevelThickness: bev, bevelSize: bev, bevelSegments: 8, curveSegments: 32 });
+    bg.translate(0, 0, -(PD - 2 * bev) / 2);
+    return (DIMS[k] = { PW: pw, PH: ph, SW: sw, SH: sh, ptH: 844, bodyGeo: bg, frontGeo: flat(pw - .01, ph - .01, pr - .005), screenGeo: flat(sw, sh, pr - .026, 32), islandGeo: flat(.214, .063, .0315), islandY: sh / 2 - .05 });
+  };
   const bumpGeo = new THREE.ExtrudeGeometry(rrect(.29, .29, .07), { depth: .012, bevelEnabled: true, bevelThickness: .004, bevelSize: .004, bevelSegments: 4, curveSegments: 16 });
   const ringGeo = new THREE.CylinderGeometry(.052, .052, .02, 40), lensGeo = new THREE.CylinderGeometry(.04, .04, .022, 40);
   const blackMat = new THREE.MeshPhysicalMaterial({ color: 0x030304, roughness: .05, metalness: 0, clearcoat: 1, envMapIntensity: 1 });
@@ -221,13 +230,15 @@
   X.FINISH = { blue: [0x3d4c6b, 0x27324a], natural: [0x8d8a83, 0x6e6b66], black: [0x2b2e35, 0x15171c], white: [0xd9d6cf, 0xcfccc4], orange: [0xb5643a, 0x8a4a2a] };
   X.makePhone = (opts = {}) => {
     const [fc, bc] = X.FINISH[opts.finish || 'blue'];
+    const D = X.phoneDims(opts.real ? 'real' : 'def');
+    const { PW, PH, SW, SH, bodyGeo, frontGeo, screenGeo, islandGeo } = D;
     const g = new THREE.Group();
     const metal = new THREE.MeshPhysicalMaterial({ color: fc, metalness: 1, roughness: .3, envMapIntensity: 1.3, clearcoat: .25, clearcoatRoughness: .25 });
     g.add(new THREE.Mesh(bodyGeo, metal));
     const front = new THREE.Mesh(frontGeo, blackMat); front.position.z = ZF; g.add(front);
     const screenMat = new THREE.MeshBasicMaterial({ map: opts.tex || null, color: 0xffffff });
     const screen = new THREE.Mesh(screenGeo, screenMat); screen.position.z = ZF + .0004; g.add(screen);
-    const island = new THREE.Mesh(islandGeo, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true })); island.position.set(0, SH / 2 - .046, ZF + .0052); island.renderOrder = 55; g.add(island);
+    const island = new THREE.Mesh(islandGeo, new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true })); island.position.set(0, D.islandY, ZF + .0052); island.renderOrder = 55; g.add(island);
     const glass = new THREE.Mesh(frontGeo, glassMat); glass.position.z = ZF + .006; glass.renderOrder = 60; g.add(glass);
     const back = new THREE.Mesh(frontGeo, new THREE.MeshPhysicalMaterial({ color: bc, roughness: .42, metalness: .25, envMapIntensity: .9 })); back.rotation.y = Math.PI; back.position.z = -ZF; g.add(back);
     const bump = new THREE.Mesh(bumpGeo, new THREE.MeshPhysicalMaterial({ color: bc, roughness: .22, metalness: .4, clearcoat: 1 })); bump.rotation.y = Math.PI; bump.position.set(PW / 2 - .19, PH / 2 - .19, -ZF); g.add(bump);
@@ -237,13 +248,13 @@
     });
     const btn = (x, y, h) => { const m = new THREE.Mesh(new THREE.BoxGeometry(.012, h, .03), metal); m.position.set(x, y, 0); g.add(m); };
     btn(-PW / 2 - .004, .36, .07); btn(-PW / 2 - .004, .22, .12); btn(-PW / 2 - .004, .07, .12); btn(PW / 2 + .004, .2, .2);
-    // overlays live in screen points (390 x 820 pt screen, like the UI designs)
+    // overlays live in screen points (390 x 820 pt screen, like the UI designs; 390 x 844 with opts.real)
     const ovRoot = new THREE.Group(); ovRoot.position.z = ZF + .0012; g.add(ovRoot);
     let oz = .0006, ro = 2;
     const P = {
-      g, screen, screenMat, metal, ovRoot, glass,
+      g, screen, screenMat, metal, ovRoot, glass, dims: D,
       show(tex) { if (screenMat.map !== tex) screenMat.map = tex; },
-      pt: (x, y) => [(x / 390 - .5) * SW, (.5 - y / 820) * SH],
+      pt: (x, y) => [(x / 390 - .5) * SW, (.5 - y / D.ptH) * SH],
       // banner/card overlay: tex sized by its own aspect, centred at (x,y) pt, width w pt
       overlay(tex, x, y, w) {
         const asp = tex.image.height / tex.image.width, ww = w / 390 * SW;

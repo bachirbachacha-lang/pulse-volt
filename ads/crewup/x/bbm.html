@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Bear Be Matcha Reel</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* Pixel & Co. portfolio reel: the ordering site we designed for @bearbematcha (Jeddah). 1080x1920, 25 s.
+   Shown with their permission (docs/context/pixel-co.md, 2 Nov). Their logo, bear, drink photos and story ad are theirs.
+   The phone plays the real v4 sample site (screen recording, x/bbm/rec.py); the laptop shows the same site at desktop size.
+   Hook "still taking orders in DMs?" -> the DMs burst into letters that draw their bear -> their drinks ->
+   the site on a phone (pick, build, the order lands on WhatsApp) -> laptop, QR table card, story ad -> Pixel & Co. */
+@font-face{font-family:Baloo;src:url(../fonts/baloobhaijaan2-arabic-var.woff2) format('woff2');font-weight:400 800;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F}
+@font-face{font-family:Baloo;src:url(../fonts/baloobhaijaan2-latin-var.woff2) format('woff2');font-weight:400 800;unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122}
+@font-face{font-family:Delius;src:url(../fonts/delius-latin-400.woff2);font-weight:400}
+@font-face{font-family:Alex;src:url(../fonts/alexandria-arabic-var.woff2) format('woff2');font-weight:100 900;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F}
+@font-face{font-family:Alex;src:url(../fonts/alexandria-latin-var.woff2) format('woff2');font-weight:100 900;unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2190-2192}
+@font-face{font-family:Unb;src:url(../fonts/unbounded-latin-var.woff2) format('woff2');font-weight:200 900}
+html,body{background:#1b120d}
+#bgdom{display:none}
+#stage{position:absolute;inset:0;z-index:10;pointer-events:none}
+.shot{position:absolute;inset:0;visibility:hidden}
+/* S1: the DMs */
+#s1bg{position:absolute;inset:-80px;background:url(../../../pixel-co/samples/bearbematcha-ad/photos/tray.jpg) center/cover;filter:blur(28px) saturate(1.15) brightness(.9)}
+#s1dim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,14,9,.82),rgba(24,14,9,.55) 48%,rgba(24,14,9,.86))}
+#hl{position:absolute;left:0;right:0;top:250px;text-align:center;font:800 104px/1.12 Baloo;color:#FFF4D6;direction:rtl;text-shadow:0 8px 40px rgba(0,0,0,.35)}
+#hl .y{color:#F5DD91}
+#hlen{position:absolute;left:0;right:0;top:520px;text-align:center;font:400 42px Delius;color:rgba(255,244,214,.78)}
+.dm{position:absolute;right:80px;max-width:780px;direction:rtl;background:#F7F2E8;color:#2b1d16;font:600 48px/1.25 Baloo;padding:20px 34px 46px;border-radius:40px 40px 12px 40px;box-shadow:0 18px 40px rgba(0,0,0,.3)}
+.dm small{position:absolute;left:28px;bottom:12px;font:500 24px Baloo;color:#9b8f80;direction:rtl}
+.dm.dots{font:800 54px/1 Baloo;letter-spacing:.14em;padding:14px 34px 26px;color:#9a8f82}
+/* S2: their bear */
+#wipe{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 44%,#FBE7A8,#F5DD91 55%,#EDCF72)}
+#logo2{position:absolute;left:198px;top:500px;width:684px;filter:drop-shadow(0 26px 40px rgba(75,42,30,.25));opacity:0}
+#t2,#t3,.dl b,.dl i,.dl em,#s6 #pc,#q6,#q6en,#f6,#steps6>*,#cta6,#h6,#perm{opacity:0}
+.cap{position:absolute;left:0;right:0;text-align:center;direction:rtl}
+.cap b{display:block;font:800 76px/1.15 Baloo;color:#4B2A1E}
+.cap span{display:block;direction:ltr;font:400 36px/1.3 Delius;color:#7A5442;margin-top:12px}
+/* stickers: captions in the style of their site (cream, ink border, hard ink shadow) */
+.stk{position:absolute;left:50%;top:230px;direction:rtl;text-align:center;white-space:nowrap;background:#FFF7DC;border:4px solid #4B2A1E;border-radius:34px;box-shadow:0 8px 0 #4B2A1E;padding:16px 40px 20px;opacity:0}
+.stk b{display:flex;align-items:center;justify-content:center;gap:16px;font:800 64px/1.15 Baloo;color:#4B2A1E}
+.stk span{display:block;direction:ltr;font:400 30px/1.2 Delius;color:#7A5442;margin-top:4px}
+.stk u{text-decoration:none;display:inline-grid;place-items:center;width:70px;height:70px;border-radius:50%;background:#7FA65A;color:#FFF7DC;border:3px solid #4B2A1E;font:800 46px/1 Baloo;padding-bottom:4px}
+.stk.pk u{background:#EE9DAA;color:#4B2A1E}
+/* S3: drink labels */
+.dl{position:absolute;left:0;right:0;top:1400px;text-align:center;direction:rtl;visibility:hidden}
+.dl b{display:block;font:800 72px/1.1 Baloo;color:#4B2A1E}
+.dl i{display:block;font:400 34px Delius;font-style:normal;color:#7A5442;margin-top:6px;direction:ltr}
+.dl em{display:inline-block;margin-top:18px;font:800 44px/1 Baloo;font-style:normal;color:#4B2A1E;background:#EE9DAA;border:4px solid #4B2A1E;border-radius:999px;padding:12px 30px 16px;box-shadow:0 6px 0 #4B2A1E;transform:rotate(-3deg)}
+.dl em small{font:700 30px Baloo;margin-right:12px;color:#4B2A1E}
+.dl em.bl{background:#DCE3EE}
+/* S6: Pixel & Co. */
+#s6{background:radial-gradient(70% 50% at 50% 38%,#1a1650,#09081A 70%)}
+#grid6{position:absolute;inset:0;background-image:linear-gradient(rgba(124,108,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(124,108,255,.09) 1px,transparent 1px);background-size:72px 72px;-webkit-mask:radial-gradient(70% 55% at 50% 45%,#000,transparent);mask:radial-gradient(70% 55% at 50% 45%,#000,transparent)}
+#pc{position:absolute;left:0;right:0;top:300px;text-align:center;font:900 64px Unb;color:#F4F1FF;letter-spacing:-.02em}
+#pc i{font-style:normal;color:#7C6CFF}
+#q6{position:absolute;left:0;right:0;top:470px;text-align:center;direction:rtl;font:800 104px/1.15 Alex;color:#F4F1FF;letter-spacing:-.01em}
+#q6 em{font-style:normal;color:#3CF2C0}
+#q6en{position:absolute;left:0;right:0;top:735px;text-align:center;font:500 38px Alex;color:#9C97C7}
+#f6{position:absolute;left:90px;right:90px;top:850px;text-align:center;direction:rtl;font:600 48px/1.45 Alex;color:#F4F1FF}
+#f6 em{font-style:normal;color:#3CF2C0}
+#steps6{position:absolute;left:0;right:0;top:1040px;display:flex;justify-content:center;align-items:center;gap:16px;direction:rtl}
+.sp{font:700 36px Alex;color:#C9C4EC;background:#171437;border:2px solid #2A2560;border-radius:999px;padding:16px 30px 20px}
+.sp.on{border-color:#3CF2C0;color:#3CF2C0}
+.ar6{font:700 40px Alex;color:#7C6CFF}
+#cta6{position:absolute;left:170px;right:170px;top:1220px;height:132px;border-radius:66px;background:#7C6CFF;display:flex;align-items:center;justify-content:center;direction:rtl;font:800 52px Alex;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.12) inset,0 30px 80px rgba(124,108,255,.45);overflow:hidden}
+#cta6sh{position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.4) 50%,rgba(255,255,255,0) 65%)}
+#h6{position:absolute;left:0;right:0;top:1400px;text-align:center;font:700 50px Unb;color:#3CF2C0;letter-spacing:-.01em}
+#perm{position:absolute;left:0;right:0;top:1500px;text-align:center;font:400 28px Alex;color:#8F8AB8}
+/* always on: honesty labels */
+#labs{position:absolute;left:40px;top:150px;z-index:60;display:flex;gap:10px;direction:ltr}
+.lb{font:600 26px Alex;padding:9px 20px 12px;border-radius:999px;background:rgba(27,18,13,.55);color:#FFF4D6;border:1.5px solid rgba(255,244,214,.28);direction:rtl}
+#lab3d{direction:ltr;font:700 22px Alex;letter-spacing:.12em;padding:12px 16px 12px;visibility:hidden}
+#labs.lt .lb{background:rgba(255,247,220,.78);color:#4B2A1E;border-color:rgba(75,42,30,.22)}
+#labs.p6 .lb{background:rgba(23,20,55,.85);color:#9C97C7;border-color:#2A2560}
+</style>
+</head>
+<body>
+<div id="bgdom"><div id="glow"></div><div id="glow2"></div></div>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="stage">
+  <div class="shot" id="s1"><div id="s1bg"></div><div id="s1dim"></div>
+    <div id="hl">للحين تاخذ الطلبات<br><span class="y">بالخاص؟</span></div>
+    <div id="hlen">Still taking orders in DMs?</div>
+    <div id="dms"></div>
+  </div>
+  <div class="shot" id="s2"><div id="wipe"></div><img id="logo2" src="../../../pixel-co/samples/bearbematcha-ad/logo.png" alt="">
+    <div class="cap" id="t2" style="top:1320px"><b>صممنا لهم موقع طلب</b><span>We designed an ordering site for @bearbematcha</span></div></div>
+  <div class="shot" id="s3">
+    <div class="cap" id="t3" style="top:200px"><b>منيو بصورهم الحقيقية</b><span>Their real photos. Their real menu.</span></div>
+    <div class="dl" id="d1"><b>بيرثداي كيك ماتشا</b><i>Birthdaee cake matcha</i><em>٢٥ ر.س</em></div>
+    <div class="dl" id="d2"><b>ويمزيكال ماتشا</b><i>Whimsical matcha · make it your way</i><em class="bl">على ذوقك</em></div>
+    <div class="dl" id="d3"><b>ماتشا كراميل التفاح</b><i>Caramelized apple crumble · limited</i><em>٣٥ ر.س<small>· لفترة محدودة</small></em></div>
+  </div>
+  <div class="stk" id="kA"><b>بشعارهم وألوانهم وصورهم</b><span>Their logo, their colours, their photos</span></div>
+  <div class="stk" id="kB"><b><u>١</u>اختر مشروبك</b><span>Pick your drink</span></div>
+  <div class="stk pk" id="kC"><b><u>٢</u>ركّبه على ذوقك</b><span>Build it your way</span></div>
+  <div class="stk" id="kE"><b><u>٣</u>والطلب يوصلهم واتساب</b><span>The order lands on their WhatsApp</span></div>
+  <div class="stk" id="k5a"><b>يشتغل على الجوال واللابتوب</b><span>Works on phone and laptop</span></div>
+  <div class="stk pk" id="k5b"><b>كرت QR للطاولة</b><span>A QR card for the table</span></div>
+  <div class="stk" id="k5c"><b>وإعلان موشن للستوري</b><span>Plus a motion ad for their stories</span></div>
+  <div class="shot" id="s6"><div id="grid6"></div>
+    <div id="pc">Pixel <i>&amp;</i> Co.</div>
+    <div id="q6">تبي موقع مثله<br><em>لمشروعك؟</em></div>
+    <div id="q6en">Want one like this for your business?</div>
+    <div id="f6">نسوي لك <em>نموذج مجاني</em> بشعارك وألوانك ومنيوك</div>
+    <div id="steps6"><span class="sp" id="sp1">راسلنا</span><span class="ar6">←</span><span class="sp" id="sp2">نموذج مجاني</span><span class="ar6">←</span><span class="sp" id="sp3">ينطلق موقعك</span></div>
+    <div id="cta6"><span style="position:relative">راسلنا · DM us</span><div id="cta6sh"></div></div>
+    <div id="h6">@pixelandco.design</div>
+    <div id="perm">Shown with permission of @bearbematcha</div>
+  </div>
+  <div id="labs"><span class="lb" id="lab">نموذج تصميم · Design sample</span><span class="lb" id="lab3d">3D RENDER</span></div>
+</div>
+<div id="flash"></div><div id="fade" style="opacity:0"></div>
+<script>window.BEAT = { beats: [0, .5], energy: [0] };</script>
+<script src="lib/three.min.js"></script>
+<script src="lib/CopyShader.js"></script><script src="lib/LuminosityHighPassShader.js"></script><script src="lib/FXAAShader.js"></script>
+<script src="lib/EffectComposer.js"></script><script src="lib/RenderPass.js"></script><script src="lib/ShaderPass.js"></script><script src="lib/MaskPass.js"></script>
+<script src="lib/UnrealBloomPass.js"></script><script src="lib/Reflector.js"></script><script src="lib/RoundedBoxGeometry.js"></script>
+<script src="lib/gsap.min.js"></script>
+<script src="common.js"></script>
+<script>
+const { tl, $ } = X;
+X.DUR = 25.0;
+const C = X.clamp, L = X.lerp;
+const e3o = x => 1 - Math.pow(1 - C(x), 3);
+const e3io = x => { x = C(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const sio = x => .5 - .5 * Math.cos(Math.PI * C(x));
+const canvas = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const rrp = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+const cover = (g, im, w, h, fx = .5, fy = .5) => { const s = Math.max(w / im.width, h / im.height); g.drawImage(im, (w - im.width * s) * fx, (h - im.height * s) * fy, im.width * s, im.height * s); };
+const PH = '../../../pixel-co/samples/bearbematcha-ad/';   // their photos + logo (shown with permission)
+const I = {};
+const load = (k, src) => new Promise(res => { const im = new Image(); im.onload = () => { I[k] = im; res(); }; im.onerror = () => { console.error('missing ' + src); res(); }; im.src = src; });
+const loading = Promise.all([
+  load('desktop', 'bbm/desktop-v4.jpg'), load('qr', 'bbm/qr.png'), load('hero', 'bbm/rec/f0045.jpg'),
+  load('birthday', PH + 'photos/birthday.jpg'), load('whimsical', PH + 'photos/whimsical.jpg'), load('autumn', PH + 'photos/autumn.jpg'),
+  load('tray', PH + 'photos/tray.jpg'), load('foam', PH + 'photos/foam.jpg'), load('logo', PH + 'logo.png'),
+]);
+
+// ---------------------------------------------------------------- timing
+const T_S2 = 1.96, T_S3 = 4.25, T_S4 = 7.75, T_S5 = 15.75, T_LAP = 15.75, T_QR = 16.9, T_AD = 18.05, T_S6 = 19.25;
+// the phone shots: reel time -> seconds of the real v4 screen recording
+const SHOTS = [
+  { t0: 7.75, t1: 9.25, s0: 0.05, s1: 1.55 },     // A: the site opens (logo curtain, kinetic headline, photo stack)
+  { t0: 9.25, t1: 10.75, s0: 11.15, s1: 12.95 },  // B: swiping the menu carousel
+  { t0: 10.75, t1: 13.25, s0: 21.95, s1: 24.75 }, // C: build your drink (taps, the cup fills, price 35 -> 44)
+  { t0: 13.25, t1: 15.75, s0: 33.5, s1: 34.6 },   // E: the WhatsApp message the shop gets (from 33.5 s the send button with WhatsApp's logo is under the nav)
+];
+const shotAt = t => SHOTS.findIndex(s => t >= s.t0 && t < s.t1);
+const recFrame = t => { const i = shotAt(t); if (i < 0) return -1; const s = SHOTS[i]; return Math.round((s.s0 + (t - s.t0) * (s.s1 - s.s0) / (s.t1 - s.t0)) * 30); };
+const adFrame = t => (t >= T_AD && t < T_S6 + .35) ? 1 + Math.min(44, Math.floor((t - T_AD) / (T_S6 - T_AD) * 45)) : -1;
+const CUTS = [T_S3, T_S4, 9.25, 10.75, 13.25, T_S5, T_QR, T_AD];
+
+// =====================================================================================================
+// 3D: one renderer, warm studio light; groups switch on per shot
+// =====================================================================================================
+const ctx = X.three({ fov: 34, bloom: .16, radius: .4, threshold: 1.3, ss: 1.5 });
+const G = ctx.grade.uniforms; G.vignette.value = .22; G.grain.value = .026; G.lift.value.set(0, 0, 0); G.knee.value = .93; G.fringe.value = .0012; G.contrast.value = 1.02; G.sat.value = 1.0;
+X.studioEnv(ctx, [[0xfff1d8, [-5, 4, 6], [8, 5], 1.7], [0xffffff, [6, 2, 4], [3, 9], 1.7], [0xffe2b0, [0, 9, 0], [14, 4], 1.3], [0xfff6e6, [-6, -3, -4], [6, 6], .9], [0xffcf8a, [5, -4, -5], [6, 5], .8]]);
+const LI = X.lights(ctx); LI.key.intensity = .9; LI.key.color.set(0xfff0dc); LI.rim.color.set(0xffe2c0); LI.rim.intensity = .5;
+ctx.scene.children.filter(o => o.isAmbientLight).forEach(a => { a.color.set(0x8a6a50); a.intensity = .55; });
+const BG = [[0, '#1b120d', '#120b08'], [4.1, '#FBE9B0', '#EFCF72'], [T_S5, '#FFF3CF', '#EFD27C'], [T_QR, '#FBEFD2', '#E9D3A0'], [T_AD, '#FBE9B0', '#EFCF72']];
+ctx.drawBg = t => { let a = BG[0]; for (const b of BG) if (t >= b[0]) a = b; const g = ctx.bg.getContext('2d'), gr = g.createRadialGradient(54, 80, 10, 54, 96, 150); gr.addColorStop(0, a[1]); gr.addColorStop(1, a[2]); g.fillStyle = gr; g.fillRect(0, 0, 108, 192); ctx.bgTex.needsUpdate = true; };
+const glEl = $('#gl');
+const glOn = t => (t >= T_S2 && t < 3.8) || (t >= T_S3 && t < T_S6 + .35);
+const baseRender = ctx.render; ctx.render = t => { if (glOn(t)) baseRender(t); };
+
+// ---------------------------------------------------------------- S1/S2 letters: the DMs burst and draw their bear
+const N = 46000;
+let sd = 20251102; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+const gauss = () => { let u = 0; while (!u) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2831853 * rnd()); };
+const fill = fn => { const a = new Float32Array(N * 3); for (let i = 0; i < N; i++) a.set(fn(i), i * 3); return a; };
+const pick = (P, jit = 0) => fill(() => { const p = P[Math.floor(rnd() * P.length)]; return [p[0] + (rnd() - .5) * jit, p[1] + (rnd() - .5) * jit, p[2] + (rnd() - .5) * jit * 4]; });
+const PXU = 1920 / (2 * 10 * Math.tan(25 * Math.PI / 180));   // px per unit at the camera's z=10, fov 50: shapes line up with the DOM
+const DMS = [['السلام عليكم، عندكم منيو؟', '٤:١٢ م'], ['كم سعر الماتشا؟', '٤:١٣ م'], ['فيه إضافات؟', '٤:١٣ م'], ['متى يجهز طلبي؟', '٤:١٥ م']];
+const DMY = [790, 950, 1110, 1270];
+$('#dms').innerHTML = DMS.map(([d, tm], i) => `<div class="dm" id="dm${i}" style="top:${DMY[i]}px">${d}<small>${tm}</small></div>`).join('') + `<div class="dm dots" id="dm4" style="top:1430px">•••</div>`;
+const SH = {};
+const buildShapes = () => {
+  // the hook's words exactly where they sit at the burst (same fonts, same places; the DM column has risen ~59 px by then)
+  const c = canvas(1080, 1920), g = c.getContext('2d'); g.fillStyle = '#fff'; g.textBaseline = 'middle'; g.direction = 'rtl';
+  g.font = '800 104px Baloo'; g.textAlign = 'center'; g.fillText('للحين تاخذ الطلبات', 540, 250 + 58); g.fillText('بالخاص؟', 540, 250 + 58 + 116);
+  g.direction = 'ltr'; g.font = '400 42px Delius'; g.fillText('Still taking orders in DMs?', 540, 520 + 26); g.direction = 'rtl';
+  g.font = '600 48px Baloo'; g.textAlign = 'right';
+  DMS.forEach(([d], i) => g.fillText(d, 1080 - 80 - 34, DMY[i] - 59 + 20 + 30));
+  const d = g.getImageData(0, 0, 1080, 1920).data, P = [];
+  for (let y = 0; y < 1920; y += 2) for (let x = 0; x < 1080; x += 2) if (d[(y * 1080 + x) * 4 + 3] > 130) P.push([(x - 540) / PXU, (960 - y) / PXU, 0]);
+  SH.dm = pick(P, .004);
+  SH.swirl = fill(i => { const u = Math.pow(rnd(), .7), r = .3 + 5.2 * u, th = (i % 2) * Math.PI + r * 1.1 + gauss() * .25; return [Math.cos(th) * r * .6, Math.sin(th) * r * .95 + gauss() * .05, gauss() * .5 * (1 - u * .6)]; });
+  // their bear: the drawn (dark) lines of the logo, placed exactly where the real logo appears (#logo2)
+  const lc = canvas(457, 500), lg = lc.getContext('2d'); lg.drawImage(I.logo, 0, 0); const ld = lg.getImageData(0, 0, 457, 500).data, B = [];
+  const sc = 684 / 457 / PXU, cy = 500 + 500 * 684 / 457 / 2;
+  for (let y = 0; y < 500; y += 2) for (let x = 0; x < 457; x += 2) { const k = (y * 457 + x) * 4; if (ld[k + 3] > 140 && ld[k] + ld[k + 1] + ld[k + 2] < 330) B.push([(x - 228.5) * sc, (960 - cy) / PXU - (y - 250) * sc, 0]); }
+  SH.bear = pick(B, .006);
+};
+const geo = new THREE.BufferGeometry();
+const A = new Float32Array(N * 3), Bp = new Float32Array(N * 3), seed = new Float32Array(N), glyph = new Float32Array(N), hue = new Float32Array(N);
+for (let i = 0; i < N; i++) { seed[i] = rnd(); glyph[i] = Math.floor(rnd() * 60); hue[i] = rnd() < .2 ? 1 : 0; }
+geo.setAttribute('position', new THREE.BufferAttribute(A, 3)); geo.setAttribute('pA', new THREE.BufferAttribute(A, 3)); geo.setAttribute('pB', new THREE.BufferAttribute(Bp, 3));
+geo.setAttribute('seed', new THREE.BufferAttribute(seed, 1)); geo.setAttribute('glyph', new THREE.BufferAttribute(glyph, 1)); geo.setAttribute('hue', new THREE.BufferAttribute(hue, 1));
+const U = { atlas: { value: null }, morph: { value: 0 }, time: { value: 0 }, swirl: { value: 1 }, size: { value: .05 }, scale: { value: 1000 }, bright: { value: .3 }, vis: { value: 0 } };
+const pmat = new THREE.ShaderMaterial({
+  uniforms: U, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  vertexShader: `attribute vec3 pA; attribute vec3 pB; attribute float seed; attribute float glyph; attribute float hue;
+    uniform float morph, time, swirl, size, scale; varying float vG; varying float vH; varying float vA;
+    void main(){
+      float k = clamp((morph - seed * 0.42) / 0.58, 0.0, 1.0); k = k * k * (3.0 - 2.0 * k);
+      float s = sin(k * 3.14159);
+      vec3 p = mix(pA, pB, k) + vec3(sin(seed * 91.7 + time * 1.3), cos(seed * 57.3 + time * 1.1), sin(seed * 33.1 - time * 0.9)) * s * swirl;
+      vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_Position = projectionMatrix * mv;
+      gl_PointSize = min(80.0, size * scale / max(0.05, -mv.z) * (0.75 + 0.5 * fract(seed * 13.7)) * (1.0 + 0.5 * s));
+      vG = mod(glyph + floor(time * 14.0 + seed * 50.0) * step(0.02, s), 60.0); vH = hue; vA = smoothstep(0.25, 1.6, -mv.z);
+    }`,
+  fragmentShader: `uniform sampler2D atlas; uniform float bright, vis; varying float vG; varying float vH; varying float vA;
+    void main(){
+      vec2 cell = vec2(mod(vG, 10.0), floor(vG / 10.0));
+      float a = texture2D(atlas, vec2((cell.x + gl_PointCoord.x) / 10.0, 1.0 - (cell.y + gl_PointCoord.y) / 6.0)).a;
+      vec3 col = mix(vec3(1.0, 0.86, 0.56), vec3(0.42, 0.72, 0.25), vH);
+      gl_FragColor = vec4(col * a * vA * bright * vis, 1.0);
+    }`,
+});
+const pts = new THREE.Points(geo, pmat); pts.frustumCulled = false; ctx.scene.add(pts);
+const ST = [[2.0, .85, 'dm', 'swirl', 2.0, .3], [2.8, .62, 'swirl', 'bear', 1.0, .26]];
+let bound = -1;
+const bind = i => { if (bound === i) return; bound = i; A.set(SH[ST[i][2]]); Bp.set(SH[ST[i][3]]); ['pA', 'pB', 'position'].forEach(k => geo.attributes[k].needsUpdate = true); };
+
+// ---------------------------------------------------------------- S3 their drinks: real photos as prints in warm light
+const gDr = new THREE.Group(); ctx.scene.add(gDr); gDr.visible = false;
+const CARD = [2.5, 3.33], cardX = [0, 3.3, 6.6];
+const shadowTex = X.canvasTex(256, 256, g => { const gr = g.createRadialGradient(128, 128, 16, 128, 128, 128); gr.addColorStop(0, 'rgba(70,38,18,.5)'); gr.addColorStop(1, 'rgba(70,38,18,0)'); g.fillStyle = gr; g.fillRect(0, 0, 256, 256); });
+const cards = ['birthday', 'whimsical', 'autumn'].map((k, i) => {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(...CARD), new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false }));
+  m.position.set(cardX[i], 0, 0); m.rotation.z = [-.03, .025, -.02][i]; m.userData.k = k;
+  const sh = new THREE.Mesh(new THREE.PlaneGeometry(CARD[0] * 1.4, CARD[1] * 1.28), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+  sh.position.set(.1, -.2, -.3); m.add(sh); gDr.add(m); return m;
+});
+const dust = X.dust(220, [12, 7, 4], 0xbfd98f, .02, .8); dust.position.set(3, -3.5, -1.2); gDr.add(dust);
+
+// ---------------------------------------------------------------- S4 the real site on a real-shaped phone in front of their café
+const scrTex = new THREE.Texture(); scrTex.encoding = THREE.sRGBEncoding; scrTex.anisotropy = 8; scrTex.minFilter = THREE.LinearFilter; scrTex.generateMipmaps = false;
+const adTex = new THREE.Texture(); adTex.encoding = THREE.sRGBEncoding; adTex.anisotropy = 8; adTex.minFilter = THREE.LinearFilter; adTex.generateMipmaps = false;
+adTex.repeat.set((390 / 844) / (1080 / 1920), 1); adTex.offset.set((1 - adTex.repeat.x) / 2, 0);   // 9:16 story on a 390x844 screen: crop the sides
+const P = X.makePhone({ finish: 'natural', tex: scrTex, real: true });
+const PD = P.dims;
+const heroTex = new THREE.Texture(); heroTex.encoding = THREE.sRGBEncoding; heroTex.anisotropy = 8; heroTex.minFilter = THREE.LinearFilter; heroTex.generateMipmaps = false;
+const gPh = new THREE.Group(); gPh.add(P.g); ctx.scene.add(gPh); gPh.visible = false;
+const cafe = new THREE.Mesh(new THREE.PlaneGeometry(18, 18), new THREE.MeshBasicMaterial({ toneMapped: false }));
+cafe.position.set(0, 0, -6); ctx.scene.add(cafe); cafe.visible = false;
+const phShadow = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 3.6), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: .55 }));
+phShadow.position.set(.25, -.35, -.9); gPh.add(phShadow);
+
+// ---------------------------------------------------------------- S5a laptop
+const gLap = new THREE.Group(); ctx.scene.add(gLap); gLap.visible = false;
+const alu = new THREE.MeshPhysicalMaterial({ color: 0xc9cbd0, metalness: 1, roughness: .34, envMapIntensity: 1.15, clearcoat: .2 });
+const base = new THREE.Mesh(new THREE.RoundedBoxGeometry(3.3, .09, 2.25, 4, .045), alu); gLap.add(base);
+const kbTex = X.canvasTex(1160, 400, g => { g.fillStyle = '#2b2c30'; g.fillRect(0, 0, 1160, 400); g.fillStyle = '#16171a'; for (let r = 0; r < 5; r++) for (let c = 0; c < 14; c++) { rrp(g, 12 + c * 82, 14 + r * 76, 70, 64, 10); g.fill(); } });
+const kb = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 1.0), new THREE.MeshPhysicalMaterial({ map: kbTex, roughness: .6, metalness: .2 }));
+kb.rotation.x = -Math.PI / 2; kb.position.set(0, .047, -.38); gLap.add(kb);
+const pad = new THREE.Mesh(new THREE.PlaneGeometry(1.25, .72), new THREE.MeshPhysicalMaterial({ color: 0xbbbdc2, metalness: .8, roughness: .22 })); pad.rotation.x = -Math.PI / 2; pad.position.set(0, .047, .62); gLap.add(pad);
+const lid = new THREE.Group(); lid.position.set(0, .045, -1.12); gLap.add(lid);
+const lidB = new THREE.Mesh(new THREE.RoundedBoxGeometry(3.3, 2.16, .05, 4, .025), alu); lidB.position.y = 1.08; lid.add(lidB);
+const bez = new THREE.Mesh(new THREE.PlaneGeometry(3.22, 2.08), new THREE.MeshPhysicalMaterial({ color: 0x050506, roughness: .08, clearcoat: 1 })); bez.position.set(0, 1.08, .026); lid.add(bez);
+const dskTex = new THREE.Texture(); dskTex.encoding = THREE.sRGBEncoding; dskTex.anisotropy = 8;
+const dsk = new THREE.Mesh(new THREE.PlaneGeometry(3.08, 1.925), new THREE.MeshBasicMaterial({ map: dskTex, toneMapped: false })); dsk.position.set(0, 1.1, .028); lid.add(dsk);
+const lapGlass = new THREE.Mesh(new THREE.PlaneGeometry(3.22, 2.08), X.glassMat); lapGlass.position.set(0, 1.08, .031); lid.add(lapGlass);
+const phFloorSh = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.0), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: .9 }));
+phFloorSh.rotation.x = -Math.PI / 2; phFloorSh.position.set(1.3, -.04, 1.0); ctx.scene.add(phFloorSh);
+const lapSh = new THREE.Mesh(new THREE.PlaneGeometry(6.2, 4.6), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: .8 })); lapSh.rotation.x = -Math.PI / 2; lapSh.position.y = -.05; gLap.add(lapSh);
+
+// ---------------------------------------------------------------- S5b QR table card (their colours; the code opens their Instagram)
+const gQR = new THREE.Group(); ctx.scene.add(gQR); gQR.visible = false;
+const floorQR = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshPhysicalMaterial({ color: 0xf1dfb0, roughness: .75 })); floorQR.rotation.x = -Math.PI / 2; gQR.add(floorQR);
+const cardTex = new THREE.Texture(); cardTex.encoding = THREE.sRGBEncoding; cardTex.anisotropy = 8;
+const tent = new THREE.Group(); gQR.add(tent);
+const faceMat = new THREE.MeshPhysicalMaterial({ map: cardTex, roughness: .55, clearcoat: .15 }), backMat = new THREE.MeshPhysicalMaterial({ color: 0xF5DD91, roughness: .6 });
+const tentFace = (z, ang, mat) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.2), mat); m.geometry.translate(0, 1.1, 0); m.position.z = z; m.rotation.x = ang; tent.add(m); return m; };
+tentFace(.21, -.19, faceMat); const tb = tentFace(-.21, .19, backMat); tb.rotation.set(-.19, Math.PI, 0);
+const tentSh = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 2.2), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: .9 })); tentSh.rotation.x = -Math.PI / 2; tentSh.position.set(.25, .004, .05); gQR.add(tentSh);
+const cupCard = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.73), new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false })); cupCard.position.set(-1.45, .87, -1.3); cupCard.rotation.y = .25; gQR.add(cupCard);
+
+// =====================================================================================================
+// camera: a pure function of time, so motion blur is right on every frame
+// =====================================================================================================
+X.rig.chase = 1; X.mb = .55;
+const cam = (p, q, fov = 34, roll = 0) => ({ p, q, fov, roll });
+// a hand-held camera never sits still: slow drift of a few millimetres (product shots only)
+const hh = (t, p, k = 1) => [p[0] + k * (.011 * Math.sin(t * 1.7) + .005 * Math.sin(t * 3.1 + 2)), p[1] + k * (.009 * Math.sin(t * 2.3 + 1) + .004 * Math.sin(t * 4.3)), p[2]];
+X.camFn = t => {
+  if (t < T_S3) {   // letters: pull back and roll while they swirl, settle as the bear forms
+    const a = e3o((t - 2.0) / .8), b = e3io((t - 2.8) / .7);
+    return cam([0, 0, 10 + 1.5 * a - 1.5 * b], [0, 0, 0], 50, (-4 * a + 4 * b) * Math.PI / 180);
+  }
+  if (t < T_S4) {   // drinks: drift past each print, whip to the next
+    const D = (T_S4 - T_S3) / 3, k = (t - T_S3) / D, i = Math.min(2, Math.floor(k)), f = k - i;
+    let x = cardX[i] + L(-.16, .16, f), z = L(11.2, 10.7, sio(f));
+    if (i < 2 && f > .84) { const w = e3io((f - .84) / .16); x = L(x, cardX[i + 1] - .16, w); z = L(z, 11.2, w); }
+    return cam([x, -.34, z], [x * .985, -.33, 0]);
+  }
+  if (t < T_S5) {
+    const i = shotAt(t), s = SHOTS[i], f = (t - s.t0) / (s.t1 - s.t0);
+    if (i === 0) return cam(hh(t, [0, .02, L(3.8, 3.55, sio(f))]), [0, .02, 0]);
+    if (i === 1) return cam(hh(t, [L(.42, .3, f), .17, L(3.6, 3.42, sio(f))]), [.04, .16, 0]);
+    if (i === 2) return cam(hh(t, [L(-.38, -.28, f), .18, L(3.5, 3.3, sio(f))]), [-.03, .18, 0]);
+    const w = sio(f * 1.05);   // E: push in to the WhatsApp message
+    return cam(hh(t, [L(0, .03, w), L(.1, .15, w), L(3.9, 2.45, w)], .7), [L(0, .03, w), L(.08, .16, w), 0]);
+  }
+  if (t < T_QR) {   // laptop: orbit while the lid opens
+    const f = (t - T_LAP) / (T_QR - T_LAP), w = sio(f);
+    return cam(hh(t, [L(-.7, 1.1, w), L(2.35, 2.15, w), L(11.2, 10.8, w)], 2), [.3, .86, 0]);
+  }
+  if (t < T_AD) {   // QR card: slow push and arc
+    const f = (t - T_QR) / (T_AD - T_QR), w = sio(f);
+    return cam(hh(t, [L(1.25, .45, w), L(1.95, 1.7, w), L(5.9, 5.3, w)], 1.5), [L(.05, 0, w), 1.2, 0]);
+  }
+  const f = C((t - T_AD) / (T_S6 - T_AD)), w = sio(f);   // story ad phone
+  return cam(hh(t, [L(-.35, -.15, w), .15, L(3.85, 3.6, w)]), [0, .16, 0]);
+};
+
+// =====================================================================================================
+// DOM timeline (captions); 3D state is set per frame below
+// =====================================================================================================
+// S1: the DMs pile up
+tl.fromTo('#s1bg', { scale: 1.1 }, { scale: 1.2, duration: 2.1, ease: 'none' }, 0);
+// the question is on screen from the very first frame (that frame is also the feed thumbnail)
+tl.fromTo('#hl', { scale: 1.06 }, { scale: 1, duration: .35 }, 0)
+  .fromTo('#hlen', { opacity: 0 }, { opacity: 1, duration: .3 }, .2);
+[.32, .56, .8, 1.04, 1.3].forEach((t, i) => tl.fromTo('#dm' + i, { opacity: 0, y: 60, scale: .86, transformOrigin: '100% 100%' }, { opacity: 1, y: 0, scale: 1, duration: .26, ease: 'back.out(1.8)' }, t));
+tl.fromTo('#dms', { y: 0 }, { y: -60, duration: 1.0, ease: 'power1.inOut' }, 1.0);
+tl.set('#flash', { background: '#ffe9b8', opacity: 0 }, 0).to('#flash', { opacity: .28, duration: .05, yoyo: true, repeat: 1 }, 1.96);
+// S2: the butter page washes in from the bear, the real logo lands
+tl.fromTo('#wipe', { clipPath: 'circle(0% at 50% 45%)' }, { clipPath: 'circle(140% at 50% 45%)', duration: .3, ease: 'power2.in', immediateRender: false }, 3.42)
+  .fromTo('#logo2', { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .3, ease: 'back.out(2)', immediateRender: false }, 3.64)
+  .fromTo('#t2', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .3, immediateRender: false }, 3.8)
+  .to(['#logo2', '#t2'], { scale: 1.04, duration: .45, ease: 'none' }, 3.8);
+// S3: their drinks
+tl.fromTo('#t3', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: .3, immediateRender: false }, 4.32);
+['#d1', '#d2', '#d3'].forEach((d, i) => { const t0 = T_S3 + i * (T_S4 - T_S3) / 3;
+  tl.fromTo([d + ' b', d + ' i'], { opacity: 0, y: 30, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .26, stagger: .05, immediateRender: false }, t0 + .14)
+    .fromTo(d + ' em', { opacity: 0, scale: .4, rotate: -14 }, { opacity: 1, scale: 1, rotate: -3, duration: .34, ease: 'back.out(2.4)', immediateRender: false }, t0 + .3); });
+// stickers: pop in, settle, drop out
+gsap.set('.stk', { xPercent: -50 });
+const stk = (id, a, b) => tl.fromTo(id, { scale: .7, rotate: -8, opacity: 0 }, { scale: 1, rotate: -2, opacity: 1, duration: .32, ease: 'back.out(2.2)', immediateRender: false }, a)
+  .to(id, { rotate: -1, duration: b - a - .5, ease: 'sine.inOut' }, a + .32).to(id, { scale: .85, opacity: 0, duration: .14, ease: 'power2.in' }, b - .16);
+stk('#kA', 8.05, 9.25); stk('#kB', 9.3, 10.75); stk('#kC', 10.8, 13.25); stk('#kE', 13.3, 15.75);
+stk('#k5a', 15.82, 16.9); stk('#k5b', 16.96, 18.05); stk('#k5c', 18.1, 19.22);
+// S6: Pixel & Co.
+tl.fromTo('#s6', { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .34, ease: 'power3.inOut', immediateRender: false }, T_S6);
+const in6 = (id, t, y = 30) => tl.fromTo(id, { opacity: 0, y, filter: 'blur(12px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .3, immediateRender: false }, t);
+in6('#pc', 19.45); in6('#q6', 19.7, 40); in6('#q6en', 20.0); in6('#f6', 20.45);
+tl.fromTo('#steps6 > *', { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .25, stagger: .1, ease: 'back.out(2)', immediateRender: false }, 21.0);
+tl.fromTo('#cta6', { opacity: 0, y: 40, scale: .9 }, { opacity: 1, y: 0, scale: 1, duration: .35, ease: 'back.out(2)', immediateRender: false }, 22.0)
+  .fromTo('#cta6sh', { x: -900 }, { x: 900, duration: .8, ease: 'power2.inOut', immediateRender: false }, 22.4)
+  .fromTo('#cta6sh', { x: -900 }, { x: 900, duration: .8, ease: 'power2.inOut', immediateRender: false }, 23.7);
+in6('#h6', 22.3); in6('#perm', 22.75, 0);
+
+// =====================================================================================================
+// per frame
+// =====================================================================================================
+let curRec = null, curAd = null;
+const vis = (id, on) => { const e = $(id); if (e) e.style.visibility = on ? 'visible' : 'hidden'; };
+const labTheme = t => t < 3.6 ? '' : t < T_S4 ? 'lt' : t < T_S5 ? '' : t < T_S6 ? 'lt' : 'p6';
+X.onFrame(t => {
+  glEl.style.opacity = glOn(t) ? 1 : 0;
+  vis('#s1', t < 2.0); vis('#s2', t >= 3.42 && t < T_S3); vis('#s3', t >= T_S3 && t < T_S4); vis('#s6', t >= T_S6);
+  const D3 = (T_S4 - T_S3) / 3; [1, 2, 3].forEach(i => vis('#d' + i, t >= T_S3 + (i - 1) * D3 && t < T_S3 + i * D3));
+  $('#labs').className = labTheme(t); vis('#lab3d', t >= T_S4 && t < T_S6);
+  ['#sp1', '#sp2', '#sp3'].forEach((s, i) => $(s).classList.toggle('on', t >= 21.35 + i * .3));
+  // letters
+  pts.visible = t >= T_S2 && t < 3.95;
+  U.vis.value = C((3.8 - t) / .3);
+  if (pts.visible && SH.dm) { const i = t >= ST[1][0] ? 1 : 0; bind(i); const [t0, d, , , sw, br] = ST[i];
+    U.morph.value = C((t - t0) / d); U.swirl.value = sw; U.time.value = t; U.bright.value = br;
+    U.scale.value = (X.H * X.SS) / 2 / Math.tan(THREE.MathUtils.degToRad(ctx.cam.fov / 2)); }
+  // drinks
+  gDr.visible = t >= T_S3 && t < T_S4;
+  if (gDr.visible) { dust.userData.update(t); const k = (t - T_S3) / D3;
+    cards.forEach((m, i) => { const f = k - i; m.rotation.y = L(.22, -.22, C((f + .3) / 1.6)); m.position.z = .12 * Math.sin(t * 1.2 + i); });
+    X.dof.amt = .009; X.dof.w = .26; } else X.dof.amt = 0;
+  // the phone (site shots, then the story ad)
+  const site = t >= T_S4 && t < T_S5, story = t >= T_AD && t < T_S6 + .35;
+  gPh.visible = site || story; cafe.visible = site;
+  if (site) {
+    const i = shotAt(t), s = SHOTS[i], f = (t - s.t0) / (s.t1 - s.t0), lt = t - s.t0;
+    if (i === 0) { const e = e3o(lt / .55); gPh.rotation.set(L(.55, .07, e), L(-.62, -.16, e) + .1 * sio(f), L(.16, .02, e)); gPh.position.set(0, L(-1.7, -.1, e), 0); }
+    if (i === 1) { gPh.rotation.set(.05, L(.36, .24, sio(f)), -.015); gPh.position.set(-.04, 0, 0); }
+    if (i === 2) { gPh.rotation.set(.04, L(-.34, -.24, sio(f)), .015); gPh.position.set(.03, .02, 0); }
+    if (i === 3) { gPh.rotation.set(L(.1, .02, sio(f)), L(-.1, .02, sio(f)), 0); gPh.position.set(0, 0, 0); }
+    gPh.position.y += .015 * Math.sin(t * 1.4);
+    P.screenMat.map = scrTex; if (curRec && scrTex.image !== curRec) { scrTex.image = curRec; scrTex.needsUpdate = true; }
+  }
+  if (story) { const f = C((t - T_AD) / (T_S6 - T_AD)); gPh.rotation.set(.06, L(.42, .2, sio(f)), -.02); gPh.position.set(0, .015 * Math.sin(t * 1.4), 0);
+    P.screenMat.map = adTex; if (curAd && adTex.image !== curAd) { adTex.image = curAd; adTex.needsUpdate = true; } }
+  // laptop + QR card
+  gLap.visible = t >= T_LAP && t < T_QR; gQR.visible = t >= T_QR && t < T_AD;
+  if (gLap.visible) { gPh.visible = true; gPh.rotation.set(-.07, -.32, 0); gPh.position.set(1.28, PD.PH / 2 - .04, 1.05); P.screenMat.map = heroTex; }
+  if (gLap.visible) { const o = e3o((t - T_LAP - .05) / .6); lid.rotation.x = -(Math.PI / 2) * (1 - o) * .85 - .3 * o + .02; gLap.rotation.y = .1; }
+  phFloorSh.visible = gLap.visible;
+  if (gQR.visible) tent.rotation.y = L(-.42, -.28, sio((t - T_QR) / 1.15));
+});
+
+// lazy screen frames: wait for the right recording frame before each render, keep a small cache
+const cache = new Map();
+const getImg = url => { if (!cache.has(url)) { cache.set(url, new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => { console.error('missing ' + url); res(null); }; im.src = url; }));
+  if (cache.size > 48) cache.delete(cache.keys().next().value); } return cache.get(url); };
+const recUrl = n => `bbm/rec/f${String(n).padStart(4, '0')}.jpg`, adUrl = n => `bbm/rec/ad${String(n).padStart(2, '0')}.jpg`;
+
+X.start(Promise.all([loading, document.fonts.ready, ...['800 104px Baloo', '600 48px Baloo', '400 40px Delius', '800 100px Alex', '900 64px Unb'].map(f => document.fonts.load(f))]).then(() => {
+  // glyph atlas: Arabic and Latin letters in their site's typeface
+  U.atlas.value = X.canvasTex(640, 384, g => { g.fillStyle = '#fff'; g.font = '700 44px Baloo'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    [...'ابتثجحخدذرزسشصضطظعغفقكلمنهويةىءآأإؤئ', ...'matchaBEARbeMATCH25'].slice(0, 60).forEach((c, i) => g.fillText(c, (i % 10) * 64 + 32, Math.floor(i / 10) * 64 + 36)); });
+  buildShapes(); bound = -1;
+  // photo prints: cover-cropped to 3:4, rounded, cream mat and ink edge (like their site's sticker cards)
+  cards.forEach(m => { const im = I[m.userData.k]; m.material.map = X.canvasTex(900, 1200, g => {
+    g.save(); rrp(g, 0, 0, 900, 1200, 60); g.clip(); g.fillStyle = '#4B2A1E'; g.fillRect(0, 0, 900, 1200);
+    rrp(g, 10, 10, 880, 1180, 52); g.clip(); g.fillStyle = '#FFF7DC'; g.fillRect(0, 0, 900, 1200);
+    rrp(g, 30, 30, 840, 1140, 36); g.clip(); g.translate(30, 30); cover(g, im, 840, 1140); g.restore(); }); m.material.map.anisotropy = 8; m.material.needsUpdate = true; });
+  // their café behind the phone, out of focus
+  cafe.material.map = X.canvasTex(1024, 1024, g => { g.filter = 'blur(20px) brightness(.8) saturate(1.1)'; cover(g, I.tray, 1024, 1024, .5, .55); g.filter = 'none';
+    const gr = g.createRadialGradient(512, 470, 120, 512, 512, 760); gr.addColorStop(0, 'rgba(40,22,12,0)'); gr.addColorStop(1, 'rgba(40,22,12,.45)'); g.fillStyle = gr; g.fillRect(0, 0, 1024, 1024); });
+  cafe.material.needsUpdate = true;
+  dskTex.image = I.desktop; dskTex.needsUpdate = true;
+  heroTex.image = I.hero; heroTex.needsUpdate = true;
+  // the QR table card: their butter + cream, their bear, "scan to order" (the code opens @bearbematcha)
+  const cc = canvas(800, 1100), g = cc.getContext('2d');
+  g.fillStyle = '#F5DD91'; g.fillRect(0, 0, 800, 1100); g.fillStyle = '#FFF7DC'; g.strokeStyle = '#4B2A1E'; g.lineWidth = 8; rrp(g, 44, 44, 712, 1012, 56); g.fill(); g.stroke();
+  g.drawImage(I.logo, 400 - 92, 78, 184, 201); g.direction = 'rtl'; g.textAlign = 'center'; g.fillStyle = '#4B2A1E'; g.font = '800 96px Baloo'; g.fillText('امسح واطلب', 400, 372);
+  g.direction = 'ltr'; g.font = '400 40px Delius'; g.fillStyle = '#7A5442'; g.fillText('Scan to order', 400, 428);
+  g.fillStyle = '#fff'; g.strokeStyle = '#4B2A1E'; g.lineWidth = 6; rrp(g, 180, 466, 440, 440, 34); g.fill(); g.stroke(); g.drawImage(I.qr, 200, 486, 400, 400);
+  g.font = '400 36px Delius'; g.fillStyle = '#4B2A1E'; g.fillText('@bearbematcha', 400, 985);
+  cardTex.image = cc; cardTex.needsUpdate = true;
+  cupCard.material.map = X.canvasTex(650, 865, g2 => { g2.save(); rrp(g2, 0, 0, 650, 865, 44); g2.clip(); g2.filter = 'blur(5px)'; cover(g2, I.foam, 650, 865); g2.restore(); });
+  cupCard.material.needsUpdate = true;
+})).then(() => {
+  const r0 = window.renderAt;
+  window.renderAt = async t => {
+    const n = recFrame(t);
+    if (n >= 0) { curRec = await getImg(recUrl(n)); for (let k = 1; k <= 3; k++) { const m = recFrame(t + k / 30); if (m >= 0) getImg(recUrl(m)); } }
+    const a = adFrame(t); if (a > 0) curAd = await getImg(adUrl(a));
+    // no smear across a hard cut; gentler blur on the slow product moves (the engine measures blur 3 units ahead)
+    X.mb = CUTS.some(c => t - 1 / 60 < c && c <= t + 1e-4) ? 0 : (t >= T_S5 ? .25 : .55);
+    return r0(t);
+  };
+});
+</script>
+</body>
+</html>
