@@ -7,8 +7,10 @@
 /* Bear be matcha x "Can I Call You Rose?" (Thee Sacred Souls), the owner's sound pick, 2 Nov.
    A sunlit table shot from above, stop-motion like the owner's @tandanang.cafe reference: their real drink photos land as
    instant prints on the song's hits, stickers and handwriting pop on the off-beats, matcha dust floats through a sunbeam.
-   9.4 s = the part of the sound in the reference (it starts at 0:15 of the song). Hits: pickups 0.33 / 0.67 / 1.03,
-   then every 1.023 s from 1.43 (strong ones 1.43, 3.52, 5.56, 7.60). Their logo, bear and photos shown with permission.
+   Timed to the full song the owner sent (from the same spot the TikTok sound starts, 0:15 of the song): pickups 0.33 / 0.67 / 1.03,
+   strong hits 1.43, 3.52, 5.56, 7.60, 9.64, 11.67, 13.70, 15.70, 17.72, 19.78, 21.80, 23.82, 25.84 (measured).
+   Lyrics (from the owner's lyric video): "can I call you rose" peaks 3.5 / 13.7 / 19.8, "sweet" 6.6, "bloom" ~9.6,
+   "'cause your fragrance takes over the room" 21.5-27. Their logo, bear and photos shown with permission.
    Everything is drawn into one canvas (fast to render, full control of light and shadow). */
 @font-face{font-family:Caveat;src:url(../fonts/caveat-latin-var.woff2) format('woff2');font-weight:400 700}
 @font-face{font-family:Ruqaa;src:url(../fonts/arefruqaa-arabic-400.woff2) format('woff2');font-weight:400}
@@ -30,7 +32,7 @@ canvas#out{display:block}
 // software canvases: the recorder's browser has only an emulated GPU, which is very slow for blur and shadows
 const _gc = HTMLCanvasElement.prototype.getContext;
 HTMLCanvasElement.prototype.getContext = function (type, opts) { return _gc.call(this, type, type === '2d' ? Object.assign({ willReadFrequently: true }, opts) : opts); };
-const DUR = 18.4; window.DUR = DUR;
+const DUR = 27.4; window.DUR = DUR;
 const W = 1080, H = 1920;
 const out = document.getElementById('out'), ctx = out.getContext('2d');
 const C = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v)), L = (a, b, k) => a + (b - a) * k;
@@ -52,10 +54,13 @@ const dieCut = (src, pad, col = '#FFFDF7') => {   // white sticker edge around a
 
 // ------------------------------------------------------------------ the song's hits (seconds), snapped to frames
 const F = t => Math.round(t * 30) / 30;
-const EV = { straw: F(.331), heap: F(.668), bear: F(1.033), A: F(1.434), sA: F(2.142), B: F(2.479), sB: F(2.781), C: F(3.524), D: F(4.58), sD: F(4.888),
-  beam: F(5.555), logo: F(6.56), E: F(7.599), tag: F(8.26),
-  // act 2 (after the 9.4 s in the reference the beat grid carries on: 1.462 + 1.0232 k)
-  M: F(9.648), circ: F(10.671), foamN: F(11.012), Q: F(11.694), heart: F(12.717), out: F(13.740), hw1: F(15.787), hw2: F(16.810), end: F(17.833) };
+const EV = { straw: F(.331), heap: F(.668), bear: F(1.033), A: F(1.434), B: F(2.479), sA: F(2.781),
+  matcha: F(3.524),                       // he sings "rose": the note says "matcha?"
+  C: F(4.58), sB: F(5.555), sw: F(6.56),  // "sweet"
+  D: F(7.599), sD: F(7.94), beam: F(9.64), logo: F(10.65), E: F(11.67), tag: F(12.01),
+  go: F(12.68), M: F(13.70),              // the camera slides down and lands on the second "rose"
+  circ: F(14.72), Q: F(15.70), foamN: F(16.73), heart: F(17.72),
+  out: F(19.78), hw1: F(21.80), hw2: F(23.82), end: F(25.84) };   // pull out on the third "rose"; then "...takes over the room"
 const STEPS = Object.values(EV).sort((a, b) => a - b);
 const on = (e, t) => t >= e - 1e-6;
 
@@ -72,6 +77,7 @@ const SK = [
   { id: 'sA', fill: '#EE9DAA', text: ['٢٥', 'ر.س'], round: 1, pose: [232, 1420, -12, 2] },
   { id: 'sB', fill: '#DCE3EE', text: ['على ذوقك'], pose: [836, 1408, 8, 2] },
   { id: 'sD', fill: '#EE9DAA', text: ['لفترة محدودة'], pose: [582, 876, 7, 2] },
+  { id: 'sw', fill: '#F8D6DC', text: ['sweet'], heart: 1, pose: [800, 842, 6, 2] },
 ];
 const POSE = { note: [344, 640, -3.5, 2.5], straw: [846, 560, -17, 9], heap: [930, 668, 0, 2], bear: [1000, 735, 10, 2], logo: [228, 860, -11, 2],
   menu: [400, 2440, -3, 3], qr: [822, 2566, 6, 3], heart: [990, 2262, -10, 2], hw1: [548, 1752, -2.5, 0], hw2: [560, 1880, -1.5, 0] };
@@ -142,12 +148,14 @@ const build = () => {
   // stickers with their prices and words (their colours, ink border, white die-cut edge)
   SK.forEach(s => {
     const f = '800 46px Baloo', mc = cnv(10, 10).getContext('2d'); mc.font = f; const tw = Math.max(...s.text.map(t => mc.measureText(t).width));
-    const w = s.round ? 156 : tw + 70, h = s.round ? 156 : 84, c = cnv(w + 8, h + 8), g = c.getContext('2d');
+    const w = s.round ? 156 : tw + 70 + (s.heart ? 44 : 0), h = s.round ? 156 : 84, c = cnv(w + 8, h + 8), g = c.getContext('2d');
     g.fillStyle = s.fill; g.strokeStyle = '#4B2A1E'; g.lineWidth = 4.5;
     if (s.round) { g.beginPath(); g.arc(w / 2 + 4, h / 2 + 4, w / 2 - 2, 0, 7); } else rr(g, 4, 4, w, h, h / 2);
     g.fill(); g.stroke();
     g.fillStyle = '#4B2A1E'; g.font = f; g.textAlign = 'center'; g.direction = 'rtl'; g.textBaseline = 'middle';
-    s.text.forEach((t, i) => g.fillText(t, w / 2 + 4, h / 2 + 4 + (i - (s.text.length - 1) / 2) * 50 + 2));
+    s.text.forEach((t, i) => g.fillText(t, w / 2 + 4 - (s.heart ? 20 : 0), h / 2 + 4 + (i - (s.text.length - 1) / 2) * 50 + 2));
+    if (s.heart) { const hx = w / 2 + 4 + tw / 2 - 12, hy = h / 2 + 2; g.fillStyle = '#E2546B'; g.beginPath(); g.moveTo(hx + 14, hy + 15); g.bezierCurveTo(hx - 6, hy + 2, hx - 2, hy - 14, hx + 8, hy - 12); g.bezierCurveTo(hx + 12, hy - 11, hx + 14, hy - 7, hx + 14, hy - 4);
+      g.bezierCurveTo(hx + 14, hy - 7, hx + 16, hy - 11, hx + 20, hy - 12); g.bezierCurveTo(hx + 30, hy - 14, hx + 34, hy + 2, hx + 14, hy + 15); g.fill(); }
     const gl = g.createLinearGradient(0, 0, w, h); gl.addColorStop(.2, 'rgba(255,255,255,.0)'); gl.addColorStop(.35, 'rgba(255,255,255,.18)'); gl.addColorStop(.5, 'rgba(255,255,255,0)');
     g.globalCompositeOperation = 'source-atop'; g.fillStyle = gl; g.fillRect(0, 0, w + 8, h + 8);
     s.c = dieCut(c, 7);
@@ -198,7 +206,7 @@ const LEAVES = []; (() => { const br = [[1040, 40, .9, -2.3], [1160, 480, .7, -2
 const PANES = [[116, 260, 440, 720, -40], [596, 260, 440, 720, -40], [116, 1020, 440, 760, -40], [596, 1020, 440, 760, -40],
   [40, 2060, 430, 540, 2040], [510, 2060, 430, 540, 2040], [40, 2640, 430, 560, 2040], [510, 2640, 430, 560, 2040]];
 const pane = (g, [x, y, pw, ph, y0]) => { const k = .12; g.beginPath(); g.moveTo(x + k * (y - y0), y); g.lineTo(x + pw + k * (y - y0), y); g.lineTo(x + pw + k * (y + ph - y0), y + ph); g.lineTo(x + k * (y + ph - y0), y + ph); g.closePath(); g.fill(); };
-const swellAt = t => { const a = t - EV.beam; return a < 0 ? 0 : C(a / .45) * C((2.1 - a) / 1.1); };
+const swellAt = t => { const a = t - EV.beam, b = t - EV.end; return Math.max(a < 0 ? 0 : C(a / .45) * C((2.1 - a) / 1.1), b < 0 ? 0 : .75 * C(b / .8)); };
 const drawLight = (t, flick) => {
   // shapes go into plain layers first, then each layer is blurred once (a blur per shape would be hundreds of blurs)
   const w = TW / 4, h = TH / 4, sw0 = swellAt(t), toW = c => c.setTransform(.25, 0, 0, .25, -TX / 4, -TY / 4);
@@ -280,10 +288,10 @@ const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2,
 
 // ------------------------------------------------------------------ the camera
 const ease = x => { x = C(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
-const BIG = () => [EV.A, EV.C, EV.beam, EV.E, EV.M, EV.Q, EV.hw1, EV.end];
+const BIG = () => [EV.A, EV.matcha, EV.sB, EV.D, EV.beam, EV.E, EV.M, EV.Q, EV.heart, EV.hw1, EV.end];
 const camAt = t => {
-  let fy = 1150, z = 1 + .045 * C(t / 9.4);
-  const m1 = ease((t - 8.92) / (EV.M - 8.92)); fy = L(fy, 2450, m1); z = L(z, 1, m1);            // slide down the table, arrive on the downbeat
+  let fy = 1150, z = 1 + .05 * C(t / EV.go);
+  const m1 = ease((t - EV.go) / (EV.M - EV.go)); fy = L(fy, 2450, m1); z = L(z, 1, m1);            // slide down the table, arrive on the downbeat
   if (t > EV.M) z = 1 + .03 * C((t - EV.M) / (EV.out - EV.M));
   const m2 = ease((t - EV.out) / (EV.hw1 - EV.out)); fy = L(fy, 1620, m2); z = L(z, .548, m2);   // pull out: the whole table
   if (t > EV.hw1) z = .548 + .022 * C((t - EV.hw1) / (DUR - EV.hw1));
@@ -299,7 +307,7 @@ const drawWorld = (g, t, cm, n) => {
   const ink = (tex, pose, e, d, rtl) => { if (!on(e, t)) return; const k = C((t - e) / d); g.save(); g.translate(pose[0], pose[1]); g.rotate(pose[2] * Math.PI / 180);
     g.beginPath(); rtl ? g.rect(tex.width / 2 - tex.width * k, -tex.height / 2, tex.width * k, tex.height) : g.rect(-tex.width / 2, -tex.height / 2, tex.width * k, tex.height); g.clip(); g.drawImage(tex, -tex.width / 2, -tex.height / 2); g.restore(); };
   ink(T.hw1, POSE.hw1, EV.hw1, .55, 1); ink(T.hw2, POSE.hw2, EV.hw2, .5, 0);
-  drawObj(g, T.note, POSE.note, t, undefined, (gg, w, h) => writeOn(gg, T.matcha, 90, 440, C((t - EV.A) / .26)));
+  drawObj(g, T.note, POSE.note, t, undefined, (gg, w, h) => writeOn(gg, T.matcha, 90, 440, C((t - EV.matcha) / .3)));
   drawObj(g, T.straw, POSE.straw, t, EV.straw); drawObj(g, T.heap, POSE.heap, t, EV.heap); drawObj(g, T.bear, POSE.bear, t, EV.bear);
   const circle = (gg, w, h) => { const k = C((t - EV.circ) / .38); if (k > 0) { gg.save(); gg.strokeStyle = 'rgba(79,122,53,.92)'; gg.lineWidth = 5; gg.lineCap = 'round'; gg.beginPath();
       for (let i = 0; i <= 60; i++) { const a = -2.6 + i / 60 * 6.6 * k, rx = 196 + 6 * Math.sin(a * 2), ry = 36 + 3 * Math.cos(a * 3); const x = 116 + Math.cos(a) * rx, y = 140 + Math.sin(a) * ry; i ? gg.lineTo(x, y) : gg.moveTo(x, y); } gg.stroke(); gg.restore(); }
