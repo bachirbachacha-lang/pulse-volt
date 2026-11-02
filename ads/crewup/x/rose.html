@@ -80,7 +80,8 @@ const SK = [
   { id: 'sw', fill: '#F8D6DC', text: ['sweet'], heart: 1, pose: [800, 842, 6, 2] },
 ];
 const POSE = { note: [344, 640, -3.5, 2.5], straw: [846, 560, -17, 9], heap: [930, 668, 0, 2], bear: [1000, 735, 10, 2], logo: [228, 860, -11, 2],
-  menu: [400, 2440, -3, 3], qr: [822, 2566, 6, 3], heart: [990, 2262, -10, 2], hw1: [548, 1752, -2.5, 0], hw2: [560, 1880, -1.5, 0] };
+  menu: [400, 2440, -3, 3], qr: [822, 2566, 6, 3], heart: [990, 2262, -10, 2], hw1: [548, 1752, -2.5, 0], hw2: [560, 1880, -1.5, 0],
+  logoBig: [540, 1462, -6, 3] };   // the outro: their logo slapped on the middle of the table, "@bearbematcha · Jeddah" just under it
 // the table is longer than the screen: paper and light cover world x -700..1780, y -600..3700
 const TX = -700, TY = -600, TW = 2480, TH = 4300;
 const T = {};   // pre-drawn textures
@@ -121,6 +122,7 @@ const build = () => {
   // their bear and their logo as die-cut stickers
   { const im = I.bear, s = 230 / im.height, c = cnv(im.width * s, 230); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); T.bear = dieCut(c, 9); }
   { const im = I.logo, c = cnv(270, 270 * im.height / im.width); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); T.logo = dieCut(c, 4); }
+  { const im = I.logo, c = cnv(640, 640 * im.height / im.width), g = c.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(im, 0, 0, c.width, c.height); T.logoBig = dieCut(c, 10); }
   // the note card
   { const c = T.note = cnv(560, 300), g = c.getContext('2d');
     g.fillStyle = '#FCFAF3'; rr(g, 0, 0, 560, 300, 5); g.fill(); noise(g, 560, 300, 7);
@@ -289,13 +291,14 @@ const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2,
 // ------------------------------------------------------------------ the camera
 const ease = x => { x = C(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const BIG = () => [EV.A, EV.matcha, EV.sB, EV.D, EV.beam, EV.E, EV.M, EV.Q, EV.heart, EV.hw1, EV.end];
-const camAt = t => {
+const camAt = (t, tb = t) => {
   let fy = 1150, z = 1 + .05 * C(t / EV.go);
   const m1 = ease((t - EV.go) / (EV.M - EV.go)); fy = L(fy, 2450, m1); z = L(z, 1, m1);            // slide down the table, arrive on the downbeat
   if (t > EV.M) z = 1 + .03 * C((t - EV.M) / (EV.out - EV.M));
   const m2 = ease((t - EV.out) / (EV.hw1 - EV.out)); fy = L(fy, 1620, m2); z = L(z, .548, m2);   // pull out: the whole table
   if (t > EV.hw1) z = .548 + .022 * C((t - EV.hw1) / (DUR - EV.hw1));
-  z *= 1 + BIG().reduce((a, b) => a + (t >= b - 1e-6 ? .014 * Math.exp(-(t - b) / .16) : 0), 0);
+  const m3 = ease((t - EV.end) / 1.35); fy = L(fy, 1640, m3); z = L(z, .9, m3);                    // outro: push in on their logo
+  z *= 1 + BIG().reduce((a, b) => a + (tb >= b - 1e-6 ? .014 * Math.exp(-(tb - b) / .16) : 0), 0);
   return { fx: 540, fy, z };
 };
 // ------------------------------------------------------------------ the frame
@@ -317,7 +320,7 @@ const drawWorld = (g, t, cm, n) => {
   const items = [...PR.map(p => ({ ev: EV[p.id], f: () => drawObj(g, p.c, p.pose, t, EV[p.id], p.id === 'E' ? (gg, w, h) => writeOn(gg, p.en_c, w * .2, w * .6, C((t - EV.tag) / .3)) : null, 'deal') })),
     ...SK.map(s => ({ ev: EV[s.id], f: () => drawObj(g, s.c, s.pose, t, EV[s.id]) })), { ev: EV.logo, f: () => drawObj(g, T.logo, POSE.logo, t, EV.logo) },
     { ev: EV.M, f: () => drawObj(g, T.menu, POSE.menu, t, EV.M, circle, 'deal') }, { ev: EV.Q, f: () => drawObj(g, T.qr, POSE.qr, t, EV.Q, null, 'deal') },
-    { ev: EV.heart, f: () => drawObj(g, T.heart, POSE.heart, t, EV.heart) }];
+    { ev: EV.heart, f: () => drawObj(g, T.heart, POSE.heart, t, EV.heart) }, { ev: EV.end + .001, f: () => drawObj(g, T.logoBig, POSE.logoBig, t, EV.end) }];
   items.sort((a, b) => a.ev - b.ev).forEach(i => i.f());
   // window light and leaf shadows over everything on the table
   g.globalCompositeOperation = 'multiply'; g.drawImage(T.light, TX, TY, TW, TH);
@@ -328,11 +331,11 @@ window.renderAt = async t => {
   const g = ctx; g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.filter = 'none';
   const n = STEPS.filter(e => on(e, t)).length;   // stop-motion: the whole table nudges a hair between shots
   drawLight(t, Math.round((hash(n * 2.3) - .5) * 4));
-  const cm = camAt(t), cp = camAt(t - 1 / 60), speed = Math.abs(cp.fy - cm.fy) * cm.z + Math.abs(cp.z - cm.z) * 1200;
+  const cm = camAt(t), cp = camAt(t - 1 / 60, t), speed = Math.abs(cp.fy - cm.fy) * cm.z + Math.abs(cp.z - cm.z) * 1200;
   if (speed < 6) drawWorld(g, t, cm, n);
   else {   // camera moving fast: average a few moments inside the frame (motion blur, half-frame shutter)
     const a = T.acc.getContext('2d'), S = 5;
-    for (let k = 0; k < S; k++) { const tk = t - k / (S - 1) / 60; drawWorld(a, tk, camAt(tk), n); g.globalAlpha = 1 / (k + 1); g.drawImage(T.acc, 0, 0); }
+    for (let k = 0; k < S; k++) { const tk = t - k / (S - 1) / 60; drawWorld(a, tk, camAt(tk, t), n); g.globalAlpha = 1 / (k + 1); g.drawImage(T.acc, 0, 0); }
     g.globalAlpha = 1;
   }
   // a small cloud dims the table just before the big hit, then the sun comes back warm on it
@@ -372,7 +375,7 @@ const boot = () => Promise.all([load('bear', PH + 'bear.png'), load('logo', PH +
   .then(async () => { build();
     // static pictures become ImageBitmaps: drawing a big canvas copies it on every draw, a bitmap does not
     const bm = async c => c && c.getContext ? await createImageBitmap(c) : c;
-    for (const k of ['paper', 'straw', 'heap', 'bear', 'logo', 'note', 'matcha', 'menu', 'qr', 'heart', 'hw1', 'hw2']) T[k] = await bm(T[k]);
+    for (const k of ['paper', 'straw', 'heap', 'bear', 'logo', 'logoBig', 'note', 'matcha', 'menu', 'qr', 'heart', 'hw1', 'hw2']) T[k] = await bm(T[k]);
     for (const p of PR) { p.c = await bm(p.c); p.en_c = await bm(p.en_c); } for (const s of SK) s.c = await bm(s.c);
     for (let i = 0; i < T.grain.length; i++) T.grain[i] = await bm(T.grain[i]);
     await window.renderAt(0); window.ready = true;
