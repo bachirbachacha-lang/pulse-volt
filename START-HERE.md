@@ -27,6 +27,7 @@ This chat is only for Pixel & Co., my web design business. Before anything else,
 | Ops Board (lead tracker) | `pixel-co/ops/` |
 | Stories, highlight covers, profile pics | `pixel-co/stories/` |
 | Video recorder scripts | `pixel-co/tools/recorders/` |
+| PC setup list (Windows) | `docs/PC-SETUP.md` |
 | Ads, reels, other brands | `ads/`, other folders |
 
 ## Good to know
