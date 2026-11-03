@@ -1,0 +1,16 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const D='/tmp/claude-0/-home-user-pulse-volt/41464516-fe55-5f32-8de9-30d09a0a93a2/scratchpad/';
+const b=await chromium.launch();const p=await b.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file:///home/user/pulse-volt/pixel-co/samples/sukkar/index.html');
+await p.evaluate(()=>{document.documentElement.style.scrollBehavior='auto';document.querySelectorAll('img').forEach(i=>i.loading='eager')});await p.waitForTimeout(1500);
+await p.screenshot({path:D+'sk-1.png'});
+await p.evaluate(()=>scrollTo(0,document.getElementById('menu').offsetTop-60));await p.waitForTimeout(300);await p.screenshot({path:D+'sk-2.png'});
+await p.evaluate(()=>scrollTo(0,document.getElementById('build').offsetTop-60));await p.waitForTimeout(300);await p.screenshot({path:D+'sk-3.png'});
+await p.click('[data-v=t2]');await p.click('[data-v=choc]');await p.click('[data-v=drip]');await p.click('[data-v=berries]');await p.click('[data-v=roses]');await p.fill('#msg','Happy Birthday Sara');await p.waitForTimeout(600);
+await p.evaluate(()=>document.querySelector('.stage').scrollIntoView());await p.waitForTimeout(300);await p.screenshot({path:D+'sk-4.png'});
+await p.click('.dates button:nth-child(4)');await p.click('#addCake');await p.waitForTimeout(900);await p.screenshot({path:D+'sk-5.png'});
+await p.click('#closeBag');await p.click('#lang');await p.evaluate(()=>scrollTo(0,0));await p.waitForTimeout(400);await p.screenshot({path:D+'sk-6.png'});
+console.log(errs,await p.evaluate(()=>document.documentElement.scrollWidth));
+await p.setViewportSize({width:1440,height:900});await p.evaluate(()=>scrollTo(0,document.getElementById('build').offsetTop-70));await p.waitForTimeout(400);await p.screenshot({path:D+'sk-d.png'});
+await b.close();

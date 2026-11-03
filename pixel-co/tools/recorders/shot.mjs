@@ -1,0 +1,16 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const [src,out]=process.argv.slice(2);
+const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium-1194/chrome-linux/chrome'});
+const p=await b.newPage({viewport:{width:390,height:844},deviceScaleFactor:3});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>m.type()==='error'&&errs.push(m.text()));
+await p.goto('file://'+src);await p.waitForTimeout(1500);
+await p.screenshot({path:out+'/ar-1-home.png'});
+await p.locator('#menu').scrollIntoViewIfNeeded();await p.evaluate(()=>scrollTo(0,document.querySelector('#menu').offsetTop-10));await p.waitForTimeout(300);
+await p.screenshot({path:out+'/ar-2-menu.png'});
+await p.evaluate(()=>{document.querySelector('#name').value='نورة';document.querySelector('#name').dispatchEvent(new Event('input'));scrollTo(0,document.querySelector('#order').offsetTop-10)});await p.waitForTimeout(300);
+await p.screenshot({path:out+'/ar-3-order.png'});
+await p.click('#lang');await p.evaluate(()=>scrollTo(0,0));await p.waitForTimeout(300);
+await p.screenshot({path:out+'/en-1-home.png'});
+await p.click('#lang');
+console.log('errors:',errs, 'overflow:', await p.evaluate(()=>document.documentElement.scrollWidth));
+await b.close();

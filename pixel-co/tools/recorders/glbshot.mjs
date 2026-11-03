@@ -1,0 +1,3 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium-1194/chrome-linux/chrome',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--allow-file-access-from-files']});
+const p=await b.newPage({viewport:{width:1200,height:600}});await p.goto('file:///tmp/claude-0/-home-user-pulse-volt/41464516-fe55-5f32-8de9-30d09a0a93a2/scratchpad/glbtest.html');await p.waitForTimeout(3000);console.log(await p.title());await p.screenshot({path:'/tmp/claude-0/-home-user-pulse-volt/41464516-fe55-5f32-8de9-30d09a0a93a2/scratchpad/glb.png'});await b.close();

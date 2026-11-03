@@ -1,0 +1,14 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const D='/tmp/claude-0/-home-user-pulse-volt/41464516-fe55-5f32-8de9-30d09a0a93a2/scratchpad/';
+const b=await chromium.launch();const p=await b.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,hasTouch:false});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file:///home/user/pulse-volt/pixel-co/samples/samra/index.html');
+await p.evaluate(()=>{document.documentElement.style.scrollBehavior='auto';document.querySelectorAll('img').forEach(i=>i.loading='eager')});await p.waitForTimeout(1500);
+await p.screenshot({path:D+'s2-1.png'});
+await p.evaluate(()=>scrollTo(0,300));await p.waitForTimeout(300);await p.screenshot({path:D+'s2-2.png'});
+const r=await p.evaluate(()=>{const e=document.getElementById('mag');e.scrollIntoView({block:'center'});const b=e.getBoundingClientRect();return{x:b.left+b.width*.55,y:b.top+b.height*.4}});
+await p.waitForTimeout(300);await p.mouse.move(r.x,r.y);await p.mouse.down();await p.mouse.move(r.x+5,r.y+5);await p.waitForTimeout(300);await p.screenshot({path:D+'s2-3.png'});await p.mouse.up();
+await p.evaluate(()=>document.getElementById('size').scrollIntoView());await p.waitForTimeout(300);await p.screenshot({path:D+'s2-4.png'});
+await p.click('#shopSize');await p.waitForTimeout(500);await p.click('[data-open=olive]');await p.waitForTimeout(500);await p.screenshot({path:D+'s2-5.png'});
+await p.click('[data-close]');await p.evaluate(()=>document.getElementById('look').scrollIntoView({block:'center'}));await p.waitForTimeout(400);await p.screenshot({path:D+'s2-6.png'});
+console.log(errs,await p.evaluate(()=>document.documentElement.scrollWidth));await b.close();

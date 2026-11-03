@@ -1,0 +1,18 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const D='/tmp/claude-0/-home-user-pulse-volt/41464516-fe55-5f32-8de9-30d09a0a93a2/scratchpad/';
+const b=await chromium.launch();
+const p=await b.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file:///home/user/pulse-volt/pixel-co/samples/bearbematcha/index.html');
+await p.waitForTimeout(800);
+await p.screenshot({path:D+'b3-1.png'});
+await p.evaluate(()=>document.getElementById('menu').scrollIntoView());await p.waitForTimeout(400);
+await p.screenshot({path:D+'b3-2.png'});
+await p.click('[data-open=bday]');await p.click('[data-v=party]');await p.click('[data-v=dose]');await p.waitForTimeout(1200);
+await p.screenshot({path:D+'b3-3.png'});
+await p.click('#addBtn');await p.evaluate(()=>document.getElementById('checkout').scrollIntoView());await p.waitForTimeout(500);
+await p.screenshot({path:D+'b3-4.png'});
+await p.click('#lang');await p.evaluate(()=>scrollTo(0,0));await p.waitForTimeout(400);
+await p.screenshot({path:D+'b3-5.png'});
+const w=await p.evaluate(()=>document.documentElement.scrollWidth);
+console.log('errs',errs,'sw',w);await b.close();
