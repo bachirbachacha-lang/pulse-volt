@@ -1,0 +1,122 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Bear be matcha ad layers</title>
+<!-- 2D layers for the Bear be matcha 3D ad, 1080x1920. ?layer=bg (opaque: colours, wipes, splashes) or ?layer=fg (transparent: text, logo, flashes).
+     setTime(t) is deterministic. Beat grid of "ski slopes": beat0 0.30 s, period 0.9513 s, drop 4.11 s. Concept ad by Pixel & Co. -->
+<style>
+@font-face{font-family:Baloo;src:url(../crewup/fonts/baloobhaijaan2-arabic-var.woff2) format("woff2");font-weight:400 800;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Baloo;src:url(../crewup/fonts/baloobhaijaan2-latin-var.woff2) format("woff2");font-weight:400 800}
+@font-face{font-family:Delius;src:url(../crewup/fonts/delius-latin-400.woff2) format("woff2")}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+#L{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Baloo,sans-serif;color:#4B2A1E}
+.a{position:absolute}
+.ar{direction:rtl;font-family:Baloo}
+.hand{font-family:Delius,cursive}
+.pill{display:inline-flex;align-items:baseline;gap:14px;padding:14px 30px;border-radius:999px;background:#4B2A1E;color:#FFF7DC}
+.card-sh{filter:drop-shadow(0 10px 24px rgba(75,42,30,.25))}
+</style>
+<div id="L"></div>
+<script>
+const Q=new URLSearchParams(location.search),LAYER=Q.get('layer')||'fg';
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>clamp((t-a)/(b-a));
+const out=x=>1-Math.pow(1-clamp(x),3),io=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=clamp(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const B=n=>.30+n*.9513,DROP=4.11;
+const SH=[{k:'S1',from:0,to:4.11,bg:'#FFF7DC'},{k:'S2',from:4.11,to:8.87,bg:'#7FA65A'},{k:'S3',from:8.87,to:10.77,bg:'#4F7A35'},
+          {k:'S4',from:10.77,to:14.58,bg:'#EE9DAA'},{k:'S5',from:14.58,to:18.39,bg:'#F5DD91'},{k:'S6',from:18.39,to:24.9,bg:'#DCE3EE'}];
+const L=document.getElementById('L');
+const LOGO='../../pixel-co/samples/bearbematcha-v4/img/logo.webp';
+function splashSVG(col,id){ // stylised milk splash ribbon
+  return `<svg id="${id}" class="a" viewBox="0 0 1000 1000" style="left:40px;top:560px;width:1000px;height:1000px;overflow:visible">
+   <path fill="${col}" d="M120 640c80-160 260-240 420-200 120 30 200 120 330 90 40-10 70-30 90-60-10 90-80 160-180 180-150 30-230-70-360-60-120 10-200 120-300 50z"/>
+   <path fill="${col}" d="M80 700c60 40 150 40 220 10-40 70-150 90-220 40z" opacity=".9"/>
+   ${[[150,520,20],[260,470,14],[780,430,18],[880,520,12],[610,560,10],[90,600,9]].map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}" fill="${col}"/>`).join('')}
+  </svg>`;}
+if(LAYER==='bg'){
+  L.innerHTML=`<div class="a" id="base" style="inset:0"></div><div class="a" id="wipe" style="left:540px;top:980px;width:10px;height:10px;border-radius:50%"></div>
+  <div class="a" id="glow" style="inset:0;background:radial-gradient(48% 30% at 50% 52%,rgba(255,255,255,.42),rgba(255,255,255,0) 70%)"></div>
+  <div class="a" id="dots" style="inset:0"></div>
+  ${splashSVG('#FFF7DC','sp1')}${splashSVG('#FFFFFF','sp2')}${splashSVG('#F7E7A6','sp3')}
+  <div class="a" id="streak" style="left:-200px;right:-200px;top:900px;height:16px;border-radius:9px;background:linear-gradient(90deg,transparent,#fff,transparent);opacity:0;filter:blur(3px)"></div>`;
+  const dots=document.getElementById('dots');let h='';const R=(i)=>((Math.sin(i*91.7)*43758.5453)%1+1)%1;
+  for(let i=0;i<46;i++){h+=`<i class="a" data-i="${i}" style="left:${R(i)*1080}px;top:${R(i+50)*1920}px;width:${10+R(i+9)*26}px;height:${10+R(i+9)*26}px;border-radius:${i%3?'50%':'6px'};background:${['#FFF7DC','#F8D6DC','#F5DD91','#DCE3EE'][i%4]};opacity:0"></i>`;}
+  dots.innerHTML=h;
+}else{
+  L.innerHTML=`
+  <div class="a" id="tag" style="left:60px;top:150px;display:flex;gap:10px;align-items:center;font:600 22px/1 Baloo;color:#4B2A1E;opacity:.8"><span style="width:12px;height:12px;border-radius:50%;background:#EE9DAA"></span><span class="ar">إعلان تجريبي</span><span>Concept ad</span></div>
+  <div class="a" id="t1" style="left:0;right:0;top:760px;text-align:center"><div class="ar" id="t1a" style="font:800 120px/1.1 Baloo"></div><div class="hand" id="t1e" style="font:400 56px/1.3 Delius;margin-top:10px"></div></div>
+  <div class="a" id="ring" style="left:540px;top:930px;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;border:26px solid #7FA65A;opacity:0"></div>
+  <img class="a card-sh" id="logo" src="${LOGO}" style="left:340px;top:700px;width:400px;opacity:0">
+  <div class="a" id="title" style="left:0;right:0;top:250px;text-align:center">
+    <div class="ar" id="eyebrow" style="font:700 34px/1 Baloo;color:#FFF7DC;opacity:.9"></div>
+    <div class="ar" id="tA" style="font:800 104px/1.05 Baloo;color:#FFF7DC;margin-top:18px"></div>
+    <div class="hand" id="tE" style="font:400 50px/1.2 Delius;color:#FFF7DC;margin-top:8px"></div>
+  </div>
+  <div class="a" id="price" style="left:0;right:0;top:1530px;text-align:center"><span class="pill"><span style="font:800 58px/1 Baloo" id="pN"></span><span style="font:700 30px/1 Baloo">SAR</span><span class="ar" style="font:700 30px/1 Baloo">ر.س</span></span></div>
+  <div class="a" id="macro" style="left:70px;right:70px;top:1500px"><div class="ar" style="font:800 96px/1.1 Baloo;color:#FFF7DC;text-align:right">ماتشا فاخرة</div><div class="hand" style="font:400 48px/1.2 Delius;color:#FFF7DC;text-align:right">Premium matcha</div></div>
+  <div class="a" id="end" style="left:0;right:0;top:230px;text-align:center">
+    <div class="ar" id="e1" style="font:800 92px/1.1 Baloo">اطلب من الموقع</div><div class="hand" id="e1e" style="font:400 46px/1.2 Delius;margin-top:6px">Order from our site</div>
+  </div>
+  <div class="a" id="end2" style="left:0;right:0;top:1480px;text-align:center">
+    <div class="ar" id="e2" style="font:800 80px/1.15 Baloo">الدب ينتظر طلبك</div>
+    <div class="hand" id="e2e" style="font:400 42px/1.2 Delius;margin-top:6px">The bear is waiting for your order</div>
+    <div id="e3" style="margin-top:30px;display:inline-flex;gap:18px;align-items:center"><img src="${LOGO}" style="width:120px"><div style="text-align:left"><div style="font:800 44px/1.1 Baloo">@bearbematcha</div><div class="ar" style="font:700 32px/1.2 Baloo;text-align:left">جدة <span style="font-family:Delius">· Jeddah</span></div></div></div>
+  </div>
+  <div class="a" id="credit" style="left:0;right:0;top:1820px;text-align:center;font:600 22px/1 Baloo;opacity:.7">Concept ad by Pixel &amp; Co. · @pixelandco.design</div>
+  <div class="a" id="flash" style="inset:0;background:#fff;opacity:0"></div>`;
+}
+const $=id=>document.getElementById(id);
+function type(el,str,k){const n=Math.round(str.length*clamp(k));el.textContent=str.slice(0,n);}
+function pop(el,k,dy=40){if(!el)return;el.style.opacity=clamp(k);el.style.transform=`translateY(${(1-out(k))*dy}px) scale(${.9+.1*back(k)})`;}
+const TITLES={S2:['من المنيو','كلاسيك فانيلا ماتشا','Classic Vanilla Matcha','23'],S4:['جديد بالمنيو؟ لا، بس يستاهل','بيرثداي كيك ماتشا','Birthdaee Cake Matcha','25'],S5:['','بنانا جليز ماتشا','Banana Glaze Matcha','26']};
+TITLES.S4[0]='احتفل معنا';
+window.setTime=function(t){
+  const S=SH.find(s=>t>=s.from&&t<s.to)||SH[SH.length-1];
+  if(LAYER==='bg'){
+    const i=SH.indexOf(S),prev=SH[Math.max(0,i-1)];
+    const k=seg(t,S.from,S.from+.42);
+    $('base').style.background=i===0||k>=1?S.bg:prev.bg;
+    const w=$('wipe');w.style.background=S.bg;const r=out(k)*2400;w.style.width=w.style.height=r+'px';w.style.marginLeft=w.style.marginTop=(-r/2)+'px';w.style.display=i>0&&k<1?'block':'none';
+    $('glow').style.opacity=S.k==='S1'?0:.9;
+    // splashes swoosh on each product reveal
+    const spl=[['sp1',4.11,'S2'],['sp2',10.77,'S4'],['sp3',14.58,'S5']];
+    spl.forEach(([id,t0])=>{const e=$(id);const kk=seg(t,t0+.05,t0+.55),ko=seg(t,t0+2.6,t0+3.4);e.style.opacity=out(kk)*(1-ko);
+      e.style.transform=`translate(${(1-out(kk))*-500+ko*300}px,${(1-out(kk))*120}px) rotate(${(1-out(kk))*-25+t*3}deg) scale(${.6+.4*out(kk)})`;e.style.transformOrigin='50% 60%';});
+    // floating dots (bokeh) after the drop
+    document.querySelectorAll('#dots i').forEach(d=>{const i=+d.dataset.i;d.style.opacity=t<DROP?0:.35+.25*Math.sin(i+t);d.style.transform=`translateY(${-((t*40*(1+i%5))%400)}px)`;});
+    // light streak on cuts
+    let sk=0;for(const c of [4.11,10.77,14.58,18.39]){const q=seg(t,c-.08,c+.3);if(q>0&&q<1)sk=Math.sin(Math.PI*q);}
+    $('streak').style.opacity=sk;$('streak').style.transform=`scaleX(${.3+sk})`;
+    return;
+  }
+  // ----- FG -----
+  $('tag').style.opacity=(.8*out(seg(t,.2,.8)))*(1-seg(t,24.3,24.8));
+  // S1: typewriter + ring zoom logo reveal
+  const s1=t<DROP;$('t1').style.display=s1?'block':'none';
+  type($('t1a'),'صُنعت بحب',seg(t,B(0),B(0)+.6));type($('t1e'),'Made with love.',seg(t,B(1),B(1)+.6));
+  const t1o=seg(t,B(2)-.15,B(2)+.1);$('t1').style.opacity=1-t1o;$('t1').style.transform=`translateY(${-t1o*60}px)`;
+  const rk=seg(t,B(2)-.05,B(2)+.45);const rg=$('ring');const rs=out(rk)*900;rg.style.width=rg.style.height=rs+'px';rg.style.marginLeft=rg.style.marginTop=(-rs/2)+'px';rg.style.opacity=t<DROP?(rk>0?1-rk*.85:0):0;rg.style.borderWidth=(26*(1-rk)+4)+'px';
+  const lk=seg(t,B(2)+.15,B(2)+.6);const lg=$('logo');lg.style.opacity=t<DROP-.05?clamp(lk):0;lg.style.transform=`scale(${.6+.4*back(lk)}) rotate(${(1-out(lk))*-8}deg)`;
+  // drop flash
+  $('flash').style.opacity=t>=DROP-.02?Math.exp(-(t-DROP)*7)*.85:0;
+  // product titles
+  const T=TITLES[S.k];const ti=$('title');
+  if(T){const k=seg(t,S.from+.25,S.from+.6),ko=seg(t,S.to-.25,S.to-.02);
+    $('eyebrow').textContent=T[0];$('tA').textContent=T[1];$('tE').textContent=T[2];
+    ti.style.opacity=clamp(k)*(1-ko);ti.style.transform=`translateY(${(1-out(k))*-50}px)`;
+    $('tA').style.transform=`scale(${.92+.08*back(k)})`;
+    const pk=seg(t,S.from+.95,S.from+1.25);$('pN').textContent=T[3];pop($('price'),pk*(1-ko),50);
+    // text colour: dark on light backgrounds
+    const dark=S.k==='S5';[...ti.querySelectorAll('div')].forEach(d=>d.style.color=dark?'#4B2A1E':'#FFF7DC');
+  }else{ti.style.opacity=0;$('price').style.opacity=0;}
+  const mk=S.k==='S3'?seg(t,9.0,9.4)*(1-seg(t,10.5,10.75)):0;pop($('macro'),mk,40);
+  // end
+  const ek=seg(t,B(20)-.05,B(20)+.3);pop($('end'),S.k==='S6'?ek:0,-30);
+  pop($('end2'),S.k==='S6'?seg(t,B(22)-.05,B(22)+.3):0,40);
+  $('e3').style.opacity=seg(t,B(23)-.05,B(23)+.25);
+  $('credit').style.opacity=S.k==='S6'?.7*seg(t,B(23),B(23)+.4):0;
+  const fo=seg(t,24.4,24.88);$('end').style.opacity=parseFloat($('end').style.opacity||0)*(1-fo);$('end2').style.opacity=parseFloat($('end2').style.opacity||0)*(1-fo);
+};
+Promise.all([document.fonts.ready,...[...document.images].map(i=>i.decode().catch(()=>0))]).then(()=>{setTime(+(Q.get('t')||5));window.READY=true;});
+</script>

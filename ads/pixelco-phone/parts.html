@@ -36,6 +36,19 @@ body{background:transparent;font-family:Alex,Out,sans-serif;-webkit-font-smoothi
   <div class="card" id="c_book" style="padding:18px 24px;border-radius:20px;background:#29E0FF;color:#05222b;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4)"><span class="ar" style="font:800 21px/1 Alex">احجز غسيل</span><span style="font:600 15px Out;opacity:.7">Book a wash</span></div>
 </div>
 
+<div id="cards2">
+  <div class="card" id="c_bbm_foam" style="width:210px;background:#FFF7DC;border-radius:26px;padding:12px;box-shadow:0 10px 30px rgba(75,42,30,.25)">
+    <div style="height:210px;border-radius:18px;background:url(../../pixel-co/samples/bearbematcha-v4/img/foam.webp) center/cover"></div>
+    <div class="ar" style="font:700 18px/1.3 Alex;color:#4B2A1E;margin-top:10px">سي سولت فانيلا ماتشا</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font:700 17px Out;color:#4B2A1E">24 SAR</span><span style="width:34px;height:34px;border-radius:11px;background:#4B2A1E;color:#FFF7DC;display:grid;place-items:center;font:700 22px/1 Out">+</span></div>
+  </div>
+  <div class="card" id="c_bbm_bday" style="width:210px;background:#FFF7DC;border-radius:26px;padding:12px;box-shadow:0 10px 30px rgba(75,42,30,.25)">
+    <div style="height:210px;border-radius:18px;background:url(../../pixel-co/samples/bearbematcha-v4/img/birthday.webp) center/cover"></div>
+    <div class="ar" style="font:700 18px/1.3 Alex;color:#4B2A1E;margin-top:10px">بيرثداي كيك ماتشا</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font:700 17px Out;color:#4B2A1E">25 SAR</span><span style="width:34px;height:34px;border-radius:11px;background:#4B2A1E;color:#FFF7DC;display:grid;place-items:center;font:700 22px/1 Out">+</span></div>
+  </div>
+  <div class="card" id="c_bbm_order" style="padding:18px 26px;border-radius:999px;background:#4B2A1E;color:#FFF7DC;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px rgba(75,42,30,.3)"><span class="ar" style="font:700 22px/1 Alex">اطلب عبر واتساب</span><span style="font:600 16px Out;opacity:.8">Order</span></div>
+</div>
 <div id="end">
   <div style="position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 42%,#2a2170,transparent 70%),radial-gradient(60% 30% at 80% 90%,rgba(255,90,54,.25),transparent 70%)"></div>
   <div id="grid" style="position:absolute;inset:0;background-image:linear-gradient(rgba(124,108,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(124,108,255,.12) 1px,transparent 1px);background-size:26px 26px"></div>
@@ -51,7 +64,7 @@ document.getElementById('c_size').innerHTML='50 52 54 56'.split(' ').map((s,i)=>
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>clamp((t-a)/(b-a)),out=x=>1-Math.pow(1-clamp(x),3);
 const back=x=>{x=clamp(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
 if(Q.get('end')){
-  document.getElementById('cards').style.display='none';const E=document.getElementById('end');E.style.display='block';
+  document.getElementById('cards').style.display='none';document.getElementById('cards2').style.display='none';const E=document.getElementById('end');E.style.display='block';
   const cols=['#7C6CFF','#B3A8FF','#FF5A36','#3CF2C0','#7C6CFF','#B3A8FF','#FF5A36','#3CF2C0','#7C6CFF'];
   const px=document.getElementById('px');px.innerHTML=cols.map(c=>`<i style="display:block;border-radius:7px;background:${c}"></i>`).join('');
   const cells=[...px.children];

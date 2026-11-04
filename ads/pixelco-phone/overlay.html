@@ -63,9 +63,9 @@ const B0=.30,BP=.9513,beat=n=>B0+n*BP,DROP=4.11;
 const $=id=>document.getElementById(id);
 const hw=[...document.querySelectorAll('#hook .w')];
 const SEGS=[
- {from:4.11,to:10.77,n:'01',a:'مقهى',e:'Café',words:[[5.06,'منيو','Menu'],[6.96,'اطلب مسبقًا','Order ahead'],[8.87,'على الواتساب','Straight to WhatsApp']]},
- {from:10.77,to:14.58,n:'02',a:'عبايات',e:'Abayas',words:[[11.72,'مجموعات','Collections'],[12.68,'مقاسات','Sizes'],[13.63,'حجز قياس','Fittings']]},
- {from:14.58,to:18.39,n:'03',a:'عناية بالسيارات',e:'Car care',words:[[15.53,'باقات','Packages'],[16.48,'مواعيد','Booking'],[17.44,'أسعار واضحة','Clear prices']]}
+ {from:4.11,to:10.77,n:'01',a:'مقهى ماتشا',e:'Bear be matcha',words:[[5.06,'منيو','Menu'],[6.01,'سوّ كوبك','Build your cup'],[6.96,'وقت الاستلام','Pickup time'],[7.92,'على الواتساب','Straight to WhatsApp'],[8.87,'بإذن صاحب المحل','Shown with their permission']]},
+ {from:10.77,to:14.58,n:'02',a:'عبايات',e:'Abayas',words:[[11.25,'مجموعات','Collections'],[12.2,'مقاسات','Sizes'],[13.15,'حجز قياس','Fittings'],[14.1,'تصميم تجريبي','Design sample']]},
+ {from:14.58,to:18.39,n:'03',a:'عناية بالسيارات',e:'Car care',words:[[15.06,'باقات','Packages'],[16.0,'مواعيد','Booking'],[16.96,'أسعار واضحة','Clear prices'],[17.91,'حجز بضغطة','One-tap booking']]}
 ];
 function pop(el,k,dy=40){el.style.opacity=clamp(k);el.style.transform=`translateY(${(1-out(k))*dy}px) scale(${.92+.08*back(k)})`;}
 window.setTime=function(t){
