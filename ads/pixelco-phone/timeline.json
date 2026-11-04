@@ -1,0 +1,6 @@
+{"fps":30,"duration":24.9,"drop":4.11,"beat":0.9513,"beat0":0.3,
+ "segments":[{"site":"off","from":0,"to":4.11},
+  {"site":"cafe","from":4.11,"to":10.77,"t0":0.0,"speed":0.976},
+  {"site":"abaya","from":10.77,"to":14.58,"t0":0.35,"speed":1.6},
+  {"site":"detail","from":14.58,"to":18.39,"t0":0.35,"speed":1.6},
+  {"site":"end","from":18.39,"to":24.9,"t0":0.0,"speed":1.0}]}

@@ -1,0 +1,791 @@
+<title>Dream Builders</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: full-screen 3D job site; stats card top-left, menu buttons top-right, job HUD docked bottom; panels slide up as sheets. One bright daytime look by choice (it is a game world). */
+:root{
+  --sky:#8fd3ff;
+  --ink:#1d2433;
+  --paper:#ffffff;
+  --muted:#5b6578;
+  --hat:#ffb320;
+  --hat-dark:#d98a00;
+  --cash:#18a957;
+  --blue:#2f7bff;
+  --line:rgba(29,36,51,.12);
+  --shade:rgba(10,18,40,.55);
+  --f-display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--sky);color:var(--ink);font:700 15px/1.4 var(--f-body);overflow:hidden;user-select:none;-webkit-user-select:none;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+.top{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none;z-index:5}
+.top > *{pointer-events:auto}
+.stats{background:var(--paper);border-radius:16px;padding:10px 14px 12px;box-shadow:0 4px 0 rgba(0,0,0,.12);min-width:210px}
+.cash{font:400 30px/1 var(--f-display);color:var(--cash);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
+.cash .coin{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3a6,#ffcc1f 55%,#d69a00);box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+.rank{margin-top:6px;display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
+.rank b{color:var(--ink);font-weight:900}
+.xp{margin-top:6px;height:8px;border-radius:99px;background:#e9edf3;overflow:hidden}
+.xp i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--hat),#ffd25e);border-radius:99px;transition:width .4s ease}
+.menu{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.mbtn{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 16px;border:0;border-radius:14px;background:var(--paper);box-shadow:0 4px 0 rgba(0,0,0,.14);font:400 18px/1 var(--f-display);letter-spacing:.02em;transition:transform .12s ease}
+.mbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.14)}
+.mbtn.primary{background:var(--hat);box-shadow:0 4px 0 var(--hat-dark)}
+.mbtn svg{width:20px;height:20px;flex:none}
+
+/* job hud */
+.hud{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 24px));z-index:5;display:grid;gap:10px}
+.jobcard{background:var(--paper);border-radius:18px;padding:12px 14px;box-shadow:0 5px 0 rgba(0,0,0,.14);display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.ava{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font:400 20px/1 var(--f-display);color:#fff}
+.jobcard h3{margin:0;font:400 18px/1.1 var(--f-display);letter-spacing:.01em}
+.jobcard p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.prog{margin-top:8px;height:12px;border-radius:99px;background:#e9edf3;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#33c46c,var(--cash));border-radius:99px;transition:width .2s ease}
+.pay{text-align:right;font:400 22px/1 var(--f-display);color:var(--cash);font-variant-numeric:tabular-nums}
+.pay small{display:block;margin-top:4px;font:800 12px/1.2 var(--f-body);color:var(--muted)}
+.pay small.hot{color:#e2552b}
+.palette{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.swatch{width:46px;height:46px;border-radius:12px;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.swatch.on{outline:4px solid var(--ink);outline-offset:1px}
+.swatch.want::after{content:"";display:block;width:100%;height:100%;border-radius:8px;background:radial-gradient(circle,rgba(255,255,255,.9) 18%,transparent 20%)}
+.idle{background:rgba(255,255,255,.92);border-radius:18px;padding:14px 16px;box-shadow:0 5px 0 rgba(0,0,0,.14);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.idle p{margin:0;max-width:34ch}
+
+/* sheets */
+.sheet-wrap{position:fixed;inset:0;z-index:20;background:var(--shade);display:flex;align-items:flex-end;justify-content:center;padding:12px max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.sheet{width:min(640px,100%);max-height:min(82vh,760px);overflow:auto;background:var(--paper);border-radius:22px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:up .22s ease}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+.sheet header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.sheet h2{margin:0;font:400 28px/1 var(--f-display);letter-spacing:.01em}
+.x{width:44px;height:44px;border:0;border-radius:12px;background:#eef1f6;font:900 20px/1 var(--f-body)}
+.list{display:grid;gap:10px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px;border-radius:16px;background:#f5f7fb;border:2px solid transparent}
+.row .meta{min-width:0}
+.row h4{margin:0;font:400 19px/1.1 var(--f-display);letter-spacing:.01em}
+.row p{margin:3px 0 0;font-size:13px;color:var(--muted)}
+.tag{display:inline-block;margin-right:6px;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.t-build{background:#2f7bff}.t-fix{background:#e2552b}.t-paint{background:#a24bff}
+.go{min-width:96px;min-height:48px;border:0;border-radius:14px;background:var(--cash);color:#fff;box-shadow:0 4px 0 #0d7b3e;font:400 18px/1 var(--f-display)}
+.go:disabled{background:#c5ccd8;box-shadow:0 4px 0 #a9b1bf;cursor:not-allowed}
+.go.buy{background:var(--hat);color:var(--ink);box-shadow:0 4px 0 var(--hat-dark)}
+.lock{font-size:12px;color:var(--muted);text-align:right}
+.ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:#fff;box-shadow:inset 0 0 0 2px var(--line)}
+.ico svg{width:26px;height:26px}
+.lvl{display:flex;gap:4px;margin-top:6px}
+.lvl i{width:16px;height:6px;border-radius:3px;background:#dfe4ec}
+.lvl i.on{background:var(--hat)}
+.note{margin:12px 2px 0;font-size:13px;color:var(--muted)}
+.ghostbtn{min-height:44px;padding:0 14px;border:2px solid var(--line);border-radius:12px;background:#fff;font:800 14px/1 var(--f-body)}
+
+.toast{position:fixed;left:50%;top:calc(96px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:30;background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:800;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none;transition:opacity .25s ease,transform .25s ease;max-width:calc(100% - 32px);text-align:center}
+.toast[hidden]{display:block!important;opacity:0;transform:translate(-50%,-8px)}
+
+.done{position:fixed;inset:0;z-index:25;display:grid;place-items:center;background:rgba(10,18,40,.35);padding:16px}
+.done .card{background:var(--paper);border-radius:24px;padding:22px 22px 18px;text-align:center;width:min(380px,100%);box-shadow:0 12px 40px rgba(0,0,0,.3);animation:pop .35s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
+.done h2{margin:0;font:400 32px/1 var(--f-display)}
+.stars{font:400 40px/1 var(--f-display);color:#ffc21a;letter-spacing:6px;margin:10px 0 4px;text-shadow:0 3px 0 #d89a00}
+.stars .off{color:#dde2ea;text-shadow:0 3px 0 #c3c9d4}
+.earn{font:400 40px/1 var(--f-display);color:var(--cash);font-variant-numeric:tabular-nums}
+.done p{margin:6px 0 16px;color:var(--muted)}
+.hint{position:fixed;left:50%;transform:translateX(-50%);top:calc(110px + env(safe-area-inset-top,0px));z-index:4;background:rgba(255,255,255,.9);padding:8px 14px;border-radius:12px;font-size:13px;color:var(--muted);pointer-events:none;text-align:center;max-width:calc(100% - 32px)}
+
+.keys{margin-top:8px;display:inline-flex;flex-wrap:wrap;gap:4px 10px;background:rgba(255,255,255,.9);border-radius:12px;padding:6px 10px;font-size:12px;color:var(--muted);max-width:260px}
+.keys kbd{display:inline-block;min-width:20px;padding:1px 5px;margin-right:2px;border-radius:5px;background:#fff;border:1px solid #cfd5df;border-bottom-width:3px;font:800 11px/1.4 var(--f-body);color:var(--ink);text-align:center}
+.prompt{position:fixed;left:50%;top:62%;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:10px;background:rgba(29,36,51,.86);color:#fff;padding:8px 14px 8px 8px;border-radius:14px;font:400 18px/1 var(--f-display);letter-spacing:.02em;pointer-events:none;white-space:nowrap}
+.prompt kbd{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:#fff;color:var(--ink);font:400 18px/1 var(--f-display);box-shadow:0 3px 0 #b9c0cc}
+.touch{display:none}
+@media (pointer:coarse){
+  .touch{display:block}
+  .keys{display:none}
+  .joy{position:fixed;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(150px + env(safe-area-inset-bottom,0px));width:124px;height:124px;border-radius:50%;background:rgba(255,255,255,.35);border:3px solid rgba(255,255,255,.7);z-index:6;touch-action:none}
+  .knob{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:#fff;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+  .tbtns{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:6;display:grid;gap:12px;justify-items:end}
+  .tbtn{width:74px;height:74px;border-radius:50%;border:0;background:rgba(255,255,255,.85);box-shadow:0 4px 0 rgba(0,0,0,.18);font:400 18px/1 var(--f-display);touch-action:none}
+  .tbtn.act{width:86px;height:86px;background:var(--hat);box-shadow:0 4px 0 var(--hat-dark);font-size:24px}
+  .prompt{top:54%}
+}
+@media (max-width:560px){
+  .stats{min-width:0;padding:8px 12px 10px}
+  .cash{font-size:24px}
+  .mbtn{padding:0 12px;font-size:16px}
+  .mbtn span{display:none}
+  .row{grid-template-columns:1fr auto}
+  .row .ico{display:none}
+  .hint{top:calc(150px + env(safe-area-inset-top,0px))}
+}
+@media (prefers-reduced-motion:reduce){.sheet,.done .card{animation:none}.xp i,.prog i{transition:none}}
+</style>
+
+<canvas id="c" aria-label="3D job site"></canvas>
+
+<div class="top">
+  <div class="stats" aria-live="polite">
+    <div class="cash"><span class="coin" aria-hidden="true"></span><span id="cash">$0</span></div>
+    <div class="rank"><span>Rank <b id="rank">Worker</b></span><span id="xpTxt">0 / 150 XP</span></div>
+    <div class="xp"><i id="xpBar"></i></div>
+    <div class="keys" aria-label="Controls"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span><span><kbd>Space</kbd> jump</span><span><kbd>Shift</kbd> run</span><span><kbd>E</kbd> use</span><span>drag to look</span></div>
+  </div>
+  <div class="menu">
+    <button class="mbtn primary" id="bJobs" type="button" aria-label="Job board"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 3h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1h3V5a2 2 0 0 1 2-2zm0 3h6V5H9zm-4 3v3h14V9zm0 5v5h14v-5h-6v1h-2v-1z"/></svg><span>Jobs</span></button>
+    <button class="mbtn" id="bShop" type="button" aria-label="Tool shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.7 3.3a5 5 0 0 0-6 6.4L3.3 15.1a2.4 2.4 0 0 0 3.4 3.4l5.4-5.4a5 5 0 0 0 6.4-6l-3 3-2.6-.6-.6-2.6z"/></svg><span>Shop</span></button>
+    <button class="mbtn" id="bHome" type="button" aria-label="My mansion"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg><span>Mansion</span></button>
+  </div>
+</div>
+
+<div class="hint" id="hint" hidden></div>
+<div class="prompt" id="prompt" hidden><kbd>E</kbd><span id="promptTxt">Build</span></div>
+<div class="touch"><div class="joy" id="joy" aria-hidden="true"><div class="knob" id="knob"></div></div>
+<div class="tbtns"><button class="tbtn" id="tJump" type="button" aria-label="Jump">Jump</button><button class="tbtn act" id="tAct" type="button" aria-label="Use">E</button></div></div>
+<div class="hud" id="hud"></div>
+<div class="toast" id="toast" hidden></div>
+<div id="layer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const T=THREE;
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+
+/* =================== SAVE =================== */
+const SAVE_KEY='dream-builders-v1';
+const fresh={cash:150,xp:0,hammer:0,roller:0,belt:0,golden:false,mansion:false,jobs:0,best:0,seenIntro:false};
+let S=Object.assign({},fresh);
+try{const raw=localStorage.getItem(SAVE_KEY); if(raw) S=Object.assign({},fresh,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(S));}catch(e){}}
+
+/* =================== GAME DATA =================== */
+const RANKS=[{n:'Worker',xp:0},{n:'Builder',xp:150},{n:'Foreman',xp:550},{n:'Architect',xp:1400},{n:'Construction Boss',xp:3000}];
+const rankIdx=()=>{let r=0;RANKS.forEach((k,i)=>{if(S.xp>=k.xp)r=i});return r;};
+const TOOLS={
+  hammer:{label:'Building tool',names:['Hammer','Nail Gun','Power Drill','Mini Crane','Tower Crane'],power:[1,2,4,8,14],price:[0,250,900,2600,6500],desc:p=>`Places ${p} block${p>1?'s':''} per tap`,
+    icon:'<path fill="#5b6578" d="M3 19.5 13 9.5l1.5 1.5-10 10z"/><path fill="#ffb320" d="M11 4h7l3 3-2 2-2-1-4 4-4-4 2-2z"/>'},
+  roller:{label:'Paint tool',names:['Brush','Roller','Spray Gun','Paint Cannon'],power:[0,1.05,1.5,2.3],price:[0,200,800,2200],desc:p=>p?`Paints a ${p<1.2?'small':p<2?'medium':'huge'} area per tap`:'Paints 1 block per tap',
+    icon:'<rect x="4" y="3" width="14" height="6" rx="2" fill="#a24bff"/><path fill="#5b6578" d="M18 6h2v6h-8v3h-2v-5h8z"/><rect x="9.5" y="15" width="3" height="7" rx="1" fill="#5b6578"/>'},
+  belt:{label:'Repair kit',names:['Duct Tape','Toolbelt','Pro Toolbox','Robot Helper'],power:[1,2,3,6],price:[0,180,750,2000],desc:p=>`Fixes ${p} damage per tap`,
+    icon:'<rect x="3" y="8" width="18" height="12" rx="2" fill="#e2552b"/><path fill="#5b6578" d="M9 5h6v3h-2V7h-2v1H9z"/><rect x="3" y="12" width="18" height="2" fill="#b33d17"/>'}
+};
+const GOLDEN_PRICE=8000, MANSION_PRICE=25000;
+const CLIENTS=[
+  {n:'Mr. Diamond',c:'#2f7bff'},{n:'Lady Goldleaf',c:'#e0a100'},{n:'Baron Von Bucks',c:'#18a957'},
+  {n:'Captain Yachtley',c:'#0ea5b7'},{n:'Lil Drip',c:'#a24bff'},{n:'Ms. Penthouse',c:'#e2552b'},
+  {n:'Duke Moneybags',c:'#6b4bff'},{n:'Auntie Platinum',c:'#7b8794'}
+];
+const JOBS=[
+  {t:'build',bp:'shed',name:'Garden shed',rank:0,pay:120,par:40},
+  {t:'paint',bp:'house',name:'Repaint the house',rank:0,pay:150,par:45},
+  {t:'fix',bp:'house',name:'Storm damage repair',rank:0,pay:140,par:35},
+  {t:'build',bp:'garage',name:'Two-car garage',rank:1,pay:330,par:60},
+  {t:'build',bp:'pool',name:'Infinity pool deck',rank:1,pay:380,par:60},
+  {t:'paint',bp:'villa',name:'Villa makeover',rank:2,pay:560,par:60},
+  {t:'fix',bp:'villa',name:'Fix up the villa',rank:2,pay:520,par:45},
+  {t:'build',bp:'villa',name:'Modern villa',rank:3,pay:1450,par:120},
+  {t:'build',bp:'mansion',name:'Mega mansion',rank:4,pay:3400,par:180}
+];
+const PAINTS=[{n:'Cloud white',c:'#f4f1ea'},{n:'Sky blue',c:'#7ec4ff'},{n:'Mint',c:'#8fe3b8'},{n:'Sunset',c:'#ffb27a'},{n:'Royal purple',c:'#9b7bff'},{n:'Hot pink',c:'#ff7ab8'}];
+
+/* =================== BLUEPRINTS =================== */
+function walls(out,x0,z0,w,d,y0,h,t,o){
+  o=o||{};
+  for(let y=y0;y<y0+h;y++){
+    for(let i=0;i<w;i++)for(let j=0;j<d;j++){
+      const edge=i===0||j===0||i===w-1||j===d-1; if(!edge) continue;
+      const x=x0+i,z=z0+j,ly=y-y0;
+      if(o.door&&j===0&&i>=o.door[0]&&i<o.door[0]+o.door[1]&&ly<o.door[2]) continue;
+      let tt=t;
+      if(o.win&&ly>=1&&ly<=Math.min(h-2,1+(o.winH||0))){
+        const corner=(i===0||i===w-1)&&(j===0||j===d-1);
+        if(!corner&&((j===0||j===d-1)?(i%o.win===1):(j%o.win===1))) tt='g';
+      }
+      if(o.front&&j===0&&ly>=o.front[0]&&ly<o.front[1]&&i>0&&i<w-1) tt='g';
+      out.push({x,y,z,t:tt});
+    }
+  }
+}
+function slab(out,x0,z0,w,d,y,t,skip){for(let i=0;i<w;i++)for(let j=0;j<d;j++){if(skip&&skip(i,j))continue;out.push({x:x0+i,y,z:z0+j,t});}}
+const BP={
+  shed(){const b=[];walls(b,-2,-1,4,3,0,2,'w',{door:[1,2,2]});slab(b,-2,-1,4,3,2,'r');return b;},
+  house(){const b=[];walls(b,-3,-2,7,5,0,3,'c',{door:[3,1,2],win:2});slab(b,-3,-2,7,5,3,'r');walls(b,-1,-1,3,3,4,1,'r');return b;},
+  garage(){const b=[];walls(b,-3,-3,6,6,0,3,'c',{door:[1,4,2]});slab(b,-3,-3,6,6,3,'r');return b;},
+  pool(){const b=[];slab(b,-5,-3,10,7,0,'s',(i,j)=>i>=2&&i<=7&&j>=2&&j<=4);
+    for(let i=0;i<10;i++){if(i%3===0){b.push({x:-5+i,y:1,z:-3,t:'w'});}}
+    b.push({x:-5,y:1,z:3,t:'c'},{x:-4,y:1,z:3,t:'c'},{x:4,y:1,z:3,t:'c'});return b;},
+  villa(){const b=[];walls(b,-4,-3,9,7,0,3,'c',{door:[4,1,2],front:[0,2],win:2});slab(b,-4,-3,9,7,3,'c');
+    walls(b,-3,-2,7,5,4,2,'c',{front:[0,2],win:2});slab(b,-3,-2,7,5,6,'r');return b;},
+  mansion(){const b=[];walls(b,-6,-4,13,9,0,3,'c',{door:[5,3,2],front:[0,2],win:2});slab(b,-6,-4,13,9,3,'c');
+    walls(b,-5,-3,11,7,4,3,'c',{front:[0,2],win:2});slab(b,-5,-3,11,7,7,'c');
+    walls(b,-3,-2,7,5,8,2,'c',{win:2,winH:0});slab(b,-3,-2,7,5,10,'r');
+    for(const x of [-6,-3,3,6]) for(let y=0;y<3;y++) b.push({x,y,z:-5,t:'w'});
+    return b;}
+};
+const BP_SIZE={shed:7,house:10,garage:10,pool:13,villa:13,mansion:18};
+
+/* =================== RENDERER =================== */
+const canvas=$('#c');
+let R;
+try{R=new T.WebGLRenderer({canvas,antialias:true});}catch(e){
+  document.body.insertAdjacentHTML('beforeend','<div class="done"><div class="card"><h2>3D not available</h2><p>This browser can\'t show 3D graphics. Try Chrome or Edge on a computer or phone.</p></div></div>');
+  return;
+}
+R.setPixelRatio(Math.min(devicePixelRatio||1,2));
+R.shadowMap.enabled=true; R.shadowMap.type=T.PCFSoftShadowMap;
+const scene=new T.Scene();
+scene.background=new T.Color(0x8fd3ff);
+scene.fog=new T.Fog(0x8fd3ff,90,220);
+const cam=new T.PerspectiveCamera(45,1,.1,500);
+
+scene.add(new T.HemisphereLight(0xeaf6ff,0x7a9a58,.85));
+const sun=new T.DirectionalLight(0xfff1d6,.85);
+sun.position.set(30,50,22); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-60,right:60,top:60,bottom:-60,near:1,far:160}); sun.shadow.bias=-.0006;
+scene.add(sun);
+
+/* materials */
+const mat=(c,o)=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.8,metalness:0},o||{}));
+const M={
+  c:mat(0xf3efe6),w:mat(0xc98a55,{roughness:.9}),g:mat(0x9fd8ff,{roughness:.15,metalness:.1,transparent:true,opacity:.85}),
+  r:mat(0x4a5163),s:mat(0xdcd6c8),gold:mat(0xffc93a,{roughness:.35,metalness:.6}),
+  ghostOn:new T.MeshBasicMaterial({color:0x2f7bff,transparent:true,opacity:.42,depthWrite:false}),
+  ghostOff:new T.MeshBasicMaterial({color:0x2f7bff,transparent:true,opacity:.1,depthWrite:false}),
+  broken:mat(0xff5a3c,{emissive:0xff2200,emissiveIntensity:.5,roughness:.4}),
+  hole:new T.MeshBasicMaterial({color:0xff6a2a,transparent:true,opacity:.55,depthWrite:false}),
+  dull:mat(0x9c9486,{roughness:.95})
+};
+const paintMat={}; PAINTS.forEach(p=>paintMat[p.c]=mat(p.c));
+const BOX=new T.BoxGeometry(.98,.98,.98);
+const BOX_G=new T.BoxGeometry(1.02,1.02,1.02);
+
+/* =================== WORLD =================== */
+const world=new T.Group(); scene.add(world);
+{
+  const g=new T.Mesh(new T.PlaneGeometry(400,400),mat(0x7cc35a)); g.rotation.x=-Math.PI/2; g.receiveShadow=true; world.add(g);
+  const road=mat(0x5d6470,{roughness:.95}), walk=mat(0xcfd3d8);
+  const strip=(w,d,x,z,m,y)=>{const s=new T.Mesh(new T.BoxGeometry(w,.1,d),m);s.position.set(x,y||.05,z);s.receiveShadow=true;world.add(s);return s;};
+  strip(160,6,0,12,road); strip(6,160,-32,0,road);
+  for(let x=-76;x<80;x+=8) strip(3,.3,x,12,mat(0xffffff),.11);
+  strip(160,1.6,0,8.2,walk,.12); strip(160,1.6,0,15.8,walk,.12);
+  // job site dirt pad + fence
+  const pad=strip(22,18,0,-1,mat(0xc9a36a,{roughness:1}),.06);
+  const fence=mat(0xff8a1f);
+  for(let i=-11;i<=11;i+=2){for(const z of [-10,8]){if(z===8&&Math.abs(i)<3)continue;const p=new T.Mesh(new T.BoxGeometry(.15,1,.15),fence);p.position.set(i,.5,z);p.castShadow=true;world.add(p);}}
+  for(let j=-10;j<=8;j+=2){for(const x of [-11,11]){const p=new T.Mesh(new T.BoxGeometry(.15,1,.15),fence);p.position.set(x,.5,j);world.add(p);}}
+  // trees
+  const trunk=mat(0x8a5a35),leaf=mat(0x3fa34d),palm=mat(0x2e8f45);
+  const tree=(x,z,s)=>{const t=new T.Group();const tr=new T.Mesh(new T.CylinderGeometry(.25*s,.35*s,3*s,8),trunk);tr.position.y=1.5*s;tr.castShadow=true;t.add(tr);
+    for(let k=0;k<3;k++){const l=new T.Mesh(new T.ConeGeometry((1.8-k*.4)*s,1.6*s,9),k%2?leaf:palm);l.position.y=(3+k*.9)*s;l.castShadow=true;t.add(l);}t.position.set(x,0,z);world.add(t);};
+  [[-14,-6],[14,-12],[-16,4],[17,3],[-40,-10],[-44,6],[40,22],[-20,24],[10,26],[30,-30],[-8,-34],[52,-6],[-58,-24],[60,30]].forEach(([x,z])=>tree(x,z,.9+Math.random()*.5));
+}
+
+/* signs (canvas textures) */
+function sign(text,sub,w,col){
+  const cv=document.createElement('canvas');cv.width=512;cv.height=200;const g=cv.getContext('2d');
+  g.fillStyle=col||'#ffb320';g.fillRect(0,0,512,200);g.fillStyle='rgba(0,0,0,.12)';g.fillRect(0,172,512,28);
+  g.fillStyle='#1d2433';g.font='64px "Lilita One", Arial Black, sans-serif';g.textAlign='center';g.fillText(text,256,96);
+  if(sub){g.font='800 30px Nunito, Arial, sans-serif';g.fillText(sub,256,148);}
+  const tx=new T.CanvasTexture(cv);tx.anisotropy=4;
+  const grp=new T.Group();
+  const m=new T.Mesh(new T.PlaneGeometry(w,w*200/512),new T.MeshStandardMaterial({map:tx,roughness:.7}));m.position.y=1.6+w*.2;m.castShadow=true;grp.add(m);
+  const back=new T.Mesh(new T.PlaneGeometry(w,w*200/512),mat(0x8a5a35));back.rotation.y=Math.PI;back.position.copy(m.position);grp.add(back);
+  for(const s of [-1,1]){const p=new T.Mesh(new T.BoxGeometry(.15,1.6+w*.2,.15),mat(0x8a5a35));p.position.set(s*w*.42,(1.6+w*.2)/2,-.02);grp.add(p);}
+  return {grp,redraw:(a,b)=>{g.fillStyle=col||'#ffb320';g.fillRect(0,0,512,200);g.fillStyle='#1d2433';g.font='64px "Lilita One", Arial Black, sans-serif';g.fillText(a,256,96);if(b){g.font='800 30px Nunito, Arial, sans-serif';g.fillText(b,256,148);}tx.needsUpdate=true;}};
+}
+
+/* collision grid: every block is a 1x1x1 cell centred on integer x,z */
+const ck=(x,y,z)=>x+'|'+y+'|'+z;
+const decorOcc=new Set(),siteOcc=new Set();
+const solidAt=(x,y,z)=>decorOcc.has(ck(x,y,z))||siteOcc.has(ck(x,y,z));
+/* static instanced building (for decor) */
+function staticBuild(blocks,ox,oz,colors,rotY){
+  const grp=new T.Group();const by={};
+  blocks.forEach(b=>{(by[b.t]=by[b.t]||[]).push(b);});
+  const d=new T.Object3D();
+  for(const t in by){
+    const m=(colors&&colors[t])||M[t];
+    const im=new T.InstancedMesh(BOX,m,by[t].length);im.castShadow=true;im.receiveShadow=true;
+    by[t].forEach((b,i)=>{d.position.set(b.x,b.y+.5,b.z);d.updateMatrix();im.setMatrixAt(i,d.matrix);});
+    grp.add(im);
+  }
+  blocks.forEach(b=>decorOcc.add(ck(ox+b.x,b.y,oz+b.z)));
+  grp.position.set(ox,0,oz);grp.rotation.y=rotY||0;world.add(grp);return grp;
+}
+// decor mansions in the rich neighborhood
+const decoCols=[{c:mat(0xfff4e0)},{c:mat(0xdff0ff)},{c:mat(0xffe3ec)}];
+staticBuild(BP.mansion(),28,-6,decoCols[0]);
+staticBuild(BP.villa(),-4,-30,decoCols[1]);
+staticBuild(BP.mansion(),26,-30,decoCols[2]);
+staticBuild(BP.villa(),52,-8,decoCols[1]);
+staticBuild(BP.pool(),26,4,null);
+{const w=new T.Mesh(new T.PlaneGeometry(6,3),new T.MeshStandardMaterial({color:0x2bb5ff,roughness:.05,metalness:.2,transparent:true,opacity:.85}));w.rotation.x=-Math.PI/2;w.position.set(25.5,.35,4);world.add(w);}
+// HQ
+staticBuild((()=>{const b=[];walls(b,-3,-2,7,5,0,3,'w',{door:[3,1,2],win:2});slab(b,-3,-2,7,5,3,'r');return b;})(),-44,-2);
+{const s=sign('BUILD CO.','HQ  ·  jobs posted daily',5);s.grp.position.set(-44,0,4.4);world.add(s.grp);}
+{const s=sign('RICH HILLS','private neighborhood',5,'#ffffff');s.grp.position.set(-26,0,7);s.grp.rotation.y=.3;world.add(s.grp);}
+const siteSign=sign('JOB SITE','open the job board',4.2);siteSign.grp.position.set(5.5,0,8.3);world.add(siteSign.grp);
+// truck
+{
+  const t=new T.Group();const body=mat(0xffb320,{roughness:.5}),dark=mat(0x2b2f38),glass=mat(0x9fd8ff,{roughness:.1});
+  const add=(g,m,x,y,z)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;t.add(o);return o;};
+  add(new T.BoxGeometry(2.4,1.6,2),body,-1.6,1.3,0);add(new T.BoxGeometry(1.9,.7,1.9),glass,-1.75,2.1,0);
+  add(new T.BoxGeometry(3.6,.9,2.1),body,1.4,.95,0);add(new T.BoxGeometry(3.6,.15,2.1),dark,1.4,1.45,0);
+  for(const x of [-1.8,1.8])for(const z of [-1.05,1.05]){const w=add(new T.CylinderGeometry(.5,.5,.4,16),dark,x,.5,z);w.rotation.x=Math.PI/2;}
+  t.position.set(-39,0,5.2);t.rotation.y=.1;world.add(t);
+}
+// player plot
+const plot={x:-14,z:-30};
+const plotSign=sign('FOR SALE',money(MANSION_PRICE),4.2,'#ffffff');plotSign.grp.position.set(plot.x,0,plot.z+8);world.add(plotSign.grp);
+let myMansion=null;
+function showMansion(){
+  if(myMansion) return;
+  myMansion=staticBuild(BP.mansion(),plot.x,plot.z,{c:mat(0xfdfbf6),r:M.gold,w:M.gold});
+  plotSign.redraw('MY MANSION','built by me');
+}
+if(S.mansion) showMansion();
+
+/* =================== WORKER =================== */
+const worker=new T.Group();
+{
+  const vest=mat(0xff8a1f),skin=mat(0xc68b59),jeans=mat(0x2c4d8f),hat=mat(0xffd21f,{roughness:.4});
+  const add=(g,m,x,y,z)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;worker.add(o);return o;};
+  add(new T.BoxGeometry(.7,.8,.4),vest,0,1.15,0);
+  worker.userData.legL=add(new T.BoxGeometry(.3,.75,.35),jeans,-.18,.38,0);
+  worker.userData.legR=add(new T.BoxGeometry(.3,.75,.35),jeans,.18,.38,0);
+  worker.userData.arm=add(new T.BoxGeometry(.22,.7,.25),skin,.47,1.15,0);
+  add(new T.BoxGeometry(.22,.7,.25),skin,-.47,1.15,0);
+  add(new T.BoxGeometry(.5,.5,.5),skin,0,1.82,0);
+  const h=add(new T.SphereGeometry(.34,16,8,0,Math.PI*2,0,Math.PI/2),hat,0,2.02,0);
+  add(new T.CylinderGeometry(.42,.42,.05,16),hat,0,2.03,.05);
+  scene.add(worker);
+}
+const P={pos:new T.Vector3(0,0,11),vy:0,ground:true,face:Math.PI};
+let wSwing=0;
+function sendWorker(p){const d=new T.Vector3(p.x-P.pos.x,0,p.z-P.pos.z);if(d.lengthSq()>.01)P.face=Math.atan2(d.x,d.z);wSwing=.35;}
+function teleport(x,z){P.pos.set(x,0,z);P.vy=0;let y=0;while(hits(P.pos.x,y,P.pos.z)&&y<20)y++;P.pos.y=y;}
+function hits(x,y,z){const r=.34;
+  for(let ix=Math.floor(x-r+.5);ix<=Math.floor(x+r+.5);ix++)for(let iz=Math.floor(z-r+.5);iz<=Math.floor(z+r+.5);iz++)
+    for(let iy=Math.floor(y+.02);iy<=Math.floor(y+1.8);iy++) if(solidAt(ix,iy,iz)) return true;
+  return false;}
+
+/* =================== CAMERA CONTROL =================== */
+const camT=new T.Vector3(0,2,11),camGoal=new T.Vector3(0,2,11);
+let theta=0,phi=1.08,dist=15,distGoal=15;
+const ptrs=new Map();let downPos=null,dragged=false,pinch0=0;
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===1){downPos={x:e.clientX,y:e.clientY};dragged=false;} if(ptrs.size===2){const a=[...ptrs.values()];pinch0=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);dragged=true;}});
+canvas.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;const p=ptrs.get(e.pointerId);const dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
+  if(ptrs.size===2){const a=[...ptrs.values()];const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinch0){distGoal=Math.min(60,Math.max(5,distGoal*pinch0/d));}pinch0=d;return;}
+  if(downPos&&Math.hypot(e.clientX-downPos.x,e.clientY-downPos.y)>7) dragged=true;
+  if(dragged){theta-=dx*.006;phi=Math.min(1.45,Math.max(.25,phi-dy*.005));}});
+const endPtr=e=>{const was=ptrs.has(e.pointerId);ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=0;
+  if(was&&ptrs.size===0&&!dragged&&downPos&&e.type==='pointerup') tap(e.clientX,e.clientY);if(ptrs.size===0)downPos=null;};
+canvas.addEventListener('pointerup',endPtr);canvas.addEventListener('pointercancel',endPtr);
+canvas.addEventListener('wheel',e=>{e.preventDefault();distGoal=Math.min(60,Math.max(5,distGoal*(1+Math.sign(e.deltaY)*.1)));},{passive:false});
+
+/* =================== AUDIO =================== */
+let AC=null;
+function snd(type){
+  try{
+    if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)();
+    const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);
+    const P={place:[180,90,.08,'square',.12],coin:[880,1320,.12,'triangle',.18],fix:[320,520,.09,'sawtooth',.08],paint:[520,380,.07,'sine',.15],no:[160,120,.12,'square',.08],win:[523,1046,.35,'triangle',.2]}[type];
+    o.type=P[3];o.frequency.setValueAtTime(P[0],t);o.frequency.exponentialRampToValueAtTime(P[1],t+P[2]);
+    g.gain.setValueAtTime(P[4],t);g.gain.exponentialRampToValueAtTime(.001,t+P[2]+.08);o.start(t);o.stop(t+P[2]+.1);
+    if(type==='win'){[659,784,1046].forEach((f,i)=>{const o2=AC.createOscillator(),g2=AC.createGain();o2.type='triangle';o2.connect(g2);g2.connect(AC.destination);o2.frequency.value=f;g2.gain.setValueAtTime(.14,t+.12*(i+1));g2.gain.exponentialRampToValueAtTime(.001,t+.12*(i+1)+.3);o2.start(t+.12*(i+1));o2.stop(t+.12*(i+1)+.32);});}
+  }catch(e){}
+}
+
+/* =================== FX =================== */
+const anims=[];
+function popIn(m){m.scale.setScalar(.01);const y=m.position.y;m.position.y=y+.7;anims.push({m,t:0,d:.2,y});}
+const coins=[];
+const coinGeo=new T.CylinderGeometry(.22,.22,.06,14);
+function burst(p,n){for(let i=0;i<n;i++){const c=new T.Mesh(coinGeo,M.gold);c.position.copy(p);c.rotation.x=Math.PI/2;
+  c.userData.v=new T.Vector3((Math.random()-.5)*4,4+Math.random()*4,(Math.random()-.5)*4);c.userData.life=1.2;scene.add(c);coins.push(c);}}
+function puff(p,color){for(let i=0;i<5;i++){const c=new T.Mesh(new T.SphereGeometry(.12,6,4),new T.MeshBasicMaterial({color:color||0xffffff,transparent:true,opacity:.9}));
+  c.position.copy(p);c.userData.v=new T.Vector3((Math.random()-.5)*2.4,1+Math.random()*1.6,(Math.random()-.5)*2.4);c.userData.life=.5;c.userData.puff=true;scene.add(c);coins.push(c);}}
+
+/* =================== JOB STATE =================== */
+const site=new T.Group();scene.add(site);
+let job=null; // {def, client, pay, start, ...}
+let offers=[];
+const key=(x,y,z)=>x+','+y+','+z;
+
+function clearSite(){siteOcc.clear();while(site.children.length){const c=site.children.pop();if(c.geometry&&c.geometry!==BOX&&c.geometry!==BOX_G)c.geometry.dispose();}}
+function rollOffers(){
+  const r=rankIdx();const pool=JOBS.filter(j=>j.rank<=r);
+  const pick=[];const shuffled=pool.slice().sort(()=>Math.random()-.5);
+  // prefer highest-rank job in the mix
+  const top=pool.filter(j=>j.rank===r);if(top.length) pick.push(top[Math.floor(Math.random()*top.length)]);
+  for(const j of shuffled){if(pick.length>=3)break;if(!pick.includes(j))pick.push(j);}
+  offers=pick.map(d=>{const cl=CLIENTS[Math.floor(Math.random()*CLIENTS.length)];return {def:d,client:cl,pay:Math.round(d.pay*(.9+Math.random()*.35)/5)*5};});
+}
+
+function startJob(o){
+  closeSheet();clearSite();
+  job={def:o.def,client:o.client,pay:o.pay,start:performance.now(),done:false};
+  const blocks=BP[o.def.bp]();
+  job.front=Math.max(...blocks.map(b=>b.z))+1.4;
+  if(o.def.t==='build') setupBuild(blocks);
+  else if(o.def.t==='fix') setupFix(blocks);
+  else setupPaint(blocks);
+  siteSign.redraw(o.client.n.toUpperCase().slice(0,14),o.def.name);
+  teleport(0,job.front+3);theta=0;
+  renderHud();
+  const touch=matchMedia('(pointer:coarse)').matches;
+  showHint(o.def.t==='build'?(touch?'Walk up to the bright blue blocks and press E (or tap them). Build from the ground up.':'Walk up to the bright blue blocks and press E, or click them. Hold E to keep building.'):o.def.t==='fix'?'Walk to the red broken parts and press E to fix them. Fast work earns a tip.':(touch?'Pick the client\'s color below, then walk up to the walls and press E.':'Pick the client\'s color (keys 1 to 6), walk up to the walls, and press E.'));
+}
+
+/* ---- BUILD ---- */
+function setupBuild(blocks){
+  job.ghosts=[];job.placed=new Set();job.total=blocks.length;job.count=0;
+  blocks.forEach(b=>{const g=new T.Mesh(BOX_G,M.ghostOff);g.position.set(b.x,b.y+.5,b.z);g.userData.b=b;site.add(g);job.ghosts.push(g);});
+  if(job.def.bp==='pool'){const w=new T.Mesh(new T.PlaneGeometry(6,3),new T.MeshStandardMaterial({color:0x2bb5ff,roughness:.05,metalness:.2,transparent:true,opacity:0}));w.rotation.x=-Math.PI/2;w.position.set(-.5,.35,0);site.add(w);job.water=w;}
+  refreshGhosts();
+}
+function supported(b){
+  if(b.y===0) return true;const P=job.placed;
+  return P.has(key(b.x,b.y-1,b.z))||P.has(key(b.x+1,b.y,b.z))||P.has(key(b.x-1,b.y,b.z))||P.has(key(b.x,b.y,b.z+1))||P.has(key(b.x,b.y,b.z-1));
+}
+function refreshGhosts(){job.avail=[];for(const g of job.ghosts){const on=supported(g.userData.b);g.material=on?M.ghostOn:M.ghostOff;if(on)job.avail.push(g);}}
+function placeGhost(g){
+  const b=g.userData.b;site.remove(g);job.ghosts.splice(job.ghosts.indexOf(g),1);
+  const m=new T.Mesh(BOX,M[b.t]);m.position.set(b.x,b.y+.5,b.z);m.castShadow=true;m.receiveShadow=true;site.add(m);popIn(m);
+  job.placed.add(key(b.x,b.y,b.z));job.count++;siteOcc.add(ck(b.x,b.y,b.z));
+  if(hits(P.pos.x,P.pos.y,P.pos.z)){P.pos.y=b.y+1;P.vy=0;}
+}
+function buildTap(hit){
+  const power=TOOLS.hammer.power[S.hammer];const origin=hit.position.clone();
+  placeGhost(hit);
+  for(let k=1;k<power;k++){
+    refreshGhosts();if(!job.avail.length)break;
+    let best=null,bd=1e9;for(const g of job.avail){const d=g.position.distanceToSquared(origin);if(d<bd){bd=d;best=g;}}
+    placeGhost(best);
+  }
+  refreshGhosts();snd('place');sendWorker(origin);
+  if(!job.ghosts.length) finishJob();
+  updateProgress();
+}
+
+/* ---- FIX ---- */
+function setupFix(blocks){
+  job.issues=[];job.meshes=[];
+  const solid=[];
+  blocks.forEach(b=>{const m=new T.Mesh(BOX,M[b.t]);m.position.set(b.x,b.y+.5,b.z);m.castShadow=true;m.receiveShadow=true;m.userData.b=b;site.add(m);solid.push(m);siteOcc.add(ck(b.x,b.y,b.z));});
+  const glass=solid.filter(m=>m.userData.b.t==='g').sort(()=>Math.random()-.5);
+  const maxY=Math.max(...blocks.map(b=>b.y));
+  const roof=solid.filter(m=>m.userData.b.t==='r'&&m.userData.b.y===maxY).sort(()=>Math.random()-.5);
+  const walls=solid.filter(m=>m.userData.b.y===0&&m.userData.b.t==='c').sort(()=>Math.random()-.5);
+  const nG=job.def.bp==='villa'?6:4,nR=job.def.bp==='villa'?4:3,nL=job.def.bp==='villa'?3:2;
+  glass.slice(0,nG).forEach(m=>{m.material=M.broken;m.userData.hp=3;m.userData.kind='window';job.issues.push(m);});
+  roof.slice(0,nR).forEach(m=>{const b=m.userData.b;siteOcc.delete(ck(b.x,b.y,b.z));m.material=M.hole;m.castShadow=false;m.userData.hp=3;m.userData.kind='roof';job.issues.push(m);});
+  walls.slice(0,nL).forEach(w=>{
+    const b=w.userData.b;const out=new T.Vector3(Math.sign(b.x)*.62*(Math.abs(b.x)>=Math.abs(b.z)?1:0),0,Math.sign(b.z)*.62*(Math.abs(b.z)>Math.abs(b.x)?1:0));
+    const pipe=new T.Mesh(new T.CylinderGeometry(.16,.16,.9,12),mat(0x8fa3b8,{metalness:.6,roughness:.4}));
+    pipe.position.set(b.x+out.x,.55,b.z+out.z);pipe.castShadow=true;site.add(pipe);
+    const leak=new T.Mesh(new T.SphereGeometry(.28,14,10),new T.MeshStandardMaterial({color:0x2b8cff,emissive:0x0b4fff,emissiveIntensity:.4,transparent:true,opacity:.85}));
+    leak.position.set(b.x+out.x*1.6,.35,b.z+out.z*1.6);leak.userData.hp=3;leak.userData.kind='leak';site.add(leak);job.issues.push(leak);
+  });
+  job.total=job.issues.reduce((a,m)=>a+m.userData.hp,0);job.count=0;
+}
+function fixTap(hit){
+  const p=TOOLS.belt.power[S.belt];const dmg=Math.min(hit.userData.hp,p);hit.userData.hp-=dmg;job.count+=dmg;
+  sendWorker(hit.position);puff(hit.position,hit.userData.kind==='leak'?0x7cc0ff:0xffffff);
+  hit.scale.setScalar(1.15);setTimeout(()=>hit.scale.setScalar(1),90);
+  if(hit.userData.hp<=0){
+    job.issues.splice(job.issues.indexOf(hit),1);
+    if(hit.userData.kind==='window'){hit.material=M.g;}
+    else if(hit.userData.kind==='roof'){hit.material=M.r;hit.castShadow=true;popIn(hit);const b=hit.userData.b;siteOcc.add(ck(b.x,b.y,b.z));if(hits(P.pos.x,P.pos.y,P.pos.z)){P.pos.y=b.y+1;P.vy=0;}}
+    else{site.remove(hit);}
+    snd('coin');
+  } else snd('fix');
+  if(!job.issues.length) finishJob();
+  updateProgress();
+}
+
+/* ---- PAINT ---- */
+function setupPaint(blocks){
+  job.want=PAINTS[1+Math.floor(Math.random()*(PAINTS.length-1))].c;job.brush=PAINTS[0].c;
+  job.paintable=[];
+  blocks.forEach(b=>{const pt=b.t==='c'||b.t==='w';const m=new T.Mesh(BOX,pt?M.dull:M[b.t]);m.position.set(b.x,b.y+.5,b.z);m.castShadow=true;m.receiveShadow=true;m.userData.b=b;m.userData.col=null;site.add(m);siteOcc.add(ck(b.x,b.y,b.z));if(pt)job.paintable.push(m);});
+  job.total=job.paintable.length;job.count=0;
+}
+function paintTap(hit){
+  const r=TOOLS.roller.power[S.roller];let n=0;
+  for(const m of job.paintable){if(m===hit||(r&&m.position.distanceTo(hit.position)<=r+.01)){m.material=paintMat[job.brush];m.userData.col=job.brush;n++;}}
+  job.count=job.paintable.filter(m=>m.userData.col===job.want).length;
+  sendWorker(hit.position);snd(job.brush===job.want?'paint':'no');
+  if(job.brush!==job.want) toast('That\'s not the color '+job.client.n+' asked for!');
+  if(job.count===job.total) finishJob();
+  updateProgress();
+}
+
+/* ---- TAP ---- */
+const ray=new T.Raycaster(),ndc=new T.Vector2();
+function tap(x,y){
+  if(!job||job.done) return;
+  const r=canvas.getBoundingClientRect();ndc.set((x-r.left)/r.width*2-1,-((y-r.top)/r.height)*2+1);ray.setFromCamera(ndc,cam);
+  hideHint();
+  const far=o=>{const d=Math.hypot(o.position.x-P.pos.x,o.position.z-P.pos.z);if(d>9){snd('no');toast('Too far away. Walk closer first.');return true;}return false;};
+  if(job.def.t==='build'){
+    const h=ray.intersectObjects(job.avail,false)[0];
+    if(h){if(!far(h.object)) buildTap(h.object);}
+    else{const any=ray.intersectObjects(job.ghosts,false)[0];if(any){snd('no');toast('Build from the ground up! Tap a bright block.');}}
+  }else if(job.def.t==='fix'){
+    const h=ray.intersectObjects(job.issues,false)[0];if(h&&!far(h.object)) fixTap(h.object);
+  }else{
+    const h=ray.intersectObjects(job.paintable,false)[0];if(h&&!far(h.object)) paintTap(h.object);
+  }
+}
+
+/* ---- FINISH ---- */
+function tipFor(){const s=(performance.now()-job.start)/1000;const par=job.def.par;
+  if(s<=par) return {tip:.5,stars:3}; if(s<=par*1.6) return {tip:.2,stars:2}; return {tip:0,stars:1};}
+function finishJob(){
+  job.done=true;const {tip,stars}=tipFor();
+  const earn=Math.round(job.pay*(1+tip)*(S.golden?2:1));
+  const xp=Math.round(job.def.pay*.5*(1+tip));const r0=rankIdx();
+  S.cash+=earn;S.xp+=xp;S.jobs++;S.best=Math.max(S.best,earn);save();
+  if(job.water) anims.push({water:job.water,t:0,d:.8});
+  snd('win');burst(new T.Vector3(0,3,0),24);
+  const r1=rankIdx();updateStats();
+  setTimeout(()=>{
+    layer.innerHTML=`<div class="done" role="dialog" aria-modal="true" aria-labelledby="doneT"><div class="card">
+      <h2 id="doneT">Job done!</h2>
+      <div class="stars" aria-label="${stars} of 3 stars">${'★'.repeat(stars)}<span class="off">${'★'.repeat(3-stars)}</span></div>
+      <div class="earn">+${money(earn)}</div>
+      <p>${job.client.n} ${stars===3?'loved it and added a big tip':stars===2?'is happy and left a small tip':'paid, but wanted it faster'}${S.golden?' · Golden Contract doubled your pay':''}. +${xp} XP</p>
+      ${r1>r0?`<p style="color:var(--ink);font-weight:900">You ranked up to ${RANKS[r1].n}! Bigger jobs unlocked.</p>`:''}
+      <button class="go" id="nextJob" type="button" style="width:100%">Next job</button></div></div>`;
+    $('#nextJob').onclick=()=>{layer.innerHTML='';rollOffers();openJobs();};
+    $('#nextJob').focus();
+  },reduce?0:700);
+  job=Object.assign(job,{});renderHud(true);
+}
+
+/* =================== UI =================== */
+const layer=$('#layer'),hud=$('#hud');
+function updateStats(){
+  $('#cash').textContent=money(S.cash);
+  const r=rankIdx();$('#rank').textContent=RANKS[r].n;
+  const next=RANKS[r+1];
+  if(next){$('#xpTxt').textContent=`${S.xp} / ${next.xp} XP`;$('#xpBar').style.width=((S.xp-RANKS[r].xp)/(next.xp-RANKS[r].xp)*100)+'%';}
+  else{$('#xpTxt').textContent=`${S.xp} XP · max rank`;$('#xpBar').style.width='100%';}
+}
+function renderHud(finished){
+  if(!job||finished){
+    hud.innerHTML=`<div class="idle"><p>${S.mansion?'You own a mansion in Rich Hills. Keep building to become the richest boss in town.':'Rich clients need builders. Take a job, get paid, and save up for your own mansion.'}</p><button class="go" type="button" id="hudJobs">Find a job</button></div>`;
+    $('#hudJobs').onclick=openJobs;return;
+  }
+  const t=job.def.t,init=job.client.n.split(' ').map(w=>w[0]).join('').slice(0,2);
+  hud.innerHTML=`${t==='paint'?`<div class="palette" role="radiogroup" aria-label="Paint color">${PAINTS.map(p=>`<button class="swatch${p.c===job.brush?' on':''}${p.c===job.want?' want':''}" role="radio" aria-checked="${p.c===job.brush}" aria-label="${p.n}${p.c===job.want?' (client wants this)':''}" data-c="${p.c}" style="background:${p.c}" type="button"></button>`).join('')}</div>`:''}
+  <div class="jobcard"><div class="ava" style="background:${job.client.c}" aria-hidden="true">${init}</div>
+    <div><h3>${job.def.name}</h3><p>${job.client.n}${t==='paint'?' wants <b>'+PAINTS.find(p=>p.c===job.want).n+'</b> (the dotted color)':t==='fix'?' needs every red part fixed':' · '+job.total+' blocks'}</p><div class="prog"><i id="prog"></i></div></div>
+    <div class="pay">${money(job.pay*(S.golden?2:1))}<small id="tip">tip running</small></div></div>`;
+  hud.querySelectorAll('.swatch').forEach(b=>b.onclick=()=>{job.brush=b.dataset.c;renderHud();snd('paint');});
+  updateProgress();
+}
+function updateProgress(){const p=$('#prog');if(p&&job) p.style.width=(job.count/job.total*100)+'%';}
+let tipLast='';
+function updateTip(){
+  if(!job||job.done) return;const el=$('#tip');if(!el) return;
+  const s=(performance.now()-job.start)/1000,par=job.def.par;let txt,hot=false;
+  if(s<=par){txt=`+50% tip · ${Math.ceil(par-s)}s`;hot=par-s<10;}else if(s<=par*1.6){txt=`+20% tip · ${Math.ceil(par*1.6-s)}s`;hot=true;}else txt='no tip';
+  if(txt!==tipLast){tipLast=txt;el.textContent=txt;el.className=hot?'hot':'';}
+}
+
+function sheet(title,body,id){
+  layer.innerHTML=`<div class="sheet-wrap" id="wrap"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="${id}"><header><h2 id="${id}">${title}</h2><button class="x" type="button" id="close" aria-label="Close">×</button></header>${body}</div></div>`;
+  $('#close').onclick=closeSheet;$('#wrap').addEventListener('pointerdown',e=>{if(e.target.id==='wrap')closeSheet();});
+  $('#close').focus();
+}
+function closeSheet(){layer.innerHTML='';}
+
+
+function openJobs(){
+  if(!offers.length) rollOffers();
+  const r=rankIdx();
+  const locked=JOBS.filter(j=>j.rank>r).sort((a,b)=>a.rank-b.rank)[0];
+  sheet('Job board',`<div class="list">${offers.map((o,i)=>`<div class="row">
+      <div class="ava" style="background:${o.client.c}" aria-hidden="true">${o.client.n.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div class="meta"><h4>${o.def.name}</h4><p><span class="tag t-${o.def.t}">${o.def.t}</span>${o.client.n} · finish in ${o.def.par}s for a tip</p></div>
+      <button class="go" type="button" data-i="${i}">${money(o.pay*(S.golden?2:1))}</button></div>`).join('')}</div>
+    ${locked?`<p class="note">Reach <b>${RANKS[locked.rank].n}</b> to unlock jobs like the <b>${locked.name}</b> (${money(locked.pay)}+).</p>`:''}
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap"><p class="note" style="margin:0">${job&&!job.done?'Taking a new job cancels the current one.':'Tap a price to take the job.'}</p><button class="ghostbtn" type="button" id="reroll">New offers</button></div>`,'jobsT');
+  layer.querySelectorAll('.go[data-i]').forEach(b=>b.onclick=()=>startJob(offers[+b.dataset.i]));
+  $('#reroll').onclick=()=>{rollOffers();openJobs();};
+}
+
+function openShop(){
+  const row=k=>{const t=TOOLS[k],lv=S[k],max=t.names.length-1,next=lv<max?lv+1:null;
+    return `<div class="row"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true">${t.icon}</svg></div>
+      <div class="meta"><h4>${t.names[lv]}</h4><p>${t.label} · ${t.desc(t.power[lv])}${next!==null?` → <b>${t.names[next]}</b>: ${t.desc(t.power[next]).toLowerCase()}`:''}</p>
+      <div class="lvl" aria-label="Level ${lv+1} of ${max+1}">${t.names.map((_,i)=>`<i class="${i<=lv?'on':''}"></i>`).join('')}</div></div>
+      ${next!==null?`<button class="go buy" type="button" data-k="${k}" ${S.cash<t.price[next]?'disabled':''}>${money(t.price[next])}</button>`:'<div class="lock">Maxed out</div>'}</div>`;};
+  sheet('Tool shop',`<div class="list">${row('hammer')}${row('roller')}${row('belt')}
+    <div class="row"><div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#ffc93a"/><path fill="#d69a00" d="M11 6h2v1.2c1.4.3 2.4 1.2 2.6 2.6h-2c-.2-.6-.8-1-1.6-1-1 0-1.6.4-1.6 1 0 .7.7.9 2 1.2 2 .4 3.3 1.1 3.3 2.9 0 1.4-1 2.4-2.7 2.7V18h-2v-1.4c-1.6-.3-2.7-1.3-2.9-2.8h2c.2.7.9 1.1 1.8 1.1 1.1 0 1.8-.4 1.8-1.1 0-.7-.7-1-2.1-1.3-1.9-.4-3.2-1.1-3.2-2.8 0-1.3 1-2.3 2.6-2.6z"/></svg></div>
+      <div class="meta"><h4>Golden Contract</h4><p>Every job pays double, forever.</p></div>
+      ${S.golden?'<div class="lock">Owned</div>':`<button class="go buy" type="button" id="gold" ${S.cash<GOLDEN_PRICE?'disabled':''}>${money(GOLDEN_PRICE)}</button>`}</div></div>
+    <p class="note">In the Roblox version, items like the Golden Contract become game passes.</p>`,'shopT');
+  layer.querySelectorAll('.go[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k,t=TOOLS[k],p=t.price[S[k]+1];if(S.cash<p)return;S.cash-=p;S[k]++;save();updateStats();snd('coin');toast('You got the '+t.names[S[k]]+'!');openShop();});
+  const g=$('#gold');if(g) g.onclick=()=>{if(S.cash<GOLDEN_PRICE)return;S.cash-=GOLDEN_PRICE;S.golden=true;save();updateStats();snd('win');toast('Golden Contract signed. Double pay!');openShop();};
+}
+
+function openHome(){
+  if(S.mansion){
+    sheet('My mansion',`<p>Your mansion stands at the top of Rich Hills. ${S.jobs} jobs done, best payday ${money(S.best)}.</p>
+      <div class="list"><div class="row"><div class="meta" style="grid-column:1/3"><h4>Coming in the Roblox version</h4><p>Post your own jobs and hire real players to build on your land. Decorate rooms, add a pool, park supercars.</p></div></div></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="go buy" type="button" id="visit">Visit my mansion</button><button class="ghostbtn" type="button" id="back">Back to the job site</button></div>`,'homeT');
+    $('#visit').onclick=()=>{closeSheet();teleport(plot.x,plot.z+10);theta=0;distGoal=26;};
+    $('#back').onclick=()=>{closeSheet();teleport(0,job?job.front+3:11);theta=0;distGoal=15;};
+    return;
+  }
+  const pct=Math.min(100,S.cash/MANSION_PRICE*100);
+  sheet('Your own mansion',`<p>A plot at the top of Rich Hills is for sale. Buy it and a three-floor mansion with gold trim gets built for you.</p>
+    <div class="prog" style="height:16px;margin:12px 0 6px"><i style="width:${pct}%"></i></div>
+    <p class="note" style="margin-top:0">${money(S.cash)} of ${money(MANSION_PRICE)} saved</p>
+    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><button class="go buy" type="button" id="buy" ${S.cash<MANSION_PRICE?'disabled':''}>Buy for ${money(MANSION_PRICE)}</button><button class="ghostbtn" type="button" id="look">Look at the plot</button></div>`,'homeT');
+  $('#look').onclick=()=>{closeSheet();teleport(plot.x,plot.z+11);theta=0;distGoal=24;};
+  $('#buy').onclick=()=>{if(S.cash<MANSION_PRICE)return;S.cash-=MANSION_PRICE;S.mansion=true;save();updateStats();showMansion();snd('win');burst(new T.Vector3(plot.x,6,plot.z),40);closeSheet();teleport(plot.x,plot.z+10);theta=0;distGoal=26;toast('Welcome home, boss. You own a mansion!');renderHud(!job||job.done);};
+}
+
+let toastT=0;
+function toast(s){const t=$('#toast');t.textContent=s;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2200);}
+function showHint(s){const h=$('#hint');h.textContent=s;h.hidden=false;}
+function hideHint(){$('#hint').hidden=true;}
+
+$('#bJobs').onclick=openJobs;$('#bShop').onclick=openShop;$('#bHome').onclick=openHome;
+
+/* intro */
+updateStats();renderHud();
+if(!S.seenIntro){
+  layer.innerHTML=`<div class="done" role="dialog" aria-modal="true" aria-labelledby="introT"><div class="card">
+    <h2 id="introT">Dream Builders</h2>
+    <p style="margin:12px 0 6px">The rich people of Rich Hills want pools, garages and mansions. You're the builder.</p>
+    <p>Build, fix and paint to get paid. Upgrade your tools, rank up to Construction Boss, and buy a mansion of your own.</p>
+    <p class="note" style="margin:-6px 0 14px">${matchMedia('(pointer:coarse)').matches?'Joystick to move · E button to build · drag to look · pinch to zoom':'W A S D to move · Space to jump · Shift to run · E to build, fix and paint · drag the mouse to look'}</p>
+    <button class="go" type="button" id="start" style="width:100%">Start working</button></div></div>`;
+  $('#start').onclick=()=>{S.seenIntro=true;save();layer.innerHTML='';rollOffers();startJob(offers.find(o=>o.def.bp==='shed')||offers[0]);};
+} else {rollOffers();}
+
+/* =================== CONTROLS =================== */
+const keys={};let touchE=false,eCd=0;const joy={x:0,y:0};
+const ZONES=[{x:5.5,z:8.3,r:3.2,label:'Job board',fn:()=>openJobs()},{x:-44,z:4.4,r:3.2,label:'Job board',fn:()=>openJobs()},
+  {x:-39,z:5.2,r:4.2,label:'Tool shop',fn:()=>openShop()},{x:plot.x,z:plot.z+8,r:3.4,label:'Mansion',fn:()=>openHome()}];
+function nearZone(){for(const z of ZONES){if(Math.hypot(P.pos.x-z.x,P.pos.z-z.z)<z.r)return z;}return null;}
+const REACH=6.5;let target=null;
+function findTarget(){
+  if(!job||job.done) return null;
+  const list=job.def.t==='build'?job.avail:job.def.t==='fix'?job.issues:job.paintable;
+  const ex=P.pos.x,ey=P.pos.y+1.2,ez=P.pos.z,fx=Math.sin(P.face),fz=Math.cos(P.face);
+  let best=null,bs=1e9;
+  for(const o of list){const dx=o.position.x-ex,dy=o.position.y-ey,dz=o.position.z-ez;const d=Math.sqrt(dx*dx+dy*dy+dz*dz);if(d>REACH)continue;
+    const hd=Math.hypot(dx,dz)||1;const dot=(dx*fx+dz*fz)/hd;const sc=d-dot*2.2+Math.max(0,dy)*.15;if(sc<bs){bs=sc;best=o;}}
+  return best;
+}
+function doAction(t){if(job.def.t==='build')buildTap(t);else if(job.def.t==='fix')fixTap(t);else paintTap(t);}
+function act(){
+  if(layer.innerHTML) return;hideHint();
+  if(target){doAction(target);return;}
+  const z=nearZone();if(z){z.fn();return;}
+  if(job&&!job.done) toast(job.def.t==='build'?'Walk up to a bright blue block, then press E.':job.def.t==='fix'?'Walk up to a red broken part, then press E.':'Walk up to a wall, then press E.');
+}
+function jump(){if(P.ground&&!layer.innerHTML){P.vy=10.5;P.ground=false;}}
+const MOVE_KEYS=['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright',' ','shift','e'];
+addEventListener('keydown',e=>{
+  if(layer.innerHTML){if(e.key==='Escape')closeSheet();return;}
+  if(e.target&&e.target.closest&&e.target.closest('button')&&(e.key==='Enter'))return;
+  const k=e.key.toLowerCase();
+  if(MOVE_KEYS.includes(k)) e.preventDefault();
+  if(k==='e'&&!keys.e){act();eCd=.28;}
+  if(k===' '&&!keys[' ']) jump();
+  if(job&&!job.done&&job.def.t==='paint'&&/^[1-6]$/.test(k)){job.brush=PAINTS[+k-1].c;renderHud();snd('paint');}
+  keys[k]=true;
+});
+addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
+addEventListener('blur',()=>{for(const k in keys)keys[k]=false;touchE=false;});
+{
+  const jz=$('#joy'),kn=$('#knob');let jid=null,cx=0,cy=0;
+  jz.addEventListener('pointerdown',e=>{jid=e.pointerId;jz.setPointerCapture(jid);const r=jz.getBoundingClientRect();cx=r.left+r.width/2;cy=r.top+r.height/2;mv(e);});
+  const mv=e=>{if(e.pointerId!==jid)return;let dx=e.clientX-cx,dy=e.clientY-cy;const L=Math.hypot(dx,dy),m=48;if(L>m){dx*=m/L;dy*=m/L;}joy.x=dx/m;joy.y=dy/m;kn.style.transform=`translate(${dx}px,${dy}px)`;};
+  jz.addEventListener('pointermove',mv);
+  const up=e=>{if(e.pointerId!==jid)return;jid=null;joy.x=joy.y=0;kn.style.transform='';};
+  jz.addEventListener('pointerup',up);jz.addEventListener('pointercancel',up);
+  const ta=$('#tAct');ta.addEventListener('pointerdown',e=>{e.preventDefault();act();touchE=true;eCd=.3;});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>ta.addEventListener(ev,()=>touchE=false));
+  $('#tJump').addEventListener('pointerdown',e=>{e.preventDefault();jump();});
+}
+const hl=new T.LineSegments(new T.EdgesGeometry(new T.BoxGeometry(1.08,1.08,1.08)),new T.LineBasicMaterial({color:0xffd21f}));hl.visible=false;scene.add(hl);
+const promptEl=$('#prompt'),promptTxt=$('#promptTxt');let promptLast='';
+function setPrompt(s){if(s===promptLast)return;promptLast=s;if(s){promptTxt.textContent=s;promptEl.hidden=false;}else promptEl.hidden=true;}
+const vF=new T.Vector3(),vR=new T.Vector3(),vM=new T.Vector3();
+function stepPlayer(dt,now){
+  const blocked=!!layer.innerHTML;
+  let f=0,s=0;
+  if(!blocked){f=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0)-joy.y;s=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+joy.x;}
+  vF.set(-Math.sin(theta),0,-Math.cos(theta));vR.set(Math.cos(theta),0,-Math.sin(theta));
+  vM.set(0,0,0).addScaledVector(vF,f).addScaledVector(vR,s);
+  let m=vM.length();if(m>1){vM.multiplyScalar(1/m);m=1;}
+  const speed=(keys.shift?11:6.5)*m;
+  if(m>.05){P.face=Math.atan2(vM.x,vM.z);
+    const dx=vM.x/m*speed*dt,dz=vM.z/m*speed*dt;
+    if(!hits(P.pos.x+dx,P.pos.y,P.pos.z))P.pos.x+=dx;
+    if(!hits(P.pos.x,P.pos.y,P.pos.z+dz))P.pos.z+=dz;
+    P.pos.x=Math.max(-120,Math.min(120,P.pos.x));P.pos.z=Math.max(-120,Math.min(120,P.pos.z));}
+  P.vy-=30*dt;const ny=P.pos.y+P.vy*dt;
+  if(P.vy<=0){
+    if(ny<=0){P.pos.y=0;P.vy=0;P.ground=true;}
+    else if(hits(P.pos.x,ny,P.pos.z)){P.pos.y=Math.floor(ny)+1;P.vy=0;P.ground=true;}
+    else{P.pos.y=ny;P.ground=false;}
+  }else{if(hits(P.pos.x,ny,P.pos.z)){P.vy=0;}else P.pos.y=ny;P.ground=false;}
+  worker.position.copy(P.pos);
+  let dr=P.face-worker.rotation.y;while(dr>Math.PI)dr-=Math.PI*2;while(dr<-Math.PI)dr+=Math.PI*2;worker.rotation.y+=dr*Math.min(1,dt*14);
+  const walking=m>.05&&P.ground;const sw=walking?Math.sin(now/(keys.shift?55:80))*.7:0;
+  worker.userData.legL.rotation.x=sw;worker.userData.legR.rotation.x=-sw;
+  // target + prompt
+  target=blocked?null:findTarget();
+  if(target){hl.visible=true;hl.position.copy(target.position);const sc=target.userData.kind==='leak'?.7:1;hl.scale.setScalar(sc);}else hl.visible=false;
+  const z=blocked?null:nearZone();
+  setPrompt(blocked?'':target?(job.def.t==='build'?'Build':job.def.t==='fix'?'Fix':'Paint'):z?z.label:'');
+  if((keys.e||touchE)&&!blocked){eCd-=dt;if(eCd<=0){if(target)doAction(target);eCd=.13;}}
+}
+
+/* =================== LOOP =================== */
+function resize(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+if(cam.aspect<1){dist=distGoal=20;}
+let last=performance.now();
+function loop(now){
+  const raw=Math.min(.25,(now-last)/1000),dt=Math.min(.05,raw);last=now;
+  {let rem=raw;while(rem>1e-4){const h=Math.min(.04,rem);stepPlayer(h,now);rem-=h;}}
+  camGoal.set(P.pos.x,P.pos.y+2.2,P.pos.z);
+  camT.lerp(camGoal,reduce?1:.2);dist+=(distGoal-dist)*(reduce?1:.1);
+  cam.position.set(camT.x+dist*Math.sin(phi)*Math.sin(theta),camT.y+dist*Math.cos(phi),camT.z+dist*Math.sin(phi)*Math.cos(theta));cam.lookAt(camT);
+  // ghosts pulse
+  M.ghostOn.opacity=.3+.18*Math.sin(now/220);
+  M.broken.emissiveIntensity=.35+.3*Math.sin(now/160);
+  if(wSwing>0){wSwing-=dt;worker.userData.arm.rotation.x=-Math.sin((.35-wSwing)/.35*Math.PI*2)*1.4;}else worker.userData.arm.rotation.x=0;
+  // anims
+  for(let i=anims.length-1;i>=0;i--){const a=anims[i];a.t+=dt;const k=Math.min(1,a.t/a.d);
+    if(a.water){a.water.material.opacity=.85*k;}else{const e=1-Math.pow(1-k,3);a.m.scale.setScalar(.01+.99*e);a.m.position.y=a.y+.7*(1-e);}
+    if(k>=1) anims.splice(i,1);}
+  for(let i=coins.length-1;i>=0;i--){const c=coins[i];c.userData.life-=dt;c.userData.v.y-=12*dt;c.position.addScaledVector(c.userData.v,dt);
+    if(!c.userData.puff)c.rotation.z+=dt*10;else c.material.opacity=Math.max(0,c.userData.life*1.8);
+    if(c.userData.life<=0){scene.remove(c);if(c.userData.puff){c.geometry.dispose();c.material.dispose();}coins.splice(i,1);}}
+  updateTip();
+  R.render(scene,cam);requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>

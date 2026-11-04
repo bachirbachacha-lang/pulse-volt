@@ -1,0 +1,220 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390,initial-scale=1">
+<title>Pixel & Co. phone screens</title>
+<!-- Three concept sites for the Pixel & Co. phone ad. Deterministic: window.setTime(t) draws the frame at t seconds.
+     ?site=cafe | abaya | detail. Recorded at 390x844 CSS px, 2x. All brands are fictional design samples. -->
+<style>
+@font-face{font-family:Alex;src:url(../crewup/fonts/alexandria-arabic-var.woff2) format("woff2");font-weight:100 900;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Alex;src:url(../crewup/fonts/alexandria-latin-var.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:Unb;src:url(../crewup/fonts/unbounded-latin-var.woff2) format("woff2");font-weight:200 900}
+@font-face{font-family:News;src:url(../crewup/fonts/newsreader-latin-400.woff2) format("woff2")}
+@font-face{font-family:Out;src:url(../crewup/fonts/outfit-latin-variable.woff2) format("woff2");font-weight:100 900}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;height:844px;overflow:hidden;background:#000}
+#app{position:relative;width:390px;height:844px;overflow:hidden;font-family:Alex,Out,sans-serif;-webkit-font-smoothing:antialiased}
+.status{position:absolute;top:0;left:0;right:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:14px 30px 0 34px;font:600 16px/1 Out,sans-serif;z-index:50;letter-spacing:.01em}
+.status .r{display:flex;gap:6px;align-items:center}
+.bars{display:flex;gap:2px;align-items:flex-end}.bars i{width:3px;border-radius:1px;background:currentColor}
+.batt{width:25px;height:12px;border:1.5px solid currentColor;border-radius:4px;padding:1.5px;opacity:.95}.batt i{display:block;height:100%;width:80%;background:currentColor;border-radius:1.5px}
+.home{position:absolute;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;z-index:50}
+.page{position:absolute;left:0;top:0;width:390px;will-change:transform}
+.splash{position:absolute;inset:0;z-index:40;display:grid;place-items:center}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:45;border-radius:28px 28px 0 0;padding:26px 24px 44px}
+.tap{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.55);z-index:60;pointer-events:none;opacity:0}
+.ar{font-family:Alex,sans-serif;direction:rtl}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:18px;font-weight:700;font-size:16px}
+.row{display:flex;gap:12px}
+</style>
+<div id="app"></div>
+<script>
+const Q=new URLSearchParams(location.search),SITE=Q.get('site')||'cafe';
+const app=document.getElementById('app');
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ease=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const out=x=>1-Math.pow(1-clamp(x),3);
+const back=x=>{x=clamp(x);const c=1.6;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const statusBar=c=>`<div class="status" style="color:${c}"><span>9:41</span><span class="r"><span class="bars"><i style="height:5px"></i><i style="height:7px"></i><i style="height:9px"></i><i style="height:11px"></i></span><svg width="16" height="12" viewBox="0 0 16 12"><path fill="${c}" d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6c1.6-1.5 3.7-2.4 6-2.4zm0 3.5c1.4 0 2.6.5 3.6 1.4l1.2-1.3A7 7 0 0 0 8 3.9 7 7 0 0 0 3.2 5.8l1.2 1.3C5.4 6.2 6.6 5.7 8 5.7zm0 3.5c.5 0 1 .2 1.3.5L8 11.2 6.7 9.7c.3-.3.8-.5 1.3-.5z"/></svg><span class="batt"><i></i></span></span></div>`;
+
+/* ======================= SITES ======================= */
+const SITES={
+cafe:{
+  bg:'#F3EBDD',ink:'#2B1D14',acc:'#D9822B',status:'#2B1D14',home:'#2B1D14',
+  splash:`<div style="text-align:center;color:#F3EBDD"><div id="lg" style="font:800 68px/1 Unb,sans-serif;letter-spacing:-.02em">SUHA</div><div class="ar" style="font:600 22px/1.4 Alex;margin-top:6px;opacity:.8">سُها · قهوة مختصة</div></div>`,
+  splashBg:'#2B1D14',
+  page:()=>`
+  <div style="height:54px"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 22px">
+    <div style="font:800 24px/1 Unb;color:#2B1D14;letter-spacing:-.02em">SUHA</div>
+    <div style="display:flex;gap:10px"><div style="width:40px;height:40px;border-radius:14px;background:#2B1D14;display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#F3EBDD" d="M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0h-2a1 1 0 0 0-2 0z"/></svg></div></div>
+  </div>
+  <div class="ar" style="padding:18px 22px 0">
+    <div data-in="0" style="display:inline-block;background:#E7D8C2;color:#8A4F1A;font:700 12px/1 Alex;padding:8px 12px;border-radius:99px">جاهزة خلال ١٠ دقائق</div>
+    <h1 data-in="1" style="font:800 44px/1.12 Alex;color:#2B1D14;margin-top:14px">قهوتك جاهزة<br>قبل ما توصل</h1>
+    <p data-in="2" style="font:500 15px/1.6 Alex;color:#6E5847;margin-top:10px;direction:ltr;text-align:right">Order ahead. Skip the line.</p>
+  </div>
+  <div data-in="3" style="position:relative;height:300px;margin-top:6px">
+    <div style="position:absolute;left:50%;top:26px;width:240px;height:240px;margin-left:-120px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#E9A55B,#D9822B 55%,#B9661D)"></div>
+    <div id="cup" style="position:absolute;left:50%;top:40px;margin-left:-80px;width:160px;height:220px">
+      <div style="position:absolute;left:14px;right:14px;top:24px;bottom:0;border-radius:10px 10px 34px 34px;background:linear-gradient(90deg,#fff,#f1ece5 60%,#d9d1c6)"></div>
+      <div style="position:absolute;left:4px;right:4px;top:6px;height:30px;border-radius:12px;background:linear-gradient(90deg,#3a2a20,#2B1D14)"></div>
+      <div style="position:absolute;left:30px;right:30px;top:96px;height:64px;border-radius:12px;background:#2B1D14;display:grid;place-items:center;font:800 18px/1 Unb;color:#F3EBDD">SUHA</div>
+    </div>
+    <div id="steam" style="position:absolute;left:50%;top:-6px;width:80px;height:60px;margin-left:-40px;opacity:.5"></div>
+  </div>
+  <div class="ar" style="padding:0 22px"><div data-in="4" class="btn" style="background:#2B1D14;color:#F3EBDD">اطلب الحين <span style="font:600 14px Out;opacity:.7">Order now</span></div></div>
+  <div class="ar" style="padding:34px 22px 10px;display:flex;justify-content:space-between;align-items:baseline"><h2 style="font:800 24px/1 Alex;color:#2B1D14">المنيو</h2><span style="font:600 13px Out;color:#8A4F1A">Menu</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px">
+    ${[['سبانش لاتيه','Spanish latte','18','#C98B55'],['ماتشا','Iced matcha','21','#8DBB6A'],['V60','Ethiopia V60','24','#7A4A2A'],['كورتادو','Cortado','16','#A86A3A']].map((m,i)=>`
+    <div class="ar" style="background:#fff;border-radius:22px;padding:12px;box-shadow:0 6px 18px rgba(43,29,20,.08)">
+      <div style="height:110px;border-radius:16px;background:radial-gradient(circle at 50% 40%,${m[3]},${m[3]}cc 45%,#efe4d4 46%);"></div>
+      <div style="font:700 15px/1.3 Alex;color:#2B1D14;margin-top:10px">${m[0]}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;direction:ltr"><span style="font:700 14px Out;color:#2B1D14">${m[2]} SAR</span><span style="width:28px;height:28px;border-radius:9px;background:#2B1D14;color:#F3EBDD;display:grid;place-items:center;font:700 18px/1 Out">+</span></div>
+    </div>`).join('')}
+  </div>
+  <div class="ar" style="padding:28px 22px 0"><h2 style="font:800 22px/1 Alex;color:#2B1D14">وقت الاستلام</h2>
+    <div style="display:flex;gap:8px;margin-top:14px;direction:ltr;justify-content:flex-end">${['10 min','20 min','30 min'].map((p,i)=>`<span style="padding:12px 16px;border-radius:14px;font:700 14px Out;${i===0?'background:#D9822B;color:#fff':'background:#E7D8C2;color:#2B1D14'}">${p}</span>`).join('')}</div></div>
+  <div class="ar" style="padding:26px 22px 120px"><div id="cta" class="btn" style="background:#2BA55E;color:#fff">اطلب عبر واتساب <span style="font:600 14px Out;opacity:.85">Order on WhatsApp</span></div></div>`,
+  sheet:`<div class="ar" style="text-align:center"><div style="width:64px;height:64px;margin:0 auto;border-radius:50%;background:#2BA55E;display:grid;place-items:center"><svg width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <div style="font:800 24px/1.3 Alex;color:#2B1D14;margin-top:14px">وصل طلبك!</div><div dir="ltr" style="font:500 14px/1.5 Out;color:#6E5847">Order sent. Ready in 10 min.</div></div>`,
+  sheetBg:'#FFFFFF', scroll:[1.9,4.7,690]
+},
+abaya:{
+  bg:'#0E0E10',ink:'#F2EEE8',acc:'#CBB89A',status:'#F2EEE8',home:'#F2EEE8',
+  splashBg:'#CBB89A',
+  splash:`<div style="text-align:center;color:#0E0E10"><div id="lg" style="font:400 76px/1 News,serif;letter-spacing:.08em">LAYAN</div><div class="ar" style="font:500 20px/1.4 Alex;margin-top:6px">ليان · عبايات</div></div>`,
+  page:()=>`
+  <div style="height:54px"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 22px;color:#F2EEE8">
+    <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#F2EEE8" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h12v2H3z"/></svg>
+    <div style="font:400 26px/1 News,serif;letter-spacing:.14em">LAYAN</div>
+    <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#F2EEE8" d="M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0h-2a1 1 0 0 0-2 0z"/></svg>
+  </div>
+  <div style="position:relative;height:520px;margin:8px 16px 0;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,#2a2622,#141214 60%)">
+    <div id="hero" style="position:absolute;inset:0">${abayaSVG('#1a1a1c','#CBB89A',0)}</div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:22px;background:linear-gradient(transparent,rgba(0,0,0,.75))">
+      <div data-in="0" style="font:500 12px/1 Out;letter-spacing:.3em;color:#CBB89A">AUTUMN 26</div>
+      <div data-in="1" class="ar" style="font:700 38px/1.15 Alex;color:#F2EEE8;margin-top:10px;text-align:right">مجموعة الخريف</div>
+      <div data-in="2" style="font:400 22px/1.2 News,serif;color:#F2EEE8;opacity:.8;text-align:right">The Autumn Edit</div>
+    </div>
+  </div>
+  <div style="padding:16px 16px 0"><div data-in="3" class="btn ar" style="background:#CBB89A;color:#0E0E10">تسوّقي الآن <span style="font:600 14px Out;opacity:.7">Shop now</span></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:28px 16px 0">
+    ${[['#2b2724','#CBB89A','نُور','Noor','690'],['#3a3236','#E2C9B8','سَما','Sama','780'],['#1c2a2a','#9FC4BC','دانة','Dana','720'],['#2a2016','#D8B27A','جود','Jood','850']].map((a,i)=>`
+    <div style="border-radius:22px;overflow:hidden;background:#18171a">
+      <div style="height:210px;position:relative;background:linear-gradient(170deg,${a[0]},#121113)">${abayaSVG(a[0],a[1],i+1)}</div>
+      <div style="padding:10px 12px 14px;display:flex;justify-content:space-between;align-items:baseline"><span style="font:400 17px/1 News,serif;color:#F2EEE8">${a[3]}</span><span class="ar" style="font:600 14px Alex;color:#CBB89A">${a[2]}</span></div>
+      <div style="padding:0 12px 14px;font:600 13px Out;color:#bdb4a6">${a[4]} SAR</div>
+    </div>`).join('')}
+  </div>
+  <div style="padding:26px 16px 0;color:#F2EEE8"><div class="ar" style="font:700 20px/1 Alex;text-align:right">اختاري مقاسك</div>
+    <div style="display:flex;gap:8px;margin-top:14px">${['50','52','54','56','58'].map((s,i)=>`<span style="flex:1;height:48px;border-radius:14px;display:grid;place-items:center;font:600 15px Out;${i===2?'background:#CBB89A;color:#0E0E10':'border:1px solid #3a3734;color:#F2EEE8'}">${s}</span>`).join('')}</div></div>
+  <div style="padding:22px 16px 120px"><div id="cta" class="btn ar" style="background:#F2EEE8;color:#0E0E10">احجزي موعد قياس <span style="font:600 14px Out;opacity:.6">Book a fitting</span></div></div>`,
+  sheetBg:'#1a191c',
+  sheet:`<div class="ar" style="text-align:center;color:#F2EEE8"><div style="width:64px;height:64px;margin:0 auto;border-radius:50%;background:#CBB89A;display:grid;place-items:center"><svg width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="#0E0E10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <div style="font:700 24px/1.3 Alex;margin-top:14px">تم حجز موعدك</div><div dir="ltr" style="font:500 14px/1.5 Out;color:#bdb4a6">Fitting booked. Thursday, 5 pm.</div></div>`,
+  scroll:[1.9,4.7,760]
+},
+detail:{
+  bg:'#0B0F14',ink:'#EAF6FF',acc:'#29E0FF',status:'#EAF6FF',home:'#EAF6FF',
+  splashBg:'#0B0F14',
+  splash:`<div style="text-align:center;color:#EAF6FF"><div id="lg" style="font:800 64px/1 Unb;letter-spacing:.04em;background:linear-gradient(90deg,#EAF6FF,#29E0FF);-webkit-background-clip:text;color:transparent">GLAZE</div><div class="ar" style="font:600 20px/1.4 Alex;margin-top:8px;color:#8FB4C8">جليز · عناية بالسيارات</div></div>`,
+  page:()=>`
+  <div style="height:54px"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 22px">
+    <div style="font:800 22px/1 Unb;color:#EAF6FF;letter-spacing:.04em">GLAZE</div>
+    <div style="padding:9px 14px;border-radius:12px;background:#132029;color:#29E0FF;font:700 13px Out">RIYADH</div>
+  </div>
+  <div style="position:relative;height:330px;margin-top:4px">
+    <div style="position:absolute;inset:40px 0 0;background:radial-gradient(60% 50% at 50% 70%,rgba(41,224,255,.35),transparent 70%)"></div>
+    <div id="car" style="position:absolute;left:-10px;right:-10px;top:96px;height:170px">${carSVG()}</div>
+    
+  </div>
+  <div class="ar" style="padding:0 22px">
+    <h1 data-in="0" style="font:800 40px/1.15 Alex;color:#EAF6FF">لمعة كأنها<br><span style="color:#29E0FF">من الوكالة</span></h1>
+    <p data-in="1" style="font:500 15px/1.6 Out;color:#8FB4C8;margin-top:8px;direction:ltr;text-align:right">Showroom shine. At your door.</p>
+    <div data-in="2" class="btn" style="margin-top:18px;background:#29E0FF;color:#05222b">احجز غسيل <span style="font:600 14px Out;opacity:.7">Book a wash</span></div>
+  </div>
+  <div class="ar" style="padding:34px 22px 12px"><h2 style="font:800 22px/1 Alex;color:#EAF6FF">الباقات <span style="font:600 13px Out;color:#29E0FF;margin-right:6px">Packages</span></h2></div>
+  <div style="display:grid;gap:12px;padding:0 22px">
+    ${[['غسيل كامل','Full wash','120','45 min'],['تلميع','Polish','350','2 h'],['سيراميك','Ceramic coat','1,450','1 day']].map((p,i)=>`
+    <div class="ar" style="display:flex;justify-content:space-between;align-items:center;padding:18px;border-radius:22px;background:${i===2?'linear-gradient(120deg,#0f3a46,#132029)':'#121a22'};border:1px solid ${i===2?'#29E0FF':'#1d2a35'}">
+      <div><div style="font:700 17px/1.3 Alex;color:#EAF6FF">${p[0]}</div><div style="font:500 13px Out;color:#8FB4C8;direction:ltr;text-align:right">${p[1]} — ${p[3]}</div></div>
+      <div style="font:800 20px/1 Unb;color:${i===2?'#29E0FF':'#EAF6FF'};direction:ltr">${p[2]}<span style="font:600 11px Out;margin-left:4px;color:#8FB4C8">SAR</span></div>
+    </div>`).join('')}
+  </div>
+  <div class="ar" style="padding:26px 22px 0"><h2 style="font:800 20px/1 Alex;color:#EAF6FF">اختر الموعد</h2>
+    <div style="display:flex;gap:8px;margin-top:14px;direction:ltr">${[['THU','6'],['FRI','7'],['SAT','8'],['SUN','9'],['MON','10']].map((d,i)=>`<span style="flex:1;padding:12px 0;border-radius:16px;text-align:center;${i===1?'background:#29E0FF;color:#05222b':'background:#121a22;color:#EAF6FF'}"><span style="display:block;font:600 11px Out;opacity:.7">${d[0]}</span><span style="display:block;font:800 18px/1.3 Unb">${d[1]}</span></span>`).join('')}</div></div>
+  <div class="ar" style="padding:24px 22px 120px"><div id="cta" class="btn" style="background:#EAF6FF;color:#0B0F14">تأكيد الحجز <span style="font:600 14px Out;opacity:.6">Confirm booking</span></div></div>`,
+  sheetBg:'#121a22',
+  sheet:`<div class="ar" style="text-align:center;color:#EAF6FF"><div style="width:64px;height:64px;margin:0 auto;border-radius:50%;background:#29E0FF;display:grid;place-items:center"><svg width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="#05222b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <div style="font:800 24px/1.3 Alex;margin-top:14px">تم الحجز!</div><div dir="ltr" style="font:500 14px/1.5 Out;color:#8FB4C8">Booked. Friday at 4 pm.</div></div>`,
+  scroll:[1.9,4.7,640]
+}};
+
+function abayaSVG(base,trim,k){
+  const sway=k*7;
+  return `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMax meet" style="position:absolute;inset:0;width:100%;height:100%">
+   <defs><linearGradient id="f${k}" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset=".45" stop-color="${base}"/><stop offset=".7" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient></defs>
+   <ellipse cx="100" cy="292" rx="70" ry="6" fill="#000" opacity=".4"/>
+   <path d="M100 38c-12 0-20 9-20 20 0 8 3 13 6 16l-26 26c-8 40-14 120-20 190h120c-6-70-12-150-20-190l-26-26c3-3 6-8 6-16 0-11-8-20-20-20z" fill="${base}"/>
+   <path d="M100 38c-12 0-20 9-20 20 0 8 3 13 6 16l-26 26c-8 40-14 120-20 190h120c-6-70-12-150-20-190l-26-26c3-3 6-8 6-16 0-11-8-20-20-20z" fill="url(#f${k})"/>
+   <path d="M60 100c-6 50-10 120-12 190" stroke="${trim}" stroke-width="2" fill="none" opacity=".7"/>
+   <path d="M140 100c6 50 10 120 12 190" stroke="${trim}" stroke-width="2" fill="none" opacity=".7"/>
+   <path d="M86 74l14 16 14-16" stroke="${trim}" stroke-width="3" fill="none"/>
+   <path d="M100 90v198" stroke="${trim}" stroke-width="1.2" opacity=".45"/>
+   <path d="M76 120c${sway} 40 ${sway/2} 110 -6 168M124 120c${-sway} 40 ${-sway/2} 110 6 168" stroke="#fff" stroke-opacity=".06" stroke-width="10" fill="none"/>
+  </svg>`;
+}
+function carSVG(){return `<svg viewBox="0 0 400 170" style="width:100%;height:100%">
+  <defs><linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c4a57"/><stop offset=".45" stop-color="#0f161d"/><stop offset=".55" stop-color="#1c2731"/><stop offset="1" stop-color="#05080b"/></linearGradient>
+  <linearGradient id="cw" x1="0" x2="1"><stop offset="0" stop-color="#0b1a22"/><stop offset=".5" stop-color="#29E0FF" stop-opacity=".35"/><stop offset="1" stop-color="#0b1a22"/></linearGradient></defs>
+  <ellipse cx="200" cy="150" rx="185" ry="10" fill="#000" opacity=".6"/>
+  <path d="M28 118c0-16 10-26 30-30l58-12c18-18 46-36 86-38 40-1 74 12 100 36l44 8c22 4 34 14 34 30v14H28z" fill="url(#cb)"/>
+  <path d="M128 76c16-14 38-26 70-27 32 0 58 9 80 27z" fill="url(#cw)"/>
+  <path d="M200 50v26" stroke="#0B0F14" stroke-width="4"/>
+  <path d="M40 104h330" stroke="#29E0FF" stroke-opacity=".25" stroke-width="2"/>
+  <path d="M346 102l22 3" stroke="#e9f7ff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M34 104l14-2" stroke="#ff3b3b" stroke-width="5" stroke-linecap="round"/>
+  ${[100,300].map(x=>`<g transform="translate(${x} 134)"><circle r="26" fill="#05080b"/><circle r="17" fill="#2a3540"/><circle r="17" fill="none" stroke="#9fb3c2" stroke-width="2"/>${[0,72,144,216,288].map(a=>`<path d="M0 0L${(15*Math.cos(a*Math.PI/180)).toFixed(1)} ${(15*Math.sin(a*Math.PI/180)).toFixed(1)}" stroke="#9fb3c2" stroke-width="3"/>`).join('')}<circle r="4" fill="#9fb3c2"/></g>`).join('')}
+</svg>`;}
+
+/* ======================= BUILD ======================= */
+const S=SITES[SITE];
+app.style.background=S.bg;
+app.innerHTML=`${statusBar(S.status)}<div class="page" id="page">${S.page()}</div>
+<div class="splash" id="splash" style="background:${S.splashBg}">${S.splash}</div>
+<div id="topband" style="position:absolute;left:0;right:0;top:0;height:64px;z-index:49;background:linear-gradient(${S.bg} 70%,${S.bg}00)"></div>
+<div class="sheet" id="sheet" style="background:${S.sheetBg};box-shadow:0 -10px 40px rgba(0,0,0,.25)">${S.sheet}</div>
+<div class="tap" id="tap"></div><div class="home" style="background:${S.home}"></div>`;
+const page=document.getElementById('page'),splash=document.getElementById('splash'),sheet=document.getElementById('sheet'),tap=document.getElementById('tap');
+const ins=[...document.querySelectorAll('[data-in]')];
+const lg=document.getElementById('lg');
+let ctaY=0;
+function measure(){const c=document.getElementById('cta');ctaY=c.offsetTop+c.offsetHeight/2;}
+window.DURATION=6.5;
+window.setTime=function(t){
+  // splash: logo pops then wipes up
+  const sp=seg(t,.55,1.05);
+  splash.style.transform=`translateY(${-ease(sp)*100}%)`;const tb=document.getElementById('topband');if(tb)tb.style.opacity=sp>=1?1:0;splash.style.display=sp>=1?'none':'grid';
+  lg.style.transform=`scale(${.85+.15*back(seg(t,0,.45))})`;lg.style.opacity=out(seg(t,0,.3));
+  // hero entrances
+  ins.forEach(el=>{const i=+el.dataset.in;const k=out(seg(t,.85+i*.1,1.35+i*.1));el.style.opacity=k;el.style.transform=`translateY(${(1-k)*26}px)`;});
+  // scroll
+  const [a,b,dist]=S.scroll;const sc=ease(seg(t,a,b))*dist;
+  page.style.transform=`translateY(${-sc}px)`;
+  // tap on CTA
+  measure();const ty=ctaY-sc;const tp=seg(t,4.95,5.35);
+  tap.style.left='195px';tap.style.top=ty+'px';tap.style.opacity=tp>0&&tp<1?(1-tp)*.9:0;tap.style.transform=`scale(${.6+tp*1.4})`;
+  const c=document.getElementById('cta');c.style.transform=`scale(${1-.04*Math.sin(Math.PI*tp)})`;
+  // confirmation sheet
+  const sh=back(seg(t,5.35,5.85));sheet.style.transform=`translateY(${(1-sh)*110}%)`;
+  // site extras
+  const cup=document.getElementById('cup');if(cup)cup.style.transform=`translateY(${Math.sin(t*2.2)*4}px) rotate(${Math.sin(t*1.3)*2}deg)`;
+  const sw=document.getElementById('sweep');if(sw)sw.style.left=(-120+((t*180)%560))+'px';
+  const car=document.getElementById('car');if(car)car.style.transform=`translateX(${(1-out(seg(t,.7,1.6)))*-260}px)`;
+  const hero=document.getElementById('hero');if(hero)hero.style.transform=`scale(${1.08-.08*out(seg(t,.6,2.2))})`;
+};
+document.fonts.ready.then(()=>{measure();setTime(+(Q.get('t')||2));window.READY=true;});
+</script>

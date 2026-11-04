@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Pixel & Co. ad parts</title>
+<!-- Floating UI cards (transparent PNGs) for the 3D burst shots, and the Pixel & Co. end screen (?end=1, setTime(t)). -->
+<style>
+@font-face{font-family:Alex;src:url(../crewup/fonts/alexandria-arabic-var.woff2) format("woff2");font-weight:100 900;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Alex;src:url(../crewup/fonts/alexandria-latin-var.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:Unb;src:url(../crewup/fonts/unbounded-latin-var.woff2) format("woff2");font-weight:200 900}
+@font-face{font-family:News;src:url(../crewup/fonts/newsreader-latin-400.woff2) format("woff2")}
+@font-face{font-family:Out;src:url(../crewup/fonts/outfit-latin-variable.woff2) format("woff2");font-weight:100 900}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:transparent;font-family:Alex,Out,sans-serif;-webkit-font-smoothing:antialiased}
+.card{display:inline-block;margin:20px}
+.ar{direction:rtl;font-family:Alex}
+#end{position:fixed;inset:0;width:390px;height:844px;overflow:hidden;background:#09081A;display:none}
+</style>
+<div id="cards">
+  <div class="card" id="c_menu" style="width:200px;background:#fff;border-radius:26px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.18)">
+    <div style="height:140px;border-radius:18px;background:radial-gradient(circle at 50% 40%,#C98B55,#C98B55cc 45%,#efe4d4 46%)"></div>
+    <div class="ar" style="font:700 19px/1.3 Alex;color:#2B1D14;margin-top:12px">سبانش لاتيه</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font:700 17px Out;color:#2B1D14">18 SAR</span><span style="width:34px;height:34px;border-radius:11px;background:#2B1D14;color:#F3EBDD;display:grid;place-items:center;font:700 22px/1 Out">+</span></div>
+  </div>
+  <div class="card" id="c_order" style="padding:18px 26px;border-radius:20px;background:#2BA55E;color:#fff;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.2)"><span class="ar" style="font:700 22px/1 Alex">اطلب عبر واتساب</span><span style="font:600 16px Out;opacity:.85">Order</span></div>
+  <div class="card" id="c_time" style="padding:14px 20px;border-radius:18px;background:#D9822B;color:#fff;font:800 22px/1 Out;box-shadow:0 10px 30px rgba(0,0,0,.2)">Ready in 10 min</div>
+  <div class="card" id="c_abaya" style="width:190px;border-radius:24px;overflow:hidden;background:#18171a;box-shadow:0 12px 30px rgba(0,0,0,.4)">
+    <div style="height:190px;background:linear-gradient(170deg,#3a3236,#121113);position:relative">
+      <svg viewBox="0 0 200 300" style="position:absolute;inset:0;width:100%;height:100%" preserveAspectRatio="xMidYMax meet"><path d="M100 38c-12 0-20 9-20 20 0 8 3 13 6 16l-26 26c-8 40-14 120-20 190h120c-6-70-12-150-20-190l-26-26c3-3 6-8 6-16 0-11-8-20-20-20z" fill="#3a3236"/><path d="M60 100c-6 50-10 120-12 190M140 100c6 50 10 120 12 190" stroke="#E2C9B8" stroke-width="2" fill="none"/><path d="M86 74l14 16 14-16" stroke="#E2C9B8" stroke-width="3" fill="none"/></svg></div>
+    <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:baseline"><span style="font:400 20px News,serif;color:#F2EEE8">Sama</span><span style="font:600 15px Out;color:#CBB89A">780 SAR</span></div>
+  </div>
+  <div class="card" id="c_size" style="display:flex;gap:8px;padding:12px;border-radius:20px;background:#1a191c;box-shadow:0 10px 30px rgba(0,0,0,.4)">${'50 52 54 56'.split(' ').map((s,i)=>`<span style="width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font:600 17px Out;${i===2?'background:#CBB89A;color:#0E0E10':'border:1px solid #3a3734;color:#F2EEE8'}">${s}</span>`).join('')}</div>
+  <div class="card" id="c_fit" style="padding:18px 24px;border-radius:20px;background:#F2EEE8;color:#0E0E10;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.35)"><span class="ar" style="font:700 21px/1 Alex">احجزي موعد قياس</span></div>
+  <div class="card" id="c_pkg" style="width:250px;padding:18px;border-radius:22px;background:linear-gradient(120deg,#0f3a46,#132029);border:1.5px solid #29E0FF;display:flex;justify-content:space-between;align-items:center;box-shadow:0 12px 30px rgba(0,0,0,.45)">
+    <div class="ar"><div style="font:700 19px/1.3 Alex;color:#EAF6FF">سيراميك</div><div style="font:500 13px Out;color:#8FB4C8">Ceramic coat</div></div>
+    <div style="font:800 22px/1 Unb;color:#29E0FF">1,450<span style="font:600 11px Out;margin-left:4px;color:#8FB4C8">SAR</span></div></div>
+  <div class="card" id="c_day" style="width:74px;padding:14px 0;border-radius:18px;text-align:center;background:#29E0FF;color:#05222b;box-shadow:0 10px 30px rgba(0,0,0,.4)"><span style="display:block;font:600 13px Out;opacity:.7">FRI</span><span style="display:block;font:800 26px/1.2 Unb">7</span></div>
+  <div class="card" id="c_book" style="padding:18px 24px;border-radius:20px;background:#29E0FF;color:#05222b;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4)"><span class="ar" style="font:800 21px/1 Alex">احجز غسيل</span><span style="font:600 15px Out;opacity:.7">Book a wash</span></div>
+</div>
+
+<div id="end">
+  <div style="position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 42%,#2a2170,transparent 70%),radial-gradient(60% 30% at 80% 90%,rgba(255,90,54,.25),transparent 70%)"></div>
+  <div id="grid" style="position:absolute;inset:0;background-image:linear-gradient(rgba(124,108,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(124,108,255,.12) 1px,transparent 1px);background-size:26px 26px"></div>
+  <div id="px" style="position:absolute;left:50%;top:300px;width:96px;height:96px;margin-left:-48px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px"></div>
+  <div id="wm" style="position:absolute;left:0;right:0;top:420px;text-align:center;font:800 40px/1 Unb;color:#F4F1FF;letter-spacing:-.01em">Pixel &amp; Co.</div>
+  <div id="tg" class="ar" style="position:absolute;left:0;right:0;top:478px;text-align:center;font:600 19px/1.5 Alex;color:#B3A8FF">مواقع لمتجرك · <span style="font-family:Out">Websites for your shop</span></div>
+</div>
+<script>
+const Q=new URLSearchParams(location.search);
+document.querySelectorAll('#cards [id]').forEach(el=>{el.innerHTML=el.innerHTML.replace(/\$\{([^}]*)\}/g,'');});
+// rebuild the size chips (template literal above is inert in HTML)
+document.getElementById('c_size').innerHTML='50 52 54 56'.split(' ').map((s,i)=>`<span style="width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font:600 17px Out;${i===2?'background:#CBB89A;color:#0E0E10':'border:1px solid #3a3734;color:#F2EEE8'}">${s}</span>`).join('');
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>clamp((t-a)/(b-a)),out=x=>1-Math.pow(1-clamp(x),3);
+const back=x=>{x=clamp(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+if(Q.get('end')){
+  document.getElementById('cards').style.display='none';const E=document.getElementById('end');E.style.display='block';
+  const cols=['#7C6CFF','#B3A8FF','#FF5A36','#3CF2C0','#7C6CFF','#B3A8FF','#FF5A36','#3CF2C0','#7C6CFF'];
+  const px=document.getElementById('px');px.innerHTML=cols.map(c=>`<i style="display:block;border-radius:7px;background:${c}"></i>`).join('');
+  const cells=[...px.children];
+  window.setTime=t=>{
+    cells.forEach((c,i)=>{const k=back(seg(t,.15+i*.07,.55+i*.07));c.style.transform=`scale(${k})`;c.style.opacity=clamp(k);});
+    const w=out(seg(t,.9,1.5));document.getElementById('wm').style.opacity=w;document.getElementById('wm').style.transform=`translateY(${(1-w)*18}px)`;
+    const g=out(seg(t,1.3,1.9));document.getElementById('tg').style.opacity=g;
+    document.getElementById('grid').style.transform=`translateY(${(t*10)%26}px)`;
+    px.style.transform=`rotate(${Math.sin(t*1.1)*3}deg)`;
+  };
+}
+document.fonts.ready.then(()=>{if(window.setTime)setTime(2.5);window.READY=true;});
+</script>
