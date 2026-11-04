@@ -6,7 +6,9 @@ IN="$1"; LAY="$2"; SONG="$3"; OUT="$4"
 ffmpeg -loglevel error -y -framerate 30 -start_number 1 -i "$LAY/bg/bg%04d.jpg" -c:v libvpx-vp9 -i "$IN" -framerate 30 -start_number 1 -i "$LAY/fg/fg%04d.png" -i "$SONG" -filter_complex "
 [1:v]scale=1080:1920:flags=lanczos,format=yuva420p,fps=30,setpts=N/30/TB,tpad=start=${PAD:-0}:color=0x00000000[d];
 [0:v]setpts=N/30/TB[b];
-[b][d]overlay=0:0:shortest=0,
+[d]split[dA][dB];[dB]lutyuv=a='clip((val-${END_ACUT:-48})*255/(255-${END_ACUT:-48})\,0\,255)',scale=trunc(iw*${END_SCALE:-0.8}/2)*2:-2:flags=lanczos[dBs];
+[b][dA]overlay=0:0:shortest=0:enable='lt(t,18.39)'[b1];
+[b1][dBs]overlay=x=(W-w)/2:y=(H-h)/2+${END_DY:-60}:shortest=0:enable='gte(t,18.39)',
 scale=w='trunc(1080*(1+0.016*if(gt(t\,4.11)\,exp(-mod(t-0.3\,0.9513)*9)\,0))/2)*2':h=-2:eval=frame:flags=bicubic,crop=1080:1920,
 noise=alls=4:allf=t[m];
 [2:v]setpts=N/30/TB[f];
