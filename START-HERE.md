@@ -16,6 +16,18 @@ Everything from the Pixel & Co. chats is saved on this branch: **`claude/shopify
 This chat is only for Pixel & Co., my web design business. Before anything else, read docs/context/owner.md and docs/context/pixel-co.md on branch claude/shopify-product-website-mrj6f2 and follow them. The full history of my old chat is in docs/chat-history/pixel-co-chat.md. Keep answers short and copy-paste ready.
 ```
 
+## One chat per project (so nothing gets mixed up)
+Start a NEW chat for each one and paste its starter message from `docs/context/team.md`:
+| Chat | Starter in team.md | Notes file |
+|---|---|---|
+| Pixel & Co. (main business) | top of this file | docs/context/pixel-co.md |
+| Reels Editor | "Starter: Reels Editor" | docs/context/team/reels-editor.md |
+| Ads Manager | "Starter: Ads Manager" | docs/context/team/ads-manager.md |
+| DM / Sales | "Starter: DM / Sales" | docs/context/team/sales.md |
+| Roblox game (Dream Builders) | "Starter: Roblox Game" | docs/context/dream-builders.md |
+| Blender Studio (3D + 3D ads) | "Starter: Blender Studio" | docs/context/blender-studio.md |
+| Trading Bot (paper only) | "Starter: Trading Bot" | docs/context/trading.md |
+
 ## Where everything is
 | What | Folder |
 |---|---|

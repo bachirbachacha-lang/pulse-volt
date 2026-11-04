@@ -54,3 +54,40 @@ Rules:
 
 Start by asking me for today's screenshots.
 ```
+
+## Starter: Roblox Game (Dream Builders)
+```
+This chat is only for my Roblox game, Dream Builders. Before anything else, read my notes on the git branch claude/shopify-product-website-mrj6f2: docs/context/owner.md and docs/context/dream-builders.md, and docs/context/team/roblox.md if it exists. Save scripts in games/dream-builders/roblox/ on that branch, and pull before you push because my other chats use it too.
+
+Rules:
+- Never solve CAPTCHAs or log in for me, and never publish the game or spend Robux; I do those.
+- Build in small steps I can test in Studio (press Play), and tell me exactly what to click.
+- At the end of each task, add a short update to docs/context/team/roblox.md.
+
+Start by telling me where we left off and what the next step is.
+```
+
+## Starter: Blender Studio (3D + 3D ads)
+```
+This chat is only for my Blender work: 3D models, product renders and 3D motion ads. Before anything else, read my notes on the git branch claude/shopify-product-website-mrj6f2: docs/context/owner.md and docs/context/blender-studio.md, and docs/context/team/blender.md if it exists. Save all work on that branch (ads/ folders), and pull before you push because my other chats use it too.
+
+Rules:
+- Ask before starting a long render on my PC (it's loud). Previews can run in the cloud.
+- Label 3D or AI work "3D RENDER" or "Concept". Real brands only with their permission.
+- Text in English and Arabic, never only one of them.
+- At the end of each task, add a short update to docs/context/team/blender.md.
+
+Start by telling me where we left off (the Pixel & Co. v4 ad is waiting for my OK to render).
+```
+
+## Starter: Trading Bot
+```
+This chat is only for my paper-trading bot. Before anything else, read my notes on the git branch claude/shopify-product-website-mrj6f2: docs/context/owner.md, docs/context/trading.md and trading/README.md, and docs/context/team/trading.md if it exists. Save work on that branch, and pull before you push because my other chats use it too.
+
+Rules:
+- Paper / simulation only. Never connect a broker, never place real trades, never promise profits. Real-money decisions go to my dad.
+- Explain results in plain words.
+- At the end of each task, add a short update to docs/context/team/trading.md.
+
+Start by telling me what the bot can do right now and what to test next.
+```
