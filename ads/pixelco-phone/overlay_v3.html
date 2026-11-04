@@ -1,0 +1,106 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Pixel & Co. ad overlay</title>
+<!-- Transparent 1080x1920 motion-graphics layer over the Blender render. setTime(t) is deterministic.
+     Beat grid from the song: beat0 0.30 s, period 0.9513 s, drop 4.11 s. -->
+<style>
+@font-face{font-family:Alex;src:url(../crewup/fonts/alexandria-arabic-var.woff2) format("woff2");font-weight:100 900;unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:Alex;src:url(../crewup/fonts/alexandria-latin-var.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:Unb;src:url(../crewup/fonts/unbounded-latin-var.woff2) format("woff2");font-weight:200 900}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+#o{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Alex,Unb,sans-serif;color:#F4F1FF;-webkit-font-smoothing:antialiased}
+.abs{position:absolute}
+.ar{direction:rtl;font-family:Alex}
+.en{font-family:Unb}
+.sh{text-shadow:0 4px 30px rgba(9,8,26,.85),0 2px 6px rgba(9,8,26,.6)}
+.chip{display:inline-flex;gap:14px;align-items:center;padding:14px 24px;border-radius:999px;background:rgba(23,20,55,.72);border:1.5px solid rgba(179,168,255,.35);backdrop-filter:blur(6px)}
+.lab{font:600 22px/1 Unb;letter-spacing:.18em;text-transform:uppercase;color:#B3A8FF}
+</style>
+<div id="o">
+  <!-- honesty label, whole video -->
+  <div class="abs" id="tag" style="left:64px;top:150px;display:flex;gap:10px;align-items:center">
+    <span style="width:12px;height:12px;border-radius:3px;background:#FF5A36"></span>
+    <span class="lab" style="font-size:20px;letter-spacing:.16em">3D render</span><span class="lab" style="opacity:.5;font-size:20px">/</span>
+    <span class="ar" style="font:600 22px/1 Alex;color:#B3A8FF">نموذج تصميم</span><span class="lab" style="font-size:20px">Design sample</span>
+  </div>
+
+  <!-- HOOK -->
+  <div class="abs sh" id="hook" style="left:0;right:0;top:1240px;text-align:center">
+    <div class="ar" style="font:800 92px/1.15 Alex"><span class="w">عندك</span> <span class="w">متجر</span><br><span class="w">بدون</span> <span class="w" style="color:#FF5A36">موقع؟</span></div>
+    <div id="hookEn" class="en" style="font:700 40px/1.3 Unb;margin-top:22px;color:#B3A8FF">Got a shop but no website?</div>
+  </div>
+
+  <div class="abs" id="shade" style="left:0;right:0;bottom:0;height:900px;background:linear-gradient(rgba(9,8,26,0),rgba(9,8,26,.55) 45%,rgba(9,8,26,.82));opacity:0"></div>
+  <!-- shot chips -->
+  <div class="abs" id="chip" style="left:0;right:0;top:250px;text-align:center"><span class="chip"><span class="en" id="chipN" style="font:800 26px/1 Unb;color:#FF5A36">01</span><span class="ar" id="chipA" style="font:700 30px/1 Alex">مقهى</span><span class="en" id="chipE" style="font:600 24px/1 Unb;color:#B3A8FF">Café</span></span></div>
+
+  <!-- beat words -->
+  <div class="abs sh" id="word" style="left:0;right:0;top:1450px;text-align:center">
+    <div class="ar" id="wordA" style="font:800 100px/1.1 Alex"></div>
+    <div class="en" id="wordE" style="font:700 38px/1.3 Unb;color:#B3A8FF;margin-top:10px;letter-spacing:.04em"></div>
+  </div>
+
+  <!-- END -->
+  <div class="abs sh" id="end" style="left:0;right:0;top:1330px;text-align:center">
+    <div class="ar" id="e1" style="font:800 76px/1.2 Alex">نسوّي لمتجرك موقع</div>
+    <div class="en" id="e2" style="font:700 36px/1.3 Unb;color:#B3A8FF;margin-top:12px">We build your shop's website.</div>
+    <div id="e3" style="margin-top:40px"><span class="chip" style="background:#FF5A36;border-color:#FF5A36;padding:20px 34px"><span class="ar" style="font:800 40px/1 Alex">عيّنة مجانية</span><span class="en" style="font:700 28px/1 Unb">Free sample</span></span></div>
+    <div id="e4" class="en" style="font:700 40px/1 Unb;margin-top:40px;letter-spacing:.01em">@pixelandco.design</div>
+    <div id="e5" class="ar" style="font:600 30px/1 Alex;margin-top:18px;color:#B3A8FF">راسلنا <span class="en" style="font:600 24px Unb">· DM us</span></div>
+  </div>
+
+  <!-- light: drop flash, cut sweeps -->
+  <div class="abs" id="flash" style="inset:0;background:radial-gradient(60% 40% at 50% 45%,rgba(255,255,255,.95),rgba(179,168,255,.55) 40%,rgba(124,108,255,0) 75%);mix-blend-mode:screen;opacity:0"></div>
+  <div class="abs" id="sweep" style="top:-200px;bottom:-200px;width:520px;background:linear-gradient(90deg,transparent,rgba(255,90,54,.0) 10%,rgba(255,140,90,.55) 45%,rgba(179,168,255,.6) 60%,transparent);transform:skewX(-14deg);mix-blend-mode:screen;opacity:0;filter:blur(18px)"></div>
+  <div class="abs" id="vig" style="inset:0;background:radial-gradient(120% 80% at 50% 45%,transparent 55%,rgba(5,4,16,.55))"></div>
+</div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)),seg=(t,a,b)=>clamp((t-a)/(b-a));
+const out=x=>1-Math.pow(1-clamp(x),3),io=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=clamp(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const B0=.30,BP=.9513,beat=n=>B0+n*BP,DROP=4.11;
+const $=id=>document.getElementById(id);
+const hw=[...document.querySelectorAll('#hook .w')];
+const SEGS=[
+ {from:4.11,to:10.77,n:'01',a:'المنيو',e:'Bear be matcha',words:[[5.06,'منيو','Menu'],[6.01,'مشروبات مميزة','Signature drinks'],[6.96,'عرض الخريف','Autumn special'],[7.92,'عربي وإنجليزي','Arabic + English'],[8.87,'موقع لمحلك','A site for your shop']]},
+ {from:10.77,to:14.58,n:'02',a:'سوّ كوبك',e:'Build your cup',words:[[11.25,'إضافات','Add-ons'],[12.2,'حليب جوز الهند','Coconut milk'],[13.15,'فوم فراولة','Strawberry foam'],[14.1,'السعر يتحدّث','Live price']]},
+ {from:14.58,to:18.39,n:'03',a:'الطلب',e:'Order',words:[[15.06,'وقت الاستلام','Pickup time'],[16.0,'رسالة جاهزة','Ready-made message'],[16.96,'على الواتساب','Straight to WhatsApp'],[17.91,'بإذن صاحب المحل','Shown with their permission']]}
+];
+function pop(el,k,dy=40){el.style.opacity=clamp(k);el.style.transform=`translateY(${(1-out(k))*dy}px) scale(${.92+.08*back(k)})`;}
+window.setTime=function(t){
+  // label
+  $('tag').style.opacity=out(seg(t,.2,.8))*(1-seg(t,24.3,24.8));
+  // hook: words land on beats 0..3, smash out on the drop
+  hw.forEach((w,i)=>{const k=seg(t,beat(i)-.08,beat(i)+.22);w.style.display='inline-block';w.style.opacity=k;w.style.transform=`translateY(${(1-out(k))*-60}px) scale(${1.25-.25*out(k)})`;w.style.filter=`blur(${(1-k)*10}px)`;});
+  const he=out(seg(t,beat(3)+.1,beat(3)+.5));$('hookEn').style.opacity=he;$('hookEn').style.transform=`translateY(${(1-he)*20}px)`;
+  const sm=seg(t,DROP-.05,DROP+.25);const hk=$('hook');hk.style.display=t<DROP+.3?'block':'none';hk.style.transform=`scale(${1+sm*.5})`;hk.style.opacity=1-sm;hk.style.filter=`blur(${sm*14}px)`;
+  // drop flash
+  $('flash').style.opacity=t>=DROP-.02?Math.exp(-(t-DROP)*5.5)*.95:0;
+  // cut sweeps
+  let sw=0,sx=-600;for(const c of [10.77,14.58,18.39]){const k=seg(t,c-.18,c+.32);if(k>0&&k<1){sw=Math.sin(Math.PI*k);sx=-600+k*2300;}}
+  $('sweep').style.opacity=sw*.9;$('sweep').style.left=sx+'px';
+  // chips + words
+  const S=SEGS.find(s=>t>=s.from&&t<s.to);
+  const chip=$('chip'),word=$('word');
+  if(S){
+    $('chipN').textContent=S.n;$('chipA').textContent=S.a;$('chipE').textContent=S.e;
+    const k=seg(t,S.from+.05,S.from+.45),ko=seg(t,S.to-.25,S.to-.02);pop(chip,k*(1-ko),-30);
+    let cur=null;for(const w of S.words) if(t>=w[0]-.06) cur=w;
+    if(cur){const k2=seg(t,cur[0]-.06,cur[0]+.2);const nxt=S.words[S.words.indexOf(cur)+1];const endT=nxt?nxt[0]-.06:S.to;const ko2=seg(t,endT-.14,endT);
+      $('wordA').textContent=cur[1];$('wordE').textContent=cur[2];word.style.opacity=clamp(k2)*(1-ko2);
+      word.style.transform=`translateY(${(1-out(k2))*50}px) scale(${1.15-.15*out(k2)})`;word.style.filter=`blur(${(1-clamp(k2))*8}px)`;}
+    else word.style.opacity=0;
+  } else {chip.style.opacity=0;word.style.opacity=0;}
+  $('shade').style.opacity=out(seg(t,.2,.9))*(1-seg(t,24.4,24.9));
+  // end card
+  const e=$('end');e.style.display=t>18.9?'block':'none';
+  pop($('e1'),seg(t,beat(20)-.05,beat(20)+.35));
+  pop($('e2'),seg(t,beat(20)+.25,beat(20)+.65),24);
+  pop($('e3'),seg(t,beat(21)-.05,beat(21)+.3),30);
+  pop($('e4'),seg(t,beat(22)-.05,beat(22)+.3),24);
+  pop($('e5'),seg(t,beat(23)-.05,beat(23)+.3),20);
+  const fo=seg(t,24.35,24.85);e.style.opacity=1-fo;
+};
+document.fonts.ready.then(()=>{setTime(+(new URLSearchParams(location.search).get('t')||2));window.READY=true;});
+</script>
