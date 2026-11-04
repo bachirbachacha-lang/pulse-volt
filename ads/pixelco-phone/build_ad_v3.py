@@ -175,12 +175,17 @@ P = [
  (239, (0, 0, 0), (72, 0, -44)), (323, (0, 0, 0.5), (72, 0, -4)),
  (324, (0, 0, 0), (0, 0, -34)), (380, (0, 0, 0), (0, 0, 4)),
  (381, (0, 0, 0), (90, 0, -40)), (437, (0, 0, 0.5), (90, 0, -24)),
- (438, (0, 0, 0), (90, 0, -384)), (480, (0, 0, 0), (90, 0, -22)), (494, (0, 0, 0.2), (90, 0, -18)),
+ (438, (0, 0, 0), (90, 0, -384)), (456, (0, 0, 0), (90, 0, -30)), (494, (0, 0, 0.2), (90, 0, -18)),
  (495, (0, 0, 0), (90, 0, -24)), (552, (0, 0, 0.4), (90, 0, -6)),
  (553, (0, 0, 0), (90, 0, -8)), (747, (0, 0, 0), (90, 0, 8)),
 ]
 for f, l, r in P: key(ctrl, f, l, r)
 finalize(ctrl, CUTS)
+# E1 whip: the full spin fires on the cut and settles facing the camera before the first word (15.06 s)
+for fc in fcurves(ctrl):
+    if fc.data_path == "rotation_euler" and fc.array_index == 2:
+        for kp in fc.keyframe_points:
+            if int(round(kp.co.x)) == 438: kp.interpolation = "CUBIC"; kp.easing = "EASE_OUT"
 
 # ------------------------------------------------------------------ cameras v2
 def camera(name, lens, fstop, target):
@@ -267,14 +272,19 @@ scene.render.film_transparent = False
 try:
     scene.view_settings.view_transform = "AgX"; scene.view_settings.look = "AgX - Medium High Contrast"
 except Exception: pass
+# Output: a PNG frame sequence, not one video file, so a long render can be stopped and resumed:
+# with overwrite off, pressing Render Animation again skips every frame already on disk (a frame is only
+# written once it is finished, so an interrupted frame is simply rendered again). No placeholders: an empty
+# placeholder left by a stopped render would be skipped on resume.
+# pc_encode.py then joins the frames into //render/pixelco_ad_3d.mp4 inside Blender.
 try:
-    scene.render.image_settings.media_type = "VIDEO"
+    scene.render.image_settings.media_type = "IMAGE"
 except Exception: pass
-scene.render.image_settings.file_format = "FFMPEG"
-ff = scene.render.ffmpeg
-ff.format = "MPEG4"; ff.codec = "H264"; ff.constant_rate_factor = "HIGH"; ff.ffmpeg_preset = "GOOD"; ff.gopsize = 15
-ff.audio_codec = "NONE"
-scene.render.filepath = "//render/pixelco_ad_3d.mp4"
+ims = scene.render.image_settings
+ims.file_format = "PNG"; ims.color_mode = "RGB"; ims.color_depth = "8"; ims.compression = 15
+scene.render.use_file_extension = True
+scene.render.use_overwrite = False; scene.render.use_placeholder = False
+scene.render.filepath = "//render/frames/pc_"
 try:
     cy.device = "GPU"
 except Exception: pass
