@@ -78,6 +78,6 @@ sign(ys, "SUPPLY YARD", Color3.fromRGB(255, 150, 30))
 local sp = W:FindFirstChildOfClass("SpawnLocation"); if sp then sp.Position = Vector3.new(0, 1, 200); sp.Size = Vector3.new(12, 1, 12) end
 -- lighting / sky
 local L = game:GetService("Lighting")
-L.Technology = Enum.Technology.Future; L.ClockTime = 15.5; L.Brightness = 3; L.EnvironmentDiffuseScale = 1; L.EnvironmentSpecularScale = 1
+L.ClockTime = 15.5; L.Brightness = 3 -- set Lighting.Technology to Future by hand (scripts cannot)
 if not L:FindFirstChildOfClass("Atmosphere") then local a = Instance.new("Atmosphere"); a.Density = 0.3; a.Haze = 1; a.Parent = L end
 print("Dream Builders world built: 6 plots, HQ, job pads, supply yard")
