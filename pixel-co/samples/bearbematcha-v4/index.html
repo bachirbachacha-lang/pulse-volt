@@ -348,7 +348,7 @@ html[dir=rtl] .bar{padding:8px 20px 8px 8px}
 document.body.classList.remove('no-js');
 const T={
   sample:{ar:'تصميم تجريبي من Pixel & Co. لـ Bear be matcha (بإذنهم) — ليس الموقع الرسمي',en:'Sample design by Pixel & Co. for Bear be matcha (with permission) — not the official website'},
-  kick:{ar:'جدة · نجهزها لك الحين',en:'Jeddah · making drinks now'},
+  kick:{ar:'جدة، نجهزها لك الحين',en:'Jeddah · making drinks now'},
   h1:{ar:[['ماتشا'],['الدب،','hl'],['جاهزة'],['أول'],['ما'],['توصل']],en:[['Bear’s'],['matcha,','hl'],['ready'],['when'],['you'],['arrive']]},
   lead:{ar:'اختر مشروبك، ركّبه على ذوقك، حدد وقت الاستلام، والطلب يوصلنا مرتب على الواتساب.',en:'Pick your drink, build it your way, choose a pickup time, and your order lands on our WhatsApp, neat and ready.'},
   cta1:{ar:'ركّب مشروبك',en:'Build your drink'},cta2:{ar:'شوف المنيو',en:'See the menu'},
@@ -362,7 +362,7 @@ const T={
   limKick:{ar:'إصدار محدود',en:'Limited drop'},limT:{ar:'ماتشا كراميل التفاح',en:'Caramelized apple crumble'},
   limP:{ar:'نكهة الخريف: ماتشا مع كراميل التفاح وكرمبل مقرمش. موجودة لفترة محدودة بس.',en:'The autumn flavour: matcha with caramelized apple and a crunchy crumble. Here for a short time only.'},
   limCta:{ar:'أبيها',en:'I want it'},only:{ar:'بس',en:'Only'},p35:{ar:'٣٥ ر.س',en:'35 SAR'},
-  ring:{ar:'· نكهة الخريف · فترة محدودة · AUTUMN FLAVOR ',en:'· AUTUMN FLAVOR · LIMITED TIME · نكهة الخريف '},
+  ring:{ar:'✦ نكهة الخريف ✦ فترة محدودة ✦ AUTUMN FLAVOR ',en:'· AUTUMN FLAVOR · LIMITED TIME · نكهة الخريف '},
   cd:{ar:['يوم','ساعة','دقيقة','ثانية'],en:['days','hrs','min','sec']},
   buildKick:{ar:'ركّب مشروبك',en:'Build your drink'},buildT:{ar:'الكوب على ذوقك',en:'Your cup, your way'},
   buildP:{ar:'اختار المشروب وزد الإضافات، وشوف الكوب يتعبى قدامك.',en:'Choose a drink, add extras, and watch the cup fill up in front of you.'},
@@ -378,10 +378,10 @@ const T={
   shopSees:{ar:'هذا اللي يوصل المحل: الأصناف، الإضافات، الوقت والمجموع. بدون أخذ ورد.',en:'This is what the shop gets: items, add ons, time and total. No back-and-forth.'},
   previewEmpty:{ar:'أضف مشروب وتشوف رسالتك هنا ✨',en:'Add a drink and your message shows up here ✨'},
   viewOrder:{ar:'عرض الطلب',en:'View order'},items:{ar:'{n} مشروب — {t}',en:'{n} drinks · {t}'},
-  whereT:{ar:'الفرع',en:'Branch'},whereP:{ar:'جدة · العنوان ورابط الخريطة يضيفه صاحب المحل',en:'Jeddah · address and map link added by the owner'},
+  whereT:{ar:'الفرع',en:'Branch'},whereP:{ar:'جدة. العنوان ورابط الخريطة يضيفه صاحب المحل',en:'Jeddah · address and map link added by the owner'},
   hoursT:{ar:'أوقات العمل',en:'Opening hours'},hoursP:{ar:'يضيفها صاحب المحل',en:'Added by the owner'},
-  foot1:{ar:'Bear be matcha · جدة',en:'Bear be matcha · Jeddah'},
-  foot2:{ar:'تصميم تجريبي من Pixel & Co. · الشعار والصور ملك Bear be matcha',en:'Sample design by Pixel & Co. · Logo and photos belong to Bear be matcha'},
+  foot1:{ar:'Bear be matcha، جدة',en:'Bear be matcha · Jeddah'},
+  foot2:{ar:'تصميم تجريبي من Pixel & Co. — الشعار والصور ملك Bear be matcha',en:'Sample design by Pixel & Co. · Logo and photos belong to Bear be matcha'},
   sar:{ar:'{n} ر.س',en:'SAR {n}'},
   msgHead:{ar:'طلب جديد من الموقع 🐻🍵',en:'New website order 🐻🍵'},msgName:{ar:'الاسم',en:'Name'},msgPick:{ar:'الاستلام',en:'Pickup'},msgNum:{ar:'رقم الطلب',en:'Order no.'}
 };
@@ -418,7 +418,8 @@ const sar=n=>tx('sar',{n:num(n)});
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ex=id=>EXTRAS.find(e=>e.id===id);
 const unit=(id,extra)=>byId[id].p+extra.reduce((s,e)=>s+ex(e).p,0);
-const optText=extra=>extra.map(e=>'+ '+L(ex(e))).join(' · ');
+// Arabic uses '،' here: a '·' next to Arabic text reads like the digit zero (٠).
+const optText=extra=>extra.map(e=>'+ '+L(ex(e))).join(lang==='ar'?'، ':' · ');
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function clock(min){const d=new Date(Date.now()+min*60000);let h=d.getHours(),m=String(d.getMinutes()).padStart(2,'0');const pm=h>=12;h=h%12||12;return `${h}:${m} ${lang==='ar'?(pm?'م':'ص'):(pm?'PM':'AM')}`}
 
