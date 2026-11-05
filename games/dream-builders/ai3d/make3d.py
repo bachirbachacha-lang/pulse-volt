@@ -56,6 +56,43 @@ try:
     if not todo:
         sys.exit(0)
 
+    import transformers, re
+    import torch.nn as nn
+    print("   transformers", transformers.__version__)
+    _orig_lsd = nn.Module.load_state_dict
+    def _lsd(self, sd, strict=True, assign=False):
+        try:
+            return _orig_lsd(self, sd, strict=strict, assign=assign)
+        except RuntimeError as e:
+            if "Missing key" not in str(e):
+                raise
+            exp = self.state_dict()
+            new = {k: v for k, v in sd.items() if k in exp}
+            extra = [k for k in sd if k not in exp]
+            grp = lambda k: (re.search(r"(.*layer\.\d+\.)", k) or [None, ""])[1] if re.search(r"(.*layer\.\d+\.)", k) else ""
+            sec = lambda k: "att" if ("attention" in k or "attn" in k) else ("mlp" if "mlp" in k else "other")
+            hints = [("query", "q_proj"), ("key", "k_proj"), ("value", "v_proj")]
+            used = set()
+            for mk in [k for k in exp if k not in sd]:
+                suf = mk.rsplit(".", 1)[-1]
+                c = [x for x in extra if x not in used and grp(x) == grp(mk) and x.rsplit(".", 1)[-1] == suf
+                     and tuple(sd[x].shape) == tuple(exp[mk].shape)]
+                c = [x for x in c if sec(x) == sec(mk)] or c
+                pick = None
+                for old, nh in hints:
+                    if nh in mk:
+                        pick = next((x for x in c if "attention." + old in x), None)
+                if pick is None:
+                    rest = [x for x in c if not any("attention." + o in x for o, _ in hints)]
+                    pick = rest[0] if len(rest) == 1 else (c[0] if len(c) == 1 else None)
+                if pick:
+                    new[mk] = sd[pick]; used.add(pick)
+            still = [k for k in exp if k not in new]
+            print(f"   [fix] renamed {len(used)} old-style weights, {len(still)} unmatched")
+            if still:
+                print("   unmatched:", still[:6], [x for x in extra if x not in used][:6])
+            return _orig_lsd(self, new, strict=not still, assign=assign)
+    nn.Module.load_state_dict = _lsd
     mem()
     print("Loading the AI (first time downloads the model, a few GB)...")
     pipe = Hunyuan3DDiTFlowMatchingPipeline.from_pretrained("tencent/Hunyuan3D-2", subfolder="hunyuan3d-dit-v2-0")
