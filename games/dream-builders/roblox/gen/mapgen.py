@@ -40,15 +40,16 @@ def road(x, z, w, l, along_z):
     if along_z: box((w, 0.4, l), (x, 0.2, z), ROAD, "Asphalt", group="Roads")
     else: box((l, 0.4, w), (x, 0.21, z), ROAD, "Asphalt", group="Roads")
 # boulevard with planted median
-road(-13, 0, 18, 1000, True); road(13, 0, 18, 1000, True)
-box((8, 0.9, 1000), (0, 0.45, 0), (120, 118, 112), "Concrete", group="Roads", name="Median")
-box((6, 1.0, 1000), (0, 0.5, 0), (70, 128, 58), "LeafyGrass", group="Roads", name="MedianGrass")
+BL = 660  # boulevard runs between the HQ campus (north) and the construction yard (south)
+road(-13, 0, 18, BL, True); road(13, 0, 18, BL, True)
+box((8, 0.9, BL), (0, 0.45, 0), (120, 118, 112), "Concrete", group="Roads", name="Median")
+box((6, 1.0, BL), (0, 0.5, 0), (70, 128, 58), "LeafyGrass", group="Roads", name="MedianGrass")
 for z in ZS: road(0, z, ST_W, 1000, False)
 for x in XS: road(x, 0, ST_W, 1000, True)
 road(0, -470, ST_W, 1000, False); road(0, 470, ST_W, 1000, False)   # ring ends
 # lane dashes
-for z in range(-490, 491, 24):
-    if any(abs(z - zz) < 20 for zz in ZS + [-470, 470]): continue
+for z in range(-322, 323, 24):
+    if any(abs(z - zz) < 20 for zz in ZS): continue
     for x in (-13, 13): box((0.7, 0.05, 9), (x, 0.43, z), LINE, "Neon", group="Roads")
 for zz in ZS + [-470, 470]:
     for x in range(-490, 491, 24):
@@ -67,7 +68,7 @@ for zz in ZS:
 def walk(x, z, sx, sz):
     box((sx, 0.8, sz), (x, 0.4, z), WALK, "Concrete", group="Sidewalks")
 for side in (-1, 1):
-    walk(side * (BLV_W / 2 + 4), 0, 8, 1000)
+    walk(side * (BLV_W / 2 + 4), 0, 8, BL)
     for xx in XS: walk(xx + side * (ST_W / 2 + 4), 0, 8, 1000)
 for zz in ZS + [-470, 470]:
     for side in (-1, 1): walk(0, zz + side * (ST_W / 2 + 4), 1000, 8)
@@ -112,10 +113,10 @@ def car(x, z, ry, rgb):
             cyl((1.2, 3, 3), (wx, 1.5, wz), (25, 25, 28), "SmoothPlastic", ry=ry, group="Cars")
 
 # boulevard palms + lamps
-for z in range(-440, 441, 40):
+for z in range(-320, 321, 40):
     if any(abs(z - zz) < 22 for zz in ZS): continue
     palm(0, z)
-for z in range(-460, 461, 60):
+for z in range(-310, 311, 60):
     if any(abs(z - zz) < 22 for zz in ZS): continue
     for side in (-1, 1): lamp(side * (BLV_W / 2 + 6), z, -90 * side)
 for xx in XS:
@@ -129,20 +130,19 @@ plots = []
 pid = 0
 for side in (-1, 1):
     for (z0, z1) in ((-300, -100), (-100, 100), (100, 300)):
-        for k in (0, 1):
+        cz = (z0 + z1) / 2
+        for k, cxa in enumerate((84, 188)):
             pid += 1
-            cz = z0 + ST_W / 2 + 8 + (k + 0.5) * ((z1 - z0 - ST_W - 16) / 2)
-            cx = side * ((BLV_W / 2 + 8) + (XS[1] - ST_W / 2 - 8 - BLV_W / 2 - 8) / 2)
-            plots.append((pid, cx, cz, side, False))
+            plots.append((pid, side * cxa, cz, side if k else -side, False))
 for k, cz in enumerate((-195, -65, 65, 195)):
-    pid += 1; plots.append((pid, 345, cz, 1, True))
+    pid += 1; plots.append((pid, 345, cz, -1, True))
 for (pid, cx, cz, side, prem) in plots:
     g = f"Plot{pid}"
     size = PLOT if not prem else 104
     box((size, 1, size), (cx, 0.5, cz), (164, 132, 92), "Ground", group=g, name="Pad",
         extra={"plot": pid, "price": 25000 if not prem else 60000, "premium": prem})
     # hedge border with a gap facing the road
-    face = -side if not prem else -1
+    face = side if not prem else -1
     for e in range(4):
         horizontal = e in (0, 1)
         off = (size / 2 + 1.2) * (1 if e % 2 else -1)
