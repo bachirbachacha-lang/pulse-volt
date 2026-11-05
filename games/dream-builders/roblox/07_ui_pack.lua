@@ -411,19 +411,25 @@ wheelRotor.Name = "WheelRotor"
 wheelRotor.Size = UDim2.fromScale(1, 1)
 wheelRotor.BackgroundTransparency = 1
 wheelRotor.Parent = wheel
+-- Slices: each one is a spoke from the centre to the rim, rotated around the wheel (fixed by Claude: labels now sit on the rim)
 for i, prizeName in ipairs(prizeNames) do
-	local slice = Instance.new("Frame")
-	slice.Name = "Slice" .. i
-	slice.AnchorPoint = Vector2.new(0.5, 0.5)
-	slice.Position = UDim2.fromScale(0.5, 0.5)
-	slice.Size = UDim2.new(0, 132, 0, 48)
-	slice.Rotation = (i - 1) * 45
-	slice.BackgroundColor3 = i % 2 == 0 and COLORS.panelLight or Color3.fromRGB(48, 43, 35)
-	slice.Parent = wheelRotor
-	corner(slice, 8)
-	stroke(slice, COLORS.gold, 0.72, 1)
-	local text = label(slice, "Prize", prizeName, UDim2.new(1, -8, 1, 0), UDim2.new(0, 4, 0, 0), 11, COLORS.text, Enum.TextXAlignment.Center)
-	text.Rotation = -slice.Rotation
+	local holder = Instance.new("Frame")
+	holder.Name = "Slice" .. i
+	holder.AnchorPoint = Vector2.new(0.5, 0.5)
+	holder.Position = UDim2.fromScale(0.5, 0.5)
+	holder.Size = UDim2.fromScale(1, 1)
+	holder.BackgroundTransparency = 1
+	holder.Rotation = (i - 1) * 45
+	holder.Parent = wheelRotor
+	local spoke = Instance.new("Frame")
+	spoke.AnchorPoint = Vector2.new(0.5, 0)
+	spoke.Position = UDim2.fromScale(0.5, 0.02)
+	spoke.Size = UDim2.new(0, 96, 0.48, 0)
+	spoke.BackgroundColor3 = i == 8 and Color3.fromRGB(150, 110, 30) or (i % 2 == 0 and COLORS.panelLight or Color3.fromRGB(58, 50, 36))
+	spoke.Parent = holder
+	corner(spoke, 14)
+	stroke(spoke, COLORS.gold, 0.55, 1)
+	label(spoke, "Prize", prizeName, UDim2.new(1, -6, 0, 30), UDim2.new(0, 3, 0, 8), 15, i == 8 and COLORS.goldLight or COLORS.text, Enum.TextXAlignment.Center)
 end
 local hub = Instance.new("Frame")
 hub.Name = "Hub"
@@ -502,7 +508,7 @@ spinButton.Activated:Connect(function()
 	end
 	local index = math.clamp(math.floor(tonumber(result.SliceIndex) or 1), 1, #prizeNames)
 	local current = wheelRotor.Rotation % 360
-	local desired = ((index - 1) * 45 + 22.5) % 360
+	local desired = (360 - (index - 1) * 45) % 360  -- bring that spoke under the pointer at the top
 	local delta = (360 - current + desired) % 360
 	local goal = wheelRotor.Rotation + 360 * 6 + delta
 	local spinTween = TweenService:Create(wheelRotor, TweenInfo.new(5.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Rotation = goal})
