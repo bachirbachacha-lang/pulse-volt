@@ -41,7 +41,7 @@ try:
 
     HOME = os.path.expanduser("~")
     SRC = os.path.join(HOME, "Downloads", "DreamBuilders_concepts", "vehicles")
-    OUT = os.path.join(HOME, "Downloads", "DreamBuilders_models", "ai3d")
+    OUT = os.path.join(HOME, "Downloads", "DreamBuilders_models", "ai3d", "cars")
     os.makedirs(OUT, exist_ok=True)
     only = [a.lower() for a in sys.argv[1:]]
 
@@ -87,6 +87,14 @@ try:
                     pick = rest[0] if len(rest) == 1 else (c[0] if len(c) == 1 else None)
                 if pick:
                     new[mk] = sd[pick]; used.add(pick)
+            for mk in [k for k in exp if k not in new]:
+                for part, half in (("gate_proj", 0), ("up_proj", 1)):
+                    if ".mlp." + part + "." in mk:
+                        src = mk.replace(".mlp." + part + ".", ".mlp.weights_in.")
+                        if src in sd:
+                            t = sd[src]; h = t.shape[0] // 2
+                            new[mk] = t[:h] if half == 0 else t[h:]
+                            used.add(src)
             still = [k for k in exp if k not in new]
             print(f"   [fix] renamed {len(used)} old-style weights, {len(still)} unmatched")
             if still:
