@@ -5,6 +5,7 @@ local W = workspace
 local root = W:WaitForChild("DreamBuilders")
 local homes = root:FindFirstChild("Homes") or Instance.new("Folder"); homes.Name = "Homes"; homes.Parent = root
 local m = W:FindFirstChild("LuxuryMansion") or homes:FindFirstChild("LuxuryMansion"); assert(m, "import LuxuryMansion.fbx first")
+if m.Parent == W then local old = homes:FindFirstChild("LuxuryMansion"); if old then old:Destroy() end end   -- a fresh import replaces the old one
 local LOOK = {
 	plaster = {{246, 244, 238}, "Plaster"}, cream = {{236, 226, 204}, "Plaster"}, slab = {{62, 60, 58}, "Concrete"},
 	wood = {{150, 100, 60}, "WoodPlanks"}, oak = {{196, 160, 116}, "WoodPlanks"}, tile = {{228, 226, 222}, "Marble"},
@@ -13,11 +14,15 @@ local LOOK = {
 	sofa = {{214, 204, 186}, "Fabric"}, fabric = {{52, 54, 60}, "Fabric"}, kitchen = {{245, 245, 242}, "SmoothPlastic"},
 	marble = {{236, 232, 226}, "Marble"}, leaf = {{60, 136, 54}, "LeafyGrass", 0, false}, grass = {{96, 150, 66}, "Grass"},
 	black = {{22, 22, 26}, "SmoothPlastic"}, bed = {{250, 248, 244}, "Fabric"},
+	floor = {{238, 226, 206}, "Marble"}, walnut = {{92, 58, 36}, "Wood"}, travertine = {{214, 198, 172}, "Limestone"},
+	boucle = {{238, 230, 214}, "Fabric"}, led = {{255, 214, 150}, "Neon", 0, false}, curtain = {{246, 240, 230}, "Fabric", 0.45, false},
+	olive = {{112, 128, 70}, "LeafyGrass", 0, false}, planter = {{226, 216, 198}, "Plaster"}, rug = {{196, 178, 152}, "Fabric"},
+	flower = {{250, 246, 236}, "Fabric", 0, false},
 }
 for _, p in ipairs(m:GetDescendants()) do
 	if p:IsA("MeshPart") then
 		local key = p.Name:match("^Mansion_(.+)$")
-		local look = key and LOOK[key] or (p.Name:find("^Door_Garage") and LOOK.frame) or (p.Name:find("^Door_") and LOOK.wood)
+		local look = key and LOOK[key] or (p.Name:find("^Door_Garage") and LOOK.frame) or (p.Name:find("^Door_") and LOOK.walnut)
 		if look then
 			p.Color = Color3.fromRGB(look[1][1], look[1][2], look[1][3]); p.Material = Enum.Material[look[2]]
 			p.Transparency = look[3] or 0; if look[4] == false then p.CanCollide = false end
@@ -54,10 +59,11 @@ local function setup(door)
 	if door.Name:find("Garage") then
 		open = closed * CFrame.new(0, s.Y - 1, 0)
 	else
-		local w = alongX and s.X or s.Z
-		local hingeOffset = alongX and CFrame.new(-s.X / 2, 0, 0) or CFrame.new(0, 0, -s.Z / 2)
+		local right = door.Name:sub(-1) == "R"            -- double doors: Door_FrontL / Door_FrontR swing apart
+		local sgn = right and 1 or -1
+		local hingeOffset = alongX and CFrame.new(sgn * s.X / 2, 0, 0) or CFrame.new(0, 0, sgn * s.Z / 2)
 		local hinge = closed * hingeOffset
-		open = hinge * CFrame.Angles(0, math.rad(-95), 0) * hingeOffset:Inverse()
+		open = hinge * CFrame.Angles(0, math.rad(right and 95 or -95), 0) * hingeOffset:Inverse()
 	end
 	local pp = Instance.new("ProximityPrompt"); pp.ActionText = "Open"; pp.ObjectText = "Door"; pp.KeyboardKeyCode = Enum.KeyCode.E
 	pp.MaxActivationDistance = 10; pp.RequiresLineOfSight = false; pp.Parent = door

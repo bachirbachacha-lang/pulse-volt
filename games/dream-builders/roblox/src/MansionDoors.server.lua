@@ -11,10 +11,11 @@ local function setup(door)
 	if door.Name:find("Garage") then
 		open = closed * CFrame.new(0, s.Y - 1, 0)
 	else
-		local w = alongX and s.X or s.Z
-		local hingeOffset = alongX and CFrame.new(-s.X / 2, 0, 0) or CFrame.new(0, 0, -s.Z / 2)
+		local right = door.Name:sub(-1) == "R"            -- double doors: Door_FrontL / Door_FrontR swing apart
+		local sgn = right and 1 or -1
+		local hingeOffset = alongX and CFrame.new(sgn * s.X / 2, 0, 0) or CFrame.new(0, 0, sgn * s.Z / 2)
 		local hinge = closed * hingeOffset
-		open = hinge * CFrame.Angles(0, math.rad(-95), 0) * hingeOffset:Inverse()
+		open = hinge * CFrame.Angles(0, math.rad(right and 95 or -95), 0) * hingeOffset:Inverse()
 	end
 	local pp = Instance.new("ProximityPrompt"); pp.ActionText = "Open"; pp.ObjectText = "Door"; pp.KeyboardKeyCode = Enum.KeyCode.E
 	pp.MaxActivationDistance = 10; pp.RequiresLineOfSight = false; pp.Parent = door
