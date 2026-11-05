@@ -4,7 +4,11 @@
 local W = workspace
 local root = W:WaitForChild("DreamBuilders")
 local homes = root:FindFirstChild("Homes") or Instance.new("Folder"); homes.Name = "Homes"; homes.Parent = root
-local m = W:FindFirstChild("LuxuryMansion") or homes:FindFirstChild("LuxuryMansion"); assert(m, "import LuxuryMansion.fbx first")
+local m
+for _, c in ipairs(W:GetChildren()) do   -- the importer can leave stray spaces in the name
+	if c:IsA("Model") and c.Name:match("^%s*LuxuryMansion") then c.Name = "LuxuryMansion"; m = c end
+end
+m = m or homes:FindFirstChild("LuxuryMansion"); assert(m, "import LuxuryMansion.fbx first")
 if m.Parent == W then local old = homes:FindFirstChild("LuxuryMansion"); if old then old:Destroy() end end   -- a fresh import replaces the old one
 local LOOK = {
 	plaster = {{246, 244, 238}, "Plaster"}, cream = {{236, 226, 204}, "Plaster"}, slab = {{62, 60, 58}, "Concrete"},
@@ -40,7 +44,9 @@ if ph then for _, p in ipairs(ph:GetChildren()) do
 end end
 m.Parent = homes
 local k = 1
-local door = m:FindFirstChild("Door_Front", true); if door and door.Size.X > 20 then k = door.Size.X / 6 end  -- importer unit fix (came in ~22x)
+local door, width = m:FindFirstChild("Door_Front", true), 6
+if not door then door, width = m:FindFirstChild("Door_FrontL", true), 3 end
+if door and math.max(door.Size.X, door.Size.Z) > width * 3 then k = math.max(door.Size.X, door.Size.Z) / width end  -- importer unit fix (came in ~22x)
 if k ~= 1 then m:ScaleTo(m:GetScale() / k) end
 m:PivotTo(CFrame.new(SPOT) * CFrame.Angles(0, math.pi, 0))
 local bcf, bsz = m:GetBoundingBox(); m:PivotTo(m:GetPivot() + Vector3.new(0, -(bcf.Position.Y - bsz.Y / 2), 0))
