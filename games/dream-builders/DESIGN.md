@@ -29,6 +29,7 @@
 - [ ] Daily wheel + quality prizes
 - [ ] Player-owned houses: buy, renovate, list, sell (market board)
 - [ ] Own real estate business: offices, staff, cars, expenses
+- [ ] **Vehicles list (5 Nov):** hypercar, luxury sedan, luxury off-road SUV, full-size pickup, muscle car, everyday sedan, big SUV, old beat-up starter car, 1960s classic, sport + cruiser motorcycles, bicycle, flatbed materials truck, cement mixer, excavator, forklift. Made-up brand names in game (no real logos/names – Roblox IP rules). Codex makes exterior + interior references (Downloads/DreamBuilders_concepts/vehicles), owner adds Google/Insta/TikTok pics if needed, then Claude models each in the owner's Blender on screen so he can watch and give feedback.
 - [ ] **Cars (owner loves cars – top priority later):** detailed drivable cars made in Blender from the owner's own car photos (interior, rims, lights, sounds), a dealership (Dream Motors downtown), plus AI traffic on the roads
 - [ ] Real 3D mansion/car models (Blender / roblox-3d-model skill), textures, sounds, UI polish
 - [ ] Robux cosmetics + passes (after Dad approves), then publish (owner publishes)
