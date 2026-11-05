@@ -2,7 +2,7 @@
 import bpy, json, math, os, sys
 from mathutils import Vector, Euler, Matrix
 HERE = os.path.dirname(os.path.abspath(__file__)); OUT = sys.argv[-1]
-D = json.load(open(os.path.join(HERE, "map_v2.json")))
+D = json.load(open(os.path.join(HERE, os.environ.get("MAPJSON", "map_v2.json"))))
 bpy.ops.wm.read_factory_settings(use_empty=True); sc = bpy.context.scene
 cache = {}
 def mat(ci, mname, tr=0, emit=False):
@@ -47,12 +47,16 @@ for d in D["prims"]:
             Rt = Rb @ R2B @ Matrix.Rotation(math.radians(180 if side > 0 else 0), 3, "Y") @ R2B.inverted() @ Matrix.Rotation(math.radians(90), 3, "X")
             Mt = Rt.to_4x4(); off = Rb @ Vector((0, side * (sz / 2 + 0.05), 0)); Mt.translation = Vector((x, -z, y)) + off; to.matrix_world = Mt
 w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
-bg = w.node_tree.nodes["Background"]; bg.inputs[0].default_value = (0.55, 0.72, 0.95, 1); bg.inputs[1].default_value = 0.9
-bpy.ops.object.light_add(type="SUN", rotation=(math.radians(48), math.radians(12), math.radians(30))); bpy.context.active_object.data.energy = 4.2
+bg = w.node_tree.nodes["Background"]
+GOLDEN = os.environ.get("GOLDEN") == "1"
+bg.inputs[0].default_value = (0.95, 0.62, 0.38, 1) if GOLDEN else (0.55, 0.72, 0.95, 1); bg.inputs[1].default_value = 0.7 if GOLDEN else 0.9
+bpy.ops.object.light_add(type="SUN", rotation=(math.radians(72 if GOLDEN else 48), math.radians(8), math.radians(-60 if GOLDEN else 30)))
+sun = bpy.context.active_object; sun.data.energy = 5.0 if GOLDEN else 4.2
+if GOLDEN: sun.data.color = (1.0, 0.78, 0.55); sun.data.angle = math.radians(2)
 sc.render.engine = "CYCLES"; sc.cycles.samples = int(os.environ.get("SPP", "20")); sc.cycles.use_denoising = True
 sc.render.resolution_x, sc.render.resolution_y = 1280, 720; sc.view_settings.view_transform = "AgX"
 cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam")); sc.collection.objects.link(cam); sc.camera = cam; cam.data.clip_end = 5000
-V = {"01_city_overview": ((520, -620, 420), (0, -20, 0), 28), "02_hq_campus": ((150, -250, 70), (0, -420, 30), 30),
+V = {"00_hero": ((-380, -720, 330), (60, 80, 30), 30), "01_city_overview": ((520, -620, 420), (0, -20, 0), 28), "02_hq_campus": ((150, -250, 70), (0, -420, 30), 30),
      "03_boulevard_plots": ((-60, 150, 26), (-60, -150, 6), 26), "04_lakeside": ((250, -260, 45), (420, 30, 4), 28),
      "05_construction_yard": ((-150, 330, 80), (60, 400, 30), 30), "06_top_down": ((0, 0, 1350), (0, 0.01, 0), 40)}
 os.makedirs(OUT, exist_ok=True)

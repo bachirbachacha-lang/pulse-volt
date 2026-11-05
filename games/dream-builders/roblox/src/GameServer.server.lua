@@ -116,7 +116,7 @@ local function buildStage(plot, stage)
 	local m = plot:FindFirstChild("Mansion") or Instance.new("Model"); m.Name = "Mansion"; m.Parent = plot
 	local W, Dp = S * 0.62, S * 0.42                    -- house footprint
 	local cx = top * CFrame.new(0, 0, -S * 0.08)
-	local white, cream, glass = Color3.fromRGB(246, 244, 238), Color3.fromRGB(232, 222, 200), Color3.fromRGB(140, 190, 230)
+	local white, cream, glass = Color3.fromRGB(248, 246, 240), Color3.fromRGB(236, 226, 204), Color3.fromRGB(110, 170, 190)
 	if stage == 1 then
 		for _, e in ipairs({{0, Dp / 2, W, 0.3}, {0, -Dp / 2, W, 0.3}, {W / 2, 0, 0.3, Dp}, {-W / 2, 0, 0.3, Dp}}) do
 			piece(m, cx * CFrame.new(e[1], 0.15, e[2]), Vector3.new(e[3], 0.3, e[4]), Color3.fromRGB(80, 170, 255), Enum.Material.Neon, 0, "Blueprint")
@@ -133,8 +133,10 @@ local function buildStage(plot, stage)
 		piece(m, cx * CFrame.new(0, y + 13.5, 0), Vector3.new(W + 1, 1, Dp + 1), white, Enum.Material.Concrete)
 		if stage == 3 then piece(m, cx * CFrame.new(0, y + 4.5, -Dp / 2 - 0.5), Vector3.new(6, 9, 0.4), Color3.fromRGB(90, 60, 40), Enum.Material.Wood, 0, "Door") end
 	elseif stage == 5 then
-		piece(m, cx * CFrame.new(0, 30.4, 0), Vector3.new(W + 6, 1.6, Dp + 6), Color3.fromRGB(40, 42, 50), Enum.Material.Slate)
-		piece(m, cx * CFrame.new(0, 31.6, 0), Vector3.new(W * 0.5, 1, Dp * 0.5), Color3.fromRGB(255, 190, 40), Enum.Material.Metal)
+		-- flat luxury roof slabs with overhang, wood slat feature wall, roof terrace rail
+		piece(m, cx * CFrame.new(0, 30.4, 0), Vector3.new(W + 8, 1.4, Dp + 8), Color3.fromRGB(60, 58, 56), Enum.Material.Concrete)
+		for i = 0, 8 do piece(m, cx * CFrame.new(-W / 2 + 2 + i * 1.6, 22.2, -Dp / 2 - 0.9), Vector3.new(0.6, 13, 0.6), Color3.fromRGB(146, 98, 58), Enum.Material.WoodPlanks) end
+		piece(m, cx * CFrame.new(0, 32.4, -Dp / 2 - 3), Vector3.new(W + 6, 2.6, 0.3), Color3.fromRGB(150, 200, 220), Enum.Material.Glass, 0.4)
 	elseif stage == 6 then
 		local pool = top * CFrame.new(0, 0, S * 0.32)
 		piece(m, pool * CFrame.new(0, 0.3, 0), Vector3.new(W * 0.7, 0.6, S * 0.2), Color3.fromRGB(235, 232, 225), Enum.Material.Marble)
