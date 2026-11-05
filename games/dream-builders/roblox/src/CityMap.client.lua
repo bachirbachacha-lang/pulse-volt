@@ -74,7 +74,7 @@ local function drawCity(content, detail)
 end
 
 -- ---------------------------------------------------------------- GUI shell
-local gui = new("ScreenGui", {Name = "CityMap", ResetOnSpawn = false, IgnoreGuiInset = false, ZIndexBehavior = Enum.ZIndexBehavior.Global}, plr:WaitForChild("PlayerGui"))
+local gui = new("ScreenGui", {Name = "CityMap", ResetOnSpawn = false, IgnoreGuiInset = false, ZIndexBehavior = Enum.ZIndexBehavior.Sibling}, plr:WaitForChild("PlayerGui"))
 -- minimap (bottom-right, above the MAP button)
 local mini = new("Frame", {AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -16, 1, -66), Size = UDim2.fromOffset(230, 174), BackgroundColor3 = C.ink, ClipsDescendants = true}, gui)
 corner(mini, 12); stroke(mini, C.gold, 2)
@@ -87,7 +87,7 @@ corner(mapBtn, 10)
 -- full map
 local panel = new("Frame", {Visible = false, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.new(0.86, 0, 0.84, 0), BackgroundColor3 = C.panel, ZIndex = 20}, gui)
 corner(panel, 18); stroke(panel, C.gold, 2)
-new("UISizeConstraint", {MaxSize = Vector2.new(1180, 760)}, panel)
+new("UISizeConstraint", {MaxSize = Vector2.new(1240, 820), MinSize = Vector2.new(760, 520)}, panel)
 local head = label(panel, "DREAM CITY", 26, C.goldL, Enum.Font.GothamBlack)
 head.Size = UDim2.new(1, -40, 0, 36); head.Position = UDim2.fromOffset(20, 10); head.TextXAlignment = Enum.TextXAlignment.Left; head.ZIndex = 21
 local sub = label(panel, "Scroll to zoom · drag to move · click a plot", 14, C.dim); sub.Size = UDim2.new(1, -40, 0, 18); sub.Position = UDim2.fromOffset(22, 44)
@@ -110,15 +110,15 @@ end
 local sTitle = sideLabel(1, 24, C.goldL, Enum.Font.GothamBlack)
 local sPrice = sideLabel(2, 18, C.text)
 local sStatus = sideLabel(3, 16, C.text)
-local sInfo = sideLabel(4, 14, C.dim, Enum.Font.Gotham); sInfo.Size = UDim2.new(1, 0, 0, 54)
+local sInfo = sideLabel(4, 14, C.dim, Enum.Font.Gotham); sInfo.Size = UDim2.new(1, 0, 0, 48)
 local function bigBtn(order, text, col)
-	local b = new("TextButton", {Size = UDim2.new(1, 0, 0, 44), BackgroundColor3 = col, Text = text, Font = Enum.Font.GothamBlack, TextSize = 17, TextColor3 = C.ink, LayoutOrder = order, ZIndex = 22}, side)
+	local b = new("TextButton", {Size = UDim2.new(1, 0, 0, 38), BackgroundColor3 = col, Text = text, Font = Enum.Font.GothamBlack, TextSize = 17, TextColor3 = C.ink, LayoutOrder = order, ZIndex = 22}, side)
 	corner(b, 10); return b
 end
 local tpBtn = bigBtn(5, "⚡  TELEPORT", C.gold)
 local gpsBtn = bigBtn(6, "📍  SET GPS", C.white)
 local clearBtn = bigBtn(7, "CLEAR GPS", Color3.fromRGB(90, 90, 96)); clearBtn.TextColor3 = C.text
-local legend = sideLabel(9, 13, C.dim, Enum.Font.Gotham); legend.Size = UDim2.new(1, 0, 0, 90)
+local legend = sideLabel(9, 12, C.dim, Enum.Font.Gotham); legend.Size = UDim2.new(1, 0, 0, 78)
 legend.Text = "🟨 For sale      🟧 Being built\n🟩 Sold            🟦 Premium waterfront\n▲ You      ● Other players\n\nPlaces: HQ · Supply Yard · Beach & Pier · Park"
 -- quick places
 local quick = new("Frame", {Size = UDim2.new(1, 0, 0, 74), BackgroundTransparency = 1, LayoutOrder = 8, ZIndex = 22}, side)
