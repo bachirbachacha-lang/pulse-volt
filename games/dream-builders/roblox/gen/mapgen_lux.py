@@ -259,9 +259,10 @@ sign((50, 8, 0.6), (0, 16, YZ + 58), 0, "SUPPLY YARD", (25, 25, 30), (255, 170, 
 for s in (-1, 1): box((1.5, 18, 1.5), (s * 25, 9, YZ + 58), GOLD, "Metal", group="Yard")
 for x in range(-170, 171, 20): cyl((3, 1.6, 1.6), (x, 2.3, YZ + 56), (255, 110, 20), "SmoothPlastic", rz=90, group="Yard")
 # ---------------------------------------------------------------- backdrop: desert mountains + distant skyline (decoration only, no collision needed)
-for i in range(46):
-    a = math.radians(95 + i * (260 / 45))         # leave the east (sea) open
-    r = random.uniform(760, 840)
+for i in range(70):
+    a = math.radians(i * (360 / 70) + random.uniform(-2, 2))
+    r = random.uniform(740, 840)
+    if math.cos(a) * r > 260: continue           # keep the east (sea) open
     s = random.uniform(140, 260)
     ball((s, s * random.uniform(0.35, 0.6), s * random.uniform(0.8, 1.2)), (math.cos(a) * r, -10, math.sin(a) * r),
          random.choice([(196, 150, 110), (176, 128, 92), (210, 168, 124)]), "Sandstone", group="Mountains")
@@ -340,11 +341,11 @@ for _, d in ipairs(D) do
 end
 local sp = W:FindFirstChild("SpawnLocation", false); if sp and sp.Parent == W then sp:Destroy() end
 local L = game:GetService("Lighting")
-L.ClockTime = 17.3; L.GeographicLatitude = 24; L.Brightness = 2.8; L.ExposureCompensation = 0.15
+L.ClockTime = 17.3; L.GeographicLatitude = 24; L.Brightness = 2.4; L.ExposureCompensation = 0
 L.Ambient = Color3.fromRGB(70, 60, 55); L.OutdoorAmbient = Color3.fromRGB(165, 140, 115)
 L.ColorShift_Top = Color3.fromRGB(255, 210, 160); L.EnvironmentDiffuseScale = 1; L.EnvironmentSpecularScale = 1
 for _, c in ipairs(L:GetChildren()) do if c:IsA("Atmosphere") or c:IsA("BloomEffect") or c:IsA("SunRaysEffect") or c:IsA("ColorCorrectionEffect") then c:Destroy() end end
-local a = Instance.new("Atmosphere"); a.Density = 0.32; a.Offset = 0.1; a.Haze = 1.6; a.Glare = 1.2; a.Color = Color3.fromRGB(255, 214, 170); a.Decay = Color3.fromRGB(150, 110, 90); a.Parent = L
+local a = Instance.new("Atmosphere"); a.Density = 0.22; a.Offset = 0.1; a.Haze = 0.7; a.Glare = 0.35; a.Color = Color3.fromRGB(255, 214, 170); a.Decay = Color3.fromRGB(150, 110, 90); a.Parent = L
 local b = Instance.new("BloomEffect"); b.Intensity = 0.6; b.Size = 30; b.Threshold = 1.6; b.Parent = L
 local r = Instance.new("SunRaysEffect"); r.Intensity = 0.06; r.Spread = 0.7; r.Parent = L
 local cc = Instance.new("ColorCorrectionEffect"); cc.Saturation = 0.12; cc.Contrast = 0.08; cc.TintColor = Color3.fromRGB(255, 244, 230); cc.Parent = L

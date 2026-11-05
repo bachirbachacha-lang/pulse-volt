@@ -67,11 +67,11 @@ for _, d in ipairs(D) do
 end
 local sp = W:FindFirstChild("SpawnLocation", false); if sp and sp.Parent == W then sp:Destroy() end
 local L = game:GetService("Lighting")
-L.ClockTime = 17.3; L.GeographicLatitude = 24; L.Brightness = 2.8; L.ExposureCompensation = 0.15
+L.ClockTime = 17.3; L.GeographicLatitude = 24; L.Brightness = 2.4; L.ExposureCompensation = 0
 L.Ambient = Color3.fromRGB(70, 60, 55); L.OutdoorAmbient = Color3.fromRGB(165, 140, 115)
 L.ColorShift_Top = Color3.fromRGB(255, 210, 160); L.EnvironmentDiffuseScale = 1; L.EnvironmentSpecularScale = 1
 for _, c in ipairs(L:GetChildren()) do if c:IsA("Atmosphere") or c:IsA("BloomEffect") or c:IsA("SunRaysEffect") or c:IsA("ColorCorrectionEffect") then c:Destroy() end end
-local a = Instance.new("Atmosphere"); a.Density = 0.32; a.Offset = 0.1; a.Haze = 1.6; a.Glare = 1.2; a.Color = Color3.fromRGB(255, 214, 170); a.Decay = Color3.fromRGB(150, 110, 90); a.Parent = L
+local a = Instance.new("Atmosphere"); a.Density = 0.22; a.Offset = 0.1; a.Haze = 0.7; a.Glare = 0.35; a.Color = Color3.fromRGB(255, 214, 170); a.Decay = Color3.fromRGB(150, 110, 90); a.Parent = L
 local b = Instance.new("BloomEffect"); b.Intensity = 0.6; b.Size = 30; b.Threshold = 1.6; b.Parent = L
 local r = Instance.new("SunRaysEffect"); r.Intensity = 0.06; r.Spread = 0.7; r.Parent = L
 local cc = Instance.new("ColorCorrectionEffect"); cc.Saturation = 0.12; cc.Contrast = 0.08; cc.TintColor = Color3.fromRGB(255, 244, 230); cc.Parent = L

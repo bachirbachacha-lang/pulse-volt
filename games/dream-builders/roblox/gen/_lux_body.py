@@ -232,9 +232,10 @@ sign((50, 8, 0.6), (0, 16, YZ + 58), 0, "SUPPLY YARD", (25, 25, 30), (255, 170, 
 for s in (-1, 1): box((1.5, 18, 1.5), (s * 25, 9, YZ + 58), GOLD, "Metal", group="Yard")
 for x in range(-170, 171, 20): cyl((3, 1.6, 1.6), (x, 2.3, YZ + 56), (255, 110, 20), "SmoothPlastic", rz=90, group="Yard")
 # ---------------------------------------------------------------- backdrop: desert mountains + distant skyline (decoration only, no collision needed)
-for i in range(46):
-    a = math.radians(95 + i * (260 / 45))         # leave the east (sea) open
-    r = random.uniform(760, 840)
+for i in range(70):
+    a = math.radians(i * (360 / 70) + random.uniform(-2, 2))
+    r = random.uniform(740, 840)
+    if math.cos(a) * r > 260: continue           # keep the east (sea) open
     s = random.uniform(140, 260)
     ball((s, s * random.uniform(0.35, 0.6), s * random.uniform(0.8, 1.2)), (math.cos(a) * r, -10, math.sin(a) * r),
          random.choice([(196, 150, 110), (176, 128, 92), (210, 168, 124)]), "Sandstone", group="Mountains")
