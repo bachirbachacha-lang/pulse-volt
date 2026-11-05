@@ -283,6 +283,51 @@ truck(-110, YZ - 20, 90, (255, 140, 0)); truck(-40, YZ - 30, 90, (226, 176, 70))
 sign((50, 8, 0.6), (0, 16, YZ + 58), 0, "SUPPLY YARD", (25, 25, 30), (255, 170, 60), group="Yard")
 for s in (-1, 1): box((1.5, 18, 1.5), (s * 25, 9, YZ + 58), GOLD, "Metal", group="Yard")
 for x in range(-170, 171, 20): cyl((3, 1.6, 1.6), (x, 2.3, YZ + 56), (255, 110, 20), "SmoothPlastic", rz=90, group="Yard")
+# ---------------------------------------------------------------- PALM HILLS: villa neighbourhood south of the yard
+road(0, -620, ST_W, 900, False)
+for x in range(-430, 431, 24): box((9, 0.05, 0.7), (x, 0.44, -620), WHITE, group="Roads")
+for s2 in (-1, 1): walk(0, -620 + s2 * (ST_W / 2 + 4), 900, 8)
+box((900, 0.3, 70), (0, 0.15, -545), LAWN, "Grass", group="Lawns"); box((900, 0.3, 70), (0, 0.15, -695), LAWN, "Grass", group="Lawns")
+for i, x in enumerate(range(-380, 381, 95)):
+    villa(x, -556, 180, w=42, d=28, group="PalmHills"); villa(x + 40, -684, 0, w=42, d=28, group="PalmHills")
+    car(x - 26, -600, 90, random.choice([(250, 250, 250), (20, 20, 24), (200, 30, 40), (226, 176, 70), (40, 70, 140)]))
+for x in range(-420, 421, 60):
+    for s2 in (-1, 1): lamp(x, -620 + s2 * (ST_W / 2 + 6), -90 * s2 + 90, group="PalmHills")
+sign((40, 7, 0.6), (0, 12, -500), 0, "PALM HILLS", (25, 25, 30), (255, 205, 90), group="PalmHills")
+for s2 in (-1, 1): box((2, 16, 2), (s2 * 22, 8, -500), GOLD, "Metal", group="PalmHills")
+# ---------------------------------------------------------------- DOWNTOWN: offices (future player real-estate companies), car dealer, shops
+DZ = 560
+box((900, 0.3, 120), (0, 0.15, DZ), (226, 218, 200), "Limestone", group="Downtown", name="DowntownPlaza")
+def tower(x, z, w, d, h, tint, name, topcol=GOLD):
+    floors = int(h // 12)
+    box((w, h, d), (x, h / 2, z), tint, "Glass", group="Downtown", name=name, tr=0.05)
+    for f in range(1, floors + 1): box((w + 0.6, 0.8, d + 0.6), (x, f * 12, z), WHITE, "Concrete", group="Downtown")
+    box((w + 2, 3, d + 2), (x, h + 1.5, z), topcol, "Metal", group="Downtown")
+    box((w * 0.5, 9, 0.6), (x, 5, z - d / 2 - 0.4), (24, 26, 34), "Glass", group="Downtown", tr=0.2)
+for i, (x, w, h, tint) in enumerate(((-360, 40, 96, (80, 120, 140)), (-280, 46, 150, (60, 100, 125)), (-200, 36, 84, (90, 130, 150)),
+                                    (200, 40, 120, (70, 110, 135)), (280, 48, 180, (55, 95, 120)), (360, 36, 72, (95, 135, 155)))):
+    tower(x, DZ + 20, w, 40, h, tint, "OfficeTower%d" % (i + 1))
+    sign((w * 0.8, 5, 0.5), (x, 14, DZ + 20 - 20.6), 180, "REALTY %d\nFOR LEASE" % (i + 1), (20, 20, 25), (255, 205, 90), group="Downtown")
+box((120, 18, 50), (-60, 9, DZ + 10), WHITE, "Plaster", group="Downtown", name="DreamMotors")
+box((116, 14, 0.6), (-60, 8, DZ + 10 - 25.4), GLASS, "Glass", group="Downtown", tr=0.3)
+box((126, 1.6, 56), (-60, 18.8, DZ + 10), GOLD, "Metal", group="Downtown")
+sign((60, 7, 0.6), (-60, 24, DZ + 10 - 26), 180, "DREAM MOTORS", (20, 20, 25), (255, 205, 90), group="Downtown")
+for i in range(5): car(-104 + i * 22, DZ - 30, 30, [(250, 250, 250), (20, 20, 24), (200, 30, 40), (226, 176, 70), (40, 70, 140)][i])
+for i, x in enumerate(range(40, 161, 30)):
+    box((26, 14, 30), (x, 7, DZ + 12), [CREAM, WHITE, (230, 214, 190), CREAM, WHITE][i], "Plaster", group="Downtown")
+    box((22, 8, 0.5), (x, 5.5, DZ - 3.3), GLASS, "Glass", group="Downtown", tr=0.3)
+    box((26, 0.5, 6), (x, 11, DZ - 6), [(200, 40, 50), (40, 120, 90), (226, 176, 70), (30, 60, 120), (20, 20, 25)][i], "Fabric", rx=-12, group="Downtown")
+    sign((18, 3, 0.4), (x, 12.6, DZ - 3.4), 180, ["CAFE", "BOUTIQUE", "JEWELS", "DESIGN", "GYM"][i], (20, 20, 25), (255, 230, 170), group="Downtown")
+for x in range(-420, 421, 40): palm(x, DZ - 50, random.uniform(24, 30), group="Downtown")
+for x in range(-400, 401, 80): lamp(x, DZ - 40, 180, group="Downtown")
+# ---------------------------------------------------------------- BEACH CLUB + marina on the waterfront
+box((40, 10, 24), (448, 5, -300), WHITE, "Plaster", group="BeachClub", name="BeachClub")
+box((48, 1.2, 32), (448, 10.6, -300), WOOD, "WoodPlanks", group="BeachClub")
+sign((30, 5, 0.5), (448, 14, -312.5), 90, "BEACH CLUB", (20, 20, 25), (255, 205, 90), group="BeachClub")
+box((30, 0.4, 20), (470, 1.1, -300), TEAL, "Glass", group="BeachClub", tr=0.2)
+for z in (-360, -240, 240, 360):
+    box((70, 1, 10), (515, 1.6, z), WOOD, "WoodPlanks", group="Marina")
+    yacht(560, z + 14, 90)
 # ---------------------------------------------------------------- backdrop: desert mountains + distant skyline (decoration only, no collision needed)
 for i in range(70):
     a = math.radians(i * (360 / 70) + random.uniform(-2, 2))
