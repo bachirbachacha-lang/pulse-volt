@@ -24,6 +24,8 @@ addPlace("HQ", "Dream Builders HQ", hqSpawn and hqSpawn.Position + Vector3.new(0
 local yf = find({"Yard", "YardFloor"}); addPlace("Yard", "Supply Yard", yf and yf.Position + Vector3.new(0, 4, 40))
 local bch = find({"Lake", "Beach"}); addPlace("Beach", "Beach & Pier", bch and bch.Position + Vector3.new(0, 4, 0))
 local pth = find({"Park", "Path"}); addPlace("Park", "Park", pth and pth.Position + Vector3.new(0, 4, 0))
+local vp = find({"Homes", "MansionViewpoint"}); addPlace("PalmHills", "Palm Hills Mansion", vp and vp.Position)
+local dt = find({"Downtown", "DreamMotors"}); addPlace("Downtown", "Downtown", dt and dt.Position + Vector3.new(0, -5, -50))
 local STAGES = {"Blueprint", "Foundation", "Ground floor", "Second floor", "Roof", "Pool & garden"}
 for _, plot in ipairs(root:WaitForChild("Plots"):GetChildren()) do
 	local pad = plot.PrimaryPart or plot:FindFirstChild("Pad")

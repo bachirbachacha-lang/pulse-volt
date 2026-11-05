@@ -34,7 +34,11 @@ if ph then for _, p in ipairs(ph:GetChildren()) do
 	if p:IsA("BasePart") and math.abs(p.Position.X - SPOT.X) < 34 and math.abs(p.Position.Z - SPOT.Z) < 34 then p:Destroy() end
 end end
 m.Parent = homes
+local k = 1
+local door = m:FindFirstChild("Door_Front", true); if door and door.Size.X > 20 then k = door.Size.X / 6 end  -- importer unit fix (came in ~22x)
+if k ~= 1 then m:ScaleTo(m:GetScale() / k) end
 m:PivotTo(CFrame.new(SPOT) * CFrame.Angles(0, math.pi, 0))
+local bcf, bsz = m:GetBoundingBox(); m:PivotTo(m:GetPivot() + Vector3.new(0, -(bcf.Position.Y - bsz.Y / 2), 0))
 local ss = game:GetService("ServerScriptService")
 local old = ss:FindFirstChild("MansionDoors"); if old then old:Destroy() end
 local s = Instance.new("Script"); s.Name = "MansionDoors"; s.Source = [==[-- Doors for imported Blender mansions: every MeshPart named Door_* gets an E prompt and swings open on its hinge
@@ -67,5 +71,5 @@ for _, d in ipairs(homes:GetDescendants()) do if d.Name:sub(1, 5) == "Door_" the
 homes.DescendantAdded:Connect(function(d) if d.Name:sub(1, 5) == "Door_" then task.wait(); setup(d) end end)
 ]==]; s.Parent = ss
 local spawnHere = Instance.new("Part"); spawnHere.Name = "MansionViewpoint"; spawnHere.Anchored = true; spawnHere.Transparency = 1; spawnHere.CanCollide = false
-spawnHere.Size = Vector3.new(1, 1, 1); spawnHere.Position = SPOT + Vector3.new(0, 4, -50); spawnHere.Parent = homes
+spawnHere.Size = Vector3.new(1, 1, 1); spawnHere.Position = SPOT + Vector3.new(0, 4, 52); spawnHere.Parent = homes
 print("Luxury mansion placed in Palm Hills at", SPOT)
