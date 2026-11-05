@@ -22,6 +22,7 @@
 ## Roadmap
 - [x] v1 world, v2 city (16 plots, HQ, yard, lake, park) – `roblox/02_map_v2.lua`
 - [x] Jobs, bricks, 6-stage mansions, money HUD, sprint – `roblox/03_gameplay.lua`
+- [x] City map (press M): live plot status (for sale / building / sold), your position, click to teleport to HQ, Yard, Beach, Park or any plot – `roblox/04_city_map.lua`
 - [ ] Save data (DataStore) so money and levels stay
 - [ ] Job levels + tool upgrades
 - [ ] NPC buyers + house rating + sale price
