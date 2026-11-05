@@ -1,0 +1,5 @@
+{"name":"Hypercar","length_studs":16,"paint":[0.02,0.04,0.28],
+ "wheels":{"front":[-0.581,-0.122,0.152],"rear":[0.613,-0.099,0.176]},"x_inner":0.29,
+ "glass":{"y0":-0.47,"y1":0.2,"belt0":0.03,"slope":0.09,"xmax":0.43,"roof_nz":0.93,"roof_y":-0.25},
+ "trim_z":-0.21,"front_y":-0.86,"front_trim_z":-0.08,"rear_y":0.88,"rear_trim_z":0.03,
+ "headlight":[-0.8,-0.04,0.05,0.2,-0.55],"taillight":[0.9,0.04,0.16]}
