@@ -112,6 +112,17 @@ for xx in XS:
     for z in range(-440, 441, 60):
         if any(abs(z - zz) < 22 for zz in ZS + [-470, 470]): continue
         for side in (-1, 1): lamp(xx + side * (ST_W / 2 + 6), z, -90 * side)
+# street furniture along the boulevard sidewalks: benches, bins, hydrants, bus stop at HQ
+for z in range(-290, 291, 66):
+    if any(abs(z - zz) < 26 for zz in ZS): continue
+    for side in (-1, 1):
+        x = side * (BLV_W / 2 + 4)
+        bench(x + side * 2.5, z + 10, 90 * side)
+        cyl((3.4, 2.2, 2.2), (x + side * 2.5, 1.9, z - 8), (40, 42, 48), "Metal", rz=90, group="Props", name="Bin")
+        cyl((2.6, 1.2, 1.2), (x - side * 2, 1.7, z + 24), (200, 40, 40), "Metal", rz=90, group="Props", name="Hydrant")
+box((24, 0.4, 7), (-30, 9.6, 330), (40, 42, 48), "Glass", group="Props", tr=0.3, name="BusStopRoof")
+for x in (-41, -19): box((0.5, 9, 0.5), (x, 5, 332), (40, 42, 48), "Metal", group="Props")
+sign((10, 3, 0.4), (-30, 11.5, 333), 180, "BUS", (25, 25, 30), (255, 205, 90), group="Props")
 for zz in ZS:   # palms along the cross streets
     for x in range(-230, 231, 46):
         if abs(x) < 40: continue
@@ -128,6 +139,9 @@ def villa(cx, cz, ry, w=46, d=32, group="ShowVillas", lit=True):
         x, z = P(-w * 0.32 + i * 1.6, -7 + d * 0.43 + 0.8); box((0.6, 11, 0.6), (x, 18.7, z), WOOD, "WoodPlanks", ry=ry, group=group)
     x, z = P(0, -2); box((w + 6, 1.1, d + 8), (x, 13.7, z), (60, 58, 56), "Concrete", ry=ry, group=group)
     x, z = P(w * 0.12, -5); box((w * 0.8, 1.1, d * 0.98), (x, 24.7, z), (60, 58, 56), "Concrete", ry=ry, group=group)
+    x, z = P(-w / 2 - 6, -4); box((12, 10, d * 0.7), (x, 6, z), (236, 226, 204), "Plaster", ry=ry, group=group, name="Garage")
+    x, z = P(-w / 2 - 6, -4 + d * 0.35 + 0.3); box((10, 8, 0.4), (x, 5, z), (60, 58, 56), "DiamondPlate", ry=ry, group=group)
+    x, z = P(-w / 2 - 6, d / 2 + 8); box((10, 0.3, 26), (x, 1.25, z), (200, 194, 182), "Cobblestone", ry=ry, group=group)
     x, z = P(0, d / 2 + 8); box((w * 0.66, 0.8, 12), (x, 1.3, z), (240, 238, 232), "Marble", ry=ry, group=group)
     x, z = P(0, d / 2 + 8); box((w * 0.6, 0.3, 9.6), (x, 1.75, z), TEAL, "Glass", ry=ry, group=group, tr=0.2)
     for s in (-1, 1):
@@ -157,6 +171,17 @@ for (pid, cx, cz, face, prem) in plots:
         else: box((1.6, 2.4, size + 4), (cx + off, 1.2, cz), CURB, "Limestone", group=g)
     for (a, b) in ((-1, -1), (1, -1), (-1, 1), (1, 1)): palm(cx + a * (size / 2 - 5), cz + b * (size / 2 - 5), random.uniform(22, 30), group=g)
     sx = cx + face * (size / 2 + 6)
+    # entrance details: stone driveway through the gap, gate pillars with lamps, mailbox, garden lights
+    ex = cx + face * (size / 2 - 2)
+    box((14, 0.25, 16), (ex - face * 4, 1.1, cz), (200, 194, 182), "Cobblestone", group=g)
+    for sz2 in (-9, 9):
+        box((2.4, 4.2, 2.4), (cx + face * (size / 2 + 1.2), 2.1, cz + sz2), CURB, "Limestone", group=g)
+        add("L", (1.2, 0.8, 1.2), (cx + face * (size / 2 + 1.2), 4.6, cz + sz2), (255, 225, 170), "Neon", group=g)
+    box((1.2, 3.2, 1.2), (sx, 1.6, cz + 14), DARK, "Metal", group=g, name="Mailbox")
+    box((1.8, 1.4, 2.6), (sx, 3.6, cz + 14), GOLD, "Metal", group=g)
+    for (a, b) in ((-1, -0.5), (-1, 0.5)):
+        box((0.6, 1.6, 0.6), (cx + face * (size / 2 - 6), 1.8, cz + b * 30), DARK, "Metal", group=g)
+        add("L", (0.9, 0.5, 0.9), (cx + face * (size / 2 - 6), 2.8, cz + b * 30), (255, 225, 170), "Neon", group=g)
     cyl((10, 0.6, 0.6), (sx, 5, cz - 12), DARK, "Metal", rz=90, group=g)
     sign((14, 6, 0.6), (sx, 11, cz - 12), 90 if face > 0 else -90,
          f"PLOT {pid}\nFOR SALE\n${(60000 if prem else 25000):,}", GOLD if not prem else TEAL, (25, 25, 30), group=g)
