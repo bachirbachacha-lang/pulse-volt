@@ -10,6 +10,10 @@ Rich clients buy mansion plots; players take jobs (Construction Worker, Architec
 - The place file on the PC: `C:\Users\PC\Downloads\DreamBuilders.rbxl` (open with Studio → File → Open from File).
 - Free Roblox skills pack the owner liked (from an Instagram reel): github.com/SyphoDev-yt/roblox-ai-skills (roblox-map, roblox-3d-model, roblox-texture-gen, create-roblox-game …). Built for Claude Code on the owner's own computer + Studio MCP + Python + Blender. Read before using; never run downloaded scripts blindly.
 
+Design doc with all ideas: `games/dream-builders/DESIGN.md`.
+
+## Status (5 Nov): map v2 + gameplay installed in Studio and saved; play-tested by the owner
+
 ## Status (4 Nov)
 - DONE: world built in Studio and saved: avenue, 3 cross streets, 6 mansion plots (Plot1–6, attribute Stage=0, FOR SALE signs), Dream Builders HQ, job pads (Construction Worker / Architect, attribute Job), Supply Yard with brick stacks, spawn at HQ.
 - NEXT: step 2 gameplay (ServerScriptService): leaderstats Money; touch a job pad = take that job; Architect touches a plot sign = blueprint (Stage 1); Worker grabs a brick at the yard and delivers it to a plot = next stage (foundation → walls → floors → roof → pool); finished mansion pays everyone who helped; rich client NPC per plot.
