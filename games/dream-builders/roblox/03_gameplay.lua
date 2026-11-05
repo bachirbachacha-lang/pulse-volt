@@ -46,7 +46,9 @@ local function toast(plr, msg)
 	task.delay(2.5, function() if g.Toast.Text == msg then g.Toast.Visible = false end end)
 end
 local function pay(plr, amount, why)
-	plr.leaderstats.Money.Value += amount; refresh(plr); toast(plr, "+$" .. amount .. "  " .. why)
+	local mult = plr:GetAttribute("MoneyMultiplier") or 1
+	amount = math.floor(amount * mult)
+	plr.leaderstats.Money.Value += amount; refresh(plr); toast(plr, "+$" .. amount .. "  " .. why .. (mult > 1 and "  (2×!)" or ""))
 end
 -- save data: money, job and career stats survive leaving the game (DataStore; in Studio turn on
 -- Game Settings > Security > "Enable Studio Access to API Services" to test saving)
@@ -56,7 +58,8 @@ local loaded = {}
 local function save(plr)
 	if not (store and loaded[plr]) then return end
 	local d = {money = plr.leaderstats.Money.Value, job = plr:GetAttribute("Job"), bricks = plr:GetAttribute("BricksDelivered") or 0,
-		mansions = plr:GetAttribute("MansionsBuilt") or 0, designs = plr:GetAttribute("Designs") or 0}
+		mansions = plr:GetAttribute("MansionsBuilt") or 0, designs = plr:GetAttribute("Designs") or 0,
+		lastSpin = plr:GetAttribute("LastSpin"), goldHat = plr:GetAttribute("HasGoldHardHat")}
 	local ok, err = pcall(function() store:SetAsync("p_" .. plr.UserId, d) end)
 	if not ok then warn("save failed", plr.Name, err) end
 end
@@ -70,6 +73,8 @@ Players.PlayerAdded:Connect(function(plr)
 			m.Value = d.money or START_MONEY
 			if d.job then plr:SetAttribute("Job", d.job); j.Value = d.job end
 			plr:SetAttribute("BricksDelivered", d.bricks or 0); plr:SetAttribute("MansionsBuilt", d.mansions or 0); plr:SetAttribute("Designs", d.designs or 0)
+			if d.lastSpin then plr:SetAttribute("LastSpin", d.lastSpin) end
+			if d.goldHat then plr:SetAttribute("HasGoldHardHat", true) end
 		end
 		loaded[plr] = ok
 	end
@@ -86,7 +91,9 @@ local function hat(char, color)
 	local old = char:FindFirstChild("HardHat"); if old then old:Destroy() end
 	local head = char:FindFirstChild("Head"); if not head then return end
 	local h = Instance.new("Part"); h.Name = "HardHat"; h.Shape = Enum.PartType.Ball; h.Size = Vector3.new(1.6, 0.9, 1.6)
-	h.Color = color; h.Material = Enum.Material.SmoothPlastic; h.CanCollide = false; h.Massless = true
+	local plr = Players:GetPlayerFromCharacter(char)
+	if plr and plr:GetAttribute("HasGoldHardHat") then color = Color3.fromRGB(255, 200, 60) end
+	h.Color = color; h.Material = (plr and plr:GetAttribute("HasGoldHardHat")) and Enum.Material.Foil or Enum.Material.SmoothPlastic; h.CanCollide = false; h.Massless = true
 	h.CFrame = head.CFrame * CFrame.new(0, 0.55, 0); h.Parent = char
 	local w = Instance.new("WeldConstraint"); w.Part0 = head; w.Part1 = h; w.Parent = h
 end
