@@ -29,5 +29,6 @@
 - [ ] Daily wheel + quality prizes
 - [ ] Player-owned houses: buy, renovate, list, sell (market board)
 - [ ] Own real estate business: offices, staff, cars, expenses
+- [ ] **Cars (owner loves cars – top priority later):** detailed drivable cars made in Blender from the owner's own car photos (interior, rims, lights, sounds), a dealership (Dream Motors downtown), plus AI traffic on the roads
 - [ ] Real 3D mansion/car models (Blender / roblox-3d-model skill), textures, sounds, UI polish
 - [ ] Robux cosmetics + passes (after Dad approves), then publish (owner publishes)
