@@ -1,0 +1,15 @@
+{
+ "name": "Excavator",
+ "length_studs": 34,
+ "paint": [
+  0.7969,
+  0.4647,
+  0.0037
+ ],
+ "generic": {
+  "glass": true,
+  "cabin": null
+ },
+ "work_tris": 120000,
+ "axles": []
+}

@@ -1,0 +1,119 @@
+{
+ "LuxurySedan": {
+  "len": 18.5,
+  "paint": [
+   175,
+   160,
+   140
+  ],
+  "wheels": true
+ },
+ "OffroadSUV": {
+  "len": 17.4,
+  "paint": [
+   25,
+   25,
+   28
+  ],
+  "wheels": true
+ },
+ "Pickup": {
+  "len": 21,
+  "paint": [
+   170,
+   80,
+   30
+  ],
+  "wheels": true
+ },
+ "MuscleCar": {
+  "len": 17.8,
+  "paint": [
+   180,
+   20,
+   20
+  ],
+  "wheels": true
+ },
+ "EverydaySedan": {
+  "len": 17,
+  "paint": [
+   215,
+   215,
+   215
+  ],
+  "wheels": true
+ },
+ "BigSUV": {
+  "len": 20,
+  "paint": [
+   225,
+   225,
+   228
+  ],
+  "wheels": true
+ },
+ "StarterCar": {
+  "len": 15.3,
+  "paint": [
+   140,
+   170,
+   150
+  ],
+  "wheels": true
+ },
+ "ClassicCar": {
+  "len": 17.8,
+  "paint": [
+   30,
+   120,
+   120
+  ],
+  "wheels": true
+ },
+ "FlatbedTruck": {
+  "len": 28,
+  "paint": [
+   235,
+   235,
+   235
+  ],
+  "wheels": true
+ },
+ "MixerTruck": {
+  "len": 32,
+  "paint": [
+   235,
+   235,
+   235
+  ],
+  "wheels": true
+ },
+ "Forklift": {
+  "len": 12.5,
+  "paint": [
+   235,
+   190,
+   20
+  ],
+  "wheels": true
+ },
+ "GTSedan": {
+  "len": 17.8,
+  "paint": [
+   70,
+   72,
+   78
+  ],
+  "wheels": true
+ },
+ "Excavator": {
+  "len": 34,
+  "paint": [
+   230,
+   180,
+   20
+  ],
+  "wheels": false
+ }
+}
