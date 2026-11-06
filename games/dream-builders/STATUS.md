@@ -53,3 +53,9 @@ Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop 
 - **New SportBike** (red/black sport motorbike): rigged with 4 hidden stabiliser wheels so it can't tip; real front tyre steers and both tyres spin; seat on the saddle. Tested: 0→96 in 2 s on open road, turns.
 - **Sounds (6 Nov night):** every vehicle has an engine loop (Roblox Resources "Car-Engine-Loop"; diesel loop for trucks, pickup, big SUV, forklift, excavator) whose pitch and volume follow speed, plus a tyre-skid sound when the car slides sideways (drift). Everyone nearby hears occupied cars. Background music playlist of 5 free Creator Store tracks (OUD SUNSET, Nice Day, Holiday, Networking, Solar Wind). Settings toggles MUSIC and SOUND EFFECTS work with them.
   Tested in Play: engine, diesel, skid and music all load; engine pitch rose 0.86 → 1.26 while accelerating; skid volume reached 0.8 during a Shift-drift (37 studs/s side slip); music playing.
+
+## Owner test feedback round (6 Nov 22:00) – fixes
+- **Press E to drive:** every vehicle has a "Drive <name>" prompt (E). Hidden while someone drives it. Tested: prompt seated the player in the Big SUV.
+- **Car stops by itself when you get out:** server takes the car back and brakes it (70 studs/s²), then parks/anchors it. Tested: got out at 69 → stopped in 1.0 s, anchored, prompt back.
+- **Car size/proportions:** cars were ~2x too big and too stubby (sedan 28 x 18 x 11 studs next to a 5-stud avatar). Every vehicle re-shaped to real-world ratios (sedans ~18.5 L x 7.6 W x 5.4 H, SUVs 19.5 x 8.2 x 7.4, trucks 28–31 long), wheels kept round, welds/motors rebuilt, seats lowered. Backup of the old big cars: `ServerStorage.CarBackups_BeforeResize`. Re-parked along the curb (z 460) in front of spawn.
+  Tested in Play: all 15 drive off their spot; seated head below the roof in every car (e.g. hypercar head 2.4 / roof 3.0 above chassis); screenshot with the avatar standing next to the GT sedan looks right.
