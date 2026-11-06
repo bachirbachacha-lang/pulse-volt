@@ -27,9 +27,11 @@ local SHOTS = {
 	{Vector3.new(-160, 70, -880), Vector3.new(-300, 10, -940), "PALM HILLS", "Your future mansion is waiting"},
 }
 
+local savedSpeed, savedJump
 local function controls(on)
-	local ok, pm = pcall(function() return require(plr:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")) end)
-	if ok and pm then local c = pm:GetControls(); if on then c:Enable() else c:Disable() end end
+	local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid"); if not hum then return end
+	if on then hum.WalkSpeed = savedSpeed or 16; hum.JumpPower = savedJump or 50
+	else savedSpeed, savedJump = hum.WalkSpeed, hum.JumpPower; hum.WalkSpeed = 0; hum.JumpPower = 0 end
 end
 
 local gui = Instance.new("ScreenGui"); gui.Name = "DreamIntro"; gui.IgnoreGuiInset = true; gui.ResetOnSpawn = false; gui.DisplayOrder = 50
@@ -42,7 +44,7 @@ for i, y in ipairs({0, 1}) do
 end
 local title = Instance.new("TextLabel"); title.AnchorPoint = Vector2.new(0.5, 0.5); title.Position = UDim2.fromScale(0.5, 0.72); title.Size = UDim2.fromScale(0.8, 0.1)
 title.BackgroundTransparency = 1; title.Font = Enum.Font.GothamBlack; title.TextScaled = true; title.TextColor3 = WHITE; title.TextTransparency = 1; title.Parent = gui
-local tstroke = Instance.new("UIStroke", title); tstroke.Thickness = 2; tstroke.Color = Color3.new(0, 0, 0); tstroke.Transparency = 0.4
+title.Text = ""
 local sub = title:Clone(); sub.Position = UDim2.fromScale(0.5, 0.79); sub.Size = UDim2.fromScale(0.7, 0.045); sub.Font = Enum.Font.GothamMedium; sub.TextColor3 = GOLD; sub.Parent = gui
 local skip = Instance.new("TextButton"); skip.AnchorPoint = Vector2.new(1, 1); skip.Position = UDim2.new(1, -20, 1, -20); skip.Size = UDim2.fromOffset(130, 40)
 skip.Text = "SKIP ▸"; skip.Font = Enum.Font.GothamBold; skip.TextSize = 16; skip.TextColor3 = WHITE; skip.BackgroundColor3 = Color3.fromRGB(40, 42, 50); skip.BackgroundTransparency = 0.2; skip.ZIndex = 5; skip.Parent = gui
@@ -104,18 +106,23 @@ local function picker()
 end
 
 -- --------------------------------------------------------------- run
-task.wait(1.5)
+if not plr.Character then plr.CharacterAdded:Wait() end
+task.wait(1)
 controls(false)
-cam.CameraType = Enum.CameraType.Scriptable
+local RunService = game:GetService("RunService")
+local cv = Instance.new("CFrameValue"); cv.Value = cam.CFrame
+RunService:BindToRenderStep("DreamIntroCam", Enum.RenderPriority.Camera.Value + 1, function()
+	cam.CameraType = Enum.CameraType.Scriptable; cam.CFrame = cv.Value
+end)
 fade(shade, "BackgroundTransparency", 1, 1)
 for _, s in ipairs(SHOTS) do
 	if skipped then break end
 	local from = CFrame.lookAt(s[1], s[2])
 	local to = CFrame.lookAt(s[1] + (s[2] - s[1]).Unit:Cross(Vector3.yAxis) * 60 + Vector3.new(0, -10, 0), s[2])
-	cam.CFrame = from
+	cv.Value = from
 	title.Text = s[3]; sub.Text = s[4]
 	fade(title, "TextTransparency", 0, 0.6); fade(sub, "TextTransparency", 0, 0.6)
-	TweenService:Create(cam, TweenInfo.new(3.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {CFrame = to}):Play()
+	TweenService:Create(cv, TweenInfo.new(3.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Value = to}):Play()
 	local t0 = os.clock()
 	while os.clock() - t0 < 3.0 and not skipped do task.wait(0.05) end
 	fade(title, "TextTransparency", 1, 0.3); fade(sub, "TextTransparency", 1, 0.3)
@@ -125,6 +132,7 @@ title.TextTransparency = 1; sub.TextTransparency = 1
 picker()
 -- back to the player
 fade(shade, "BackgroundTransparency", 0, 0.35); task.wait(0.4)
+RunService:UnbindFromRenderStep("DreamIntroCam")
 cam.CameraType = Enum.CameraType.Custom
 local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid"); if hum then cam.CameraSubject = hum end
 for _, b in ipairs(bars) do TweenService:Create(b, TweenInfo.new(0.6), {Size = UDim2.new(1, 0, 0, 0)}):Play() end
