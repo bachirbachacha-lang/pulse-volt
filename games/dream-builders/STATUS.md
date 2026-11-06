@@ -76,3 +76,10 @@ Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop 
   Tested in Play: drove the hypercar from the city over the bridge onto the island and down the boulevard at full speed (x 770 → 1773); walked into Club Mirage → club music playing, background music muted; dance floor + LED wall animating (screenshot).
   `ServerStorage.DB_Tools.BuildKit` = helper module for building more venues the same way.
 - Note on "roads too small": that came from the cars being 2x too big; with real-size cars the 42-stud roads now fit 4–5 cars side by side.
+
+## Blender models (7 Nov, built live in the owner's Blender, imported by Claude via Import 3D)
+- `Downloads\DreamBuilders_models\metro\MetroStation.blend/.fbx` – platform level: curved glass roof on 16 steel arches, purlins, Y-columns, marble platforms with yellow safety line, glass platform screen doors with LED header, wooden benches, hanging info screens, roof light strips, escalator glass box. Placed on all 3 stations (`Station_*/NewStation`); old block roof/columns/benches removed, old platforms + screen-door walls kept as invisible collision.
+- `MetroEntrance.fbx` – street pavilion: glass walls, floating roof with gold edge + LED, lit "M" totem, ticket machines, turnstiles, 2 escalators + stairs, benches. Placed in front of each station's stair tower facing the street; the ticket gate prompt now sits at the turnstiles.
+- `city\DreamTower.fbx` – 349-stud twisting landmark skyscraper (44 floors, lit floor lines, steel fins, gold crown, spire) behind Downtown at (-400, 980).
+- Templates kept in `ServerStorage.DB_Tools.MetroStation/MetroEntrance`.
+  Tested in Play: walked from the street into the Downtown pavilion to the turnstiles → "Enter platform" → on the new platform (y 38.6). Screenshots: platform under the glass roof with the train, pavilion on the street, tower in the skyline.
