@@ -6,11 +6,15 @@ local PAINT = rawget(_G, "CAR_PAINT") or Color3.fromRGB(18, 34, 120)
 local TOP_SPEED = rawget(_G, "CAR_SPEED") or 110 -- studs/s
 
 local W = workspace
-local car
+local car, old
 for _, m in ipairs(W:GetChildren()) do
-	if m:IsA("Model") and m.Name:match("^%s*" .. NAME) then car = m end
+	if m:IsA("Model") and m.Name:match("^%s*" .. NAME .. "[_%s%d]*") and (m.Name:gsub("^%s+", ""):gsub("_AI", ""):gsub("%s+$", "")) == NAME then
+		if m:FindFirstChild("Chassis") then old = m else car = m end
+	end
 end
-assert(car, "No imported model named " .. NAME .. " in Workspace - import the FBX first")
+assert(car, "No new imported model named " .. NAME .. " in Workspace - import the FBX first")
+local oldPivot = old and old:GetPivot()
+if old then old:Destroy() end
 car.Name = NAME
 -- flatten (importer can nest models)
 for _, d in ipairs(car:GetDescendants()) do
@@ -151,12 +155,13 @@ end)
 -- park it on the street in front of the spawn
 local spawnL = W:FindFirstChildWhichIsA("SpawnLocation", true)
 local base = spawnL and spawnL.Position or Vector3.new(0, 0, 0)
-local target = base + Vector3.new(0, 0, -40)
+local target = rawget(_G, "CAR_POS") or (oldPivot and oldPivot.Position) or (base + Vector3.new(0, 0, -40))
+local yaw = rawget(_G, "CAR_YAW") or 90
 local cf = chassis.CFrame
 local rel = cf:Inverse() * car:GetPivot()
 car.WorldPivot = cf
 local ray = W:Raycast(target + Vector3.new(0, 200, 0), Vector3.new(0, -400, 0))
 local gy = ray and ray.Position.Y or 0
 local lift = (chassis.Position.Y - (mid.Y - r)) + 0.2
-car:PivotTo(CFrame.new(target.X, gy + lift, target.Z) * CFrame.Angles(0, math.rad(90), 0))
+car:PivotTo(CFrame.new(target.X, gy + lift, target.Z) * CFrame.Angles(0, math.rad(yaw), 0))
 print("Car ready:", NAME, "- press Play, walk to it and sit in the driver seat (W/S/A/D)")

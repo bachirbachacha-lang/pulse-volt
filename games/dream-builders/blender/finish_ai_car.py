@@ -58,12 +58,16 @@ for k in ("paint", "glass", "trim", "light", "tail"):
 IDX = {k: i for i, k in enumerate(("paint", "glass", "trim", "light", "tail"))}
 
 # 3) cut wheels out
-W = C["wheels"]; xin = C.get("x_inner", 0.29)
+xin = C.get("x_inner", 0.29)
+if "axles" in C:
+    AX = [(a[0], a[1], a[2], a[3]) for a in C["axles"]]
+else:
+    AX = [("F" if k == "front" else "R", *v) for k, v in C["wheels"].items()]
 wheels = {}
 bm = bmesh.new(); bm.from_mesh(src.data)
-for axle, (yc, zc, r) in W.items():
+for ak, yc, zc, r in AX:
     for side in (-1, 1):
-        key = ("F" if axle == "front" else "R") + ("L" if side < 0 else "R")
+        key = ak + ("L" if side < 0 else "R")
         sel = [f for f in bm.faces if all(side * v.co.x > xin and (v.co.y - yc) ** 2 + (v.co.z - zc) ** 2 < (r * 1.03) ** 2 for v in f.verts)]
         nb = bmesh.new()
         vmap = {}
@@ -85,10 +89,35 @@ bmesh.ops.delete(bm, geom=loose, context='VERTS')
 
 # 4) paint body by region
 g = C.get("glass", {})
+vz = [v.co for v in bm.verts]
+ZMIN = min(v.z for v in vz); ZMAX = max(v.z for v in vz); H = ZMAX - ZMIN
+YMIN = min(v.y for v in vz); YMAX = max(v.y for v in vz); XMAX = max(abs(v.x) for v in vz)
+GEN = "generic" in C
+if GEN:
+    G = C["generic"]
+    belt_z = ZMIN + G.get("belt", 0.6) * H
+    cab = G.get("cabin")  # [y0, y1] or None -> auto from roof height
+    if cab is None:
+        ys = [v.y for v in vz if v.z > ZMIN + 0.85 * H]
+        cab = [min(ys) - 0.12, max(ys) + 0.08] if ys else [0, 0]
 for f in bm.faces:
     c = f.calc_center_median(); n = f.normal
     x, y, z = c.x, c.y, c.z
     k = "paint"
+    if GEN:
+        if cab[0] < y < cab[1] and z > belt_z and abs(x) < 0.97 * XMAX and n.z < G.get("roof_nz", 0.9) and G.get("glass", True):
+            k = "glass"
+        if z < ZMIN + G.get("trim", 0.12) * H:
+            k = "trim"
+        if (y < YMIN + 0.05 or y > YMAX - 0.04) and z < ZMIN + G.get("bumper", 0.38) * H:
+            k = "trim"
+        zb = (ZMIN + G.get("light_lo", 0.42) * H, ZMIN + G.get("light_hi", 0.62) * H)
+        if y < YMIN + 0.07 and zb[0] < z < zb[1] and abs(x) > 0.45 * XMAX and n.y < -0.55:
+            k = "light"
+        if y > YMAX - 0.06 and zb[0] < z < zb[1] + 0.05 * H and abs(x) > 0.45 * XMAX and n.y > 0.55:
+            k = "tail"
+        f.material_index = IDX[k]
+        continue
     belt = g.get("belt0", 0.03) + (y - g.get("y0", -0.47)) * g.get("slope", 0.09)
     if g.get("y0", -0.47) < y < g.get("y1", 0.2) and z > belt and abs(x) < g.get("xmax", 0.43) \
             and not (n.z > g.get("roof_nz", 0.93) and y > g.get("roof_y", -0.25)):
@@ -111,9 +140,10 @@ bm.to_mesh(src.data); bm.free()
 # split body by material into separate objects
 bpy.ops.object.select_all(action='DESELECT'); src.select_set(True); bpy.context.view_layer.objects.active = src
 bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.separate(type='MATERIAL'); bpy.ops.object.mode_set(mode='OBJECT')
-budget = {"paint": 14000, "glass": 2500, "trim": 3500, "light": 600, "tail": 600}
+budget = C.get("budget", {"paint": 14000, "glass": 2500, "trim": 3500, "light": 600, "tail": 600})
 parts = []
 for o in [o for o in bpy.data.objects if o.type == 'MESH']:
+    if o.name.startswith(("Wheel_", "Well_", "Caliper_")): continue
     k = o.data.materials[o.data.polygons[0].material_index].name if o.data.polygons else None
     if not k:
         bpy.data.objects.remove(o); continue
@@ -127,9 +157,11 @@ def new_obj(nm, bmx, m):
     bpy.context.scene.collection.objects.link(o); me.materials.append(m); return o
 for key, (nb, ctr, r, side) in wheels.items():
     yc, zc = ctr.y, ctr.z
+    if not nb.faces:
+        print("   (no wheel faces for", key, ")"); continue
     tb = nb.copy(); rb = nb
     for b_, keep_tyre in ((tb, True), (rb, False)):
-        dels = [f for f in b_.faces if ((f.calc_center_median().y - yc) ** 2 + (f.calc_center_median().z - zc) ** 2) ** .5 > 0.74 * r != keep_tyre]
+        dels = [f for f in b_.faces if ((((f.calc_center_median().y - yc) ** 2 + (f.calc_center_median().z - zc) ** 2) ** .5 > 0.74 * r) != keep_tyre)]
         bmesh.ops.delete(b_, geom=dels, context='FACES')
     t = new_obj(f"Wheel_{key}_tyre", tb, M["tyre"]); rm = new_obj(f"Wheel_{key}_rim", rb, M["rim"])
     for o in (t, rm):
