@@ -19,7 +19,7 @@ CARS = {
  "09_classic_1960s_car":  ("ClassicCar", 17.8, 0.12, {}),
  "13_flatbed_truck":      ("FlatbedTruck", 28, 0.125, {"generic": {"cabin": [-0.86, -0.5]}}),
  "14_cement_mixer_truck": ("MixerTruck", 32, 0.14, {"generic": {"cabin": [-1.0, -0.7]}}),
- "16_forklift":           ("Forklift", 12.5, 0.14, {"generic": {"glass": False}}),
+ "16_forklift":           ("Forklift", 12.5, 0.14, {"generic": {"glass": False}, "axles": [["F", -0.2688, -0.488, 0.14], ["R", 0.7391, -0.488, 0.14]]}),
  "17_gt63_style":         ("GTSedan", 17.8, 0.13, {}),
  "15_excavator":          ("Excavator", 34, None, {"generic": {"glass": True, "cabin": None}}),
 }
