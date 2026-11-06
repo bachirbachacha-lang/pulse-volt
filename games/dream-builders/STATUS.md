@@ -13,3 +13,7 @@
 | Head-on obstacle | some parked spots sit on props/curbs | – | known: forklift wheels too small for curbs |
 
 Known / not done: excavator not drivable; motorbikes + bicycle not built; car looks (Stage 2: artist models for main cars, AI+texture for extras); no engine sounds yet.
+
+## Extra (6 Nov): hologram build effect
+Owner's reel (Ropilot "Astra 6" demo) – buildings materialising with a holo scan. Rebuilt ourselves: `BuildFX` LocalScript + GameServer tags each plot-house piece. Tested in Play on the mansion (ring sweeps, pieces fade in).
+Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop decoy pricing (for later, Dad approves Robux), skill directory.

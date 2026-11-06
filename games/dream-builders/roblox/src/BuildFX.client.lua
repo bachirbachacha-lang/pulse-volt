@@ -1,0 +1,2 @@
+-- (StarterPlayerScripts "BuildFX") Hologram build effect, inspired by the owner's reference reel.
+-- Server tags building pieces "BuildFX" (GameServer piece() for plot mansions); each nearby client: outlines -> scan ring -> pieces fade in by height.
