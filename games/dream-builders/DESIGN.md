@@ -57,3 +57,9 @@ You start poor and grind (that rule stays!). The goal: become the millionaire wh
 7. NPC traffic, schedules, tourists everywhere
 
 Technical note: each country is a separate place in one Roblox experience (TeleportService). It loads faster and each country can be huge.
+
+## Owner feedback after first vehicle test (6 Nov) - honest list
+Broken (fix first): cars roll forward by themselves, steering doesn't work, SUV/map glitching, head pokes through the hypercar roof, pool: can't swim (stands on water).
+Look: cars look cartoon/AI/fake - target is Berry Avenue level realism. City towers need real glass (window lines, reflections), real floors, offices, real-estate companies, trading centre inside.
+Wants: drift button; every house built like the Blender mansion (owner likes it) but more detailed/proportioned; mansion fixes (missed spots); bigger map, everything a bit bigger; Palm-style beach with beach restaurant + beach workspace; cargo port next to the beach (ships deliver materials); sounds: engine, effects, background music; settings (sound/graphics).
+Game identity: real-life business roleplay that teaches hard work. Be a real-estate agent, start a company, sell cars/houses, travel to other countries for business/vacation, phone with fake social app + food ordering with an NPC delivery driver coming to your house.
