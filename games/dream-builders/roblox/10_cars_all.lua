@@ -21,12 +21,13 @@ local CARS = {
 	{"Forklift", 12.5, C(235, 190, 20), 30},
 }
 local spawnL = workspace:FindFirstChildWhichIsA("SpawnLocation", true)
-local base = (spawnL and spawnL.Position or Vector3.zero) + Vector3.new(-110, 0, -70)
-local x = 0
+local base = (spawnL and spawnL.Position or Vector3.zero) + Vector3.new(0, 0, -39) -- showroom row facing the spawn
+local x = -110
 for i, c in ipairs(CARS) do
 	local name, len, paint, speed = c[1], c[2], c[3], c[4]
 	_G.CAR_NAME, _G.CAR_LEN, _G.CAR_PAINT, _G.CAR_SPEED = name, len, paint, speed
-	_G.CAR_POS = base + Vector3.new(x, 0, 0); _G.CAR_YAW = 0
+	local w = (len > 22) and 18 or 14
+	_G.CAR_POS = base + Vector3.new(x + w / 2, 0, 0); _G.CAR_YAW = 180
 	local found = false
 	for _, m in ipairs(workspace:GetChildren()) do
 		if m:IsA("Model") and not m:FindFirstChild("Chassis") and (m.Name:gsub("^%s+", ""):gsub("_AI", ""):gsub("%s+$", "")) == name then found = true end
@@ -35,7 +36,7 @@ for i, c in ipairs(CARS) do
 		local ok, err = pcall(run)
 		print(ok and ("OK  " .. name) or ("ERR " .. name .. ": " .. tostring(err)))
 	end
-	x += (len > 22 and 22 or 16)
+	x += w
 	for _, k in ipairs({"CAR_NAME", "CAR_LEN", "CAR_PAINT", "CAR_SPEED", "CAR_POS", "CAR_YAW"}) do _G[k] = nil end
 end
 -- the static excavator (no wheels yet): paint + anchor only
