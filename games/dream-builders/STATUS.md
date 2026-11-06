@@ -26,3 +26,6 @@ Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop 
 - Cars re-parked in a showroom row 58 studs in front of the spawn (spawn now 0,1.5,504).
 - Tested in Play: spawn OK, server + UI scripts start, MapData has 22 plots, mansion pool = Swimming.
 - Next: fill the new space (beach club + beach workspace, cargo port, downtown towers with glass curtain walls), better palms/landscaping.
+- Car textures (6 Nov): Roblox Studio's built-in AI `generate_texture` (Quality) run on every car's Body_Paint with its Codex picture as the hint + a text prompt (no logos/text). All 13 drivable vehicles now have SurfaceAppearance paint (grilles, seams, chrome, rust on the starter car, pallets on the flatbed). Old glass/headlight zones toned to dark tint so they don't fight the texture. Backups of every car before texturing: ServerStorage.CarBackups.
+- Owner idea logged: metro station (with airport + port in Stage 3/5).
+- Sketchfab route dropped: site needs an account the owner can't make (age rule) – not working around it.
