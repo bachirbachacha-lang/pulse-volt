@@ -18,3 +18,11 @@ Known / not done: excavator not drivable; motorbikes + bicycle not built; car lo
 Owner's reel (Ropilot "Astra 6" demo) – buildings materialising with a holo scan. Rebuilt ourselves: `BuildFX` LocalScript + GameServer tags each plot-house piece. Tested in Play on the mansion (ring sweeps, pieces fade in).
 Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop decoy pricing (for later, Dad approves Robux), skill directory.
 - Steering v2: real turning circle from wheelbase, no sideways slide (tested 5 deg slip), calmer drift; parked-car headlights no longer blown-out neon blobs.
+
+## Stage 3 start (6 Nov): bigger city
+- Backup first: `Downloads\DreamBuilders_backup_6Nov_before_bigger_map.rbxl`.
+- Whole `workspace.DreamBuilders` scaled x1.5 about the origin (7,988 parts, 232 light ranges); 1700-stud ground split into 4 tiles (2048 limit); sea + mansion pool terrain water cleared and refilled at the new size.
+- City map window widened to -1000..1250 x -1150..1150 (now includes Palm Hills + Downtown); drawn map scaled to match.
+- Cars re-parked in a showroom row 58 studs in front of the spawn (spawn now 0,1.5,504).
+- Tested in Play: spawn OK, server + UI scripts start, MapData has 22 plots, mansion pool = Swimming.
+- Next: fill the new space (beach club + beach workspace, cargo port, downtown towers with glass curtain walls), better palms/landscaping.
