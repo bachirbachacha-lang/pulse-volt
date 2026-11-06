@@ -17,3 +17,4 @@ Known / not done: excavator not drivable; motorbikes + bicycle not built; car lo
 ## Extra (6 Nov): hologram build effect
 Owner's reel (Ropilot "Astra 6" demo) – buildings materialising with a holo scan. Rebuilt ourselves: `BuildFX` LocalScript + GameServer tags each plot-house piece. Tested in Play on the mansion (ring sweeps, pieces fade in).
 Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop decoy pricing (for later, Dad approves Robux), skill directory.
+- Steering v2: real turning circle from wheelbase, no sideways slide (tested 5 deg slip), calmer drift; parked-car headlights no longer blown-out neon blobs.
