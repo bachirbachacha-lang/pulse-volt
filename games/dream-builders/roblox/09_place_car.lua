@@ -116,12 +116,38 @@ for _, tyre in ipairs(find("^Wheel_%a%a_tyre$")) do
 	h.Parent = col; table.insert(motors, h)
 end
 
--- driver seat (left side, inside the cabin)
+-- driver seat (left side, low in the cabin) + a simple interior
+local groundY = mid.Y - r
+local seatPos = Vector3.new(0, 0, 0) + mid + lat * LEN * 0.07 - fwd * LEN * 0.05
+seatPos = Vector3.new(seatPos.X, groundY + 0.9, seatPos.Z)
 local seat = Instance.new("VehicleSeat"); seat.Name = "DriverSeat"
 seat.Size = Vector3.new(2, 0.4, 2); seat.Transparency = 1; seat.CanCollide = false
-seat.CFrame = CFrame.lookAt(mid - lat * LEN * 0.07 - fwd * LEN * 0.06 + Vector3.new(0, r * 0.55, 0), mid - lat * LEN * 0.07 + Vector3.new(0, r * 0.55, 0))
+seat.CFrame = CFrame.lookAt(seatPos, seatPos + fwd)
 seat.Anchored = true; seat.Parent = car
 do local w = Instance.new("WeldConstraint"); w.Part0 = chassis; w.Part1 = seat; w.Parent = seat end
+for _, o in ipairs(car:GetChildren()) do if o.Name:match("^Interior_") then o:Destroy() end end
+local LEATHER, DASH = Color3.fromRGB(150, 110, 70), Color3.fromRGB(28, 26, 28)
+local function ip(nm, size, cf, col, mat, shape)
+	local p = Instance.new("Part"); p.Name = "Interior_" .. nm; p.Size = size; p.CFrame = cf; p.Color = col
+	p.Material = mat or Enum.Material.SmoothPlastic; p.Anchored = true; p.CanCollide = false; p.Massless = true; p.CastShadow = false
+	if shape then p.Shape = shape end
+	p.Parent = car; local w = Instance.new("WeldConstraint"); w.Part0 = chassis; w.Part1 = p; w.Parent = p; return p
+end
+local base = CFrame.lookAt(seatPos, seatPos + fwd)
+for _, side in ipairs({1, -1}) do
+	local sp = seatPos - lat * (side == 1 and 0 or LEN * 0.14)
+	local b = CFrame.lookAt(sp, sp + fwd)
+	ip(side == 1 and "SeatD" or "SeatP", Vector3.new(2.1, 0.6, 2.1), b * CFrame.new(0, -0.45, 0), LEATHER, Enum.Material.Leather)
+	ip(side == 1 and "BackD" or "BackP", Vector3.new(2.1, 2.8, 0.5), b * CFrame.new(0, 1.0, 1.15) * CFrame.Angles(math.rad(-12), 0, 0), LEATHER, Enum.Material.Leather)
+end
+local mid2 = seatPos - lat * LEN * 0.07
+ip("Floor", Vector3.new(LEN * 0.2, 0.2, LEN * 0.32), CFrame.lookAt(Vector3.new(mid2.X, groundY + 0.25, mid2.Z), Vector3.new(mid2.X, groundY + 0.25, mid2.Z) + fwd), DASH)
+ip("Dash", Vector3.new(LEN * 0.2, 1.1, 1.4), CFrame.lookAt(mid2, mid2 + fwd) * CFrame.new(0, 1.3, -3.1), DASH)
+ip("Screen", Vector3.new(1.6, 0.9, 0.1), CFrame.lookAt(mid2, mid2 + fwd) * CFrame.new(0, 2.05, -2.45) * CFrame.Angles(math.rad(-15), 0, 0), Color3.fromRGB(60, 140, 220), Enum.Material.Neon)
+ip("Wheel", Vector3.new(0.25, 1.5, 1.5), base * CFrame.new(0, 1.55, -2.2) * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(0, 0, math.rad(-20)), Color3.fromRGB(20, 20, 22), nil, Enum.PartType.Cylinder)
+for _, p in ipairs(car:GetChildren()) do
+	if p:IsA("MeshPart") and (p.Name == "Body_Paint" or p.Name == "Body_Trim") then pcall(function() p.DoubleSided = true end) end
+end
 seat:SetAttribute("TopSpeed", TOP_SPEED); seat:SetAttribute("WheelRadius", r)
 
 local src = Instance.new("Script"); src.Name = "DriveScript"; src.Parent = car
