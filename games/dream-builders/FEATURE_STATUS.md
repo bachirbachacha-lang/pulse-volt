@@ -14,7 +14,7 @@ Four labels:
 | City, Palm Island, port, metro, tower elevator, ship interior | Visit, ride, elevator, board the ship |
 | 15 drivable cars | E to drive, brakes and parks when you get out, realistic size |
 | Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid |
-| AI staff for your business | Hire for $150; staff serve customers by themselves; owner gets 70% (+$17 on a $25 service) |
+| AI staff for your business | Up to 3 staff ($150 each); more staff = faster service; owner keeps 70%; wages $5 per staff per minute (tested: 2 staff, +$14 sales and -$10 wages); unpaid staff quit |
 | Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80% |
 | Garages + driveways (24 villas) | Owner-only roll-up door; F = park the car you last drove inside |
 | Phone: Bank, Maps (GPS), Jobs, Property, Business | Balance, transfers, travel, switch job, listings |
@@ -31,12 +31,12 @@ Four labels:
 | A few pedestrians | 6 people walking the downtown and avenue sidewalks (kept few on purpose) |
 | Weather + time-of-day lighting, real grass | Rain and storms cycle; lighting changes by the hour |
 | Hair Stylist job | Plaza salon chair: open it, AI customers sit and ask for a style, hold to cut, paid + tips (+$42 tested) |
-| Taxi rides | Phone › Maps › switch to Taxi mode: an AI taxi pulls up, you get in, it drives off and drops you at the destination ($12 fare tested) |
-| Airport + flight to the Maldives | Dream International Airport (north of downtown): ticket desk $150 → flight fade → Maldives resort island (water villas, beach bar, seaplane dock). "Fly home" is free. Tested both ways. |
+| Taxi rides | Phone › Maps › Taxi mode: an AI taxi with a driver picks you up and **drives the real roads** (route finding over the road network) to your destination. Spawn → Palm Island took ~19 s, $18 fare. |
+| Airport + flight to the Maldives | Upgraded: entrance canopy, palms, parking, jet bridge, apron markings, runway lights, baggage carts, duty free, gate screens, new airliner (swept wings, engines, Dream Air tail). Dream International Airport (north of downtown): ticket desk $150 → flight fade → Maldives resort island (water villas, beach bar, seaplane dock). "Fly home" is free. Tested both ways. |
 | Phone: Supplies app | Order a 10-brick pallet ($30) to a plot under construction; Construction Workers pick bricks from it (order + delivery tested) |
 | Phone: Assistant app | Rule-based tips from your money, job, shop and villa, with "Take me there" buttons. Not an AI chat. |
 | Business upgrades | Price tiers (Budget / Standard / Premium change price and customer speed); decor upgrade $250 (plants + chandelier, +$3 per customer). Tested: Premium + decor + staff paid $16 on a Café sale. |
-| Export cargo contracts | Second contract type at the gate house (city → ship). Start tested; delivery uses the same code as imports (tested). |
+| Export cargo contracts | City → cargo ship. Full run tested: load in Downtown → unload at the quay → +$320 |
 | Security pass | See SECURITY_REVIEW.md: rate limits added, transfers notify both players, no teleports while seated |
 | Construction Worker / Architect | Carry bricks, build mansions in stages (older feature) |
 
@@ -50,9 +50,7 @@ Four labels:
 
 ## Planned (not built yet)
 - Real other-country servers (TeleportService to separate places): needs publishing. Today "Maldives" is a far island inside this same game world.
-- Better airport and jet models: Codex Blender task. The current ones are simple block models.
-- Taxi that drives the whole route on the roads. Today it drives off, the screen fades, and it arrives.
-- More staff per shop, staff wages over time.
+- A Blender-made jet to replace the Studio-built one, once Blender's MCP link is running again
 - Documentation set (PROJECT_OVERVIEW, TECHNICAL_ARCHITECTURE, etc.): assigned to Codex.
 
 ## Not started
