@@ -145,7 +145,7 @@ app("Business", "📊", Color3.fromRGB(212, 150, 60), function(list)
 		end
 		local dc; dc = card(list, b.decor and "✨ Luxury decor" or "Upgrade decor", b.decor and "+$3 on every customer" or "$250 · plants, lights, +$3 per customer", b.decor and "✓" or "$250", not b.decor and function()
 			dc:FindFirstChildWhichIsA("TextLabel").Text = tostring(rf3:InvokeServer("decor")); task.wait(1); APPS.Business() end or nil, 20)
-		card(list, b.staff and "👔 Staff hired" or "No staff yet", b.staff and "They serve customers for you (you keep 70%)" or "Hire at the counter in your shop ($150)", nil, nil, 21)
+		card(list, "👔 Staff: " .. (b.count or 0) .. " / 3", "Hire at the counter ($150 each) · wages $5 each per minute · you keep 70%", nil, nil, 21)
 	end
 end)
 local rf2 = game:GetService("ReplicatedStorage"):WaitForChild("PhoneApps")

@@ -98,7 +98,7 @@ rf.OnServerInvoke = function(p, what, a)
 	elseif what == "biz" then
 		for _, u in ipairs(units:GetChildren()) do
 			if u:GetAttribute("OwnerId") == p.UserId then
-				return {tier = u:GetAttribute("Tier") or "Standard", decor = u:GetAttribute("Decor") == true, staff = u:GetAttribute("Staff") == true}
+				return {tier = u:GetAttribute("Tier") or "Standard", decor = u:GetAttribute("Decor") == true, staff = u:GetAttribute("Staff") == true, count = u:GetAttribute("StaffCount") or 0}
 			end
 		end
 		return nil
