@@ -176,6 +176,51 @@ Other weaknesses seen:
   2. Then hospital + doctor job.
   3. Then the EconomyService pilot.
 
+
+## Session 3 (7 Nov, 22:23–23:30): what changed
+**Dream Residences (Tower 3): COMPLETE (tested)**
+- Hollowed the tower; the solid core block is backed up in ServerStorage.Phase1Backups.
+- Lobby with concierge desk, sofas, chandelier and mailboxes.
+- 14 furnished apartments: living room facing the skyline, kitchen, dining, bedroom, shower.
+- Standard units are floors 1–3 ($8,000); Premium units are floors 4–7 ($15,000).
+- Double-height penthouse ($80,000): sectional, piano, kitchen island, dining for 8, mezzanine master suite, bathtub.
+- Roof terrace: pool, loungers, hot tub, glass rails.
+- The elevator reuses TowerServer, with 10 stops (LOBBY, 1–7, PENTHOUSE, ROOF).
+- The door opens for the owner and the owner's Roblox friends; sell back at 80%.
+- Saving uses DataStore DreamResidence_v1 (untestable until published).
+- Tested: elevator to the penthouse → buy → $80,000 taken → door opens for the owner.
+
+**Taxi Driver job: COMPLETE (tested)**
+- An AI passenger waves you down at one of 10 kerbside spots. Pull up next to them, drive to the destination, and get paid by distance, plus a fast-ride tip.
+- Tested: pickup + drop-off, +$66.
+
+**Dream City Hospital + Doctor job: COMPLETE (tested)**
+- Building: reception, waiting room, pharmacy, 4 treatment bays (beds, monitors, curtains), ambulance bay, roof helipad.
+- Up to 3 AI patients with symptoms. The Doctor calls the next patient to a bay and treats them (+$35 plus tips).
+- Free check-up for everyone (heals to full).
+- Tested: patient arrived in 25 s, treated in Bay 1, +$35.
+
+**Dream Grand Hotel (Tower 1) + Hotel Receptionist job: COMPLETE (tested)**
+- Hollowed the tower: hotel lobby + 14 rooms (re-using the tested apartment layout).
+- Book a room ($150, 30 min, F key); the door opens for the guest and their friends.
+- Receptionist job: check in AI guests (+$30).
+- Tested: check-in +$30, booking -$150 (room 101), elevator to the floor, door opens.
+- Fixed: the booking prompt and the guest prompt clashed on the E key.
+
+**Jobs:** 13 now. The intro picker now scrolls and lists Teacher, Doctor, Taxi Driver and Hotel Receptionist. They're also in Phone › Jobs and the HUD hints.
+
+**Maps:** added Dream Residences, Hospital and Dream Grand Hotel.
+
+## Still not started (honest)
+- Avatar editor, inventory, saved outfits
+- Yacht boarding and boat driving
+- Supermarket, electronics and furniture stores
+- Police (safe "city patrol" version)
+- Audio pass per district
+- UI navigation rebuild
+- EconomyService / PlayerDataService refactor
+- Interiors for the remaining downtown towers (2, 5, 6)
+
 ## (previous) Next session starting point
 - **Exact next task (Phase 1 → 2):**
   1. Re-seat the parked cars.
