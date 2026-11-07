@@ -221,6 +221,52 @@ Other weaknesses seen:
 - EconomyService / PlayerDataService refactor
 - Interiors for the remaining downtown towers (2, 5, 6)
 
+
+## Session 4 (7 Nov, 22:37–23:10): what changed
+**Yachts: COMPLETE (tested)**
+- The 7 block yachts are replaced by real motor yachts. Old ones are backed up in Phase1Backups/OldYachts.
+- Each yacht has a tapered bow, navy stripe, teak deck, cabin with window band, flybridge, radar arch, rails, aft sofa, swim platform, name on the transom and underwater lights.
+- **Driving:** "Board yacht" from the pier side, then sit at the Helm (VehicleSeat; W/S throttle, A/D steer). The server moves the yacht and stops it before land, piers or boats. "Go ashore" from the swim platform.
+- Tested: moved 14 studs, then auto-stopped before a pier. Reverse + 150° turn + cruise of 327 studs, driver still seated.
+
+**Dream Mart + Inventory: COMPLETE (tested)**
+- Store on the north ground, with a path to the airport road. Sections: Grocery, Tech, Style.
+- 16 products on shelves with price tags; checkouts. Prices come from the server's own catalogue.
+- Food and drinks go to the backpack (health / speed). Holdables: flowers, camera.
+- Wearables (headphones, watch, sunglasses, gold chain, cap, designer bag) and collectibles go to **Phone › Inventory**: tap to wear, and they come back after respawn.
+- Saved with DreamInventory_v1 (needs publishing).
+- Tested: $71 spent; sandwich in the backpack; sunglasses + cap in the inventory and worn.
+
+**District audio: COMPLETE (tested)**
+- AmbienceFX crossfades by district: Downtown traffic, beach/island/marina/Maldives waves, port harbor, Palm Hills/school/hospital birds.
+- Yacht wash plays while driving a yacht.
+- Sounds: licensed Roblox Pro Sound Effects + one free waves track. All 5 checked with PreloadAsync = Success.
+- Tested: spawn → city 0.12; Palm Beach → waves 0.35.
+
+**Style app (avatar colours + 3 saved outfits): COMPLETE (tested)**
+- Shirt, trousers and skin palettes, validated on the server.
+- Applying removes the player's Roblox clothing in this game only. "Back to my Roblox avatar" resets it.
+- Saved with DreamOutfits_v1.
+
+**City Patrol Officer job (non-violent): COMPLETE (tested)**
+- Calls every ~25 s: lost tourist, broken-down car, lost pet, noise complaint, parking trouble.
+- Blue marker; help prompt pays $40–55. Patrol cap while on duty.
+- Tested: lost-dog call +$50.
+
+**Jobs:** 14 (intro picker, Phone › Jobs, HUD hints).
+
+**Phone:** 13 apps (+Inventory, +Style).
+
+**Maps:** + Dream Mart.
+
+**Output:** 0 server errors and 0 client errors in the last Play test.
+
+## Still not started (honest)
+- EconomyService / PlayerDataService refactor (internal)
+- Main-menu navigation rebuild (the brief's Avatar/Vehicles/Properties/… bar)
+- Interiors for downtown towers 2, 5 and 6
+- Furniture placement in owned homes
+
 ## (previous) Next session starting point
 - **Exact next task (Phase 1 → 2):**
   1. Re-seat the parked cars.
