@@ -1,5 +1,5 @@
 # Dream Builders – feature status (honest)
-Updated 8 Nov 2026 by Claude (after the owner's playtest).
+Updated 8 Nov 2026 by Claude (after the owner's playtest, then the Phase A smoke tests; see PHASE_A_RESULTS.md).
 
 Four labels:
 - **Fully working:** tested in Roblox Studio Play mode, and the result was checked (money changed, item arrived, and so on).
@@ -13,9 +13,9 @@ Four labels:
 | Intro + job picker | 9 jobs; HUD shows the job and a hint |
 | City, Palm Island, port, metro, tower elevator, ship interior | Visit, ride, elevator, board the ship |
 | 15 drivable cars | E to drive, brakes and parks when you get out, realistic size |
-| Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid |
+| Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid. Re-tested 8 Nov (Café: −$50 rent, +$15 per customer). 3 bugs found, see "Known bugs" below |
 | AI staff for your business | Up to 3 staff ($150 each); more staff = faster service; owner keeps 70%; wages $5 per staff per minute (tested: 2 staff, +$14 sales and -$10 wages); unpaid staff quit |
-| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80% |
+| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). **Villa_PalmHills_1_Classic is buried in a dune**, see "Known bugs" |
 | Garages + driveways (24 villas) | Owner-only roll-up door; F = park the car you last drove inside |
 | Phone: Bank, Maps (GPS), Jobs, Property, Business | Balance, transfers, travel, switch job, listings |
 | Phone: Dream Eats | Order → paid → AI courier walks to you → food in backpack → eating heals and gives speed |
@@ -41,12 +41,22 @@ Four labels:
 | Metro stairs | Walk up real stairs to the platform at all 3 stations (tested at each) |
 | Wheels spin on every car | Own car, other players' cars, traffic and taxis (tested) |
 | Garage doors open for the owner | Roll up automatically when the owner comes close (tested) |
-| Tower lobbies: Dream Bank, Sky Tower + Sky Deck, Dream Café | Auto doors, tellers/ATMs, lift to the roof deck, buy drinks (tested) |
+| Tower lobbies: Dream Bank, Sky Tower + Sky Deck, Dream Café | Auto doors, tellers/ATMs, lift to the roof deck, buy drinks (tested). 8 Nov: the Sky Deck lift now shows its fade + caption both ways (it used to cause the Phone:342 error) |
+| Metro full trip (re-tested 8 Nov) | Street gate → platform → board → ride Downtown to Park → get off → exit to the street |
+| Drive a car (re-tested 8 Nov) | MuscleCar: drove 25 studs, stopped when W released, car anchored after getting out |
 | North District front | Road-side plaza, parking, big signs for the Mart, Academy, Hospital and Airport (screenshots) |
 | City life NPCs | 55 AI people sitting, waiting and strolling; 60 fps on the server (tested) |
 | Marina Row (6 new modern houses) | 6 different designs by the sea, furnished, stairs to every floor, garage, pool; $45,000 in Phone › Property (tested walking every house) |
 | Readable signs | All wall signs re-scaled; checked on screenshots |
 | Construction Worker / Architect | Carry bricks, build mansions in stages (older feature) |
+
+## Known bugs (found 8 Nov in Play, not fixed yet)
+| Bug | Where | Suggested fix |
+|---|---|---|
+| Villa_PalmHills_1_Classic is buried: its doors and garage are inside a sand dune; My Home lands on top of the dune | `Workspace.DreamBuilders.Mountains` child #34 (Sandstone ball at −547.9, −15, −977.8) | Shrink or move that one dune (backup first), then re-test |
+| Street side of a shop sign keeps the old name ("JEWELS") after opening a business | `BusinessServer.setSign` only updates the first of the sign's 2 labels | Update every label on the sign |
+| Rent board text still shows after renting | RentBoard part goes transparent but its SurfaceGui stays on | Turn the SurfaceGui off on open, on again on close |
+| At the counter, E can pick "Hire staff" instead of "Serve" | Both prompts use E with a 10-stud range | Different key for Hire staff, or move the staff spot |
 
 ## Partly done
 | Feature | What's missing |

@@ -299,3 +299,20 @@ Saved in DreamBuilders.rbxl (Ctrl+S done). Every item below marked **tested** wa
 - EconomyService / PlayerDataService refactor
 - Main-menu navigation bar from the brief
 - Furniture placement in owned homes
+
+## Session 6 (8 Nov, 02:15–03:00): Phase A, stabilise before city work
+Workflow change (owner's master prompt pack, 8 Nov): **Claude is the only agent that edits, saves or Play-tests the place. Codex is the read-only auditor and reviewer.** Codex's audit pack is in `audit/phase1_codex/`. Full results, with numbers, are in `PHASE_A_RESULTS.md`.
+
+| Item | Status |
+|---|---|
+| Fresh backup `Downloads\DreamBuilders_backup_8Nov_before_phaseA.rbxl`, byte-identical to the saved place, parses cleanly | **COMPLETE** (opening it in Studio not tested) |
+| Phone:342 nil-Text error: LobbyServer's Sky Deck lift sent ScreenFade with no caption. Now sends caption + 2.5 s and moves the player once the screen is black. | **COMPLETE (tested):** lift up and down, both flights, 0 game errors |
+| "Asset content representation is being generated": all 20 IDs mapped to car MeshPart textures (owner's own uploads); 70 warned IDs preloaded = Success | **TESTED, harmless**; no change made |
+| Smoke tests: spawn, money, property, business, car, metro | **PASS** (1 player) |
+| Save/rejoin, 2-player tests | **BLOCKED / NOT TESTED** (publish needed; Studio multi-client run by the owner) |
+| New bugs found: buried villa (PalmHills_1), shop sign back face, rent board text, Serve vs Hire staff key clash | Listed in FEATURE_STATUS "Known bugs". **Not fixed**; waiting for the owner's OK |
+
+**Next session starting point**
+1. Fix the 3 shop bugs in BusinessServer (one small batch, then test).
+2. Free Villa_PalmHills_1_Classic from the dune (one part; backup first).
+3. Then start the measured map/road audit Codex asked for (bounds, road endpoints, entrances) before any city rebuilding.

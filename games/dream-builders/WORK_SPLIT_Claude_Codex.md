@@ -1,5 +1,10 @@
 # Dream Builders: who works on what (Claude + Codex)
-Updated 7 Nov 2026 by Claude. Read this before you start. Check it again before every new task.
+Updated 8 Nov 2026 by Claude. Read this before you start. Check it again before every new task.
+
+## Change on 8 Nov (owner's master prompt pack)
+- **Claude** is the only agent that edits, saves or Play-tests the live place (DreamBuilders.rbxl).
+- **Codex** is the read-only auditor, planner and code reviewer. Codex may read files, scripts and logs, write plans and review notes, and review Claude's changes. Codex must not edit or save the place, move map objects, or run anything destructive, unless the owner changes this rule.
+- The "Codex makes files" lanes below are kept for history only. Don't start new Codex file work unless the owner asks for it.
 
 ## Golden rule
 - ONLY CLAUDE EDITS ROBLOX STUDIO (DreamBuilders.rbxl).
@@ -48,3 +53,4 @@ Add one line at the bottom of this file: date, who, what file.
 
 ## Log
 - 7 Nov, Claude: property v1 done in Studio (buy villa from the phone, owner sign, locked doors, My Home GPS, saved). Tested in Play.
+- 8 Nov, Claude: Phase A from Codex's handoff. Backup made, Phone:342 ScreenFade fix in LobbyServer (tested), asset warnings mapped (harmless), smoke tests passed. See PHASE_A_RESULTS.md.

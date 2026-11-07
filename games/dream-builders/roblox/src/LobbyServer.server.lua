@@ -93,7 +93,8 @@ if lobby5 and deck then
 		local hum = p.Character and p.Character:FindFirstChildOfClass("Humanoid")
 		if not hum or hum.SeatPart then return end
 		local fade = game.ReplicatedStorage:FindFirstChild("ScreenFade")
-		if fade and fade:IsA("RemoteEvent") then fade:FireClient(p) ; task.wait(0.4) end
+		-- send the caption + duration the Phone fade expects (no text made Phone:342 error); wait 0.9 s so the move happens on a fully black screen
+		if fade and fade:IsA("RemoteEvent") then fade:FireClient(p, msg, 2.5) ; task.wait(0.9) end
 		p.Character:PivotTo(target)
 		K.toast(p, msg)
 	end
