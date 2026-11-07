@@ -7,8 +7,9 @@ local DEST = {
 	["Palm Island"] = Vector3.new(1330, 6, -420), ["Cargo Port"] = Vector3.new(716, 5, -1330), ["Palm Hills"] = Vector3.new(-252, 5, -930),
 	["HQ (Jobs)"] = Vector3.new(0, 5, 600),
 	["Airport"] = Vector3.new(-500, 4, 1430),
+	["School (Academy)"] = Vector3.new(250, 4, 1395), ["Dream Residences"] = Vector3.new(-300, 4, 828), ["Hospital"] = Vector3.new(520, 4, 1395), ["Dream Grand Hotel"] = Vector3.new(-540, 4, 828), ["Dream Agency (Missions)"] = Vector3.new(-330, 4, 760),
 }
-local JOBS = {["Construction Worker"] = 1, ["Architect"] = 1, ["Real Estate Agent"] = 1, ["Car Dealer"] = 1, ["Chef"] = 1, ["Hair Stylist"] = 1, ["Fashion Designer"] = 1, ["Delivery Driver"] = 1, ["Business Owner"] = 1}
+local JOBS = {["Construction Worker"] = 1, ["Architect"] = 1, ["Real Estate Agent"] = 1, ["Car Dealer"] = 1, ["Chef"] = 1, ["Hair Stylist"] = 1, ["Fashion Designer"] = 1, ["Delivery Driver"] = 1, ["Business Owner"] = 1, ["Teacher"] = 1, ["Taxi Driver"] = 1, ["Doctor"] = 1, ["Hotel Receptionist"] = 1}
 local log = {}   -- [userId] = {transactions}
 local lastTp = {}
 local function money(p) local ls = p:FindFirstChild("leaderstats"); return ls and ls:FindFirstChild("Money") end

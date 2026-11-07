@@ -110,7 +110,7 @@ end)
 app("Jobs", "💼", Color3.fromRGB(200, 120, 40), function(list)
 	clear(list); local d = rf:InvokeServer("profile")
 	card(list, "Current job", d.job, nil, nil, 0)
-	for i, j in ipairs({"Construction Worker", "Architect", "Real Estate Agent", "Car Dealer", "Chef", "Hair Stylist", "Fashion Designer", "Delivery Driver", "Business Owner"}) do
+	for i, j in ipairs({"Construction Worker", "Architect", "Real Estate Agent", "Car Dealer", "Chef", "Hair Stylist", "Fashion Designer", "Delivery Driver", "Business Owner", "Teacher", "Taxi Driver", "Doctor", "Hotel Receptionist"}) do
 		card(list, j, j == d.job and "Your job" or "Tap to switch", j == d.job and "✓" or "", function() rf:InvokeServer("job", j); APPS.Jobs() end, i)
 	end
 end)

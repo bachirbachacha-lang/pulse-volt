@@ -57,6 +57,20 @@ local function blocked(me, pos, dir, dist)
 	end
 	return false
 end
+local SIG = db:WaitForChild("Signals")
+local JUNCTIONS = {}
+for _, j in ipairs(SIG:GetChildren()) do JUNCTIONS[#JUNCTIONS + 1] = Vector3.new(j:GetAttribute("X"), 0, j:GetAttribute("Z")) end
+local function redAhead(pos, dir)
+	local axis = math.abs(dir.Z) > math.abs(dir.X) and "NS" or "EW"
+	if SIG:GetAttribute("Green") == axis then return false end
+	for _, j in ipairs(JUNCTIONS) do
+		local rel = (j - pos) * Vector3.new(1, 0, 1)
+		local ahead = rel:Dot(dir)
+		local side = (rel - dir * ahead).Magnitude
+		if ahead > 22 and ahead < 40 and side < 30 then return true end
+	end
+	return false
+end
 local function lift(m) local cf, sz = m:GetBoundingBox(); return m:GetPivot().Position.Y - (cf.Position.Y - sz.Y / 2) end
 ---------------------------------------------------------------- traffic cars (copies of city cars, no seats/scripts)
 local traffic = T:FindFirstChild("Traffic") or Instance.new("Folder"); traffic.Name = "Traffic"; traffic.Parent = T
@@ -119,7 +133,7 @@ Run.Heartbeat:Connect(function(dt)
 	for _, m in ipairs(movers) do
 		local p, dir = at(m.path, m.d)
 		blockers[m.model] = {pos = p}
-		local want = blocked(m.model, p, dir, 26) and 0 or m.speed
+		local want = (blocked(m.model, p, dir, 26) or redAhead(p, dir)) and 0 or m.speed
 		m.v = m.v + math.clamp(want - m.v, -60 * dt, 20 * dt)
 		m.d += m.v * dt
 		local q, dq = at(m.path, m.d + 6)
@@ -137,7 +151,7 @@ Run.Heartbeat:Connect(function(dt)
 			if ahead < 25 and lastStop ~= i then want = math.min(want, math.max(4, ahead * 1.2)) end
 			if ahead < 0.8 and lastStop ~= i then dwellUntil = now + 9; lastStop = i; bus:SetAttribute("AtStop", i); want = 0 end
 		end
-		if blocked(bus, p, dir, 30) then want = 0 end
+		if blocked(bus, p, dir, 30) or redAhead(p, dir) then want = 0 end
 	end
 	for i, st in ipairs(stopsF:GetChildren()) do local b = st:FindFirstChild("Sign") and st.Sign:FindFirstChild("Board"); if b then b.Enabled = bus:GetAttribute("AtStop") == tonumber(st:GetAttribute("Index")) end end
 	busM.v = busM.v + math.clamp(want - busM.v, -40 * dt, 12 * dt)

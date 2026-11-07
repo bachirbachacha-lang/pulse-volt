@@ -18,6 +18,10 @@ local JOBS = {
 	{"Fashion Designer", "👗", "Design clothes and start your own clothing brand"},
 	{"Delivery Driver", "🛵", "Deliver food and supplies across the city"},
 	{"Business Owner", "💼", "Rent a Downtown shop and open any business you want"},
+	{"Teacher", "👩‍🏫", "Teach lessons at Dream City Academy"},
+	{"Doctor", "🩺", "Treat patients at Dream City Hospital"},
+	{"Taxi Driver", "🚕", "Pick up passengers anywhere in the city"},
+	{"Hotel Receptionist", "🛎️", "Check in guests at the Dream Grand Hotel"},
 }
 local SHOTS = {
 	{Vector3.new(-300, 260, 1500), Vector3.new(0, 80, 700), "DREAM BUILDERS", "A city of dreams"},
@@ -68,8 +72,9 @@ local function picker()
 	local h = Instance.new("TextLabel"); h.Size = UDim2.new(1, -40, 0, 46); h.Position = UDim2.fromOffset(20, 18); h.BackgroundTransparency = 1
 	h.Font = Enum.Font.GothamBlack; h.TextSize = 32; h.TextColor3 = GOLD; h.Text = "WHAT DO YOU WANT TO BE?"; h.ZIndex = 11; h.Parent = panel
 	local h2 = h:Clone(); h2.Position = UDim2.fromOffset(20, 62); h2.Size = UDim2.new(1, -40, 0, 22); h2.TextSize = 16; h2.Font = Enum.Font.GothamMedium
-	h2.TextColor3 = Color3.fromRGB(200, 200, 210); h2.Text = "Everyone starts with $100. Pick a job to start earning – you can change it later at HQ."; h2.Parent = panel
-	local grid = Instance.new("Frame"); grid.Position = UDim2.fromOffset(20, 100); grid.Size = UDim2.new(1, -40, 0, 380); grid.BackgroundTransparency = 1; grid.ZIndex = 11; grid.Parent = panel
+	h2.TextColor3 = Color3.fromRGB(200, 200, 210); h2.Text = "Everyone starts with $100. Pick a job to start earning (scroll for more) – change it any time in Phone › Jobs."; h2.Parent = panel
+	local grid = Instance.new("ScrollingFrame"); grid.Position = UDim2.fromOffset(20, 100); grid.Size = UDim2.new(1, -40, 0, 380); grid.BackgroundTransparency = 1; grid.ZIndex = 11; grid.Parent = panel
+	grid.BorderSizePixel = 0; grid.ScrollBarThickness = 6; grid.ScrollBarImageColor3 = GOLD; grid.CanvasSize = UDim2.new(); grid.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	local layout = Instance.new("UIGridLayout", grid); layout.CellSize = UDim2.new(1 / 3, -10, 0, 118); layout.CellPadding = UDim2.fromOffset(12, 12)
 	local chosen, cards = nil, {}
 	local go = Instance.new("TextButton"); go.AnchorPoint = Vector2.new(0.5, 1); go.Position = UDim2.new(0.5, 0, 1, -16); go.Size = UDim2.fromOffset(300, 50)

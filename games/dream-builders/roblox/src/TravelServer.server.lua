@@ -54,7 +54,7 @@ for _, z in ipairs({150, -150}) do line({{-390, z}, {390, z}}) end           -- 
 line({{-750, -705}, {-390, -705}, {390, -705}, {716, -705}, {750, -705}})
 for _, x in ipairs({-390, 390}) do line({{x, 705}, {x, 474}, {x, 150}, {x, -150}, {x, -450}, {x, -705}}) end
 line({{750, -450}, {1250, -450}, {1580, -450}, {1880, -450}})          -- bridge + island boulevard
-line({{650, 705}, {650, 1315}, {-430, 1315}, {-430, 1400}, {-500, 1400}})    -- airport road (via the clear corridor at x = 650)
+line({{650, 705}, {650, 1315}, {250, 1315}, {-430, 1315}, {-430, 1400}, {-500, 1400}})    -- airport road (via the clear corridor at x = 650)
 line({{716, -705}, {716, -930}, {716, -1340}})                          -- port road
 line({{716, -930}, {675, -930}, {0, -930}, {-480, -930}})               -- Palm Hills road
 local function nearest(pos) local best, bd; for k, v in pairs(N) do local d = (Vector3.new(pos.X, 0.6, pos.Z) - v).Magnitude; if not bd or d < bd then best, bd = k, d end end; return best end
