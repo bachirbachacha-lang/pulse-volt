@@ -115,7 +115,7 @@ for i, st in ipairs(STOPS) do
 	for _, x in ipairs({-4.8, 4.8}) do bp("Post", Vector3.new(0.3, 7.6, 0.3), CFrame.new(x, 4, 1.8), Color3.fromRGB(30, 32, 36), Enum.Material.Metal) end
 	bp("Bench", Vector3.new(7, 0.4, 1.6), CFrame.new(0, 2, 1), Color3.fromRGB(212, 170, 90), Enum.Material.Wood)
 	local sg = bp("Sign", Vector3.new(4, 1.2, 0.2), CFrame.new(-3, 7, -0.2), Color3.fromRGB(10, 10, 12))
-	local gui = Instance.new("SurfaceGui"); gui.Face = Enum.NormalId.Front; gui.PixelsPerStud = 40; gui.Parent = sg
+	local gui = (function() local _g = Instance.new("SurfaceGui"); _g.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud; _g.PixelsPerStud = 50; return _g end)(); gui.Face = Enum.NormalId.Front; gui.PixelsPerStud = 40; gui.Parent = sg
 	local tl = Instance.new("TextLabel"); tl.Size = UDim2.fromScale(1, 1); tl.BackgroundTransparency = 1; tl.TextScaled = true; tl.Font = Enum.Font.GothamBold; tl.TextColor3 = Color3.fromRGB(255, 170, 40); tl.Text = "🚌 " .. st[1]; tl.Parent = gui
 	local pp = K.prompt(sg, "Board the bus", "Bus stop · " .. st[1], 0.3, 14); pp.Enabled = false; pp.Name = "Board"
 	pp.Triggered:Connect(function(p)

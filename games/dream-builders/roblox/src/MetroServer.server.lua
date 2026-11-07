@@ -33,7 +33,7 @@ for _, st in ipairs(stations) do
 	ex.Color = Color3.fromRGB(30, 140, 70); ex.Material = Enum.Material.SmoothPlastic
 	ex.CFrame = CFrame.new(st.platform.Position.X - 46, st.platform.Position.Y + st.platform.Size.Y / 2 + 3, st.platform.Position.Z + 4.4)
 	ex.Parent = st.model
-	local g = ex:FindFirstChild("SurfaceGui") or Instance.new("SurfaceGui"); g.Face = Enum.NormalId.Front; g.Parent = ex
+	local g = ex:FindFirstChild("SurfaceGui") or (function() local _g = Instance.new("SurfaceGui"); _g.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud; _g.PixelsPerStud = 50; return _g end)(); g.Face = Enum.NormalId.Front; g.Parent = ex
 	local t = g:FindFirstChild("TextLabel") or Instance.new("TextLabel"); t.Size = UDim2.fromScale(1, 1); t.BackgroundTransparency = 1; t.TextScaled = true
 	t.Font = Enum.Font.GothamBold; t.TextColor3 = Color3.new(1, 1, 1); t.Text = "EXIT ⇧ STREET"; t.Parent = g
 	local ep = ex:FindFirstChild("Exit") or Instance.new("ProximityPrompt"); ep.Name = "Exit"; ep.ActionText = "Exit to street"; ep.ObjectText = st.name

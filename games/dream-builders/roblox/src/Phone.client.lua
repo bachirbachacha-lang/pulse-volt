@@ -12,7 +12,7 @@ local phone = Instance.new("Frame"); phone.AnchorPoint = Vector2.new(1, 1); phon
 phone.BackgroundColor3 = Color3.fromRGB(5, 5, 7); phone.Parent = gui; Instance.new("UICorner", phone).CornerRadius = UDim.new(0, 40)
 local ps = Instance.new("UIStroke", phone); ps.Color = Color3.fromRGB(70, 72, 80); ps.Thickness = 3
 local scale = Instance.new("UIScale", phone)
-local function rescale() local v = workspace.CurrentCamera.ViewportSize; scale.Scale = math.min(1, (v.Y - 40) / 640) end
+local function rescale() local v = workspace.CurrentCamera.ViewportSize; scale.Scale = math.clamp((v.Y - 30) / 560, 0.95, 1.6) end
 rescale(); workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(rescale)
 local screen = Instance.new("Frame"); screen.Position = UDim2.fromOffset(10, 10); screen.Size = UDim2.new(1, -20, 1, -20); screen.BackgroundColor3 = BG; screen.ClipsDescendants = true; screen.Parent = phone
 Instance.new("UICorner", screen).CornerRadius = UDim.new(0, 32)
@@ -110,7 +110,7 @@ end)
 app("Jobs", "💼", Color3.fromRGB(200, 120, 40), function(list)
 	clear(list); local d = rf:InvokeServer("profile")
 	card(list, "Current job", d.job, nil, nil, 0)
-	for i, j in ipairs({"Construction Worker", "Architect", "Real Estate Agent", "Car Dealer", "Chef", "Hair Stylist", "Fashion Designer", "Delivery Driver", "Business Owner", "Teacher", "Taxi Driver", "Doctor", "Hotel Receptionist"}) do
+	for i, j in ipairs({"Construction Worker", "Architect", "Real Estate Agent", "Car Dealer", "Chef", "Hair Stylist", "Fashion Designer", "Delivery Driver", "Business Owner", "Teacher", "Taxi Driver", "Doctor", "Hotel Receptionist", "City Patrol Officer"}) do
 		card(list, j, j == d.job and "Your job" or "Tap to switch", j == d.job and "✓" or "", function() rf:InvokeServer("job", j); APPS.Jobs() end, i)
 	end
 end)
@@ -281,6 +281,46 @@ app("Assistant", "🤖", Color3.fromRGB(80, 90, 200), function(list)
 		lbl(c, t.text, 12, WHITE, Enum.Font.GothamMedium, UDim2.fromOffset(12, 6), UDim2.new(1, -24, 0, t.place and 36 or 52), Enum.TextXAlignment.Left)
 		if t.place then lbl(c, "Take me there ›", 11, GOLD, Enum.Font.GothamBold, UDim2.fromOffset(12, 44), UDim2.new(1, -24, 0, 14), Enum.TextXAlignment.Left) end
 	end
+end)
+app("Inventory", "🎒", Color3.fromRGB(150, 110, 70), function(list)
+	clear(list)
+	local items = game:GetService("ReplicatedStorage"):WaitForChild("InventoryRequest"):InvokeServer("list")
+	lbl(list, "Food & drinks are in your backpack (number keys). Wearables: tap to wear.", 11, GREY, Enum.Font.GothamMedium, nil, UDim2.new(1, 0, 0, 30), Enum.TextXAlignment.Left).LayoutOrder = 0
+	if #items == 0 then card(list, "Nothing here yet", "Shop at Dream Mart (Maps › Dream Mart)", nil, nil, 1) end
+	for k, it in ipairs(items) do
+		card(list, it.name .. (it.count > 1 and (" ×" .. it.count) or ""), it.wear and (it.on and "Wearing · tap to take off" or "Tap to wear") or "Collectible", it.on and "ON" or "", it.wear and function()
+			game:GetService("ReplicatedStorage").InventoryRequest:InvokeServer("toggle", it.name); APPS.Inventory()
+		end or nil, k)
+	end
+end)
+app("Style", "👕", Color3.fromRGB(200, 90, 160), function(list)
+	clear(list)
+	local srf = game:GetService("ReplicatedStorage"):WaitForChild("StyleRequest")
+	local d = srf:InvokeServer("palette"); if type(d) ~= "table" then return end
+	local pick = {shirt = 1, pants = 1, skin = 1}
+	local order = 0
+	for _, key in ipairs({"shirt", "pants", "skin"}) do
+		order += 1
+		lbl(list, ({shirt = "SHIRT", pants = "TROUSERS", skin = "SKIN TONE"})[key], 11, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = order
+		order += 1
+		local row = Instance.new("Frame"); row.Size = UDim2.new(1, -4, 0, 30); row.BackgroundTransparency = 1; row.LayoutOrder = order; row.Parent = list
+		local l = Instance.new("UIListLayout", row); l.FillDirection = Enum.FillDirection.Horizontal; l.Padding = UDim.new(0, 5)
+		local chips = {}
+		for idx, c in ipairs(d.pal[key]) do
+			local b = Instance.new("TextButton"); b.Size = UDim2.fromOffset(24, 24); b.Text = ""; b.BackgroundColor3 = Color3.new(c[1], c[2], c[3]); b.Parent = row
+			Instance.new("UICorner", b).CornerRadius = UDim.new(1, 0)
+			local st = Instance.new("UIStroke", b); st.Color = GOLD; st.Thickness = idx == 1 and 2 or 0; chips[idx] = st
+			b.MouseButton1Click:Connect(function() pick[key] = idx; for j, s in ipairs(chips) do s.Thickness = j == idx and 2 or 0 end; srf:InvokeServer("apply", pick) end)
+		end
+	end
+	for slot = 1, 3 do
+		local has = d.outfits[slot] ~= nil
+		card(list, "Outfit " .. slot, has and "Tap to wear · hold-save below" or "Empty", has and "WEAR" or "", has and function() srf:InvokeServer("load", slot) end or nil, 20 + slot)
+		local sv = Instance.new("TextButton"); sv.Size = UDim2.new(1, -4, 0, 26); sv.Text = "💾 Save current look to Outfit " .. slot; sv.Font = Enum.Font.GothamBold; sv.TextSize = 12
+		sv.TextColor3 = WHITE; sv.BackgroundColor3 = Color3.fromRGB(60, 62, 70); sv.LayoutOrder = 20 + slot; sv.Parent = list; Instance.new("UICorner", sv).CornerRadius = UDim.new(0, 8)
+		sv.MouseButton1Click:Connect(function() srf:InvokeServer("save", slot, pick); APPS.Style() end)
+	end
+	card(list, "↩ Back to my Roblox avatar", "Puts your own clothes back on", nil, function() srf:InvokeServer("reset") end, 40)
 end)
 app("Settings", "⚙️", Color3.fromRGB(90, 92, 100), function(list) clear(list); card(list, "Dream Phone v2", "Press P to open / close", nil, nil, 1) end)
 -- open / close

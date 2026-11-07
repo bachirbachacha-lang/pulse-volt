@@ -1,5 +1,5 @@
 # Dream Builders – feature status (honest)
-Updated 7 Nov 2026 (evening) by Claude.
+Updated 8 Nov 2026 by Claude (after the owner's playtest).
 
 Four labels:
 - **Fully working:** tested in Roblox Studio Play mode, and the result was checked (money changed, item arrived, and so on).
@@ -38,6 +38,13 @@ Four labels:
 | Business upgrades | Price tiers (Budget / Standard / Premium change price and customer speed); decor upgrade $250 (plants + chandelier, +$3 per customer). Tested: Premium + decor + staff paid $16 on a Café sale. |
 | Export cargo contracts | City → cargo ship. Full run tested: load in Downtown → unload at the quay → +$320 |
 | Security pass | See SECURITY_REVIEW.md: rate limits added, transfers notify both players, no teleports while seated |
+| Metro stairs | Walk up real stairs to the platform at all 3 stations (tested at each) |
+| Wheels spin on every car | Own car, other players' cars, traffic and taxis (tested) |
+| Garage doors open for the owner | Roll up automatically when the owner comes close (tested) |
+| Tower lobbies: Dream Bank, Sky Tower + Sky Deck, Dream Café | Auto doors, tellers/ATMs, lift to the roof deck, buy drinks (tested) |
+| North District front | Road-side plaza, parking, big signs for the Mart, Academy, Hospital and Airport (screenshots) |
+| City life NPCs | 55 AI people sitting, waiting and strolling; 60 fps on the server (tested) |
+| Readable signs | All wall signs re-scaled; checked on screenshots |
 | Construction Worker / Architect | Carry bricks, build mansions in stages (older feature) |
 
 ## Partly done
@@ -49,6 +56,8 @@ Four labels:
 | Cars look | Size and driving are correct, but the bodies look toy-like. Needs pro car models (owner + Dad decision). |
 
 ## Planned (not built yet)
+- New modern house designs made in Blender (blocked until the Blender link is started)
+- Upper floors of towers 2, 5 and 6
 - Real other-country servers (TeleportService to separate places): needs publishing. Today "Maldives" is a far island inside this same game world.
 - A Blender-made jet to replace the Studio-built one, once Blender's MCP link is running again
 - Documentation set (PROJECT_OVERVIEW, TECHNICAL_ARCHITECTURE, etc.): assigned to Codex.

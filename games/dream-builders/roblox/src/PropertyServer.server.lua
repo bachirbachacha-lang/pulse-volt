@@ -27,7 +27,7 @@ local function sign(h, text)
 		s = Instance.new("Part"); s.Name = "OwnerSign"; s.Anchored = true; s.Size = Vector3.new(7, 2.4, 0.4)
 		s.CFrame = CFrame.lookAt(base + Vector3.new(0, 3, 0), base + Vector3.new(0, 3, 0) + dir); s.Color = Color3.fromRGB(20, 22, 28); s.Parent = h
 		local post = Instance.new("Part"); post.Name = "SignPost"; post.Anchored = true; post.Size = Vector3.new(0.4, 3, 0.4); post.CFrame = CFrame.new(base + Vector3.new(0, 1.5, 0)); post.Color = Color3.fromRGB(212, 170, 90); post.Material = Enum.Material.Metal; post.Parent = s
-		local g = Instance.new("SurfaceGui"); g.Face = Enum.NormalId.Front; g.PixelsPerStud = 30; g.Parent = s
+		local g = (function() local _g = Instance.new("SurfaceGui"); _g.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud; _g.PixelsPerStud = 50; return _g end)(); g.Face = Enum.NormalId.Front; g.PixelsPerStud = 30; g.Parent = s
 		local l = Instance.new("TextLabel"); l.Name = "T"; l.Size = UDim2.fromScale(1, 1); l.BackgroundTransparency = 1; l.TextScaled = true; l.Font = Enum.Font.GothamBold; l.TextColor3 = Color3.fromRGB(212, 170, 90); l.Parent = g
 	end
 	s:FindFirstChild("T", true).Text = text

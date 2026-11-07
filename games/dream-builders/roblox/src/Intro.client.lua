@@ -22,6 +22,7 @@ local JOBS = {
 	{"Doctor", "🩺", "Treat patients at Dream City Hospital"},
 	{"Taxi Driver", "🚕", "Pick up passengers anywhere in the city"},
 	{"Hotel Receptionist", "🛎️", "Check in guests at the Dream Grand Hotel"},
+	{"City Patrol Officer", "🚓", "Help lost tourists, stuck drivers and lost pets"},
 }
 local SHOTS = {
 	{Vector3.new(-300, 260, 1500), Vector3.new(0, 80, 700), "DREAM BUILDERS", "A city of dreams"},

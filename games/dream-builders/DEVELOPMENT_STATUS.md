@@ -273,3 +273,29 @@ Other weaknesses seen:
   2. Do the visual pass on the Palm Beach layout.
   3. Add EconomyService (module) and migrate one script (PhoneServer transfers) as the pilot.
   4. Start Phase 2: crosswalk markings + traffic lights at downtown junctions; give the roads a consistent kerb design.
+
+## Session 5 (7–8 Nov): fixes from the owner's playtest
+Saved in DreamBuilders.rbxl (Ctrl+S done). Every item below marked **tested** was checked in Studio Play mode.
+
+| Owner's complaint | What was done | Status |
+|---|---|---|
+| Signs unreadable | All 240+ wall signs switched from stretched 800×600 to pixels-per-stud. Big signs use fewer pixels per stud so the text can be large (Roblox caps scaled text at 100 px). HUD uses a bold font now. | COMPLETE (checked on screenshots) |
+| Grass everywhere / grass inside houses | Grass under 49 buildings changed to plain ground; grass blades shorter | COMPLETE |
+| 4 palms flying | 449 of 559 palms re-seated on the ground; spot-checked 10 areas (gap ≤0.6 studs) | COMPLETE |
+| Signs/stairs blocking you | 250 furniture meshes + 1,607 thin poles, lamps, sign boards and screens are now walk-through | IMPLEMENTED — owner should re-check in play |
+| Metro stairs (again) | Real walkable stairs (35 steps, glass rails, landing to the bridge) at all 3 stations. "Take escalator up" still works too. | COMPLETE (tested: walked up at Downtown, Beach and Park in 4.5 s each) |
+| Car wheels don't spin | Your own car already spun. Other players' cars, traffic cars and taxis didn't. New WheelSpinFX spins them on every screen. | COMPLETE (tested: 4 traffic cars + own car) |
+| Garages blocked | Garage doors roll up by themselves when the owner (or a friend they allow) comes within 34 studs, and close when they leave. Strangers still see a closed door. | COMPLETE (tested with an owned villa) |
+| Big building has no door / towers empty | Towers 2, 5 and 6 now have real lobbies with sliding auto-doors: **Dream Bank** (2 tellers, 2 ATMs, sofas), **Sky Tower** (host, city model, lift to a new Sky Deck at 275 studs with telescopes and lounge), **Dream Café & Gym** (barista sells Karak/Latte/Juice). The floors above the lobbies are still solid. | COMPLETE for lobbies (tested walking in, lift up/down, buying a Latte −$5) |
+| Hospital, school and mart "built behind", names unreadable | New North District front: sidewalk, plaza, lawns, hedges, palms, street lamps, a parking lot linking the road to each front door, 4 big double-sided monument signs at the road, big roof signs | COMPLETE (checked on screenshots) |
+| No NPCs | CityLifeServer adds 55 AI people: office workers in Tower 4, guests at the beach club, Sky Deck, café and bank, people waiting on metro platforms, friends chatting on the plaza, 4 slow strollers. Server stays at 60 fps. | COMPLETE (tested) |
+| Phone app tiny | Phone scale raised (minimum 0.95, max 1.6) | IMPLEMENTED — not re-checked on a small screen |
+| Modern houses, different designs, made in Blender | Not done. The Blender link isn't running (localhost:9876 refused). The owner must click "Start MCP Bridge Server" in Blender's sidebar. | BLOCKED |
+
+**Still not started (honest)**
+- New house designs (waiting for the Blender link)
+- Upper floors of towers 2, 5 and 6 (only the lobbies are done)
+- NPC hair/accessories (they're plain blocky avatars)
+- EconomyService / PlayerDataService refactor
+- Main-menu navigation bar from the brief
+- Furniture placement in owned homes

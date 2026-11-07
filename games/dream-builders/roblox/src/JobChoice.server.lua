@@ -7,7 +7,7 @@ local JOBS = {
 	["Construction Worker"] = Color3.fromRGB(255, 150, 30),
 	["Architect"] = Color3.fromRGB(80, 170, 255),
 	["Real Estate Agent"] = false, ["Car Dealer"] = false, ["Chef"] = false, ["Hair Stylist"] = false,
-	["Fashion Designer"] = false, ["Delivery Driver"] = false, ["Business Owner"] = false, ["Teacher"] = false, ["Taxi Driver"] = false, ["Doctor"] = false, ["Hotel Receptionist"] = false,
+	["Fashion Designer"] = false, ["Delivery Driver"] = false, ["Business Owner"] = false, ["Teacher"] = false, ["Taxi Driver"] = false, ["Doctor"] = false, ["Hotel Receptionist"] = false, ["City Patrol Officer"] = false,
 }
 local function hat(char, color)
 	local old = char:FindFirstChild("HardHat"); if old then old:Destroy() end

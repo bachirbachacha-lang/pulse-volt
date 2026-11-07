@@ -32,6 +32,32 @@ local function setup(door)
 		isOpen = not isOpen; pp.ActionText = isOpen and "Close" or "Open"
 		TweenService:Create(door, TweenInfo.new(0.6, Enum.EasingStyle.Quad), {CFrame = isOpen and open or closed, Size = isOpen and openSize or s}):Play()
 	end)
+	if door.Name:find("Garage") then
+		-- garage doors also roll up by themselves when the owner (or a friend they allow) comes close, on foot or in a car
+		task.spawn(function()
+			local villa = door:FindFirstAncestorWhichIsA("Model")
+			while villa and villa.Parent ~= homes do villa = villa:FindFirstAncestorWhichIsA("Model") end
+			local lastNear = false
+			while door.Parent do
+				task.wait(0.4)
+				local near = false
+				local api = game.ServerStorage:FindFirstChild("PropertyAPI")
+				if villa and api and villa:GetAttribute("OwnerId") then
+					for _, p in ipairs(game:GetService("Players"):GetPlayers()) do
+						local r = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+						if r and (r.Position - closed.Position).Magnitude < 34 and api:Invoke("canOpen", p, villa) then near = true; break end
+					end
+				end
+				if near ~= lastNear then
+					lastNear = near
+					if isOpen ~= near then
+						isOpen = near; pp.ActionText = isOpen and "Close" or "Open"
+						TweenService:Create(door, TweenInfo.new(0.8, Enum.EasingStyle.Quad), {CFrame = isOpen and open or closed, Size = isOpen and openSize or s}):Play()
+					end
+				end
+			end
+		end)
+	end
 end
 for _, d in ipairs(homes:GetDescendants()) do if d.Name:sub(1, 5) == "Door_" then setup(d) end end
 homes.DescendantAdded:Connect(function(d) if d.Name:sub(1, 5) == "Door_" then task.wait(); setup(d) end end)
