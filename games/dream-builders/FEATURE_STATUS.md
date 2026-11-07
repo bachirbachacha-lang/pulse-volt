@@ -44,6 +44,7 @@ Four labels:
 | Tower lobbies: Dream Bank, Sky Tower + Sky Deck, Dream Café | Auto doors, tellers/ATMs, lift to the roof deck, buy drinks (tested) |
 | North District front | Road-side plaza, parking, big signs for the Mart, Academy, Hospital and Airport (screenshots) |
 | City life NPCs | 55 AI people sitting, waiting and strolling; 60 fps on the server (tested) |
+| Marina Row (6 new modern houses) | 6 different designs by the sea, furnished, stairs to every floor, garage, pool; $45,000 in Phone › Property (tested walking every house) |
 | Readable signs | All wall signs re-scaled; checked on screenshots |
 | Construction Worker / Architect | Carry bricks, build mansions in stages (older feature) |
 
@@ -56,7 +57,7 @@ Four labels:
 | Cars look | Size and driving are correct, but the bodies look toy-like. Needs pro car models (owner + Dad decision). |
 
 ## Planned (not built yet)
-- New modern house designs made in Blender (blocked until the Blender link is started)
+- Blender-made house models (blocked until the Blender link is started; Marina Row was built in Studio)
 - Upper floors of towers 2, 5 and 6
 - Real other-country servers (TeleportService to separate places): needs publishing. Today "Maldives" is a far island inside this same game world.
 - A Blender-made jet to replace the Studio-built one, once Blender's MCP link is running again

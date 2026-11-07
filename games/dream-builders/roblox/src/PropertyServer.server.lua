@@ -4,9 +4,9 @@ local Players, DSS = game:GetService("Players"), game:GetService("DataStoreServi
 local homes = workspace:WaitForChild("DreamBuilders"):WaitForChild("Homes")
 local okStore, store = pcall(function() return DSS:GetDataStore("DreamProperty_v1") end)
 if not okStore then store = nil end
-local PRICE = {["Palm Hills"] = 25000, ["Show Villas"] = 35000, ["Palm Island"] = 60000}
+local PRICE = {["Palm Hills"] = 25000, ["Show Villas"] = 35000, ["Palm Island"] = 60000, ["Marina Row"] = 45000}
 local owned = {} -- [userId] = villa model
-local function area(h) return h.Name:find("Island") and "Palm Island" or (h.Name:find("ShowVillas") and "Show Villas" or "Palm Hills") end
+local function area(h) if h.Name:find("MarinaRow") then return "Marina Row" end; return h.Name:find("Island") and "Palm Island" or (h.Name:find("ShowVillas") and "Show Villas" or "Palm Hills") end
 local function price(h) return PRICE[area(h)] end
 local function money(p) local ls = p:FindFirstChild("leaderstats"); return ls and ls:FindFirstChild("Money") end
 local function toast(p, msg)

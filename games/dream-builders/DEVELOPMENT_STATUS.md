@@ -290,10 +290,10 @@ Saved in DreamBuilders.rbxl (Ctrl+S done). Every item below marked **tested** wa
 | Hospital, school and mart "built behind", names unreadable | New North District front: sidewalk, plaza, lawns, hedges, palms, street lamps, a parking lot linking the road to each front door, 4 big double-sided monument signs at the road, big roof signs | COMPLETE (checked on screenshots) |
 | No NPCs | CityLifeServer adds 55 AI people: office workers in Tower 4, guests at the beach club, Sky Deck, café and bank, people waiting on metro platforms, friends chatting on the plaza, 4 slow strollers. Server stays at 60 fps. | COMPLETE (tested) |
 | Phone app tiny | Phone scale raised (minimum 0.95, max 1.6) | IMPLEMENTED — not re-checked on a small screen |
-| Modern houses, different designs, made in Blender | Not done. The Blender link isn't running (localhost:9876 refused). The owner must click "Start MCP Bridge Server" in Blender's sidebar. | BLOCKED |
+| Modern houses, different designs | **Marina Row**: 6 new waterfront houses, each a different design (Cube, Timber, Butterfly roof, 3-storey Tower with roof terrace, L-shaped Courtyard, Glass Box). Each has furnished rooms, walkable stairs to every floor, a pool deck, an owner-only garage and front doors. Buyable in Phone › Property for $45,000; added to Maps/taxi. Built from parts in Studio (ModernHouseKit + MarinaRowBuilder), **not in Blender**, because the Blender link is still off. | COMPLETE (tested: walked in and up the stairs in all 6; Tower reached floors 2, 3 and the roof; all 6 listed at $45,000) |
 
 **Still not started (honest)**
-- New house designs (waiting for the Blender link)
+- Blender-made house models (the Blender link is off; Marina Row was built in Studio instead)
 - Upper floors of towers 2, 5 and 6 (only the lobbies are done)
 - NPC hair/accessories (they're plain blocky avatars)
 - EconomyService / PlayerDataService refactor
