@@ -1,4 +1,3 @@
--- StarterPlayer.StarterPlayerScripts.BackgroundMusic (copied from Studio 6 Nov)
 -- Background music playlist (Roblox-licensed tracks from the Creator Store). Settings > MUSIC turns it off.
 local SoundService = game:GetService("SoundService")
 local plr = game:GetService("Players").LocalPlayer

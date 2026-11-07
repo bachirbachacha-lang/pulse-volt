@@ -1,12 +1,9 @@
--- ServerStorage.DB_Tools.CarRig : rig a Roblox-generated car (parts named body / windows / "front left wheel" ...)
--- for VehicleDrive (client), VehicleOwnership (server) and VehicleMenu. Returns the model or nil, err.
 local M = {}
 function M.rig(m, name, LEN, topSpeed)
 	for _, p in ipairs(m:GetDescendants()) do if p:IsA("BasePart") then p.Anchored = true; p.Parent = m end end
 	for _, d in ipairs(m:GetChildren()) do if d:IsA("Model") then d:Destroy() end end
 	local e = m:GetExtentsSize(); local longest = math.max(e.X, e.Z)
 	m:ScaleTo(m:GetScale() * LEN / longest)
-	-- wheel naming from the generator can't be trusted: find the long axis, front = end nearer the headlights / windscreen
 	local wheels, lights = {}, nil
 	for _, p in ipairs(m:GetChildren()) do
 		if p:IsA("BasePart") then
@@ -20,6 +17,7 @@ function M.rig(m, name, LEN, topSpeed)
 		end
 	end
 	if #wheels < 4 then return nil, "need 4 wheels, got " .. #wheels end
+	-- long axis = direction of biggest wheel spread; front = the end nearer the headlights (or the windscreen)
 	local c = Vector3.zero; for _, w in ipairs(wheels) do c += w.Position end; c /= #wheels
 	local ext = m:GetExtentsSize()
 	local axis = (ext.X >= ext.Z) and Vector3.xAxis or Vector3.zAxis
@@ -89,7 +87,6 @@ function M.rig(m, name, LEN, topSpeed)
 	m.Name = name; m.WorldPivot = ch.CFrame
 	return m
 end
--- swap a freshly generated model in for an existing car (keeps its parking spot; old one goes to ServerStorage.CarBackups)
 function M.swap(gen, name, LEN, topSpeed)
 	local old = workspace:FindFirstChild(name)
 	local spot = old and old:FindFirstChild("Chassis") and old.Chassis.CFrame

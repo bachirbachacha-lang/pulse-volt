@@ -97,3 +97,15 @@ Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop 
 - **Real grass:** 16 flat lawn parts + the Palm Island lawn turned into terrain grass with Terrain decoration (moving grass blades), green tone, shorter blades. Old lawn parts kept but invisible/non-colliding.
 - **Lighting presets + weather** (`AtmospherePresets` server, `WeatherFX` client): sunrise / morning / midday / golden hour / sunset / night blended by the clock (ambient, atmosphere haze/colour, colour grading, brightness, restrained bloom); weather cycles Clear / Cloudy / Rain / Fog / Storm every 2.5–5 min (clouds, haze, darker light, rain particles around the camera, rain sound, storm lightning flashes + thunder). Tested in Play: Rain → atmosphere density 0.36, brightness down, rain emitter 1400/s, rain sound loaded + playing.
 - **Dream Phone v1** (P key or 📱 button; `Phone` client, `PhoneServer` + `PhoneRequest`): lock screen with clock, home screen with apps – Bank (balance, business earnings, recent money in/out, send money to a player – server-checked), Maps (GPS fast travel to 10 places, cooldown, not while seated), Jobs (switch job), Property (all 24 villas + empty lots with prices), Business (your brand, earnings, bricks, mansions). Dreamgram / Messages / Food / Settings show "coming soon". Tested in Play: profile, 10 places, travel to Palm Island worked (arrived 1330, 9, -420), 28 listings, home screen screenshot.
+
+## 7 Nov – Property v1, escalators, scripts synced (Claude)
+- Property v1 (PropertyServer + PhoneServer + MansionDoors + Phone app). Tested in Play:
+  - buy a villa from Phone › Property: money taken, second purchase blocked
+  - owner sign on the ground with your name
+  - Maps › My Home lands you at your villa
+  - other people's villa doors stay locked
+  - saved in DataStore DreamProperty_v1 (needs API Services on)
+  - selling refunds 80%
+- Metro street entrances: glass escalator shafts replace the stairs that went through walls.
+- All Studio scripts are now in roblox/src. They're extracted from the saved DreamBuilders.rbxl, so the repo matches the game.
+- WORK_SPLIT_Claude_Codex.md: only Claude edits Studio. Codex makes Blender props, docs and Lua drafts as files.

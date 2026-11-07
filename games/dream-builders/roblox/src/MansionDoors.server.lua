@@ -20,7 +20,11 @@ local function setup(door)
 	local pp = Instance.new("ProximityPrompt"); pp.ActionText = "Open"; pp.ObjectText = "Door"; pp.KeyboardKeyCode = Enum.KeyCode.E
 	pp.MaxActivationDistance = 10; pp.RequiresLineOfSight = false; pp.Parent = door
 	local isOpen = false
-	pp.Triggered:Connect(function()
+	pp.Triggered:Connect(function(who)
+		local villa = door:FindFirstAncestorWhichIsA("Model")
+		while villa and villa.Parent ~= homes do villa = villa:FindFirstAncestorWhichIsA("Model") end
+		local api = game.ServerStorage:FindFirstChild("PropertyAPI")
+		if villa and api and who and not api:Invoke("canOpen", who, villa) then pp.ObjectText = "Locked · " .. tostring(villa:GetAttribute("OwnerName")); return end
 		isOpen = not isOpen; pp.ActionText = isOpen and "Close" or "Open"
 		TweenService:Create(door, TweenInfo.new(0.6, Enum.EasingStyle.Quad), {CFrame = isOpen and open or closed}):Play()
 	end)

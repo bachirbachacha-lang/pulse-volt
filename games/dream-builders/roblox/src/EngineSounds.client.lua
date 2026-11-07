@@ -1,4 +1,3 @@
--- StarterPlayer.StarterPlayerScripts.EngineSounds (copied from Studio 6 Nov). Each vehicle Chassis has Sounds "Engine" (car loop 80317022777602 / diesel 71482635231754) and "Skid" (112851268328371).
 -- Engine + tyre sounds for every occupied vehicle near you (pitch follows speed, skid when sliding sideways).
 local Run = game:GetService("RunService")
 local cam = workspace.CurrentCamera

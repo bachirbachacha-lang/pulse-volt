@@ -55,7 +55,6 @@ skip.MouseButton1Click:Connect(function() skipped = true end)
 
 local function fade(obj, prop, to, t) TweenService:Create(obj, TweenInfo.new(t or 0.6), {[prop] = to}):Play() end
 
--- --------------------------------------------------------------- job picker
 local function picker()
 	skip.Visible = false
 	fade(shade, "BackgroundTransparency", 0.35, 0.5)
@@ -77,7 +76,7 @@ local function picker()
 	go.BackgroundColor3 = Color3.fromRGB(70, 70, 76); go.Text = "PICK A JOB"; go.Font = Enum.Font.GothamBlack; go.TextSize = 20; go.TextColor3 = WHITE; go.AutoButtonColor = false; go.ZIndex = 11; go.Parent = panel
 	Instance.new("UICorner", go).CornerRadius = UDim.new(0, 12)
 	for _, j in ipairs(JOBS) do
-		local c = Instance.new("TextButton"); c.Text = ""; c.AutoButtonColor = false; c.BackgroundColor3 = Color3.fromRGB(30, 32, 40); c.ZIndex = 12; c.Parent = grid
+		local c = Instance.new("TextButton"); c.Name = j[1]; c.Text = ""; c.AutoButtonColor = false; c.BackgroundColor3 = Color3.fromRGB(30, 32, 40); c.ZIndex = 12; c.Parent = grid
 		Instance.new("UICorner", c).CornerRadius = UDim.new(0, 12)
 		local cs = Instance.new("UIStroke", c); cs.Color = Color3.fromRGB(60, 62, 72); cs.Thickness = 1.5
 		local icon = Instance.new("TextLabel"); icon.BackgroundTransparency = 1; icon.Position = UDim2.fromOffset(12, 10); icon.Size = UDim2.fromOffset(44, 44)
@@ -105,7 +104,6 @@ local function picker()
 	panel:Destroy()
 end
 
--- --------------------------------------------------------------- run
 if not plr.Character then plr.CharacterAdded:Wait() end
 task.wait(1)
 controls(false)
@@ -130,7 +128,6 @@ for _, s in ipairs(SHOTS) do
 end
 title.TextTransparency = 1; sub.TextTransparency = 1
 picker()
--- back to the player
 fade(shade, "BackgroundTransparency", 0, 0.35); task.wait(0.4)
 RunService:UnbindFromRenderStep("DreamIntroCam")
 cam.CameraType = Enum.CameraType.Custom
@@ -138,6 +135,7 @@ local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid"); i
 for _, b in ipairs(bars) do TweenService:Create(b, TweenInfo.new(0.6), {Size = UDim2.new(1, 0, 0, 0)}):Play() end
 fade(shade, "BackgroundTransparency", 1, 0.8)
 controls(true)
+task.wait(0.3)
 local job = plr:GetAttribute("Job")
 title.Text = job and ("YOU ARE NOW A " .. string.upper(job)) or ""; title.Position = UDim2.fromScale(0.5, 0.2); title.Size = UDim2.fromScale(0.7, 0.07)
 fade(title, "TextTransparency", 0, 0.4); task.wait(2.2); fade(title, "TextTransparency", 1, 0.6); task.wait(0.7)

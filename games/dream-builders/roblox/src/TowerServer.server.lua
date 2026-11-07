@@ -1,4 +1,3 @@
--- ServerScriptService.TowerServer (copied from Studio 6 Nov)
 -- Office towers: elevator floor picker (server checks the player is at an elevator) + automatic sliding lobby doors.
 local RS, Players, TS = game:GetService("ReplicatedStorage"), game:GetService("Players"), game:GetService("TweenService")
 local ev = RS:WaitForChild("ElevatorGo")

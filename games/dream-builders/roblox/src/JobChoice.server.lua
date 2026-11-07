@@ -1,5 +1,4 @@
 -- ServerScriptService.JobChoice: the intro's "What do you want to be?" picker asks the server for a job.
--- The server checks the job is real, sets it (GameServer's HUD listens to the Job attribute) and gives the right hat.
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
 local ev = RS:FindFirstChild("ChooseJob") or Instance.new("RemoteEvent")

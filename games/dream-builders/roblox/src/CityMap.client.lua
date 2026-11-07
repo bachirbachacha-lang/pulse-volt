@@ -10,7 +10,7 @@ local ev = RS:WaitForChild("MapTeleport")
 local data = RS:WaitForChild("MapData")
 
 -- world window shown on the map (studs): north (+Z) is up, east (+X) is right
-local XMIN, XMAX, ZMIN, ZMAX = -620, 780, -530, 530
+local XMIN, XMAX, ZMIN, ZMAX = -1000, 1250, -1150, 1150 -- city scaled x1.5 (6 Nov), now shows Palm Hills + Downtown
 local WX, WZ = XMAX - XMIN, ZMAX - ZMIN
 local function fpos(x, z) return UDim2.fromScale((x - XMIN) / WX, (ZMAX - z) / WZ) end
 local function fsize(sx, sz) return UDim2.fromScale(sx / WX, sz / WZ) end
@@ -30,6 +30,7 @@ end
 local function corner(o, r) new("UICorner", {CornerRadius = UDim.new(0, r)}, o); return o end
 local function stroke(o, col, t) new("UIStroke", {Color = col, Thickness = t or 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border}, o); return o end
 local function rect(parent, x, z, sx, sz, col, r, z_)
+	x, z, sx, sz = x * 1.5, z * 1.5, sx * 1.5, sz * 1.5 -- drawing coords are pre-scale
 	local f = new("Frame", {AnchorPoint = Vector2.new(0.5, 0.5), Position = fpos(x, z), Size = fsize(sx, sz), BackgroundColor3 = col, BorderSizePixel = 0, ZIndex = z_ or 2}, parent)
 	if r then corner(f, r) end
 	return f
@@ -53,7 +54,7 @@ local function drawCity(content, detail)
 	for _, xx in ipairs({-260, 260}) do rect(content, xx, 0, 28, 1000, C.road, nil, 3) end
 	if detail then
 		for z = -320, 320, 24 do for _, x in ipairs({-13, 13}) do rect(content, x, z, 1.6, 9, C.line, nil, 5) end end
-		for z = -310, 310, 22 do new("Frame", {AnchorPoint = Vector2.new(0.5, 0.5), Position = fpos(0, z), Size = UDim2.fromOffset(4, 4), BackgroundColor3 = Color3.fromRGB(60, 130, 55), BorderSizePixel = 0, ZIndex = 5}, content) end
+		for z = -310, 310, 22 do new("Frame", {AnchorPoint = Vector2.new(0.5, 0.5), Position = fpos(0, z * 1.5), Size = UDim2.fromOffset(4, 4), BackgroundColor3 = Color3.fromRGB(60, 130, 55), BorderSizePixel = 0, ZIndex = 5}, content) end
 	end
 	-- pier + yachts
 	rect(content, 560, 0, 230, 16, Color3.fromRGB(150, 104, 64), nil, 4); rect(content, 700, 0, 90, 40, Color3.fromRGB(150, 104, 64), 2, 4)

@@ -1,4 +1,3 @@
--- StarterPlayer.StarterPlayerScripts.ElevatorUI (copied from Studio 6 Nov)
 local ev = game:GetService("ReplicatedStorage"):WaitForChild("ElevatorGo")
 local plr = game:GetService("Players").LocalPlayer
 local names = {[0] = "Lobby", [1] = "Dream Realty", [2] = "Dream Exchange"}

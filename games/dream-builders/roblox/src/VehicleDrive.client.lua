@@ -1,4 +1,3 @@
--- StarterPlayer.StarterPlayerScripts.VehicleDrive (v2, copied from Studio 6 Nov)
 -- realistic arcade driving: W/S gas + brake/reverse, A/D steer (car follows its front wheels), hold SHIFT to drift
 local Players, UIS, Run = game:GetService("Players"), game:GetService("UserInputService"), game:GetService("RunService")
 local plr = Players.LocalPlayer

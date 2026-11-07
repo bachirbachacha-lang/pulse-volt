@@ -32,7 +32,8 @@ local function refresh(plr)
 	local f = g.Frame; local job = plr:GetAttribute("Job") or "No job"
 	f.Money.Text = "$" .. tostring(plr.leaderstats.Money.Value)
 	f.Job.Text = "JOB: " .. string.upper(job)
-	f.Hint.Text = job == "Construction Worker" and "Get bricks at the Supply Yard (E)" or job == "Architect" and "Design a plot: press E at its sign" or "Step on a job pad at HQ"
+	local HINTS = {["Construction Worker"] = "Get bricks at the Supply Yard (E)", ["Architect"] = "Design a plot: press E at its sign", ["Real Estate Agent"] = "Go to Dream Realty Tower (Downtown)", ["Car Dealer"] = "Go to Dream Motors (Downtown)", ["Chef"] = "Cook at Palm Island restaurants", ["Hair Stylist"] = "Downtown shops: salon chairs", ["Fashion Designer"] = "Downtown shops: start your brand", ["Delivery Driver"] = "Grab a car and deliver around the city", ["Business Owner"] = "Rent a Downtown shop for your business"}
+	f.Hint.Text = HINTS[job] or "Pick a job at HQ"
 end
 local function toast(plr, msg)
 	local g = plr:FindFirstChild("PlayerGui") and plr.PlayerGui:FindFirstChild("DreamHUD"); if not g then return end
@@ -73,6 +74,10 @@ Players.PlayerAdded:Connect(function(plr)
 		loaded[plr] = ok
 	end
 	hud(plr); refresh(plr)
+	m.Changed:Connect(function() refresh(plr) end) -- MoneyChangedListener
+	plr:GetAttributeChangedSignal("Job"):Connect(function() -- JobAttrListener
+		local jv = plr:GetAttribute("Job"); if jv then j.Value = jv end; refresh(plr)
+	end)
 	plr.CharacterAdded:Connect(function() task.wait(0.5); refresh(plr) end)
 end)
 Players.PlayerRemoving:Connect(function(plr) save(plr); loaded[plr] = nil end)
@@ -141,7 +146,9 @@ end
 local function piece(model, cf, size, color, mat, tr, name)
 	local p = Instance.new("Part"); p.Anchored = true; p.Size = size; p.CFrame = cf; p.Color = color
 	p.Material = mat or Enum.Material.SmoothPlastic; p.Transparency = tr or 0; p.Name = name or "Mansion"
-	p.TopSurface = Enum.SurfaceType.Smooth; p.BottomSurface = Enum.SurfaceType.Smooth; p.Parent = model; return p
+	p.TopSurface = Enum.SurfaceType.Smooth; p.BottomSurface = Enum.SurfaceType.Smooth; p.Parent = model
+	if model.Name == "Mansion" then game:GetService("CollectionService"):AddTag(p, "BuildFX") end
+	return p
 end
 local function buildStage(plot, stage, intoModel)
 	local pad = plot.PrimaryPart; local S = pad.Size.X; local top = pad.CFrame * CFrame.new(0, pad.Size.Y / 2, 0)
