@@ -109,3 +109,17 @@ Reels reviewed: Claude-context tips, Opus x Roblox Studio workflow, Roblox shop 
 - Metro street entrances: glass escalator shafts replace the stairs that went through walls.
 - All Studio scripts are now in roblox/src. They're extracted from the saved DreamBuilders.rbxl, so the repo matches the game.
 - WORK_SPLIT_Claude_Codex.md: only Claude edits Studio. Codex makes Blender props, docs and Lua drafts as files.
+
+## 7 Nov – garages, island road, phone v2 (Claude)
+- **Villa garages + driveways.** All 24 villas get a garage beside the house (roll-up door that only the owner can open), a concrete driveway to the road and two lamps. 
+  - Tested: owner presses F "Park my car" on the driveway and the car they last drove is parked inside.
+- **Palm Island road fixed.** Grass terrain had covered the island boulevard and the villa pools. Terrain lowered to the road level and the road cleared.
+- **Phone v2:**
+  - **Dreamgram:** posts (filtered caption + place tag + type), likes, follows, follower count, notifications.
+  - **Messages:** inbox with game and business messages, plus 8 preset quick messages to players. No free text, for safety.
+  - **Dream Eats:** 4 Palm Island restaurants with menus.
+  - Notification banner at the top of the screen.
+  - Tested: order → paid → courier NPC walks to you → food in backpack (eating heals and gives speed). Posting and inbox also tested.
+  - Delivery Driver job: orders go to an online delivery driver (pickup marker → deliver to the customer → paid). Written, NOT yet tested; needs 2 players.
+- **Business saving** (DreamBusiness_v1): your shop reopens on rejoin, no rent charged again. Written, NOT testable yet. Roblox DataStore only works after the place is published, and publishing is the owner's/Dad's decision. The same applies to villa saving.
+- tools_extract_scripts.py pulls all scripts out of DreamBuilders.rbxl so the repo matches the game.

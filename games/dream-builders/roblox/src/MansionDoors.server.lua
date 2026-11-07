@@ -8,7 +8,11 @@ local function setup(door)
 	local closed = door.CFrame; local s = door.Size
 	local alongX = s.X >= s.Z
 	local open
-	if door.Name:find("Garage") then
+	local openSize = s
+	if door:GetAttribute("Roll") then
+		-- roll-up door: shrinks into a 1-stud roll under the header instead of poking through the roof
+		openSize = Vector3.new(s.X, 1, s.Z); open = closed * CFrame.new(0, (s.Y - 1) / 2, 0)
+	elseif door.Name:find("Garage") then
 		open = closed * CFrame.new(0, s.Y - 1, 0)
 	else
 		local right = door.Name:sub(-1) == "R"            -- double doors: Door_FrontL / Door_FrontR swing apart
@@ -17,7 +21,7 @@ local function setup(door)
 		local hinge = closed * hingeOffset
 		open = hinge * CFrame.Angles(0, math.rad(right and 95 or -95), 0) * hingeOffset:Inverse()
 	end
-	local pp = Instance.new("ProximityPrompt"); pp.ActionText = "Open"; pp.ObjectText = "Door"; pp.KeyboardKeyCode = Enum.KeyCode.E
+	local pp = Instance.new("ProximityPrompt"); pp.ActionText = "Open"; pp.ObjectText = door.Name:find("Garage") and "Garage" or "Door"; pp.KeyboardKeyCode = Enum.KeyCode.E
 	pp.MaxActivationDistance = 10; pp.RequiresLineOfSight = false; pp.Parent = door
 	local isOpen = false
 	pp.Triggered:Connect(function(who)
@@ -26,7 +30,7 @@ local function setup(door)
 		local api = game.ServerStorage:FindFirstChild("PropertyAPI")
 		if villa and api and who and not api:Invoke("canOpen", who, villa) then pp.ObjectText = "Locked · " .. tostring(villa:GetAttribute("OwnerName")); return end
 		isOpen = not isOpen; pp.ActionText = isOpen and "Close" or "Open"
-		TweenService:Create(door, TweenInfo.new(0.6, Enum.EasingStyle.Quad), {CFrame = isOpen and open or closed}):Play()
+		TweenService:Create(door, TweenInfo.new(0.6, Enum.EasingStyle.Quad), {CFrame = isOpen and open or closed, Size = isOpen and openSize or s}):Play()
 	end)
 end
 for _, d in ipairs(homes:GetDescendants()) do if d.Name:sub(1, 5) == "Door_" then setup(d) end end

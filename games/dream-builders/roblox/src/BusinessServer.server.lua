@@ -6,6 +6,12 @@ local ev = RS:WaitForChild("BusinessEvent")
 local units = workspace:WaitForChild("DreamBuilders"):WaitForChild("Businesses")
 local RENT = 50
 local owned = {} -- [player] = unit
+local okStore, store = pcall(function() return game:GetService("DataStoreService"):GetDataStore("DreamBusiness_v1") end)
+if not okStore then store = nil end
+local function saveBiz(plr, data)
+	if not store then return end
+	task.spawn(function() pcall(function() store:SetAsync("u_" .. plr.UserId, data or {}) end) end)
+end
 local function money(plr) local ls = plr:FindFirstChild("leaderstats"); return ls and ls:FindFirstChild("Money") end
 local function toast(plr, msg)
 	local g = plr:FindFirstChild("PlayerGui") and plr.PlayerGui:FindFirstChild("DreamHUD"); if not g or not g:FindFirstChild("Toast") then return end
@@ -31,7 +37,7 @@ for _, u in ipairs(units:GetChildren()) do
 		ev:FireClient(plr, "pick", u.Name, RENT, Kit.TYPES)
 	end)
 end
-ev.OnServerEvent:Connect(function(plr, action, unitName, kind, brand)
+local function handle(plr, action, unitName, kind, brand, restored)
 	if action == "open" then
 		local u = units:FindFirstChild(tostring(unitName)); if not u or u:GetAttribute("OwnerId") or owned[plr] then return end
 		if type(kind) ~= "string" or not Kit.TYPES[kind] then return end
@@ -41,8 +47,10 @@ ev.OnServerEvent:Connect(function(plr, action, unitName, kind, brand)
 		local ok, res = pcall(function() return TextService:FilterStringAsync(brand, plr.UserId):GetNonChatStringForBroadcastAsync() end)
 		if not ok then toast(plr, "Couldn't check that name, try again"); return end
 		brand = res
-		local m = money(plr); if not m or m.Value < RENT then toast(plr, "You need $" .. RENT .. " to rent a shop"); return end
-		m.Value -= RENT
+		if not restored then
+			local m = money(plr); if not m or m.Value < RENT then toast(plr, "You need $" .. RENT .. " to rent a shop"); return end
+			m.Value -= RENT
+		end
 		owned[plr] = u
 		u:SetAttribute("OwnerId", plr.UserId); u:SetAttribute("Type", kind); u:SetAttribute("Brand", brand)
 		Kit.furnish(u, kind, plr.Name, brand)
@@ -66,9 +74,26 @@ ev.OnServerEvent:Connect(function(plr, action, unitName, kind, brand)
 		end)
 		toast(plr, "Welcome to " .. brand .. "! Customers are on their way")
 		ev:FireClient(plr, "opened", u.Name, brand)
+		saveBiz(plr, {type = kind, brand = brand})
 	elseif action == "close" then
-		local u = owned[plr]; if u then reset(u); owned[plr] = nil; toast(plr, "Business closed") end
+		local u = owned[plr]; if u then reset(u); owned[plr] = nil; toast(plr, "Business closed"); saveBiz(plr, {}) end
 	end
+end
+ev.OnServerEvent:Connect(function(plr, action, unitName, kind, brand) handle(plr, action, unitName, kind, brand, false) end)
+-- reopen your business when you come back (any free shop unit, no rent charged again)
+Players.PlayerAdded:Connect(function(plr)
+	if not store then return end
+	local ok, d = pcall(function() return store:GetAsync("u_" .. plr.UserId) end)
+	if not ok or type(d) ~= "table" or not d.type or not Kit.TYPES[d.type] then return end
+	plr:WaitForChild("leaderstats", 15); task.wait(3)
+	for _, u in ipairs(units:GetChildren()) do
+		if not u:GetAttribute("OwnerId") then
+			handle(plr, "open", u.Name, d.type, d.brand or "", true)
+			task.delay(4, function() toast(plr, "Welcome back! " .. tostring(d.brand) .. " is open again") end)
+			return
+		end
+	end
+	toast(plr, "All shops are taken right now, your brand is saved")
 end)
 Players.PlayerRemoving:Connect(function(plr) local u = owned[plr]; if u then reset(u); owned[plr] = nil end end)
 -- customers: one at a time per open shop

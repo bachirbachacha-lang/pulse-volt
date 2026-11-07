@@ -28,6 +28,7 @@ local function watch(car)
 		local plr = hum and Players:GetPlayerFromCharacter(hum.Parent)
 		pr.Enabled = hum == nil
 		if plr then
+			car:SetAttribute("LastDriver", plr.UserId)
 			setAnchored(car, false)
 			pcall(function() ch:SetNetworkOwner(plr) end)
 		elseif not hum then
