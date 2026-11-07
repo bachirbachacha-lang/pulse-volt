@@ -2,7 +2,7 @@
 Updated 7 Nov 2026 (22:xx Riyadh), by Claude, following the "Ultimate Roblox Game Overhaul" brief.
 
 ## Current phase
-Phase 1 — Foundation and repair. The collision and road blockers are done; one item is blocked (see below).
+Phase 1 complete. Phases 6 and 8 started: metro doors, traffic signals, missions, school.
 
 ---
 
@@ -109,7 +109,74 @@ Other weaknesses seen:
 - **Risk:** the Beach Club moved 76 studs north, and 7 nearby props (lamps / lounge sets / palms) were pushed out of its footprint.
   - **Next action:** a visual check of the beach layout.
 
+
+## Session 2 (7 Nov, 22:05–23:00): what changed
+**Backup and assets**
+- [x] Backup copy saved to the PC: `Downloads/DreamBuilders_backup_7Nov_after_phase1.rbxl`
+- [x] **Model warnings re-investigated.**
+  - All 117 MeshPart textures load: PreloadAsync = Success in Edit and on the client.
+  - The 57 "Asset content representation is being generated" lines are logged once per AI-generated texture when a session starts. Roblox serves the original texture while it builds optimised versions. They're warnings, not failures.
+  - The only 2 real failures are Roblox's default avatar face textures (player and NPC heads). That's on Roblox's side.
+  - **Status: TESTED, harmless.** To remove the warnings, replace those models.
+
+**Metro doors: COMPLETE (tested)**
+- MetroDoors script + glass platform screen doors (48 leaves on 3 stations).
+- When the train docks, the train doors slide 3.4 studs and the platform doors 2.2 studs, with a chime. Both close 2.5 s before departure.
+- Doors stop blocking while open.
+
+**Traffic signals + crosswalks: COMPLETE (tested)**
+- 16 junctions, 64 signal poles, zebra crossings and stop lines (paint only, non-solid).
+- SignalServer runs one city cycle: NS green 14 s → amber 3 s → all-red 1.5 s → EW.
+- The AI traffic and the bus stop at red. In a 45 s test, each car still covered ~1,200 studs with waits.
+
+**Missions / organisation: COMPLETE for v1 (single-player tested)**
+- Dream Agency (fictional) board in the downtown plaza.
+- 4 story missions:
+  - VIP escort, airport → Dream Realty
+  - Lost briefcase (marina)
+  - Gala crates, Supply Yard → Club Mirage
+  - City photo tour
+- Everyone at the board joins the team, and any member can complete a step.
+- Rewards each; reputation ranks Rookie → Agent → Senior Agent → Director; 15-minute time limit.
+- Tested: VIP mission → +$260, rep 1.
+- Multiplayer team play is untested (needs 2 players).
+
+**School: TESTED — NEEDS POLISH**
+- Dream City Academy on the new ground north of downtown, by the airport road.
+- Rooms: reception (timetable + bell), maths room, computer room, science lab, library, cafeteria, staff office, lockers corridor, gym and sports field.
+- Bell timetable: lesson 120 s / break 30 s.
+- People: 1 AI teacher + 5 AI students, kept small on purpose.
+- For players:
+  - Maths quiz on the board (3 answer prompts): +$10 and +1 Grade.
+  - Attendance pay ($5 / 30 s) for sitting in class.
+  - New **Teacher job**: teach the lesson at the desk, +$45.
+- Tested: 5 students seated, teach +$45, correct answer +$10, grade 1.
+- Fixed: 36 classroom seats faced away from the board.
+- Polish left: only the maths room runs lessons; no NPCs in other rooms.
+
+**Jobs / phone**
+- Teacher added to JobChoice, Phone › Jobs and the HUD hints.
+- Maps destinations added: "School (Academy)" and "Dream Agency (Missions)". The taxi road map knows the school.
+
+## Still not started (from the overhaul brief)
+- Apartments and penthouses (Part 16)
+- Hospital / doctor and police jobs
+- Avatar editor, inventory, saved outfits (Part 18)
+- Hotel
+- Supermarket, electronics and furniture stores
+- Yacht boarding / boat driving
+- Downtown building interiors and facade variety
+- Audio pass (city ambience per district)
+- UI navigation rebuild
+- EconomyService / PlayerDataService refactor
+
 ## Next session starting point
+- **Exact next task:**
+  1. Apartments + penthouse in one downtown tower (concierge, buy/rent, owner-only door, furnished penthouse with skyline view).
+  2. Then hospital + doctor job.
+  3. Then the EconomyService pilot.
+
+## (previous) Next session starting point
 - **Exact next task (Phase 1 → 2):**
   1. Re-seat the parked cars.
   2. Do the visual pass on the Palm Beach layout.

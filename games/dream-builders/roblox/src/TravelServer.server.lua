@@ -48,13 +48,15 @@ local N, E = {}, {}
 local function node(x, z) local k = x .. "," .. z; if not N[k] then N[k] = Vector3.new(x, 0.6, z); E[k] = {} end; return k end
 local function link(a, b) table.insert(E[a], b); table.insert(E[b], a) end
 local function line(pts) local prev; for _, p in ipairs(pts) do local k = node(p[1], p[2]); if prev then link(prev, k) end; prev = k end end
-for _, z in ipairs({705, 474, 150, -150, -450}) do line({{-750, z}, {-390, z}, {390, z}, {750, z}}) end
+for _, z in ipairs({474, -450}) do line({{-750, z}, {-390, z}, {390, z}, {750, z}}) end
+line({{-750, 705}, {-390, 705}, {390, 705}, {650, 705}, {750, 705}})
+for _, z in ipairs({150, -150}) do line({{-390, z}, {390, z}}) end           -- these streets end at the avenues
 line({{-750, -705}, {-390, -705}, {390, -705}, {716, -705}, {750, -705}})
 for _, x in ipairs({-390, 390}) do line({{x, 705}, {x, 474}, {x, 150}, {x, -150}, {x, -450}, {x, -705}}) end
 line({{750, -450}, {1250, -450}, {1580, -450}, {1880, -450}})          -- bridge + island boulevard
-line({{-750, 705}, {-800, 705}, {-800, 1400}, {-500, 1400}})            -- airport road
+line({{650, 705}, {650, 1315}, {-430, 1315}, {-430, 1400}, {-500, 1400}})    -- airport road (via the clear corridor at x = 650)
 line({{716, -705}, {716, -930}, {716, -1340}})                          -- port road
-line({{716, -930}, {675, -930}, {0, -930}, {-675, -930}})               -- Palm Hills road
+line({{716, -930}, {675, -930}, {0, -930}, {-480, -930}})               -- Palm Hills road
 local function nearest(pos) local best, bd; for k, v in pairs(N) do local d = (Vector3.new(pos.X, 0.6, pos.Z) - v).Magnitude; if not bd or d < bd then best, bd = k, d end end; return best end
 local function route(from, to)
 	local a, b = nearest(from), nearest(to)
