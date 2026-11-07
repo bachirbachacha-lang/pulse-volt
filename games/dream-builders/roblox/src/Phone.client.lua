@@ -127,10 +127,116 @@ app("Business", "📊", Color3.fromRGB(212, 150, 60), function(list)
 	else card(list, "No business yet", "Rent a shop Downtown ($50) – Maps › Shops", nil, nil, 1) end
 	card(list, "Bricks delivered", nil, tostring(d.bricks), nil, 3); card(list, "Mansions built", nil, tostring(d.mansions), nil, 4)
 end)
-app("Dreamgram", "📸", Color3.fromRGB(220, 60, 120), function(list) clear(list); card(list, "Coming soon", "Post your mansion, cars and business", nil, nil, 1) end)
-app("Messages", "💬", Color3.fromRGB(60, 180, 90), function(list) clear(list); card(list, "Coming soon", "Chat with friends and businesses", nil, nil, 1) end)
-app("Food", "🍔", Color3.fromRGB(230, 80, 50), function(list) clear(list); card(list, "Coming soon", "Order from Palm Island restaurants", nil, nil, 1) end)
-app("Settings", "⚙️", Color3.fromRGB(90, 92, 100), function(list) clear(list); card(list, "Dream Phone v1", "Press P to open / close", nil, nil, 1) end)
+local rf2 = game:GetService("ReplicatedStorage"):WaitForChild("PhoneApps")
+local function btn(parent, text, color, size, order)
+	local b = Instance.new("TextButton"); b.Size = size or UDim2.new(1, -4, 0, 34); b.BackgroundColor3 = color or CARD; b.Text = text; b.TextColor3 = WHITE
+	b.Font = Enum.Font.GothamBold; b.TextSize = 13; b.LayoutOrder = order or 0; b.AutoButtonColor = true; b.Parent = parent
+	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 10); return b
+end
+local function row(parent, order, h)
+	local f = Instance.new("Frame"); f.Size = UDim2.new(1, -4, 0, h or 34); f.BackgroundTransparency = 1; f.LayoutOrder = order; f.Parent = parent
+	local l = Instance.new("UIListLayout", f); l.FillDirection = Enum.FillDirection.Horizontal; l.Padding = UDim.new(0, 6); return f
+end
+local function ago(s) if s < 60 then return "now" elseif s < 3600 then return math.floor(s / 60) .. "m" else return math.floor(s / 3600) .. "h" end end
+app("Dreamgram", "📸", Color3.fromRGB(220, 60, 120), function(list)
+	clear(list); local d = rf2:InvokeServer("feed")
+	lbl(list, "👥 " .. d.followers .. " followers", 12, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = 0
+	local kind = "here"
+	local kr = row(list, 1, 30)
+	local kbs = {}
+	for _, k in ipairs({{"here", "📍"}, {"villa", "🏡"}, {"car", "🚗"}, {"biz", "🛍️"}}) do
+		local b = btn(kr, k[2], k[1] == kind and Color3.fromRGB(220, 60, 120) or CARD, UDim2.fromOffset(56, 30)); kbs[k[1]] = b
+		b.MouseButton1Click:Connect(function() kind = k[1]; for n, x in pairs(kbs) do x.BackgroundColor3 = n == kind and Color3.fromRGB(220, 60, 120) or CARD end end)
+	end
+	local box = Instance.new("TextBox"); box.Size = UDim2.new(1, -4, 0, 34); box.PlaceholderText = "Write a caption…"; box.Text = ""; box.TextSize = 12; box.Font = Enum.Font.GothamMedium
+	box.BackgroundColor3 = CARD; box.TextColor3 = WHITE; box.ClearTextOnFocus = false; box.LayoutOrder = 2; box.Parent = list; Instance.new("UICorner", box).CornerRadius = UDim.new(0, 10)
+	local pb = btn(list, "Post", Color3.fromRGB(220, 60, 120), nil, 3)
+	pb.MouseButton1Click:Connect(function()
+		local r = rf2:InvokeServer("post", kind, box.Text)
+		if r == "Posted!" then APPS.Dreamgram() else pb.Text = tostring(r) end
+	end)
+	if #d.posts == 0 then card(list, "No posts yet", "Be the first to post!", nil, nil, 4) end
+	for i, x in ipairs(d.posts) do
+		local c = Instance.new("Frame"); c.Size = UDim2.new(1, -4, 0, 96); c.BackgroundColor3 = CARD; c.LayoutOrder = 4 + i; c.Parent = list
+		Instance.new("UICorner", c).CornerRadius = UDim.new(0, 12)
+		lbl(c, x.name .. "  ·  " .. ago(x.ago), 13, WHITE, Enum.Font.GothamBold, UDim2.fromOffset(12, 6), UDim2.new(1, -90, 0, 16), Enum.TextXAlignment.Left)
+		lbl(c, x.kind .. "  ·  " .. x.place, 11, GOLD, Enum.Font.GothamBold, UDim2.fromOffset(12, 24), UDim2.new(1, -24, 0, 14), Enum.TextXAlignment.Left)
+		lbl(c, x.caption, 12, WHITE, Enum.Font.GothamMedium, UDim2.fromOffset(12, 40), UDim2.new(1, -24, 0, 26), Enum.TextXAlignment.Left)
+		local lb = Instance.new("TextButton"); lb.Position = UDim2.fromOffset(10, 68); lb.Size = UDim2.fromOffset(70, 22); lb.BackgroundTransparency = 1
+		lb.Text = (x.liked and "❤️ " or "🤍 ") .. x.likes; lb.TextColor3 = WHITE; lb.Font = Enum.Font.GothamBold; lb.TextSize = 13; lb.TextXAlignment = Enum.TextXAlignment.Left; lb.Parent = c
+		lb.MouseButton1Click:Connect(function() rf2:InvokeServer("like", x.id); APPS.Dreamgram() end)
+		if not x.mine then
+			local fb = Instance.new("TextButton"); fb.AnchorPoint = Vector2.new(1, 0); fb.Position = UDim2.new(1, -10, 0, 6); fb.Size = UDim2.fromOffset(76, 22)
+			fb.BackgroundColor3 = x.following and CARD or Color3.fromRGB(220, 60, 120); fb.Text = x.following and "Following" or "Follow"; fb.TextColor3 = WHITE; fb.Font = Enum.Font.GothamBold; fb.TextSize = 11; fb.Parent = c
+			Instance.new("UICorner", fb).CornerRadius = UDim.new(1, 0)
+			fb.MouseButton1Click:Connect(function() rf2:InvokeServer("follow", x.uid); APPS.Dreamgram() end)
+		end
+	end
+end)
+app("Messages", "💬", Color3.fromRGB(60, 180, 90), function(list)
+	clear(list); local d = rf2:InvokeServer("inbox")
+	lbl(list, "SEND A MESSAGE", 11, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = 0
+	if #d.players == 0 then card(list, "Nobody else is here yet", "Invite a friend to play!", nil, nil, 1) end
+	for i, o in ipairs(d.players) do
+		card(list, o.name, "Tap to send a quick message", "›", function()
+			clear(list)
+			lbl(list, "To " .. o.name, 14, WHITE, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 20), Enum.TextXAlignment.Left).LayoutOrder = 0
+			for k, t in ipairs(d.presets) do
+				local b = btn(list, t, CARD, nil, k)
+				b.MouseButton1Click:Connect(function() b.Text = tostring(rf2:InvokeServer("send", o.user, k)) .. " ✓"; task.wait(0.8); APPS.Messages() end)
+			end
+			btn(list, "‹ Back", Color3.fromRGB(60, 62, 70), nil, 99).MouseButton1Click:Connect(APPS.Messages)
+		end, i)
+	end
+	lbl(list, "INBOX", 11, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = 50
+	if #d.msgs == 0 then card(list, "No messages yet", nil, nil, nil, 51) end
+	for i, m in ipairs(d.msgs) do
+		local c = Instance.new("Frame"); c.Size = UDim2.new(1, -4, 0, 62); c.BackgroundColor3 = CARD; c.LayoutOrder = 50 + i; c.Parent = list
+		Instance.new("UICorner", c).CornerRadius = UDim.new(0, 12)
+		lbl(c, m.from, 13, GOLD, Enum.Font.GothamBold, UDim2.fromOffset(12, 6), UDim2.new(1, -70, 0, 16), Enum.TextXAlignment.Left)
+		lbl(c, os.date("%H:%M", m.time), 11, GREY, Enum.Font.GothamMedium, UDim2.fromOffset(0, 6), UDim2.new(1, -12, 0, 16), Enum.TextXAlignment.Right)
+		lbl(c, m.text, 12, WHITE, Enum.Font.GothamMedium, UDim2.fromOffset(12, 24), UDim2.new(1, -24, 0, 34), Enum.TextXAlignment.Left)
+	end
+end)
+app("Dream Eats", "🍔", Color3.fromRGB(230, 80, 50), function(list)
+	clear(list); local d = rf2:InvokeServer("menu")
+	card(list, "Delivery to you", d.drivers > 0 and (d.drivers .. " delivery driver(s) online") or "Courier · about 20 seconds", "$" .. d.fee, nil, 0)
+	for i, r in ipairs(d.restaurants) do
+		card(list, r.name, "Palm Island · tap for menu", "›", function()
+			clear(list)
+			lbl(list, r.name, 16, WHITE, Enum.Font.GothamBlack, nil, UDim2.new(1, 0, 0, 22), Enum.TextXAlignment.Left).LayoutOrder = 0
+			local picked, total = {}, d.fee
+			local ob
+			for k, it in ipairs(r.items) do
+				local b; b = card(list, it[1], "Tap to add", fmt(it[2]), function()
+					picked[k] = not picked[k]; total = d.fee; for kk, on in pairs(picked) do if on then total += r.items[kk][2] end end
+					b.BackgroundColor3 = picked[k] and Color3.fromRGB(70, 40, 35) or CARD
+					ob.Text = "Order · " .. fmt(total) .. " (incl. delivery)"
+				end, k)
+			end
+			ob = btn(list, "Order · " .. fmt(total) .. " (incl. delivery)", Color3.fromRGB(230, 80, 50), nil, 50)
+			ob.MouseButton1Click:Connect(function()
+				local idx = {}; for k, on in pairs(picked) do if on then idx[#idx + 1] = k end end
+				ob.Text = tostring(rf2:InvokeServer("order", r.name, idx))
+			end)
+			btn(list, "‹ Restaurants", Color3.fromRGB(60, 62, 70), nil, 51).MouseButton1Click:Connect(APPS["Dream Eats"])
+		end, i)
+	end
+end)
+-- notification banner (messages, likes, deliveries)
+local banner = Instance.new("TextLabel"); banner.AnchorPoint = Vector2.new(0.5, 0); banner.Position = UDim2.new(0.5, 0, 0, -80); banner.Size = UDim2.fromOffset(360, 56)
+banner.BackgroundColor3 = Color3.fromRGB(20, 22, 30); banner.TextColor3 = WHITE; banner.Font = Enum.Font.GothamMedium; banner.TextSize = 14; banner.TextWrapped = true; banner.Parent = gui
+Instance.new("UICorner", banner).CornerRadius = UDim.new(0, 16); local bst = Instance.new("UIStroke", banner); bst.Color = GOLD; bst.Thickness = 1.5
+local bpad = Instance.new("UIPadding", banner); bpad.PaddingLeft = UDim.new(0, 12); bpad.PaddingRight = UDim.new(0, 12)
+local seq = 0
+game:GetService("ReplicatedStorage"):WaitForChild("PhoneNotify").OnClientEvent:Connect(function(from, text)
+	seq += 1; local my = seq
+	banner.Text = "📱 " .. from .. ": " .. text
+	TweenService:Create(banner, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {Position = UDim2.new(0.5, 0, 0, 12)}):Play()
+	task.delay(4.5, function() if seq == my then TweenService:Create(banner, TweenInfo.new(0.3), {Position = UDim2.new(0.5, 0, 0, -80)}):Play() end end)
+	if current == "Messages" then APPS.Messages() end
+end)
+app("Settings", "⚙️", Color3.fromRGB(90, 92, 100), function(list) clear(list); card(list, "Dream Phone v2", "Press P to open / close", nil, nil, 1) end)
 -- open / close
 local open = false
 local function toggle()
