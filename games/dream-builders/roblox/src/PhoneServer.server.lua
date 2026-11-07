@@ -6,6 +6,7 @@ local DEST = {
 	["Shops (Businesses)"] = Vector3.new(150, 5, 822), ["Metro – Downtown"] = Vector3.new(-5, 5, 790), ["Palm Beach"] = Vector3.new(690, 6, -150),
 	["Palm Island"] = Vector3.new(1330, 6, -420), ["Cargo Port"] = Vector3.new(716, 5, -1330), ["Palm Hills"] = Vector3.new(-252, 5, -930),
 	["HQ (Jobs)"] = Vector3.new(0, 5, 600),
+	["Airport"] = Vector3.new(-500, 4, 1430),
 }
 local JOBS = {["Construction Worker"] = 1, ["Architect"] = 1, ["Real Estate Agent"] = 1, ["Car Dealer"] = 1, ["Chef"] = 1, ["Hair Stylist"] = 1, ["Fashion Designer"] = 1, ["Delivery Driver"] = 1, ["Business Owner"] = 1}
 local log = {}   -- [userId] = {transactions}
@@ -51,6 +52,18 @@ rf.OnServerInvoke = function(p, what, arg, arg2)
 		if not to or to == p or not amt then return "Player not found" end
 		amt = math.floor(amt); if amt < 1 or amt > 100000 then return "Bad amount" end
 		local a, b = money(p), money(to); if not a or not b or a.Value < amt then return "Not enough money" end
-		a.Value -= amt; b.Value += amt; return "Sent $" .. amt .. " to " .. to.DisplayName
+		if lastTp["tx" .. p.UserId] and os.clock() - lastTp["tx" .. p.UserId] < 5 then return "Wait a few seconds" end
+		lastTp["tx" .. p.UserId] = os.clock()
+		a.Value -= amt; b.Value += amt
+		local sm = game.ServerStorage:FindFirstChild("SendPhoneMessage")
+		if sm then sm:Fire(to, "Dream Bank", p.DisplayName .. " sent you $" .. amt); sm:Fire(p, "Dream Bank", "You sent $" .. amt .. " to " .. to.DisplayName) end
+		return "Sent $" .. amt .. " to " .. to.DisplayName
 	end
+end
+
+-- other scripts (taxi) can look up a destination
+local placesApi = Instance.new("BindableFunction"); placesApi.Name = "PlacesAPI"; placesApi.Parent = game.ServerStorage
+placesApi.OnInvoke = function(p, name)
+	if name == "My Home" then return game.ServerStorage.PropertyAPI:Invoke("home", p) end
+	return DEST[name]
 end

@@ -46,6 +46,8 @@ ev.OnServerEvent:Connect(function(plr, key)
 	if type(key) ~= "string" then return end
 	local now = os.clock(); if last[plr] and now - last[plr] < 3 then return end
 	local pos = places[key]; local char = plr.Character
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	if hum and hum.SeatPart then return end
 	if pos and char and char.PrimaryPart then last[plr] = now; char:PivotTo(CFrame.new(pos)) end
 end)
 Players.PlayerRemoving:Connect(function(p) last[p] = nil end)

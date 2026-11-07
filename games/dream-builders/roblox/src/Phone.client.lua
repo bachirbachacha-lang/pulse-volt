@@ -2,6 +2,7 @@
 local Players, UIS, TweenService, L = game:GetService("Players"), game:GetService("UserInputService"), game:GetService("TweenService"), game:GetService("Lighting")
 local plr = Players.LocalPlayer
 local rf = game:GetService("ReplicatedStorage"):WaitForChild("PhoneRequest")
+local rf3 = game:GetService("ReplicatedStorage"):WaitForChild("PhoneExtra")
 local GOLD, BG, CARD, WHITE, GREY = Color3.fromRGB(212, 170, 90), Color3.fromRGB(12, 13, 18), Color3.fromRGB(28, 30, 38), Color3.new(1, 1, 1), Color3.fromRGB(150, 152, 165)
 local gui = Instance.new("ScreenGui"); gui.Name = "DreamPhone"; gui.ResetOnSpawn = false; gui.DisplayOrder = 30; gui.Parent = plr:WaitForChild("PlayerGui")
 local btn = Instance.new("TextButton"); btn.AnchorPoint = Vector2.new(1, 1); btn.Position = UDim2.new(1, -16, 1, -96); btn.Size = UDim2.fromOffset(56, 56)
@@ -62,6 +63,8 @@ local function card(list, title, sub, right, onClick, order)
 	return b
 end
 local APPS = {}
+local taxiMode = false
+local open = false
 local function app(name, icon, color, build)
 	local b = Instance.new("TextButton"); b.Text = ""; b.BackgroundTransparency = 1; b.Parent = grid
 	local ic = Instance.new("TextLabel"); ic.Size = UDim2.fromOffset(58, 58); ic.BackgroundColor3 = color; ic.Text = icon; ic.TextScaled = true; ic.Parent = b
@@ -88,8 +91,15 @@ app("Bank", "🏦", Color3.fromRGB(30, 120, 80), function(list)
 end)
 app("Maps", "🗺️", Color3.fromRGB(40, 110, 200), function(list)
 	clear(list)
+	local mode = card(list, taxiMode and "🚕 Mode: Taxi ride (paid)" or "⚡ Mode: Fast travel (free)", "Tap to switch between fast travel and taxi", nil, function() taxiMode = not taxiMode; APPS.Maps() end, 0)
 	for i, n in ipairs(rf:InvokeServer("places")) do
-		local c; c = card(list, n, "Tap to travel", "GO ›", function()
+		local c; c = card(list, n, taxiMode and "Call a taxi here" or "Tap to travel", taxiMode and "🚕 ›" or "GO ›", function()
+			if taxiMode then
+				local t = game:GetService("ReplicatedStorage"):WaitForChild("TaxiRequest"):InvokeServer(n)
+				c:FindFirstChildWhichIsA("TextLabel").Text = tostring(t)
+				if tostring(t):find("on the way") then task.wait(0.8); TweenService:Create(phone, TweenInfo.new(0.3), {Position = UDim2.new(1, -84, 1, 700)}):Play(); open = false end
+				return
+			end
 			local r = rf:InvokeServer("go", n)
 			if r == true then gui.Enabled = true; TweenService:Create(phone, TweenInfo.new(0.3), {Position = UDim2.new(1, -84, 1, 700)}):Play()
 			elseif r == "seated" then c:FindFirstChildWhichIsA("TextLabel").Text = "Get out of the seat first"
@@ -126,6 +136,17 @@ app("Business", "📊", Color3.fromRGB(212, 150, 60), function(list)
 		card(list, d.biz.brand, d.biz.type, "OPEN", nil, 1); card(list, "Earned today", "From customers", fmt(d.earned), nil, 2)
 	else card(list, "No business yet", "Rent a shop Downtown ($50) – Maps › Shops", nil, nil, 1) end
 	card(list, "Bricks delivered", nil, tostring(d.bricks), nil, 3); card(list, "Mansions built", nil, tostring(d.mansions), nil, 4)
+	local b = rf3:InvokeServer("biz")
+	if b then
+		lbl(list, "SHOP SETTINGS", 11, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = 10
+		local info = {Budget = "Cheaper · customers every 8s · 80% price", Standard = "Normal · every 12s · 100% price", Premium = "Fancy · every 18s · 140% price"}
+		for i, t in ipairs({"Budget", "Standard", "Premium"}) do
+			card(list, (b.tier == t and "● " or "○ ") .. t .. " prices", info[t], b.tier == t and "ON" or "", function() rf3:InvokeServer("tier", t); APPS.Business() end, 10 + i)
+		end
+		local dc; dc = card(list, b.decor and "✨ Luxury decor" or "Upgrade decor", b.decor and "+$3 on every customer" or "$250 · plants, lights, +$3 per customer", b.decor and "✓" or "$250", not b.decor and function()
+			dc:FindFirstChildWhichIsA("TextLabel").Text = tostring(rf3:InvokeServer("decor")); task.wait(1); APPS.Business() end or nil, 20)
+		card(list, b.staff and "👔 Staff hired" or "No staff yet", b.staff and "They serve customers for you (you keep 70%)" or "Hire at the counter in your shop ($150)", nil, nil, 21)
+	end
 end)
 local rf2 = game:GetService("ReplicatedStorage"):WaitForChild("PhoneApps")
 local function mkBtn(parent, text, color, size, order)
@@ -236,9 +257,33 @@ game:GetService("ReplicatedStorage"):WaitForChild("PhoneNotify").OnClientEvent:C
 	task.delay(4.5, function() if seq == my then TweenService:Create(banner, TweenInfo.new(0.3), {Position = UDim2.new(0.5, 0, 0, -80)}):Play() end end)
 	if current == "Messages" then APPS.Messages() end
 end)
+app("Supplies", "🧱", Color3.fromRGB(170, 75, 55), function(list)
+	clear(list); local d = rf3:InvokeServer("plots")
+	card(list, "Brick pallet", d.bricks .. " bricks delivered to a building plot", "$" .. d.price, nil, 0)
+	local n = 0
+	for _, pl in ipairs(d.plots) do
+		if pl.started and not pl.done then
+			n += 1
+			local c; c = card(list, "Plot " .. tostring(pl.id) .. " · " .. pl.stageName, pl.pallet and "Pallet already there" or "Tap to order a pallet here", pl.pallet and "🧱" or "ORDER", not pl.pallet and function()
+				c:FindFirstChildWhichIsA("TextLabel").Text = tostring(rf3:InvokeServer("order", pl.name))
+			end or nil, n)
+		end
+	end
+	if n == 0 then card(list, "No building sites yet", "An Architect has to design a mansion on a plot first", nil, nil, 1) end
+end)
+app("Assistant", "🤖", Color3.fromRGB(80, 90, 200), function(list)
+	clear(list)
+	lbl(list, "Dream Assistant · tips for you", 12, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = 0
+	for i, t in ipairs(rf3:InvokeServer("assistant")) do
+		local c = Instance.new(t.place and "TextButton" or "Frame"); c.Size = UDim2.new(1, -4, 0, 64); c.BackgroundColor3 = CARD; c.LayoutOrder = i; c.Parent = list
+		if t.place then c.Text = ""; c.MouseButton1Click:Connect(function() local r = rf:InvokeServer("go", t.place); if r == true then TweenService:Create(phone, TweenInfo.new(0.3), {Position = UDim2.new(1, -84, 1, 700)}):Play(); open = false end end) end
+		Instance.new("UICorner", c).CornerRadius = UDim.new(0, 12)
+		lbl(c, t.text, 12, WHITE, Enum.Font.GothamMedium, UDim2.fromOffset(12, 6), UDim2.new(1, -24, 0, t.place and 36 or 52), Enum.TextXAlignment.Left)
+		if t.place then lbl(c, "Take me there ›", 11, GOLD, Enum.Font.GothamBold, UDim2.fromOffset(12, 44), UDim2.new(1, -24, 0, 14), Enum.TextXAlignment.Left) end
+	end
+end)
 app("Settings", "⚙️", Color3.fromRGB(90, 92, 100), function(list) clear(list); card(list, "Dream Phone v2", "Press P to open / close", nil, nil, 1) end)
 -- open / close
-local open = false
 local function toggle()
 	open = not open
 	if open then show("Lock"); local d = rf:InvokeServer("profile"); note.Text = "💰 " .. fmt(d.money) .. "\n💼 " .. d.job end
@@ -248,3 +293,15 @@ unlock.MouseButton1Click:Connect(function() show("Home") end)
 btn.MouseButton1Click:Connect(toggle)
 UIS.InputBegan:Connect(function(i, gp) if not gp and i.KeyCode == Enum.KeyCode.P then toggle() end end)
 task.spawn(function() while true do local t = clockText(); status.Text = t; big.Text = t; task.wait(1) end end)
+
+-- screen fade (flights, taxi)
+local fadeF = Instance.new("Frame"); fadeF.Size = UDim2.fromScale(1, 1); fadeF.BackgroundColor3 = Color3.new(0, 0, 0); fadeF.BackgroundTransparency = 1; fadeF.ZIndex = 50; fadeF.Visible = false; fadeF.Parent = gui
+local fadeT = lbl(fadeF, "", 26, WHITE, Enum.Font.GothamBold, UDim2.fromScale(0, 0.45), UDim2.new(1, 0, 0, 40)); fadeT.ZIndex = 51; fadeT.TextTransparency = 1
+gui.IgnoreGuiInset = true
+game:GetService("ReplicatedStorage"):WaitForChild("ScreenFade").OnClientEvent:Connect(function(text, dur)
+	fadeT.Text = text; fadeF.Visible = true
+	TweenService:Create(fadeF, TweenInfo.new(0.8), {BackgroundTransparency = 0}):Play(); TweenService:Create(fadeT, TweenInfo.new(0.8), {TextTransparency = 0}):Play()
+	task.wait(math.max(1, (dur or 3) - 0.8))
+	TweenService:Create(fadeF, TweenInfo.new(0.8), {BackgroundTransparency = 1}):Play(); TweenService:Create(fadeT, TweenInfo.new(0.8), {TextTransparency = 1}):Play()
+	task.wait(0.8); fadeF.Visible = false
+end)

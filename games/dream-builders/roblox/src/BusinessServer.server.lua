@@ -24,7 +24,8 @@ end
 local function reset(unit)
 	Kit.clear(unit)
 	local c = unit:FindFirstChild("Customer"); if c then c:Destroy() end
-	unit:SetAttribute("OwnerId", nil); unit:SetAttribute("Type", nil); unit:SetAttribute("Brand", nil); unit:SetAttribute("Waiting", nil)
+	unit:SetAttribute("OwnerId", nil); unit:SetAttribute("Type", nil); unit:SetAttribute("PriceMult", nil); unit:SetAttribute("CustomerGap", nil); unit:SetAttribute("Decor", nil); unit:SetAttribute("Tier", nil)
+	local dec = unit:FindFirstChild("DecorPack"); if dec then dec:Destroy() end; unit:SetAttribute("Brand", nil); unit:SetAttribute("Waiting", nil)
 	setSign(unit, "FOR RENT · $" .. RENT)
 	unit.RentBoard.Transparency = 0; unit.RentBoard.Open.Enabled = true
 	local sp = unit:FindFirstChild("ServePoint"); if sp then sp:Destroy() end
@@ -65,7 +66,7 @@ local function handle(plr, action, unitName, kind, brand, restored)
 			if who.UserId ~= u:GetAttribute("OwnerId") then toast(who, "Only the owner can serve here"); return end
 			local c = u:FindFirstChild("Customer"); if not c or not u:GetAttribute("Waiting") then return end
 			u:SetAttribute("Waiting", nil); pr.Enabled = false
-			local pay = Kit.TYPES[kind].price
+			local pay = math.floor(Kit.TYPES[kind].price * (u:GetAttribute("PriceMult") or 1)) + (u:GetAttribute("Decor") and 3 or 0)
 			local mm = money(who); if mm then mm.Value += pay end
 			who:SetAttribute("BusinessEarned", (who:GetAttribute("BusinessEarned") or 0) + pay)
 			toast(who, "+$" .. pay .. "  happy customer at " .. brand)
@@ -79,7 +80,14 @@ local function handle(plr, action, unitName, kind, brand, restored)
 		local u = owned[plr]; if u then reset(u); owned[plr] = nil; toast(plr, "Business closed"); saveBiz(plr, {}) end
 	end
 end
-ev.OnServerEvent:Connect(function(plr, action, unitName, kind, brand) handle(plr, action, unitName, kind, brand, false) end)
+local lastBiz = {}
+ev.OnServerEvent:Connect(function(plr, action, unitName, kind, brand)
+	if lastBiz[plr] and os.clock() - lastBiz[plr] < 1 then return end
+	lastBiz[plr] = os.clock()
+	if type(action) ~= "string" then return end
+	handle(plr, action, unitName, kind, brand, false)
+end)
+Players.PlayerRemoving:Connect(function(p) lastBiz[p] = nil end)
 -- reopen your business when you come back (any free shop unit, no rent charged again)
 Players.PlayerAdded:Connect(function(plr)
 	if not store then return end
@@ -130,8 +138,11 @@ local function spawnCustomer(u)
 	end)
 end
 while true do
-	task.wait(12)
+	task.wait(2)
 	for _, u in ipairs(units:GetChildren()) do
-		if u:GetAttribute("OwnerId") and not u:FindFirstChild("Customer") and u:FindFirstChild("Interior") then task.spawn(spawnCustomer, u) end
+		if u:GetAttribute("OwnerId") and not u:FindFirstChild("Customer") and u:FindFirstChild("Interior") and (u:GetAttribute("NextCustomer") or 0) <= os.clock() then
+			u:SetAttribute("NextCustomer", os.clock() + (u:GetAttribute("CustomerGap") or 12))
+			task.spawn(spawnCustomer, u)
+		end
 	end
 end

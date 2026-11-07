@@ -123,7 +123,14 @@ local function assign(o, driver)
 end
 
 ---------------------------------------------------------------- requests
+local lastAct = {}
+local LIMIT = {like = 0.5, follow = 1, send = 2}
 rf.OnServerInvoke = function(p, what, a, b)
+	if LIMIT[what] then
+		local k = p.UserId .. what
+		if lastAct[k] and os.clock() - lastAct[k] < LIMIT[what] then return "Slow down" end
+		lastAct[k] = os.clock()
+	end
 	if what == "feed" then
 		local t = {}
 		for i = #posts, math.max(1, #posts - 29), -1 do

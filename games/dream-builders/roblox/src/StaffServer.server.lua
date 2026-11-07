@@ -37,7 +37,7 @@ while true do
 				if not (c and u:GetAttribute("Waiting")) then return end
 				u:SetAttribute("Waiting", nil)
 				local sp = u:FindFirstChild("ServePoint"); if sp and sp:FindFirstChild("Serve") then sp.Serve.Enabled = false end
-				local kind = u:GetAttribute("Type"); local price = Kit.TYPES[kind] and Kit.TYPES[kind].price or 15
+				local kind = u:GetAttribute("Type"); local price = math.floor((Kit.TYPES[kind] and Kit.TYPES[kind].price or 15) * (u:GetAttribute("PriceMult") or 1)) + (u:GetAttribute("Decor") and 3 or 0)
 				local p = Players:GetPlayerByUserId(owner)
 				if p then K.pay(p, math.floor(price * 0.7), "your staff served a customer") end
 				local e = u:FindFirstChild("Staff"); if e then K.bubble(e, "Thank you, come again! 😊"); task.delay(3, function() if e.Parent then K.bubble(e, nil) end end) end

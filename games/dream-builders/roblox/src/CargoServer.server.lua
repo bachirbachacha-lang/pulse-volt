@@ -30,14 +30,12 @@ local function cleanup(p)
 	contract[p] = nil
 end
 local gate = port:WaitForChild("GateHouse")
-local gp = K.prompt(gate, "Take a cargo contract", "Port office", 0.5, 14)
-gp.Triggered:Connect(function(p)
-	if contract[p] then K.toast(p, "You already have a contract. Check the yellow marker"); return end
-	local dest = DEST[math.random(#DEST)]
-	local c = {stage = "load", dest = dest, trash = {}}; contract[p] = c
-	local lp = pad("LoadPad", Vector3.new(800, 0, -1600), Color3.fromRGB(255, 190, 40)); table.insert(c.trash, lp)
-	local mk = K.marker(p, lp, "📦 Load cargo here", Color3.fromRGB(230, 150, 30)); table.insert(c.trash, mk)
-	K.msg(p, "Dream Port", "Contract: bring a container to " .. dest.name .. " for $" .. dest.pay .. ". Drive a vehicle onto the yellow pad on the quay and load it (Flatbed Truck fits best).")
+local QUAY = Vector3.new(800, 0, -1600)
+local function run(p, loadPos, loadName, dropPos, dropName, payAmount)
+	local c = {stage = "load", trash = {}}; contract[p] = c
+	local lp = pad("LoadPad", loadPos, Color3.fromRGB(255, 190, 40)); table.insert(c.trash, lp)
+	local mk = K.marker(p, lp, "📦 Load cargo · " .. loadName, Color3.fromRGB(230, 150, 30)); table.insert(c.trash, mk)
+	K.msg(p, "Dream Port", "Contract: load cargo at " .. loadName .. " and bring it to " .. dropName .. " for $" .. payAmount .. ". Drive a vehicle onto the yellow pad (Flatbed Truck fits best).")
 	local pr = K.prompt(lp, "Load container", "Cargo", 1.5, 16); table.insert(c.trash, pr)
 	pr.Triggered:Connect(function(who)
 		if who ~= p or c.stage ~= "load" then return end
@@ -51,18 +49,31 @@ gp.Triggered:Connect(function(p)
 		local w = Instance.new("WeldConstraint"); w.Part0 = ch; w.Part1 = box; w.Parent = box
 		table.insert(c.trash, box)
 		c.stage = "deliver"; lp:Destroy(); mk:Destroy()
-		local dp = pad("DropPad", c.dest.pos, Color3.fromRGB(60, 200, 110)); table.insert(c.trash, dp)
-		local mk2 = K.marker(p, dp, "🚚 Deliver to " .. c.dest.name, Color3.fromRGB(40, 160, 90)); table.insert(c.trash, mk2)
-		K.toast(p, "Container loaded! Deliver it to " .. c.dest.name)
-		local up = K.prompt(dp, "Unload container", c.dest.name, 1.5, 16)
+		local dp = pad("DropPad", dropPos, Color3.fromRGB(60, 200, 110)); table.insert(c.trash, dp)
+		local mk2 = K.marker(p, dp, "🚚 Deliver to " .. dropName, Color3.fromRGB(40, 160, 90)); table.insert(c.trash, mk2)
+		K.toast(p, "Container loaded! Deliver it to " .. dropName)
+		local up = K.prompt(dp, "Unload container", dropName, 1.5, 16)
 		up.Triggered:Connect(function(w2)
 			if w2 ~= p or c.stage ~= "deliver" then return end
 			if vehicleOf(p) ~= car then K.toast(p, "Bring the truck with the container"); return end
 			c.stage = "done"
-			K.pay(p, c.dest.pay, "cargo delivered to " .. c.dest.name)
+			K.pay(p, payAmount, "cargo delivered to " .. dropName)
 			cleanup(p)
 		end)
 	end)
 	task.delay(600, function() if contract[p] == c and c.stage ~= "done" then cleanup(p); K.toast(p, "Cargo contract expired") end end)
+end
+local gp = K.prompt(gate, "Import contract (port → city)", "Port office", 0.5, 14)
+gp.Triggered:Connect(function(p)
+	if contract[p] then K.toast(p, "You already have a contract. Check the yellow marker"); return end
+	local d = DEST[math.random(#DEST)]
+	run(p, QUAY, "the quay", d.pos, d.name, d.pay)
+end)
+local ep = K.prompt(gate, "Export contract (city → ship)", "Port office", 0.5, 14)
+ep.UIOffset = Vector2.new(0, 60); ep.KeyboardKeyCode = Enum.KeyCode.F; ep.Exclusivity = Enum.ProximityPromptExclusivity.AlwaysShow
+ep.Triggered:Connect(function(p)
+	if contract[p] then K.toast(p, "You already have a contract. Check the yellow marker"); return end
+	local d = DEST[math.random(#DEST)]
+	run(p, d.pos, d.name, QUAY, "the cargo ship (quay)", d.pay + 60)
 end)
 Players.PlayerRemoving:Connect(cleanup)

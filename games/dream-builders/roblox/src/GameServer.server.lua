@@ -32,7 +32,7 @@ local function refresh(plr)
 	local f = g.Frame; local job = plr:GetAttribute("Job") or "No job"
 	f.Money.Text = "$" .. tostring(plr.leaderstats.Money.Value)
 	f.Job.Text = "JOB: " .. string.upper(job)
-	local HINTS = {["Construction Worker"] = "Get bricks at the Supply Yard (E)", ["Architect"] = "Design a plot: press E at its sign", ["Real Estate Agent"] = "Dream Realty Tower reception: get a client (E)", ["Car Dealer"] = "Dream Motors sales kiosk: get a buyer (E)", ["Chef"] = "Sahara Grill / Dream Diner: start a shift at the grill (F)", ["Hair Stylist"] = "Open a Hair Salon in a Downtown shop", ["Fashion Designer"] = "Plaza pop-up: design outfits, then sell at the stall", ["Delivery Driver"] = "Food orders come to you: pick up, then deliver", ["Business Owner"] = "Rent a Downtown shop for your business"}
+	local HINTS = {["Construction Worker"] = "Get bricks at the Supply Yard (E)", ["Architect"] = "Design a plot: press E at its sign", ["Real Estate Agent"] = "Dream Realty Tower reception: get a client (E)", ["Car Dealer"] = "Dream Motors sales kiosk: get a buyer (E)", ["Chef"] = "Sahara Grill / Dream Diner: start a shift at the grill (F)", ["Hair Stylist"] = "Plaza salon chair: open it and cut hair (E)", ["Fashion Designer"] = "Plaza pop-up: design outfits, then sell at the stall", ["Delivery Driver"] = "Food orders come to you: pick up, then deliver", ["Business Owner"] = "Rent a Downtown shop for your business"}
 	f.Hint.Text = HINTS[job] or "Pick a job at HQ"
 end
 local function toast(plr, msg)
