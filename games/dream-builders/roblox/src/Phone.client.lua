@@ -128,7 +128,7 @@ app("Business", "📊", Color3.fromRGB(212, 150, 60), function(list)
 	card(list, "Bricks delivered", nil, tostring(d.bricks), nil, 3); card(list, "Mansions built", nil, tostring(d.mansions), nil, 4)
 end)
 local rf2 = game:GetService("ReplicatedStorage"):WaitForChild("PhoneApps")
-local function btn(parent, text, color, size, order)
+local function mkBtn(parent, text, color, size, order)
 	local b = Instance.new("TextButton"); b.Size = size or UDim2.new(1, -4, 0, 34); b.BackgroundColor3 = color or CARD; b.Text = text; b.TextColor3 = WHITE
 	b.Font = Enum.Font.GothamBold; b.TextSize = 13; b.LayoutOrder = order or 0; b.AutoButtonColor = true; b.Parent = parent
 	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 10); return b
@@ -145,12 +145,12 @@ app("Dreamgram", "📸", Color3.fromRGB(220, 60, 120), function(list)
 	local kr = row(list, 1, 30)
 	local kbs = {}
 	for _, k in ipairs({{"here", "📍"}, {"villa", "🏡"}, {"car", "🚗"}, {"biz", "🛍️"}}) do
-		local b = btn(kr, k[2], k[1] == kind and Color3.fromRGB(220, 60, 120) or CARD, UDim2.fromOffset(56, 30)); kbs[k[1]] = b
+		local b = mkBtn(kr, k[2], k[1] == kind and Color3.fromRGB(220, 60, 120) or CARD, UDim2.fromOffset(56, 30)); kbs[k[1]] = b
 		b.MouseButton1Click:Connect(function() kind = k[1]; for n, x in pairs(kbs) do x.BackgroundColor3 = n == kind and Color3.fromRGB(220, 60, 120) or CARD end end)
 	end
 	local box = Instance.new("TextBox"); box.Size = UDim2.new(1, -4, 0, 34); box.PlaceholderText = "Write a caption…"; box.Text = ""; box.TextSize = 12; box.Font = Enum.Font.GothamMedium
 	box.BackgroundColor3 = CARD; box.TextColor3 = WHITE; box.ClearTextOnFocus = false; box.LayoutOrder = 2; box.Parent = list; Instance.new("UICorner", box).CornerRadius = UDim.new(0, 10)
-	local pb = btn(list, "Post", Color3.fromRGB(220, 60, 120), nil, 3)
+	local pb = mkBtn(list, "Post", Color3.fromRGB(220, 60, 120), nil, 3)
 	pb.MouseButton1Click:Connect(function()
 		local r = rf2:InvokeServer("post", kind, box.Text)
 		if r == "Posted!" then APPS.Dreamgram() else pb.Text = tostring(r) end
@@ -182,10 +182,10 @@ app("Messages", "💬", Color3.fromRGB(60, 180, 90), function(list)
 			clear(list)
 			lbl(list, "To " .. o.name, 14, WHITE, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 20), Enum.TextXAlignment.Left).LayoutOrder = 0
 			for k, t in ipairs(d.presets) do
-				local b = btn(list, t, CARD, nil, k)
+				local b = mkBtn(list, t, CARD, nil, k)
 				b.MouseButton1Click:Connect(function() b.Text = tostring(rf2:InvokeServer("send", o.user, k)) .. " ✓"; task.wait(0.8); APPS.Messages() end)
 			end
-			btn(list, "‹ Back", Color3.fromRGB(60, 62, 70), nil, 99).MouseButton1Click:Connect(APPS.Messages)
+			mkBtn(list, "‹ Back", Color3.fromRGB(60, 62, 70), nil, 99).MouseButton1Click:Connect(APPS.Messages)
 		end, i)
 	end
 	lbl(list, "INBOX", 11, GREY, Enum.Font.GothamBold, nil, UDim2.new(1, 0, 0, 16), Enum.TextXAlignment.Left).LayoutOrder = 50
@@ -214,12 +214,12 @@ app("Dream Eats", "🍔", Color3.fromRGB(230, 80, 50), function(list)
 					ob.Text = "Order · " .. fmt(total) .. " (incl. delivery)"
 				end, k)
 			end
-			ob = btn(list, "Order · " .. fmt(total) .. " (incl. delivery)", Color3.fromRGB(230, 80, 50), nil, 50)
+			ob = mkBtn(list, "Order · " .. fmt(total) .. " (incl. delivery)", Color3.fromRGB(230, 80, 50), nil, 50)
 			ob.MouseButton1Click:Connect(function()
 				local idx = {}; for k, on in pairs(picked) do if on then idx[#idx + 1] = k end end
 				ob.Text = tostring(rf2:InvokeServer("order", r.name, idx))
 			end)
-			btn(list, "‹ Restaurants", Color3.fromRGB(60, 62, 70), nil, 51).MouseButton1Click:Connect(APPS["Dream Eats"])
+			mkBtn(list, "‹ Restaurants", Color3.fromRGB(60, 62, 70), nil, 51).MouseButton1Click:Connect(APPS["Dream Eats"])
 		end, i)
 	end
 end)

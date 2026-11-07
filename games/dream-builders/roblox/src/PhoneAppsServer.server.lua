@@ -91,7 +91,9 @@ end
 local function assign(o, driver)
 	busyDriver[driver] = o; o.driver = driver
 	local pad = Instance.new("Part"); pad.Name = "FoodPickup"; pad.Anchored = true; pad.CanCollide = false; pad.Size = Vector3.new(4, 0.2, 4); pad.Shape = Enum.PartType.Cylinder
-	pad.CFrame = CFrame.new(pickupPoint(o.rest)) * CFrame.Angles(0, 0, math.rad(90)); pad.Color = Color3.fromRGB(230, 80, 50); pad.Material = Enum.Material.Neon; pad.Transparency = 0.3; pad.Parent = workspace
+	pad.CFrame = CFrame.new(pickupPoint(o.rest)) * CFrame.Angles(0, 0, math.rad(90)); pad.Color = Color3.fromRGB(230, 80, 50); pad.Material = Enum.Material.Neon; pad.Transparency = 0.3
+	local holder = Instance.new("Model"); holder.Name = "FoodPickup"; holder.ModelStreamingMode = Enum.ModelStreamingMode.Persistent; holder.Parent = workspace
+	pad.Parent = holder; pad.Destroying:Connect(function() holder:Destroy() end)
 	local pr = Instance.new("ProximityPrompt"); pr.ActionText = "Pick up order"; pr.ObjectText = o.rest; pr.HoldDuration = 0.6; pr.RequiresLineOfSight = false; pr.Parent = pad
 	local mk = marker(driver, pad, "📦 Pick up at " .. o.rest, Color3.fromRGB(230, 80, 50))
 	push(driver, "Dream Eats", "New delivery! Pick up " .. #o.items .. " item(s) at " .. o.rest .. " (Palm Island) for " .. o.customer.DisplayName .. ". Pay: $" .. o.pay)
