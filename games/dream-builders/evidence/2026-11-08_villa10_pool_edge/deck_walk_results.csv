@@ -1,0 +1,294 @@
+run,run_started_riyadh,version,walk,samples,swim_samples_total,deck_swim_samples,stuck_samples,samples_inside_pool,states,moved_studs_start_to_end,valid
+1,22:02:11,V10-R2,S d1.0 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,S d1.0 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,S d1.5 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,S d1.5 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,S d2.2 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,S d2.2 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d1.0 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d1.0 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d1.5 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d1.5 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d2.2 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d2.2 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d3.0 E>W,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,N d3.0 W>E,25,0,0,0,0,Runn25,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,W d1.0 N>S,11,0,0,0,0,Runn11,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,W d1.0 S>N,11,0,0,0,0,Runn11,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,W d1.5 N>S,11,0,0,0,0,Runn11,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,W d1.5 S>N,11,0,0,0,0,Runn11,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+1,22:02:11,V10-R2,W d2.2 N>S,12,0,0,0,0,Runn12,0.0,"NO - first R2 run: the intro screen was still open, WalkSpeed 0, the character never moved; run repeated as run 2"
+2,22:03:58,V10-R2,S d1.0 E>W,25,25,25,21,0,Swim25,1.4,yes
+2,22:03:58,V10-R2,S d1.0 W>E,25,7,7,0,0,"Runn18,Swim7",37.8,yes
+2,22:03:58,V10-R2,S d1.5 E>W,25,24,24,20,0,"Swim24,Runn1",1.4,yes
+2,22:03:58,V10-R2,S d1.5 W>E,25,1,1,0,0,"Gett1,Runn23,Swim1",41.5,yes
+2,22:03:58,V10-R2,S d2.2 E>W,25,0,0,0,0,Runn25,42.4,yes
+2,22:03:58,V10-R2,S d2.2 W>E,25,0,0,0,0,Runn25,42.9,yes
+2,22:03:58,V10-R2,N d1.0 E>W,25,2,2,0,0,"Runn22,Gett1,Swim2",36.5,yes
+2,22:03:58,V10-R2,N d1.0 W>E,25,1,1,0,0,"Runn24,Swim1",42.9,yes
+2,22:03:58,V10-R2,N d1.5 E>W,25,0,0,0,0,Runn25,42.6,yes
+2,22:03:58,V10-R2,N d1.5 W>E,25,0,0,0,0,Runn25,41.6,yes
+2,22:03:58,V10-R2,N d2.2 E>W,24,0,0,0,0,Runn24,42.4,yes
+2,22:03:58,V10-R2,N d2.2 W>E,25,0,0,0,0,Runn25,42.5,yes
+2,22:03:58,V10-R2,N d3.0 E>W,25,0,0,0,0,Runn25,42.5,yes
+2,22:03:58,V10-R2,N d3.0 W>E,24,0,0,0,0,Runn24,41.6,yes
+2,22:03:58,V10-R2,W d1.0 N>S,12,3,3,0,0,"Swim3,Runn9",12.9,yes
+2,22:03:58,V10-R2,W d1.0 S>N,12,0,0,0,0,Runn12,18.7,yes
+2,22:03:58,V10-R2,W d1.5 N>S,11,0,0,0,0,Runn11,17.5,yes
+2,22:03:58,V10-R2,W d1.5 S>N,12,0,0,0,0,Runn12,19.2,yes
+2,22:03:58,V10-R2,W d2.2 N>S,11,0,0,0,0,Runn11,18.1,yes
+2,22:03:58,V10-R2,W d2.2 S>N,11,0,0,0,0,Runn11,17.7,yes
+2,22:03:58,V10-R2,E d1.0 N>S,11,0,0,0,0,Runn11,16.7,yes
+2,22:03:58,V10-R2,E d1.0 S>N,12,0,0,0,0,Runn12,17.3,yes
+2,22:03:58,V10-R2,E d1.5 N>S,11,0,0,0,0,Runn11,17.1,yes
+2,22:03:58,V10-R2,E d1.5 S>N,12,0,0,0,0,Runn12,18.4,yes
+2,22:03:58,V10-R2,E d2.2 N>S,11,0,0,0,0,Runn11,17.8,yes
+2,22:03:58,V10-R2,E d2.2 S>N,11,0,0,0,0,Runn11,17.6,yes
+2,22:03:58,V10-R2,Lap A,98,97,97,91,0,"Gett1,Swim97",1.4,yes
+2,22:03:58,V10-R2,Lap B,81,20,20,1,0,"Runn60,Gett1,Swim20",1.0,yes
+2,22:03:58,V10-R2,Swim,120,114,0,36,117,"Swim114,Runn6",6.1,yes
+3,22:06:17,V10-R5,S d1.0 E>W,25,0,0,0,0,Runn25,43.0,yes
+3,22:06:17,V10-R5,S d1.0 W>E,25,0,0,0,0,"Gett1,Runn24",42.6,yes
+3,22:06:17,V10-R5,S d1.5 E>W,25,2,2,0,0,"Swim2,Runn23",42.6,yes
+3,22:06:17,V10-R5,S d1.5 W>E,25,0,0,0,0,"Gett1,Runn24",41.4,yes
+3,22:06:17,V10-R5,S d2.2 E>W,25,0,0,0,0,Runn25,41.6,yes
+3,22:06:17,V10-R5,S d2.2 W>E,24,0,0,0,0,Runn24,41.6,yes
+3,22:06:17,V10-R5,N d1.0 E>W,25,3,3,0,0,"Swim3,Runn22",35.9,yes
+3,22:06:17,V10-R5,N d1.0 W>E,25,0,0,0,0,Runn25,41.7,yes
+3,22:06:17,V10-R5,N d1.5 E>W,25,0,0,0,0,Runn25,42.9,yes
+3,22:06:17,V10-R5,N d1.5 W>E,25,0,0,0,0,Runn25,43.2,yes
+3,22:06:17,V10-R5,N d2.2 E>W,25,0,0,0,0,Runn25,42.7,yes
+3,22:06:17,V10-R5,N d2.2 W>E,25,0,0,0,0,Runn25,41.6,yes
+3,22:06:17,V10-R5,N d3.0 E>W,25,0,0,0,0,Runn25,42.1,yes
+3,22:06:17,V10-R5,N d3.0 W>E,25,0,0,0,0,Runn25,42.6,yes
+3,22:06:17,V10-R5,W d1.0 N>S,12,2,2,0,0,"Runn9,Gett1,Swim2",13.3,yes
+3,22:06:17,V10-R5,W d1.0 S>N,12,0,0,0,0,Runn12,19.5,yes
+3,22:06:17,V10-R5,W d1.5 N>S,11,0,0,0,0,Runn11,17.6,yes
+3,22:06:17,V10-R5,W d1.5 S>N,11,0,0,0,0,Runn11,17.9,yes
+3,22:06:17,V10-R5,W d2.2 N>S,11,0,0,0,0,Runn11,17.9,yes
+3,22:06:17,V10-R5,W d2.2 S>N,12,0,0,0,0,Runn12,19.2,yes
+3,22:06:17,V10-R5,E d1.0 N>S,11,0,0,0,0,Runn11,15.6,yes
+3,22:06:17,V10-R5,E d1.0 S>N,11,0,0,0,0,Runn11,16.7,yes
+3,22:06:17,V10-R5,E d1.5 N>S,11,0,0,0,0,Runn11,17.2,yes
+3,22:06:17,V10-R5,E d1.5 S>N,11,0,0,0,0,Runn11,17.0,yes
+3,22:06:17,V10-R5,E d2.2 N>S,12,0,0,0,0,Runn12,18.4,yes
+3,22:06:17,V10-R5,E d2.2 S>N,11,0,0,0,0,Runn11,18.0,yes
+3,22:06:17,V10-R5,Lap A,71,1,1,0,0,"Swim1,Runn70",1.6,yes
+3,22:06:17,V10-R5,Lap B,72,2,2,0,0,"Runn68,Gett2,Swim2",1.5,yes
+3,22:06:17,V10-R5,Swim,120,115,0,36,117,"Swim115,Runn5",5.8,yes
+4,22:08:50,V10-R6,S d1.0 E>W,25,0,0,0,0,Runn25,42.1,yes
+4,22:08:50,V10-R6,S d1.0 W>E,25,0,0,0,0,Runn25,41.8,yes
+4,22:08:50,V10-R6,S d1.5 E>W,26,0,0,0,0,Runn26,42.6,yes
+4,22:08:50,V10-R6,S d1.5 W>E,25,0,0,0,0,Runn25,42.4,yes
+4,22:08:50,V10-R6,S d2.2 E>W,25,0,0,0,0,Runn25,42.2,yes
+4,22:08:50,V10-R6,S d2.2 W>E,25,0,0,0,0,Runn25,42.1,yes
+4,22:08:50,V10-R6,N d1.0 E>W,25,0,0,0,0,Runn25,42.0,yes
+4,22:08:50,V10-R6,N d1.0 W>E,25,0,0,0,0,Runn25,42.7,yes
+4,22:08:50,V10-R6,N d1.5 E>W,25,0,0,0,0,Runn25,41.9,yes
+4,22:08:50,V10-R6,N d1.5 W>E,25,0,0,0,0,Runn25,42.7,yes
+4,22:08:50,V10-R6,N d2.2 E>W,25,0,0,0,0,Runn25,41.6,yes
+4,22:08:50,V10-R6,N d2.2 W>E,25,0,0,0,0,Runn25,41.8,yes
+4,22:08:50,V10-R6,N d3.0 E>W,25,0,0,0,0,Runn25,41.9,yes
+4,22:08:50,V10-R6,N d3.0 W>E,25,0,0,0,0,Runn25,42.4,yes
+4,22:08:50,V10-R6,W d1.0 N>S,12,0,0,0,0,Runn12,18.5,yes
+4,22:08:50,V10-R6,W d1.0 S>N,12,0,0,0,0,Runn12,19.0,yes
+4,22:08:50,V10-R6,W d1.5 N>S,11,0,0,0,0,Runn11,17.6,yes
+4,22:08:50,V10-R6,W d1.5 S>N,11,0,0,0,0,Runn11,18.1,yes
+4,22:08:50,V10-R6,W d2.2 N>S,11,0,0,0,0,Runn11,17.9,yes
+4,22:08:50,V10-R6,W d2.2 S>N,11,0,0,0,0,Runn11,17.9,yes
+4,22:08:50,V10-R6,E d1.0 N>S,11,0,0,0,0,Runn11,15.9,yes
+4,22:08:50,V10-R6,E d1.0 S>N,11,0,0,0,0,Runn11,16.7,yes
+4,22:08:50,V10-R6,E d1.5 N>S,12,0,0,0,0,Runn12,18.7,yes
+4,22:08:50,V10-R6,E d1.5 S>N,11,0,0,0,0,Runn11,17.1,yes
+4,22:08:50,V10-R6,E d2.2 N>S,11,0,0,0,0,Runn11,17.6,yes
+4,22:08:50,V10-R6,E d2.2 S>N,11,0,0,0,0,Runn11,17.9,yes
+4,22:08:50,V10-R6,Lap A,72,1,1,0,0,"Swim1,Runn71",0.9,yes
+4,22:08:50,V10-R6,Lap B,71,2,2,0,0,"Swim2,Runn69",1.6,yes
+4,22:08:50,V10-R6,Swim,115,61,0,0,78,"Runn52,Gett2,Swim61",53.5,yes
+5,22:11:06,V15-ref,S d1.0 E>W,25,0,0,0,0,Runn25,41.3,yes
+5,22:11:06,V15-ref,S d1.0 W>E,25,0,0,0,0,Runn25,42.5,yes
+5,22:11:06,V15-ref,S d1.5 E>W,24,0,0,0,0,Runn24,41.6,yes
+5,22:11:06,V15-ref,S d1.5 W>E,25,0,0,0,0,Runn25,42.3,yes
+5,22:11:06,V15-ref,S d2.2 E>W,25,0,0,0,0,Runn25,41.8,yes
+5,22:11:06,V15-ref,S d2.2 W>E,25,0,0,0,0,Runn25,41.6,yes
+5,22:11:06,V15-ref,N d1.0 E>W,25,14,14,0,0,"Runn10,Gett1,Swim14",41.3,yes
+5,22:11:06,V15-ref,N d1.0 W>E,25,12,12,1,0,"Gett1,Runn12,Swim12",25.6,yes
+5,22:11:06,V15-ref,N d1.5 E>W,25,18,18,0,0,"Runn6,Gett1,Swim18",41.3,yes
+5,22:11:06,V15-ref,N d1.5 W>E,26,26,26,15,0,Swim26,2.1,yes
+5,22:11:06,V15-ref,N d2.2 E>W,25,10,10,0,0,"Swim10,Runn15",41.7,yes
+5,22:11:06,V15-ref,N d2.2 W>E,25,2,2,0,0,"Runn23,Swim2",42.2,yes
+5,22:11:06,V15-ref,N d3.0 E>W,24,0,0,0,0,Runn24,42.0,yes
+5,22:11:06,V15-ref,N d3.0 W>E,25,0,0,0,0,Runn25,42.4,yes
+5,22:11:06,V15-ref,W d1.0 N>S,11,10,10,0,0,"Swim10,Runn1",13.5,yes
+5,22:11:06,V15-ref,W d1.0 S>N,11,0,0,0,0,Runn11,17.4,yes
+5,22:11:06,V15-ref,W d1.5 N>S,12,12,12,0,0,Swim12,1.3,yes
+5,22:11:06,V15-ref,W d1.5 S>N,11,0,0,0,0,Runn11,17.8,yes
+5,22:11:06,V15-ref,W d2.2 N>S,11,0,0,0,0,Runn11,17.9,yes
+5,22:11:06,V15-ref,W d2.2 S>N,11,0,0,0,0,Runn11,17.6,yes
+5,22:11:06,V15-ref,E d1.0 N>S,11,0,0,0,0,Runn11,16.6,yes
+5,22:11:06,V15-ref,E d1.0 S>N,11,0,0,0,0,Runn11,16.1,yes
+5,22:11:06,V15-ref,E d1.5 N>S,11,0,0,0,0,Runn11,17.0,yes
+5,22:11:06,V15-ref,E d1.5 S>N,12,0,0,0,0,Runn12,18.2,yes
+5,22:11:06,V15-ref,E d2.2 N>S,11,0,0,0,0,Runn11,18.4,yes
+5,22:11:06,V15-ref,E d2.2 S>N,11,0,0,0,0,Runn11,17.9,yes
+5,22:11:06,V15-ref,Lap A,74,18,18,0,0,"Runn52,Gett4,Swim18",1.6,yes
+5,22:11:06,V15-ref,Lap B,78,31,31,0,0,"Runn46,Gett1,Swim31",1.6,yes
+5,22:11:06,V15-ref,Swim,122,116,0,33,119,"Swim116,Runn6",6.2,yes
+5,22:11:06,V1-saved,S d1.0 E>W,25,1,1,0,0,"Swim1,Runn24",42.5,yes
+5,22:11:06,V1-saved,S d1.0 W>E,25,7,7,0,0,"Runn18,Swim7",38.7,yes
+5,22:11:06,V1-saved,S d1.5 E>W,25,0,0,0,0,Runn25,42.4,yes
+5,22:11:06,V1-saved,S d1.5 W>E,25,0,0,0,0,Runn25,42.9,yes
+5,22:11:06,V1-saved,S d2.2 E>W,25,0,0,0,0,Runn25,42.1,yes
+5,22:11:06,V1-saved,S d2.2 W>E,25,0,0,0,0,Runn25,42.7,yes
+5,22:11:06,V1-saved,N d1.0 E>W,25,0,0,0,0,Runn25,43.1,yes
+5,22:11:06,V1-saved,N d1.0 W>E,25,9,9,0,0,"Gett1,Runn15,Swim9",37.4,yes
+5,22:11:06,V1-saved,N d1.5 E>W,25,0,0,0,0,Runn25,41.7,yes
+5,22:11:06,V1-saved,N d1.5 W>E,25,0,0,0,0,Runn25,41.6,yes
+5,22:11:06,V1-saved,N d2.2 E>W,25,0,0,0,0,Runn25,42.2,yes
+5,22:11:06,V1-saved,N d2.2 W>E,25,0,0,0,0,Runn25,42.1,yes
+5,22:11:06,V1-saved,N d3.0 E>W,25,0,0,0,0,Runn25,42.4,yes
+5,22:11:06,V1-saved,N d3.0 W>E,25,0,0,0,0,Runn25,41.8,yes
+5,22:11:06,V1-saved,W d1.0 N>S,12,11,11,0,0,"Runn1,Swim11",14.6,yes
+5,22:11:06,V1-saved,W d1.0 S>N,11,1,1,0,0,"Swim1,Runn10",17.3,yes
+5,22:11:06,V1-saved,W d1.5 N>S,11,11,11,1,0,Swim11,1.0,yes
+5,22:11:06,V1-saved,W d1.5 S>N,12,1,1,0,0,"Runn11,Swim1",18.8,yes
+5,22:11:06,V1-saved,W d2.2 N>S,11,0,0,0,0,Runn11,17.6,yes
+5,22:11:06,V1-saved,W d2.2 S>N,12,0,0,0,0,Runn12,19.0,yes
+5,22:11:06,V1-saved,E d1.0 N>S,11,0,0,0,0,Runn11,16.8,yes
+5,22:11:06,V1-saved,E d1.0 S>N,11,0,0,0,0,Runn11,16.2,yes
+5,22:11:06,V1-saved,E d1.5 N>S,12,0,0,0,0,Runn12,18.4,yes
+5,22:11:06,V1-saved,E d1.5 S>N,11,0,0,0,0,Runn11,17.0,yes
+5,22:11:06,V1-saved,E d2.2 N>S,11,0,0,0,0,Runn11,17.4,yes
+5,22:11:06,V1-saved,E d2.2 S>N,11,0,0,0,0,Runn11,17.9,yes
+5,22:11:06,V1-saved,Lap A,73,5,5,0,0,"Runn65,Gett3,Swim5",1.6,yes
+5,22:11:06,V1-saved,Lap B,76,12,12,0,0,"Runn62,Gett2,Swim12",1.0,yes
+5,22:11:06,V1-saved,Swim,119,112,0,24,115,"Swim112,Runn7",6.5,yes
+6,22:15:21,V10-R8,S d1.0 E>W,25,,0,0,,,,yes
+6,22:15:21,V10-R8,S d1.0 W>E,25,,0,0,,,,yes
+6,22:15:21,V10-R8,S d1.5 E>W,25,,0,0,,,,yes
+6,22:15:21,V10-R8,S d1.5 W>E,24,,0,0,,,,yes
+6,22:15:21,V10-R8,S d2.2 E>W,25,,0,0,,,,yes
+6,22:15:21,V10-R8,S d2.2 W>E,25,,0,0,,,,yes
+6,22:15:21,V10-R8,N d1.0 E>W,25,,3,0,,,,yes
+6,22:15:21,V10-R8,N d1.0 W>E,25,,0,0,,,,yes
+6,22:15:21,V10-R8,W d1.0 N>S,11,,3,0,,,,yes
+6,22:15:21,V10-R8,W d1.0 S>N,11,,0,0,,,,yes
+6,22:15:21,V10-R8,Lap A1,71,,0,0,,,,yes
+6,22:15:21,V10-R8,Lap B1,72,,0,0,,,,yes
+6,22:15:21,V10-R8,Lap A2,72,,0,0,,,,yes
+6,22:15:21,V10-R8,Lap B2,72,,0,0,,,,yes
+6,22:15:21,V10-R8,Lap A3,71,,0,0,,,,yes
+6,22:15:21,V10-R8,Lap B3,72,,1,0,,,,yes
+7,22:17:07,V10-R9,S d1.0 E>W,25,,0,0,,,,yes
+7,22:17:07,V10-R9,S d1.0 W>E,26,,0,0,,,,yes
+7,22:17:07,V10-R9,S d1.5 E>W,25,,0,0,,,,yes
+7,22:17:07,V10-R9,S d1.5 W>E,25,,0,0,,,,yes
+7,22:17:07,V10-R9,S d2.2 E>W,25,,0,0,,,,yes
+7,22:17:07,V10-R9,S d2.2 W>E,25,,0,0,,,,yes
+7,22:17:07,V10-R9,N d1.0 E>W,25,,0,0,,,,yes
+7,22:17:07,V10-R9,N d1.0 W>E,26,,0,0,,,,yes
+7,22:17:07,V10-R9,W d1.0 N>S,11,,1,0,,,,yes
+7,22:17:07,V10-R9,W d1.0 S>N,11,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap A1,72,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap B1,71,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap A2,70,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap B2,72,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap A3,73,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap B3,72,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap A4,72,,0,0,,,,yes
+7,22:17:07,V10-R9,Lap B4,71,,0,0,,,,yes
+8,22:19:02,V10-R10,S d1.0 E>W,25,0,0,0,0,Runn25,42.3,yes
+8,22:19:02,V10-R10,S d1.0 W>E,25,0,0,0,0,Runn25,42.9,yes
+8,22:19:02,V10-R10,S d1.5 E>W,25,0,0,0,0,Runn25,42.4,yes
+8,22:19:02,V10-R10,S d1.5 W>E,24,0,0,0,0,Runn24,41.9,yes
+8,22:19:02,V10-R10,S d2.2 E>W,25,0,0,0,0,Runn25,42.4,yes
+8,22:19:02,V10-R10,S d2.2 W>E,25,0,0,0,0,Runn25,42.1,yes
+8,22:19:02,V10-R10,N d1.0 E>W,25,0,0,0,0,Runn25,42.4,yes
+8,22:19:02,V10-R10,N d1.0 W>E,24,0,0,0,0,Runn24,41.6,yes
+8,22:19:02,V10-R10,N d1.5 E>W,25,0,0,0,0,Runn25,41.9,yes
+8,22:19:02,V10-R10,N d1.5 W>E,25,0,0,0,0,Runn25,42.2,yes
+8,22:19:02,V10-R10,N d2.2 E>W,25,0,0,0,0,Runn25,42.9,yes
+8,22:19:02,V10-R10,N d2.2 W>E,25,0,0,0,0,Runn25,42.4,yes
+8,22:19:02,V10-R10,N d3.0 E>W,24,0,0,0,0,Runn24,41.6,yes
+8,22:19:02,V10-R10,N d3.0 W>E,25,0,0,0,0,Runn25,42.6,yes
+8,22:19:02,V10-R10,W d1.0 N>S,11,0,0,0,0,Runn11,17.9,yes
+8,22:19:02,V10-R10,W d1.0 S>N,11,0,0,0,0,Runn11,17.9,yes
+8,22:19:02,V10-R10,W d1.5 N>S,11,0,0,0,0,Runn11,17.5,yes
+8,22:19:02,V10-R10,W d1.5 S>N,11,0,0,0,0,Runn11,18.2,yes
+8,22:19:02,V10-R10,W d2.2 N>S,11,0,0,0,0,Runn11,17.6,yes
+8,22:19:02,V10-R10,W d2.2 S>N,11,0,0,0,0,Runn11,17.9,yes
+8,22:19:02,V10-R10,E d1.0 N>S,11,0,0,0,0,Runn11,16.7,yes
+8,22:19:02,V10-R10,E d1.0 S>N,11,0,0,0,0,Runn11,16.4,yes
+8,22:19:02,V10-R10,E d1.5 N>S,11,0,0,0,0,Runn11,17.5,yes
+8,22:19:02,V10-R10,E d1.5 S>N,11,0,0,0,0,Runn11,16.9,yes
+8,22:19:02,V10-R10,E d2.2 N>S,11,0,0,0,0,Runn11,17.8,yes
+8,22:19:02,V10-R10,E d2.2 S>N,12,0,0,0,0,Runn12,19.0,yes
+8,22:19:02,V10-R10,Lap A,73,0,0,0,0,Runn73,1.4,yes
+8,22:19:02,V10-R10,Lap B,71,0,0,0,0,Runn71,1.4,yes
+8,22:19:02,V10-R10,Swim,116,63,0,0,79,"Runn51,Gett2,Swim63",54.1,yes
+10,22:26:43,V10-FINAL,S d1.0 E>W,26,0,0,0,0,Runn26,,yes
+10,22:26:43,V10-FINAL,S d1.0 W>E,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,S d1.5 E>W,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,S d1.5 W>E,24,0,0,0,0,Runn24,,yes
+10,22:26:43,V10-FINAL,S d2.2 E>W,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,S d2.2 W>E,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d1.0 E>W,24,0,0,0,0,Runn24,,yes
+10,22:26:43,V10-FINAL,N d1.0 W>E,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d1.5 E>W,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d1.5 W>E,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d2.2 E>W,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d2.2 W>E,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d3.0 E>W,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,N d3.0 W>E,25,0,0,0,0,Runn25,,yes
+10,22:26:43,V10-FINAL,W d1.0 N>S,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,W d1.0 S>N,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,W d1.5 N>S,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,W d1.5 S>N,12,0,0,0,0,Runn12,,yes
+10,22:26:43,V10-FINAL,W d2.2 N>S,12,0,0,0,0,Runn12,,yes
+10,22:26:43,V10-FINAL,W d2.2 S>N,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,E d1.0 N>S,12,0,0,0,0,Runn12,,yes
+10,22:26:43,V10-FINAL,E d1.0 S>N,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,E d1.5 N>S,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,E d1.5 S>N,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,E d2.2 N>S,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,E d2.2 S>N,11,0,0,0,0,Runn11,,yes
+10,22:26:43,V10-FINAL,Lap A1,71,0,0,0,0,Runn71,,yes
+10,22:26:43,V10-FINAL,Lap B1,71,0,0,0,0,Runn71,,yes
+10,22:26:43,V10-FINAL,Lap A2,72,0,0,0,0,Runn72,,yes
+10,22:26:43,V10-FINAL,Lap B2,71,0,0,0,0,Runn71,,yes
+10,22:26:43,V10-FINAL,Lap A3,70,0,0,0,0,Runn70,,yes
+10,22:26:43,V10-FINAL,Lap B3,71,0,0,0,0,Runn71,,yes
+10,22:26:43,V10-FINAL,Swim,113,60,0,0,77,"Runn51,Gett2,Swim60",,yes
+11,22:30:28,V10-C0,S d1.0 E>W,25,3,3,0,0,"Swim3,Runn22",,yes
+11,22:30:28,V10-C0,S d1.0 W>E,25,6,6,0,0,"Gett1,Runn18,Swim6",,yes
+11,22:30:28,V10-C0,S d1.5 E>W,25,23,23,20,0,"Gett1,Runn1,Swim23",,yes
+11,22:30:28,V10-C0,S d1.5 W>E,25,5,5,0,0,"Runn20,Swim5",,yes
+11,22:30:28,V10-C0,S d2.2 E>W,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,S d2.2 W>E,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,N d1.0 E>W,25,2,2,0,0,"Runn22,Gett1,Swim2",,yes
+11,22:30:28,V10-C0,N d1.0 W>E,25,0,0,0,0,"Runn24,Gett1",,yes
+11,22:30:28,V10-C0,N d1.5 E>W,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,N d1.5 W>E,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,N d2.2 E>W,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,N d2.2 W>E,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,N d3.0 E>W,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,N d3.0 W>E,25,0,0,0,0,Runn25,,yes
+11,22:30:28,V10-C0,W d1.0 N>S,11,3,3,0,0,"Runn8,Swim3",,yes
+11,22:30:28,V10-C0,W d1.0 S>N,11,0,0,0,0,"Runn10,Gett1",,yes
+11,22:30:28,V10-C0,W d1.5 N>S,12,0,0,0,0,Runn12,,yes
+11,22:30:28,V10-C0,W d1.5 S>N,11,0,0,0,0,Runn11,,yes
+11,22:30:28,V10-C0,W d2.2 N>S,12,0,0,0,0,Runn12,,yes
+11,22:30:28,V10-C0,W d2.2 S>N,11,0,0,0,0,Runn11,,yes
+11,22:30:28,V10-C0,E d1.0 N>S,11,0,0,0,0,Runn11,,yes
+11,22:30:28,V10-C0,E d1.0 S>N,12,0,0,0,0,Runn12,,yes
+11,22:30:28,V10-C0,E d1.5 N>S,12,0,0,0,0,Runn12,,yes
+11,22:30:28,V10-C0,E d1.5 S>N,12,0,0,0,0,Runn12,,yes
+11,22:30:28,V10-C0,E d2.2 N>S,11,0,0,0,0,Runn11,,yes
+11,22:30:28,V10-C0,E d2.2 S>N,11,0,0,0,0,Runn11,,yes
+11,22:30:28,V10-C0,Lap A1,98,98,98,83,0,Swim98,,yes
+11,22:30:28,V10-C0,Lap B1,79,18,18,1,0,"Runn58,Gett3,Swim18",,yes
+11,22:30:28,V10-C0,Lap A2,98,97,97,85,0,"Gett1,Swim97",,yes
+11,22:30:28,V10-C0,Lap B2,78,18,18,0,0,"Runn59,Gett1,Swim18",,yes
+11,22:30:28,V10-C0,Lap A3,100,98,98,92,0,"Gett1,Runn1,Swim98",,yes
+11,22:30:28,V10-C0,Lap B3,79,18,18,0,0,"Runn54,Gett7,Swim18",,yes
+11,22:30:28,V10-C0,Swim,119,113,0,31,116,"Swim113,Runn6",,yes

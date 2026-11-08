@@ -78,7 +78,7 @@ The same scripted test was used for every version. It holds a direction, exactly
 | Version | Samples on the deck | Deck swim | Stuck | Notes |
 |---|---|---|---|---|
 | Villa 10, approved fill (3 lap pairs) | 1,019 | **389 (38.2%)** | 281 | Trapped at the house-side corner in **every** lap A (97–98% swimming). Also trapped on the house-side walk 1.5 studs out (20 samples stuck). |
-| R2: bottom ring layer removed | 665 | 180 (27.1%) | 133 | Still trapped (house side at 1.0 and 1.5 studs out; lap A 97 of 98) |
+| R2: bottom ring layer removed | 664 | 180 (27.1%) | 133 | Still trapped (house side at 1.0 and 1.5 studs out; lap A 97 of 98). The first R2 run is not counted: the intro screen was still open and the character never moved (run 1 in `deck_walk_results.csv`). |
 | R5: R2 + house-side top row 0.05 | 628 | 10 (1.6%) | 0 | Short blips: house side 1.5 studs out, the north-east and north-west corners, laps |
 | R6: R2 + whole top ring 0.05 | 629 | 3 (0.5%) | 0 | Blips only on the house-side path in laps |
 | R8: R2 + house-side top row 0.01 (3 lap pairs) | 651 | 7 (1.1%) | 0 | Blips at the north-east and north-west corners only |
