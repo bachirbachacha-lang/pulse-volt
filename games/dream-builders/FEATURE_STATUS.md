@@ -13,9 +13,9 @@ Four labels:
 | Intro + job picker | 9 jobs; HUD shows the job and a hint |
 | City, Palm Island, port, metro, tower elevator, ship interior | Visit, ride, elevator, board the ship |
 | 15 drivable cars | E to drive, brakes and parks when you get out, realistic size |
-| Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid. Re-tested 8 Nov (Café: −$50 rent, +$15 per customer). 3 bugs found, see "Known bugs" below |
+| Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid. Re-tested 8 Nov (Café: −$50 rent, +$15 per customer). Sign, rent board and Serve/Hire key fixed 8 Nov (tested). Hire staff = F |
 | AI staff for your business | Up to 3 staff ($150 each); more staff = faster service; owner keeps 70%; wages $5 per staff per minute (tested: 2 staff, +$14 sales and -$10 wages); unpaid staff quit |
-| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). **Villa_PalmHills_1_Classic is buried in a dune**, see "Known bugs" |
+| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). Villa_PalmHills_1_Classic un-buried 8 Nov (tested). Villas 6 and 10 still raised, see "Known bugs" |
 | Garages + driveways (24 villas) | Owner-only roll-up door; F = park the car you last drove inside |
 | Phone: Bank, Maps (GPS), Jobs, Property, Business | Balance, transfers, travel, switch job, listings |
 | Phone: Dream Eats | Order → paid → AI courier walks to you → food in backpack → eating heals and gives speed |
@@ -50,13 +50,19 @@ Four labels:
 | Readable signs | All wall signs re-scaled; checked on screenshots |
 | Construction Worker / Architect | Carry bricks, build mansions in stages (older feature) |
 
-## Known bugs (found 8 Nov in Play, not fixed yet)
+## Known bugs
+Fixed 8 Nov and tested in Play (details in BUGFIX_REPORT_2026-11-08.md):
+- Villa_PalmHills_1_Classic buried in a dune: house lowered to its driveway, dune moved off the lot
+- Shop signs: the street side now shows FOR RENT or the business name (was the old fixed names)
+- Rent board text no longer floats after renting
+- Hire staff is now F (gamepad Y), so E at the counter always serves
+
+Still open (found 8 Nov, not fixed, waiting for the owner's OK):
 | Bug | Where | Suggested fix |
 |---|---|---|
-| Villa_PalmHills_1_Classic is buried: its doors and garage are inside a sand dune; My Home lands on top of the dune | `Workspace.DreamBuilders.Mountains` child #34 (Sandstone ball at −547.9, −15, −977.8) | Shrink or move that one dune (backup first), then re-test |
-| Street side of a shop sign keeps the old name ("JEWELS") after opening a business | `BusinessServer.setSign` only updates the first of the sign's 2 labels | Update every label on the sign |
-| Rent board text still shows after renting | RentBoard part goes transparent but its SurfaceGui stays on | Turn the SurfaceGui off on open, on again on close |
-| At the counter, E can pick "Hire staff" instead of "Serve" | Both prompts use E with a 10-stud range | Different key for Hire staff, or move the staff spot |
+| Villa_PalmHills_6_Classic: the house floats about 31 studs above its garage | 50 parts also shifted sideways compared with Villa 7 | Measure first, then rebuild its layout from Villa 7's (backup first) |
+| Villa_PalmHills_10_Pearl: house raised 7.58 studs with no steps; 32 parts inside a dune | 47 raised parts | Same fix as Villa 1 |
+| Palm Hills road: lane markings continue onto the sand past the road's west end (x −490) | Roads | Trim the markings or extend the road |
 
 ## Partly done
 | Feature | What's missing |

@@ -19,6 +19,8 @@ local function setup(u)
 	local spot = Instance.new("Part"); spot.Name = "StaffSpot"; spot.Anchored = true; spot.CanCollide = false; spot.Transparency = 1; spot.Size = Vector3.new(2, 2, 2)
 	spot.CFrame = u.Origin.CFrame * CFrame.new(5, 3, 12.5); spot.Parent = u
 	local pp = K.prompt(spot, "Hire staff #1 ($" .. HIRE .. ")", "AI employee", 0.8, 10); pp.Name = "Hire"
+	-- Serve (BusinessServer) uses E at the same counter, so hiring uses F / gamepad Y to stop the two prompts fighting over one key
+	pp.KeyboardKeyCode = Enum.KeyCode.F; pp.GamepadKeyCode = Enum.KeyCode.ButtonY
 	pp.Triggered:Connect(function(p)
 		if p.UserId ~= u:GetAttribute("OwnerId") then K.toast(p, "Only the owner can hire staff"); return end
 		local n = #staff(u); if n >= MAX then K.toast(p, "Your team is full (" .. MAX .. ")"); return end

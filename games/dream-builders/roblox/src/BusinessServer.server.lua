@@ -18,8 +18,19 @@ local function toast(plr, msg)
 	g.Toast.Text = msg; g.Toast.Visible = true
 	task.delay(2.8, function() if g.Toast.Text == msg then g.Toast.Visible = false end end)
 end
+-- the shop sign has a label on both faces (the street sees the back face), so update every label
 local function setSign(unit, text)
-	local l = unit.Sign:FindFirstChildWhichIsA("TextLabel", true); if l then l.Text = text end
+	for _, l in ipairs(unit.Sign:GetDescendants()) do if l:IsA("TextLabel") then l.Text = text end end
+end
+-- string.upper leaves accented letters lower case ("CAFé"), so map the common ones too
+local ACCENTS = {["à"] = "À", ["á"] = "Á", ["â"] = "Â", ["ä"] = "Ä", ["ã"] = "Ã", ["å"] = "Å", ["æ"] = "Æ", ["ç"] = "Ç", ["è"] = "È", ["é"] = "É", ["ê"] = "Ê", ["ë"] = "Ë", ["ì"] = "Ì", ["í"] = "Í", ["î"] = "Î", ["ï"] = "Ï", ["ñ"] = "Ñ", ["ò"] = "Ò", ["ó"] = "Ó", ["ô"] = "Ô", ["õ"] = "Õ", ["ö"] = "Ö", ["ø"] = "Ø", ["ù"] = "Ù", ["ú"] = "Ú", ["û"] = "Û", ["ü"] = "Ü", ["ý"] = "Ý"}
+local function signUpper(s) return (string.upper(s):gsub("\195[\160-\191]", ACCENTS)) end
+-- the "OPEN YOUR BUSINESS HERE" board: hiding the part alone left its text floating, so switch the text off too
+local function showBoard(unit, on)
+	local rb = unit.RentBoard
+	rb.Transparency = on and 0 or 1
+	for _, g in ipairs(rb:GetChildren()) do if g:IsA("SurfaceGui") then g.Enabled = on end end
+	rb.Open.Enabled = on
 end
 local function reset(unit)
 	Kit.clear(unit)
@@ -27,7 +38,7 @@ local function reset(unit)
 	unit:SetAttribute("OwnerId", nil); unit:SetAttribute("Type", nil); unit:SetAttribute("PriceMult", nil); unit:SetAttribute("CustomerGap", nil); unit:SetAttribute("Decor", nil); unit:SetAttribute("Tier", nil)
 	local dec = unit:FindFirstChild("DecorPack"); if dec then dec:Destroy() end; unit:SetAttribute("Brand", nil); unit:SetAttribute("Waiting", nil)
 	setSign(unit, "FOR RENT · $" .. RENT)
-	unit.RentBoard.Transparency = 0; unit.RentBoard.Open.Enabled = true
+	showBoard(unit, true)
 	local sp = unit:FindFirstChild("ServePoint"); if sp then sp:Destroy() end
 end
 for _, u in ipairs(units:GetChildren()) do
@@ -55,8 +66,8 @@ local function handle(plr, action, unitName, kind, brand, restored)
 		owned[plr] = u
 		u:SetAttribute("OwnerId", plr.UserId); u:SetAttribute("Type", kind); u:SetAttribute("Brand", brand)
 		Kit.furnish(u, kind, plr.Name, brand)
-		setSign(u, Kit.TYPES[kind].icon .. " " .. string.upper(brand))
-		u.RentBoard.Transparency = 1; u.RentBoard.Open.Enabled = false
+		setSign(u, Kit.TYPES[kind].icon .. " " .. signUpper(brand))
+		showBoard(u, false)
 		-- owner's serve prompt behind the counter
 		local sp = Instance.new("Part"); sp.Name = "ServePoint"; sp.Anchored = true; sp.CanCollide = false; sp.Transparency = 1; sp.Size = Vector3.new(2, 2, 2)
 		sp.CFrame = u.Origin.CFrame * CFrame.new(0, 3, 12.5); sp.Parent = u

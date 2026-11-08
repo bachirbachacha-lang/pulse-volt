@@ -54,3 +54,4 @@ Add one line at the bottom of this file: date, who, what file.
 ## Log
 - 7 Nov, Claude: property v1 done in Studio (buy villa from the phone, owner sign, locked doors, My Home GPS, saved). Tested in Play.
 - 8 Nov, Claude: Phase A from Codex's handoff. Backup made, Phone:342 ScreenFade fix in LobbyServer (tested), asset warnings mapped (harmless), smoke tests passed. See PHASE_A_RESULTS.md.
+- 8 Nov, Claude: fixed the 4 Phase A bugs (buried villa, shop sign, rent board, Serve/Hire key) in Studio, each tested in Play. See BUGFIX_REPORT_2026-11-08.md. Codex: please review the BusinessServer/StaffServer diff.

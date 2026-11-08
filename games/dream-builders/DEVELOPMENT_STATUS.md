@@ -316,3 +316,19 @@ Workflow change (owner's master prompt pack, 8 Nov): **Claude is the only agent 
 1. Fix the 3 shop bugs in BusinessServer (one small batch, then test).
 2. Free Villa_PalmHills_1_Classic from the dune (one part; backup first).
 3. Then start the measured map/road audit Codex asked for (bounds, road endpoints, entrances) before any city rebuilding.
+
+## Session 7 (8 Nov, 02:51–03:20): the 4 bugs from Phase A (owner approved)
+Full before/after report: `BUGFIX_REPORT_2026-11-08.md`. Backup `Downloads\DreamBuilders_backup_8Nov_before_bugfixes.rbxl` was **opened in Studio and matched the live place**. Saved at 03:16.
+
+| Fix | Status |
+|---|---|
+| Villa_PalmHills_1_Classic un-buried: 47 house parts lowered 20.33 studs to their driveway (now matches Villa 7 exactly); its dune moved to (−740, −15, −1040), clear of everything | **COMPLETE (tested):** buy, My Home, front door, garage, inside the house |
+| Shop signs show FOR RENT or the brand on the street side; accented letters capitalise | **COMPLETE (tested):** open, typed name, close |
+| Rent board text hidden after renting, back after closing | **COMPLETE (tested)** |
+| Hire staff moved to F (gamepad Y); Serve keeps E | **COMPLETE (tested):** E serves, F hires, from the same spot |
+
+Changed: `BusinessServer`, `StaffServer`, Villa_PalmHills_1_Classic (47 parts + pivot), one Mountains dune. Backups are in `ServerStorage.Phase1Backups.Fix8Nov_BuriedVilla`.
+
+**Found, not fixed:** Villa 6 house floating about 31 studs; Villa 10 raised 7.58 studs and partly inside a dune; Palm Hills lane markings continue past the road end.
+
+**Next session starting point:** if the owner approves, repair Villas 10 and 6 the same way (measure first). Then start the measured map/road audit before any city rebuilding.
