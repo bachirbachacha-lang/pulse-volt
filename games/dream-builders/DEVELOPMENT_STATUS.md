@@ -339,3 +339,13 @@ Plan with exact parts and coordinates: `VILLA_6_10_REPAIR_PLAN.md`. Waiting for 
 - **Villa 6:** the house is on its correct plot but 31.55 studs too high (47 parts plus pool water). The garage was put west of the house, away from the Port Road. Plan: lower only.
 - **Villa 10:** 47 parts are 7.578 studs too high (10-stud step, can't walk in), and dune #43 cuts into its back. Plan: lower, move the dune to (375, −15, −1145), move the pool water.
 - **Regression found in my Fix 1:** Villa 1's pool water stayed floating at y 20–28 and its pool is empty. Plan 0.
+
+## Session 9 (8 Nov, 15:45–16:50): Villa 1 pool (Plan 0), owner-approved, Villa 1 only
+Full report: `PLAN0_VILLA1_POOL_STATUS.md`.
+- **Fill only (y 5.41):** water level right, but water clung to the outside of the pool wall. The cause was an old thin ground layer under the pool (44 terrain cells at y 0–4). Restored, not saved.
+- **Extra step approved:** cleared those 44 cells, then filled. Villa 1 then matched Villa 7 (water, look, swim, entry, exit, no holes, Output clean).
+- **Deck-swim:** the water just outside the walls makes you swim on the deck next to the pool, same as Villas 7, 8 and 15. Restored under the owner's rule. The owner then chose "re-apply and save".
+- **Saved 16:42.** Only `Terrain.SmoothGrid` differs from the backup (checked chunk by chunk). Backup `DreamBuilders_backup_8Nov_before_villa1_pool.rbxl` untouched.
+
+**Next session starting point:** Villas 10 and 6 wait for the owner's separate approval. Their pool water needs the corrected method (fill to y 5.41 plus the ground-layer step). The deck-swim effect on all pools needs its own plan.
+

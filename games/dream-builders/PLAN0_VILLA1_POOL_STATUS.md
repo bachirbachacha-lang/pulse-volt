@@ -1,11 +1,15 @@
-# Plan 0 (Villa 1 pool water): status
-8 Nov 2026, 15:45–17:00 Riyadh, by Claude.
+# Plan 0 (Villa 1 pool water): report
+8 Nov 2026, 15:45–16:50 Riyadh, by Claude.
 
-**Status: NOT DONE. Villa 1 is back to the saved state. Nothing was saved.**
-- The owner approved the extra ground step at 16:23 (section 6).
-- With that step, Villa 1 matched Villa 7 in every check.
-- One thing broke the owner's "no water spill" rule: the thin water just outside the pool walls lets a player swim on the deck right next to the pool. Villas 7, 8 and 15 do exactly the same. Because of the rule, Villa 1 was restored and not saved.
-- Waiting for the owner's decision.
+**Status: FULLY WORKING. Repaired, tested in Play, and saved at 16:42.** See section 7.
+- Villa 1's pool now matches Villa 7: water at y 5.41, no floating water, you can swim and get in and out by the steps.
+- It also has the same deck-swim effect as Villas 7, 8 and 15: walking right next to the outside of the pool wall can make you swim. The owner chose to accept it (section 6).
+- Villas 10 and 6 were **not** touched.
+
+History:
+- Run 1: the fill alone failed the visual check, so it was restored.
+- Run 2: with the approved extra ground step, Villa 1 matched Villa 7, but it was restored because of the "no water spill" rule.
+- Run 3: the owner chose "re-apply and save".
 
 "Tested" means checked in Roblox Studio Play mode with one player.
 
@@ -153,3 +157,43 @@
 - The pools do not line up with the 4-stud terrain grid, so the cells at the pool's edges hold water slightly past the walls.
 - If Villa 1 is made identical to Villa 7, it gets this effect too.
 - Removing it would be a separate job for all villas, and needs its own plan.
+
+## 7. Run 3: re-applied and saved (owner chose "Re-apply and save")
+**Re-applied in Edit**
+- Starting point checked first: 0 terrain cells and 0 parts different from the saved place.
+- The same 3 steps changed **176 cells**, all inside the planned boxes:
+  - 88 Water → Air (y 20–28)
+  - 44 Ground → Water (y 0–4)
+  - 44 Air → Water (y 4–8)
+- The water fill values were the same as run 2. Parts 0/0/0.
+- The view from above (5,985 points) was **identical to run 2** at every point.
+
+**Play re-test**
+
+| Test | Result |
+|---|---|
+| On the deck | Running, standing on the deck (Limestone) |
+| Over the steps into the pool | Running |
+| Middle of the pool | Swimming |
+| Back to the steps | Swimming |
+| Climb out with a jump | Freefall, then Running on the deck |
+| Output | Server 0 errors, client 0 errors. The only warnings were the known car-texture "being generated" ones. |
+
+**Before saving:** checked again in Edit: 176 cells, parts 0/0/0, 65 scripts with 374,888 characters of source (unchanged).
+
+**Saved**
+- Ctrl+S in Studio. The Output showed `Saved to 'C:/Users/PC/Downloads/DreamBuilders.rbxl'` at 16:42:28.
+- New file: 4,593,098 bytes, SHA-256 `6c804b239b6c3853e9329c82af22ed885d6f92552f5909222234f774bf1d4a5a`.
+
+**Saved file checked**
+- Structure OK: 107 classes, 29,932 objects, END chunk.
+- Compared chunk by chunk with the backup:
+  - Same object count in every class.
+  - Of the 2,132 property chunks, **only `Terrain.SmoothGrid` (the terrain data) differs**.
+  - All parts, scripts (every `Source` chunk) and settings are byte-identical.
+
+**Backup:** untouched. `Downloads\DreamBuilders_backup_8Nov_before_villa1_pool.rbxl` is still 4,593,103 bytes, SHA-256 `d97a010d8830…`, last modified 03:39. To undo this repair, open that file.
+
+**Evidence:** `evidence/2026-11-08_villa1_pool/` (comparison images, before/after screenshots, the 44-cell table, the terrain preview).
+
+**Not done (on purpose):** Villa 10 (Plan 1) and Villa 6 (Plan 2) need the owner's separate approval. They would need the same corrected water method: fill to y 5.41 plus the ground-layer step.

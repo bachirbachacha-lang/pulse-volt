@@ -15,7 +15,7 @@ Four labels:
 | 15 drivable cars | E to drive, brakes and parks when you get out, realistic size |
 | Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid. Re-tested 8 Nov (Café: −$50 rent, +$15 per customer). Sign, rent board and Serve/Hire key fixed 8 Nov (tested). Hire staff = F |
 | AI staff for your business | Up to 3 staff ($150 each); more staff = faster service; owner keeps 70%; wages $5 per staff per minute (tested: 2 staff, +$14 sales and -$10 wages); unpaid staff quit |
-| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). Villa_PalmHills_1_Classic un-buried 8 Nov (tested). Villas 6 and 10 still raised, see "Known bugs" |
+| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). Villa_PalmHills_1_Classic un-buried 8 Nov (tested); its pool water repaired 8 Nov 16:42 (tested, saved). Villas 6 and 10 still raised, see "Known bugs" |
 | Garages + driveways (24 villas) | Owner-only roll-up door; F = park the car you last drove inside |
 | Phone: Bank, Maps (GPS), Jobs, Property, Business | Balance, transfers, travel, switch job, listings |
 | Phone: Dream Eats | Order → paid → AI courier walks to you → food in backpack → eating heals and gives speed |
@@ -56,14 +56,16 @@ Fixed 8 Nov and tested in Play (details in BUGFIX_REPORT_2026-11-08.md):
 - Shop signs: the street side now shows FOR RENT or the business name (was the old fixed names)
 - Rent board text no longer floats after renting
 - Hire staff is now F (gamepad Y), so E at the counter always serves
+- Villa_PalmHills_1_Classic pool: floating water removed, pool refilled to y 5.41 like Villa 7; swim in/out by the steps tested (16:42; PLAN0_VILLA1_POOL_STATUS.md)
 
 Still open (found 8 Nov, not fixed, waiting for the owner's OK):
 | Bug | Where | Suggested fix |
 |---|---|---|
-| **Villa_PalmHills_1_Classic pool: water left floating at y 20–28, pool empty** (side effect of the 8 Nov fix) | Terrain water above the pool | Plan 0 in VILLA_6_10_REPAIR_PLAN.md |
-| Villa_PalmHills_6_Classic: the house is 31.55 studs too high (on its correct plot; the garage is on the west side on purpose, away from the Port Road) | 47 house parts + pool water | Plan 2 in VILLA_6_10_REPAIR_PLAN.md |
-| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | Plan 1 in VILLA_6_10_REPAIR_PLAN.md |
+| Villa_PalmHills_6_Classic: the house is 31.55 studs too high (on its correct plot; the garage is on the west side on purpose, away from the Port Road) | 47 house parts + pool water | Plan 2 in VILLA_6_10_REPAIR_PLAN.md (pool water must use the corrected Villa 1 method) |
+| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | Plan 1 in VILLA_6_10_REPAIR_PLAN.md (pool water must use the corrected Villa 1 method) |
 | Palm Hills road: lane markings continue onto the sand past the road's west end (x −490) | Roads | Trim the markings or extend the road |
+| All villa pools (tested Villas 1, 7, 8, 15): walking on the deck right next to the outside of the pool wall can make you swim. The pools don't line up with the 4-stud terrain grid, so water reaches up to 1.8 studs past the walls. | Terrain water at every villa pool | Not planned yet; needs its own plan |
+| Villa_PalmHills_7_Sand: a sand dune rises just outside the pool's garden-side wall near the steps end (noticed 8 Nov, not checked further) | Mountains dune | Not planned yet |
 
 ## Partly done
 | Feature | What's missing |

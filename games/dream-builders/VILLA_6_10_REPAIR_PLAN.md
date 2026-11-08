@@ -61,6 +61,11 @@ All plans follow the same pattern as the tested Villa 1 fix, plus the pool-water
 4. Run the checks, then a Play test, then check Output.
 
 ### Plan 0: Villa 1 pool water (repairs my regression)
+> **Done 8 Nov 16:42 with a corrected method** (see `PLAN0_VILLA1_POOL_STATUS.md`):
+> - Fill to y **5.41**, not 5.90. 5.90 overflowed the walls.
+> - First turn the old thin ground layer at y 0–4 into air. A water fill does not replace ground.
+>
+> Plans 1 and 2 below still show the old water steps, and need the same correction before use.
 1. `Terrain:ReplaceMaterial` Water → Air, only inside x −532…−488, y 20…28, z −1044…−1028. Only the 88 floating water cells are there (checked: no other material in that box).
 2. `Terrain:FillBlock` Water: centre (−510.82, 4.28, −1035.75), size (37.80, 3.24, 12.60). This is the inside of the pool: from the pool floor top (y 2.66) to the coping top (y 5.90). The correct villas' water occupies exactly this box's voxels.
 3. Test: no water above y 8 there; the pool has water; walking into the pool gives the "Swimming" state.
