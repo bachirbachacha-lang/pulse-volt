@@ -2,6 +2,8 @@
 8 Nov 2026, 16:55–17:40 Riyadh, by Claude. Revision 2 at 17:15–17:35 answers the owner's questions from 17:12.
 
 > **Status 8 Nov, 21:40:** approved at 17:20 and applied in Studio. Checks 1–11 passed. **Play check 12 failed:** players get stuck swimming at the pool's house-side corner. The repair was **undone and NOT saved**, so the saved game is unchanged. Results and options: `VILLA10_REPAIR_STATUS.md`. The plan text below is kept as approved, plus one correction in section 6.
+>
+> **22:45:** step 4c is replaced by the revised pool-edge fill in `VILLA10_POOL_EDGE_PLAN.md`. It is tested in a test copy and **waiting for approval**. All other steps stay as below.
 
 **READ-ONLY. Nothing in the game was changed or saved.** Every number was measured in Studio Edit mode. "After" values are calculations (simulated), not real moves. **Waiting for the owner's approval.**
 

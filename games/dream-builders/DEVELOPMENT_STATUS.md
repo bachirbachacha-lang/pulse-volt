@@ -362,3 +362,19 @@ Full report: `VILLA10_REPAIR_STATUS.md`. Plan: `VILLA10_REPAIR_PLAN.md` (revisio
 
 **Next session starting point:** the owner chooses a Villa 10 option (report section 5). Villa 6 is not started; its plan must check the same house-side pool problem first.
 
+## Session 11 (8 Nov, 21:45–22:45): Villa 10 pool-edge plan (Option 1), test copy only
+Plan: `VILLA10_POOL_EDGE_PLAN.md`. Test log: `evidence/2026-11-08_villa10_pool_edge/test_results.md`.
+- **Where:** all work was done in a test copy, `Downloads\DreamBuilders_TEST_villa10_pool_edge.rbxl`, in its own Studio window. It was closed without saving.
+- **Files:** all three files (the game, the backup and the test copy) are still byte-identical: SHA-256 `6c804b23…`.
+- **What the test copy showed:**
+  - The visible water on the deck came from the bottom layer of the pool's outer ring of terrain cells.
+  - The swimming came from the top layer of the same ring, which reaches 0.86 studs past the house-side wall.
+- **Fix found:** the outer ring (24 of the 40 water columns) gets no bottom layer and only a thin 0.012 top layer. The middle 16 columns are unchanged.
+- **Result:** 0 accidental swimming in 910 samples of walking round the pool, and in real key-press tests. The approved fill had 38%, Villa 15 has 24% and Villa 1 has 9%.
+  - The pool looks the same.
+  - Swimming in the pool and getting out over the steps work.
+  - Side effect: the water is shallow (you stand) in the ring next to the walls.
+- **Stages:** house + dune (Stage A) and pool (Stage B) are kept as separate stages with separate checks.
+
+**Next session starting point:** waiting for the owner's approval of `VILLA10_POOL_EDGE_PLAN.md`. Villa 6 is untouched.
+

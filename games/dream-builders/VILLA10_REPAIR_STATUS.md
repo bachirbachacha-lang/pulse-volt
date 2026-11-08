@@ -3,6 +3,11 @@
 
 **Result: the repair failed Play check 12, so I undid it in Studio and saved nothing.** Villa 10 is still raised, exactly as before. **Waiting for the owner's decision** (section 5).
 
+> **Update 21:45–22:45:** the owner chose Option 1.
+> - The revised pool-edge plan is in `VILLA10_POOL_EDGE_PLAN.md`.
+> - It was tested only in a test copy, which was closed without saving: 0 accidental swimming round the pool.
+> - It is **waiting for approval**, and the real game is still unchanged.
+
 ## Status at a glance
 | Item | Status |
 |---|---|
