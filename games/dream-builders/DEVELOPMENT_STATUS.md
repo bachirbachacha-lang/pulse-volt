@@ -332,3 +332,10 @@ Changed: `BusinessServer`, `StaffServer`, Villa_PalmHills_1_Classic (47 parts + 
 **Found, not fixed:** Villa 6 house floating about 31 studs; Villa 10 raised 7.58 studs and partly inside a dune; Palm Hills lane markings continue past the road end.
 
 **Next session starting point:** if the owner approves, repair Villas 10 and 6 the same way (measure first). Then start the measured map/road audit before any city rebuilding.
+
+## Session 8 (8 Nov, 03:23–03:50): Villa 6 and Villa 10 inspection (read-only, no changes)
+Plan with exact parts and coordinates: `VILLA_6_10_REPAIR_PLAN.md`. Waiting for the owner's approval.
+- Confirmed: the 03:16 save holds all fixes; both backups are intact (hashes match); the report and screenshots are on GitHub.
+- **Villa 6:** the house is on its correct plot but 31.55 studs too high (47 parts plus pool water). The garage was put west of the house, away from the Port Road. Plan: lower only.
+- **Villa 10:** 47 parts are 7.578 studs too high (10-stud step, can't walk in), and dune #43 cuts into its back. Plan: lower, move the dune to (375, −15, −1145), move the pool water.
+- **Regression found in my Fix 1:** Villa 1's pool water stayed floating at y 20–28 and its pool is empty. Plan 0.

@@ -60,8 +60,9 @@ Fixed 8 Nov and tested in Play (details in BUGFIX_REPORT_2026-11-08.md):
 Still open (found 8 Nov, not fixed, waiting for the owner's OK):
 | Bug | Where | Suggested fix |
 |---|---|---|
-| Villa_PalmHills_6_Classic: the house floats about 31 studs above its garage | 50 parts also shifted sideways compared with Villa 7 | Measure first, then rebuild its layout from Villa 7's (backup first) |
-| Villa_PalmHills_10_Pearl: house raised 7.58 studs with no steps; 32 parts inside a dune | 47 raised parts | Same fix as Villa 1 |
+| **Villa_PalmHills_1_Classic pool: water left floating at y 20–28, pool empty** (side effect of the 8 Nov fix) | Terrain water above the pool | Plan 0 in VILLA_6_10_REPAIR_PLAN.md |
+| Villa_PalmHills_6_Classic: the house is 31.55 studs too high (on its correct plot; the garage is on the west side on purpose, away from the Port Road) | 47 house parts + pool water | Plan 2 in VILLA_6_10_REPAIR_PLAN.md |
+| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | Plan 1 in VILLA_6_10_REPAIR_PLAN.md |
 | Palm Hills road: lane markings continue onto the sand past the road's west end (x −490) | Roads | Trim the markings or extend the road |
 
 ## Partly done

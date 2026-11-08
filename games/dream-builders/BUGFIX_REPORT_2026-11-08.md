@@ -51,6 +51,8 @@ Each fix was made separately. Each was tested in Studio Play mode, and the Outpu
 
 **After:** `1_villa1_topdown_AFTER.jpg`, `1_villa1_street_AFTER.jpg`
 
+> **Correction (8 Nov, 03:45, found during the Villa 6/10 inspection):** Fix 1 has a side effect. Villa 1's pool water is terrain water and did not move with the house. Its pool is now empty, and the water (88 cells) floats at y 20–28 above where the pool used to be. The Play test above did not include the pool. The repair (Plan 0) is in `VILLA_6_10_REPAIR_PLAN.md`, waiting for approval. Screenshot: `evidence/2026-11-08_villa_inspection/villa1_pool_water_floating_REGRESSION.jpg`.
+
 ## Fix 2: shop signs show the right name. FIXED (tested)
 **Before**
 - Every shop sign (all 5 units) has a label on each face.
