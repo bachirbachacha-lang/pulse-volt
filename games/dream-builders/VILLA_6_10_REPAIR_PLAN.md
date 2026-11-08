@@ -71,6 +71,7 @@ All plans follow the same pattern as the tested Villa 1 fix, plus the pool-water
 3. Test: no water above y 8 there; the pool has water; walking into the pool gives the "Swimming" state.
 
 ### Plan 1: Villa_PalmHills_10_Pearl
+> **Replaced by `VILLA10_REPAIR_PLAN.md` (8 Nov, 17:45).** It was re-measured, uses the corrected water method, and has full terrain-cell and neighbour checks. The steps below are kept only for history.
 1. Lower the **47 parts** listed below by **7.578 studs** (y only; x/z unchanged). This makes Villa 10 identical to Villa 15.
 2. Model WorldPivot: (453.68, 8.08, −843.92) → y **0.50**.
 3. Move **Mountains child #43** from (344.6, −15.0, −1060.3) to **(375, −15, −1145)**.

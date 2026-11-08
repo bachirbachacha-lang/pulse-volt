@@ -62,7 +62,7 @@ Still open (found 8 Nov, not fixed, waiting for the owner's OK):
 | Bug | Where | Suggested fix |
 |---|---|---|
 | Villa_PalmHills_6_Classic: the house is 31.55 studs too high (on its correct plot; the garage is on the west side on purpose, away from the Port Road) | 47 house parts + pool water | Plan 2 in VILLA_6_10_REPAIR_PLAN.md (pool water must use the corrected Villa 1 method) |
-| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | Plan 1 in VILLA_6_10_REPAIR_PLAN.md (pool water must use the corrected Villa 1 method) |
+| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | VILLA10_REPAIR_PLAN.md (updated 8 Nov 17:45, waiting for approval) |
 | Palm Hills road: lane markings continue onto the sand past the road's west end (x −490) | Roads | Trim the markings or extend the road |
 | All villa pools (tested Villas 1, 7, 8, 15): walking on the deck right next to the outside of the pool wall can make you swim. The pools don't line up with the 4-stud terrain grid, so water reaches up to 1.8 studs past the walls. | Terrain water at every villa pool | Not planned yet; needs its own plan |
 | Villa_PalmHills_7_Sand: a sand dune rises just outside the pool's garden-side wall near the steps end (noticed 8 Nov, not checked further) | Mountains dune | Not planned yet |
