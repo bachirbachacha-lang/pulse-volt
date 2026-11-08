@@ -15,7 +15,7 @@ Four labels:
 | 15 drivable cars | E to drive, brakes and parks when you get out, realistic size |
 | Rent a shop (any business type) | Pick a type and filtered brand name, the shop is furnished, AI customers come in, serve them, get paid. Re-tested 8 Nov (Café: −$50 rent, +$15 per customer). Sign, rent board and Serve/Hire key fixed 8 Nov (tested). Hire staff = F |
 | AI staff for your business | Up to 3 staff ($150 each); more staff = faster service; owner keeps 70%; wages $5 per staff per minute (tested: 2 staff, +$14 sales and -$10 wages); unpaid staff quit |
-| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). Villa_PalmHills_1_Classic un-buried 8 Nov (tested); its pool water repaired 8 Nov 16:42 (tested, saved). Villas 6 and 10 still raised, see "Known bugs" |
+| Buy a villa | Buy from the phone, name sign, other people's doors stay locked, My Home GPS, sell back at 80%. Re-tested 8 Nov (buy, sell, sign, My Home, owner opens the front door). Villa_PalmHills_1_Classic un-buried 8 Nov (tested); its pool water repaired 8 Nov 16:42 (tested, saved). Villas 6 and 10 still raised, see "Known bugs" (a Villa 10 repair was tried 8 Nov and undone, not saved) |
 | Garages + driveways (24 villas) | Owner-only roll-up door; F = park the car you last drove inside |
 | Phone: Bank, Maps (GPS), Jobs, Property, Business | Balance, transfers, travel, switch job, listings |
 | Phone: Dream Eats | Order → paid → AI courier walks to you → food in backpack → eating heals and gives speed |
@@ -62,7 +62,8 @@ Still open (found 8 Nov, not fixed, waiting for the owner's OK):
 | Bug | Where | Suggested fix |
 |---|---|---|
 | Villa_PalmHills_6_Classic: the house is 31.55 studs too high (on its correct plot; the garage is on the west side on purpose, away from the Port Road) | 47 house parts + pool water | Plan 2 in VILLA_6_10_REPAIR_PLAN.md (pool water must use the corrected Villa 1 method) |
-| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | VILLA10_REPAIR_PLAN.md (updated 8 Nov 17:45, waiting for approval) |
+| Villa_PalmHills_10_Pearl: house 7.578 studs too high (10-stud step, can't walk in); 39 parts inside dune #43 | 47 house parts, dune #43, pool water | Repair approved and tried 8 Nov (VILLA10_REPAIR_PLAN.md). It failed Play check 12: with the pool refilled, water lies on the narrow path between the pool and the house, and players get stuck swimming at the corner. **Undone, not saved.** Owner's choice of next step: VILLA10_REPAIR_STATUS.md |
+| Villa_PalmHills_10_Pearl front bench: floats 1.8 studs above the sand (the house step it sat on is raised with the house). Villa 15's bench also hangs 1.8 above the sand. Not in the way of any door, garage or driveway | Bench part at (371.46, 2.25, −981.00) | Left in place on the owner's instruction (known issue) |
 | Palm Hills road: lane markings continue onto the sand past the road's west end (x −490) | Roads | Trim the markings or extend the road |
 | All villa pools (tested Villas 1, 7, 8, 15): walking on the deck right next to the outside of the pool wall can make you swim. The pools don't line up with the 4-stud terrain grid, so water reaches up to 1.8 studs past the walls. | Terrain water at every villa pool | Not planned yet; needs its own plan |
 | Villa_PalmHills_7_Sand: a sand dune rises just outside the pool's garden-side wall near the steps end (noticed 8 Nov, not checked further) | Mountains dune | Not planned yet |

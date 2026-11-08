@@ -349,3 +349,16 @@ Full report: `PLAN0_VILLA1_POOL_STATUS.md`.
 
 **Next session starting point:** Villas 10 and 6 wait for the owner's separate approval. Their pool water needs the corrected method (fill to y 5.41 plus the ground-layer step). The deck-swim effect on all pools needs its own plan.
 
+## Session 10 (8 Nov, 16:55–17:55 and 21:35–21:45): Villa 10 plan and repair attempt (NOT saved)
+Full report: `VILLA10_REPAIR_STATUS.md`. Plan: `VILLA10_REPAIR_PLAN.md` (revision 2, approved 17:20).
+- Read-only plan, revised once after the owner's questions. Approved at 17:20 with 6 conditions.
+- **Backup:** `Downloads\DreamBuilders_backup_8Nov_before_villa10.rbxl`. It was re-opened in Studio and matched before any change.
+- **Applied in Studio:** the change counts were exact (160 terrain cells; 47 house parts and the dune). Play checks 1–11 passed.
+- **Check 12 failed:**
+  - Refilling the pool put a thin layer of water on the narrow path between the pool and the house, because of where Villa 10's pool sits on the 4-stud terrain grid.
+  - Players get stuck swimming at that corner. Confirmed with real key presses: stuck for as long as the key was held.
+  - The same walk at Villas 1 and 15 never gets stuck.
+- **Undone:** 0 parts moved, 0 terrain cells different, and the copy folder removed. **Not saved:** the file is still the 16:42 save, byte-for-byte the same as the backup.
+
+**Next session starting point:** the owner chooses a Villa 10 option (report section 5). Villa 6 is not started; its plan must check the same house-side pool problem first.
+

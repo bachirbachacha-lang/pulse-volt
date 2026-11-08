@@ -1,6 +1,8 @@
 # Villa 10 (Villa_PalmHills_10_Pearl): repair plan, revision 2
 8 Nov 2026, 16:55–17:40 Riyadh, by Claude. Revision 2 at 17:15–17:35 answers the owner's questions from 17:12.
 
+> **Status 8 Nov, 21:40:** approved at 17:20 and applied in Studio. Checks 1–11 passed. **Play check 12 failed:** players get stuck swimming at the pool's house-side corner. The repair was **undone and NOT saved**, so the saved game is unchanged. Results and options: `VILLA10_REPAIR_STATUS.md`. The plan text below is kept as approved, plus one correction in section 6.
+
 **READ-ONLY. Nothing in the game was changed or saved.** Every number was measured in Studio Edit mode. "After" values are calculations (simulated), not real moves. **Waiting for the owner's approval.**
 
 **Changed in revision 2:**
@@ -162,6 +164,7 @@ Full cell table: `evidence/2026-11-08_villa10_plan/villa10_40_cells.md`.
   - House side: 0.86 studs past.
   - East (steps) side: none.
 - Everything past the walls will be under the deck (`Mansion_stone`, top y 2.48) after lowering.
+  - **Correction (8 Nov, after testing): this was wrong.** On the house side, the water lies on top of the narrow deck path (up to 1.34 studs deep at the wall), and players get stuck at the corner. See `VILLA10_REPAIR_STATUS.md` section 3.
 - **Expected fill:** ~34% (y 0–4) and ~35–36% (y 4–8) in all 40 columns. This uses the water-fill rule measured at Villas 1, 7, 8 and 15; it will be measured after the change.
 - Villa 10 lines up with the grid better than Villa 1 did (35.5 stud² past the walls against 94.4), so less water should sit just outside the walls. That is a prediction, to be checked.
 
