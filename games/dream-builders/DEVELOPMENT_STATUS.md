@@ -378,3 +378,18 @@ Plan: `VILLA10_POOL_EDGE_PLAN.md`. Test log: `evidence/2026-11-08_villa10_pool_e
 
 **Next session starting point:** waiting for the owner's approval of `VILLA10_POOL_EDGE_PLAN.md`. Villa 6 is untouched.
 
+## Session 12 (8–9 Nov, 22:53–00:20): review package and live procedure (no live edits)
+- **Review package (22:53–23:00):** made for Codex, which could not reach GitHub: 44 files, including verbatim Studio logs and per-walk CSVs. While building it I corrected the R2 sample count (665 → 664).
+- **Codex's review:** approve with conditions (5).
+- **Live procedure:** `VILLA10_LIVE_PROCEDURE.md` and 9 scripts in `villa10_live/`.
+  - Guarded write scripts that need a confirmation string.
+  - Exact fingerprints of every part, the protected terrain, the scripts and the object counts.
+  - Exact before/after comparisons, so only the 48 planned objects and 160 cells can differ.
+  - Acceptance tests P1–P5 and K1–K6.
+  - Rollbacks R0 (discard), R1 (guarded script with dry run) and R2 (after saving, only with approval).
+  - The old unguarded rollback is retired.
+- **Run on the live place:** read-only only (23:53): the target check (OK) and the baseline fingerprint.
+- **Not yet run anywhere:** the write and rollback scripts. Step 0 of the procedure rehearses them on the test copy first.
+
+**Next session starting point:** waiting for the owner's approval of `VILLA10_LIVE_PROCEDURE.md`. Villa 6 is untouched.
+
