@@ -378,7 +378,7 @@ Plan: `VILLA10_POOL_EDGE_PLAN.md`. Test log: `evidence/2026-11-08_villa10_pool_e
 
 **Next session starting point:** waiting for the owner's approval of `VILLA10_POOL_EDGE_PLAN.md`. Villa 6 is untouched.
 
-## Session 12 (8–9 Nov, 22:53–00:20): review package and live procedure (no live edits)
+## Session 12 (8–9 Nov, 22:53–00:05): review package and live procedure (no live edits)
 - **Review package (22:53–23:00):** made for Codex, which could not reach GitHub: 44 files, including verbatim Studio logs and per-walk CSVs. While building it I corrected the R2 sample count (665 → 664).
 - **Codex's review:** approve with conditions (5).
 - **Live procedure:** `VILLA10_LIVE_PROCEDURE.md` and 9 scripts in `villa10_live/`.
