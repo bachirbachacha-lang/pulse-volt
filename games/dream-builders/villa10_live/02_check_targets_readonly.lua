@@ -7,6 +7,11 @@ assert(game.Name == PLACE, "wrong place: " .. game.Name)
 assert(game:GetService("RunService"):IsEdit(), "not in Edit mode")
 
 local DY = -7.57825
+-- Villa 10 WorldPivot: the FULL CFrame (all 12 components), read on the live place 9 Nov 00:30 (read-only).
+-- After Stage A only the y component may differ (PIVOT_BEFORE + (0, DY, 0)); x, z and the rotation stay bit-identical.
+local PIVOT_BEFORE = CFrame.new(453.68255615234375, 8.0782604217529297, -843.9224853515625, -1, 0, -8.7422776573475858e-08, 0, 1, 0, 8.7422776573475858e-08, 0, -1)
+local PIVOT_AFTER = PIVOT_BEFORE + Vector3.new(0, DY, 0)
+local function cfs(cf) local t = {cf:GetComponents()} for i = 1, 12 do t[i] = string.format("%.9g", t[i]) end return "{" .. table.concat(t, ", ") .. "}" end
 local db = workspace.DreamBuilders
 local v10 = db.Homes.Villa_PalmHills_10_Pearl
 -- the 47 house parts: path inside the Villa 10 model and position BEFORE the repair (plan section 7)
@@ -54,7 +59,7 @@ if nV10 ~= 69 then bad("Villa 10 has " .. nV10 .. " parts, expected 69") end
 
 -- 2) model pivot
 local pv = v10.WorldPivot
-if math.abs(pv.Position.Y - 8.07826) > 1e-4 then bad(string.format("Villa 10 pivot y %.5f, expected 8.07826", pv.Position.Y)) end
+if pv ~= PIVOT_BEFORE then bad("Villa 10 WorldPivot is " .. cfs(pv) .. ", expected exactly " .. cfs(PIVOT_BEFORE)) end
 
 -- 3) dune #43: index, position, size
 local kids = db.Mountains:GetChildren()
@@ -85,6 +90,6 @@ end end end
 local pb = game:GetService("ServerStorage"):FindFirstChild("Phase1Backups")
 if pb and pb:FindFirstChild("Fix8Nov_Villa10") then bad("ServerStorage.Phase1Backups.Fix8Nov_Villa10 already exists") end
 
-return string.format("CHECK TARGETS (read-only): %d/47 house parts found, pivot y %.5f, dune #43 %s, %d terrain cells checked, %d differ from the expected before-values.\n%s",
-	#found, pv.Position.Y, dune and string.format("at (%.3f, %.3f, %.3f)", dune.Position.X, dune.Position.Y, dune.Position.Z) or "missing",
+return string.format("CHECK TARGETS (read-only): %d/47 house parts found, WorldPivot %s (exact match: %s), dune #43 %s, %d terrain cells checked, %d differ from the expected before-values.\n%s",
+	#found, cfs(pv), tostring(pv == PIVOT_BEFORE), dune and string.format("at (%.3f, %.3f, %.3f)", dune.Position.X, dune.Position.Y, dune.Position.Z) or "missing",
 	nCells, nBad, #problems == 0 and "RESULT: OK - every target is exactly in the expected before-state." or ("RESULT: STOP - " .. #problems .. " problem(s):\n" .. table.concat(problems, "\n")))

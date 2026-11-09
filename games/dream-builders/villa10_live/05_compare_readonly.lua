@@ -14,6 +14,11 @@ local A, B = _G.V10L and _G.V10L[BASE], _G.V10L and _G.V10L[NEW]
 assert(A and B, "fingerprints " .. BASE .. " and " .. NEW .. " must both exist (run 01 first)")
 
 local DY = -7.57825
+-- Villa 10 WorldPivot: the FULL CFrame (all 12 components), read on the live place 9 Nov 00:30 (read-only).
+-- After Stage A only the y component may differ (PIVOT_BEFORE + (0, DY, 0)); x, z and the rotation stay bit-identical.
+local PIVOT_BEFORE = CFrame.new(453.68255615234375, 8.0782604217529297, -843.9224853515625, -1, 0, -8.7422776573475858e-08, 0, 1, 0, 8.7422776573475858e-08, 0, -1)
+local PIVOT_AFTER = PIVOT_BEFORE + Vector3.new(0, DY, 0)
+local function cfs(cf) local t = {cf:GetComponents()} for i = 1, 12 do t[i] = string.format("%.9g", t[i]) end return "{" .. table.concat(t, ", ") .. "}" end
 local fails, notes = {}, {}
 local function fail(s) table.insert(fails, s) end
 local stageMovesParts = (STAGE == "A" or STAGE == "B" or STAGE == "B_ROLLBACK")
@@ -147,6 +152,33 @@ table.sort(terrainReport)
 local wantCellDelta = ({A = -80, B = -64, ROLLBACK = 0, B_ROLLBACK = -80})[STAGE]
 if B.cells - A.cells ~= wantCellDelta then fail(string.format("CountCells changed by %d, expected %d", B.cells - A.cells, wantCellDelta)) end
 
+-- 3b) model pivots: the FULL WorldPivot CFrame of every villa model, exact
+local pivReport
+do
+	local v10key = nil
+	for key in pairs(A.pivots) do if key:sub(-#"/Homes[1]/Villa_PalmHills_10_Pearl[1]") == "/Homes[1]/Villa_PalmHills_10_Pearl[1]" then v10key = key end end
+	if not v10key then fail("Villa 10 pivot not recorded in " .. BASE) end
+	if BASE == "BEFORE" and v10key and A.pivots[v10key] ~= PIVOT_BEFORE then fail("Villa 10 WorldPivot in " .. BASE .. " is " .. cfs(A.pivots[v10key]) .. ", not exactly " .. cfs(PIVOT_BEFORE)) end
+	local nSame, nPiv = 0, 0
+	for key, ca in pairs(A.pivots) do
+		local cb = B.pivots[key]
+		nPiv += 1
+		if not cb then fail("model pivot missing in " .. NEW .. ": " .. key)
+		elseif key == v10key then
+			local want = stageMovesParts and (ca + Vector3.new(0, DY, 0)) or ca
+			if cb ~= want then fail("Villa 10 WorldPivot is " .. cfs(cb) .. ", expected exactly " .. cfs(want)) end
+			local a, b = {ca:GetComponents()}, {cb:GetComponents()}
+			for i = 1, 12 do if i ~= 2 and a[i] ~= b[i] then fail("Villa 10 WorldPivot component " .. i .. " changed (only y may change)") end end
+		elseif cb ~= ca then fail("UNPLANNED pivot change: " .. key .. " " .. cfs(ca) .. " -> " .. cfs(cb))
+		else nSame += 1 end
+	end
+	for key in pairs(B.pivots) do
+		if not A.pivots[key] and not (stageMovesParts and key:find(copyPrefix, 1, true)) then fail("UNPLANNED new model pivot: " .. key) end
+	end
+	pivReport = string.format("%d model pivots compared; %d other villas bit-identical; Villa 10 %s -> %s", nPiv, nSame,
+		v10key and cfs(A.pivots[v10key]) or "?", v10key and B.pivots[v10key] and cfs(B.pivots[v10key]) or "?")
+end
+
 -- 4) scripts and object counts
 if B.scripts.digest ~= A.scripts.digest or B.scripts.n ~= A.scripts.n or B.scripts.chars ~= A.scripts.chars then fail("SCRIPTS CHANGED") end
 local folder = game:GetService("ServerStorage"):FindFirstChild("Phase1Backups") and game:GetService("ServerStorage").Phase1Backups:FindFirstChild("Fix8Nov_Villa10")
@@ -158,8 +190,8 @@ end
 if stageMovesParts and not folder then fail("copy folder missing") end
 if not stageMovesParts and folder then fail("copy folder still present") end
 
-return string.format("COMPARE %s -> %s (stage %s): %s\n  parts: %d changed (%d planned and exact), %d added, %d removed\n  groups changed: %s\n  terrain: %s\n  CountCells %d -> %d (delta %d)\n  scripts %s\n%s",
+return string.format("COMPARE %s -> %s (stage %s): %s\n  parts: %d changed (%d planned and exact), %d added, %d removed\n  groups changed: %s\n  terrain: %s\n  pivots: %s\n  CountCells %d -> %d (delta %d)\n  scripts %s\n%s",
 	BASE, NEW, STAGE, #fails == 0 and "PASS - only the planned changes" or ("FAIL - " .. #fails .. " problem(s)"),
 	nChanged, nExpectedOk, nAdded, nRemoved, #changedGroups > 0 and table.concat(changedGroups, ", ") or "none",
-	table.concat(terrainReport, "; "), A.cells, B.cells, B.cells - A.cells, B.scripts.digest == A.scripts.digest and "identical" or "DIFFERENT",
+	table.concat(terrainReport, "; "), pivReport, A.cells, B.cells, B.cells - A.cells, B.scripts.digest == A.scripts.digest and "identical" or "DIFFERENT",
 	#fails == 0 and "" or table.concat(fails, "\n", 1, math.min(#fails, 30)))

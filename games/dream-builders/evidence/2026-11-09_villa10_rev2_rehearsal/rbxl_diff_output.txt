@@ -1,0 +1,16 @@
+# tools/rbxl_diff.py output, run 2026-11-09T12:47Z
+
+## 1. Control: backup vs test copy
+OLD /mnt/user-data/uploads/Downloads/DreamBuilders_backup_8Nov_before_villa10.rbxl sha256 6c804b239b6c3853e9329c82af22ed885d6f92552f5909222234f774bf1d4a5a bytes 4593098 classes 107 instances 29932
+NEW /mnt/user-data/uploads/Downloads/DreamBuilders_TEST_villa10_pool_edge.rbxl sha256 6c804b239b6c3853e9329c82af22ed885d6f92552f5909222234f774bf1d4a5a bytes 4593098 classes 107 instances 29932
+compared 107 classes, 2132 class properties, chunks ['END\x00', 'PRNT', 'SSTR']
+RESULT: IDENTICAL CONTENT
+exit code 0
+
+## 2. Backup vs the live file as saved at 00:59 on 9 Nov
+OLD /mnt/user-data/uploads/Downloads/DreamBuilders_backup_8Nov_before_villa10.rbxl sha256 6c804b239b6c3853e9329c82af22ed885d6f92552f5909222234f774bf1d4a5a bytes 4593098 classes 107 instances 29932
+NEW /mnt/user-data/uploads/Downloads/DreamBuilders.rbxl sha256 00a816a4b6fbba93559f98f1a7631bb2c7c870579d4bcfdd48ea39e3bc93c975 bytes 4593113 classes 107 instances 29932
+PROP Terrain.SmoothGrid: 595141 -> 596385 bytes; first differing byte at 1
+compared 107 classes, 2132 class properties, chunks ['END\x00', 'PRNT', 'SSTR']
+RESULT: 1 DIFFERENCE(S)
+exit code 1

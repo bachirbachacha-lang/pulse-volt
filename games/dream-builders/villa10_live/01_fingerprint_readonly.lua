@@ -3,6 +3,8 @@
 -- Records a fingerprint of the open place under a label and prints a summary. Run in Edit mode.
 -- Set LABEL before running: "BEFORE" (after the fresh reopen), "AFTER_A" (after Stage A), "AFTER_B" (after Stage B),
 -- "AFTER_ROLLBACK" (after a rollback). Results are kept in _G.V10L[LABEL] for 05_compare_readonly.lua.
+-- The printed digests are order-independent, so the outputs of two different sessions (for example the step-1 BEFORE
+-- and the AFTER_R0 run after a close-and-reopen) can be compared line by line (tools/compare_fingerprints.py).
 local LABEL = "BEFORE"
 
 local PLACE = "DreamBuilders.rbxl" -- the live place. Only for the Step 0 rehearsal: "DreamBuilders_TEST_villa10_pool_edge.rbxl"
@@ -48,6 +50,13 @@ local function keyOf(inst)
 	return k
 end
 
+-- path WITHOUT sibling indexes: used for the group and script digests, so that the digests do not depend on the
+-- order of same-named siblings (that order can differ between a long-running session and a fresh open of the same file)
+local function pathOf(inst)
+	if inst == game then return "" end
+	return pathOf(inst.Parent) .. "/" .. inst.Name
+end
+
 local function groupOf(p)
 	if p:IsDescendantOf(SS) then
 		local top = p
@@ -91,7 +100,7 @@ for _, root in ipairs({workspace, SS}) do
 			G.n += 1
 			local c = {d.CFrame:GetComponents()}
 			for i = 1, 12 do c[i] = string.format("%.5f", c[i]) end
-			table.insert(G.list, key .. "|" .. table.concat(c, ",") .. "|" ..
+			table.insert(G.list, pathOf(d) .. "|" .. table.concat(c, ",") .. "|" ..
 				string.format("%.4f,%.4f,%.4f|%s%s%.3f%s%s", d.Size.X, d.Size.Y, d.Size.Z, tostring(d.Anchored),
 					tostring(d.CanCollide), d.Transparency, d.Material.Name, d.Color:ToHex()))
 			if n % 3000 == 0 then task.wait() end
@@ -99,6 +108,17 @@ for _, root in ipairs({workspace, SS}) do
 	end
 end
 R.nParts = n
+-- 1b) the FULL WorldPivot CFrame of every villa model (Homes) and of any model inside the copy folder
+R.pivots = {}
+local function cfs(cf) local t = {cf:GetComponents()} for i = 1, 12 do t[i] = string.format("%.9g", t[i]) end return "{" .. table.concat(t, ", ") .. "}" end
+local nPiv = 0
+for _, m in ipairs(db.Homes:GetChildren()) do
+	if m:IsA("Model") then R.pivots[keyOf(m)] = m.WorldPivot nPiv += 1 end
+end
+local pbk = SS:FindFirstChild("Phase1Backups")
+local fk = pbk and pbk:FindFirstChild("Fix8Nov_Villa10")
+if fk then for _, m in ipairs(fk:GetChildren()) do if m:IsA("Model") then R.pivots[keyOf(m)] = m.WorldPivot nPiv += 1 end end end
+R.nPivots = nPiv
 local hashed = 0
 for _, G in pairs(R.groups) do
 	table.sort(G.list)
@@ -160,7 +180,7 @@ for _, svc in ipairs({workspace, game:GetService("ServerScriptService"), SS, gam
 		if d:IsA("LuaSourceContainer") then
 			nScripts += 1
 			chars += #d.Source
-			table.insert(srcList, keyOf(d) .. "\0" .. d.Source)
+			table.insert(srcList, pathOf(d) .. "\0" .. d.Source)
 		end
 	end
 end
@@ -180,6 +200,12 @@ _G.V10L[LABEL] = R
 -- 4) summary
 local out = {string.format("FINGERPRINT %s  place=%s  parts=%d  terrain cells=%d  scripts=%d (%d chars, %s)",
 	LABEL, game.Name, R.nParts, R.cells, nScripts, chars, R.scripts.digest)}
+local v10m = db.Homes:FindFirstChild("Villa_PalmHills_10_Pearl")
+table.insert(out, string.format("  pivots recorded for %d models; Villa 10 WorldPivot %s", nPiv, v10m and cfs(v10m.WorldPivot) or "MISSING"))
+for _, nm in ipairs({"Villa_PalmHills_1_Classic", "Villa_PalmHills_6_Classic", "Villa_PalmHills_15_Pearl", "Villa_PalmHills_8_Charcoal", "Villa_PalmHills_16_Classic", "Villa_PalmHills_4_Charcoal"}) do
+	local m = db.Homes:FindFirstChild(nm)
+	table.insert(out, string.format("  pivot %-28s %s", nm, m and cfs(m.WorldPivot) or "MISSING"))
+end
 local gnames = {}
 for g in pairs(R.groups) do table.insert(gnames, g) end
 table.sort(gnames)

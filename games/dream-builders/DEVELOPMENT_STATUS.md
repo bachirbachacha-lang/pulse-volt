@@ -393,3 +393,28 @@ Plan: `VILLA10_POOL_EDGE_PLAN.md`. Test log: `evidence/2026-11-08_villa10_pool_e
 
 **Next session starting point:** waiting for the owner's approval of `VILLA10_LIVE_PROCEDURE.md`. Villa 6 is untouched.
 
+
+## Session 13 (9 Nov, 15:25–16:10): Revision 2: test-copy rehearsal (no live edits)
+Report: `VILLA10_REV2_REPORT.md`. Evidence: `evidence/2026-11-09_villa10_rev2_rehearsal/`. Owner decisions: `VILLA10_OWNER_DECISIONS.md`.
+- **Found at the start:** `DreamBuilders.rbxl` was saved at 00:59 (not by Claude; all Studio windows were closed when I came back).
+  - `tools/rbxl_diff.py` and a whole-map, three-channel terrain comparison show the only difference from the backup: 40 cells of hidden water under Villa 10's pool.
+  - The 8 Nov undo missed them because `ReadVoxels` cannot see water inside ground cells.
+  - The backup and the test copy are still `6c804b23…`.
+- **Script changes:**
+  - Full WorldPivot CFrame checks (Codex condition 2).
+  - Order-independent digests.
+  - A one-window session token (`00_…`).
+  - A player-data guard (`10_…`).
+  - `tools/rbxl_diff.py`.
+- **Rehearsal on the test copy:**
+  - Guards: all refused.
+  - Stage A: correct.
+  - Purchase test with the player-data guard: PASS.
+  - Walk-in and front door: PASS.
+  - **Stage B: FAILED** (ground stays under the written water).
+  - R1 Stage-B rollback: ran.
+  - R0 (close without saving and reopen): exact, file hash unchanged.
+- **Defects D1–D4:** D1 fixed. D2–D4 need Revision 3, with all three terrain channels.
+- **Not tested:** 07, 08, 09 ALL.
+
+**Next session starting point:** the owner's decisions D-1 to D-4. No live edits until then. Villa 6 is untouched.

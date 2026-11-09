@@ -1,0 +1,149 @@
+01_fingerprint_readonly.lua (digest 762583068-302862684, order-independent group/script digests), LABEL BEFORE
+Run 9 Nov 2026 12:39:21Z in DreamBuilders_TEST_villa10_pool_edge.rbxl (SHA-256 6c804b23...4a5a, = backup), fresh open, Edit mode.
+NOTE: terrain sums use ReadVoxels and cannot see hidden liquid inside solid cells (defect D4).
+
+FINGERPRINT BEFORE  place=DreamBuilders_TEST_villa10_pool_edge.rbxl  parts=25827  terrain cells=3696540  scripts=65 (374888 chars, 871961411-265938881)
+  pivots recorded for 31 models; Villa 10 WorldPivot {453.682556, 8.07826042, -843.922485, -1, 0, -8.74227766e-08, 0, 1, 0, 8.74227766e-08, 0, -1}
+  pivot Villa_PalmHills_1_Classic    {-401.317444, 0.500007629, -839.25, -1, 0, -8.74227766e-08, 0, 1, 0, 8.74227766e-08, 0, -1}
+  pivot Villa_PalmHills_6_Classic    {738.682556, 32.0500031, -846, -1, 0, -8.74227766e-08, 0, 1, 0, 8.74227766e-08, 0, -1}
+  pivot Villa_PalmHills_15_Pearl     {162.607574, 0.500007629, -842.257446, -1, 0, -8.74227766e-08, 0, 1, 0, 8.74227766e-08, 0, -1}
+  pivot Villa_PalmHills_8_Charcoal   {311.182556, 0.500007629, -842.257446, -1, 0, -8.74227766e-08, 0, 1, 0, 8.74227766e-08, 0, -1}
+  pivot Villa_PalmHills_16_Classic   {176.317444, 0.500007629, -1014, 1, 0, 0, 0, 1, 0, 0, 0, 1}
+  pivot Villa_PalmHills_4_Charcoal   {318.817444, 0.500007629, -1017.74255, 1, 0, 0, 0, 1, 0, 0, 0, 1}
+  group DreamBuilders/Airport                              400 parts  665389195-373668662
+  group DreamBuilders/Beach                                 78 parts  140399666-956730415
+  group DreamBuilders/BeachClub                              4 parts  849702148-918013893
+  group DreamBuilders/Businesses                            95 parts  529466628-257858712
+  group DreamBuilders/CargoPort                            374 parts  666598500-608623070
+  group DreamBuilders/Crane                                 61 parts  896839883-184148405
+  group DreamBuilders/Downtown                            4735 parts  477539664-992792903
+  group DreamBuilders/DreamMart                            201 parts  993693645-311281841
+  group DreamBuilders/DreamTower                             7 parts  075489948-061521867
+  group DreamBuilders/Flowers                               53 parts  668526530-859208429
+  group DreamBuilders/ForSaleLots                           12 parts  106070662-530963029
+  group DreamBuilders/Ground                                12 parts  872018508-012647439
+  group DreamBuilders/HQ                                   201 parts  955402448-050599930
+  group DreamBuilders/Hospital                              81 parts  628029482-582246726
+  group DreamBuilders/JobPads                               10 parts  449598005-261025671
+  group DreamBuilders/JobStations                           45 parts  375667868-614022613
+  group DreamBuilders/Lake                                  66 parts  157392524-521307276
+  group DreamBuilders/Lamps                                264 parts  425558499-023292050
+  group DreamBuilders/Lawns                                  9 parts  317755813-535762683
+  group DreamBuilders/Maldives                             113 parts  726021987-561624656
+  group DreamBuilders/Marina                                 4 parts  158340195-672737809
+  group DreamBuilders/MarinaRowLand                          6 parts  982267128-736065944
+  group DreamBuilders/Materials                             34 parts  157961713-488861030
+  group DreamBuilders/Metro                                697 parts  303689619-269849834
+  group DreamBuilders/Mountains                             43 parts  744570744-586576712
+  group DreamBuilders/NorthDistrict                        116 parts  850783868-159440039
+  group DreamBuilders/PalmBeach                            262 parts  410557666-801276581
+  group DreamBuilders/PalmHills                            168 parts  462950038-355222402
+  group DreamBuilders/PalmIsland                           793 parts  185986784-538454698
+  group DreamBuilders/Park                                  47 parts  803119709-403554165
+  group DreamBuilders/Plots                                459 parts  041269994-263517256
+  group DreamBuilders/Props                                 64 parts  130836080-212588196
+  group DreamBuilders/Roads                                448 parts  164312628-809647020
+  group DreamBuilders/School                               367 parts  092785949-364709814
+  group DreamBuilders/ShowVillas                            16 parts  324792887-623421571
+  group DreamBuilders/Sidewalks                             84 parts  525625506-992216418
+  group DreamBuilders/Signals                             1080 parts  188207810-104024235
+  group DreamBuilders/Skyline                               54 parts  664557822-560103829
+  group DreamBuilders/SkylineFacades                      4116 parts  088206004-450669579
+  group DreamBuilders/Transit                               43 parts  979863431-096515702
+  group DreamBuilders/Trees                                478 parts  274245823-248465867
+  group DreamBuilders/Yachts                               385 parts  148829651-528796909
+  group DreamBuilders/Yard                                  83 parts  616108479-809288228
+  group Homes/CodexShowcaseHomes                           450 parts  413671163-892692854
+  group Homes/IslandVilla_1_Pearl                           67 parts  427594007-016005138
+  group Homes/IslandVilla_2_Sand                            67 parts  557466063-198905577
+  group Homes/IslandVilla_3_Charcoal                        67 parts  540113499-025118960
+  group Homes/IslandVilla_4_Classic                         67 parts  791942942-204412595
+  group Homes/LuxuryMansion                                 47 parts  505224702-144455313
+  group Homes/MansionViewpoint                               4 parts  424463171-558024448
+  group Homes/Villa_MarinaRow_1_Cube                       129 parts  775893460-721659602
+  group Homes/Villa_MarinaRow_2_Timber                     137 parts  844321213-771607197
+  group Homes/Villa_MarinaRow_3_Butterfly                  132 parts  557200447-027535977
+  group Homes/Villa_MarinaRow_4_Tower                      205 parts  763609385-415612891
+  group Homes/Villa_MarinaRow_5_Courtyard                  142 parts  990616991-135511838
+  group Homes/Villa_MarinaRow_6_GlassBox                   124 parts  290424873-627189184
+  group Homes/Villa_PalmHills_10_Pearl                      69 parts  494328315-052216179
+  group Homes/Villa_PalmHills_11_Classic                    69 parts  151583583-175258920
+  group Homes/Villa_PalmHills_12_Sand                       69 parts  838009275-561913106
+  group Homes/Villa_PalmHills_13_Charcoal                   69 parts  684606656-276037115
+  group Homes/Villa_PalmHills_15_Pearl                      69 parts  768541350-793168690
+  group Homes/Villa_PalmHills_16_Classic                    69 parts  098025973-606251902
+  group Homes/Villa_PalmHills_17_Sand                       68 parts  789991186-046745197
+  group Homes/Villa_PalmHills_1_Classic                     68 parts  412892740-053951729
+  group Homes/Villa_PalmHills_2_Sand                        69 parts  042018614-907105162
+  group Homes/Villa_PalmHills_4_Charcoal                    69 parts  871025111-539702018
+  group Homes/Villa_PalmHills_5_Pearl                       69 parts  281657752-131562609
+  group Homes/Villa_PalmHills_6_Classic                     69 parts  338525990-635845536
+  group Homes/Villa_PalmHills_7_Sand                        68 parts  578800577-814985166
+  group Homes/Villa_PalmHills_8_Charcoal                    69 parts  536285490-700576571
+  group Homes/Villa_ShowVillas_18_Charcoal                  80 parts  654970056-928168639
+  group Homes/Villa_ShowVillas_19_Pearl                     84 parts  894628535-638973428
+  group Homes/Villa_ShowVillas_21_Classic                   80 parts  121239150-775272480
+  group Homes/Villa_ShowVillas_22_Sand                      61 parts  283036210-072002195
+  group Homes/Villa_ShowVillas_23_Charcoal                  84 parts  723327463-754047041
+  group Homes/Villa_ShowVillas_24_Pearl                     61 parts  688276978-408591907
+  group ServerStorage/CarBackups                           951 parts  923402685-233675277
+  group ServerStorage/CarBackups_BeforeResize              289 parts  033957020-886532093
+  group ServerStorage/DB_Tools                            2249 parts  364396558-208916214
+  group ServerStorage/HouseBackups                         759 parts  400555229-655385369
+  group ServerStorage/Phase1Backups/Beach                   80 parts  334842441-686141831
+  group ServerStorage/Phase1Backups/BeachClub                4 parts  483983605-082408108
+  group ServerStorage/Phase1Backups/BeachSand                1 parts  132162878-562285951
+  group ServerStorage/Phase1Backups/DarkLobbyGlass_-420      1 parts  742512856-201226832
+  group ServerStorage/Phase1Backups/DarkLobbyGlass_420       1 parts  499144543-714542130
+  group ServerStorage/Phase1Backups/DarkLobbyGlass_540       1 parts  816741635-597264254
+  group ServerStorage/Phase1Backups/Fix8Nov_BuriedVilla     69 parts  289858750-145545902
+  group ServerStorage/Phase1Backups/FloorSlab                1 parts  726655643-219861250
+  group ServerStorage/Phase1Backups/HQ                     201 parts  848578359-118363476
+  group ServerStorage/Phase1Backups/Lake                    57 parts  507543196-425930777
+  group ServerStorage/Phase1Backups/OfficeTower1             1 parts  619115460-008082679
+  group ServerStorage/Phase1Backups/OfficeTower2             1 parts  803844521-511843836
+  group ServerStorage/Phase1Backups/OfficeTower3             1 parts  402006557-396174422
+  group ServerStorage/Phase1Backups/OfficeTower5             1 parts  179804962-727537857
+  group ServerStorage/Phase1Backups/OfficeTower6             1 parts  431885983-747540481
+  group ServerStorage/Phase1Backups/OldAirportRoad          17 parts  237639471-259824707
+  group ServerStorage/Phase1Backups/OldYachts               21 parts  040398945-695264316
+  group ServerStorage/Phase1Backups/PalmBeach              257 parts  160420731-347818321
+  group ServerStorage/Phase1Backups/Roads                  442 parts  658959436-808694698
+  group ServerStorage/Phase1Backups/RoofPlant                1 parts  834527249-997712132
+  group ServerStorage/Phase1Backups/Sidewalks               20 parts  986958375-262294302
+  group ServerStorage/Phase1Backups/Yard                    83 parts  447866358-847693216
+  group ServerStorage/PortBackup                           299 parts  320774906-565522264
+  group ServerStorage/ShopBackups                           10 parts  447611920-050703844
+  group Workspace/BigSUV                                    20 parts  914064263-866298911
+  group Workspace/ClassicCar                                20 parts  542173092-170914031
+  group Workspace/EverydaySedan                             20 parts  129284086-076478130
+  group Workspace/Excavator                                 16 parts  565951418-466614069
+  group Workspace/FlatbedTruck                              20 parts  739814726-600175826
+  group Workspace/Forklift                                  18 parts  423936611-676859019
+  group Workspace/GTSedan                                   20 parts  070764074-568300487
+  group Workspace/Hypercar                                  20 parts  877833506-976126176
+  group Workspace/LuxurySedan                               20 parts  777099321-071965346
+  group Workspace/MixerTruck                                20 parts  068391181-673239281
+  group Workspace/MuscleCar                                 20 parts  239688507-950288609
+  group Workspace/OffroadSUV                                20 parts  276612556-908728449
+  group Workspace/Pickup                                    20 parts  881504973-324198237
+  group Workspace/SportBike                                 15 parts  432395891-985827911
+  group Workspace/StarterCar                                20 parts  424797893-344107799
+  terrain Villa10_work_area            60x14x65 cells from (280,-16,-1200)  water 80  solid 3380  926387774-050962547
+  terrain Villa_PalmHills_15_Pearl     34x14x35 cells from (-8,-16,-1072)  water 80  solid 1368  599245519-301851738
+  terrain Villa_PalmHills_16_Classic   34x14x35 cells from (212,-16,-924)  water 88  solid 1422  791927450-237413260
+  terrain Villa_PalmHills_1_Classic    34x14x34 cells from (-572,-16,-1068)  water 88  solid 1301  516459126-710339131
+  terrain Villa_PalmHills_4_Charcoal   34x14x35 cells from (352,-16,-928)  water 80  solid 1368  923237202-260692270
+  terrain Villa_PalmHills_6_Classic    34x21x35 cells from (544,-16,-1076)  water 406  solid 1405  920942966-584891726
+  terrain Villa_PalmHills_8_Charcoal   34x14x35 cells from (140,-16,-1072)  water 88  solid 1364  237610684-251228802
+  counts Lighting=6, ReplicatedStorage=4, ServerScriptService=41, ServerStorage=7306, StarterGui=0, StarterPlayer=20, Workspace=22481
+
+Why these group digests differ from the 8 Nov 23:53 live baseline:
+- On 9 Nov 00:35, the old 01, run on the test copy (fresh open, same bytes as the live file then), gave different digests for every Homes group. Mountains, PalmHills, Roads, ForSaleLots, the terrain and the scripts all matched the live 23:53 values.
+- The old 01 put each part's sibling index (Name[1], Name[2], ...) into the group digests. The Homes models contain many same-named siblings.
+- Most likely cause, NOT proven: the order of same-named siblings in the long-running live session differed from a fresh open.
+- Either way, those 23:53 digests cannot be reproduced after a reopen. So the procedure must not require a fresh open to equal them.
+- 01 now digests index-free paths, so its digests do not depend on sibling order.
+- Part-by-part comparison inside one session (05) still uses the indexed keys.
+- A fresh open of the same file was not re-fingerprinted with the new 01 after R0, because the rehearsal stopped at defect D3.
+  So "order-independent" is a property of the code, not yet a tested result.

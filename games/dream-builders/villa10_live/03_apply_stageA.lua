@@ -4,14 +4,24 @@
 -- raised pool water removed (80 cells, y 8..16 -> Air). First it adds the in-place copies
 -- ServerStorage.Phase1Backups.Fix8Nov_Villa10 (the original Villa 10 model and dune #43), used by 09_rollback_guarded.lua.
 -- Nothing is written unless EVERY target is exactly in the expected before-state and CONFIRM is set.
+-- SESSION GUARD: also requires SESSION_TOKEN to equal the token printed by 00_session_identity_readonly.lua in THIS Studio
+-- window. Each Studio window is a separate process with its own _G, so a token issued in one window cannot work in another.
 local CONFIRM = "" -- set to "APPLY STAGE A" to run
+local SESSION_TOKEN = "" -- paste the token from 00_session_identity_readonly.lua run in this window
 if CONFIRM ~= "APPLY STAGE A" then return "NOT RUN: set CONFIRM = \"APPLY STAGE A\"" end
+assert(_G.V10_SESSION and SESSION_TOKEN ~= "" and _G.V10_SESSION.token == SESSION_TOKEN and _G.V10_SESSION.place == game.Name,
+	"session guard: run 00_session_identity_readonly.lua in this window and paste its token")
 local PLACE = "DreamBuilders.rbxl" -- the live place. Only for the Step 0 rehearsal: "DreamBuilders_TEST_villa10_pool_edge.rbxl"
 assert(game.Name == PLACE, "wrong place: " .. game.Name)
 local RunService = game:GetService("RunService")
 assert(RunService:IsEdit() and not RunService:IsRunning(), "not in Edit mode")
 
 local DY = -7.57825
+-- Villa 10 WorldPivot: the FULL CFrame (all 12 components), read on the live place 9 Nov 00:30 (read-only).
+-- After Stage A only the y component may differ (PIVOT_BEFORE + (0, DY, 0)); x, z and the rotation stay bit-identical.
+local PIVOT_BEFORE = CFrame.new(453.68255615234375, 8.0782604217529297, -843.9224853515625, -1, 0, -8.7422776573475858e-08, 0, 1, 0, 8.7422776573475858e-08, 0, -1)
+local PIVOT_AFTER = PIVOT_BEFORE + Vector3.new(0, DY, 0)
+local function cfs(cf) local t = {cf:GetComponents()} for i = 1, 12 do t[i] = string.format("%.9g", t[i]) end return "{" .. table.concat(t, ", ") .. "}" end
 local SS = game:GetService("ServerStorage")
 local db = workspace.DreamBuilders
 local v10 = db.Homes.Villa_PalmHills_10_Pearl
@@ -54,7 +64,7 @@ for _, e in ipairs(LIST) do
 	if #hits ~= 1 then bad(path .. ": " .. #hits .. " matches at the before-position")
 	else used[hits[1]] = true table.insert(found, {part = hits[1], pos = pos}) end
 end
-if math.abs(v10.WorldPivot.Position.Y - 8.07826) > 1e-4 then bad("pivot not at y 8.07826") end
+if v10.WorldPivot ~= PIVOT_BEFORE then bad("WorldPivot is " .. cfs(v10.WorldPivot) .. ", expected exactly " .. cfs(PIVOT_BEFORE)) end
 local kids = db.Mountains:GetChildren()
 local dune = kids[43]
 if not (#kids == 43 and dune and dune:IsA("BasePart") and (dune.Position - Vector3.new(344.565, -15, -1060.26)).Magnitude < 0.01
@@ -85,7 +95,7 @@ folder.Parent = pb
 if #folder:GetDescendants() ~= expectedCopy then return "STOP after the copy step: the copy has " .. #folder:GetDescendants() .. " objects, expected " .. expectedCopy .. ". Only the copy folder was added; use rollback R0." end
 -- 2) house parts, pivot, dune
 for _, f in ipairs(found) do f.part.CFrame = f.part.CFrame + Vector3.new(0, DY, 0) end
-v10.WorldPivot = v10.WorldPivot + Vector3.new(0, DY, 0)
+v10.WorldPivot = PIVOT_AFTER
 dune.CFrame = CFrame.new(385, -15, -1148) * dune.CFrame.Rotation
 -- 3) terrain 4a: the old raised pool water -> Air. Only the 80 cells of the upper box (y 8..16) are written.
 local UPPER = Region3.new(Vector3.new(324, 8, -1048), Vector3.new(364, 16, -1032))
@@ -105,7 +115,12 @@ local post = {}
 for _, f in ipairs(found) do
 	if (f.part.Position - (f.pos + Vector3.new(0, DY, 0))).Magnitude > 0.01 then table.insert(post, f.part.Name .. " not at its new position") end
 end
-if math.abs(v10.WorldPivot.Position.Y - 0.50001) > 1e-4 then table.insert(post, "pivot not at y 0.50001") end
+if v10.WorldPivot ~= PIVOT_AFTER then table.insert(post, "WorldPivot is " .. cfs(v10.WorldPivot) .. ", expected exactly " .. cfs(PIVOT_AFTER)) end
+do -- only y may differ from the original pivot
+	local a, b = {PIVOT_BEFORE:GetComponents()}, {v10.WorldPivot:GetComponents()}
+	for i = 1, 12 do if i ~= 2 and a[i] ~= b[i] then table.insert(post, "WorldPivot component " .. i .. " changed") end end
+end
+if copyV.WorldPivot ~= PIVOT_BEFORE then table.insert(post, "the copy's WorldPivot is not the original") end
 if (dune.Position - Vector3.new(385, -15, -1148)).Magnitude > 0.001 then table.insert(post, "dune not at (385, -15, -1148)") end
 local m1, o1 = workspace.Terrain:ReadVoxels(BOX, 4)
 local cellsChanged = 0
@@ -123,6 +138,6 @@ for x = 1, sm1.Size.X do for y = 1, sm1.Size.Y do for z = 1, sm1.Size.Z do
 	if not inBox and (sm1[x][y][z] ~= sm0[x][y][z] or so1[x][y][z] ~= so0[x][y][z]) then shellChanged += 1 end
 end end end
 if shellChanged > 0 then table.insert(post, shellChanged .. " cells outside the box changed") end
-return string.format("STAGE A %s: %d parts moved, pivot y %.5f, dune at (%.3f, %.3f, %.3f), %d terrain cells changed (expected 80), shell changed %d, copy folder %d objects.%s",
-	#post == 0 and "DONE" or "PROBLEM", #found, v10.WorldPivot.Position.Y, dune.Position.X, dune.Position.Y, dune.Position.Z, cellsChanged, shellChanged,
+return string.format("STAGE A %s: %d parts moved, WorldPivot %s -> %s, dune at (%.3f, %.3f, %.3f), %d terrain cells changed (expected 80), shell changed %d, copy folder %d objects.%s",
+	#post == 0 and "DONE" or "PROBLEM", #found, cfs(PIVOT_BEFORE), cfs(v10.WorldPivot), dune.Position.X, dune.Position.Y, dune.Position.Z, cellsChanged, shellChanged,
 	#folder:GetDescendants(), #post == 0 and "" or ("\n" .. table.concat(post, "\n")))

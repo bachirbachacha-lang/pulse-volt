@@ -10,15 +10,25 @@
 local MODE = "ALL"
 local DRY_RUN = true
 local CONFIRM = "" -- for a real run (DRY_RUN = false) set to "ROLL BACK VILLA 10"
+local SESSION_TOKEN = "" -- for a real run: the token from 00_session_identity_readonly.lua run in this window
 
 local PLACE = "DreamBuilders.rbxl" -- the live place. Only for the Step 0 rehearsal: "DreamBuilders_TEST_villa10_pool_edge.rbxl"
 assert(game.Name == PLACE, "wrong place: " .. game.Name)
 local RunService = game:GetService("RunService")
 assert(RunService:IsEdit() and not RunService:IsRunning(), "not in Edit mode")
 assert(MODE == "ALL" or MODE == "STAGE_B", "MODE must be ALL or STAGE_B")
-if not DRY_RUN then assert(CONFIRM == "ROLL BACK VILLA 10", "real run needs CONFIRM = \"ROLL BACK VILLA 10\"") end
+if not DRY_RUN then
+	assert(CONFIRM == "ROLL BACK VILLA 10", "real run needs CONFIRM = \"ROLL BACK VILLA 10\"")
+	assert(_G.V10_SESSION and SESSION_TOKEN ~= "" and _G.V10_SESSION.token == SESSION_TOKEN and _G.V10_SESSION.place == game.Name,
+		"session guard: run 00_session_identity_readonly.lua in this window and paste its token")
+end
 
 local DY = -7.57825
+-- Villa 10 WorldPivot: the FULL CFrame (all 12 components), read on the live place 9 Nov 00:30 (read-only).
+-- After Stage A only the y component may differ (PIVOT_BEFORE + (0, DY, 0)); x, z and the rotation stay bit-identical.
+local PIVOT_BEFORE = CFrame.new(453.68255615234375, 8.0782604217529297, -843.9224853515625, -1, 0, -8.7422776573475858e-08, 0, 1, 0, 8.7422776573475858e-08, 0, -1)
+local PIVOT_AFTER = PIVOT_BEFORE + Vector3.new(0, DY, 0)
+local function cfs(cf) local t = {cf:GetComponents()} for i = 1, 12 do t[i] = string.format("%.9g", t[i]) end return "{" .. table.concat(t, ", ") .. "}" end
 local SS = game:GetService("ServerStorage")
 local db = workspace.DreamBuilders
 local v10 = db.Homes.Villa_PalmHills_10_Pearl
@@ -67,7 +77,7 @@ if copyV then
 	local n = 0
 	for _, d in ipairs(copyV:GetDescendants()) do if d:IsA("BasePart") then n += 1 end end
 	if n ~= 69 then bad("the Villa 10 copy has " .. n .. " parts, expected 69") end
-	if math.abs(copyV.WorldPivot.Position.Y - 8.07826) > 1e-4 then bad("the Villa 10 copy's pivot is not the original 8.07826") end
+	if copyV.WorldPivot ~= PIVOT_BEFORE then bad("the Villa 10 copy's WorldPivot is " .. cfs(copyV.WorldPivot) .. ", not exactly the original " .. cfs(PIVOT_BEFORE)) end
 end
 if copyD and (copyD.Position - Vector3.new(344.565, -15, -1060.26)).Magnitude > 0.01 then bad("the dune copy is not at the original position") end
 
@@ -101,8 +111,8 @@ if MODE == "ALL" and copyV then
 			if state == "after" then table.insert(pairsToRestore, {live, copy}) end
 		end
 	end
-	local pv = v10.WorldPivot.Position.Y
-	if math.abs(pv - 0.50001) > 1e-4 and math.abs(pv - 8.07826) > 1e-4 then bad(string.format("Villa 10 pivot at unexpected y %.5f", pv)) end
+	local pv = v10.WorldPivot
+	if pv ~= PIVOT_AFTER and pv ~= PIVOT_BEFORE then bad("Villa 10 WorldPivot in an unexpected state: " .. cfs(pv)) end
 	local dune = db.Mountains:GetChildren()[43]
 	if not dune or not copyD or dune.Size ~= copyD.Size then bad("dune #43 missing or not matching its copy")
 	elseif (dune.Position - Vector3.new(385, -15, -1148)).Magnitude > 0.001 and (dune.Position - copyD.Position).Magnitude > 0.001 then
@@ -132,7 +142,7 @@ if MODE == "STAGE_B" then
 end
 
 table.insert(plan, string.format("MODE %s: %d house parts to restore, pivot %s, dune %s, %d terrain cells to restore, copy folder %s",
-	MODE, #pairsToRestore, MODE == "ALL" and "to 8.07826" or "unchanged", MODE == "ALL" and "to (344.565, -15, -1060.26)" or "unchanged",
+	MODE, #pairsToRestore, MODE == "ALL" and ("from " .. cfs(v10.WorldPivot) .. " to " .. cfs(PIVOT_BEFORE)) or "unchanged", MODE == "ALL" and "to (344.565, -15, -1060.26)" or "unchanged",
 	cellsToRestore, MODE == "ALL" and "removed after verification" or "kept"))
 if #problems > 0 then return "ROLLBACK STOPPED - nothing written. " .. #problems .. " problem(s):\n" .. table.concat(problems, "\n", 1, math.min(#problems, 20)) end
 if DRY_RUN then return "DRY RUN OK - nothing written. Would do: " .. table.concat(plan, "\n") end
@@ -163,7 +173,7 @@ task.wait(1)
 local post = {}
 if MODE == "ALL" then
 	for _, pr in ipairs(pairsToRestore) do if pr[1].CFrame ~= pr[2].CFrame then table.insert(post, pr[1].Name .. " not restored exactly") end end
-	if v10.WorldPivot ~= copyV.WorldPivot then table.insert(post, "pivot not restored exactly") end
+	if v10.WorldPivot ~= copyV.WorldPivot or v10.WorldPivot ~= PIVOT_BEFORE then table.insert(post, "WorldPivot not restored exactly: " .. cfs(v10.WorldPivot)) end
 	if db.Mountains:GetChildren()[43].CFrame ~= copyD.CFrame then table.insert(post, "dune not restored exactly") end
 end
 local m1, o1 = workspace.Terrain:ReadVoxels(BOX, 4)

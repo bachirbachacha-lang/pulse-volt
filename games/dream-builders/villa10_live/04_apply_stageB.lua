@@ -4,14 +4,24 @@
 --   inner 16 columns (x 328..360, z -1044..-1036): bottom Water 86/256, top Water 91/256  (same as the approved fill)
 --   outer ring 24 columns:                         bottom Air,          top Water 3/256    (the revised pool edge)
 -- Nothing is written unless Stage A is exactly in place, every cell is in its expected state and CONFIRM is set.
+-- SESSION GUARD: also requires SESSION_TOKEN to equal the token printed by 00_session_identity_readonly.lua in THIS Studio
+-- window. Each Studio window is a separate process with its own _G, so a token issued in one window cannot work in another.
 local CONFIRM = "" -- set to "APPLY STAGE B" to run
+local SESSION_TOKEN = "" -- paste the token from 00_session_identity_readonly.lua run in this window
 if CONFIRM ~= "APPLY STAGE B" then return "NOT RUN: set CONFIRM = \"APPLY STAGE B\"" end
+assert(_G.V10_SESSION and SESSION_TOKEN ~= "" and _G.V10_SESSION.token == SESSION_TOKEN and _G.V10_SESSION.place == game.Name,
+	"session guard: run 00_session_identity_readonly.lua in this window and paste its token")
 local PLACE = "DreamBuilders.rbxl" -- the live place. Only for the Step 0 rehearsal: "DreamBuilders_TEST_villa10_pool_edge.rbxl"
 assert(game.Name == PLACE, "wrong place: " .. game.Name)
 local RunService = game:GetService("RunService")
 assert(RunService:IsEdit() and not RunService:IsRunning(), "not in Edit mode")
 
 local DY = -7.57825
+-- Villa 10 WorldPivot: the FULL CFrame (all 12 components), read on the live place 9 Nov 00:30 (read-only).
+-- After Stage A only the y component may differ (PIVOT_BEFORE + (0, DY, 0)); x, z and the rotation stay bit-identical.
+local PIVOT_BEFORE = CFrame.new(453.68255615234375, 8.0782604217529297, -843.9224853515625, -1, 0, -8.7422776573475858e-08, 0, 1, 0, 8.7422776573475858e-08, 0, -1)
+local PIVOT_AFTER = PIVOT_BEFORE + Vector3.new(0, DY, 0)
+local function cfs(cf) local t = {cf:GetComponents()} for i = 1, 12 do t[i] = string.format("%.9g", t[i]) end return "{" .. table.concat(t, ", ") .. "}" end
 local db = workspace.DreamBuilders
 local v10 = db.Homes.Villa_PalmHills_10_Pearl
 local LIST = {
@@ -63,7 +73,7 @@ for _, e in ipairs(LIST) do
 	end
 	if hits ~= 1 then bad(path .. " is not at its Stage A position") else nParts += 1 end
 end
-if math.abs(v10.WorldPivot.Position.Y - 0.50001) > 1e-4 then bad("pivot not at y 0.50001 (Stage A missing?)") end
+if v10.WorldPivot ~= PIVOT_AFTER then bad("WorldPivot is " .. cfs(v10.WorldPivot) .. ", expected exactly " .. cfs(PIVOT_AFTER) .. " (Stage A missing?)") end
 local dune = db.Mountains:GetChildren()[43]
 if not (dune and (dune.Position - Vector3.new(385, -15, -1148)).Magnitude < 0.001) then bad("dune #43 not at its Stage A position") end
 local pb = game:GetService("ServerStorage"):FindFirstChild("Phase1Backups")
@@ -110,5 +120,5 @@ for x = 1, sm1.Size.X do for y = 1, sm1.Size.Y do for z = 1, sm1.Size.Z do
 	if not inBox and (sm1[x][y][z] ~= sm0[x][y][z] or so1[x][y][z] ~= so0[x][y][z]) then shellChanged += 1 end
 end end end
 if shellChanged > 0 then table.insert(post, shellChanged .. " cells outside the box changed") end
-return string.format("STAGE B %s: %d Stage A parts confirmed, %d terrain cells changed (expected 80: 16 Ground->Water 86, 24 Ground->Air, 16 Air->Water 91, 24 Air->Water 3), shell changed %d.%s",
+return string.format("STAGE B %s: %d Stage A parts confirmed, WorldPivot unchanged at " .. cfs(v10.WorldPivot) .. ", %d terrain cells changed (expected 80: 16 Ground->Water 86, 24 Ground->Air, 16 Air->Water 91, 24 Air->Water 3), shell changed %d.%s",
 	#post == 0 and "DONE" or "PROBLEM", nParts, changed, shellChanged, #post == 0 and "" or ("\n" .. table.concat(post, "\n", 1, math.min(#post, 20))))

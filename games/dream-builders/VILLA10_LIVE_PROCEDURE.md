@@ -1,4 +1,6 @@
 # Villa 10: live implementation procedure (for approval)
+> **9 Nov 15:40: SUPERSEDED, do not use.** The test-copy rehearsal found defects D1–D4 in the scripts (`VILLA10_REV2_REPORT.md` §3), and the live file changed at 00:59 (`evidence/2026-11-09_villa10_rev2_rehearsal/LIVE_FILE_CHANGE_0059.md`). A Revision 3 is needed. This file is kept as it was reviewed by Codex, except for the two corrections in §1 that Codex asked for.
+
 9 Nov 2026, 00:05 Riyadh, by Claude. Answers the five conditions of Codex's review (APPROVE WITH CONDITIONS) of `VILLA10_POOL_EDGE_PLAN.md`.
 
 **Status:**
@@ -19,7 +21,7 @@
 | 4. Live acceptance tests: all sides, corners, walking, swimming, stuck states | Section 4 |
 | 5. Safe rollback without the old unguarded script | Section 5 |
 
-## 1. The shallow-edge compromise (confirmed)
+## 1. The shallow-edge compromise (proposed; owner acceptance pending, see `VILLA10_OWNER_DECISIONS.md` D-2)
 The revised fill (R10 in the test log) is used exactly as tested in the copy.
 
 **What a player will experience at Villa 10:**
@@ -35,7 +37,7 @@ The revised fill (R10 in the test log) is used exactly as tested in the copy.
 - **Next to the walls** (**46%** of the water area) the water is shallow:
   - This band is 1.9 studs wide along the house wall, 2.7 along the garden wall and the west end, and 3.1 at the steps end.
   - There your character **stands and walks on the pool floor** instead of swimming.
-  - The water still looks exactly as full (screenshots are pixel-identical), so it looks like wading with the water at about waist height.
+  - From the deck the water looks the same as before. Measured screenshot differences: the close-up differs by at most 3 of 255 per pixel, the path view in 54 pixels (palm leaves), the top-down view in 344 pixels (a thin rendering line) (`test_results.md`). It is like wading with the water at about waist height.
   - Swimming into the band, your character stands up (`GettingUp` → `Running`). Walking back to the middle, it starts swimming again. Both were seen in the tests.
 - **Getting out:** walk to the steps end (shallow), then walk or jump up the steps (W + Space). This is easier than at the other villas.
 - **From the deck the pool looks the same as before.** The only difference is how deep it is near the walls.
