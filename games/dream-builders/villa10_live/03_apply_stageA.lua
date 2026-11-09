@@ -1,9 +1,9 @@
--- 03_apply_stageA.lua
+-- 03_apply_stageA.lua  (Revision 3)
 -- WRITES TO THE OPEN PLACE. Run only after the owner's approval, in the step the procedure says.
 -- Stage A: the 47 house parts down 7.57825 studs, the Villa 10 pivot, dune #43 to (385, -15, -1148), and the old
--- raised pool water removed (80 cells, y 8..16 -> Air). First it adds the in-place copies
+-- raised pool water removed (box layers 3-4 = 80 cells -> Air, no liquid). First it adds the in-place copies
 -- ServerStorage.Phase1Backups.Fix8Nov_Villa10 (the original Villa 10 model and dune #43), used by 09_rollback_guarded.lua.
--- Nothing is written unless EVERY target is exactly in the expected before-state and CONFIRM is set.
+-- Nothing is written unless EVERY target is exactly in the expected before-state (terrain in all three channels).
 -- SESSION GUARD: also requires SESSION_TOKEN to equal the token printed by 00_session_identity_readonly.lua in THIS Studio
 -- window. Each Studio window is a separate process with its own _G, so a token issued in one window cannot work in another.
 local CONFIRM = "" -- set to "APPLY STAGE A" to run
@@ -45,8 +45,79 @@ local LIST = {
 	{"PoolRaised.StepIn1",362.183,11.078,-1040.422},{"PoolRaised.StepIn2",360.383,10.568,-1040.422},
 	{"PoolRaised.StepOut1",366.143,10.568,-1040.422},{"PoolRaised.StepOut2",364.343,11.078,-1040.422},
 }
-local BEFORE = {{Enum.Material.Ground, 30}, {Enum.Material.Air, 0}, {Enum.Material.Water, 113}, {Enum.Material.Water, 63}}
+-- TERRAIN (Revision 3): all three voxel channels. Amounts are whole numbers in 1/255 steps ("bytes").
+-- The pool box: x 324..364, y 0..16, z -1048..-1032 = 10 x 4 x 4 cells. Layer 1 = y 0..4, 2 = 4..8, 3 = 8..12, 4 = 12..16.
+-- Inner 16 columns: x 328..360, z -1044..-1036. Ring: the other 24 columns.
+-- Values measured on the test copy (= backup 6c804b23) on 9 Nov with ReadVoxelChannels. NOTE: the live file as saved at
+-- 00:59 has hidden liquid 85 in the 40 layer-1 cells; the scripts refuse to run on it (owner decision D-1 first).
+local CHN = {"SolidMaterial", "SolidOccupancy", "LiquidOccupancy"}
+local AIR, GROUND = Enum.Material.Air, Enum.Material.Ground
 local BOX = Region3.new(Vector3.new(324, 0, -1048), Vector3.new(364, 16, -1032))
+local SHELL = Region3.new(Vector3.new(320, -4, -1052), Vector3.new(368, 20, -1028)) -- the box plus 272 cells around it
+local function isRing(x, z) return x == 1 or x == 10 or z == 1 or z == 4 end
+local function BEFORE(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	if y == 2 then return AIR, 0, 0 end
+	if y == 3 then return AIR, 0, 113 end
+	return AIR, 0, 63
+end
+local function AFTER_A(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	return AIR, 0, 0
+end
+local function AFTER_B(x, y, z) -- R10: solid explicitly Air (clears the ground), water as liquid
+	if y == 1 then if isRing(x, z) then return AIR, 0, 0 end return AIR, 0, 86 end
+	if y == 2 then if isRing(x, z) then return AIR, 0, 3 end return AIR, 0, 91 end
+	return AIR, 0, 0
+end
+local function b255(v) return math.floor(v * 255 + 0.5) end
+local function readBox()
+	local ch = workspace.Terrain:ReadVoxelChannels(BOX, 4, CHN)
+	assert(ch.Size == Vector3.new(10, 4, 4), "pool box is " .. tostring(ch.Size))
+	return function(x, y, z) return ch.SolidMaterial[x][y][z], b255(ch.SolidOccupancy[x][y][z]), b255(ch.LiquidOccupancy[x][y][z]) end
+end
+-- compares the box with a state function; returns the number of differing cells and up to 5 descriptions
+local function boxDiff(get, want, yFrom, yTo)
+	local n, txt = 0, {}
+	for x = 1, 10 do for y = yFrom or 1, yTo or 4 do for z = 1, 4 do
+		local m, so, lo = get(x, y, z)
+		local wm, ws, wl = want(x, y, z)
+		if m ~= wm or so ~= ws or lo ~= wl then
+			n += 1
+			if #txt < 5 then table.insert(txt, string.format("cell (%d,%d,%d) is %s/%d/%d, expected %s/%d/%d", 324 + (x - 1) * 4, (y - 1) * 4, -1048 + (z - 1) * 4, m.Name, so, lo, wm.Name, ws, wl)) end
+		end
+	end end end
+	return n, txt
+end
+-- raw copy of the 12 x 6 x 6 shell region, to prove that the 272 cells around the box do not change
+local function readShell() return workspace.Terrain:ReadVoxelChannels(SHELL, 4, CHN) end
+local function shellChanged(a, b)
+	local n = 0
+	for x = 1, 12 do for y = 1, 6 do for z = 1, 6 do
+		local wx, wy, wz = 320 + (x - 1) * 4, -4 + (y - 1) * 4, -1052 + (z - 1) * 4
+		local inB = wx >= 324 and wx < 364 and wy >= 0 and wy < 16 and wz >= -1048 and wz < -1032
+		if not inB then
+			for _, c in ipairs(CHN) do if a[c][x][y][z] ~= b[c][x][y][z] then n += 1 break end end
+		end
+	end end end
+	return n
+end
+local function writeLayers(yFrom, yTo, stateFn) -- writes exactly the box layers yFrom..yTo (80 or 160 cells), all channels
+	local reg = Region3.new(Vector3.new(324, (yFrom - 1) * 4, -1048), Vector3.new(364, yTo * 4, -1032))
+	local SM, SO, LO = {}, {}, {}
+	for x = 1, 10 do
+		SM[x], SO[x], LO[x] = {}, {}, {}
+		for y = yFrom, yTo do
+			local j = y - yFrom + 1
+			SM[x][j], SO[x][j], LO[x][j] = {}, {}, {}
+			for z = 1, 4 do
+				local m, so, lo = stateFn(x, y, z)
+				SM[x][j][z], SO[x][j][z], LO[x][j][z] = m, so / 255, lo / 255
+			end
+		end
+	end
+	workspace.Terrain:WriteVoxelChannels(reg, 4, {SolidMaterial = SM, SolidOccupancy = SO, LiquidOccupancy = LO})
+end
 local problems = {}
 local function bad(s) table.insert(problems, s) end
 
@@ -61,23 +132,20 @@ for _, e in ipairs(LIST) do
 	for _, c in ipairs(container:GetChildren()) do
 		if c.Name == childName and c:IsA("BasePart") and not used[c] and (c.Position - pos).Magnitude < 0.01 then table.insert(hits, c) end
 	end
-	if #hits ~= 1 then bad(path .. ": " .. #hits .. " matches at the before-position")
+	if #hits ~= 1 then bad(string.format("part %s at (%.3f,%.3f,%.3f): %d matches", path, pos.X, pos.Y, pos.Z, #hits))
 	else used[hits[1]] = true table.insert(found, {part = hits[1], pos = pos}) end
 end
 if v10.WorldPivot ~= PIVOT_BEFORE then bad("WorldPivot is " .. cfs(v10.WorldPivot) .. ", expected exactly " .. cfs(PIVOT_BEFORE)) end
 local kids = db.Mountains:GetChildren()
 local dune = kids[43]
 if not (#kids == 43 and dune and dune:IsA("BasePart") and (dune.Position - Vector3.new(344.565, -15, -1060.26)).Magnitude < 0.01
-	and (dune.Size - Vector3.new(257.28, 96.87, 269.61)).Magnitude < 0.01) then bad("dune #43 not in its before-state") end
-local m0, o0 = workspace.Terrain:ReadVoxels(BOX, 4)
-for x = 1, 10 do for y = 1, 4 do for z = 1, 4 do
-	if m0[x][y][z] ~= BEFORE[y][1] or math.floor(o0[x][y][z] * 256 + 0.5) ~= BEFORE[y][2] then bad(string.format("cell x%d y%d z%d not in its before-state", x, y, z)) end
-end end end
+	and (dune.Size - Vector3.new(257.28, 96.87, 269.61)).Magnitude < 0.01) then bad("dune #43 not at (344.565, -15, -1060.26) with size (257.28, 96.87, 269.61)") end
+local nb, tb = boxDiff(readBox(), BEFORE)
+for _, t in ipairs(tb) do bad(t) end
+if nb > 5 then bad((nb - 5) .. " more pool-box cells not in the before-state") end
 local pb = SS:FindFirstChild("Phase1Backups")
 if not pb then bad("ServerStorage.Phase1Backups missing") elseif pb:FindFirstChild("Fix8Nov_Villa10") then bad("Fix8Nov_Villa10 already exists") end
--- the shell of 272 cells around the box, recorded to prove it is not touched
-local SHELL = Region3.new(Vector3.new(320, -4, -1052), Vector3.new(368, 20, -1028))
-local sm0, so0 = workspace.Terrain:ReadVoxels(SHELL, 4)
+local shell0 = readShell()
 if #problems > 0 then return "STOP - nothing written. " .. #problems .. " problem(s):\n" .. table.concat(problems, "\n", 1, math.min(#problems, 20)) end
 
 -- ===== writes =====
@@ -97,17 +165,8 @@ if #folder:GetDescendants() ~= expectedCopy then return "STOP after the copy ste
 for _, f in ipairs(found) do f.part.CFrame = f.part.CFrame + Vector3.new(0, DY, 0) end
 v10.WorldPivot = PIVOT_AFTER
 dune.CFrame = CFrame.new(385, -15, -1148) * dune.CFrame.Rotation
--- 3) terrain 4a: the old raised pool water -> Air. Only the 80 cells of the upper box (y 8..16) are written.
-local UPPER = Region3.new(Vector3.new(324, 8, -1048), Vector3.new(364, 16, -1032))
-local mats, occs = {}, {}
-for x = 1, 10 do
-	mats[x], occs[x] = {}, {}
-	for y = 1, 2 do
-		mats[x][y], occs[x][y] = {}, {}
-		for z = 1, 4 do mats[x][y][z] = Enum.Material.Air occs[x][y][z] = 0 end
-	end
-end
-workspace.Terrain:WriteVoxels(UPPER, 4, mats, occs)
+-- 3) terrain 4a: the old raised pool water -> Air with no liquid. Only box layers 3-4 (80 cells) are written.
+writeLayers(3, 4, AFTER_A)
 task.wait(1)
 
 -- ===== post-checks =====
@@ -122,22 +181,12 @@ do -- only y may differ from the original pivot
 end
 if copyV.WorldPivot ~= PIVOT_BEFORE then table.insert(post, "the copy's WorldPivot is not the original") end
 if (dune.Position - Vector3.new(385, -15, -1148)).Magnitude > 0.001 then table.insert(post, "dune not at (385, -15, -1148)") end
-local m1, o1 = workspace.Terrain:ReadVoxels(BOX, 4)
-local cellsChanged = 0
-for x = 1, 10 do for y = 1, 4 do for z = 1, 4 do
-	local q = math.floor(o1[x][y][z] * 256 + 0.5)
-	local want = (y >= 3) and {Enum.Material.Air, 0} or BEFORE[y]
-	if m1[x][y][z] ~= want[1] or q ~= want[2] then table.insert(post, string.format("cell x%d y%d z%d wrong after Stage A", x, y, z)) end
-	if m1[x][y][z] ~= m0[x][y][z] or q ~= math.floor(o0[x][y][z] * 256 + 0.5) then cellsChanged += 1 end
-end end end
-local sm1, so1 = workspace.Terrain:ReadVoxels(SHELL, 4)
-local shellChanged = 0
-for x = 1, sm1.Size.X do for y = 1, sm1.Size.Y do for z = 1, sm1.Size.Z do
-	local wx, wy, wz = 320 + (x - 1) * 4, -4 + (y - 1) * 4, -1052 + (z - 1) * 4
-	local inBox = wx >= 324 and wx < 364 and wy >= 0 and wy < 16 and wz >= -1048 and wz < -1032
-	if not inBox and (sm1[x][y][z] ~= sm0[x][y][z] or so1[x][y][z] ~= so0[x][y][z]) then shellChanged += 1 end
-end end end
-if shellChanged > 0 then table.insert(post, shellChanged .. " cells outside the box changed") end
-return string.format("STAGE A %s: %d parts moved, WorldPivot %s -> %s, dune at (%.3f, %.3f, %.3f), %d terrain cells changed (expected 80), shell changed %d, copy folder %d objects.%s",
-	#post == 0 and "DONE" or "PROBLEM", #found, cfs(PIVOT_BEFORE), cfs(v10.WorldPivot), dune.Position.X, dune.Position.Y, dune.Position.Z, cellsChanged, shellChanged,
+local get1 = readBox()
+local na, ta = boxDiff(get1, AFTER_A)
+for _, t in ipairs(ta) do table.insert(post, t) end
+local changed = boxDiff(get1, BEFORE)
+local sc = shellChanged(shell0, readShell())
+if sc > 0 then table.insert(post, sc .. " cells outside the box changed") end
+return string.format("STAGE A %s: %d parts moved, WorldPivot %s -> %s, dune at (%.3f, %.3f, %.3f), %d pool-box cells changed (expected 80), %d box cells differ from the planned Stage A state (3 channels), shell changed %d, copy folder %d objects.%s",
+	#post == 0 and "DONE" or "PROBLEM", #found, cfs(PIVOT_BEFORE), cfs(v10.WorldPivot), dune.Position.X, dune.Position.Y, dune.Position.Z, changed, na, sc,
 	#folder:GetDescendants(), #post == 0 and "" or ("\n" .. table.concat(post, "\n")))

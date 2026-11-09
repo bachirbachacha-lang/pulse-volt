@@ -1,7 +1,7 @@
--- 09_rollback_guarded.lua  (rollback R1 of the procedure; replaces the old unguarded _G.V10_RESTORE)
+-- 09_rollback_guarded.lua  (Revision 3; rollback R1 of the procedure; replaces the old unguarded _G.V10_RESTORE)
 -- Use ONLY before saving, and only when rollback R0 (close the place without saving and reopen the file) cannot be used.
 -- It restores ONLY the planned targets, from the in-place copies made by 03 (exact original CFrames) and the measured
--- original terrain values. It does not depend on anything kept in _G.
+-- original terrain values in ALL THREE voxel channels. It does not depend on anything kept in _G.
 --   MODE = "ALL"      undo Stage A and Stage B: 47 house parts, pivot, dune #43, all 160 pool cells; then removes the copy folder
 --   MODE = "STAGE_B"  undo Stage B only: the 80 lower pool cells (y 0..8). The house, dune and copy folder stay.
 --   DRY_RUN = true    checks everything and reports what it would do, writes nothing (always run this first)
@@ -52,17 +52,78 @@ local LIST = {
 	{"PoolRaised.StepIn1",362.183,11.078,-1040.422},{"PoolRaised.StepIn2",360.383,10.568,-1040.422},
 	{"PoolRaised.StepOut1",366.143,10.568,-1040.422},{"PoolRaised.StepOut2",364.343,11.078,-1040.422},
 }
+-- TERRAIN (Revision 3): all three voxel channels. Amounts are whole numbers in 1/255 steps ("bytes").
+-- The pool box: x 324..364, y 0..16, z -1048..-1032 = 10 x 4 x 4 cells. Layer 1 = y 0..4, 2 = 4..8, 3 = 8..12, 4 = 12..16.
+-- Inner 16 columns: x 328..360, z -1044..-1036. Ring: the other 24 columns.
+-- Values measured on the test copy (= backup 6c804b23) on 9 Nov with ReadVoxelChannels. NOTE: the live file as saved at
+-- 00:59 has hidden liquid 85 in the 40 layer-1 cells; the scripts refuse to run on it (owner decision D-1 first).
+local CHN = {"SolidMaterial", "SolidOccupancy", "LiquidOccupancy"}
+local AIR, GROUND = Enum.Material.Air, Enum.Material.Ground
+local BOX = Region3.new(Vector3.new(324, 0, -1048), Vector3.new(364, 16, -1032))
+local SHELL = Region3.new(Vector3.new(320, -4, -1052), Vector3.new(368, 20, -1028)) -- the box plus 272 cells around it
 local function isRing(x, z) return x == 1 or x == 10 or z == 1 or z == 4 end
-local function beforeCell(x, y, z) -- measured on the live place 8 Nov 23:53 (02_check_targets_readonly.lua)
-	if y == 1 then return Enum.Material.Ground, 30 end
-	if y == 2 then return Enum.Material.Air, 0 end
-	if y == 3 then return Enum.Material.Water, 113 end
-	return Enum.Material.Water, 63
+local function BEFORE(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	if y == 2 then return AIR, 0, 0 end
+	if y == 3 then return AIR, 0, 113 end
+	return AIR, 0, 63
 end
-local function afterCell(x, y, z) -- planned values after Stage B
-	if y == 1 then if isRing(x, z) then return Enum.Material.Air, 0 end return Enum.Material.Water, 86 end
-	if y == 2 then if isRing(x, z) then return Enum.Material.Water, 3 end return Enum.Material.Water, 91 end
-	return Enum.Material.Air, 0
+local function AFTER_A(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	return AIR, 0, 0
+end
+local function AFTER_B(x, y, z) -- R10: solid explicitly Air (clears the ground), water as liquid
+	if y == 1 then if isRing(x, z) then return AIR, 0, 0 end return AIR, 0, 86 end
+	if y == 2 then if isRing(x, z) then return AIR, 0, 3 end return AIR, 0, 91 end
+	return AIR, 0, 0
+end
+local function b255(v) return math.floor(v * 255 + 0.5) end
+local function readBox()
+	local ch = workspace.Terrain:ReadVoxelChannels(BOX, 4, CHN)
+	assert(ch.Size == Vector3.new(10, 4, 4), "pool box is " .. tostring(ch.Size))
+	return function(x, y, z) return ch.SolidMaterial[x][y][z], b255(ch.SolidOccupancy[x][y][z]), b255(ch.LiquidOccupancy[x][y][z]) end
+end
+-- compares the box with a state function; returns the number of differing cells and up to 5 descriptions
+local function boxDiff(get, want, yFrom, yTo)
+	local n, txt = 0, {}
+	for x = 1, 10 do for y = yFrom or 1, yTo or 4 do for z = 1, 4 do
+		local m, so, lo = get(x, y, z)
+		local wm, ws, wl = want(x, y, z)
+		if m ~= wm or so ~= ws or lo ~= wl then
+			n += 1
+			if #txt < 5 then table.insert(txt, string.format("cell (%d,%d,%d) is %s/%d/%d, expected %s/%d/%d", 324 + (x - 1) * 4, (y - 1) * 4, -1048 + (z - 1) * 4, m.Name, so, lo, wm.Name, ws, wl)) end
+		end
+	end end end
+	return n, txt
+end
+-- raw copy of the 12 x 6 x 6 shell region, to prove that the 272 cells around the box do not change
+local function readShell() return workspace.Terrain:ReadVoxelChannels(SHELL, 4, CHN) end
+local function shellChanged(a, b)
+	local n = 0
+	for x = 1, 12 do for y = 1, 6 do for z = 1, 6 do
+		local wx, wy, wz = 320 + (x - 1) * 4, -4 + (y - 1) * 4, -1052 + (z - 1) * 4
+		local inB = wx >= 324 and wx < 364 and wy >= 0 and wy < 16 and wz >= -1048 and wz < -1032
+		if not inB then
+			for _, c in ipairs(CHN) do if a[c][x][y][z] ~= b[c][x][y][z] then n += 1 break end end
+		end
+	end end end
+	return n
+end
+local function writeLayers(yFrom, yTo, stateFn) -- writes exactly the box layers yFrom..yTo (80 or 160 cells), all channels
+	local reg = Region3.new(Vector3.new(324, (yFrom - 1) * 4, -1048), Vector3.new(364, yTo * 4, -1032))
+	local SM, SO, LO = {}, {}, {}
+	for x = 1, 10 do
+		SM[x], SO[x], LO[x] = {}, {}, {}
+		for y = yFrom, yTo do
+			local j = y - yFrom + 1
+			SM[x][j], SO[x][j], LO[x][j] = {}, {}, {}
+			for z = 1, 4 do
+				local m, so, lo = stateFn(x, y, z)
+				SM[x][j][z], SO[x][j][z], LO[x][j][z] = m, so / 255, lo / 255
+			end
+		end
+	end
+	workspace.Terrain:WriteVoxelChannels(reg, 4, {SolidMaterial = SM, SolidOccupancy = SO, LiquidOccupancy = LO})
 end
 local problems, plan = {}, {}
 local function bad(s) table.insert(problems, s) end
@@ -120,26 +181,22 @@ if MODE == "ALL" and copyV then
 	end
 end
 
--- 3) terrain: each cell must be in its planned after-state or already in its before-state
-local yTop = (MODE == "ALL") and 4 or 2
-local BOX = Region3.new(Vector3.new(324, 0, -1048), Vector3.new(364, 4 * yTop, -1032))
-local m0, o0 = workspace.Terrain:ReadVoxels(BOX, 4)
+-- 3) terrain (all three channels): each cell must be in a planned state or already restored. Anything else -> stop.
+--    MODE ALL:     layers 1-2 BEFORE or AFTER_B; layers 3-4 BEFORE or AFTER_A (Air, no liquid)
+--    MODE STAGE_B: layers 1-2 AFTER_A (= BEFORE there) or AFTER_B; layers 3-4 must be AFTER_A (else use MODE ALL)
+local get0 = readBox()
 local cellsToRestore = 0
-for x = 1, 10 do for y = 1, yTop do for z = 1, 4 do
-	local q = math.floor(o0[x][y][z] * 256 + 0.5)
-	local bm, bq = beforeCell(x, y, z)
-	local am, aq = afterCell(x, y, z)
-	if m0[x][y][z] == bm and q == bq then -- already restored
-	elseif m0[x][y][z] == am and q == aq then cellsToRestore += 1
-	else bad(string.format("cell x%d y%d z%d in an unexpected state: %s %d/256", x, y, z, m0[x][y][z].Name, q)) end
+local function same(a1, a2, a3, b1, b2, b3) return a1 == b1 and a2 == b2 and a3 == b3 end
+for x = 1, 10 do for y = 1, 4 do for z = 1, 4 do
+	local m, so, lo = get0(x, y, z)
+	local tm, ts, tl = (MODE == "ALL" and BEFORE or AFTER_A)(x, y, z) -- the restore target
+	local am, as_, al = (y <= 2 and AFTER_B or AFTER_A)(x, y, z)     -- the planned after-state
+	if MODE == "STAGE_B" and y >= 3 then
+		if not same(m, so, lo, AIR, 0, 0) then bad("Stage A upper cells are not Air without liquid: use MODE = \"ALL\"") end
+	elseif same(m, so, lo, tm, ts, tl) then -- already restored
+	elseif same(m, so, lo, am, as_, al) then cellsToRestore += 1
+	else bad(string.format("cell (%d,%d,%d) in an unexpected state: %s/%d/%d", 324 + (x - 1) * 4, (y - 1) * 4, -1048 + (z - 1) * 4, m.Name, so, lo)) end
 end end end
-if MODE == "STAGE_B" then
-	-- Stage A must still be in place (upper cells Air), or this is not a Stage-B-only situation
-	local mu, ou = workspace.Terrain:ReadVoxels(Region3.new(Vector3.new(324, 8, -1048), Vector3.new(364, 16, -1032)), 4)
-	for x = 1, 10 do for y = 1, 2 do for z = 1, 4 do
-		if mu[x][y][z] ~= Enum.Material.Air then bad("Stage A upper cells are not Air: use MODE = \"ALL\"") break end
-	end end end
-end
 
 table.insert(plan, string.format("MODE %s: %d house parts to restore, pivot %s, dune %s, %d terrain cells to restore, copy folder %s",
 	MODE, #pairsToRestore, MODE == "ALL" and ("from " .. cfs(v10.WorldPivot) .. " to " .. cfs(PIVOT_BEFORE)) or "unchanged", MODE == "ALL" and "to (344.565, -15, -1060.26)" or "unchanged",
@@ -148,25 +205,15 @@ if #problems > 0 then return "ROLLBACK STOPPED - nothing written. " .. #problems
 if DRY_RUN then return "DRY RUN OK - nothing written. Would do: " .. table.concat(plan, "\n") end
 
 -- ===== real run =====
-local SHELL = Region3.new(Vector3.new(320, -4, -1052), Vector3.new(368, 20, -1028))
-local sm0, so0 = workspace.Terrain:ReadVoxels(SHELL, 4)
+local shell0 = readShell()
 if MODE == "ALL" then
 	for _, pr in ipairs(pairsToRestore) do pr[1].CFrame = pr[2].CFrame end
 	v10.WorldPivot = copyV.WorldPivot
 	db.Mountains:GetChildren()[43].CFrame = copyD.CFrame
+	writeLayers(1, 4, BEFORE)  -- all 160 box cells, all three channels
+else
+	writeLayers(1, 2, AFTER_A) -- the 80 lower cells back to the Stage A state (= the original ground layer)
 end
-local mats, occs = {}, {}
-for x = 1, 10 do
-	mats[x], occs[x] = {}, {}
-	for y = 1, yTop do
-		mats[x][y], occs[x][y] = {}, {}
-		for z = 1, 4 do
-			local bm, bq = beforeCell(x, y, z)
-			mats[x][y][z] = bm occs[x][y][z] = bq / 256
-		end
-	end
-end
-workspace.Terrain:WriteVoxels(BOX, 4, mats, occs)
 task.wait(1)
 
 -- ===== verification =====
@@ -176,17 +223,10 @@ if MODE == "ALL" then
 	if v10.WorldPivot ~= copyV.WorldPivot or v10.WorldPivot ~= PIVOT_BEFORE then table.insert(post, "WorldPivot not restored exactly: " .. cfs(v10.WorldPivot)) end
 	if db.Mountains:GetChildren()[43].CFrame ~= copyD.CFrame then table.insert(post, "dune not restored exactly") end
 end
-local m1, o1 = workspace.Terrain:ReadVoxels(BOX, 4)
-for x = 1, 10 do for y = 1, yTop do for z = 1, 4 do
-	local bm, bq = beforeCell(x, y, z)
-	if m1[x][y][z] ~= bm or math.floor(o1[x][y][z] * 256 + 0.5) ~= bq then table.insert(post, string.format("cell x%d y%d z%d not restored", x, y, z)) end
-end end end
-local sm1, so1 = workspace.Terrain:ReadVoxels(SHELL, 4)
-for x = 1, sm1.Size.X do for y = 1, sm1.Size.Y do for z = 1, sm1.Size.Z do
-	local wx, wy, wz = 320 + (x - 1) * 4, -4 + (y - 1) * 4, -1052 + (z - 1) * 4
-	local inBox = wx >= 324 and wx < 364 and wy >= 0 and wy < 4 * yTop and wz >= -1048 and wz < -1032
-	if not inBox and (sm1[x][y][z] ~= sm0[x][y][z] or so1[x][y][z] ~= so0[x][y][z]) then table.insert(post, "a cell outside the box changed") break end
-end end end
+local nr, tr = boxDiff(readBox(), MODE == "ALL" and BEFORE or AFTER_A)
+for _, t in ipairs(tr) do table.insert(post, t) end
+local sc = shellChanged(shell0, readShell())
+if sc > 0 then table.insert(post, sc .. " cells outside the box changed") end
 if #post > 0 then return "ROLLBACK PROBLEM - do NOT save; use R0 (close without saving and reopen):\n" .. table.concat(post, "\n", 1, math.min(#post, 20)) end
 if MODE == "ALL" then folder:Destroy() end
 return "ROLLBACK DONE (" .. table.concat(plan, "") .. "). Do not save. Next: 01 with LABEL \"" .. (MODE == "ALL" and "AFTER_ROLLBACK" or "AFTER_B_ROLLBACK") ..

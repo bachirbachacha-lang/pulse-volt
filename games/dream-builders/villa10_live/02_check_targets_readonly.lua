@@ -1,7 +1,6 @@
--- 02_check_targets_readonly.lua
--- READ-ONLY. Contains no write calls. Finds every object and terrain cell the repair would change and checks that
--- each one is EXACTLY in the expected "before" state. Prints OK or the list of mismatches. Run in Edit mode.
--- The same target definitions are repeated in 03, 04 and 09 (each script must stand alone).
+-- 02_check_targets_readonly.lua  (Revision 3)
+-- READ-ONLY. Contains no write calls. Checks that every object and terrain cell the repair would change is EXACTLY in
+-- the expected "before" state, terrain in all three voxel channels. Prints OK or the list of mismatches. Edit mode.
 local PLACE = "DreamBuilders.rbxl" -- the live place. Only for the Step 0 rehearsal: "DreamBuilders_TEST_villa10_pool_edge.rbxl"
 assert(game.Name == PLACE, "wrong place: " .. game.Name)
 assert(game:GetService("RunService"):IsEdit(), "not in Edit mode")
@@ -35,6 +34,79 @@ local LIST = {
 	{"PoolRaised.StepIn1",362.183,11.078,-1040.422},{"PoolRaised.StepIn2",360.383,10.568,-1040.422},
 	{"PoolRaised.StepOut1",366.143,10.568,-1040.422},{"PoolRaised.StepOut2",364.343,11.078,-1040.422},
 }
+-- TERRAIN (Revision 3): all three voxel channels. Amounts are whole numbers in 1/255 steps ("bytes").
+-- The pool box: x 324..364, y 0..16, z -1048..-1032 = 10 x 4 x 4 cells. Layer 1 = y 0..4, 2 = 4..8, 3 = 8..12, 4 = 12..16.
+-- Inner 16 columns: x 328..360, z -1044..-1036. Ring: the other 24 columns.
+-- Values measured on the test copy (= backup 6c804b23) on 9 Nov with ReadVoxelChannels. NOTE: the live file as saved at
+-- 00:59 has hidden liquid 85 in the 40 layer-1 cells; the scripts refuse to run on it (owner decision D-1 first).
+local CHN = {"SolidMaterial", "SolidOccupancy", "LiquidOccupancy"}
+local AIR, GROUND = Enum.Material.Air, Enum.Material.Ground
+local BOX = Region3.new(Vector3.new(324, 0, -1048), Vector3.new(364, 16, -1032))
+local SHELL = Region3.new(Vector3.new(320, -4, -1052), Vector3.new(368, 20, -1028)) -- the box plus 272 cells around it
+local function isRing(x, z) return x == 1 or x == 10 or z == 1 or z == 4 end
+local function BEFORE(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	if y == 2 then return AIR, 0, 0 end
+	if y == 3 then return AIR, 0, 113 end
+	return AIR, 0, 63
+end
+local function AFTER_A(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	return AIR, 0, 0
+end
+local function AFTER_B(x, y, z) -- R10: solid explicitly Air (clears the ground), water as liquid
+	if y == 1 then if isRing(x, z) then return AIR, 0, 0 end return AIR, 0, 86 end
+	if y == 2 then if isRing(x, z) then return AIR, 0, 3 end return AIR, 0, 91 end
+	return AIR, 0, 0
+end
+local function b255(v) return math.floor(v * 255 + 0.5) end
+local function readBox()
+	local ch = workspace.Terrain:ReadVoxelChannels(BOX, 4, CHN)
+	assert(ch.Size == Vector3.new(10, 4, 4), "pool box is " .. tostring(ch.Size))
+	return function(x, y, z) return ch.SolidMaterial[x][y][z], b255(ch.SolidOccupancy[x][y][z]), b255(ch.LiquidOccupancy[x][y][z]) end
+end
+-- compares the box with a state function; returns the number of differing cells and up to 5 descriptions
+local function boxDiff(get, want, yFrom, yTo)
+	local n, txt = 0, {}
+	for x = 1, 10 do for y = yFrom or 1, yTo or 4 do for z = 1, 4 do
+		local m, so, lo = get(x, y, z)
+		local wm, ws, wl = want(x, y, z)
+		if m ~= wm or so ~= ws or lo ~= wl then
+			n += 1
+			if #txt < 5 then table.insert(txt, string.format("cell (%d,%d,%d) is %s/%d/%d, expected %s/%d/%d", 324 + (x - 1) * 4, (y - 1) * 4, -1048 + (z - 1) * 4, m.Name, so, lo, wm.Name, ws, wl)) end
+		end
+	end end end
+	return n, txt
+end
+-- raw copy of the 12 x 6 x 6 shell region, to prove that the 272 cells around the box do not change
+local function readShell() return workspace.Terrain:ReadVoxelChannels(SHELL, 4, CHN) end
+local function shellChanged(a, b)
+	local n = 0
+	for x = 1, 12 do for y = 1, 6 do for z = 1, 6 do
+		local wx, wy, wz = 320 + (x - 1) * 4, -4 + (y - 1) * 4, -1052 + (z - 1) * 4
+		local inB = wx >= 324 and wx < 364 and wy >= 0 and wy < 16 and wz >= -1048 and wz < -1032
+		if not inB then
+			for _, c in ipairs(CHN) do if a[c][x][y][z] ~= b[c][x][y][z] then n += 1 break end end
+		end
+	end end end
+	return n
+end
+local function writeLayers(yFrom, yTo, stateFn) -- writes exactly the box layers yFrom..yTo (80 or 160 cells), all channels
+	local reg = Region3.new(Vector3.new(324, (yFrom - 1) * 4, -1048), Vector3.new(364, yTo * 4, -1032))
+	local SM, SO, LO = {}, {}, {}
+	for x = 1, 10 do
+		SM[x], SO[x], LO[x] = {}, {}, {}
+		for y = yFrom, yTo do
+			local j = y - yFrom + 1
+			SM[x][j], SO[x][j], LO[x][j] = {}, {}, {}
+			for z = 1, 4 do
+				local m, so, lo = stateFn(x, y, z)
+				SM[x][j][z], SO[x][j][z], LO[x][j][z] = m, so / 255, lo / 255
+			end
+		end
+	end
+	workspace.Terrain:WriteVoxelChannels(reg, 4, {SolidMaterial = SM, SolidOccupancy = SO, LiquidOccupancy = LO})
+end
 local problems = {}
 local function bad(s) table.insert(problems, s) end
 
@@ -50,46 +122,26 @@ for _, e in ipairs(LIST) do
 		if c.Name == childName and c:IsA("BasePart") and not used[c] and (c.Position - pos).Magnitude < 0.01 then table.insert(hits, c) end
 	end
 	if #hits ~= 1 then bad(string.format("part %s at (%.3f,%.3f,%.3f): %d matches", path, pos.X, pos.Y, pos.Z, #hits))
-	else used[hits[1]] = true table.insert(found, hits[1]) end
+	else used[hits[1]] = true table.insert(found, {part = hits[1], pos = pos}) end
 end
--- the other 22 Villa 10 parts (garage block) must not be in the list
 local nV10 = 0
 for _, d in ipairs(v10:GetDescendants()) do if d:IsA("BasePart") then nV10 += 1 end end
 if nV10 ~= 69 then bad("Villa 10 has " .. nV10 .. " parts, expected 69") end
-
--- 2) model pivot
+-- 2) model pivot, full CFrame
 local pv = v10.WorldPivot
 if pv ~= PIVOT_BEFORE then bad("Villa 10 WorldPivot is " .. cfs(pv) .. ", expected exactly " .. cfs(PIVOT_BEFORE)) end
-
--- 3) dune #43: index, position, size
+-- 3) dune #43
 local kids = db.Mountains:GetChildren()
 local dune = kids[43]
-if #kids ~= 43 then bad("Mountains has " .. #kids .. " children, expected 43") end
-if not (dune and dune:IsA("BasePart") and (dune.Position - Vector3.new(344.565, -15, -1060.26)).Magnitude < 0.01
-	and (dune.Size - Vector3.new(257.28, 96.87, 269.61)).Magnitude < 0.01) then
-	bad("dune #43 not at (344.565, -15, -1060.26) with size (257.28, 96.87, 269.61)")
-end
-
--- 4) the 160 terrain cells: x 324..364, y 0..16, z -1048..-1032, exact values (occupancy in 1/256 steps)
-local BEFORE = { -- by layer (y index 1..4)
-	{Enum.Material.Ground, 30}, {Enum.Material.Air, 0}, {Enum.Material.Water, 113}, {Enum.Material.Water, 63},
-}
-local m, o = workspace.Terrain:ReadVoxels(Region3.new(Vector3.new(324, 0, -1048), Vector3.new(364, 16, -1032)), 4)
-if m.Size ~= Vector3.new(10, 4, 4) then bad("terrain box is " .. tostring(m.Size)) end
-local nCells, nBad = 0, 0
-for x = 1, 10 do for y = 1, 4 do for z = 1, 4 do
-	nCells += 1
-	local q = math.floor(o[x][y][z] * 256 + 0.5)
-	if m[x][y][z] ~= BEFORE[y][1] or q ~= BEFORE[y][2] then
-		nBad += 1
-		if nBad <= 5 then bad(string.format("cell (%d,%d,%d) is %s %d/256", 324 + (x - 1) * 4, (y - 1) * 4, -1048 + (z - 1) * 4, m[x][y][z].Name, q)) end
-	end
-end end end
-
+if not (#kids == 43 and dune and dune:IsA("BasePart") and (dune.Position - Vector3.new(344.565, -15, -1060.26)).Magnitude < 0.01
+	and (dune.Size - Vector3.new(257.28, 96.87, 269.61)).Magnitude < 0.01) then bad("dune #43 not at (344.565, -15, -1060.26) with size (257.28, 96.87, 269.61)") end
+-- 4) the 160 pool-box cells, all three channels
+local nBad, txt = boxDiff(readBox(), BEFORE)
+for _, t in ipairs(txt) do bad(t) end
 -- 5) no leftover copy folder from earlier attempts
 local pb = game:GetService("ServerStorage"):FindFirstChild("Phase1Backups")
 if pb and pb:FindFirstChild("Fix8Nov_Villa10") then bad("ServerStorage.Phase1Backups.Fix8Nov_Villa10 already exists") end
 
-return string.format("CHECK TARGETS (read-only): %d/47 house parts found, WorldPivot %s (exact match: %s), dune #43 %s, %d terrain cells checked, %d differ from the expected before-values.\n%s",
+return string.format("CHECK TARGETS (read-only): %d/47 house parts found, WorldPivot %s (exact match: %s), dune #43 %s, 160 pool-box cells checked in 3 channels, %d differ from the before-values.\n%s",
 	#found, cfs(pv), tostring(pv == PIVOT_BEFORE), dune and string.format("at (%.3f, %.3f, %.3f)", dune.Position.X, dune.Position.Y, dune.Position.Z) or "missing",
-	nCells, nBad, #problems == 0 and "RESULT: OK - every target is exactly in the expected before-state." or ("RESULT: STOP - " .. #problems .. " problem(s):\n" .. table.concat(problems, "\n")))
+	nBad, #problems == 0 and "RESULT: OK - every target is exactly in the expected before-state." or ("RESULT: STOP - " .. #problems .. " problem(s):\n" .. table.concat(problems, "\n")))

@@ -1,5 +1,17 @@
 # Villa 10: owner decisions and acceptance record
-Prepared 9 Nov 2026 by Claude. **Nothing below is accepted or approved yet.**
+Prepared 9 Nov 2026 by Claude. Updated 16:45 with the owner's decisions of 16:00.
+
+**Owner's decisions, 9 Nov 16:00 Riyadh (copied word for word):**
+> "D-1: I am considering restoring DreamBuilders.rbxl from the verified backup. Before doing anything, confirm that the 00:59 snapshot is preserved, verify both SHA-256 hashes, and prepare the exact restoration procedure. Do not replace the main file yet. D-2: Defer acceptance of R10. Fix Stage B first, remeasure the pool and provide a new acceptance sheet. D-3: No live authorization for any Stage A or Stage B changes yet. D-4: APPROVED — proceed with Revision 3 work on a separate test copy ONLY."
+
+| Decision | Status after 16:00 |
+|---|---|
+| D-1 | **Open.** Snapshot preserved and hashes verified; the procedure is in `VILLA10_D1_RESTORE_PROCEDURE.md`. Not restored. |
+| D-2 | **Deferred.** The new sheet after the Stage B fix is `VILLA10_R10_ACCEPTANCE_SHEET.md`. |
+| D-3 | **No live authorization.** |
+| D-4 | **Approved and done** (test copy only): `VILLA10_REV3_REPORT.md`. |
+
+The original decision texts follow.
 
 To decide, reply in chat with the decision number and your answer, for example "D-1: restore. D-2: accept." I will copy your exact words and the time into this file. A decision counts only when it comes from you in chat.
 

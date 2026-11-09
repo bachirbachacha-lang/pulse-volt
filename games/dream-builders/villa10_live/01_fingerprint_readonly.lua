@@ -1,4 +1,4 @@
--- 01_fingerprint_readonly.lua
+-- 01_fingerprint_readonly.lua  (Revision 3: terrain in all three voxel channels, whole map)
 -- READ-ONLY. Contains no write calls (no CFrame/Property assignment, no terrain writes, no Parent changes).
 -- Records a fingerprint of the open place under a label and prints a summary. Run in Edit mode.
 -- Set LABEL before running: "BEFORE" (after the fresh reopen), "AFTER_A" (after Stage A), "AFTER_B" (after Stage B),
@@ -133,7 +133,14 @@ for _, G in pairs(R.groups) do
 end
 task.wait()
 
--- 2) terrain: exact snapshots of protected regions
+-- 2) terrain, ALL THREE voxel channels (SolidMaterial, SolidOccupancy, LiquidOccupancy). Roblox stores the two
+--    amounts in steps of 1/255, so they are kept as whole numbers 0..255 ("bytes"). ReadVoxels is NOT used: it cannot
+--    see water inside a solid cell (rehearsal defect D4).
+local CHN = {"SolidMaterial", "SolidOccupancy", "LiquidOccupancy"}
+local function b255(v) return math.floor(v * 255 + 0.5) end
+-- the 160-cell pool box (the only terrain the repair may change): x 324..364, y 0..16, z -1048..-1032
+local function inBox(wx, wy, wz) return wx >= 324 and wx < 364 and wy >= 0 and wy < 16 and wz >= -1048 and wz < -1032 end
+-- 2a) named regions, cell by cell (kept for 05)
 local function aabb(cf, size)
 	local mn = Vector3.new(math.huge, math.huge, math.huge)
 	local mx = -mn
@@ -145,19 +152,21 @@ local function aabb(cf, size)
 end
 local function snap(name, mn, mx)
 	local reg = Region3.new(mn, mx):ExpandToGrid(4)
-	local m, o = workspace.Terrain:ReadVoxels(reg, 4)
-	local h1, h2, water, solid = 0, 0, 0, 0
-	for x = 1, m.Size.X do for y = 1, m.Size.Y do for z = 1, m.Size.Z do
-		local mat = m[x][y][z]
-		local q = math.floor(o[x][y][z] * 256 + 0.5)
-		local v = mat.Value * 300 + q
+	local ch = workspace.Terrain:ReadVoxelChannels(reg, 4, CHN)
+	local size = ch.Size
+	local cells = {}
+	local h1, h2, liquid, solid = 0, 0, 0, 0
+	for x = 1, size.X do for y = 1, size.Y do for z = 1, size.Z do
+		local m, so, lo = ch.SolidMaterial[x][y][z], b255(ch.SolidOccupancy[x][y][z]), b255(ch.LiquidOccupancy[x][y][z])
+		local v = (m.Value * 256 + so) * 256 + lo
+		cells[(x - 1) * size.Y * size.Z + (y - 1) * size.Z + z] = v
 		h1 = (h1 * P1 + v) % M1
 		h2 = (h2 * P2 + v) % M2
-		if mat == Enum.Material.Water then water += 1 elseif mat ~= Enum.Material.Air then solid += 1 end
+		if lo > 0 then liquid += 1 end
+		if m ~= Enum.Material.Air then solid += 1 end
 	end end end
-	local lo = reg.CFrame.Position - reg.Size / 2
-	R.terrain[name] = {region = reg, lo = lo, mats = m, occ = o, size = m.Size, water = water, solid = solid,
-		sum = string.format("%09d-%09d", h1, h2)}
+	local lo3 = reg.CFrame.Position - reg.Size / 2
+	R.terrain[name] = {lo = lo3, size = size, cells = cells, liquid = liquid, solid = solid, sum = string.format("%09d-%09d", h1, h2)}
 	task.wait()
 end
 snap("Villa10_work_area", Vector3.new(280, -16, -1200), Vector3.new(520, 40, -940))
@@ -169,7 +178,53 @@ for _, villa in ipairs({"Villa_PalmHills_1_Classic", "Villa_PalmHills_6_Classic"
 	local mn, mx = aabb(cf, size)
 	snap(villa, Vector3.new(mn.X - 12, -16, mn.Z - 12), Vector3.new(mx.X + 12, math.max(40, mx.Y + 8), mx.Z + 12))
 end
-R.cells = workspace.Terrain:CountCells()
+-- 2b) the whole map, all three channels, in 256-stud tiles, with the 160 pool-box cells left out (they are recorded
+--     separately in R.box). Extent: x -4000..2464, y -96..32, z -2400..4000 (all terrain lies inside; measured 9 Nov).
+local tiles, outSolid, outLiquid, nCells = {}, 0, 0, 0
+local box = {}
+for tx = -4000, 2463, 256 do for tz = -2400, 3999, 256 do
+	local ch = workspace.Terrain:ReadVoxelChannels(Region3.new(Vector3.new(tx, -96, tz), Vector3.new(tx + 256, 32, tz + 256)), 4, CHN)
+	local SM, SO, LO, size = ch.SolidMaterial, ch.SolidOccupancy, ch.LiquidOccupancy, ch.Size
+	local h1, h2, cs, cl = 0, 0, 0, 0
+	for x = 1, size.X do local wx = tx + (x - 1) * 4 local a, b, c = SM[x], SO[x], LO[x]
+		for y = 1, size.Y do local wy = -96 + (y - 1) * 4 local a2, b2, c2 = a[y], b[y], c[y]
+			for z = 1, size.Z do
+				local wz = tz + (z - 1) * 4
+				local m, so, lo = a2[z], b255(b2[z]), b255(c2[z])
+				if inBox(wx, wy, wz) then
+					box[((wx - 324) / 4) * 16 + ((wy - 0) / 4) * 4 + ((wz + 1048) / 4) + 1] = {m, so, lo}
+				else
+					local v = (m.Value * 256 + so) * 256 + lo
+					h1 = (h1 * P1 + v) % M1
+					h2 = (h2 * P2 + v) % M2
+					if m ~= Enum.Material.Air then cs += 1 end
+					if lo > 0 then cl += 1 end
+				end
+			end
+		end
+	end
+	nCells += size.X * size.Y * size.Z
+	outSolid += cs outLiquid += cl
+	tiles[tx .. "," .. tz] = string.format("%09d-%09d", h1, h2)
+	task.wait()
+end end
+local tkeys = {}
+for k in pairs(tiles) do table.insert(tkeys, k) end
+table.sort(tkeys)
+local g1, g2 = 0, 0
+for _, k in ipairs(tkeys) do g1, g2 = hashStr(g1, g2, k .. ":" .. tiles[k] .. ";") end
+local boxCount, boxSum = {}, {}
+for i = 1, 160 do
+	local c = box[i]
+	local key = string.format("y%d:%s/%d/%d", math.floor(((i - 1) % 16) / 4), c[1].Name, c[2], c[3])
+	boxCount[key] = (boxCount[key] or 0) + 1
+end
+for k, v in pairs(boxCount) do table.insert(boxSum, k .. " x" .. v) end
+table.sort(boxSum)
+R.map = {tiles = tiles, digest = string.format("%09d-%09d", g1, g2), cells = nCells, solid = outSolid, liquid = outLiquid}
+R.box = box
+R.boxSummary = table.concat(boxSum, ", ")
+R.cells = workspace.Terrain:CountCells() -- information only (not a check; rehearsal defect D2)
 
 -- 3) scripts and object counts
 local srcList, nScripts, chars = {}, 0, 0
@@ -198,7 +253,7 @@ _G.V10L = _G.V10L or {}
 _G.V10L[LABEL] = R
 
 -- 4) summary
-local out = {string.format("FINGERPRINT %s  place=%s  parts=%d  terrain cells=%d  scripts=%d (%d chars, %s)",
+local out = {string.format("FINGERPRINT %s  place=%s  parts=%d  CountCells(info only)=%d  scripts=%d (%d chars, %s)",
 	LABEL, game.Name, R.nParts, R.cells, nScripts, chars, R.scripts.digest)}
 local v10m = db.Homes:FindFirstChild("Villa_PalmHills_10_Pearl")
 table.insert(out, string.format("  pivots recorded for %d models; Villa 10 WorldPivot %s", nPiv, v10m and cfs(v10m.WorldPivot) or "MISSING"))
@@ -217,9 +272,11 @@ for t in pairs(R.terrain) do table.insert(tnames, t) end
 table.sort(tnames)
 for _, t in ipairs(tnames) do
 	local T = R.terrain[t]
-	table.insert(out, string.format("  terrain %-28s %dx%dx%d cells from (%d,%d,%d)  water %d  solid %d  %s", t, T.size.X, T.size.Y,
-		T.size.Z, T.lo.X, T.lo.Y, T.lo.Z, T.water, T.solid, T.sum))
+	table.insert(out, string.format("  terrain %-28s %dx%dx%d cells from (%d,%d,%d)  with liquid %d  with solid %d  %s", t, T.size.X, T.size.Y,
+		T.size.Z, T.lo.X, T.lo.Y, T.lo.Z, T.liquid, T.solid, T.sum))
 end
+table.insert(out, string.format("  terrain WHOLE MAP outside the pool box: %d cells, with solid %d, with liquid %d, digest %s", R.map.cells - 160, R.map.solid, R.map.liquid, R.map.digest))
+table.insert(out, "  terrain POOL BOX (layer: SolidMaterial/SolidOccupancy/LiquidOccupancy in 1/255): " .. R.boxSummary)
 local cn = {}
 for k, v in pairs(R.counts) do table.insert(cn, k .. "=" .. v) end
 table.sort(cn)

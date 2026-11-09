@@ -1,0 +1,55 @@
+07_acceptance_suite_client.lua, Play client, test copy after Stage B (R10, Revision 3), 9 Nov 2026 ~13:14-13:18 UTC. Verbatim.
+"moved" is the distance from the first to the last sample. For laps (P3) it is small because a lap ends where it started.
+
+VERDICT: PASS
+TOTALS: samples 1334, deck-swim 0, stuck 0
+P1 | house side 1.0 out E>W                   | samples  25 | deck-swim 0 | stuck 0 | moved 39.4
+P1 | house side 1.0 out W>E                   | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | house side 1.5 out E>W                   | samples  25 | deck-swim 0 | stuck 0 | moved 41.7
+P1 | house side 1.5 out W>E                   | samples  25 | deck-swim 0 | stuck 0 | moved 41.3
+P1 | house side 2.2 out E>W                   | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | house side 2.2 out W>E                   | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | garden side 1.0 out E>W                  | samples  24 | deck-swim 0 | stuck 0 | moved 41.9
+P1 | garden side 1.0 out W>E                  | samples  25 | deck-swim 0 | stuck 0 | moved 41.9
+P1 | garden side 1.5 out E>W                  | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | garden side 1.5 out W>E                  | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | garden side 2.2 out E>W                  | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | garden side 2.2 out W>E                  | samples  25 | deck-swim 0 | stuck 0 | moved 42.4
+P1 | garden side 3.0 out E>W                  | samples  25 | deck-swim 0 | stuck 0 | moved 42.1
+P1 | garden side 3.0 out W>E                  | samples  25 | deck-swim 0 | stuck 0 | moved 42.7
+P1 | west end 1.0 out N>S                     | samples  11 | deck-swim 0 | stuck 0 | moved 17.8
+P1 | west end 1.0 out S>N                     | samples  11 | deck-swim 0 | stuck 0 | moved 17.3
+P1 | steps end 1.0 out N>S                    | samples  11 | deck-swim 0 | stuck 0 | moved 16.5
+P1 | steps end 1.0 out S>N                    | samples  12 | deck-swim 0 | stuck 0 | moved 17.7
+P1 | west end 1.5 out N>S                     | samples  12 | deck-swim 0 | stuck 0 | moved 18.4
+P1 | west end 1.5 out S>N                     | samples  11 | deck-swim 0 | stuck 0 | moved 17.9
+P1 | steps end 1.5 out N>S                    | samples  12 | deck-swim 0 | stuck 0 | moved 18.4
+P1 | steps end 1.5 out S>N                    | samples  11 | deck-swim 0 | stuck 0 | moved 17.1
+P1 | west end 2.2 out N>S                     | samples  12 | deck-swim 0 | stuck 0 | moved 18.4
+P1 | west end 2.2 out S>N                     | samples  11 | deck-swim 0 | stuck 0 | moved 17.9
+P1 | steps end 2.2 out N>S                    | samples  12 | deck-swim 0 | stuck 0 | moved 18.1
+P1 | steps end 2.2 out S>N                    | samples  11 | deck-swim 0 | stuck 0 | moved 17.9
+P2 | corner south-east (house/steps) (end side first) | samples  10 | deck-swim 0 | stuck 0 | moved 10.1
+P2 | corner south-east (house/steps) (long side first) | samples  10 | deck-swim 0 | stuck 0 | moved 10.1
+P2 | corner south-west (house/west) (end side first) | samples  10 | deck-swim 0 | stuck 0 | moved 9.9
+P2 | corner south-west (house/west) (long side first) | samples  10 | deck-swim 0 | stuck 0 | moved 10.1
+P2 | corner north-west (garden/west) (end side first) | samples  10 | deck-swim 0 | stuck 0 | moved 9.9
+P2 | corner north-west (garden/west) (long side first) | samples  10 | deck-swim 0 | stuck 0 | moved 10.1
+P2 | corner north-east (garden/steps) (end side first) | samples  10 | deck-swim 0 | stuck 0 | moved 9.9
+P2 | corner north-east (garden/steps) (long side first) | samples  11 | deck-swim 0 | stuck 0 | moved 10.1
+P3 | lap clockwise 1                          | samples  72 | deck-swim 0 | stuck 0 | moved 1.6
+P3 | lap counter-clockwise 1                  | samples  70 | deck-swim 0 | stuck 0 | moved 1.6
+P3 | lap clockwise 2                          | samples  72 | deck-swim 0 | stuck 0 | moved 1.8
+P3 | lap counter-clockwise 2                  | samples  71 | deck-swim 0 | stuck 0 | moved 1.8
+P3 | lap clockwise 3                          | samples  70 | deck-swim 0 | stuck 0 | moved 1.8
+P3 | lap counter-clockwise 3                  | samples  71 | deck-swim 0 | stuck 0 | moved 1.8
+P4 | escape house-side corner E               | free directions 3 of 4 | deck-swim 0 | stuck 0
+P4 | escape house-side corner W               | free directions 3 of 4 | deck-swim 0 | stuck 0
+P4 | escape garden corner W                   | free directions 4 of 4 | deck-swim 0 | stuck 0
+P4 | escape garden corner E                   | free directions 4 of 4 | deck-swim 0 | stuck 0
+P4 | escape house path x-12                   | free directions 2 of 4 | deck-swim 0 | stuck 0
+P4 | escape house path x0                     | free directions 2 of 4 | deck-swim 0 | stuck 0
+P4 | escape house path x+12                   | free directions 3 of 4 | deck-swim 0 | stuck 0
+P4 | escape garden side x-10                  | free directions 3 of 4 | deck-swim 0 | stuck 0
+P4 | escape garden side x+10                  | free directions 3 of 4 | deck-swim 0 | stuck 0
+P5 | swim test | walk in over the steps: reached (Swimming=15,Running=6) ; deep middle: reached (Swimming=5) ; house-side wall: reached (Swimming=9) ; middle: reached (Swimming=4) ; garden-side wall: reached (GettingUp=1,Running=1,Swimming=3) ; middle: reached (Swimming=4) ; west wall: reached (GettingUp=1,Running=1,Swimming=10) ; middle: reached (Swimming=15) ; steps: reached (Swimming=18) | swimming samples in the deep middle 61 | exited onto the deck: true | stuck 0

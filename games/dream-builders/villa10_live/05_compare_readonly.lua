@@ -1,4 +1,4 @@
--- 05_compare_readonly.lua
+-- 05_compare_readonly.lua  (Revision 3: terrain in all three channels, whole map)
 -- READ-ONLY. Contains no write calls. Compares two fingerprints made by 01_fingerprint_readonly.lua and checks that the
 -- ONLY differences are the planned ones for the given stage. Prints PASS or FAIL with every unexpected difference.
 --   STAGE = "A"            after Stage A   (47 house parts + dune moved, 80 upper pool cells -> Air, copy folder added)
@@ -114,43 +114,73 @@ for _, g in ipairs(changedGroups) do
 	if not (stageMovesParts and allowedGroups[g]) then fail("UNPLANNED group change: " .. g) end
 end
 
--- 3) terrain, cell by cell
-local function isRing(xi, zi) return xi == 1 or xi == 10 or zi == 1 or zi == 4 end
-local function plannedAfter(wx, wy, wz) -- returns material, q (1/256) or nil if the cell is not planned to change at this stage
-	if wx < 324 or wx >= 364 or wz < -1048 or wz >= -1032 or wy < 0 or wy >= 16 then return nil end
-	local xi, zi = (wx - 324) / 4 + 1, (wz + 1048) / 4 + 1
-	if wy >= 8 then if STAGE ~= "ROLLBACK" then return Enum.Material.Air, 0 end return nil end
-	if STAGE ~= "B" then return nil end
-	if wy < 4 then if isRing(xi, zi) then return Enum.Material.Air, 0 end return Enum.Material.Water, 86 end
-	if isRing(xi, zi) then return Enum.Material.Water, 3 end
-	return Enum.Material.Water, 91
+-- 3) terrain, ALL THREE channels (Revision 3; CountCells is no longer checked: rehearsal defect D2)
+--    3a) the 160 pool-box cells must be exactly in the planned state for this stage
+--    3b) the whole map outside the box: identical digest (and, if not, the differing 256-stud tiles are listed)
+--    3c) the named regions (Villa 10 work area, Villas 1, 6, 15, 8, 16, 4): identical cell by cell outside the box
+local AIR, GROUND = Enum.Material.Air, Enum.Material.Ground
+local function isRing(x, z) return x == 1 or x == 10 or z == 1 or z == 4 end
+local function BEFORE_(x, y, z)
+	if y == 1 then return GROUND, 30, 0 end
+	if y == 2 then return AIR, 0, 0 end
+	if y == 3 then return AIR, 0, 113 end
+	return AIR, 0, 63
+end
+local function AFTER_A_(x, y, z) if y == 1 then return GROUND, 30, 0 end return AIR, 0, 0 end
+local function AFTER_B_(x, y, z)
+	if y == 1 then if isRing(x, z) then return AIR, 0, 0 end return AIR, 0, 86 end
+	if y == 2 then if isRing(x, z) then return AIR, 0, 3 end return AIR, 0, 91 end
+	return AIR, 0, 0
+end
+local wantBox = ({A = AFTER_A_, B = AFTER_B_, ROLLBACK = BEFORE_, B_ROLLBACK = AFTER_A_})[STAGE]
+local function boxCheck(R0, want, label)
+	local n = 0
+	for x = 1, 10 do for y = 1, 4 do for z = 1, 4 do
+		local c = R0.box[(x - 1) * 16 + (y - 1) * 4 + z]
+		local wm, ws, wl = want(x, y, z)
+		if c[1] ~= wm or c[2] ~= ws or c[3] ~= wl then
+			n += 1
+			if n <= 5 then fail(string.format("%s pool-box cell (%d,%d,%d) is %s/%d/%d, expected %s/%d/%d", label, 324 + (x - 1) * 4, (y - 1) * 4, -1048 + (z - 1) * 4, c[1].Name, c[2], c[3], wm.Name, ws, wl)) end
+		end
+	end end end
+	return n
 end
 local terrainReport = {}
+if BASE == "BEFORE" then
+	local nb = boxCheck(A, BEFORE_, BASE)
+	table.insert(terrainReport, string.format("pool box in %s: %d of 160 cells differ from the measured before-values", BASE, nb))
+end
+local nbox = boxCheck(B, wantBox, NEW)
+table.insert(terrainReport, string.format("pool box in %s: %d of 160 cells differ from the planned %s state (3 channels)", NEW, nbox, STAGE))
+local tilesDiff = {}
+for k, v in pairs(A.map.tiles) do if B.map.tiles[k] ~= v then table.insert(tilesDiff, k) end end
+table.sort(tilesDiff)
+if A.map.digest ~= B.map.digest or #tilesDiff > 0 then
+	fail("UNPLANNED terrain change outside the pool box, in 256-stud tile(s) at x,z: " .. table.concat(tilesDiff, " ; ", 1, math.min(#tilesDiff, 10)))
+end
+table.insert(terrainReport, string.format("whole map outside the box (%d cells, 3 channels): %s -> %s, %d tiles differ",
+	A.map.cells - 160, A.map.digest, B.map.digest, #tilesDiff))
 for name, Ta in pairs(A.terrain) do
 	local Tb = B.terrain[name]
 	if not Tb then fail("terrain region missing in " .. NEW .. ": " .. name)
 	else
-		local diff, planned, bad = 0, 0, 0
-		for x = 1, Ta.size.X do for y = 1, Ta.size.Y do for z = 1, Ta.size.Z do
-			local ma, mb = Ta.mats[x][y][z], Tb.mats[x][y][z]
-			local qa, qb = math.floor(Ta.occ[x][y][z] * 256 + 0.5), math.floor(Tb.occ[x][y][z] * 256 + 0.5)
-			local wx, wy, wz = Ta.lo.X + (x - 1) * 4, Ta.lo.Y + (y - 1) * 4, Ta.lo.Z + (z - 1) * 4
-			local pm, pq = nil, nil
-			if name == "Villa10_work_area" then pm, pq = plannedAfter(wx, wy, wz) end
-			if pm then
-				planned += 1
-				if mb ~= pm or qb ~= pq then bad += 1 if bad <= 5 then fail(string.format("planned cell (%d,%d,%d) is %s %d/256, expected %s %d/256", wx, wy, wz, mb.Name, qb, pm.Name, pq)) end end
-			elseif ma ~= mb or qa ~= qb then
-				diff += 1
-				if diff <= 5 then fail(string.format("UNPLANNED terrain change in %s at (%d,%d,%d): %s %d -> %s %d", name, wx, wy, wz, ma.Name, qa, mb.Name, qb)) end
+		local diff = 0
+		local sy, sz = Ta.size.Y, Ta.size.Z
+		for x = 1, Ta.size.X do for y = 1, sy do for z = 1, sz do
+			local i = (x - 1) * sy * sz + (y - 1) * sz + z
+			if Ta.cells[i] ~= Tb.cells[i] then
+				local wx, wy, wz = Ta.lo.X + (x - 1) * 4, Ta.lo.Y + (y - 1) * 4, Ta.lo.Z + (z - 1) * 4
+				local inB = wx >= 324 and wx < 364 and wy >= 0 and wy < 16 and wz >= -1048 and wz < -1032
+				if not inB then
+					diff += 1
+					if diff <= 5 then fail(string.format("UNPLANNED terrain change in %s at (%d,%d,%d)", name, wx, wy, wz)) end
+				end
 			end
 		end end end
-		table.insert(terrainReport, string.format("%s: %d planned cells, %d wrong, %d unplanned changes", name, planned, bad, diff))
+		table.insert(terrainReport, string.format("%s: %d unplanned changes", name, diff))
 	end
 end
 table.sort(terrainReport)
-local wantCellDelta = ({A = -80, B = -64, ROLLBACK = 0, B_ROLLBACK = -80})[STAGE]
-if B.cells - A.cells ~= wantCellDelta then fail(string.format("CountCells changed by %d, expected %d", B.cells - A.cells, wantCellDelta)) end
 
 -- 3b) model pivots: the FULL WorldPivot CFrame of every villa model, exact
 local pivReport
@@ -190,7 +220,7 @@ end
 if stageMovesParts and not folder then fail("copy folder missing") end
 if not stageMovesParts and folder then fail("copy folder still present") end
 
-return string.format("COMPARE %s -> %s (stage %s): %s\n  parts: %d changed (%d planned and exact), %d added, %d removed\n  groups changed: %s\n  terrain: %s\n  pivots: %s\n  CountCells %d -> %d (delta %d)\n  scripts %s\n%s",
+return string.format("COMPARE %s -> %s (stage %s): %s\n  parts: %d changed (%d planned and exact), %d added, %d removed\n  groups changed: %s\n  terrain: %s\n  pivots: %s\n  CountCells %d -> %d (delta %d, information only)\n  scripts %s\n%s",
 	BASE, NEW, STAGE, #fails == 0 and "PASS - only the planned changes" or ("FAIL - " .. #fails .. " problem(s)"),
 	nChanged, nExpectedOk, nAdded, nRemoved, #changedGroups > 0 and table.concat(changedGroups, ", ") or "none",
 	table.concat(terrainReport, "; "), pivReport, A.cells, B.cells, B.cells - A.cells, B.scripts.digest == A.scripts.digest and "identical" or "DIFFERENT",

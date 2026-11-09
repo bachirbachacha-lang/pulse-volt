@@ -418,3 +418,19 @@ Report: `VILLA10_REV2_REPORT.md`. Evidence: `evidence/2026-11-09_villa10_rev2_re
 - **Not tested:** 07, 08, 09 ALL.
 
 **Next session starting point:** the owner's decisions D-1 to D-4. No live edits until then. Villa 6 is untouched.
+
+## Session 14 (9 Nov, 16:00–16:50): Revision 3 on the test copy (owner D-4); no live edits
+Report: `VILLA10_REV3_REPORT.md`. Evidence: `evidence/2026-11-09_villa10_rev3_rehearsal/`. Acceptance sheet: `VILLA10_R10_ACCEPTANCE_SHEET.md`. Restore procedure (D-1): `VILLA10_D1_RESTORE_PROCEDURE.md`.
+- **D-1 check:** the 00:59 snapshot is byte-identical to the live file (`00a816a4…`); the backup and the test copy are `6c804b23…`. Nothing was restored.
+- **Scripts:** terrain is now read and written in all three channels. The pool box values are exact bytes. A whole-map, three-channel check outside the box replaces `CountCells`. Stage B clears the ground in the same write.
+- **Rehearsal (test copy):** all PASS.
+  - Stage A and Stage B: exact.
+  - Water on the deck: 0.
+  - Player-data guard and purchase: PASS.
+  - P1–P5: 0 deck-swim, 0 stuck in 1,334 samples.
+  - K1–K6 with real keys: PASS.
+  - New depth map: 66% swim, 34% stand.
+  - R1 Stage B only, R1 full and R0: all exact.
+- **Still open:** owner decisions D-1, D-2, D-3; Codex's review; the post-save file check has not been rehearsed.
+
+**Next session starting point:** wait for the owner. No live edits. Villa 6 is untouched.
