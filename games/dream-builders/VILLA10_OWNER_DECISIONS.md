@@ -11,6 +11,11 @@ Prepared 9 Nov 2026 by Claude. Updated 16:45 with the owner's decisions of 16:00
 | D-3 | **No live authorization.** |
 | D-4 | **Approved and done** (test copy only): `VILLA10_REV3_REPORT.md`. |
 
+**Owner's instruction, 9 Nov 19:34 Riyadh (copied word for word):**
+> "Please package all Revision 3 reports, scripts, test outputs, rollback evidence and the updated live restoration procedure into one complete ZIP. Do not restore or modify the live project. I want Codex to independently review the entire Revision 3 package before making any live decisions. Keep D-1, D-2 and D-3 unresolved until I explicitly decide them."
+
+So D-1, D-2 and D-3 stay **unresolved**. Next: Codex reviews the complete Revision 3 package (`villa10_rev3_complete_review_2026-11-09.zip`).
+
 The original decision texts follow.
 
 To decide, reply in chat with the decision number and your answer, for example "D-1: restore. D-2: accept." I will copy your exact words and the time into this file. A decision counts only when it comes from you in chat.
