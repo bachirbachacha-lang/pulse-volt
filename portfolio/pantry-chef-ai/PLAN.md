@@ -2,9 +2,9 @@
 
 Written 14 Nov 2026 by Claude, working alone while the owner was away.
 
-## Decisions I made for you (change any of them)
+## Decisions (settled on 14 Nov 2026)
 
-Each line is one decision. Tell me the number and what you want instead.
+The owner asked Claude to decide these. They are final and the project is built on them. Nothing here is waiting for an answer. If you ever want one changed, say the number.
 
 | # | Decision | Why, in plain words | How hard to change later |
 |---|---|---|---|
@@ -68,7 +68,6 @@ I did not do any of these, on purpose.
 - **Publishing**: putting the app on the internet, App Store or Play Store developer accounts.
 - **Name check**: I did one quick web search and found no recipe app called "Potwise". That is not a legal trademark check. Do a proper check before using the name in public.
 - **Photos**: if you want real food photos, they must be your own or properly licensed.
-- **Your choice on D1 to D15** above.
 
 ## Risks I know about
 

@@ -10,7 +10,7 @@ Tested on Linux with Node.js 22.23.4 and Chromium only. See TEST_RESULTS.md for 
 
 | Item | Status | Notes |
 |---|---|---|
-| PLAN.md (roadmap, tech stack, 15 decisions) | Fully working | Written. Decisions wait for the owner. |
+| PLAN.md (roadmap, tech stack, 15 decisions) | Fully working | Written. Decisions settled by Claude at the owner's request. |
 | BRAND.md and logo SVGs | Fully working | Logo rendered and looked at. Name is not trademark-checked. |
 | design/UX.md and 4 HTML mockups | Fully working | Opened at phone width: no errors, no sideways scroll. Mockups show fallback fonts. |
 | README.md | Fully working | Run steps were followed from a fresh copy of the branch and worked. |
@@ -46,7 +46,7 @@ Tested on Linux with Node.js 22.23.4 and Chromium only. See TEST_RESULTS.md for 
 
 ## Needs the owner / the owner's dad
 
-1. Read the 15 decisions at the top of PLAN.md and say which to change (especially D1 name, D2 web app, D7 sample chef).
+1. (Settled) The 15 decisions in PLAN.md: the owner told Claude to decide, so they stand as written.
 2. Real AI: which route (free local model or paid API), and any account, key or payment. Not done on purpose.
 3. A proper trademark check on "Potwise" before public use.
 4. Publishing or deploying anywhere. Not done on purpose.
