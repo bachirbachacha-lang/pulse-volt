@@ -1,0 +1,77 @@
+# Plan: Pantry Chef AI (product name: Potwise)
+
+Written 14 Nov 2026 by Claude, working alone while the owner was away.
+
+## Decisions I made for you (change any of them)
+
+Each line is one decision. Tell me the number and what you want instead.
+
+| # | Decision | Why, in plain words | How hard to change later |
+|---|---|---|---|
+| D1 | Product name is **Potwise** | Short, easy to say, means "wise about what goes in the pot". Details in BRAND.md. | Easy (one name in a few files) |
+| D2 | It is a **mobile-first web app**, not an App Store app | It opens in any phone or laptop browser. No Apple or Google developer account, no payment, no Android Studio or Xcode. A lecturer can open it in seconds. | Medium. It can be wrapped into a real phone app later (see roadmap phase 5). |
+| D3 | Frontend: **React + Vite** | React is the most used tool for building screens, so it is good for a CV. Vite starts the project in one command. Both are free. | Hard (it is the whole screen code) |
+| D4 | Backend: **Node.js + Express** | Same language (JavaScript) as the frontend, so you learn one language, not two. Express is the most common Node server. | Medium |
+| D5 | Database: **SQLite**, using the one built into Node | The whole database is one file on your computer. No server to install, no account, no password. Because it is built into Node there is nothing extra to install on Windows. | Medium (the SQL is standard) |
+| D6 | Styling: **plain CSS with variables** (no Tailwind, no UI kit) | You can read every style and explain it in a viva. Brand colours live in one place. | Easy |
+| D7 | The AI chef is **not real AI yet**. One marked function, `suggestMeals()`, returns sample suggestions by matching your ingredients against the recipes. | Real AI needs an API key or a paid service, which the rules forbid for now. Keeping it in one function means real AI can be plugged in later without touching the screens. | Easy (one file) |
+| D8 | **No login.** One person uses the app on their own computer. | Accounts need passwords, email and security work. Not needed to show the idea. | Medium |
+| D9 | Pictures are **drawn by code** (simple plate illustrations), no photos | No stock photos, no AI images, nothing copied from anyone. Works offline. | Easy (swap in your own photos) |
+| D10 | Recipes are **14 sample recipes I wrote** for this project | Original text, realistic amounts. Nutrition numbers are estimates and labelled as estimates. | Easy (edit one data file) |
+| D11 | Language: **English only** for now | Keeps version 1 small. Arabic (right-to-left) is on the roadmap. | Medium |
+| D12 | Tests: **Node's built-in test runner** for the backend, **Playwright** for clicking through the real screens | Built-in means nothing extra to install. Playwright is the standard free tool for browser tests. | Easy |
+| D13 | Needs **Node.js 22.13 or newer** | That version includes the built-in database. It is the free standard download. | n/a |
+| D14 | Fonts are **Fraunces** (headings) and **DM Sans** (text), installed with the app | Both are free, open-licence fonts. Installed with the app so it works offline and nothing loads from another company's servers. | Easy |
+| D15 | Five tabs: **Home, Explore, Chef, Saved, Pantry** | "Use what I have" only makes sense if the app knows what you have, so Pantry is a tab. | Easy |
+
+## What the app does (version 1)
+
+1. **Home**: greeting, search, a card that opens the chef, meal categories, popular recipes.
+2. **Explore**: search by name or ingredient, filter by category.
+3. **Recipe**: cooking time, difficulty, servings, estimated calories, ingredients (shows which ones you already have), numbered steps, save button.
+4. **Chef**: a chat. Type ingredients, or tap **Use what I have**, **Random recipe**, or **Diet plan**.
+5. **Pantry**: the list of ingredients you have at home.
+6. **Saved**: recipes you marked with the heart.
+
+## Tech stack in one picture
+
+```
+Phone or laptop browser
+        |
+   React screens (Vite)          <- what you see
+        |  asks for data with fetch()
+   Express server (Node.js)      <- the rules
+        |              \
+   SQLite file          suggestMeals()   <- the "AI chef" (sample logic for now)
+   (recipes, pantry, saved)
+```
+
+Everything is free and open source. Nothing needs an account, a key or a card.
+
+## Roadmap
+
+| Phase | What | Status on 14 Nov 2026 |
+|---|---|---|
+| 0 | Plan, brand, screen design, mockups | See STATUS.md |
+| 1 | Working version with sample data, sample chef, tests, documents | See STATUS.md |
+| 2 | Polish: add your own recipes, edit recipes in the app, shopping list for missing ingredients, cook mode with timers | Planned |
+| 3 | Real AI chef behind `suggestMeals()`. Free route: a local model with Ollama on your own computer. Paid route: an AI API key. | Planned. Needs the owner / the owner's dad (see below). |
+| 4 | Arabic language and right-to-left layout, accessibility check with a screen reader | Planned |
+| 5 | Phone app: installable web app first, then wrap with Capacitor for the stores | Planned. Store accounts cost money and need dad. |
+| 6 | Put it online with accounts so each person has their own pantry | Planned. Needs hosting decisions and dad. |
+
+## Needs the owner / the owner's dad
+
+I did not do any of these, on purpose.
+
+- **Real AI**: choosing a provider, creating an account, getting an API key, any payment.
+- **Publishing**: putting the app on the internet, App Store or Play Store developer accounts.
+- **Name check**: I did one quick web search and found no recipe app called "Potwise". That is not a legal trademark check. Do a proper check before using the name in public.
+- **Photos**: if you want real food photos, they must be your own or properly licensed.
+- **Your choice on D1 to D15** above.
+
+## Risks I know about
+
+- The built-in SQLite in Node prints an "experimental" warning on Node 22. It works, and the warning is harmless, but the wording of that feature could change in a future Node version.
+- Sample chef logic can look smarter than it is. Every chef reply in the app is labelled as a sample so nobody is misled.
+- Nutrition numbers are rough estimates, not medical or dietary advice. The diet plan screen says so.
