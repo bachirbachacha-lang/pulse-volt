@@ -1,6 +1,6 @@
 # Status: Pantry Chef AI (Potwise)
 
-Last updated: 14 Nov 2026, after step 3.
+Last updated: 14 Nov 2026, after step 4.
 
 Words used: **Fully working** (I ran and tested it in this session), **Partly done**, **Planned**, **Not started**.
 
@@ -9,8 +9,8 @@ Words used: **Fully working** (I ran and tested it in this session), **Partly do
 | PLAN.md (roadmap, tech stack, decisions) | Fully working | Written. It is a document, nothing to run. |
 | BRAND.md and logo | Fully working | Written; logo SVGs rendered and looked at in this session. Name not trademark-checked. |
 | UI/UX: screen list, flows, mockups | Fully working | design/UX.md and 4 HTML mockups. Opened in a browser in this session at phone width: no errors, no sideways scroll. |
-| App: frontend | Not started | |
-| App: backend and database | Not started | |
-| AI chef | Not started | Will be sample logic, not real AI |
+| App: frontend | Fully working | 6 screens. Built and clicked through in a real browser in this session. |
+| App: backend and database | Fully working | Express + SQLite. Started and called in this session. |
+| AI chef | Partly done | Sample logic only (ingredient matching), behind `suggestMeals()` in `app/server/chef.js`. Real AI: Planned, needs the owner. |
 | Tests | Not started | |
 | README, TECHNICAL, LEARNING_NOTES, PORTFOLIO | Not started | |

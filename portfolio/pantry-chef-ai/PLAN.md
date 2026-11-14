@@ -17,7 +17,7 @@ Each line is one decision. Tell me the number and what you want instead.
 | D7 | The AI chef is **not real AI yet**. One marked function, `suggestMeals()`, returns sample suggestions by matching your ingredients against the recipes. | Real AI needs an API key or a paid service, which the rules forbid for now. Keeping it in one function means real AI can be plugged in later without touching the screens. | Easy (one file) |
 | D8 | **No login.** One person uses the app on their own computer. | Accounts need passwords, email and security work. Not needed to show the idea. | Medium |
 | D9 | Pictures are **drawn by code** (simple plate illustrations), no photos | No stock photos, no AI images, nothing copied from anyone. Works offline. | Easy (swap in your own photos) |
-| D10 | Recipes are **14 sample recipes I wrote** for this project | Original text, realistic amounts. Nutrition numbers are estimates and labelled as estimates. | Easy (edit one data file) |
+| D10 | Recipes are **16 sample recipes I wrote** for this project | Original text, realistic amounts. Nutrition numbers are estimates and labelled as estimates. | Easy (edit one data file) |
 | D11 | Language: **English only** for now | Keeps version 1 small. Arabic (right-to-left) is on the roadmap. | Medium |
 | D12 | Tests: **Node's built-in test runner** for the backend, **Playwright** for clicking through the real screens | Built-in means nothing extra to install. Playwright is the standard free tool for browser tests. | Easy |
 | D13 | Needs **Node.js 22.13 or newer** | That version includes the built-in database. It is the free standard download. | n/a |

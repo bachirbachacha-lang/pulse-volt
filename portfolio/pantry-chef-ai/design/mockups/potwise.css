@@ -150,7 +150,7 @@ svg { display: block; }
 .hero { position: relative; }
 .hero .art { aspect-ratio: 16 / 11; }
 .hero .hero-bar { position: absolute; inset: 16px 16px auto; display: flex; justify-content: space-between; }
-.sheet { background: var(--cream); border-radius: 28px 28px 0 0; margin-top: -28px; position: relative; padding: 24px 20px 110px; }
+.sheet { background: var(--cream); border-radius: 28px 28px 0 0; margin-top: -28px; position: relative; padding: 24px 20px 40px; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 18px 0 4px; }
 .stat { background: var(--white); border: 1px solid var(--crust); border-radius: 16px; padding: 10px 6px; text-align: center; }
 .stat b { display: block; font-size: 16px; }
