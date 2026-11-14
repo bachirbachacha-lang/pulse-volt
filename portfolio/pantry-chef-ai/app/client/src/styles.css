@@ -247,3 +247,6 @@ svg { display: block; }
 .step.done .n { background: var(--basil); color: var(--white); }
 .step .n svg { width: 16px; height: 16px; }
 .empty .btn { display: inline-flex; }
+
+/* Only shown in the one-page preview build. */
+.preview-bar { max-width: 480px; margin: 0 auto; padding: 8px 20px; background: var(--ink); color: var(--cream); font-size: 12px; text-align: center; }

@@ -33,6 +33,7 @@ Tested on Linux with Node.js 22.23.4 and Chromium only. See TEST_RESULTS.md for 
 | Chef: Diet plan (4 goals, 3 days) | Fully working as a sample | Simple rules. Not dietary advice. |
 | Backend API (13 addresses) and SQLite database | Fully working | 47 backend tests pass |
 | 16 sample recipes | Fully working | Sample text; nutrition numbers are estimates |
+| One-page preview (`app/preview/potwise-preview.html`, `npm run build:preview`) | Fully working | The same screens with no server; data kept in memory and reset on reload. Clicked through in a browser in this session. Published as a private Claude artifact for the owner, not public. |
 | Real AI chef | Planned | Needs the owner / the owner's dad (key or local model) |
 | Runs on Windows / macOS | Not tested | Should work with Node 22.13+, but not tried |
 | Real phone, Safari, Firefox | Not tested | |
