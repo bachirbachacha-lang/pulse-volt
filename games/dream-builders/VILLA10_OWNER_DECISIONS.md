@@ -16,6 +16,11 @@ Prepared 9 Nov 2026 by Claude. Updated 16:45 with the owner's decisions of 16:00
 
 So D-1, D-2 and D-3 stay **unresolved**. Next: Codex reviews the complete Revision 3 package (`villa10_rev3_complete_review_2026-11-09.zip`).
 
+**Owner's instruction, 9 Nov 19:52 Riyadh (copied word for word):**
+> "Continue Dream Builders Villa 10 from Revision 3. Use the attached Revision 3 package and Codex's Revision 3.1 remediation checklist. Address all six findings and the outstanding mobile, gamepad and multiplayer tests. You are authorized to work on separate test copies only. Do not restore, edit, save or publish the live Roblox project. Produce a complete evidence package for Codex's independent review. Do not claim anything is tested unless it was actually tested."
+
+Status 15 Nov: the checklist was never received (six findings Not started). Mobile: partly tested. Gamepad and two players: not tested. See `evidence/2026-11-15_villa10_rev31_devices/device_test_log.md`. D-1, D-2 and D-3 are still **unresolved**.
+
 The original decision texts follow.
 
 To decide, reply in chat with the decision number and your answer, for example "D-1: restore. D-2: accept." I will copy your exact words and the time into this file. A decision counts only when it comes from you in chat.
