@@ -6,6 +6,20 @@ Words used: **Fully working** (I ran and tested it in this session), **Partly do
 
 Tested on Linux with Node.js 22.23.4 and Chromium only. See TEST_RESULTS.md for exactly what was and was not tested.
 
+## Redesign, 15 Nov 2026 (owner's request: match the yellow reference design)
+
+| Item | Status | Notes |
+|---|---|---|
+| Yellow theme on all screens (white, yellow, dark text, one sans-serif font) | Fully working | 47 backend and 21 browser tests pass after the change (two browser checks were updated for the new layout and font). |
+| Home: dark chef card with photo, category icon tiles, photo recipe cards | Fully working | Looked at in screenshots at phone width. |
+| Recipe: photo header, time and level pills, stats row, "Start cooking" button | Fully working | The button scrolls to the steps. |
+| Chef: mascot header, new bubble colours | Fully working | Still sample answers, not AI. |
+| Food photos | Partly done | Only 3 of 16 recipes have a photo (pasta, pancakes, salad), cut from the owner's picture grid, so they are small and soft. The other 13 still show the drawn plate. 5 supplied photos (burger, pizza, salmon, tacos, lava cake) match no recipe and are unused. The owner must confirm he has the right to use these photos. |
+| BRAND.md, design/ mockups, LEARNING_NOTES, PORTFOLIO | Partly done | They still describe the old red and cream look and serif headings. Not updated yet. |
+| Avatar, notification bell, ratings, "AI powered" label from the reference | Not started | Left out on purpose: the app has no accounts, no reviews and no real AI yet. |
+
+The reference picture is someone else's design. The redesign follows its style (colours, layout pattern) with our own name, logo, mascot and code.
+
 ## Documents
 
 | Item | Status | Notes |

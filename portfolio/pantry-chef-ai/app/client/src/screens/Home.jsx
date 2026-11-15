@@ -5,7 +5,11 @@ import { useLoad, useTitle } from '../hooks.js';
 import Icon from '../components/Icon.jsx';
 import Logo from '../components/Logo.jsx';
 import RecipeCard from '../components/RecipeCard.jsx';
+import Mascot from '../components/Mascot.jsx';
+import { HERO_PHOTO } from '../components/RecipeArt.jsx';
 import { ErrorNote, Loading } from '../components/Status.jsx';
+
+const CAT_ICONS = { breakfast: 'sun', lunch: 'bowl', dinner: 'moon', snacks: 'cookie', desserts: 'cake' };
 
 function greeting() {
   const hour = new Date().getHours();
@@ -29,10 +33,12 @@ export default function Home() {
   return (
     <main className="screen">
       <div className="topbar">
-        <div className="brand"><Logo />Potwise</div>
+        <div>
+          <p className="hello">{greeting()}</p>
+          <h1>What would you like to cook?</h1>
+        </div>
+        <div className="brand" aria-label="Potwise"><Logo /></div>
       </div>
-      <p className="hello">{greeting()}</p>
-      <h1>What would you like to cook?</h1>
 
       <form className="search" role="search" onSubmit={search}>
         <Icon name="search" />
@@ -42,22 +48,22 @@ export default function Home() {
       </form>
 
       <section className="chef-card">
-        <svg className="spark" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 3c.8 4.600 2.400 6.200 7 7-4.600.8-6.200 2.400-7 7-.8-4.600-2.400-6.200-7-7 4.600-.8 6.200-2.400 7-7z" fill="#F2B441" />
-        </svg>
-        <span className="pill-label">Chef</span>
-        <h2>Cook what you already have</h2>
-        <p>Tell the chef what is in your kitchen and get meal ideas.</p>
-        <Link className="btn light" to="/chef">Ask the chef</Link>
+        <img className="chef-photo" src={HERO_PHOTO} alt="" />
+        <div className="chef-copy">
+          <span className="pill-label">Chef</span>
+          <h2>Cook what you already have</h2>
+          <p>Tell the chef what is in your kitchen and get meal ideas.</p>
+          <Link className="btn" to="/chef">Ask the chef<Icon name="send" /></Link>
+        </div>
+        <Mascot size={54} />
       </section>
-
       <div className="section-head"><h2>Categories</h2></div>
       {categories.error && <ErrorNote message={categories.error} onRetry={categories.reload} />}
       {categories.data && (
-        <div className="cats">
+        <div className="cat-tiles">
           {categories.data.map((c) => (
-            <Link key={c.id} className="cat" to={`/explore?category=${c.id}`}>
-              <span className="dot" style={{ background: c.color }} />{c.label}
+            <Link key={c.id} className={`cat-tile cat-${c.id}`} to={`/explore?category=${c.id}`}>
+              <span className="cat-icon"><Icon name={CAT_ICONS[c.id] ?? 'bowl'} /></span>{c.label}
             </Link>
           ))}
         </div>

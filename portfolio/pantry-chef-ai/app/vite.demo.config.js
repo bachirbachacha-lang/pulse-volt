@@ -30,7 +30,7 @@ export default defineConfig({
         const read = (ext) => assets.filter((f) => f.endsWith(ext)).map((f) => fs.readFileSync(path.join(out, 'assets', f), 'utf8')).join('\n');
         const js = read('.js').replace(/<\/script/gi, '<\\/script');
         const html = `<title>Potwise Preview</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
 <style>${read('.css')}</style>
 <div id="root"></div>
 <script type="module">${js}</script>

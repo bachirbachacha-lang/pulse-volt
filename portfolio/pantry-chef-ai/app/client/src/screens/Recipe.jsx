@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api.js';
 import { useLoad, useTitle } from '../hooks.js';
 import Icon from '../components/Icon.jsx';
-import PlateArt from '../components/PlateArt.jsx';
+import RecipeArt from '../components/RecipeArt.jsx';
 import { ErrorNote, Loading } from '../components/Status.jsx';
 
 const TAG_COLOURS = { Vegetarian: 'green', Vegan: 'green', 'High protein': 'red', Quick: 'yellow', Lighter: 'yellow' };
@@ -53,13 +53,17 @@ export default function Recipe() {
   return (
     <main>
       <div className="hero">
-        <span className="art"><PlateArt colors={recipe.colors} seed={recipe.id} /></span>
+        <span className="art"><RecipeArt recipe={recipe} /></span>
         <div className="hero-bar">
           <button className="icon-btn" onClick={() => navigate(-1)} aria-label="Back"><Icon name="back" /></button>
           <button className={`icon-btn${recipe.saved ? ' on' : ''}`} onClick={toggleSaved} aria-pressed={recipe.saved}
             aria-label="Save recipe">
             <Icon name="heart" filled={recipe.saved} />
           </button>
+        </div>
+        <div className="hero-pills">
+          <span><Icon name="clock" />{recipe.minutes} min</span>
+          <span><Icon name="level" />{recipe.difficulty}</span>
         </div>
       </div>
 
@@ -73,10 +77,9 @@ export default function Recipe() {
         {saveError && <p className="error" role="alert" style={{ marginTop: 12 }}>{saveError}</p>}
 
         <div className="stats">
-          <div className="stat"><b>{recipe.minutes}</b><span>minutes</span></div>
-          <div className="stat"><b>{recipe.difficulty}</b><span>level</span></div>
-          <div className="stat"><b>{recipe.servings}</b><span>serving{recipe.servings === 1 ? '' : 's'}</span></div>
-          <div className="stat"><b>{recipe.kcal}</b><span>kcal est.</span></div>
+          <div className="stat"><Icon name="clock" /><b>{recipe.minutes}</b><span>minutes</span></div>
+          <div className="stat"><Icon name="users" /><b>{recipe.servings}</b><span>serving{recipe.servings === 1 ? '' : 's'}</span></div>
+          <div className="stat"><Icon name="flame" /><b>{recipe.kcal}</b><span>kcal est.</span></div>
         </div>
 
         <div className="section-head">
@@ -93,8 +96,8 @@ export default function Recipe() {
           ))}
         </ul>
 
-        <div className="section-head">
-          <h2>Steps</h2>
+        <div className="section-head" id="steps">
+          <h2>Step by step</h2>
           <span className="small muted">Tap a step when it is done</span>
         </div>
         <ol className="steps">
@@ -111,6 +114,11 @@ export default function Recipe() {
         <p className="note" style={{ marginTop: 14 }}>
           Sample recipe. Calories ({recipe.kcal} kcal) and protein ({recipe.protein} g) are rough estimates for one serving.
         </p>
+      </div>
+      <div className="sticky-cta">
+        <button className="btn block" onClick={() => document.getElementById('steps')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+          <Icon name="play" />Start cooking
+        </button>
       </div>
     </main>
   );

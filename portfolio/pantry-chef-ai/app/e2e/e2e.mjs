@@ -71,17 +71,17 @@ try {
     await page.goto(URL);
     await page.getByRole('heading', { name: 'What would you like to cook?' }).waitFor();
     await page.locator('.recipe-card').first().waitFor();
-    assert.equal(await page.locator('.cats .cat').count(), 5);
+    assert.equal(await page.locator('.cat-tiles .cat-tile').count(), 5);
     assert.equal(await page.locator('.recipe-card').count(), 6);
     await noSidewaysScroll();
     await document_fonts(page);
     await shot('01-home');
   });
 
-  await check('Brand fonts are loaded (Fraunces for headings, DM Sans for text)', async () => {
+  await check('Brand font is loaded (DM Sans for headings and text)', async () => {
     const fonts = await page.evaluate(async () => {
       await document.fonts.ready;
-      return [document.fonts.check('600 28px "Fraunces Variable"'), document.fonts.check('15px "DM Sans Variable"')];
+      return [document.fonts.check('700 26px "DM Sans Variable"'), document.fonts.check('15px "DM Sans Variable"')];
     });
     assert.deepEqual(fonts, [true, true]);
   });

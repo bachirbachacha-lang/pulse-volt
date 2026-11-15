@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../api.js';
 import { useTitle } from '../hooks.js';
 import Icon from '../components/Icon.jsx';
-import PlateArt from '../components/PlateArt.jsx';
+import RecipeArt from '../components/RecipeArt.jsx';
+import Mascot from '../components/Mascot.jsx';
 
 const GOALS = [
   { id: 'balanced', label: 'Balanced' },
@@ -25,7 +26,7 @@ function Suggestion({ item }) {
   const { recipe, uses = [], missing } = item;
   return (
     <Link className="suggestion" to={`/recipe/${recipe.id}`}>
-      <span className="art"><PlateArt colors={recipe.colors} seed={recipe.id} /></span>
+      <span className="art"><RecipeArt recipe={recipe} /></span>
       <div className="info">
         <h3>{recipe.title}</h3>
         <div className="meta">
@@ -146,7 +147,7 @@ export default function Chef({ messages, setMessages }) {
     <>
       <main className="screen with-composer">
         <div className="topbar">
-          <div><h1>Chef</h1><p className="hello">Your cooking helper</p></div>
+          <div className="chef-head"><Mascot size={48} /><div><h1>Chef</h1><p className="hello">Your cooking helper</p></div></div>
           <span className="tag yellow">Sample answers</span>
         </div>
 
