@@ -67,12 +67,13 @@ try {
 
   console.log('\nPotwise browser test\n');
 
-  await check('Home shows the heading, 5 categories and 6 popular recipes', async () => {
+  await check('Home shows the heading, 5 categories and 8 popular recipes', async () => {
     await page.goto(URL);
     await page.getByRole('heading', { name: 'What would you like to cook?' }).waitFor();
     await page.locator('.recipe-card').first().waitFor();
     assert.equal(await page.locator('.cat-tiles .cat-tile').count(), 5);
-    assert.equal(await page.locator('.recipe-card').count(), 6);
+    assert.equal(await page.locator('.recipe-card').count(), 8);
+    assert.equal(await page.locator('.recipe-card img.photo').count(), 8, 'every popular recipe should show a photo');
     await noSidewaysScroll();
     await document_fonts(page);
     await shot('01-home');
@@ -86,10 +87,10 @@ try {
     assert.deepEqual(fonts, [true, true]);
   });
 
-  await check('Tapping the Dinner category lists the 5 dinner recipes', async () => {
+  await check('Tapping the Dinner category lists the 8 dinner recipes', async () => {
     await page.getByRole('link', { name: 'Dinner' }).click();
-    await page.getByText('5 recipes').waitFor();
-    assert.equal(await page.locator('.recipe-card').count(), 5);
+    await page.getByText('8 recipes').waitFor();
+    assert.equal(await page.locator('.recipe-card').count(), 8);
     assert.equal(await page.getByRole('button', { name: 'Dinner' }).getAttribute('aria-pressed'), 'true');
     await shot('02-explore');
   });

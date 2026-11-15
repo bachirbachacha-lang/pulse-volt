@@ -2,7 +2,7 @@
 
 Mockups: open `design/mockups/index.html` in a browser to see the four main screens side by side. A picture of them is in `design/mockups-preview.png`. They are static HTML with sample content and use the same stylesheet (`potwise.css`) that the real app uses, so the app looks like the mockups.
 
-Note: the mockups show fallback fonts (Georgia and the system font) because they are plain files with nothing installed. The real app installs Fraunces and DM Sans.
+Updated 15 Nov 2026 for the yellow redesign. The mockups load DM Sans from Google Fonts and use the owner's photos from `design/mockups/photos/`, so they need an internet connection to show the right font.
 
 ## Who it is for
 
@@ -64,7 +64,7 @@ Home -> category chip or search -> Explore list -> Recipe -> heart -> appears in
 ## Design rules used
 
 - **Thumb first.** Main actions sit in the lower half. Every tap target is at least 44 px.
-- **One main action per screen.** Paprika is kept for that action.
+- **One main action per screen.** Yellow is kept for that action.
 - **Tell the truth.** The Chef screen carries a "Sample answers" tag. Calories are labelled as estimates.
 - **Never a dead end.** Empty pantry, no saved recipes, no search results and server errors each have their own short message and a next step.
 - **Readable.** All text colour pairs pass WCAG AA contrast (table in BRAND.md). Focus outlines are visible. Icons that carry meaning have text labels. Motion is tiny and switched off when the device asks for reduced motion.
@@ -72,4 +72,6 @@ Home -> category chip or search -> Explore list -> Recipe -> heart -> appears in
 
 ## What differs from the reference picture
 
-Direction kept: phone recipe app, a chef helper, quick actions, suggestion list. Changed: name, colours (paprika and cream, not yellow and green), fonts (a serif for headings), no robot mascot, no photos (drawn plates), a Pantry tab, ticked ingredients instead of ingredient photo tiles, and honest "sample" labels.
+Followed on purpose (the owner asked for it on 15 Nov 2026): white and yellow colours, one sans-serif font, a dark card with a food photo on Home, round category tiles, photo recipe cards, a photo header with time and level pills on the recipe screen, a yellow "Start cooking" button, a chef header on the chat.
+
+Our own: the name and logo, the pot-in-a-chef's-hat mascot (the reference has a robot), all text and recipes, the icons, the Pantry tab and ticked ingredients, the honest "Sample answers" label, and all the code. Left out: the user photo, notification bell, star ratings and "AI powered" label, because the app has no accounts, no reviews and no real AI.

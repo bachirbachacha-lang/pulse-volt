@@ -16,7 +16,7 @@
   --saffron-pale: #FFF4CC;
   --saffron-ink: #6B4A00;
   --ink: #16181D;
-  --muted: #6B7280;
+  --muted: #5E6470; /* was #6B7280, darkened so grey text passes 4.5:1 on the grey fields */
   --cream: #FFFFFF;
   --oat: #F4F5F7;
   --crust: #E9EBEF;
@@ -280,7 +280,7 @@ h2 { font-size: 19px; }
 .chef-card .chef-photo { position: absolute; right: 0; top: 0; width: 52%; height: 100%; object-fit: cover;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 45%); mask-image: linear-gradient(to right, transparent, #000 45%); }
 .chef-card .mascot { position: absolute; right: 10px; bottom: 10px; z-index: 1; background: #fff; border-radius: 50%; padding: 5px; box-shadow: var(--shadow); }
-.pill-label { background: var(--basil); color: #fff; }
+.pill-label { background: var(--basil-dark); color: #fff; } /* basil-dark: white on the lighter green was only 3.2:1 */
 
 .section-head a { color: var(--paprika-dark); }
 .cat-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }

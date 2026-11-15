@@ -28,11 +28,13 @@ People often have food at home and still do not know what to cook. Recipe apps u
 ## Design process
 
 1. **Reference.** I started from a reference image of a recipe app for general direction only, and listed what to keep (a chef helper, quick actions) and what must be original (name, colours, type, logo, pictures).
-2. **Brand.** Name "Potwise", a paprika and cream palette, a serif for headings, and a pot-and-spark logo mark. All text colours were checked for WCAG AA contrast.
+2. **Brand.** Name "Potwise" and a pot-and-spark logo mark. The first look was paprika and cream with serif headings. After seeing it in use, I moved it closer to my reference: white and warm yellow, one rounded sans-serif font, food photos, and a friendly pot mascot. All text colours were checked for WCAG AA contrast.
 3. **Flows.** Five user flows were written before any screen was drawn (design/UX.md). The main one is Pantry, then Chef, then Recipe.
 4. **Mockups.** Four static HTML mockups using the real stylesheet, so the built app matches them.
 
 ![Mockups](design/mockups-preview.png)
+
+A second decision: the redesign. Food apps sell with food, so the yellow look with photos made the app feel much more inviting than drawn plates. The checks still mattered: two colour pairs in the new look failed contrast and were fixed.
 
 A design decision I would point to: adding a **Pantry** tab. "Use what I have" is meaningless unless the app knows what you have, so the pantry became a main screen rather than a setting.
 
@@ -68,13 +70,13 @@ All passed on 14 Nov 2026. Not tested: Windows, real phones, Safari and Firefox,
 
 ## Limits and next steps
 
-Sample recipes only, one user, no login, English only, not deployed. Next: real AI behind `suggestMeals()`, adding your own recipes, a shopping list for missing ingredients, Arabic and right-to-left layout, then an installable phone version. See PLAN.md.
+21 sample recipes (8 with photos), one user, no login, English only, not deployed. Next: real AI behind `suggestMeals()`, adding your own recipes, a shopping list for missing ingredients, Arabic and right-to-left layout, then an installable phone version. See PLAN.md.
 
 ## Ethics and safety
 
 - No personal data is collected. Everything stays on the user's computer.
 - Nutrition numbers are labelled as estimates, and the meal plan states it is not dietary or medical advice.
-- All content is original; no third-party photos or brands. Fonts and libraries are open source and credited.
+- Recipes, text, logo and code are original. The 8 food photos were made by me with an AI image tool **[owner: name the tool]**; they are not photos of real dishes. No other brands. Fonts and libraries are open source and credited.
 
 ## Suggested wording about AI assistance
 

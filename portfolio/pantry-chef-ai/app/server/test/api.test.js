@@ -39,25 +39,25 @@ test('GET /api/health', async () => {
   assert.deepEqual(data, { ok: true });
 });
 
-test('GET /api/categories gives 5 categories with counts that add up to 16', async () => {
+test('GET /api/categories gives 5 categories with counts that add up to 21', async () => {
   const { data } = await call('GET', '/api/categories');
   assert.deepEqual(data.map((c) => c.id), ['breakfast', 'lunch', 'dinner', 'snacks', 'desserts']);
-  assert.equal(data.reduce((sum, c) => sum + c.count, 0), 16);
+  assert.equal(data.reduce((sum, c) => sum + c.count, 0), 21);
 });
 
-test('GET /api/recipes gives all 16 with lists already turned back from JSON text', async () => {
+test('GET /api/recipes gives all 21 with lists already turned back from JSON text', async () => {
   const { data } = await call('GET', '/api/recipes');
-  assert.equal(data.length, 16);
+  assert.equal(data.length, 21);
   assert.ok(Array.isArray(data[0].tags) && Array.isArray(data[0].colors));
   assert.equal(typeof data[0].popular, 'boolean');
   assert.equal(data[0].saved, false);
 });
 
 test('GET /api/recipes filters by category, popular and search word', async () => {
-  assert.equal((await call('GET', '/api/recipes?category=dinner')).data.length, 5);
-  assert.equal((await call('GET', '/api/recipes?popular=1')).data.length, 6);
+  assert.equal((await call('GET', '/api/recipes?category=dinner')).data.length, 8);
+  assert.equal((await call('GET', '/api/recipes?popular=1')).data.length, 8);
   assert.deepEqual((await call('GET', '/api/recipes?q=lentil')).data.map((r) => r.title), ['Red Lentil Soup']);
-  assert.deepEqual((await call('GET', '/api/recipes?q=PASTA')).data.map((r) => r.title), ['Garlic Butter Pasta']);
+  assert.deepEqual((await call('GET', '/api/recipes?q=PASTA')).data.map((r) => r.title), ['Creamy Garlic Pasta']);
   assert.equal((await call('GET', '/api/recipes?category=dinner&q=chickpea')).data.length, 1);
   assert.deepEqual((await call('GET', '/api/recipes?q=zzzz')).data, []);
 });
@@ -66,7 +66,7 @@ test('search treats % and _ as normal letters, and a SQL attack as plain text', 
   assert.deepEqual((await call('GET', '/api/recipes?q=%25')).data, []); // %25 is a "%" sign
   assert.deepEqual((await call('GET', '/api/recipes?q=_')).data, []);
   assert.deepEqual((await call('GET', "/api/recipes?q=" + encodeURIComponent("'; DROP TABLE recipes; --"))).data, []);
-  assert.equal((await call('GET', '/api/recipes')).data.length, 16); // still there
+  assert.equal((await call('GET', '/api/recipes')).data.length, 21); // still there
 });
 
 test('GET /api/recipes rejects an unknown category', async () => {

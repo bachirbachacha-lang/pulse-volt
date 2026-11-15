@@ -136,19 +136,21 @@ Tests use a throwaway database (`:memory:`), so they never change your real data
 
 ## 9. Design ideas worth saying out loud
 
-- **Design tokens**: colours and sizes are named once at the top of `styles.css` (`--paprika`, `--r-card`) and reused. Change one line, the whole app follows.
+- **Design tokens**: colours and sizes are named once at the top of `styles.css` (`--sun`, `--r-card`) and reused. The 15 Nov redesign to yellow was mostly done by changing these values: proof that tokens work. (Some old names such as `--paprika` were kept and now hold yellow, so no rule had to be rewritten. Renaming them is a good tidy-up exercise.) Change one line, the whole app follows.
 - **Mobile first**: the layout is designed for a phone, then centred on bigger screens.
 - **Accessibility**: every input has a label, icon buttons have names, colours have enough contrast, and meaning is never shown by colour alone.
 - **Empty, loading and error states**: every screen has an answer for "nothing here", "wait" and "it broke". Beginners often forget these.
+- **Photos with a fallback**: `components/RecipeArt.jsx` shows a photo if the recipe has one, otherwise a drawn plate. One small component decides, so every screen (cards, recipe header, chef suggestions) behaves the same. Look at how it chooses: it matches by recipe title, which is simple but fragile. If you rename a recipe, its photo disappears. Fixing that (store the photo name with the recipe) is exercise 6 below.
 - **Optimistic update**: the heart turns on the moment you tap it, before the server answers, and turns back if the server says no (`Recipe.jsx`, `toggleSaved`).
 
 ## 10. Try these to learn (smallest first)
 
-1. Change the paprika colour in `client/src/styles.css` and watch the whole app change.
+1. Change `--sun` in `client/src/styles.css` and watch the whole app change.
 2. Add a recipe of your own to `server/seed-data.js`, delete `data/potwise.db`, restart. Run `npm test`: one test will tell you if an ingredient key is wrong.
 3. Add "noodles" as another word for pasta in `server/ingredients.js` and write a test for it.
 4. Add a new diet goal in `server/chef.js` and a button for it in `Chef.jsx`.
 5. Add a "missing ingredients" shopping list screen. You will need a table, two routes, an `api.js` function and a screen: the full path from part 3.
+6. Make photos survive a rename: add a `photo` field to each recipe in `seed-data.js` and a `photo` column to the `recipes` table, then make `RecipeArt.jsx` use it.
 
 ## 11. Questions a lecturer might ask
 

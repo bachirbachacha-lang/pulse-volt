@@ -12,7 +12,7 @@ Express 5 server (Node.js, ES modules)
    |-- chef.js       suggestMeals() and buildDietPlan()   <- sample logic, the AI seam
    |-- ingredients.js  text -> ingredient key
    |-- db.js         SQLite schema, seed, queries (node:sqlite, built into Node)
-   `-- seed-data.js  16 sample recipes, 5 categories, starter pantry
+   `-- seed-data.js  21 sample recipes, 5 categories, starter pantry
 SQLite file: app/data/potwise.db (created on first start, not in git)
 ```
 
@@ -37,7 +37,8 @@ app/
       api.js            the only place that calls fetch()
       hooks.js          useLoad (loading / error / data), useTitle
       styles.css        design system (same file as design/mockups/potwise.css plus a few app-only rules)
-      components/       Icon, Logo, PlateArt, RecipeCard, Status, TabBar
+      components/       Icon, Logo, Mascot, PlateArt, RecipeArt, RecipeCard, Status, TabBar
+      photos/           8 food photos from the owner, built into the page
       screens/          Home, Explore, Recipe, Chef, Saved, Pantry
   server/
     index.js            starts the server (PORT, HOST, POTWISE_DB can be set)
@@ -86,11 +87,17 @@ Current sample logic: turn every typed ingredient into a key, then for each reci
 
 Suggested path to real AI (not done): send the model the pantry and the recipe list, ask for a ranked list of recipe ids with a one-line reason each, validate that every id exists, and fall back to the sample logic if the call fails. Keep the key on the server only, in an environment variable, never in the client code or in git.
 
+## Photos
+
+`client/src/components/RecipeArt.jsx` has a list that maps a recipe title to a photo file. A recipe in the list shows its photo; any other recipe shows the drawn plate from `PlateArt.jsx`. The photos are imported with `?inline`, so Vite puts them inside the built JavaScript as data. That keeps the one-page preview working as a single file.
+
+On 15 Nov 2026, 8 recipes have photos: Creamy Garlic Pasta, Banana Oat Pancakes, Crunchy Garden Salad, Classic Cheeseburger, Beef Pepperoni Pizza, Pan-Seared Salmon with Asparagus, Spiced Beef Tacos, Chocolate Lava Cake. These 8 are also the "popular" recipes on Home.
+
 ## Ingredient matching
 
 `toKey()` lowercases, removes digits and punctuation, drops describing words (fresh, chopped, ground, cooked...), makes the last word singular with three simple rules, then looks the result up in a small synonym table (scallion -> spring onion, spaghetti -> pasta...). Matching is exact on the key. A test checks that every seeded ingredient name turns into its own key.
 
-Known limits: the singular rules are simple English only ("couscous" becomes "couscou", which still matches itself). Words not in the synonym table are separate ingredients ("noodles" is not "pasta"). Salt, water and black pepper are staples and never count as missing.
+Known limits: the singular rules are simple English only. Words that end in "s" but are not plural (asparagus, couscous, hummus) are kept in a small `NOT_PLURAL` list. Words not in the synonym table are separate ingredients ("noodles" is not "pasta"). Salt, water and black pepper are staples and never count as missing.
 
 ## Safety choices
 
@@ -112,3 +119,5 @@ Semantic elements (`main`, `nav`, `form`, headings in order), text labels for ev
 - A proper inflection library or a curated ingredient list instead of the simple singular rules.
 - Component tests for the React screens (today they are covered only by the browser tests).
 - Outline the wordmark in `logo-full.svg`.
+- Store a photo name in the database instead of matching photos by recipe title in `RecipeArt.jsx`. Today, renaming a recipe silently drops its photo (a browser test catches this for the popular recipes).
+- Larger photo files. Today each photo is about 180 x 200 pixels and is built into the JavaScript bundle.

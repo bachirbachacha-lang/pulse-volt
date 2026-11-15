@@ -62,7 +62,7 @@ test('different spellings match (scallions, spaghetti)', async () => {
   const { suggestions } = await suggestMeals({ ingredients: ['Scallions', 'SPAGHETTI'], recipes });
   const titles = suggestions.map((s) => s.recipe.title);
   assert.ok(titles.includes('Egg Fried Rice'));
-  assert.ok(titles.includes('Garlic Butter Pasta'));
+  assert.ok(titles.includes('Creamy Garlic Pasta'));
 });
 
 test('chefReply has a sentence for every situation', () => {

@@ -6,13 +6,27 @@ Everything on this page was run by Claude on 14 Nov 2026, in this session, on a 
 
 | Test set | What it checks | Command | Result |
 |---|---|---|---|
-| Backend tests | Ingredient matching, the sample chef, the diet plan, and every server address, using a throwaway database | `npm test` | **47 passed, 0 failed** |
-| Browser tests | A real hidden browser at phone size using the built app like a person: search, categories, recipe, save, pantry, chef, diet plan | `npm run test:e2e` | **21 passed, 0 failed** |
+| Backend tests (14 Nov) | Ingredient matching, the sample chef, the diet plan, and every server address, using a throwaway database | `npm test` | **47 passed, 0 failed** |
+| Browser tests (14 Nov) | A real hidden browser at phone size using the built app like a person: search, categories, recipe, save, pantry, chef, diet plan | `npm run test:e2e` | **21 passed, 0 failed** |
 | Fresh copy check | Cloned the branch into an empty folder, then `npm install`, `npm test`, `npm run build`, `npm start`, opened the health address and a recipe, ran the browser tests | by hand | **Worked** |
 | Developer mode | `npm run dev`, then asked for the app and `/api/health` through port 5173 | by hand | **Worked** |
 | Tests can fail | Put a deliberate mistake in the chef's sorting, ran `npm test` | by hand | **5 tests failed as they should.** Mistake removed, 47 pass again. |
 | Mockups | Opened the 4 mockup files at phone width | script | No errors, no sideways scrolling |
 | Colour contrast | Calculated with the WCAG formula | script | The 10 text and background pairs the design uses pass 4.5:1. One pair fails and is marked "do not use" (table in BRAND.md). |
+
+## 15 Nov 2026: five photo recipes and the creamy pasta
+
+Run by Claude on 15 Nov 2026, same Linux computer, Node.js 22.23.4, Chromium.
+
+| Check | Result |
+|---|---|
+| `npm test` after adding 5 recipes and changing the pasta | **47 passed, 0 failed** |
+| `npm run test:e2e` after rebuilding | **21 passed, 0 failed** |
+| New browser check: every popular recipe on Home shows a photo | Passes. Proven able to fail: renaming one photo entry made it fail (20 of 21), then it was put back. |
+| One-page preview rebuilt and clicked through (Home 8 cards, pantry to chef, recipe, save, diet plan, search) | Worked, no console errors, no sideways scroll |
+| Contrast of the yellow look | 2 pairs failed and were fixed (see BRAND.md) |
+
+Tests changed for the new data: 21 recipes instead of 16, 8 dinner recipes instead of 5, 8 popular instead of 6, the pasta search now finds "Creamy Garlic Pasta", "Fettuccine", "cilantro" and "Salmon fillets" are checked as ingredient words, and "asparagus" and "couscous" now keep their final "s".
 
 ## What happened on the way
 
@@ -29,12 +43,12 @@ Everything on this page was run by Claude on 14 Nov 2026, in this session, on a 
 - **Real AI.** There is none yet, so there is nothing to test.
 - **Nutrition numbers.** They are estimates written by hand and were not checked against a nutrition database.
 
-## Backend tests, full list (`npm test`)
+## Backend tests, full list (`npm test`, run 15 Nov 2026)
 
 ```
 ✔ GET /api/health
-✔ GET /api/categories gives 5 categories with counts that add up to 16
-✔ GET /api/recipes gives all 16 with lists already turned back from JSON text
+✔ GET /api/categories gives 5 categories with counts that add up to 21
+✔ GET /api/recipes gives all 21 with lists already turned back from JSON text
 ✔ GET /api/recipes filters by category, popular and search word
 ✔ search treats % and _ as normal letters, and a SQL attack as plain text
 ✔ GET /api/recipes rejects an unknown category
@@ -77,19 +91,19 @@ Everything on this page was run by Claude on 14 Nov 2026, in this session, on a 
 ✔ parseIngredientText removes repeats and handles empty input
 ✔ parseIngredientText stops at 30 ingredients
 ✔ sample data: every ingredient key is in its simplest form and matches its name
-✔ sample data: 16 recipes, each complete
+✔ sample data: 21 recipes, each complete
 ✔ sample data: starter pantry items all turn into keys
 ℹ tests 47
 ℹ pass 47
 ℹ fail 0
 ```
 
-## Browser tests, full list (`npm run test:e2e`)
+## Browser tests, full list (`npm run test:e2e`, run 15 Nov 2026)
 
 ```
-  PASS  Home shows the heading, 5 categories and 6 popular recipes
-  PASS  Brand fonts are loaded (Fraunces for headings, DM Sans for text)
-  PASS  Tapping the Dinner category lists the 5 dinner recipes
+  PASS  Home shows the heading, 5 categories and 8 popular recipes
+  PASS  Brand font is loaded (DM Sans for headings and text)
+  PASS  Tapping the Dinner category lists the 8 dinner recipes
   PASS  Search from Home finds a recipe by ingredient
   PASS  A search with no matches shows a helpful empty message
   PASS  Recipe screen shows facts, ticks pantry ingredients and has 4 steps

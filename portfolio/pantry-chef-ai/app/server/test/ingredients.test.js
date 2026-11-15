@@ -24,10 +24,14 @@ test('toKey knows different names for the same thing', () => {
   assert.equal(toKey('chicken breast'), 'chicken');
   assert.equal(toKey('yoghurt'), 'yogurt');
   assert.equal(toKey('oil'), 'vegetable oil');
+  assert.equal(toKey('Fettuccine'), 'pasta');
+  assert.equal(toKey('cilantro'), 'coriander');
+  assert.equal(toKey('Salmon fillets'), 'salmon');
 });
 
 test('toKey keeps words that only look plural', () => {
-  assert.equal(toKey('couscous'), 'couscou'); // known limit: written down in TECHNICAL.md
+  assert.equal(toKey('couscous'), 'couscous');
+  assert.equal(toKey('Asparagus'), 'asparagus');
   assert.equal(toKey('watercress'), 'watercress');
 });
 
@@ -64,8 +68,8 @@ test('sample data: every ingredient key is in its simplest form and matches its 
   }
 });
 
-test('sample data: 16 recipes, each complete', () => {
-  assert.equal(RECIPES.length, 16);
+test('sample data: 21 recipes, each complete', () => {
+  assert.equal(RECIPES.length, 21);
   for (const r of RECIPES) {
     assert.ok(r.title && r.description, r.title);
     assert.ok(r.ingredients.length >= 5, `${r.title} ingredients`);
@@ -74,7 +78,7 @@ test('sample data: 16 recipes, each complete', () => {
     assert.ok(r.minutes > 0 && r.servings > 0 && r.kcal > 0 && r.protein > 0, `${r.title} numbers`);
     assert.ok(r.ingredients.some(([key]) => !STAPLES.has(key)), `${r.title} needs a real ingredient`);
   }
-  assert.equal(new Set(RECIPES.map((r) => r.title)).size, 16, 'titles are unique');
+  assert.equal(new Set(RECIPES.map((r) => r.title)).size, 21, 'titles are unique');
 });
 
 test('sample data: starter pantry items all turn into keys', () => {

@@ -11,7 +11,7 @@ const DESCRIBERS = new Set(['fresh', 'chopped', 'ground', 'cooked', 'plain', 'dr
 // Different names for the same thing. Left side: what people type. Right side: our key.
 const SAME_AS = {
   'scallion': 'spring onion', 'green onion': 'spring onion',
-  'spaghetti': 'pasta', 'penne': 'pasta', 'macaroni': 'pasta',
+  'spaghetti': 'pasta', 'penne': 'pasta', 'macaroni': 'pasta', 'fettuccine': 'pasta', 'tagliatelle': 'pasta',
   'chicken breast': 'chicken', 'chicken thigh': 'chicken',
   'lentil': 'lentils', 'red lentil': 'lentils',
   'chickpea': 'chickpeas', 'garbanzo bean': 'chickpeas',
@@ -23,10 +23,18 @@ const SAME_AS = {
   'oil': 'vegetable oil', 'sunflower oil': 'vegetable oil',
   'cocoa powder': 'cocoa', 'flatbread': 'flatbread', 'pita': 'flatbread', 'pitta': 'flatbread', 'tortilla': 'flatbread', 'wrap': 'flatbread',
   'pepper': 'black pepper',
+  'salmon fillet': 'salmon', 'cherry tomato': 'tomato', 'cilantro': 'coriander',
+  'chocolate': 'dark chocolate', 'cooking cream': 'cream', 'double cream': 'cream', 'heavy cream': 'cream',
+  'minced beef': 'beef mince', 'beef': 'beef mince', 'cheddar cheese': 'cheddar', 'cheese': 'cheddar',
+  'bun': 'burger bun', 'pepperoni': 'beef pepperoni', 'tomato sauce': 'passata',
 };
+
+// Words that end in "s" but are not plural, so they must be left alone.
+const NOT_PLURAL = new Set(['asparagus', 'couscous', 'hummus', 'molasses']);
 
 // "tomatoes" -> "tomato", "berries" -> "berry", "eggs" -> "egg"
 function singular(word) {
+  if (NOT_PLURAL.has(word)) return word;
   if (word.length > 4 && word.endsWith('oes')) return word.slice(0, -2);
   if (word.length > 4 && word.endsWith('ies')) return word.slice(0, -3) + 'y';
   if (word.length > 3 && word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1);

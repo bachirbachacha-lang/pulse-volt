@@ -2,28 +2,32 @@
    The colours and sizes at the top are the brand (see BRAND.md).
    Change a value here and it changes everywhere. */
 :root {
-  --paprika: #C8401F;
-  --paprika-dark: #8A2A12;
-  --paprika-pale: #FBE4DC;
-  --basil: #2E7D4F;
-  --basil-dark: #1F5E3A;
-  --basil-pale: #E3F1E7;
-  --saffron: #F2B441;
-  --saffron-pale: #FCEFD2;
+  /* Sunny theme (redesign, 15 Nov 2026): white, warm yellow, near-black ink.
+     The old token names are kept so every rule below still works. */
+  --sun: #FFC629;
+  --sun-deep: #F5B400;
+  --paprika: var(--sun);
+  --paprika-dark: #7A5200;
+  --paprika-pale: #FFF4CC;
+  --basil: #23A55A;
+  --basil-dark: #17703C;
+  --basil-pale: #E3F6EA;
+  --saffron: #FFC629;
+  --saffron-pale: #FFF4CC;
   --saffron-ink: #6B4A00;
-  --ink: #2A1A2E;
-  --muted: #6B5B66;
-  --cream: #FFF7EC;
-  --oat: #F4E9DA;
-  --crust: #E6D8C6;
+  --ink: #16181D;
+  --muted: #5E6470; /* was #6B7280, darkened so grey text passes 4.5:1 on the grey fields */
+  --cream: #FFFFFF;
+  --oat: #F4F5F7;
+  --crust: #E9EBEF;
   --white: #FFFFFF;
 
-  --font-head: "Fraunces Variable", Fraunces, Georgia, "Times New Roman", serif;
+  --font-head: "DM Sans Variable", "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-body: "DM Sans Variable", "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --r-card: 20px;
-  --r-input: 14px;
-  --shadow: 0 2px 10px rgba(42, 26, 46, 0.08);
+  --r-card: 22px;
+  --r-input: 16px;
+  --shadow: 0 6px 20px rgba(22, 24, 29, 0.07);
   --tabbar-h: 72px;
 }
 
@@ -230,3 +234,91 @@ svg { display: block; }
   .btn, .cat, .icon-btn, .recipe-card { transition: transform 0.12s ease, background-color 0.12s ease; }
   .btn:active, .cat:active, .icon-btn:active { transform: scale(0.97); }
 }
+
+/* ---- Added for the working app (not in the static mockups) ---- */
+.chat-item { display: flex; flex-direction: column; gap: 10px; }
+.chat-item > .btn { align-self: flex-start; }
+.bubble.error { background: var(--paprika-pale); color: var(--paprika-dark); }
+.icon-btn:disabled { opacity: 0.55; cursor: default; }
+.cat { font: inherit; color: inherit; cursor: pointer; }
+.cat.active { color: var(--cream); }
+.steps li { padding: 0; }
+.step {
+  display: flex; gap: 14px; width: 100%; padding: 12px 0; text-align: left;
+  background: none; border: 0; border-radius: 12px;
+}
+.step.done { color: var(--muted); }
+.step.done .n { background: var(--basil); color: var(--white); }
+.step .n svg { width: 16px; height: 16px; }
+.empty .btn { display: inline-flex; }
+
+/* Only shown in the one-page preview build. */
+.preview-bar { max-width: 480px; margin: 0 auto; padding: 8px 20px; background: var(--ink); color: var(--cream); font-size: 12px; text-align: center; }
+
+/* ---- Sunny redesign (15 Nov 2026): overrides for the yellow theme ---- */
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.01em; }
+h1 { font-size: 26px; }
+h2 { font-size: 19px; }
+.photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.btn { color: var(--ink); box-shadow: 0 6px 16px rgba(255, 198, 41, 0.35); }
+.btn.ghost, .btn.light { box-shadow: none; }
+.btn.ghost { border-color: var(--crust); font-weight: 600; }
+.icon-btn { border-color: transparent; box-shadow: var(--shadow); }
+.icon-btn.on { color: var(--ink); }
+.topbar { align-items: flex-start; }
+.brand svg { width: 44px; height: 44px; }
+.hello { font-size: 14px; margin-bottom: 2px; }
+.search input, .field { background: var(--oat); border-color: transparent; }
+.search input:focus, .field:focus { background: var(--white); border-color: var(--sun-deep); outline: none; }
+
+.chef-card { background: #17191E; color: #D9DCE3; padding: 0; display: flex; min-height: 190px; }
+.chef-card .chef-copy { position: relative; z-index: 1; padding: 18px 0 18px 18px; width: 62%; }
+.chef-card h2 { color: #fff; font-size: 21px; max-width: 12ch; }
+.chef-card p { font-size: 13px; max-width: 24ch; }
+.chef-card .btn { min-height: 42px; padding: 0 16px; font-size: 14px; }
+.chef-card .btn svg { width: 16px; height: 16px; }
+.chef-card .chef-photo { position: absolute; right: 0; top: 0; width: 52%; height: 100%; object-fit: cover;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 45%); mask-image: linear-gradient(to right, transparent, #000 45%); }
+.chef-card .mascot { position: absolute; right: 10px; bottom: 10px; z-index: 1; background: #fff; border-radius: 50%; padding: 5px; box-shadow: var(--shadow); }
+.pill-label { background: var(--basil-dark); color: #fff; } /* basil-dark: white on the lighter green was only 3.2:1 */
+
+.section-head a { color: var(--paprika-dark); }
+.cat-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.cat-tile { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; min-width: 0; }
+.cat-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: var(--saffron-pale); color: #B77A00; }
+.cat-icon svg { width: 26px; height: 26px; }
+.cat-lunch .cat-icon { background: #E3F6EA; color: #17703C; }
+.cat-dinner .cat-icon { background: #ECE6FB; color: #5B3FB5; }
+.cat-snacks .cat-icon { background: #FDE5EC; color: #B8325A; }
+.cat-desserts .cat-icon { background: #FFE9DC; color: #B4551C; }
+.cat.active { background: var(--sun); border-color: var(--sun); color: var(--ink); }
+
+.recipe-card { box-shadow: var(--shadow); border: 1px solid var(--crust); }
+.recipe-card .art { aspect-ratio: 5 / 4; overflow: hidden; }
+.recipe-card h3 { font-size: 15px; }
+.suggestion { border: 1px solid var(--crust); }
+
+.hero .art { aspect-ratio: 4 / 3.400; overflow: hidden; }
+.hero-pills { position: absolute; left: 16px; bottom: 44px; display: flex; gap: 8px; }
+.hero-pills span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 600; box-shadow: var(--shadow); }
+.hero-pills svg { width: 15px; height: 15px; }
+.sheet { padding-bottom: 110px; }
+.stats { grid-template-columns: repeat(3, 1fr); }
+.stat { background: var(--oat); border: 0; display: grid; grid-template-columns: auto auto; justify-content: center; align-items: center; column-gap: 6px; }
+.stat svg { width: 18px; height: 18px; color: #B77A00; grid-row: span 2; }
+.stat b { text-align: left; line-height: 1.1; }
+.stat span { text-align: left; }
+.steps .n { background: var(--sun); }
+.sticky-cta { background: linear-gradient(to top, #fff 70%, rgba(255, 255, 255, 0)); z-index: 5; }
+
+.chef-head { display: flex; align-items: center; gap: 12px; }
+.bubble.chef { background: #EAF3FF; }
+.bubble.me { background: var(--sun); color: var(--ink); }
+.bubble .who { color: #2B5FA8; }
+.tag.red { background: #FDE5EC; color: #96284A; }
+
+.tabbar { border-top-color: var(--crust); box-shadow: 0 -6px 20px rgba(22, 24, 29, 0.05); }
+.tab.active, .tab.chef-tab.active { color: var(--ink); }
+.tab.active svg { color: var(--sun-deep); }
+.tab.chef-tab .bump { color: var(--ink); border-color: #fff; box-shadow: 0 6px 16px rgba(255, 198, 41, 0.45); }
+.tab.chef-tab .bump svg, .tab.chef-tab.active .bump svg { color: var(--ink); }

@@ -1,4 +1,4 @@
-// SAMPLE DATA. These 16 recipes were written for this project.
+// SAMPLE DATA. These 21 recipes were written for this project.
 // Calories and protein are rough estimates per serving, not measured values.
 //
 // Each ingredient is [key, name shown on screen, amount].
@@ -88,7 +88,7 @@ export const RECIPES = [
     title: 'Egg Fried Rice',
     description: 'The best use for yesterday\'s rice. Ready in one pan in fifteen minutes.',
     category: 'lunch', minutes: 15, difficulty: 'Easy', servings: 2, kcal: 430, protein: 15,
-    tags: ['Vegetarian', 'Quick'], popular: true,
+    tags: ['Vegetarian', 'Quick'], popular: false,
     colors: ['#FBE4DC', '#F0C987', '#2E7D4F', '#F6D56B'],
     ingredients: [
       ['rice', 'Cooked rice', '2 cups, cold'], ['egg', 'Eggs', '2'], ['spring onion', 'Spring onions', '3'],
@@ -138,28 +138,28 @@ export const RECIPES = [
     ],
   },
   {
-    title: 'Garlic Butter Pasta',
-    description: 'Silky pasta with slow-cooked garlic, butter and a squeeze of lemon. Ready before the table is set.',
-    category: 'dinner', minutes: 20, difficulty: 'Easy', servings: 2, kcal: 520, protein: 14,
-    tags: ['Vegetarian'], popular: true,
-    colors: ['#FCEFD2', '#F3D9A0', '#2E7D4F', '#C8401F'],
+    title: 'Creamy Garlic Pasta',
+    description: 'Ribbons of pasta in a garlic cream sauce with parmesan, topped with sliced pan-seared chicken.',
+    category: 'dinner', minutes: 25, difficulty: 'Easy', servings: 2, kcal: 690, protein: 42,
+    tags: ['High protein'], popular: true,
+    colors: ['#FFF4CC', '#F3E2B0', '#C98A3B', '#2E7D4F'],
     ingredients: [
-      ['pasta', 'Spaghetti', '200 g'], ['garlic', 'Garlic', '4 cloves'], ['butter', 'Butter', '40 g'],
-      ['olive oil', 'Olive oil', '1 tbsp'], ['lemon', 'Lemon', '1/2'], ['parsley', 'Parsley', 'small handful'],
-      ['salt', 'Salt', 'to taste'],
+      ['pasta', 'Fettuccine', '200 g'], ['chicken', 'Chicken breast', '1 large'], ['garlic', 'Garlic', '4 cloves'],
+      ['cream', 'Cooking cream', '200 ml'], ['parmesan', 'Parmesan', '40 g, grated'], ['butter', 'Butter', '20 g'],
+      ['parsley', 'Parsley', 'small handful'], ['salt', 'Salt', 'to taste'],
     ],
     steps: [
       'Boil the pasta in salted water until just tender. Keep a cup of the cooking water.',
-      'Melt the butter with the oil on low heat. Add sliced garlic and cook gently until soft and golden.',
-      'Toss the pasta in the garlic butter with a splash of the cooking water until glossy.',
-      'Finish with lemon juice and chopped parsley. Serve straight away.',
+      'Season the chicken with salt and cook it in half the butter for 5 to 6 minutes a side until golden and cooked through. Rest it, then slice.',
+      'In the same pan, cook the chopped garlic gently in the rest of the butter for 1 minute. Pour in the cream and simmer for 2 minutes.',
+      'Stir in the parmesan and the pasta with a splash of the cooking water until glossy. Top with the chicken and chopped parsley.',
     ],
   },
   {
     title: 'Chickpea Tomato Curry',
     description: 'A gentle, tomato-rich curry from tins and jars you probably already own.',
     category: 'dinner', minutes: 30, difficulty: 'Medium', servings: 3, kcal: 460, protein: 17,
-    tags: ['Vegan'], popular: true,
+    tags: ['Vegan'], popular: false,
     colors: ['#FCEFD2', '#E0792B', '#F6E3B4', '#2E7D4F'],
     ingredients: [
       ['chickpeas', 'Chickpeas', '1 tin (400 g)'], ['tomato', 'Chopped tomatoes', '1 tin (400 g)'], ['onion', 'Onion', '1'],
@@ -266,7 +266,7 @@ export const RECIPES = [
     title: 'Date and Almond Bites',
     description: 'Soft, chocolatey bites made in a blender. No baking.',
     category: 'desserts', minutes: 15, difficulty: 'Easy', servings: 6, kcal: 150, protein: 4,
-    tags: ['Vegan', 'Quick'], popular: true,
+    tags: ['Vegan', 'Quick'], popular: false,
     colors: ['#F4E9DA', '#FFFDF5', '#5A3420', '#7A4A2A'],
     ingredients: [
       ['dates', 'Soft dates', '200 g, stones out'], ['almonds', 'Almonds', '100 g'], ['oats', 'Rolled oats', '40 g'],
@@ -294,6 +294,96 @@ export const RECIPES = [
       'Spoon half the yogurt into two glasses. Add a layer of banana.',
       'Add the rest of the yogurt, then the remaining banana and the almonds.',
       'Finish with the honey and a pinch of cinnamon.',
+    ],
+  },
+  {
+    title: 'Classic Cheeseburger',
+    description: 'A juicy beef patty with melted cheese, crisp lettuce and tomato in a toasted bun.',
+    category: 'dinner', minutes: 20, difficulty: 'Easy', servings: 2, kcal: 620, protein: 36,
+    tags: ['High protein'], popular: true,
+    colors: ['#FFF4CC', '#C98A3B', '#7A4A2A', '#9CCB7A'],
+    ingredients: [
+      ['beef mince', 'Beef mince', '300 g'], ['burger bun', 'Burger buns', '2'], ['cheddar', 'Cheddar', '2 slices'],
+      ['lettuce', 'Lettuce', '2 leaves'], ['tomato', 'Tomato', '1'], ['onion', 'Onion', '1/2'],
+      ['vegetable oil', 'Vegetable oil', '1 tsp'], ['salt', 'Salt', 'to taste'],
+    ],
+    steps: [
+      'Shape the mince into two patties a little wider than the buns. Press a small dip into the middle of each and season with salt.',
+      'Heat the oil in a pan until very hot. Cook the patties for 3 to 4 minutes a side without pressing them.',
+      'Lay a slice of cheese on each patty for the last minute so it melts. Toast the cut sides of the buns in the pan.',
+      'Build the burgers with lettuce, the patty, sliced tomato and onion. Serve straight away.',
+    ],
+  },
+  {
+    title: 'Beef Pepperoni Pizza',
+    description: 'A thin, crisp pizza with tomato sauce, stretchy mozzarella, beef pepperoni and fresh basil.',
+    category: 'dinner', minutes: 30, difficulty: 'Medium', servings: 2, kcal: 720, protein: 30,
+    tags: [], popular: true,
+    colors: ['#FBE4DC', '#F0C987', '#C8401F', '#2E7D4F'],
+    ingredients: [
+      ['pizza dough', 'Pizza dough', '1 ball (250 g)'], ['passata', 'Passata', '5 tbsp'], ['mozzarella', 'Mozzarella', '125 g'],
+      ['beef pepperoni', 'Beef pepperoni', '12 slices'], ['basil', 'Basil', 'a few leaves'], ['olive oil', 'Olive oil', '1 tsp'],
+      ['salt', 'Salt', 'a pinch'],
+    ],
+    steps: [
+      'Heat the oven as hot as it goes, with a baking tray inside, for at least 15 minutes.',
+      'Stretch the dough into a thin round on a floured sheet of baking paper.',
+      'Spread the passata with a pinch of salt, leaving the edge bare. Add torn mozzarella and the pepperoni.',
+      'Slide the paper onto the hot tray and bake for 8 to 10 minutes until the edge is blistered. Finish with basil and the olive oil.',
+    ],
+  },
+  {
+    title: 'Pan-Seared Salmon with Asparagus',
+    description: 'Crisp-skinned salmon with tender asparagus, sweet tomatoes and a squeeze of lemon. One pan.',
+    category: 'dinner', minutes: 20, difficulty: 'Easy', servings: 2, kcal: 460, protein: 36,
+    tags: ['High protein', 'Lighter'], popular: true,
+    colors: ['#E3F6EA', '#F2A07B', '#2E7D4F', '#F6D56B'],
+    ingredients: [
+      ['salmon', 'Salmon fillets', '2'], ['asparagus', 'Asparagus', '1 bunch'], ['tomato', 'Cherry tomatoes', '8'],
+      ['lemon', 'Lemon', '1/2'], ['garlic', 'Garlic', '1 clove'], ['butter', 'Butter', '15 g'],
+      ['olive oil', 'Olive oil', '1 tbsp'], ['salt', 'Salt', 'to taste'],
+    ],
+    steps: [
+      'Pat the salmon dry and season with salt. Snap the woody ends off the asparagus.',
+      'Heat the oil in a pan. Cook the salmon skin-side down for 4 minutes until crisp, then turn it over.',
+      'Add the asparagus, tomatoes, butter and sliced garlic around the fish. Cook for 3 to 4 minutes, spooning the butter over.',
+      'Squeeze the lemon over everything and serve from the pan.',
+    ],
+  },
+  {
+    title: 'Spiced Beef Tacos',
+    description: 'Crunchy taco shells filled with cumin-spiced beef, fresh tomato, onion and coriander, finished with lime.',
+    category: 'lunch', minutes: 20, difficulty: 'Easy', servings: 2, kcal: 540, protein: 30,
+    tags: ['High protein'], popular: true,
+    colors: ['#FFF4CC', '#F0C987', '#C8401F', '#2E7D4F'],
+    ingredients: [
+      ['taco shell', 'Taco shells', '6'], ['beef mince', 'Beef mince', '250 g'], ['onion', 'Onion', '1'],
+      ['tomato', 'Tomatoes', '2'], ['coriander', 'Fresh coriander', 'small handful'], ['lime', 'Lime', '1'],
+      ['cumin', 'Ground cumin', '1 tsp'], ['paprika', 'Paprika', '1 tsp'], ['vegetable oil', 'Vegetable oil', '1 tsp'],
+      ['salt', 'Salt', 'to taste'],
+    ],
+    steps: [
+      'Chop the onion finely. Keep a spoonful raw for the top and dice the tomatoes.',
+      'Fry the rest of the onion in the oil for 3 minutes. Add the mince, cumin, paprika and salt and cook for 8 minutes until browned.',
+      'Warm the taco shells in the oven or a dry pan for 2 minutes.',
+      'Fill the shells with the beef, tomato, raw onion and coriander. Squeeze the lime over the top.',
+    ],
+  },
+  {
+    title: 'Chocolate Lava Cake',
+    description: 'A small warm chocolate cake with a soft, flowing middle. Ready in twenty minutes.',
+    category: 'desserts', minutes: 20, difficulty: 'Medium', servings: 2, kcal: 430, protein: 7,
+    tags: ['Vegetarian'], popular: true,
+    colors: ['#F4E9DA', '#5A3420', '#3A2114', '#FFFDF5'],
+    ingredients: [
+      ['dark chocolate', 'Dark chocolate', '80 g'], ['butter', 'Butter', '60 g, plus extra for the cups'], ['egg', 'Eggs', '2'],
+      ['sugar', 'Sugar', '40 g'], ['flour', 'Plain flour', '25 g'], ['salt', 'Salt', 'a pinch'],
+    ],
+    steps: [
+      'Heat the oven to 220 C. Butter two small oven-safe cups well.',
+      'Melt the chocolate and butter together in short bursts in the microwave, stirring until smooth.',
+      'Whisk the eggs and sugar until pale, then fold in the chocolate, the flour and the salt.',
+      'Fill the cups and bake for 9 to 10 minutes until the edges are set and the middle still wobbles. Rest 1 minute, then turn out onto plates.',
     ],
   },
 ];
