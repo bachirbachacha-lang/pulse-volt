@@ -1,0 +1,69 @@
+{
+ "eyebrow": "pixel &amp; co / <b>CLAUDE CODE TIPS</b>",
+ "hook": {
+  "head": "3 Claude Code features most people <span class=\"o\">never use.</span>",
+  "vo": "Three Claude Code features... that most people never use."
+ },
+ "tips": [
+  {
+   "n": "Number one. Claude dot M D.",
+   "vo": "Put a file called Claude dot M D in your project. Claude reads it at the start of every session, so it remembers your rules, and how you like things done.",
+   "head": "<span class=\"v\">CLAUDE.md</span> = memory.",
+   "visual": {
+    "type": "code",
+    "title": "CLAUDE.md",
+    "lines": [
+     "<span class=\"c\"># Project rules</span>",
+     "<span class=\"k\">-</span> Mobile first, then desktop",
+     "<span class=\"k\">-</span> Use our brand colours",
+     "<span class=\"k\">-</span> Never push to main",
+     "<span class=\"k\">-</span> Test before you finish"
+    ],
+    "pills": [
+     "session 1 \u2713",
+     "session 2 \u2713",
+     "session 3 \u2713"
+    ]
+   }
+  },
+  {
+   "n": "Number two. Plan mode.",
+   "vo": "Press Shift Tab to switch into plan mode. Claude reads your code and writes a plan first... and changes nothing until you approve it.",
+   "head": "<span class=\"v\">Plan</span> before it <span class=\"o\">touches</span> code.",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; add a booking page to my site",
+    "lines": [
+     "<b>1.</b> Read pages/ and the layout",
+     "<b>2.</b> Add /booking with a form",
+     "<b>3.</b> Link it in the menu",
+     "<b>4.</b> Test on phone width"
+    ],
+    "status": "\u23f8 plan mode on",
+    "button": "Approve plan",
+    "keys": [
+     "Shift",
+     "Tab"
+    ]
+   }
+  },
+  {
+   "n": "Number three. Skills.",
+   "vo": "A skill is a folder with a skill dot M D file inside. Write your process once, and Claude follows it every single time that task comes up.",
+   "head": "Teach it <span class=\"m\">once.</span> It follows forever.",
+   "visual": {
+    "type": "tree",
+    "nodes": [
+     "skills/",
+     "website-build/",
+     "SKILL.md"
+    ],
+    "burst": true
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

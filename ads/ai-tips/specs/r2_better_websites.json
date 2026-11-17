@@ -1,0 +1,70 @@
+{
+ "eyebrow": "pixel &amp; co / <b>CLAUDE TIPS</b>",
+ "hook": {
+  "head": "Get <span class=\"v\">better websites</span> out of Claude.",
+  "vo": "Three ways to get way better websites out of Claude."
+ },
+ "tips": [
+  {
+   "n": "Number one. Show, don't tell.",
+   "vo": "Upload a screenshot of a website you love, and ask Claude to match the style. It can see images, so it copies the feel, not just your words.",
+   "head": "Show it a <span class=\"o\">screenshot.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "att",
+      "reference.png"
+     ],
+     [
+      "u",
+      "Match this style for my caf\u00e9 website"
+     ],
+     [
+      "c",
+      "Got it. Dark, minimal, big photos. Building it now."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number two. Phone first.",
+   "vo": "Most of your customers open your site from Instagram, on a phone. Tell Claude to design for a phone screen first, then desktop.",
+   "head": "Design for the <span class=\"m\">phone</span> first.",
+   "visual": {
+    "type": "code",
+    "title": "prompt.txt",
+    "lines": [
+     "<span class=\"c\"># My request</span>",
+     "<span class=\"k\">-</span> Design mobile-first",
+     "<span class=\"k\">-</span> Then scale up to desktop",
+     "<span class=\"k\">-</span> Big buttons, easy to tap"
+    ],
+    "pills": [
+     "phone \u2713",
+     "tablet \u2713",
+     "desktop \u2713"
+    ]
+   }
+  },
+  {
+   "n": "Number three. Make it check itself.",
+   "vo": "Before you call it done, ask Claude to review its own work, list what's broken, and fix it. It catches the mistakes you would miss.",
+   "head": "Make it <span class=\"o\">check its work.</span>",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; review the site, list problems, fix them",
+    "lines": [
+     "<b>\u2713</b> Button too small on phone",
+     "<b>\u2713</b> Menu overlaps the logo",
+     "<b>\u2713</b> Images missing alt text"
+    ],
+    "button": "All fixed"
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

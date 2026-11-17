@@ -1,0 +1,56 @@
+{
+ "eyebrow": "pixel &amp; co / <b>CLAUDE CODE TIPS</b>",
+ "hook": {
+  "head": "Claude Code <span class=\"v\">shortcuts</span> you need.",
+  "vo": "Three Claude Code shortcuts that will save you so much time."
+ },
+ "tips": [
+  {
+   "n": "Number one. Escape.",
+   "vo": "Claude going the wrong way? Press Escape to stop it right away, then tell it what you actually want.",
+   "head": "Press <span class=\"o\">Esc</span> to stop it.",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; redesign the whole site",
+    "lines": [
+     "<b>\u2026</b> editing 14 files",
+     "<b>\u25a0</b> Interrupted by user"
+    ],
+    "keys": [
+     "Esc"
+    ]
+   }
+  },
+  {
+   "n": "Number two. The at sign.",
+   "vo": "Type the at sign and a file name, to point Claude straight at the right file. No guessing, and no searching your whole project.",
+   "head": "Use <span class=\"v\">@</span> to point at files.",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; fix the menu in @components/Menu.tsx",
+    "lines": [
+     "<b>\u2713</b> Read components/Menu.tsx",
+     "<b>\u2713</b> Fixed the overlap",
+     "<b>\u2713</b> 1 file changed"
+    ]
+   }
+  },
+  {
+   "n": "Number three. Slash clear.",
+   "vo": "Finished one task, and starting another? Type slash clear for a fresh start, so old context doesn't confuse the new task.",
+   "head": "<span class=\"m\">/clear</span> between tasks.",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; /clear",
+    "lines": [
+     "<b>\u2713</b> Conversation cleared",
+     "<b>\u2713</b> Fresh start for the next task"
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

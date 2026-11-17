@@ -1,0 +1,67 @@
+{
+ "eyebrow": "pixel &amp; co / <b>PROMPTING 101</b>",
+ "hook": {
+  "head": "Your prompts are <span class=\"o\">too short.</span>",
+  "vo": "Your prompts are too short. Here's how to fix them."
+ },
+ "tips": [
+  {
+   "n": "Number one. Context.",
+   "vo": "Tell Claude who it's for, and why. A website for a Jeddah bakery that takes orders on WhatsApp gets a much better result than: make me a website.",
+   "head": "Say <span class=\"v\">who</span> it's for.",
+   "visual": {
+    "type": "code",
+    "title": "prompt.txt",
+    "lines": [
+     "<span class=\"c\"># Weak</span>",
+     "make me a website",
+     "",
+     "<span class=\"c\"># Strong</span>",
+     "<span class=\"k\">-</span> For a Jeddah bakery",
+     "<span class=\"k\">-</span> Orders on WhatsApp"
+    ]
+   }
+  },
+  {
+   "n": "Number two. Examples.",
+   "vo": "Paste one example of what good looks like. One example teaches Claude your style faster than a whole paragraph of rules.",
+   "head": "Show an <span class=\"m\">example.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Write captions like this one:"
+     ],
+     [
+      "u",
+      "\"Fresh out the oven. Gone by noon.\""
+     ],
+     [
+      "c",
+      "\"Warm. Flaky. Yours by 9 a.m.\""
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number three. Format.",
+   "vo": "End your prompt with the exact format you want. Three bullet points. One table. Under fifty words. Claude follows it.",
+   "head": "Say the <span class=\"o\">format.</span>",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; 3 caption ideas, under 10 words each",
+    "lines": [
+     "<b>1.</b> Fresh out the oven.",
+     "<b>2.</b> Baked at dawn, gone by noon.",
+     "<b>3.</b> Your morning, sorted."
+    ],
+    "button": "Copy"
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

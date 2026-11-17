@@ -1,0 +1,154 @@
+<!doctype html><html><head><meta charset="utf-8"><title>tip1</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/Inter-Black.otf);font-weight:900}
+@font-face{font-family:Inter;src:url(fonts/Inter-SemiBold.otf);font-weight:600}
+@font-face{font-family:Inter;src:url(fonts/Inter-Medium.otf);font-weight:500}
+@font-face{font-family:Mono;src:url(fonts/jetbrains-mono-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Mono;src:url(fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+:root{--bg:#ECE8E0;--ink:#141414;--dim:#7a746b;--line:#d6d0c4;--vio:#7C6CFF;--or:#FF5A36;--mint:#22c79a;--card:#fbfaf7}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter}
+#grid{position:absolute;inset:-80px;background-image:radial-gradient(#cfc8ba 2px,transparent 2.5px);background-size:40px 40px;opacity:.55}
+#eyebrow{position:absolute;left:80px;top:150px;font:500 30px Mono;letter-spacing:.06em;color:var(--dim)}
+#eyebrow b{color:var(--ink);font-weight:700}
+.H{position:absolute;left:80px;right:80px;top:220px;font:900 112px/1.02 Inter;letter-spacing:-.045em}
+.H .w{display:inline-block;white-space:pre;opacity:0;will-change:transform,filter}
+.H .v{color:var(--vio)}.H .o{color:var(--or)}.H .m{color:var(--mint)}
+.sc{position:absolute;inset:0;visibility:hidden;perspective:1600px}
+.big{position:absolute;left:0;right:0;text-align:center;font:900 520px/1 Inter;letter-spacing:-.06em;color:var(--ink);opacity:0}
+.card{position:absolute;background:var(--card);border:2px solid var(--line);border-radius:36px;box-shadow:0 40px 90px rgba(40,30,10,.18);overflow:hidden}
+.file{left:150px;top:640px;width:780px;height:640px;transform-origin:50% 60%}
+.file .bar{height:76px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 30px;font:700 30px Mono}
+.file .bar i{width:18px;height:18px;border-radius:50%;background:#e2dccf;display:inline-block}
+.code{padding:34px 40px;font:500 36px/1.75 Mono;color:var(--ink);white-space:pre}
+.code .c{color:var(--dim)}.code .k{color:var(--vio);font-weight:700}
+.sess{position:absolute;width:280px;height:200px;border-radius:28px;background:var(--card);border:2px solid var(--line);box-shadow:0 24px 50px rgba(40,30,10,.15);font:700 28px Mono;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;opacity:0}
+.sess small{font:500 24px Mono;color:var(--mint)}
+.term{left:90px;top:640px;width:900px;height:700px;background:#141414;border-color:#141414;color:#f1efe9}
+.term .bar{height:70px;display:flex;align-items:center;gap:12px;padding:0 28px}.term .bar i{width:18px;height:18px;border-radius:50%;display:inline-block}
+.tl{font:500 34px/1.7 Mono;padding:10px 40px;white-space:pre}
+.status{position:absolute;left:40px;bottom:36px;font:700 32px Mono;color:#b9b0ff;opacity:0}
+.key{position:absolute;top:1340px;height:150px;border-radius:30px;background:#fff;border:3px solid var(--ink);box-shadow:0 14px 0 var(--ink);font:700 54px Mono;display:flex;align-items:center;justify-content:center;opacity:0}
+.plan li{list-style:none;font:500 32px/1.9 Mono;opacity:0}
+.plan li b{color:#22c79a}
+.approve{position:absolute;right:40px;bottom:28px;padding:18px 34px;border-radius:999px;background:var(--vio);color:#fff;font:700 30px Inter;opacity:0}
+.node{position:absolute;padding:22px 34px;border-radius:24px;background:var(--card);border:2px solid var(--line);font:700 36px Mono;box-shadow:0 20px 40px rgba(40,30,10,.14);opacity:0;white-space:nowrap}
+.node.dark{background:#141414;color:#fff;border-color:#141414}
+svg.wires{position:absolute;inset:0;width:1080px;height:1920px;overflow:visible}
+svg.wires path{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round}
+.mini{position:absolute;width:96px;height:70px;border-radius:16px;background:var(--card);border:2px solid var(--line);opacity:0;display:flex;align-items:center;justify-content:center;font:700 30px Inter;color:var(--mint)}
+#sub{position:absolute;left:300px;right:60px;top:1560px;font:600 46px/1.25 Inter;color:var(--ink)}
+#sub span{display:inline-block;white-space:pre;opacity:.18}
+#sub span.on{opacity:1}
+#sub span.now{background:var(--ink);color:var(--bg);border-radius:10px;padding:0 8px;margin:0 -8px}
+#mascot{position:absolute;left:30px;top:1490px;width:260px;height:260px}
+#mascot img{position:absolute;inset:0;width:100%;height:100%;display:none}
+#tag{position:absolute;left:300px;top:1500px;font:700 26px Mono;color:var(--dim);letter-spacing:.06em}
+#prog{position:absolute;left:0;top:0;height:12px;width:0;background:var(--vio)}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+</style></head><body>
+<div id="grid"></div>
+<div id="eyebrow">pixel &amp; co / <b>CLAUDE CODE TIPS</b></div>
+<div class="H" id="Hhook">3 Claude Code features most people <span class="o">never use.</span></div>
+<div class="H" id="H1"><span class="v">CLAUDE.md</span> = memory.</div>
+<div class="H" id="H2"><span class="v">Plan</span> before it <span class="o">touches</span> code.</div>
+<div class="H" id="H3">Teach it <span class="m">once.</span> It follows forever.</div>
+<div class="H" id="Hcta">Save this <span class="v">for later.</span></div>
+<div class="sc" id="Sn1"><div class="big" id="B1" style="top:640px">01</div></div>
+<div class="sc" id="St1">
+  <div class="card file" id="file"><div class="bar"><i></i><i></i><i></i>&nbsp; CLAUDE.md</div>
+  <div class="code" id="code"></div></div>
+  <div class="sess" id="s1" style="left:60px;top:1080px">session 1<small>✓ read CLAUDE.md</small></div>
+  <div class="sess" id="s2" style="left:400px;top:1150px">session 2<small>✓ read CLAUDE.md</small></div>
+  <div class="sess" id="s3" style="left:740px;top:1080px">session 3<small>✓ read CLAUDE.md</small></div>
+</div>
+<div class="sc" id="Sn2"><div class="big" id="B2" style="top:640px">02</div></div>
+<div class="sc" id="St2">
+  <div class="card term" id="term"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+    <div class="tl" id="tl1">&gt; add a booking page to my site</div>
+    <ul class="plan" id="plan" style="margin:10px 0 0;padding:0 40px">
+      <li><b>1.</b> Read pages/ and the layout</li><li><b>2.</b> Add /booking with a form</li><li><b>3.</b> Link it in the menu</li><li><b>4.</b> Test on phone width</li></ul>
+    <div class="status" id="status">⏸ plan mode on</div><div class="approve" id="approve">Approve plan</div></div>
+  <div class="key" id="kShift" style="left:150px;width:400px">Shift</div>
+  <div class="key" id="kTab" style="left:600px;width:330px">Tab</div>
+</div>
+<div class="sc" id="Sn3"><div class="big" id="B3" style="top:640px">03</div></div>
+<div class="sc" id="St3">
+  <svg class="wires" id="wires3"><path id="w1" d="M540 790 L540 900"/><path id="w2" d="M540 1020 L540 1130"/></svg>
+  <div class="node" id="nA" style="left:390px;top:680px">skills/</div>
+  <div class="node" id="nB" style="left:330px;top:910px">website-build/</div>
+  <div class="node dark" id="nC" style="left:375px;top:1140px">SKILL.md</div>
+  <div id="minis"></div>
+</div>
+<div class="sc" id="Scta">
+  <div class="node dark" id="ctaH" style="left:270px;top:760px;font-size:52px;padding:34px 60px">@pixelandco.design</div>
+  <div class="node" id="ctaS" style="left:360px;top:960px">follow for more</div>
+</div>
+<div id="tag">PIXEL · YOUR AI GUIDE</div>
+<div id="mascot"></div><div id="hero" style="position:absolute;left:40px;top:470px;width:1000px;height:1000px;opacity:0"><img id="heroImg" style="width:100%;height:100%"></div>
+<div id="sub"></div>
+<div id="prog"></div><div id="flash"></div>
+<script src="lib/gsap.min.js"></script>
+<script>
+const LINES={"lines": [{"key": "hook", "text": "Three Claude Code features most people never use.", "t": 0.4, "d": 2.83}, {"key": "n1", "text": "Number one. Claude dot M D.", "t": 3.63, "d": 2.18}, {"key": "t1", "text": "Put a file called CLAUDE dot M D in your project. Claude reads it at the start of every session, so it remembers your rules and how you like things done.", "t": 6.21, "d": 6.7}, {"key": "n2", "text": "Number two. Plan mode.", "t": 13.51, "d": 1.5}, {"key": "t2", "text": "Press Shift Tab to switch into plan mode. Claude reads your code and writes a plan first, and changes nothing until you approve it.", "t": 15.41, "d": 6.3}, {"key": "n3", "text": "Number three. Skills.", "t": 22.31, "d": 1.52}, {"key": "t3", "text": "A skill is a folder with a SKILL dot M D file inside. Write your process once, and Claude follows it every time that task comes up.", "t": 24.23, "d": 6.98}, {"key": "cta", "text": "Save this for later, and follow Pixel and Co for more.", "t": 31.81, "d": 3.04}], "dur": 37.24};const DUR=LINES.dur;window.DUR=DUR;window.ready=false;
+const $=i=>document.getElementById(i);
+const M={talk:[],idle:[]},mbox=$('mascot');
+for(const k of ['talk','idle'])for(let i=0;i<60;i++){const im=new Image();im.src=`m/${k}_${String(i).padStart(2,'0')}.png`;mbox.appendChild(im);M[k].push(im);}
+const words=el=>{const out=[];[...el.childNodes].forEach(n=>{const cls=n.nodeType===1?n.className:'';(n.textContent).split(/(\s+)/).forEach(t=>{if(!t)return;const s=document.createElement('span');s.className='w '+cls;s.textContent=t;el.insertBefore(s,n);if(t.trim())out.push(s);});el.removeChild(n);});return out;};
+const HW={};['Hhook','H1','H2','H3','Hcta'].forEach(id=>HW[id]=words($(id)));
+const L={};LINES.lines.forEach(l=>L[l.key]=l);
+const tl=gsap.timeline({paused:true}),P='power4.out',B='back.out(1.7)';
+const show=(id,a,b)=>{tl.set($(id),{visibility:'visible'},a);tl.set($(id),{visibility:'hidden'},b);};
+const head=(id,a,b)=>{tl.fromTo(HW[id],{y:90,opacity:0,filter:'blur(16px)'},{y:0,opacity:1,filter:'blur(0px)',duration:.5,stagger:.07,ease:P,immediateRender:false},a);tl.set(HW[id],{opacity:0},b);};
+const T=k=>L[k].t,E=k=>L[k].t+L[k].d;
+/* hook */
+head('Hhook',T('hook')-.1,T('n1')-.05);
+/* numbers */
+[['Sn1','B1','n1','t1'],['Sn2','B2','n2','t2'],['Sn3','B3','n3','t3']].forEach(([s,b,n,t])=>{show(s,T(n)-.05,T(t)-.02);tl.fromTo($(b),{scale:2.4,opacity:0,filter:'blur(30px)'},{scale:1,opacity:1,filter:'blur(0px)',duration:.45,ease:P,immediateRender:false},T(n)-.05);tl.to($(b),{scale:.6,opacity:0,filter:'blur(20px)',duration:.25,ease:'power2.in'},T(t)-.27);tl.fromTo($('flash'),{opacity:.55},{opacity:0,duration:.3,immediateRender:false},T(t));});
+/* t1: CLAUDE.md file */
+show('St1',T('t1'),T('n2')-.02);head('H1',T('t1'),T('n2')-.05);
+tl.fromTo($('file'),{y:500,rotationX:35,rotationY:-18,opacity:0,scale:.85},{y:0,rotationX:8,rotationY:-6,opacity:1,scale:1,duration:.8,ease:B,immediateRender:false},T('t1')+.1);
+const CODE=['<span class="c"># Project rules</span>','<span class="k">-</span> Mobile first, then desktop','<span class="k">-</span> Use our brand colours','<span class="k">-</span> Never push to main','<span class="k">-</span> Test before you finish'];
+tl.to($('file'),{rotationX:0,rotationY:0,duration:3,ease:'sine.inOut'},T('t1')+.9);
+tl.to($('file'),{y:-330,scale:.62,duration:.6,ease:'power3.inOut'},T('t1')+5.0);
+['s1','s2','s3'].forEach((s,i)=>{tl.fromTo($(s),{opacity:0,y:120,scale:.6},{opacity:1,y:0,scale:1,duration:.5,ease:B,immediateRender:false},T('t1')+5.4+i*.35);tl.to($(s),{y:-14,duration:.9,yoyo:true,repeat:3,ease:'sine.inOut'},T('t1')+6+i*.35);});
+/* t2: plan mode */
+show('St2',T('t2'),T('n3')-.02);head('H2',T('t2'),T('n3')-.05);
+tl.fromTo($('term'),{y:420,opacity:0,rotationX:25,scale:.9},{y:0,opacity:1,rotationX:0,scale:1,duration:.7,ease:B,immediateRender:false},T('t2')+.05);
+[['kShift',0],['kTab',.18]].forEach(([k,d])=>{tl.fromTo($(k),{opacity:0,y:80},{opacity:1,y:0,duration:.4,ease:B,immediateRender:false},T('t2')+.6+d);tl.to($(k),{y:12,boxShadow:'0 2px 0 #141414',duration:.08},T('t2')+1.5+d*.3);tl.to($(k),{y:0,boxShadow:'0 14px 0 #141414',duration:.12},T('t2')+1.75);tl.to($(k),{opacity:0,y:60,duration:.3},T('t2')+3.2);});
+tl.fromTo($('status'),{opacity:0,x:-30},{opacity:1,x:0,duration:.4,ease:P,immediateRender:false},T('t2')+1.8);
+tl.fromTo('#plan li',{opacity:0,x:-40},{opacity:1,x:0,duration:.35,stagger:.4,ease:P,immediateRender:false},T('t2')+3.0);
+tl.fromTo($('approve'),{opacity:0,scale:.5},{opacity:1,scale:1,duration:.45,ease:B,immediateRender:false},T('t2')+5.4);
+tl.to($('approve'),{scale:1.08,duration:.35,yoyo:true,repeat:3,ease:'sine.inOut'},T('t2')+5.9);
+tl.to($('term'),{scale:1.04,duration:L.t2.d,ease:'none'},T('t2')+.8);
+/* t3: skills */
+show('St3',T('t3'),T('cta')-.02);head('H3',T('t3'),T('cta')-.05);
+[['nA',.1],['nB',.6],['nC',1.1]].forEach(([n,d])=>tl.fromTo($(n),{opacity:0,y:50,scale:.8},{opacity:1,y:0,scale:1,duration:.45,ease:B,immediateRender:false},T('t3')+d));
+['w1','w2'].forEach((w,i)=>{const p=$(w),len=p.getTotalLength();tl.fromTo(p,{strokeDasharray:len,strokeDashoffset:len},{strokeDashoffset:0,duration:.35,ease:'power2.out',immediateRender:false},T('t3')+.45+i*.5);});
+tl.to([$('nA'),$('nB'),$('w1'),$('w2')],{opacity:0,duration:.3},T('t3')+3.6);
+tl.to($('nC'),{top:1000,scale:1.25,duration:.5,ease:'power3.inOut'},T('t3')+3.6);
+const mb=$('minis'),MN=[];const labels=['site','menu','ads','copy','SEO','forms','tests','deploy'];
+for(let r=0;r<3;r++){const n=[8,12,16][r],R=[230,340,450][r];for(let i=0;i<n;i++){const a=i/n*Math.PI*2+r*.3;const d=document.createElement('div');d.className='mini';d.textContent='✓';d.style.left=(540-48+Math.cos(a)*R)+'px';d.style.top=(1035-35+Math.sin(a)*R*.72)+'px';mb.appendChild(d);MN.push([d,r,i]);}}
+MN.forEach(([d,r,i])=>tl.fromTo(d,{opacity:0,scale:.2,x:(540-48-parseFloat(d.style.left))*.9,y:(1035-35-parseFloat(d.style.top))*.9},{opacity:1,scale:1,x:0,y:0,duration:.55,ease:B,immediateRender:false},T('t3')+4.2+r*.25+i*.015));
+tl.to('#minis .mini',{rotation:6,duration:1.2,yoyo:true,repeat:2,ease:'sine.inOut',stagger:.01},T('t3')+5.2);
+/* cta */
+show('Scta',T('cta'),DUR);head('Hcta',T('cta'),DUR+1);
+tl.fromTo($('ctaH'),{opacity:0,scale:.4,rotation:-6},{opacity:1,scale:1,rotation:0,duration:.6,ease:B,immediateRender:false},T('cta')+.3);
+tl.fromTo($('ctaS'),{opacity:0,y:40},{opacity:1,y:0,duration:.45,ease:P,immediateRender:false},T('cta')+.7);
+tl.fromTo($('hero'),{opacity:0,scale:.3,y:300},{opacity:1,scale:1,y:0,duration:.7,ease:B,immediateRender:false},0.1);
+tl.to($('hero'),{opacity:0,scale:.3,x:-420,y:880,duration:.45,ease:'power3.in'},T('n1')-.45);
+tl.fromTo($('hero'),{opacity:0,scale:.3,x:0,y:400},{opacity:1,scale:.75,x:0,y:420,duration:.6,ease:B,immediateRender:false},T('cta')+.9);
+tl.fromTo($('mascot'),{opacity:0},{opacity:1,duration:.3,immediateRender:false},T('n1')-.1);tl.set($('mascot'),{opacity:0},0);tl.to($('mascot'),{opacity:0,duration:.3},T('cta')+.8);
+/* background + progress */
+tl.fromTo($('grid'),{x:0,y:0},{x:-40,y:-120,duration:DUR,ease:'none'},0);
+tl.fromTo($('prog'),{width:0},{width:1080,duration:DUR,ease:'none'},0);
+tl.to({},{duration:.01},DUR);
+/* subtitles: word timing by length */
+const SUB=[];LINES.lines.forEach(l=>{const ws=l.text.split(' ');const tot=ws.reduce((s,w)=>s+w.length+1,0);let acc=l.t;const g=[];const chunk=[];ws.forEach((w,i)=>{const d=l.d*(w.length+1)/tot;g.push({w,t:acc,e:acc+d});acc+=d;});for(let i=0;i<g.length;i+=4)SUB.push({ws:g.slice(i,i+4),t:g[i].t,e:g[Math.min(i+3,g.length-1)].e});});
+const sub=$('sub');let cur=-1;
+function subs(t){const k=SUB.findIndex(s=>t>=s.t-.05&&t<s.e+.25);if(k!==cur){sub.textContent='';cur=k;if(k>=0)SUB[k].ws.forEach(o=>{const s=document.createElement('span');s.textContent=o.w+' ';sub.appendChild(s);});}
+ if(k>=0)[...sub.children].forEach((s,i)=>{const o=SUB[k].ws[i];s.className=(t>=o.t?'on':'')+(t>=o.t&&t<o.e?' now':'');});}
+function mascot(t){const talking=LINES.lines.some(l=>t>=l.t&&t<=l.t+l.d);const f=Math.floor(t*30)%60;M.talk.concat(M.idle).forEach(im=>im.style.display='none');(talking?M.talk:M.idle)[f].style.display='block';$('heroImg').src=(talking?M.talk:M.idle)[f].src;}
+function code(t){const a=T('t1')+.9,n=Math.max(0,Math.min(CODE.length,Math.floor((t-a)/.75)+1));$('code').innerHTML=t<a?'':CODE.slice(0,n).join('\n');}
+window.renderAt=t=>{tl.time(Math.min(t,DUR),true);subs(t);mascot(t);code(t);};
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>document.fonts.ready).then(()=>{renderAt(0);window.ready=true;});
+</script></body></html>

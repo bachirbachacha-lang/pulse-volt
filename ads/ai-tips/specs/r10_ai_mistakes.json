@@ -1,0 +1,68 @@
+{
+ "theme": "dark",
+ "eyebrow": "pixel &amp; co / <b>AI MISTAKES</b>",
+ "hook": {
+  "head": "Stop making these <span class=\"o\">AI mistakes.</span>",
+  "vo": "Stop making these three mistakes with AI."
+ },
+ "tips": [
+  {
+   "n": "Mistake one. Sharing secrets.",
+   "vo": "Never paste passwords, bank details, or private keys into a chat. Treat it like a message someone else could read.",
+   "head": "Never paste <span class=\"o\">passwords.</span>",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; my password is ********",
+    "lines": [
+     "<b>\u2715</b> Don't share passwords",
+     "<b>\u2715</b> Don't share bank details",
+     "<b>\u2713</b> Share the problem, not the secret"
+    ]
+   }
+  },
+  {
+   "n": "Mistake two. Trusting blindly.",
+   "vo": "AI can sound sure and still be wrong. Check important facts, prices, and dates before you post or send anything.",
+   "head": "Check <span class=\"m\">the facts.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Is this price right?"
+     ],
+     [
+      "c",
+      "Good question. Please check it against your price list before posting."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Mistake three. Taking the first answer.",
+   "vo": "The first answer is a draft. Ask it to make it shorter, funnier, or more like your brand. The second try is usually much better.",
+   "head": "The first answer is a <span class=\"v\">draft.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "c",
+      "Visit our caf\u00e9 for great coffee."
+     ],
+     [
+      "u",
+      "Shorter, and more fun"
+     ],
+     [
+      "c",
+      "Coffee so good, you'll skip the queue twice."
+     ]
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

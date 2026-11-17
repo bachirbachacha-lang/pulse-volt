@@ -1,0 +1,70 @@
+{
+ "eyebrow": "pixel &amp; co / <b>CLAUDE TIPS</b>",
+ "hook": {
+  "head": "Claude can build you <span class=\"v\">a working tool.</span>",
+  "vo": "Most people only chat with Claude. But it can build you a working tool."
+ },
+ "tips": [
+  {
+   "n": "Number one. Calculators.",
+   "vo": "Ask for a price calculator for your services. Claude builds it right in the chat, and you can use it straight away.",
+   "head": "Price <span class=\"v\">calculators.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Make a price calculator for my car wash"
+     ],
+     [
+      "c",
+      "Done. Pick the car size and the package, and it shows the total."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number two. Trackers.",
+   "vo": "Need to track orders? Ask for a simple tracker. Tell Claude which columns you need, and it builds the whole layout.",
+   "head": "Order <span class=\"m\">trackers.</span>",
+   "visual": {
+    "type": "code",
+    "title": "orders-tracker",
+    "lines": [
+     "<span class=\"c\"># Columns</span>",
+     "<span class=\"k\">-</span> Customer",
+     "<span class=\"k\">-</span> Item",
+     "<span class=\"k\">-</span> Pickup time",
+     "<span class=\"k\">-</span> Paid"
+    ],
+    "pills": [
+     "12 orders",
+     "3 pending",
+     "9 done"
+    ]
+   }
+  },
+  {
+   "n": "Number three. Share it.",
+   "vo": "When you like it, publish it, and share the link with your team or your customers.",
+   "head": "<span class=\"o\">Share</span> the link.",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Can my team use this too?"
+     ],
+     [
+      "c",
+      "Yes. Publish it and send them the link."
+     ]
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

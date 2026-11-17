@@ -1,0 +1,65 @@
+{
+ "theme": "dark",
+ "eyebrow": "pixel &amp; co / <b>BEHIND THE SCENES</b>",
+ "hook": {
+  "head": "How I find <span class=\"v\">website clients</span> with AI.",
+  "vo": "Here's how I find website clients, using AI."
+ },
+ "tips": [
+  {
+   "n": "Step one. Pick one niche.",
+   "vo": "Pick one type of business, like caf\u00e9s. Every caf\u00e9 needs the same things: a menu, a map, and a way to order.",
+   "head": "Pick <span class=\"v\">one niche.</span>",
+   "visual": {
+    "type": "tree",
+    "nodes": [
+     "caf\u00e9s",
+     "menu + map",
+     "order on WhatsApp"
+    ]
+   }
+  },
+  {
+   "n": "Step two. Build a free sample.",
+   "vo": "Before you pitch, build a free sample with their real menu. People say yes to something they can see, not to a promise.",
+   "head": "Build a <span class=\"m\">free sample.</span>",
+   "visual": {
+    "type": "code",
+    "title": "sample-site",
+    "lines": [
+     "<span class=\"c\"># Built with Claude</span>",
+     "<span class=\"k\">-</span> Their real menu",
+     "<span class=\"k\">-</span> Their colours",
+     "<span class=\"k\">-</span> Order on WhatsApp"
+    ],
+    "pills": [
+     "phone \u2713",
+     "desktop \u2713",
+     "ready"
+    ]
+   }
+  },
+  {
+   "n": "Step three. A real compliment.",
+   "vo": "Message them with one specific compliment about their page, then offer the sample. No copy and paste spam.",
+   "head": "Send a <span class=\"o\">real message.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Your pistachio latte reel was so good. I made you a free website sample, want to see it?"
+     ],
+     [
+      "c",
+      "Wow, yes! Send it over."
+     ]
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "eyebrow": "pixel &amp; co / <b>AI EXPLAINED</b>",
+ "hook": {
+  "head": "What is an <span class=\"v\">AI agent,</span> really?",
+  "vo": "Everyone says AI agent. Here's what it actually means."
+ },
+ "tips": [
+  {
+   "n": "Step one. A goal.",
+   "vo": "A chatbot answers one message. An agent gets a goal, like: build me a landing page, and works toward it on its own.",
+   "head": "It gets a <span class=\"v\">goal.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Build me a landing page for my bakery"
+     ],
+     [
+      "c",
+      "On it. I'll plan it, build it, and test it."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Step two. Tools.",
+   "vo": "Agents use tools. They read files, run code, search, and edit, one step after another, and check the result each time.",
+   "head": "It uses <span class=\"m\">tools.</span>",
+   "visual": {
+    "type": "tree",
+    "nodes": [
+     "goal",
+     "read files",
+     "write code",
+     "run tests"
+    ]
+   }
+  },
+  {
+   "n": "Step three. You stay in charge.",
+   "vo": "Good agents ask before big changes. You approve the plan, and you review the work before anything goes live.",
+   "head": "You stay <span class=\"o\">in charge.</span>",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; publish the site",
+    "lines": [
+     "<b>?</b> This will go live. Continue?"
+    ],
+    "button": "Approve"
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

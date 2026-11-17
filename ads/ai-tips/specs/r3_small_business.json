@@ -1,0 +1,67 @@
+{
+ "eyebrow": "pixel &amp; co / <b>CLAUDE FOR BUSINESS</b>",
+ "hook": {
+  "head": "Run your <span class=\"v\">small business</span> with Claude.",
+  "vo": "Three ways small business owners can use Claude today."
+ },
+ "tips": [
+  {
+   "n": "Number one. Projects.",
+   "vo": "Make a project, and upload your menu, your prices, and your rules once. Every chat inside that project already knows your business.",
+   "head": "Use <span class=\"v\">Projects.</span>",
+   "visual": {
+    "type": "tree",
+    "nodes": [
+     "Project: My Caf\u00e9",
+     "menu + prices + rules",
+     "every new chat"
+    ],
+    "burst": true
+   }
+  },
+  {
+   "n": "Number two. Photos to tables.",
+   "vo": "Snap a photo of a receipt or an invoice, upload it, and ask Claude to turn it into a clean table you can paste into your spreadsheet.",
+   "head": "Turn photos into <span class=\"m\">tables.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "att",
+      "receipt.jpg"
+     ],
+     [
+      "u",
+      "Turn this into a table"
+     ],
+     [
+      "c",
+      "Done. Item, quantity, price. 12 rows, ready to paste."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number three. Faster replies.",
+   "vo": "Paste a customer message, and ask for a friendly reply in your own tone. You check it, you send it. Your reply is ready in seconds.",
+   "head": "Reply to customers <span class=\"o\">faster.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Customer asks: do you deliver to Jeddah?"
+     ],
+     [
+      "c",
+      "Draft: Hi! Yes, we deliver across Jeddah. Order on WhatsApp and we'll confirm in minutes."
+     ]
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

@@ -1,0 +1,73 @@
+{
+ "theme": "dark",
+ "eyebrow": "pixel &amp; co / <b>CLAUDE TIPS</b>",
+ "hook": {
+  "head": "Claude can <span class=\"v\">read your files.</span>",
+  "vo": "Claude can read your files. Here are three ways to use that."
+ },
+ "tips": [
+  {
+   "n": "Number one. Price lists.",
+   "vo": "Upload your menu or price list as a PDF, and ask for five Instagram captions based on it. Real prices, real items, no typing.",
+   "head": "PDF to <span class=\"v\">captions.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "att",
+      "menu.pdf"
+     ],
+     [
+      "u",
+      "Write 5 Instagram captions from this menu"
+     ],
+     [
+      "c",
+      "1. Our pistachio latte is back. 22 riyals of pure joy."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number two. Spreadsheets.",
+   "vo": "Upload a spreadsheet of your sales, and ask which items sell best, and on which days. You get answers, not just numbers.",
+   "head": "Ask your <span class=\"m\">spreadsheet.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "att",
+      "sales.csv"
+     ],
+     [
+      "u",
+      "What sells best, and when?"
+     ],
+     [
+      "c",
+      "Spanish latte. Fridays are your busiest day."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number three. Error screenshots.",
+   "vo": "Something broke on your website? Screenshot the error, upload it, and ask Claude what it means, and how to fix it.",
+   "head": "Screenshot the <span class=\"o\">error.</span>",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; what does this error mean?",
+    "lines": [
+     "<b>!</b> 404: page not found",
+     "<b>\u2713</b> Your menu link points to /menu.html",
+     "<b>\u2713</b> The file is called /menus.html"
+    ],
+    "button": "Fix the link"
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}
