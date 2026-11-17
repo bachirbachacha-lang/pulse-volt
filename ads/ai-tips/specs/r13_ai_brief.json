@@ -1,0 +1,60 @@
+{
+ "theme": "dark",
+ "eyebrow": "pixel &amp; co / <b>PROMPTING 101</b>",
+ "hook": {
+  "head": "Write a <span class=\"v\">website brief</span> with AI.",
+  "vo": "Before you build a website, write a brief. Here's how, with AI."
+ },
+ "tips": [
+  {
+   "n": "Step one. The goal.",
+   "vo": "Start with one goal. More orders, more bookings, or more calls. Ask Claude to keep every section focused on that goal.",
+   "head": "One <span class=\"v\">goal.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "My goal: more pickup orders for my caf\u00e9"
+     ],
+     [
+      "c",
+      "Great. Every section will push people to order."
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Step two. The customer.",
+   "vo": "Describe your customer. Students near campus? Families on weekends? The words and the design change for each one.",
+   "head": "Who is the <span class=\"m\">customer?</span>",
+   "visual": {
+    "type": "tree",
+    "nodes": [
+     "your customer",
+     "their questions",
+     "your sections"
+    ]
+   }
+  },
+  {
+   "n": "Step three. The sections.",
+   "vo": "Ask Claude to list the sections in order, with one sentence for each. Now you have a plan before a single line of code.",
+   "head": "List the <span class=\"o\">sections.</span>",
+   "visual": {
+    "type": "code",
+    "title": "brief.md",
+    "lines": [
+     "<span class=\"k\">1.</span> Hero + order button",
+     "<span class=\"k\">2.</span> Menu with prices",
+     "<span class=\"k\">3.</span> Map and hours",
+     "<span class=\"k\">4.</span> Reviews"
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

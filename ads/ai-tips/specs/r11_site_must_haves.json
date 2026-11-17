@@ -1,0 +1,61 @@
+{
+ "theme": "dark",
+ "eyebrow": "pixel &amp; co / <b>WEBSITE TIPS</b>",
+ "hook": {
+  "head": "3 things every <span class=\"v\">business website</span> needs.",
+  "vo": "Three things every small business website needs."
+ },
+ "tips": [
+  {
+   "n": "Number one. Prices you can see.",
+   "vo": "Show your menu and your prices right on the page. If people have to message you to ask, many of them just leave.",
+   "head": "Show your <span class=\"v\">prices.</span>",
+   "visual": {
+    "type": "code",
+    "title": "menu",
+    "lines": [
+     "<span class=\"c\"># Menu</span>",
+     "<span class=\"k\">-</span> Spanish latte ...... 18",
+     "<span class=\"k\">-</span> Iced matcha ........ 22",
+     "<span class=\"k\">-</span> Saffron cake ....... 16"
+    ]
+   }
+  },
+  {
+   "n": "Number two. One tap to order.",
+   "vo": "Add one big button that opens WhatsApp with the order already written. Fewer steps means more orders.",
+   "head": "<span class=\"m\">One tap</span> to order.",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Hi! I'd like 2 Spanish lattes for pickup at 5 pm"
+     ],
+     [
+      "c",
+      "Got it, see you at 5!"
+     ]
+    ]
+   }
+  },
+  {
+   "n": "Number three. Map and hours.",
+   "vo": "Put your location and your opening hours where nobody has to search for them. It sounds simple, but it's what people look for first.",
+   "head": "Map + <span class=\"o\">opening hours.</span>",
+   "visual": {
+    "type": "term",
+    "prompt": "&gt; where are you, and are you open?",
+    "lines": [
+     "<b>\u2713</b> Open now \u00b7 7 am to midnight",
+     "<b>\u2713</b> Tap for directions"
+    ],
+    "button": "Open in Maps"
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

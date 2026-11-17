@@ -5,7 +5,7 @@ from faster_whisper import WhisperModel
 names=sys.argv[1:]; R='/root/tip1'
 m=ChatterboxTTS.from_pretrained(device="cpu"); W=WhisperModel("base.en",device="cpu",compute_type="int8")
 import re
-def norm(x): return [w for w in re.sub(r"[^a-z0-9 ]"," ",x.lower().replace("1","one").replace("2","two").replace("3","three").replace("number ","").replace("claude","cloud").replace("clawed","cloud").replace("&"," and ")).split() if w]
+def norm(x): return [w for w in re.sub(r"[^a-z0-9 ]"," ",x.lower().replace(" dot m d",".md").replace("1","one").replace("2","two").replace("3","three").replace("number ","").replace("claude","cloud").replace("clawed","cloud").replace("&"," and ")).split() if w]
 def ok(text,heard):
     e,h=norm(text),norm(heard)
     if not h or h[0]!=e[0] and (len(h)<2 or h[1]!=e[0]): return False
@@ -42,5 +42,5 @@ for name in names:
     subprocess.run(['node',f'{R}/rec.js',f'{d}/frames'],env=env,check=True,stdout=subprocess.DEVNULL)
     subprocess.run(['python3',f'{R}/fx.py',f'{d}/frames/sfx.json',f'{d}/fx.wav',str(sp['timing']['dur'])],check=True)
     subprocess.run(['ffmpeg','-loglevel','error','-y','-i',f'{d}/vo.wav','-i',f'{d}/fx.wav','-filter_complex','[1]aresample=48000,volume=0.32[f];[0][f]amix=inputs=2:normalize=0,alimiter=limit=0.9[o]','-map','[o]',f'{d}/mix.wav'],check=True)
-    subprocess.run(['ffmpeg','-loglevel','error','-y','-framerate','30','-i',f'{d}/frames/f%05d.jpg','-i',f'{d}/mix.wav','-vf','noise=alls=2:allf=t,format=yuv420p','-c:v','libx264','-crf','19','-preset','slow','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-shortest','-movflags','+faststart',f'{R}/out2/{name}.mp4'],check=True)
+    subprocess.run(['ffmpeg','-loglevel','error','-y','-framerate','30','-i',f'{d}/frames/f%05d.jpg','-i',f'{d}/mix.wav','-vf','noise=alls=2:allf=t,format=yuv420p','-c:v','libx264','-crf','19','-preset','fast','-threads','2','-x264-params','rc-lookahead=10','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-shortest','-movflags','+faststart',f'{R}/out2/{name}.mp4'],check=True)
     print('DONE',name,flush=True)

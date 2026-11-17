@@ -1,0 +1,60 @@
+{
+ "eyebrow": "pixel &amp; co / <b>INSTAGRAM TIPS</b>",
+ "hook": {
+  "head": "Fix your <span class=\"o\">Instagram bio</span> in 30 seconds.",
+  "vo": "Your Instagram bio is losing you customers. Here's the fix."
+ },
+ "tips": [
+  {
+   "n": "Number one. Say what you sell.",
+   "vo": "In the first line, say exactly what you sell. Not a quote. Not just emojis. Just: specialty coffee and fresh cakes.",
+   "head": "Say what you <span class=\"v\">sell.</span>",
+   "visual": {
+    "type": "code",
+    "title": "bio",
+    "lines": [
+     "<span class=\"c\"># Before</span>",
+     "living the dream \u2728",
+     "",
+     "<span class=\"c\"># After</span>",
+     "Specialty coffee + fresh cakes"
+    ]
+   }
+  },
+  {
+   "n": "Number two. Say where.",
+   "vo": "Second line: your city and your area. People want to know if they can actually come to you.",
+   "head": "Say <span class=\"m\">where.</span>",
+   "visual": {
+    "type": "code",
+    "title": "bio",
+    "lines": [
+     "Specialty coffee + fresh cakes",
+     "<span class=\"k\">\ud83d\udccd</span> Riyadh, Al Olaya"
+    ]
+   }
+  },
+  {
+   "n": "Number three. One link that works.",
+   "vo": "Use one link that goes straight to your menu and your order button. Every extra tap loses people.",
+   "head": "One link that <span class=\"o\">works.</span>",
+   "visual": {
+    "type": "chat",
+    "msgs": [
+     [
+      "u",
+      "Where can I see the menu?"
+     ],
+     [
+      "c",
+      "Tap the link in our bio. Menu, prices and ordering are all there."
+     ]
+    ]
+   }
+  }
+ ],
+ "cta": {
+  "head": "Save this <span class=\"v\">for later.</span>",
+  "vo": "Save this for later... and follow Pixel and Co, for more."
+ }
+}

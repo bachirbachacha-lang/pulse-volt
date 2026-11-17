@@ -1,0 +1,97 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Inter;src:url(fonts/Inter-Black.otf);font-weight:900}
+@font-face{font-family:Inter;src:url(fonts/Inter-Bold.otf);font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/Inter-Medium.otf);font-weight:500}
+@font-face{font-family:Unb;src:url(fonts/unbounded-latin-var.woff2);font-weight:200 900}
+@font-face{font-family:Mono;src:url(fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+*{box-sizing:border-box;margin:0}
+body{width:390px;height:844px;overflow:hidden;font-family:Inter}
+.s{position:relative;width:390px;height:844px;overflow:hidden;display:none}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:56px 22px 0;font:700 13px Inter;letter-spacing:.12em}
+.pill{padding:12px 20px;border-radius:999px;font:700 14px Inter;display:inline-block}
+.orb{position:absolute;border-radius:50%;filter:blur(40px)}
+/* 1 NOVA sneakers */
+#s1{background:#0b0b0b;color:#fff}
+#s1 .shoe{position:absolute;left:30px;top:190px;width:340px;height:200px;transform:rotate(-14deg)}
+#s1 h1{position:absolute;left:22px;top:420px;font:900 74px/0.9 Inter;letter-spacing:-.04em}
+#s1 h1 span{color:#ff5a1f}
+#s1 .meta{position:absolute;left:22px;top:600px;font:500 15px/1.5 Inter;color:#aaa;width:300px}
+#s1 .cta{position:absolute;left:22px;right:22px;bottom:40px;display:flex;gap:10px}
+#s1 .cta .pill:first-child{background:#ff5a1f;color:#000;flex:1;text-align:center}
+#s1 .cta .pill:last-child{border:2px solid #333;color:#fff}
+#s1 .timer{position:absolute;right:22px;top:110px;font:700 13px Mono;color:#ff5a1f;border:1.5px solid #ff5a1f;border-radius:999px;padding:8px 14px}
+/* 2 Bloom & Bean */
+#s2{background:#f3ece0;color:#1f2a1f}
+#s2 h1{padding:30px 22px 0;font:900 52px/0.95 Inter;letter-spacing:-.04em}
+#s2 h1 i{font-style:normal;color:#3d7a4a}
+#s2 .cards{position:absolute;left:22px;right:22px;top:270px;display:flex;flex-direction:column;gap:14px}
+#s2 .c{background:#fff;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center;box-shadow:0 10px 30px rgba(60,50,30,.1)}
+#s2 .cup{width:64px;height:64px;border-radius:18px;flex:none}
+#s2 .c b{font:700 17px Inter;display:block}#s2 .c small{font:500 13px Inter;color:#7a7465}
+#s2 .c .p{margin-left:auto;font:900 18px Inter}
+#s2 .wa{position:absolute;left:22px;right:22px;bottom:40px;background:#1f2a1f;color:#f3ece0;text-align:center}
+/* 3 IRONHOUSE gym */
+#s3{background:#e9ff3b;color:#0a0a0a}
+#s3 h1{position:absolute;left:22px;top:110px;font:900 88px/0.82 Inter;letter-spacing:-.05em}
+#s3 .classes{position:absolute;left:0;right:0;top:420px;padding:0 22px;display:flex;flex-direction:column;gap:10px}
+#s3 .r{display:flex;justify-content:space-between;align-items:center;border-top:2px solid #0a0a0a;padding:14px 0;font:700 20px Inter}
+#s3 .r small{font:700 13px Mono}
+#s3 .book{position:absolute;left:22px;right:22px;bottom:40px;background:#0a0a0a;color:#e9ff3b;text-align:center}
+/* 4 MAISON NOIR */
+#s4{background:#0e0c0a;color:#e9dcc3}
+#s4 .bottle{position:absolute;left:115px;top:150px;width:160px;height:300px}
+#s4 h1{position:absolute;left:0;right:0;top:490px;text-align:center;font:300 40px/1.1 Unb;letter-spacing:.08em}
+#s4 p{position:absolute;left:40px;right:40px;top:600px;text-align:center;font:500 14px/1.6 Inter;color:#a8977a}
+#s4 .buy{position:absolute;left:60px;right:60px;bottom:50px;border:1.5px solid #c9a96a;color:#e9dcc3;text-align:center;border-radius:0;letter-spacing:.2em}
+/* 5 SAHARA eats */
+#s5{background:#fff4ec;color:#2b130a}
+#s5 .hero{position:absolute;left:0;right:0;top:0;height:330px;background:linear-gradient(160deg,#ff7a3d,#e2342b)}
+#s5 .plate{position:absolute;left:95px;top:95px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffe2b8,#f3b25f 40%,#c8692a 70%,#7a2e10);box-shadow:0 30px 60px rgba(90,20,0,.45),inset 0 0 0 14px #fff}
+#s5 h1{position:absolute;left:22px;top:350px;font:900 40px/1 Inter;letter-spacing:-.03em}
+#s5 .tabs{position:absolute;left:22px;top:450px;display:flex;gap:8px}
+#s5 .tabs span{padding:10px 16px;border-radius:999px;background:#ffe3d1;font:700 13px Inter}
+#s5 .tabs span:first-child{background:#2b130a;color:#fff}
+#s5 .it{position:absolute;left:22px;right:22px;display:flex;justify-content:space-between;font:700 17px Inter;padding:14px 0;border-bottom:1.5px dashed #f0c9ad}
+#s5 .wa{position:absolute;left:22px;right:22px;bottom:40px;background:#25d366;color:#fff;text-align:center}
+/* 6 Ledgerly dashboard */
+#s6{background:#0a0d1c;color:#e8ecff}
+#s6 h2{padding:20px 22px 0;font:700 15px Inter;color:#8a93c4}
+#s6 .big{padding:6px 22px 0;font:900 56px Inter;letter-spacing:-.03em}
+#s6 .big small{font:700 18px Inter;color:#3cf2a0;margin-left:8px}
+#s6 svg{position:absolute;left:0;top:240px}
+#s6 .kpis{position:absolute;left:22px;right:22px;top:500px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#s6 .k{background:#141938;border:1px solid #232a55;border-radius:20px;padding:16px}
+#s6 .k b{display:block;font:900 26px Inter}#s6 .k small{font:500 12px Inter;color:#8a93c4}
+#s6 .bar{position:absolute;left:22px;right:22px;bottom:40px;background:#6c5cff;color:#fff;text-align:center}
+</style></head><body>
+<div class="s" id="s1"><div class="nav"><span>NOVA</span><span>☰</span></div><div class="timer">DROP 02:14:09</div>
+<div class="orb" style="width:300px;height:300px;left:40px;top:150px;background:#ff5a1f;opacity:.35"></div>
+<svg class="shoe" viewBox="0 0 340 200"><path d="M20 140 C40 80 90 70 130 90 C170 110 200 60 250 70 C300 80 330 120 320 150 L320 168 L20 168 Z" fill="#f2f2f2"/><path d="M20 160 L320 160 L320 178 C220 190 120 190 20 178 Z" fill="#ff5a1f"/><path d="M120 100 L150 140 M150 95 L175 135 M180 85 L200 125" stroke="#0b0b0b" stroke-width="6" stroke-linecap="round"/><path d="M230 75 C260 95 285 110 318 140" stroke="#ff5a1f" stroke-width="8" fill="none"/></svg>
+<h1>AIR<br>RUN <span>01</span></h1><div class="meta">Limited drop. 500 pairs only. Ships in 48 hours across the Gulf.</div>
+<div class="cta"><span class="pill">Reserve · 549 SAR</span><span class="pill">Sizes</span></div></div>
+<div class="s" id="s2"><div class="nav"><span>BLOOM &amp; BEAN</span><span>BAG 2</span></div><h1>Slow coffee,<br><i>fast pickup.</i></h1>
+<div class="cards">
+ <div class="c"><div class="cup" style="background:linear-gradient(160deg,#c89566,#6b3d1e)"></div><div><b>Spanish Latte</b><small>Condensed milk, double shot</small></div><span class="p">18</span></div>
+ <div class="c"><div class="cup" style="background:linear-gradient(160deg,#b8d98a,#3d7a4a)"></div><div><b>Iced Matcha</b><small>Ceremonial grade, oat milk</small></div><span class="p">22</span></div>
+ <div class="c"><div class="cup" style="background:linear-gradient(160deg,#f2c27a,#b5651d)"></div><div><b>Saffron Cake</b><small>Baked this morning</small></div><span class="p">16</span></div>
+ <div class="c"><div class="cup" style="background:linear-gradient(160deg,#5b3a29,#1c100a)"></div><div><b>Cold Brew</b><small>18-hour steep</small></div><span class="p">20</span></div></div>
+<span class="pill wa">Order ahead · ready in 8 min</span></div>
+<div class="s" id="s3"><div class="nav"><span>IRONHOUSE</span><span>JOIN</span></div><h1>NO<br>DAYS<br>OFF.</h1>
+<div class="classes"><div class="r">Strength 101<small>06:00 · 8 LEFT</small></div><div class="r">HIIT Burn<small>07:30 · 3 LEFT</small></div><div class="r">Mobility<small>18:00 · 12 LEFT</small></div><div class="r">Boxing<small>20:00 · FULL</small></div></div>
+<span class="pill book">Book your first class free</span></div>
+<div class="s" id="s4"><div class="nav" style="color:#c9a96a"><span>MAISON NOIR</span><span>EN</span></div>
+<div class="orb" style="width:260px;height:260px;left:65px;top:180px;background:#c9a96a;opacity:.25"></div>
+<svg class="bottle" viewBox="0 0 160 300"><rect x="58" y="0" width="44" height="40" rx="6" fill="#c9a96a"/><rect x="68" y="40" width="24" height="26" fill="#8a7448"/><rect x="10" y="66" width="140" height="230" rx="26" fill="#1c1814" stroke="#c9a96a" stroke-width="2"/><rect x="22" y="80" width="18" height="200" rx="9" fill="#fff" opacity=".08"/><text x="80" y="190" text-anchor="middle" font-family="Unb" font-size="16" fill="#e9dcc3" letter-spacing="4">OUD</text><text x="80" y="212" text-anchor="middle" font-family="Inter" font-size="9" fill="#a8977a" letter-spacing="3">EXTRAIT 50ML</text></svg>
+<h1>OUD NOIR</h1><p>Smoked oud, black rose and amber. Made in small batches.</p><span class="pill buy">ADD TO BAG · 890 SAR</span></div>
+<div class="s" id="s5"><div class="hero"><div class="nav" style="color:#fff"><span>SAHARA</span><span>☰</span></div><div class="plate"></div></div>
+<h1>Grilled tonight,<br>at your door.</h1><div class="tabs"><span>Grills</span><span>Bowls</span><span>Sides</span><span>Drinks</span></div>
+<div class="it" style="top:510px">Mixed Grill Platter<span>65</span></div><div class="it" style="top:562px">Chicken Shawarma Bowl<span>32</span></div><div class="it" style="top:614px">Saffron Rice<span>14</span></div>
+<span class="pill wa">Order on WhatsApp</span></div>
+<div class="s" id="s6"><div class="nav" style="color:#8a93c4"><span>LEDGERLY</span><span>NOV</span></div><h2>Revenue this month</h2><div class="big">84,210<small>+23%</small></div>
+<svg width="390" height="230" viewBox="0 0 390 230"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6c5cff" stop-opacity=".55"/><stop offset="1" stop-color="#6c5cff" stop-opacity="0"/></linearGradient></defs>
+<path d="M0 190 C40 170 60 180 90 150 C120 120 150 140 180 110 C210 80 240 100 270 70 C300 45 340 60 390 20 L390 230 L0 230 Z" fill="url(#g)"/><path d="M0 190 C40 170 60 180 90 150 C120 120 150 140 180 110 C210 80 240 100 270 70 C300 45 340 60 390 20" fill="none" stroke="#8f82ff" stroke-width="4"/><circle cx="270" cy="70" r="7" fill="#fff"/></svg>
+<div class="kpis"><div class="k"><b>1,284</b><small>Orders</small></div><div class="k"><b>65.6</b><small>Avg. basket (SAR)</small></div><div class="k"><b>4.9★</b><small>Rating</small></div><div class="k"><b>312</b><small>New customers</small></div></div>
+<span class="pill bar">Export report</span></div>
+<script>window.show=n=>{document.querySelectorAll('.s').forEach(e=>e.style.display='none');document.getElementById('s'+n).style.display='block';};</script>
+</body></html>
